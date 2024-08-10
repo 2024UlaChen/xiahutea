@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>faq</title>
+
+    <link rel="shortcut icon" type="image/x-icon" href="assets/images/favicon.png"/>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i&display=swap"
+          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,300i,400,400i,700,700i&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="assets/css/animate.min.css">
+    <link rel="stylesheet" href="assets/css/jquery-ui.css">
+    <link rel="stylesheet" href="assets/css/slick.css">
+    <link rel="stylesheet" href="assets/css/chosen.min.css">
+    <link rel="stylesheet" href="assets/css/pe-icon-7-stroke.css">
+    <link rel="stylesheet" href="assets/css/magnific-popup.min.css">
+    <link rel="stylesheet" href="assets/css/lightbox.min.css">
+    <link rel="stylesheet" href="assets/js/fancybox/source/jquery.fancybox.css">
+    <link rel="stylesheet" href="assets/css/jquery.scrollbar.min.css">
+    <link rel="stylesheet" href="assets/css/mobile-menu.css">
+    <link rel="stylesheet" href="assets/fonts/flaticon/flaticon.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        div.header-message > h1 {
+            margin: 0 auto;
+            border-radius: 50%;
+            color: #73B4BA;
+        }
+
+        .header-user-links li {
+            display: inline-block;
+        }
+
+        .header-user-links i {
+            border-radius: 50%;
+            font-size: 20px;
+            margin-left: 10px;
+        }
+
+
+        .query-bar a {
+            margin-left: 10px;
+            margin-right: 10px;
+            border-radius: 50%;
+        }
+
+        .query-bar input {
+            background-color: white;
+            width: 80%;
+        }
+
+        .reset-margin {
+            margin: 0;
+            margin-top: 2%;
+            background-color: #f5f5f5;
+            padding: 20px;
+            padding-top: 0;
+            overflow: visible;
+        }
+
+        div#faq{
+            width:80%;
+            padding-right: 15px;
+            padding-left: 15px;
+            margin-right: auto;
+            margin-left: auto;
+            border-radius: 5px;
+        }
+
+        #title-list {
+            /*margin-right: 30px;*/
+            margin-top: 20px;
+            padding: 20px 10px 0px 10px;
+            background-color: white;
+            border-radius: 5px;
+        }
+
+        #title-list li {
+            height: 60px;
+            font-size: 18px;
+            text-align: left;
+            list-style-type: none;
+            color: black;
+        }
+
+        ul.faq-list {
+            margin: 24px 0 0 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        ul.faq-list > li {
+            margin-bottom: 10px;
+            box-shadow: 0px 2px 0px 0px rgba(56, 55, 53, 0.33);
+        }
+
+        ul.faq-list > li:last-child {
+            margin-bottom: 0;
+        }
+
+        ul.faq-list > li > a.link_title {
+            display: block;
+            width: 100%;
+            color: black;
+            background-color: white;
+            padding: 15px 0px;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        ul.faq-list > li > a.link_title::after {
+            content: "";
+            display: block;
+            clear: both;
+        }
+
+        ul.faq-list > li > a.link_title button.switch_btn {
+            float: right;
+            display: inline-block;
+            background: none;
+            border: 0;
+            outline: none;
+            color: #73B4BA;
+            font-size: 30px;
+            padding: 0px;
+        }
+
+        ul.faq-list > li > a.link_title button.switch_btn span.-minus {
+            display: none;
+        }
+
+        ul.faq-list > li > div.inner_block {
+            font-size: 18px;
+            color: #4a4a4a;
+            margin-top: 8px;
+            padding: 0px 0px 10px 10px;
+            line-height: 1.6;
+            display: none;
+        }
+
+        ul.faq-list > li.-on > a.link_title button.switch_btn span.-plus {
+            display: none;
+
+        }
+
+        ul.faq-list > li.-on > a.link_title button.switch_btn span.-minus {
+            display: inline-block;
+        }
+
+        div.main-content {
+            margin: 0px
+        }
+
+        div.faq-card {
+            padding: 30px;
+            background: white;
+            width: auto;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+
+        div.card-title {
+            font-size: 18px;
+            color: black;
+            font-weight: bold;
+        }
+
+        div#faq-query-bar {
+            background: white;
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+            border-radius: 5px;
+            box-shadow:0 0 3px 1px rgba(128, 128, 128, 0.59)
+        }
+
+        div#faq-query-bar input {
+            width: 80%;
+            border: 0px;
+            padding-right: 5px;;
+            flex: 1; /* 讓 input 佔滿剩餘的空間 */
+        }
+
+        #faq-nav {
+            padding: 0px 15px 0px 0px;
+            position: sticky;
+            top: 0;
+        }
+
+        div#faq-nav a {
+            display: flex;
+            align-items: center;
+            padding-right: 15px;
+
+        }
+
+        div#card-list {
+            margin-top: 20px;
+            padding: 0;
+
+        }
+
+        div.faq-card:last-child {
+            margin-bottom: 0;
+        }
+
+    </style>
+</head>
+
+<body>
+<div class="header"></div>
+<div class="main-content main-content-contact">
+    <div class="page-main-content">
+        <div id="faq">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-contact reset-margin row">
+
+                        <div class="col-sm-3" id="faq-nav">
+                            <div id="faq-query-bar">
+                                <input type="text" placeholder="搜尋問題關鍵字">
+                                <a href="#">
+                                    <i class="fa fa-search" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                            <div id="title-list">
+                                <ul >
+                                    <li>
+                                        <a href="#">新手上路</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">會員資訊</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">訂購資訊</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">會員優惠與折扣活動</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">其他問題</a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                        </div>
+                        <div class="col-sm-9" id="card-list">
+                            <div class="faq-card">
+                                <div class="card-title">
+                                    新手上路
+                                </div>
+                                <ul class="faq-list">
+                                    <li>
+                                        <a class="link_title" href="#">
+                                            <button type="button" class="switch_btn">
+                                                <span class="-plus">+</span>
+                                                <span class="-minus">-</span>
+                                            </button>
+                                            [ 訂餐流程 ] 如何使用夏虎茶訂餐？
+                                        </a>
+
+                                        <div class="inner_block">
+                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci aperiam
+                                            consectetur debitis deserunt dolores eaque eius, est fugiat impedit ipsam
+                                            itaque non obcaecati praesentium quo reprehenderit sunt suscipit veniam
+                                            vero.
+                                        </div>
+
+                                    </li>
+
+                                    <li>
+                                        <a class="link_title" href="#">
+                                            <button type="button" class="switch_btn">
+                                                <span class="-plus">+</span>
+                                                <span class="-minus">-</span>
+                                            </button>
+                                            [ 最愛店家 ] 建立我的最愛店家
+                                        </a>
+                                        <div class="inner_block">
+                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad adipisci
+                                            commodi eveniet exercitationem illum libero modi nostrum saepe tempore
+                                            temporibus. Atque consequatur ducimus enim ex id porro, quam rerum soluta!
+                                        </div>
+                                    </li>
+
+                                    <li>
+                                        <a class="link_title" href="#">
+                                            <button type="button" class="switch_btn">
+                                                <span class="-plus">+</span>
+                                                <span class="-minus">-</span>
+                                            </button>
+                                            [ 取餐資訊 ] 門市的營業時間/電話/地址/外送限制/取餐方式/支付方式/金額上限
+                                        </a>
+                                        <div class="inner_block">
+                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad adipisci
+                                            commodi eveniet exercitationem illum libero modi nostrum saepe tempore
+                                            temporibus. Atque consequatur ducimus enim ex id porro, quam rerum soluta!
+                                        </div>
+                                    </li>
+
+                                    <li>
+                                        <a class="link_title" href="#">
+                                            <button type="button" class="switch_btn">
+                                                <span class="-plus">+</span>
+                                                <span class="-minus">-</span>
+                                            </button>
+                                            [ 優惠券 ] 如何使用優惠券享有折扣？
+                                        </a>
+                                        <div class="inner_block">
+                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad adipisci
+                                            commodi eveniet exercitationem illum libero modi nostrum saepe tempore
+                                            temporibus. Atque consequatur ducimus enim ex id porro, quam rerum soluta!
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="faq-card">
+                                <div class="card-title">
+                                    會員資訊
+                                </div>
+                                <ul class="faq-list">
+                                    <li>
+                                        <a class="link_title" href="#">
+                                            <button type="button" class="switch_btn">
+                                                <span class="-plus">+</span>
+                                                <span class="-minus">-</span>
+                                            </button>
+                                            [ 忘記密碼 ] 忘記密碼無法登入怎麼辦?
+                                        </a>
+
+                                        <div class="inner_block">
+                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci aperiam
+                                            consectetur debitis deserunt dolores eaque eius, est fugiat impedit ipsam
+                                            itaque non obcaecati praesentium quo reprehenderit sunt suscipit veniam
+                                            vero.
+                                        </div>
+
+                                    </li>
+
+                                    <li>
+                                        <a class="link_title" href="#">
+                                            <button type="button" class="switch_btn">
+                                                <span class="-plus">+</span>
+                                                <span class="-minus">-</span>
+                                            </button>
+                                            [ 通知設定 ] 我要怎麼收到通知(訂單、點數和優惠券期限)
+                                        </a>
+                                        <div class="inner_block">
+                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad adipisci
+                                            commodi eveniet exercitationem illum libero modi nostrum saepe tempore
+                                            temporibus. Atque consequatur ducimus enim ex id porro, quam rerum soluta!
+                                        </div>
+                                    </li>
+                                </ul>
+
+                            </div>
+                            <div class="faq-card">
+                                <div class="card-title">
+                                    訂購資訊
+                                </div>
+                                <ul class="faq-list">
+                                    <li>
+                                        <a class="link_title" href="#">
+                                            <button type="button" class="switch_btn">
+                                                <span class="-plus">+</span>
+                                                <span class="-minus">-</span>
+                                            </button>
+                                            [ 取餐方式 ] 門市是否支援外送服務？
+                                        </a>
+
+                                        <div class="inner_block">
+                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci aperiam
+                                            consectetur debitis deserunt dolores eaque eius, est fugiat impedit ipsam
+                                            itaque non obcaecati praesentium quo reprehenderit sunt suscipit veniam
+                                            vero.
+                                        </div>
+
+                                    </li>
+
+                                    <li>
+                                        <a class="link_title" href="#">
+                                            <button type="button" class="switch_btn">
+                                                <span class="-plus">+</span>
+                                                <span class="-minus">-</span>
+                                            </button>
+                                            [ 訂購資訊 ] 收到的商品品項有誤
+                                        </a>
+                                        <div class="inner_block">
+                                            如有任何商品內容的錯誤，最即時的方式請直接聯絡門市，也可在訂單下評價或給予回饋。<br>
+                                            您可以於門市的訂購頁面、訂單詳細資訊裡取得門市的聯絡電話。
+                                        </div>
+                                    </li>
+
+                                    <li>
+                                        <a class="link_title" href="#">
+                                            <button type="button" class="switch_btn">
+                                                <span class="-plus">+</span>
+                                                <span class="-minus">-</span>
+                                            </button>
+                                            [ 訂購資訊 ] 想變更或取消訂單
+                                        </a>
+                                        <div class="inner_block">
+                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad adipisci
+                                            commodi eveniet exercitationem illum libero modi nostrum saepe tempore
+                                            temporibus. Atque consequatur ducimus enim ex id porro, quam rerum soluta!
+                                        </div>
+                                    </li>
+
+                                    <li>
+                                        <a class="link_title" href="#">
+                                            <button type="button" class="switch_btn">
+                                                <span class="-plus">+</span>
+                                                <span class="-minus">-</span>
+                                            </button>
+                                            [ 訂購資訊 ] 登入找不到訂單
+                                        </a>
+                                        <div class="inner_block">
+                                            請確認下訂時與現在是否為相同帳號 (相同入徑登入)。
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <a class="link_title" href="#">
+                                            <button type="button" class="switch_btn">
+                                                <span class="-plus">+</span>
+                                                <span class="-minus">-</span>
+                                            </button>
+                                            [ 付款資訊 ] 申請退款後，多久會收到退款呢？
+                                        </a>
+
+                                        <div class="inner_block">
+                                            退款作業是由銀行端進行處理，各銀行端作業時間不同，故訂單狀態顯示「已申請退款」時，請直接聯繫銀行端，確認詳細的退款時間。
+                                        </div>
+
+                                    </li>
+
+                                    <li>
+                                        <a class="link_title" href="#">
+                                            <button type="button" class="switch_btn">
+                                                <span class="-plus">+</span>
+                                                <span class="-minus">-</span>
+                                            </button>
+                                            有綁定信用卡，但門市無法使用
+                                        </a>
+                                        <div class="inner_block">
+                                            各門市有不同的付款方式設定，詳細支援的付款方式可以參考菜單頁面的 訂單資訊>店家資訊
+                                        </div>
+                                    </li>
+
+                                    <li>
+                                        <a class="link_title" href="#">
+                                            <button type="button" class="switch_btn">
+                                                <span class="-plus">+</span>
+                                                <span class="-minus">-</span>
+                                            </button>
+                                            [ 付款資訊 ] 信用卡綁定為什麼失敗？
+                                        </a>
+                                        <div class="inner_block">
+                                            目前信用卡綁定只支援台灣國內銀行發行之信用卡。<br>
+                                            不支援卡別：American Express美國運通, UnionPay中國銀聯, Discovery發現卡
+                                        </div>
+                                    </li>
+
+                                    <li>
+                                        <a class="link_title" href="#">
+                                            <button type="button" class="switch_btn">
+                                                <span class="-plus">+</span>
+                                                <span class="-minus">-</span>
+                                            </button>
+                                            [ 發票開立 ] 無法使用電子載具
+                                        </a>
+                                        <div class="inner_block">
+                                            各門市有不同的開立發票設定，如門市未提供載具服務，則不會顯示該開立發票選項
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <a class="link_title" href="#">
+                                            <button type="button" class="switch_btn">
+                                                <span class="-plus">+</span>
+                                                <span class="-minus">-</span>
+                                            </button>
+                                            [ 發票開立 ] 有打統編的公司發票存入個人載具，該怎麼查詢/列印？
+                                        </a>
+                                        <div class="inner_block">
+                                            1. 須請公司會計單位使用“公司帳號“登入，選擇「營業人」進入「財政部電子發票整合服務平台」查詢/列印。<br>
+                                            2. 使用“個人帳號“登入財政部電子發票整合服務平台的話，僅能看到簡易明細，無法下載正式的電子發票證明。<br>
+                                            3. <a href="https://www.mof.gov.tw/singlehtml/155?cntId=84135"
+                                                  target="_blank">財政部電子發票整合服務平台官方資訊參考</a>
+                                        </div>
+                                    </li>
+                                </ul>
+
+                            </div>
+                            <div class="faq-card">
+                                <div class="card-title">
+                                    優惠券與集點卡活動
+                                </div>
+                                <ul class="faq-list">
+                                    <li>
+                                        <a class="link_title" href="#">
+                                            <button class="switch_btn" type="button">
+                                                <span class="-plus">+</span>
+                                                <span class="-minus">-</span>
+                                            </button>
+                                            [ 優惠券 ] 如何取得優惠券？
+                                        </a>
+
+                                        <div class="inner_block">
+                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci aperiam
+                                            consectetur debitis deserunt dolores eaque eius, est fugiat impedit ipsam
+                                            itaque non obcaecati praesentium quo reprehenderit sunt suscipit veniam
+                                            vero.
+                                        </div>
+
+                                    </li>
+
+                                    <li>
+                                        <a class="link_title" href="#">
+                                            <button class="switch_btn" type="button">
+                                                <span class="-plus">+</span>
+                                                <span class="-minus">-</span>
+                                            </button>
+                                            [ 優惠券 ] 我該如何知道優惠券規則？
+                                        </a>
+                                        <div class="inner_block">
+                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet corporis enim
+                                            eum exercitationem facilis laudantium maxime mollitia, natus nemo, pariatur
+                                            sint suscipit, tempora temporibus ullam velit! Ab amet ex nihil!
+                                        </div>
+                                    </li>
+
+                                    <li>
+                                        <a class="link_title" href="#">
+                                            <button class="switch_btn" type="button">
+                                                <span class="-plus">+</span>
+                                                <span class="-minus">-</span>
+                                            </button>
+                                            [ 優惠券 ] 如何使用優惠券?
+                                        </a>
+                                        <div class="inner_block">
+                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad adipisci
+                                            commodi eveniet exercitationem illum libero modi nostrum saepe tempore
+                                            temporibus. Atque consequatur ducimus enim ex id porro, quam rerum soluta!
+                                        </div>
+                                    </li>
+
+                                    <li>
+                                        <a class="link_title" href="#">
+                                            <button class="switch_btn" type="button">
+                                                <span class="-plus">+</span>
+                                                <span class="-minus">-</span>
+                                            </button>
+                                            [ 優惠券 ] 如何知道我的券夾裡有什麼優惠券以及優惠券使用期限呢？
+                                        </a>
+                                        <div class="inner_block">
+                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab accusamus
+                                            architecto asperiores consectetur cum delectus dolorum earum facere in
+                                            minima necessitatibus obcaecati pariatur porro provident quae quis suscipit
+                                            unde, ut.
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <a class="link_title" href="#">
+                                            <button class="switch_btn" type="button">
+                                                <span class="-plus">+</span>
+                                                <span class="-minus">-</span>
+                                            </button>
+                                            [ 集點卡 ] 如何獲得店家集點卡？
+                                        </a>
+
+                                        <div class="inner_block">
+                                            購買該店家商品即可獲得店家集點卡
+                                        </div>
+
+                                    </li>
+
+                                    <li>
+                                        <a class="link_title" href="#">
+                                            <button class="switch_btn" type="button">
+                                                <span class="-plus">+</span>
+                                                <span class="-minus">-</span>
+                                            </button>
+                                            [ 集點卡 ] 我該如何知道店家的集點卡規則？
+                                        </a>
+                                        <div class="inner_block">
+                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. A accusamus alias
+                                            aliquid commodi consectetur doloribus error esse eveniet inventore, ipsum
+                                            laboriosam mollitia natus nobis quasi rerum sapiente sunt. Omnis, sapiente!
+                                        </div>
+                                    </li>
+
+                                    <li>
+                                        <a class="link_title" href="#">
+                                            <button class="switch_btn" type="button">
+                                                <span class="-plus">+</span>
+                                                <span class="-minus">-</span>
+                                            </button>
+                                            [ 集點卡 ] 如何進行點數兌換?
+                                        </a>
+                                        <div class="inner_block">
+                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. A consectetur
+                                            cumque fugiat magnam quas repellat? Autem consequatur deleniti dolorum error
+                                            exercitationem fugit minima obcaecati, officiis optio quasi sapiente
+                                            voluptates voluptatum!
+                                        </div>
+                                    </li>
+
+                                    <li>
+                                        <a class="link_title" href="#">
+                                            <button class="switch_btn" type="button">
+                                                <span class="-plus">+</span>
+                                                <span class="-minus">-</span>
+                                            </button>
+                                            [ 集點卡 ] 如何知道我的有哪些集點卡與集點卡使用期限
+                                        </a>
+                                        <div class="inner_block">
+                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias in ipsa nisi
+                                            nulla reiciendis saepe sed voluptates! Ad animi aspernatur atque consectetur
+                                            cumque mollitia rem totam? A aspernatur dicta unde!
+                                        </div>
+                                    </li>
+                                </ul>
+
+                            </div>
+                            <div class="faq-card">
+                                <div class="card-title">
+                                    其他問題
+                                </div>
+                                <ul class="faq-list">
+                                    <li>
+                                        <a class="link_title" href="#">
+                                            <button class="switch_btn" type="button">
+                                                <span class="-plus">+</span>
+                                                <span class="-minus">-</span>
+                                            </button>
+                                            [ 系統異常 ] 點擊按鈕無反應
+                                        </a>
+
+                                        <div class="inner_block">
+                                            1. 請確認是否使用 Chrome, Safari, Firefox 瀏覽器，以及是否為正常狀態
+                                            (非私密瀏覽、非無痕視窗)<br>
+                                            2. 請確認網路訊號狀態，是否有設定任何阻擋<br>
+                                            3. 請確認是否有關閉cookie存取的設定<br>
+                                            4. 可嘗試重新整理頁面<br>
+                                            5. 請向夏虎茶客服反應<br>
+                                        </div>
+
+                                    </li>
+
+                                    <li>
+                                        <a class="link_title" href="#">
+                                            <button class="switch_btn" type="button">
+                                                <span class="-plus">+</span>
+                                                <span class="-minus">-</span>
+                                            </button>
+                                            [ 定位問題 ] 使用Android 安卓/Apple iOS 蘋果手機/Wed 網頁/其他裝置 ，怎麼開啟定位呢？
+                                        </a>
+                                        <div class="inner_block">
+                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores
+                                            consequatur enim labore laborum nostrum officia perferendis tempore.
+                                            Cupiditate dolorem ducimus facilis harum incidunt inventore ipsa minima
+                                            necessitatibus, omnis similique tempore?
+                                        </div>
+                                    </li>
+
+                                    <li>
+                                        <a class="link_title" href="#">
+                                            <button class="switch_btn" type="button">
+                                                <span class="-plus">+</span>
+                                                <span class="-minus">-</span>
+                                            </button>
+                                            [ 門市募集 ] 我是店家，想加入/了解夏虎茶
+                                        </a>
+                                        <div class="inner_block">
+                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad adipisci
+                                            commodi eveniet exercitationem illum libero modi nostrum saepe tempore
+                                            temporibus. Atque consequatur ducimus enim ex id porro, quam rerum soluta!
+                                        </div>
+                                    </li>
+                                </ul>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="footer"></div>
+
+
+<script src="assets/js/jquery-1.12.4.min.js"></script>
+<script src="assets/js/jquery.plugin-countdown.min.js"></script>
+<script src="assets/js/jquery-countdown.min.js"></script>
+<script src="assets/js/bootstrap.min.js"></script>
+<script src="assets/js/owl.carousel.min.js"></script>
+<script src="assets/js/magnific-popup.min.js"></script>
+<script src="assets/js/isotope.min.js"></script>
+<script src="assets/js/jquery.scrollbar.min.js"></script>
+<script src="assets/js/jquery-ui.min.js"></script>
+<script src="assets/js/mobile-menu.js"></script>
+<script src="assets/js/chosen.min.js"></script>
+<script src="assets/js/slick.js"></script>
+<script src="assets/js/jquery.elevateZoom.min.js"></script>
+<script src="assets/js/jquery.actual.min.js"></script>
+<script src="assets/js/fancybox/source/jquery.fancybox.js"></script>
+<script src="assets/js/lightbox.min.js"></script>
+<script src="assets/js/owl.thumbs.min.js"></script>
+<script src="assets/js/jquery.scrollbar.min.js"></script>
+<script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyC3nDHy1dARR-Pa_2jjPCjvsOR4bcILYsM'></script>
+<script src="assets/js/frontend-plugin.js"></script>
+<script src="js/general.js"></script>
+
+<script>
+    $("a.link_title").on("click", function (e) {
+        e.preventDefault();
+        $(this).closest("li").toggleClass("-on");
+        $(this).closest("li").find("div.inner_block").slideToggle();
+    });
+
+
+</script>
+
+
+</body>
+
+
+</html>
