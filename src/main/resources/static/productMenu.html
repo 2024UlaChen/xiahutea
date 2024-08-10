@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="./slick.css">
+    <link rel="stylesheet" href="./slick-theme.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #d1eced;
+            /* background-color: red; */
+
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+
+
+
+        }
+
+        .restaurant-info-container,
+        .menu-container {
+            width: 80%;
+            margin-bottom: 20px;
+
+
+        }
+
+        .restaurant-info-container {
+
+            box-shadow: 0px 2px 4px -1px rgb(227, 219, 219);
+            margin-top: 10px;
+            border-radius: 10px;
+            background-color: #ffffff;
+
+
+        }
+
+        .restaurant-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .restaurant-details {
+            display: flex;
+            flex-direction: column;
+
+            border-radius: 10px;
+
+
+
+
+        }
+
+        .rating,
+        .hours,
+        .phone,
+        .address {
+            margin-top: 5px;
+        }
+
+
+
+        .restaurant-text {
+            display: flex;
+            flex-direction: column;
+
+        }
+
+
+
+        .restaurant-actions {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 50px;
+
+
+            /* flex-direction: row; */
+        }
+
+        .action {
+            /* display: inline-block; */
+            margin-top: 10px;
+
+
+
+        }
+
+        .restaurant-logo-big {
+            text-align: center;
+        }
+
+        .menu-section {
+
+            width: 30%;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0px 2px 4px -1px rgb(227, 219, 219);
+            border: 1px solid #00000020;
+            background-color: #ffffff;
+            flex-grow: 1;
+        }
+
+        .menu-container {
+            display: -webkit-inline-box;
+            flex-wrap: wrap;
+            text-align: left;
+            gap: 37px;
+
+
+
+            /* 使整個 menu-container 的內容靠左對齊 */
+        }
+
+
+
+        .menu-section ul {
+            list-style: none;
+            padding: 20px;
+            background-color: #ffffff;
+
+        }
+
+        .menu-section li {
+            margin-bottom: 10px;
+            border-bottom: 1px dotted #ccc;
+            color: #0a0601;
+            display: flex;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+
+        h2 {
+
+            color: #73B4BA;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+
+
+        .restaurant-info-container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .restaurant-details {
+            flex: 1;
+            min-width: 300px;
+            padding: 20px;
+        }
+
+        .carousel-container {
+            flex: 2;
+            min-width: 300px;
+            padding: 20px;
+        }
+
+        .carousel-inner img {
+            width: 100%;
+            height: auto;
+        }
+
+
+
+        div.orderinfo,
+        div.question {
+
+            background-color: #fac792;
+            border-radius: 10px;
+            width: 100px;
+            height: 50px;
+            box-shadow: 0px 2px 4px -1px rgb(232, 196, 196);
+            cursor: pointer;
+            display: flex;
+            /* 水平置中 */
+            justify-content: center;
+            /* 垂直置中 */
+            align-items: center;
+
+
+        }
+
+
+        div.orderinfo:hover {
+            background-color: #73B4BA;
+        }
+
+        div.question:hover {
+            background-color: #73B4BA;
+
+        }
+
+
+        /* 燈箱 */
+        #lightbox {
+            /*   border: 1px solid red; */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: hsla(0, 0%, 0%, .5);
+
+
+            display: none;
+        }
+
+        /* 元素 article 置中及基本樣式 */
+        #lightbox>article {
+            /* background-color: white;
+            width: 90%;
+            max-width: 300px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px #ddd;
+            padding: 5px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); */
+
+            /* background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px #ddd;
+            width: 315px;
+            /* max-width: 300px; */
+            /*height: 500px;
+            overflow: auto;
+            padding: 5px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); */
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+
+            max-width: 350px;
+
+        }
+
+
+        div.title {
+            /* padding: 15px; */
+            /* font-weight: bold; */
+            background-color: #ffffff;
+            text-align: center;
+
+
+        }
+
+        div.content {
+            /* padding: 15px; */
+            overflow: auto;
+            flex-grow: 1;
+            height: 300px;
+            /* 讓中間部分填充剩餘空間 */
+        }
+
+        div.footer {
+            padding: 10px;
+            background-color: #f8f8f8;
+
+        }
+
+        .content::-webkit-scrollbar {
+            display: none;
+        }
+
+
+
+
+        div.options div.temperature {
+
+            border-radius: 5px;
+            border: solid #fac792 1px;
+        }
+
+
+        div.options {
+            margin-left: 10px;
+
+
+
+        }
+
+        div.temperature {
+            display: flex;
+            width: 90px;
+            height: 30px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            /* 水平置中 */
+            justify-content: center;
+            /* 垂直置中 */
+            align-items: center;
+            cursor: pointer;
+
+        }
+
+
+        .section {
+            margin-bottom: 20px;
+            justify-content: center;
+            margin: 10px;
+
+        }
+
+        .section label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        /* 字體顏色 */
+        div.ice {
+            color: rgb(69, 64, 64);
+            font-size: x-small;
+        }
+
+
+
+
+        /* 數量 */
+        /* selector */
+        button.minus,
+        button.plus {
+            width: 40px;
+            height: 32px;
+            border: solid #fac792 1px;
+            /* 水平置中 */
+            justify-content: center;
+            /* 垂直置中 */
+            align-items: center;
+            display: flex;
+            background-color: #fff;
+
+
+        }
+
+        .minus {
+            border-radius: 5px 0px 0px 5px;
+        }
+
+        .plus {
+            border-radius: 0px 5px 5px 0px;
+        }
+
+        div.selector {
+            border: solid #fac792 1px;
+            width: 87px;
+            height: 32px;
+
+        }
+
+        div.quantity {
+            display: flex;
+            justify-content: flex-start;
+        }
+
+        input.number {
+            width: 85px;
+            height: 25px;
+            outline: none;
+            text-align: center;
+
+        }
+
+        /* 訂購人 */
+        input.person {
+            border: solid #fac792 1px;
+            border-radius: 5px;
+            width: 200px;
+            height: 30px;
+
+        }
+
+        .person:focus {
+
+            outline: solid #fac792 1px;
+        }
+
+        /* .myclassa {
+            border: 1px solid black;
+            display: inline-block;
+        }
+
+        .myclassa img {
+            border: 1px solid blue;
+        } */
+
+        .footer button[type="submit"] {
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .footer button[type="submit"]:hover {
+            background-color: #218838;
+        }
+
+        div.pic {
+            width: 350px;
+            height: 300px;
+            /* border: solid red 1px; */
+        }
+
+        div.pic img {
+
+            /* width: 100%;
+            height: 100%; */
+            vertical-align: bottom;
+            width: 100%;
+        }
+
+        /* 訂購資訊modal */
+        .modal {
+            width: 350px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            border-bottom: 1px solid #ddd;
+            background-color: #f1f1f1;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .modal-header .close-btn {
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .modal-tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .modal-tabs button {
+            flex: 1;
+            padding: 12px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            color: #555;
+        }
+
+        .modal-tabs button.active {
+            border-bottom: 2px solid #007bff;
+            color: #007bff;
+        }
+
+        .modal-content {
+            padding: 16px;
+        }
+
+        .modal-content p {
+            margin: 8px 0;
+            color: #333;
+        }
+
+        .modal-content p strong {
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .modal-content .icon {
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <div class="container">
+        <div class="restaurant-info-container">
+            <div class="restaurant-info">
+                <div class="restaurant-details">
+
+                    <div class="restaurant-text">
+                        <h3>忠孝店</h3>
+                        <p>藍彩茶所</p>
+                        <div class="rating">
+                            <span>⭐⭐⭐⭐⭐</span>
+                            <span>(3)</span>
+                        </div>
+                        <div class="hours">
+                            <span>⏰ 11:00 ~ 21:00</span>
+                        </div>
+                        <div class="phone">
+                            <span>📞 02-27769858</span>
+                        </div>
+                        <div class="address">
+                            <span>📍 台北市大安區忠孝東路四段77巷34號</span>
+                        </div>
+                    </div>
+
+                    <div class="restaurant-actions">
+                        <div class="orderinfo" style="color: #fffcfc;">訂購資訊</div>
+                        <div class="question" style="color: #ffffff;">常見問題</div>
+
+
+
+                    </div>
+
+
+                </div>
+
+                <!-- <div class="myclass">
+                    <div><img src="./cat_picture.jpg"></div>
+                    <div><img src="./w644.jpg"></div>
+                    <div><img src="./cat_picture.jpg"></div>
+
+                </div> -->
+
+            </div>
+
+
+        </div>
+
+        <div class="menu-container ">
+            <div class="menu-section">
+                <h2>經典義式咖啡</h2>
+                <ul class="menulist">
+                    <li>咖啡拿鐵 <span>70</span></li>
+                    <li>卡布奇諾 <span>70</span></li>
+                    <li>美式黑咖啡 <span>70</span></li>
+                    <li>焦糖拿鐵 <span>80</span></li>
+                    <li>榛果拿鐵 <span>80</span></li>
+                    <li>香草拿鐵 <span>80</span></li>
+                    <li>黑糖拿鐵 <span>80</span></li>
+                    <li>橙皮拿鐵 <span>80</span></li>
+                    <li>路易莎特調咖啡 <span>80</span></li>
+                    <li>鸚鵡咖啡 <span>80</span></li>
+                    <li>義式摩卡 <span>80</span></li>
+                    <li>焦糖瑪奇朵 <span>80</span></li>
+                </ul>
+            </div>
+            <div class="menu-section">
+                <h2>精品咖啡</h2>
+                <ul class="menulist">
+                    <li>莊園拿鐵 <span>80</span></li>
+                    <li>莊園美式 <span>60</span></li>
+                    <li>澳洲小拿鐵 <span>65</span></li>
+                    <li>義式濃縮 <span>60</span></li>
+                    <li>日曬耶加 <span>100</span></li>
+                    <li>黃金曼特寧 <span>100</span></li>
+                    <li>水洗耶加 <span>85</span></li>
+                    <li>肯亞 <span>85</span></li>
+                    <li>曼特寧 <span>85</span></li>
+                    <li>哥倫比亞 <span>85</span></li>
+                    <li>曼巴 <span>85</span></li>
+                    <li>莊園老饕深焙 <span>85</span></li>
+                </ul>
+            </div>
+            <div class="menu-section">
+                <h2>嚴選經典風味茶</h2>
+                <ul class="memulist">
+                    <li>經典水果茶 <span>60</span></li>
+                    <li>柳橙綠茶 <span>60</span></li>
+                    <li>檸檬綠茶 <span>60</span></li>
+                    <li>百香綠茶 <span>60</span></li>
+                    <li>芒果綠茶 <span>60</span></li>
+                    <li>錫蘭紅茶 <span>40</span></li>
+                    <li>薰香綠茶 <span>40</span></li>
+                    <li>太妃糖紅茶 <span>45</span></li>
+                    <li>太妃糖奶茶 <span>60</span></li>
+                    <li>太妃糖鮮奶茶 <span>65</span></li>
+                    <li>貴妃荔枝紅茶 <span>45</span></li>
+                    <li>貴妃荔枝奶茶 <span>45</span></li>
+                </ul>
+            </div>
+            <div class="menu-section">
+                <h2>嚴選經典風味茶</h2>
+                <ul class="menulist">
+                    <li>經典水果茶 <span>60</span></li>
+                    <li>柳橙綠茶 <span>60</span></li>
+                    <li>檸檬綠茶 <span>60</span></li>
+                    <li>百香綠茶 <span>60</span></li>
+                    <li>芒果綠茶 <span>60</span></li>
+                    <li>錫蘭紅茶 <span>40</span></li>
+                    <li>薰香綠茶 <span>40</span></li>
+                    <li>太妃糖紅茶 <span>45</span></li>
+                    <li>太妃糖奶茶 <span>60</span></li>
+                    <li>太妃糖鮮奶茶 <span>65</span></li>
+                    <li>貴妃荔枝紅茶 <span>45</span></li>
+                    <li>貴妃荔枝奶茶 <span>45</span></li>
+                </ul>
+            </div>
+            <div class="menu-section">
+                <h2>經典義式咖啡</h2>
+                <ul class="menulist">
+                    <li>咖啡拿鐵 <span>70</span></li>
+                    <li>卡布奇諾 <span>70</span></li>
+                    <li>美式黑咖啡 <span>70</span></li>
+                    <li>焦糖拿鐵 <span>90</span></li>
+                    <li>榛果拿鐵 <span>80</span></li>
+                    <li>香草拿鐵 <span>80</span></li>
+                    <li>黑糖拿鐵 <span>80</span></li>
+                    <li>橙皮拿鐵 <span>80</span></li>
+                    <li>路易莎特調咖啡 <span>80</span></li>
+                    <li>鸚鵡咖啡 <span>80</span></li>
+                    <li>義式摩卡 <span>80</span></li>
+                    <li>焦糖瑪奇朵 <span>80</span></li>
+                </ul>
+            </div>
+            <div class="menu-section">
+                <h2>經典義式咖啡</h2>
+                <ul class="menulist">
+                    <li>咖啡拿鐵 <span>70</span></li>
+                    <li>卡布奇諾 <span>70</span></li>
+                    <li>美式黑咖啡 <span>70</span></li>
+                    <li>焦糖拿鐵 <span>80</span></li>
+                    <li>榛果拿鐵 <span>80</span></li>
+                    <li>香草拿鐵 <span>90</span></li>
+                    <li>黑糖拿鐵 <span>80</span></li>
+                    <li>橙皮拿鐵 <span>80</span></li>
+                    <li>路易莎特調咖啡 <span>80</span></li>
+                    <li>鸚鵡咖啡 <span>80</span></li>
+                    <li>義式摩卡 <span>80</span></li>
+                    <li>焦糖瑪奇朵 <span>80</span></li>
+                </ul>
+            </div>
+
+
+        </div>
+
+        <!-- 燈箱 (飲料點選)-->
+        <div id="lightbox">
+            <article>
+
+
+                <div class="title">
+
+
+                    <h6>大●阿薩姆紅茶</h6>
+
+                </div>
+                <form>
+                    <div class="content">
+                        <div class="pic">
+                            <img src="./drink.png">
+                        </div>
+                        <div class="section">
+                            <label><span style="color: red;">*</span>溫度</label>
+                            <div class="options">
+                                <div class="temperature">
+                                    冰
+                                </div>
+                                <div class="temperature">
+                                    少冰
+                                </div>
+                                <div class="temperature">
+                                    3
+                                </div>
+                                <div class="temperature">
+                                    <div>4</div>
+                                </div>
+                                <div class="temperature">
+                                    <div>5</div>
+                                </div>
+                                <div class="temperature">
+                                    <div>6</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="section">
+                            <label><span style="color: red;">*</span>甜度</label>
+                            <div class="options">
+                                <div class="temperature">
+                                    <div class="ice">冰</div>
+                                </div>
+                                <div class="temperature">
+                                    <div class="ice">少冰</div>
+                                </div>
+                                <div class="temperature">
+                                    <div>3</div>
+                                </div>
+                                <div class="temperature">
+                                    <div>4</div>
+                                </div>
+                                <div class="temperature">
+                                    <div>5</div>
+                                </div>
+                                <div class="temperature">
+                                    <div>6</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="section">
+                            <label><span style="color: red;">*</span>加料</label>
+                            <div class="options">
+                                <div class="temperature">
+                                    <div class="ice">冰</div>
+                                </div>
+                                <div class="temperature">
+                                    <div class="ice">少冰</div>
+                                </div>
+                                <div class="temperature">
+                                    <div>3</div>
+                                </div>
+                                <div class="temperature">
+                                    <div>4</div>
+                                </div>
+                                <div class="temperature">
+                                    <div>5</div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="section">
+                            <label><span style="color: red;">*</span>訂購人姓名</label>
+                            <input type="text" placeholder="避免使用特殊符號，最多10字" class="person">
+                        </div>
+                    </div>
+
+
+                    <div class="footer">
+                        <div class="price">
+                            <span>總金額：40 元</span>
+                        </div>
+
+                        <div class="quantity">
+                            <button class="minus">-</button>
+                            <div class="selector">
+                                <input type="number" class="number" tabindex="0" min="1" max="999"
+                                    style="border: none;">
+                            </div>
+
+                            <button type="button" class="plus">+</button>
+
+                        </div>
+
+                        <button type="submit">加入購物車</button>
+
+                </form>
+
+        </div>
+
+        </article>
+
+        <div class="modal">
+            <div class="modal-header">
+                <h2>訂購資訊</h2>
+                <button class="close-btn">&times;</button>
+            </div>
+            <div class="modal-tabs">
+                <button class="active">店家資訊</button>
+                <button>退款</button>
+                <button>常見問題</button>
+            </div>
+            <div class="modal-content">
+                <p><strong>藍杉茶所 忠孝店</strong></p>
+                <p><img class="icon" src="star_icon.png" alt="Rating" />5.0 (5)</p>
+                <p><img class="icon" src="clock_icon.png" alt="Hours" />11:30 ~ 21:30</p>
+                <p><img class="icon" src="phone_icon.png" alt="Phone" />02-27769858</p>
+                <p><img class="icon" src="location_icon.png" alt="Address" />台北市大安區忠孝東路四段77巷34號</p>
+                <p><strong>可現金</strong></p>
+                <p>現金單筆消費上限 $10000</p>
+                <p>本店無印製姓名貼紙</p>
+                <p><strong>商行資訊</strong></p>
+                <p>斑茶創意手搖飲料店</p>
+                <p>88369515</p>
+            </div>
+        </div>
+
+
+
+
+
+    </div>
+
+    <!-- <div id="tab-demo">
+    <ul class="tab-title">
+        <li><a href="#tab01">店家資訊</a></li>
+        <li><a href="#tab02">怎取貨</a></li>
+      
+    </ul>
+    <div id="tab01" class="tab-inner">
+        <p>tab01的內容</p>
+    </div>
+    <div id="tab02" class="tab-inner">
+        <p>tab02的內容</p>
+    </div>
+    <div id="tab03" class="tab-inner">
+        <p>tab03的內容</p>
+    </div>
+</div> -->
+
+    <script src="./jquery-3.7.1.min.js"></script>
+    <script src="./slick.min.js"> </script>
+
+    <script>
+
+
+        $('.myclassa').slick({
+            //infinite: true,
+            slidesToShow: 1,
+            //slidesToScroll: 1,
+            //autoplay: true,
+            //autoplaySpeed: 1000,
+            // dots: true,
+            // arrows: true
+        });
+
+
+
+        // 綁定菜單
+        $(document).ready(function () {
+            $(".plus").on("click", function (e) {
+                e.preventDefault()
+                alert("rrr")
+            })
+
+
+            $(".minus").on("click", function (e) {
+                e.preventDefault()
+            })
+
+
+
+            //    **菜單燈箱**
+            $('ul li').on('click', function () {
+                $("#lightbox").fadeIn();
+
+
+                $("#lightbox").on("click", function () {
+                    $("#lightbox").fadeOut();
+                });
+                $("#lightbox > article").on("click", function (e) {
+                    e.stopPropagation();
+                });
+
+
+                //  **菜單燈箱邏輯**
+                // $("#lightbox, .temperature").click(function () {
+                //     alert("rrr")
+                // });
+
+                // 訂購資訊
+
+                $("div.orderinfo").on("click", function () {
+
+                })
+
+                // 常見問題
+                $("div.question").on("click", function () {
+                    window.location.href = "https://tw.yahoo.com";
+                });
+
+
+
+
+
+
+
+
+
+
+
+
+            });
+
+
+
+
+
+            // $("#lightbox > article").on("click", function (e) {
+            //     e.stopPropagation();
+            // });
+
+
+            // $('button').on("click", function () {
+            //     // alert("rrrr");
+            // })
+
+        });
+
+
+    </script>
+
+</body>
+
+</html>
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8"
+    crossorigin="anonymous"></script> -->
+
+</html>
