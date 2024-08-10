@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>商家帳號維護</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
+  <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
+  <style>
+    html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background: #000;
+}
+
+.glow-on-hover {
+    /* width: 220px;
+    height: 50px; */
+    border: none;
+    outline: none;
+    color: #fff;
+    background: #111;
+    cursor: pointer;
+    position: relative;
+    z-index: 0;
+    border-radius: 10px;
+}
+
+.glow-on-hover:before {
+    content: '';
+    background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+    position: absolute;
+    top: -2px;
+    left:-2px;
+    background-size: 400%;
+    z-index: -1;
+    filter: blur(5px);
+    width: calc(100% + 4px);
+    height: calc(100% + 4px);
+    animation: glowing 20s linear infinite;
+    opacity: 0;
+    transition: opacity .3s ease-in-out;
+    border-radius: 10px;
+}
+
+.glow-on-hover:active {
+    color: #000
+}
+
+.glow-on-hover:active:after {
+    background: transparent;
+}
+
+.glow-on-hover:hover:before {
+    opacity: 1;
+}
+
+.glow-on-hover:after {
+    z-index: -1;
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #111;
+    left: 0;
+    top: 0;
+    border-radius: 10px;
+}
+
+@keyframes glowing {
+    0% { background-position: 0 0; }
+    50% { background-position: 400% 0; }
+    100% { background-position: 0 0; }
+}
+  </style>
+</head>
+<body class="hold-transition sidebar-mini">
+<!-- Site wrapper -->
+<div class="wrapper">
+  <!-- Navbar -->
+  
+  <!-- /.navbar -->
+
+  <!-- Main Sidebar Container -->
+  
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>商家帳號維護區</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">首頁</a></li>
+              <li class="breadcrumb-item active">商家帳號維護區</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+      <!-- Default box -->
+      <div class="card">
+        <div class="card-header">
+          
+          <nav class="navbar navbar-light bg-light">
+            <div>
+            <form class="form-inline ">
+              <label class="from-control m-2">統編編號</label>
+              <input class="form-control mr-sm-2" type="text" placeholder="輸入統編" aria-label="Search">
+              <label class="from-control m-2">店家名稱</label>
+              <input class="form-control mr-sm-2" type="text" placeholder="輸入商家" aria-label="Search">
+              <label class="from-control m-2">帳號狀態</label>
+              <select class="form-select">
+                <option>開啟</option>
+                <option>停權</option>
+              </select>
+              <!-- <button class="btn btn-info my-2 my-sm-0" type="submit">搜尋</button> -->
+                
+            </form>
+          </div>
+            <div>
+            <label class=" m-2">註冊日期起日</label>
+              <input type="date" class=" m-2">
+              <label class=" m-2">註冊日期迄日</label>
+              <input type="date" class=" m-2">
+              <input type="submit" class="btn btn-info from-control m-2" value="搜尋">
+            </div>
+          </nav>
+
+
+        </div>
+        <div class="card-body p-0">
+          <table class="table table-striped projects">
+              <thead>
+                  <tr>
+                      <th style="width: 1%">
+                          #
+                      </th>
+                      <th style="width: 15%">
+                          商家名稱
+                      </th>
+                      <th style="width: 15%">
+                          帳號(統編)
+                      </th>
+                      <th style="width: 10%">
+                          聯絡人電話
+                      </th>
+                      <th style="width: 10%" class="text-center">
+                          狀態
+                      </th>
+                      <th style="width: 10%" class="text-center">功能</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr>
+                      <td>
+                          #
+                      </td>
+                      <td>
+                          <a>
+                              十嵐
+                          </a>
+                          <br/>
+                          <small>
+                              註冊日 01.01.2019
+                          </small>
+                      </td>
+                      <td>
+                          1111-1111
+                      </td>
+                      <td class="project_progress">
+                          02-11111111
+                      </td>
+                      <td class="project-state form-switch">
+                        <input type="checkbox" checked data-toggle="toggle" data-size="sm">
+                      </td>
+                      <td class="text-center">
+                        <button class="glow-on-hover" type="button">View</button>
+                      </td>
+                      
+                  </tr>
+                  <tr>
+                    <td>
+                        #
+                    </td>
+                    <td>
+                        <a>
+                            二十嵐
+                        </a>
+                        <br/>
+                        <small>
+                            註冊日 01.01.2019
+                        </small>
+                    </td>
+                    <td>
+                        2222-2222
+                    </td>
+                    <td class="project_progress">
+                        02-22222222
+                    </td>
+                    <td class="project-state form-switch">
+                      <input type="checkbox" checked data-toggle="toggle" data-size="sm">
+                    </td>
+                    <td class="text-center">
+                      <button class="glow-on-hover" type="button">View</button>
+                    </td>
+                    
+                </tr>
+                <tr>
+                  <td>
+                      #
+                  </td>
+                  <td>
+                      <a>
+                          三十嵐
+                      </a>
+                      <br/>
+                      <small>
+                          註冊日 01.01.2019
+                      </small>
+                  </td>
+                  <td>
+                      3333-33333
+                  </td>
+                  <td class="project_progress">
+                      02-33333333
+                  </td>
+                  <td class="project-state form-switch">
+                    <input type="checkbox" checked data-toggle="toggle" data-size="sm">
+                  </td>
+                  <td class="text-center">
+                    <button class="glow-on-hover" type="button">View</button>
+                  </td>
+                  
+              </tr>
+              <tr>
+                <td>
+                    #
+                </td>
+                <td>
+                    <a>
+                        四十嵐
+                    </a>
+                    <br/>
+                    <small>
+                        註冊日 01.01.2019
+                    </small>
+                </td>
+                <td>
+                    4444-4444
+                </td>
+                <td class="project_progress">
+                    02-44444444
+                </td>
+                <td class="project-state form-switch">
+                  <input type="checkbox" checked data-toggle="toggle" data-size="sm">
+                </td>
+                <td class="text-center">
+                  <button class="glow-on-hover" type="button">View</button>
+                </td>
+                
+            </tr>
+            <tr>
+              <td>
+                  #
+              </td>
+              <td>
+                  <a>
+                      五十嵐
+                  </a>
+                  <br/>
+                  <small>
+                      註冊日 01.01.2019
+                  </small>
+              </td>
+              <td>
+                  5555-5555
+              </td>
+              <td class="project_progress">
+                  02-55555555
+              </td>
+              <td class="project-state form-switch">
+                <input type="checkbox" checked data-toggle="toggle" data-size="sm">
+              </td>
+              <td class="text-center">
+                <button class="glow-on-hover" type="button">View</button>
+              </td>
+          </tr>
+          <tr>
+            <td>
+                #
+            </td>
+            <td>
+                <a>
+                    六十嵐
+                </a>
+                <br/>
+                <small>
+                    註冊日 01.01.2019
+                </small>
+            </td>
+            <td>
+                6666-6666
+            </td>
+            <td class="project_progress">
+                02-66666666
+            </td>
+            <td class="project-state form-switch">
+              <input type="checkbox" checked data-toggle="toggle" data-size="sm">
+            </td>
+            <td class="text-center">
+              <button class="glow-on-hover" type="button">View</button>
+            </td>
+        </tr>
+        <tr>
+          <td>
+              #
+          </td>
+          <td>
+              <a>
+                  七十嵐
+              </a>
+              <br/>
+              <small>
+                  註冊日 01.01.2019
+              </small>
+          </td>
+          <td>
+              7777-7777
+          </td>
+          <td class="project_progress">
+              02-77777777
+          </td>
+          <td class="project-state form-switch">
+            <input type="checkbox" checked data-toggle="toggle" data-size="sm">
+          </td>
+          <td class="text-center">
+            <button class="glow-on-hover" type="button">View</button>
+          </td>
+      </tr>
+      
+              </tbody>
+          </table>
+        </div>
+        <!-- /.card-body -->
+      </div>
+      <!-- /.card -->
+
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+
+  <!-- Control Sidebar -->
+  <!-- <aside class="control-sidebar control-sidebar-dark">
+    
+  </aside> -->
+  <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery -->
+<script src="../../plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- AdminLTE App -->
+<script src="../../dist/js/adminlte.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="../../dist/js/demo.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
+</body>
+</html>

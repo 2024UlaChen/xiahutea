@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>夏虎茶</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="./slicktools/slick.css">
+    <link rel="stylesheet" href="./slicktools/slick-theme.css">
+    <style>
+        .IndexImgNameFontSize{
+            font-weight: bold; 
+            color:black
+
+        }
+        .KunStar{
+            color:#F9A825;
+            font-size: 16px;
+        }
+        .image-container {
+            position: relative;
+            display: inline-block;
+        }
+        .icon-overlay {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 5px;
+            border-radius: 50%;
+        }
+        .KunAdsSize{
+            max-width: 60%; 
+            height: auto;
+            
+        }
+        .KunHidden{
+            overflow: hidden;
+        }
+        div.slick-slide{
+            
+            overflow:hidden;
+            background-color: rgb(221, 231, 235);
+            text-align: center;
+        }
+        .slick-slide img{
+            display: inline;
+        }
+        .KunSlickImg{
+            /* width: 100%; */
+            height: 300px;
+            
+            
+        /* width: 50vw; */
+        /* height: 30vh; */
+        /* margin-left: 5%; */
+        /* overflow: hidden; */
+    }
+        
+        .KunSpeedSearch{
+            font-size: 17px;
+        }
+        .KunIndexSotreImg{
+            max-width: 100%; 
+            height: auto;
+            position: relative;
+        }
+        .favorite-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-weight: bold;
+            font-size: 1.5rem; /* 根據需要調整字體大小 */
+            background-color: rgba(0, 0, 0, 0.5); /* 可選：增加背景以使文字更清晰 */
+            padding: 0.5rem; /* 可選：增加內邊距 */
+            border-radius: 0.25rem; /* 可選：增加圓角 */
+            text-align: center;
+        }
+        .KunNav{
+            list-style: none;
+        }
+        
+    </style>
+</head>
+<body>
+<header class="header style2">
+    <div class="top-bar">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="col-lg-3">
+                        <div class="header-message">
+                            <h1>夏虎茶</h1>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="query-bar">
+                            <a href="#">
+                                <i class="fa fa-search" aria-hidden="true"></i>
+                            </a>
+                            <input type="text" placeholder="搜尋品牌、門市或商品" name="" id="">
+                            <a href="#">
+                <span>
+                  <i class="fa fa-times" aria-hidden="true"></i>
+                </span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <ul class="header-user-links top-bar-right">
+                            <li>
+                                <a href="#">
+                  <span>
+                    <i class="fa fa-book" aria-hidden="true"></i>
+                  </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                  <span>
+                    <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                  </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                  <span>
+                    <i class="fa fa-bell" aria-hidden="true"></i>
+                  </span>
+                                </a>
+                            </li>
+                            <li class="teamo-dropdown block-account">
+                                <a href="#" data-teamo="teamo-dropdown">
+                  <span>
+                    <i class="fa fa-user-circle" aria-hidden="true"></i>
+                  </span>
+                                </a>
+                                <ul class="teamo-submenu" id="query-member">
+                                    <li class="switcher-option">
+                                        <div class="account-list row">
+                                            <div class="col-lg-12 no-padding">
+                                                <div class="col-sm-4">
+                                                    <img src="/assets/images/xiahutealogo.jpg" alt="userPhoto">
+                                                </div>
+                                                <div class="col-lg-8">
+                                                    <span>userName</span>
+                                                    <span>userAccount</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="switcher-option">
+                                        <a href="#">
+                                            <span> 帳號設定 </span>
+                                        </a>
+                                    </li>
+                                    <li class="switcher-option">
+                                        <a href="#">
+                                            <span> 會員卡 </span>
+                                        </a>
+                                    </li>
+                                    <li class="switcher-option">
+                                        <a href="#">
+                                            <span> 我的券夾 </span>
+                                        </a>
+                                    </li>
+                                    <hr>
+                                    <li class="switcher-option">
+                                        <a href="#">
+                                            <span> 訂單管理 </span>
+                                        </a>
+                                    </li>
+                                    <li class="switcher-option">
+                                        <a href="#">
+                                            <span> 意見回饋 </span>
+                                        </a>
+                                    </li>
+                                    <li class="switcher-option">
+                                        <a href="#">
+                                            <span> 常見問題 </span>
+                                        </a>
+                                    </li>
+                                    <hr>
+                                    <li class="switcher-option">
+                                        <a href="#">
+                                            <span> 登出 </span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+    <div class="kunClass ">
+        <div>
+            <img class="KunSlickImg " src="./白.jpg" alt="" >
+        </div>
+        <div>
+            <img class="KunSlickImg" src="./日.jpg" alt="" sizes="" srcset="">
+        </div>
+        <div>
+            <img class="KunSlickImg" src="./巴曜Card.png" alt="" sizes="" srcset="">
+        </div>
+        <div>
+            <img class="KunSlickImg" src="./在睡.jpg" alt="" sizes="" srcset="">
+        </div>
+        <div>
+            <img class="KunSlickImg" src="./一.webp" alt="" sizes="" srcset="">
+        </div>
+    </div> 
+    <!--輪播結束-->
+    
+    <div class="Container m-5" style="text-align: center;">
+        
+    </div>
+    <div class="Container m-5">
+        <div class="row KunSpeedSearch">
+            <div class="col-2"></div>
+            <div class="col"><i class="fa-solid fa-map-location">找附近</i></div>
+            <div class="col searchPlace"><i class="fa-solid fa-map">找區域</i></div>
+            <div class="col"><i class="fa-solid fa-store">找商家</i></div>            
+            <div class="col"><i class="fa-solid fa-shop">找品牌</i></div>            
+            <div class="col"><i class="fa-solid fa-crown">集點卡</i></div>
+            <div class="col"><i class="fa-solid fa-tags">優惠券</i></div>
+            <div class="col"><i class="fa-solid fa-rectangle-list">曾點過</i></div>
+            <div class="col"></div>            
+            <div class="col-2"></div>
+        </div>
+        
+        
+            <div class="row justify-content-center">
+                
+                <figure class="col-3 m-3 figure  ">
+                    <img src="./AL_56228.webp" alt=""  class="rounded KunIndexSotreImg " >
+                    
+                    
+                    <div class="row">
+                        <figcaption class="figure-caption col-10 IndexImgNameFontSize" >得正大安計畫</figcaption>
+                        <figcaption class="figure-caption col"><i class="fa-solid fa-truck"></i></figcaption>
+                        <figcaption class="figure-caption col-12" ><i class="KunStar fa-solid fa-star"></i><span class="KunRank">4.8</span>&nbsp;‧&nbsp;11:00~22:00&nbsp;‧&nbsp;約0.2公里</figcaption>
+                    </div>                   
+                    
+                </figure>
+
+                <figure class="col-3 m-3 figure">
+                    <img src="./photo-64b7454a3f2f3.gif" alt="" class="rounded KunIndexSotreImg"  >
+                    <div class="row">
+                        <figcaption class="figure-caption col-10 IndexImgDescribeFontSize" style="font-weight: bold; color:black">得正新店計畫</figcaption>
+                    <figcaption class="figure-caption col"><i class="fa-solid fa-truck"></i></figcaption>
+                    <figcaption class="figure-caption col-12" ><i class="KunStar fa-solid fa-star"></i><span class="KunRank">4.5</span>&nbsp;‧&nbsp;11:00~22:00&nbsp;‧&nbsp;約1.2公里</figcaption>
+                    </div>      
+                </figure>
+                <figure class="col-3 m-3 figure">
+                    <img src="./202404019-7.jpg" alt="" class="rounded KunIndexSotreImg" >
+                    <div class="row">
+                        <figcaption class="figure-caption col-10 IndexImgNameFontSize" >八曜和茶七張店</figcaption>
+                    <figcaption class="figure-caption col"><i class="fa-solid fa-truck"></i></figcaption>
+                    <figcaption class="figure-caption col-12" ><i class="KunStar fa-solid fa-star"></i><span class="KunRank">5</span>&nbsp;‧&nbsp;11:00~22:00&nbsp;‧&nbsp;約3公里</figcaption>
+                    </div>      
+                </figure>
+                <figure class="col-3 m-3 figure">
+                    <img src="./43_20230904101040_5619.jpg" alt="" class="rounded KunIndexSotreImg" >
+                    <div class="row">
+                        <figcaption class="figure-caption col-10 IndexImgNameFontSize" >得正大安計畫</figcaption>
+                    <figcaption class="figure-caption col"><i class="fa-solid fa-truck"></i></figcaption>
+                    <figcaption class="figure-caption col-12" ><i class="KunStar fa-solid fa-star"></i><span class="KunRank">4.6</span>&nbsp;‧&nbsp;11:00~22:00&nbsp;‧&nbsp;約8公里</figcaption>
+                    </div>      
+                </figure>
+                <figure class="col-3 m-3 figure">
+                    <img src="./一.webp" alt="" class="rounded KunIndexSotreImg" >
+                    <div class="row">
+                        <figcaption class="figure-caption col-10 IndexImgNameFontSize" >一沐日大坪林店</figcaption>
+                    <figcaption class="figure-caption col"><i class="fa-solid fa-truck"></i></figcaption>
+                    <figcaption class="figure-caption col-12" ><i class="KunStar fa-solid fa-star"></i><span class="KunRank">4.4</span>&nbsp;‧&nbsp;11:00~22:00&nbsp;‧&nbsp;約2.4公里</figcaption>
+                    </div>      
+                </figure>
+                <!--here-->
+                <figure class="col-3 m-3 figure">
+                    <img src="./五銅.jpg" alt="" class="rounded KunIndexSotreImg" >
+                    <div class="row">
+                        <figcaption class="figure-caption col-10 IndexImgNameFontSize" >五同好景美店</figcaption>
+                    <figcaption class="figure-caption col"><i class="fa-solid fa-truck"></i></figcaption>
+                    <figcaption class="figure-caption col-12" ><i class="KunStar fa-solid fa-star"></i><span class="KunRank">4.4</span>&nbsp;‧&nbsp;11:00~22:00&nbsp;‧&nbsp;約2.4公里</figcaption>
+                    </div>      
+                </figure>
+                <figure class="col-3 m-3 figure">
+                    <img src="./在睡.jpg" alt="" class="rounded KunIndexSotreImg" >
+                    <div class="row">
+                        <figcaption class="figure-caption col-10 IndexImgNameFontSize" >在睡五分鐘永和店</figcaption>
+                    <figcaption class="figure-caption col"><i class="fa-solid fa-truck"></i></figcaption>
+                    <figcaption class="figure-caption col-12" ><i class="KunStar fa-solid fa-star"></i><span class="KunRank">4.4</span>&nbsp;‧&nbsp;11:00~22:00&nbsp;‧&nbsp;約2.4公里</figcaption>
+                    </div>      
+                </figure>
+                <figure class="col-3 m-3 figure">
+                    <img src="./白.jpg" alt="" class="rounded KunIndexSotreImg" >
+                    <div class="row">
+                        <figcaption class="figure-caption col-10 IndexImgNameFontSize" >沐白中和店</figcaption>
+                    <figcaption class="figure-caption col"><i class="fa-solid fa-truck"></i></figcaption>
+                    <figcaption class="figure-caption col-12" ><i class="KunStar fa-solid fa-star"></i><span class="KunRank">4.4</span>&nbsp;‧&nbsp;11:00~22:00&nbsp;‧&nbsp;約2.4公里</figcaption>
+                    </div>      
+                </figure>
+
+
+            </div>
+
+
+
+
+
+
+    
+    <div class="row align-items-md-stretch">
+        <div class="col-md-6">
+          <div class="h-100 p-5 text-white bg-dark rounded-3">
+            <h2>有夏虎茶真好，快來瞭解我們吧</h2>
+            
+            <button class="btn btn-outline-light" type="button">快速上手</button>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="h-100 p-5 bg-light border rounded-3">
+            <h2>有夏虎茶真好，快來加入我們吧</h2>
+            
+            <button class="btn btn-outline-secondary" type="button">手刀報名</button>
+          </div>
+        </div>
+      </div>
+    </div>
+<footer class="footer style7">
+    <div class="container">
+        <div class="container-wapper no-padding">
+            <div class="row">
+                <div class="box-footer col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                    <div class="teamo-custommenu default">
+                        <ul class="menu">
+                            <li class="menu-item">
+                                <h3>夏虎茶</h3>
+                            </li>
+                            <li class="menu-item">
+                                <a href="#">公司資訊：雲仲資訊股份有限公司</a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="#">統一編號：58364751
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="box-footer col-xs-12 col-sm-4 col-md-4 col-lg-4 hidden-xs">
+
+                </div>
+                <div class="box-footer col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                    <div class="teamo-custommenu default">
+                        <ul class="menu">
+                            <li class="menu-item">
+                                <a href="#">常見問題</a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="#">隱私權條款</a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="#">意見回饋</a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="#">使用者條款</a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="#">信用卡條款</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-end">
+                <div class="row">
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="teamo-socials">
+                            <ul class="socials">
+                                <li>
+                                    <a href="#" class="social-item" target="_blank">
+                                        <i class="icon fa fa-facebook"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="social-item" target="_blank">
+                                        <i class="icon fa fa-twitter"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="social-item" target="_blank">
+                                        <i class="icon fa fa-instagram"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="coppyright">
+                            © 2024 XiaHuTea 台灣 . All rights reserved
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="./slicktools/slick.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function generateAreaSelect(cityId) {
+            let areaOptions = {};
+            if (cityId === "1") { // 新北市
+                areaOptions = {
+                    1: '板橋區',
+                    2: '三峽區',
+                    3: '新店區'
+                };
+            } else if (cityId === "2") { // 台北市
+                areaOptions = {
+                    1: '大安區',
+                    2: '信義區',
+                    3: '中正區'
+                };
+            }
+            Swal.fire({
+                title: '選擇區域',
+                input: 'select',
+                inputOptions: areaOptions,
+                inputPlaceholder: '選擇區域',
+                showCancelButton: true,
+                inputValidator: (value) => {
+                    return new Promise((resolve) => {
+                        if (value) {
+                            resolve();
+                        } else {
+                            resolve('請選擇區域');
+                        }
+                    });
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const selectedArea = result.value;
+                    Swal.fire(`您選擇的區域是: ${selectedArea}`);
+                }
+            });
+        }
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded",function(){
+
+
+
+            let userLogin = document.querySelector('.userLogin'); //登入按鈕
+            let searchPlace = document.querySelector('.searchPlace');
+            searchPlace.addEventListener("click",function(){
+                Swal.fire({
+                    title:'選擇區域',
+                    input:"select",
+                    inputOptions:{
+                            1:'新北市',
+                            2:'台北市'                           
+                        
+                        
+                    },
+                    inputPlaceholder:"選擇縣市",
+                    showCancelButton:true,
+                    inputValidator:(value) =>{
+                        return new Promise(
+                            (resolve) => {
+                                if(value){
+                                    resolve();
+                                }else{
+                                    resolve("選擇縣市");
+                                }
+                            });
+                    }
+                }).then((result) => {
+                    if(result.isConfirmed){
+                        const selectedCity = result.value;
+                        generateAreaSelect(selectedCity);
+                    }
+                });
+
+
+            });//典籍了區域
+
+             userLogin.addEventListener('click',function(){
+                (async () => {
+                    const { value: formValues } = await Swal.fire({
+                        title: "會員登入",
+                        html: `
+                        <label>帳號</label>
+                        <input id="swal-input1" class="swal2-input"><br>
+                        <label>密碼</label>
+                        <input type="password" id="swal-input2" class="swal2-input">
+
+                        `,
+                        footer: '<a href="#">忘記密碼?</a>',
+                        showCancelButton:true,
+                        confirmButtonText: '登入',
+                        cancelButtonText:'註冊',
+                        focusConfirm: false,
+                        preConfirm: () => {
+                        return [
+                            document.getElementById("swal-input1").value,
+                            document.getElementById("swal-input2").value
+                        ];
+                        }
+                    });
+                    if (formValues) {
+                        Swal.fire(JSON.stringify(formValues));
+                    }
+                    })()
+            });
+
+
+                //加入愛心失敗
+            let heartTag ='<div class="favorite-text"><i class="fa-solid fa-heart"></i></div>';
+            let storetags = document.querySelectorAll('.KunIndexSotreImg');
+            storetags.forEach(function(item){
+                //監聽被覆蓋
+                item.addEventListener('mouseenter',function(){
+                    if (!item.parentElement.querySelector('.favorite-text')) {
+                // item.insertAdjacentHTML('afterend', heartTag);
+            }
+                });
+                item.addEventListener('mouseleave',function(){
+                    console.log('走了')
+                    let heartElement = item.parentElement.querySelector('.favorite-text');
+                    if (heartElement) {
+                        // heartElement.remove();
+                    }
+                });
+            }); //所有店家迴圈
+
+            
+
+        
+
+        }); //end dom    
+        
+        
+
+        $(document).ready(function() {
+            $('.kunClass').slick({
+                centerMode: true,
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                autoplay: true,
+                autoplaySpeed: 2000,
+                
+            });
+            $('.slick-slide').css('filter', 'blur(3px)');
+        $('.slick-center').css('filter', 'none');
+             // 监听 Slick 的初始化和切换事件，以确保正确应用模糊效果
+    $('.kunClass').on('init afterChange', function(event, slick, currentSlide){
+        // 确保在初始化和每次滑动后应用正确的滤镜
+        $('.slick-slide').css('filter', 'blur(3px)');
+        $('.slick-slide').css('overflow','hidden');
+        $('.slick-center').css('filter', 'none');
+        $('.slick-center').css('overflow','none');
+    });
+        });
+
+
+        
+        </script>
+</body>
+</html>

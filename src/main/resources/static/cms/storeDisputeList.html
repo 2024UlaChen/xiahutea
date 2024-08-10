@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>後台 | 訂單爭議管理</title>
+
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet" href="../store/plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="../store/dist/css/adminlte.min.css">
+    <!-- DataTables -->
+    <link rel="stylesheet" href="../store/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="../store/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="../store/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+    <style>
+        div.dataTables_filter label{
+            font-weight:normal;
+        }
+        input.order_filter{
+            border:0.5px #C0C0C0 solid;
+            margin-left:.5em;
+            display:inline-block;
+            width:auto;
+            margin-right:20px
+        }
+        div.dataTables_filter{
+            margin-bottom: 50px;
+        }
+        div.dataTables_wrapper div.dataTables_filter{
+            display: none;
+        }
+    </style>
+</head>
+
+<body class="hold-transition sidebar-mini">
+    <div class="wrapper">
+    <!--header & aside -->
+        <div class="storeheader"></div>
+        <div class="storeaside"></div>
+
+    <!-- 功能       -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1>訂單爭議管理</h1>
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                <li class="breadcrumb-item active">訂單爭議管理</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div><!-- /.container-fluid -->
+            </section>
+
+            <!-- Main content 查詢欄 待確認-->
+            <section class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">爭議列表</h3>
+                                </div>
+                                <!-- /.card-header 訂單列表 -->
+                                <div class="card-body">
+                                    <!-- /.order_filter -->
+                                    <div class="dataTables_filter">
+                                        <label>
+                                            爭議編號<input type="search" class="order_filter">
+                                        </label>
+                                        <label>
+                                            訂單編號<input type="search" class="order_filter">
+                                        </label>
+                                        <label>
+                                            會員姓名<input type="search" class="order_filter">
+                                        </label>
+                                        <label>
+                                            店家名稱<input type="search" class="order_filter">
+                                        </label>
+                                        <br>
+                                        <label>
+                                            申請起日 <input type="date" class="order_filter">
+                                        </label>
+                                        <label>
+                                            申請迄日<input type="date"class="order_filter">
+                                        </label>
+                                        <label>處理狀態</label>
+                                        <select>
+                                            <option value=”0” selected>請選擇</option>
+                                            <option value=”1”>未處理</option>
+                                            <option value=”2”>同意</option>
+                                            <option value=”3”>不同意</option>
+                                        </select>
+                                        <button style="float: right;">查詢</button>
+                                    </div>
+                                    <!-- /.order_filter -->
+                                    <table id="example1" class="table table-bordered table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th>申請日期</th>
+                                            <th>爭議編號</th>
+                                            <th>訂單編號</th>
+                                            <th>會員姓名</th>
+                                            <th>店家名稱</th>
+                                            <th>處理狀態</th>
+                                            <th>退款金額</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>2024/07/01</td>
+                                            <td><a href="#">R240701001</a></td>
+                                            <td>2407010013</td>
+                                            <td>陳姿姿</td>
+                                            <td>一沐日汐止店</td>
+                                            <td>未處理</td>
+                                            <td>300</td>
+                                        </tr>
+                                        <tr>
+                                            <td>2024/07/01</td>
+                                            <td><a href="#">R240701002</a></td>
+                                            <td>2407010010</td>
+                                            <td>廖寧寧</td>
+                                            <td>鶴茶樓中正店</td>
+                                            <td>同意</td>
+                                            <td>80</td>
+                                        </tr>
+                                        <tr>
+                                            <td>2024/07/01</td>
+                                            <td><a href="#">R240721004</a></td>
+                                            <td>2407210099</td>
+                                            <td>潘安妮</td>
+                                            <td>得正淡水店</td>
+                                            <td>不同意</td>
+                                            <td>1100</td>
+                                        </tr>
+                                        <tr>
+                                            <td>2024/07/01</td>
+                                            <td><a href="#">R240901044</a></td>
+                                            <td>2408110013</td>
+                                            <td>紀小琴</td>
+                                            <td>鶴茶樓中正店</td>
+                                            <td>同意</td>
+                                            <td>50</td>
+                                        </tr>
+                                        <tr>
+                                            <td>2024/07/01</td>
+                                            <td><a href="#">R240709001</a></td>
+                                            <td>2407090019</td>
+                                            <td>鐘小芳</td>
+                                            <td>萬波新莊店</td>
+                                            <td>同意</td>
+                                            <td>180</td>
+                                        </tr>
+                                        <tr>
+                                            <td>2024/07/01</td>
+                                            <td><a href="#">R240711041</a></td>
+                                            <td>2407080083</td>
+                                            <td>吳家家</td>
+                                            <td>鶴茶樓中正店</td>
+                                            <td>未處理</td>
+                                            <td>220</td>
+                                        </tr>
+                                        <tr>
+                                            <td>2024/07/01</td>
+                                            <td><a href="#">R240706001</a></td>
+                                            <td>2407040047</td>
+                                            <td>劉小渝</td>
+                                            <td>一沐日汐止店</td>
+                                            <td>未處理</td>
+                                            <td>240</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                            <!-- /.card -->
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+                </div>
+                <!-- /.container-fluid -->
+            </section>
+            <!-- /.content -->
+        </div>
+
+    <!--footer -->
+        <div class="storefooter"></div>
+    </div>
+
+    <script src="../store/plugins/jquery/jquery.min.js"></script>
+    <script src="../store/plugins/jquery-ui/jquery-ui.min.js"></script>
+    <script src="../store/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../store/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+
+    <script src="../store/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="../store/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="../store/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="../store/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="../store/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="../store/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+
+    <script src="../store/dist/js/adminlte.js"></script>
+    <script src="../store/dist/js/demo.js"></script>
+    <script src="../store/dist/js/storegeneral.js"></script>
+    <!-- Page specific script -->
+    <script>
+        $(function () {
+            $("#example1").DataTable({
+                "responsive": true, "lengthChange": false, "autoWidth": false,
+                "buttons": ["excel", "print"]
+            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+            $('#example2').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": true,
+            });
+        });
+    </script>
+</body>
+
+</html>

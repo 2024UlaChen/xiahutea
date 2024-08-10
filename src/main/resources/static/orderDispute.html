@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="shortcut icon" type="image/x-icon" href="assets/images/favicon.png" />
+    <link
+            href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i&display=swap"
+            rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,300i,400,400i,700,700i&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="assets/css/animate.min.css">
+    <link rel="stylesheet" href="assets/css/jquery-ui.css">
+    <link rel="stylesheet" href="assets/css/slick.css">
+    <link rel="stylesheet" href="assets/css/chosen.min.css">
+    <link rel="stylesheet" href="assets/css/pe-icon-7-stroke.css">
+    <link rel="stylesheet" href="assets/css/magnific-popup.min.css">
+    <link rel="stylesheet" href="assets/css/lightbox.min.css">
+    <link rel="stylesheet" href="assets/js/fancybox/source/jquery.fancybox.css">
+    <link rel="stylesheet" href="assets/css/jquery.scrollbar.min.css">
+    <link rel="stylesheet" href="assets/css/mobile-menu.css">
+    <link rel="stylesheet" href="assets/fonts/flaticon/flaticon.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.bootcss.com/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+
+    <style>
+        /* background-color: #f5f5f5; */
+
+        div.header-message>h1 {
+            margin: 0 auto;
+            border-radius: 50%;
+            color: #73B4BA;
+        }
+
+        .header-user-links li {
+            display: inline-block;
+        }
+
+        .header-user-links i {
+            border-radius: 50%;
+            font-size: 20px;
+            margin-left: 10px;
+        }
+
+
+        .query-bar a {
+            margin-left: 10px;
+            margin-right: 10px;
+            border-radius: 50%;
+        }
+
+        .query-bar input {
+            background-color: white;
+            width: 80%;
+        }
+
+        #query-member {
+            min-width: 200px;
+            padding-left: 10px;
+        }
+
+        #query-member li {
+            min-width: 100%;
+        }
+
+        #query-member img {
+            width: 100%;
+        }
+
+        #query-member .account-list {
+            margin-top: 10%;
+        }
+
+        .reset-margin {
+            margin: 0;
+            margin-top: 2%;
+            background-color: #f5f5f5;
+        }
+
+        .member-aside {
+            width: 30%;
+            height: 100%;
+            margin: 0 auto;
+            /* background-color: #f8f8f8; */
+
+        }
+
+        .member-introduction {
+            margin: 0 auto;
+            margin-right: 30px;
+            padding-top: 55px;
+            padding-right: 20px;
+            padding-bottom: 45px;
+            padding-left: 20px;
+            background-color: white;
+        }
+
+        .member-introduction div {
+            text-align: center;
+            overflow: hidden;
+        }
+
+
+        .member-list {
+            margin-right: 30px;
+            margin-top: 50px;
+            padding-top: 55px;
+            padding-right: 20px;
+            padding-bottom: 50px;
+            padding-left: 60px;
+            background-color: white;
+        }
+
+        .member-list li {
+            height: 60px;
+            font-size: 18px;
+            text-align: left;
+            list-style-type: none;
+        }
+
+        .warn {
+            display: inline;
+            color: #ff5e7d;
+        }
+
+        .remind {
+            color: #9b9b9b;
+            font-size: 12px;
+        }
+
+        .userPhoto {
+            margin: 0 auto;
+            display: inline-block;
+            width: 30%;
+            border-radius: 50%;
+        }
+
+        .sex {
+            font-size: 16px;
+            display: block;
+        }
+
+        /* 爭議申請表   */
+        div.content-area{
+            margin: 20px 20% 20px 20%;
+            background-color: #f1f1f1;
+            width: 50%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center; /* 垂直置中 */
+            flex-direction: column; /* 垂直排列子元素 */
+            padding: 20px; /* 添加一些內邊距以獲得更好的間距 */
+            box-sizing: border-box; /* 確保 padding 不會影響寬度和高度 */
+            border-radius: 1%;
+
+        }
+
+        div.dispute_apply_title{
+            font: 20px black;
+            font-weight: bold;
+            padding-bottom: 20px;
+        }
+        form.dispute_apply_form{
+            width: 100%;
+            height: 100%;
+            background-color: white;
+            padding: 20px;
+            border-radius: 1%;
+        }
+        label.dispute_apply_form_key{
+            padding-right: 20px
+        }
+        input.dispute_apply_form_value{
+            width: 100%;
+            margin-bottom: 20px;
+
+        }
+        textarea.dispute_apply_form_reason{
+            border: 1px gray solid;
+            min-width: 100%;
+            margin-bottom: 20px;
+
+        }
+        button.btn_dispute_apply{
+            display: inline-flex;
+            margin: 10px
+        }
+        .button-container {
+            display: flex;
+            justify-content: center; /* 水平置中 */
+            gap: 10px; /* 添加按鈕之間的間距 */
+            padding: 5px; /* 添加內邊距 */
+        }
+
+        .btn_dispute_apply{
+            padding: 10px 20px; /* 按鈕內部的內邊距 */
+            margin: 10px;
+        }
+
+    </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="main-content main-content-product">
+    <div class="container">
+        <div class="content-area">
+            <div class="dispute_apply_title">訂單爭議申請</div>
+            <form class="dispute_apply_form" action="#" method="#">
+                <div>
+                    <label class="dispute_apply_form_key">訂單編號</label>
+                    <input class="dispute_apply_form_value" type=”text” name=”order_id” placeholder="2407200001" disabled>
+                </div>
+                <div>
+                    <label class="dispute_apply_form_key">會員姓名</label>
+                    <input class="dispute_apply_form_value" type=”text” name=”dispute_user_name” placeholder="sandy" disabled>
+                </div>
+                <div>
+                    <label class="dispute_apply_form_key">店家名稱</label>
+                    <input class="dispute_apply_form_value" type=”text” name=”dispute_store_name” placeholder="五十嵐汐止店" disabled>
+                </div>
+                <div>
+                    <label class="dispute_apply_form_key">商品總數</label>
+                    <input class="dispute_apply_form_value" type=”text” name="dispute_product_tatal" placeholder="3" disabled>
+                </div>
+                <div>
+                    <label class="dispute_apply_form_key">付款金額</label>
+                    <input class="dispute_apply_form_value" type=”text” name="dispute_paymoney" placeholder="170" disabled>
+                </div>
+                <div>
+                    <label class="dispute_apply_form_key">申請原因</label><br>
+                    <textarea class="dispute_apply_form_reason" name="dispute_reason" rows="2"></textarea>
+                </div>
+                <div class="button-container">
+                    <button class="btn_dispute_apply" id="btn_submit" type="button">送出</button>
+                    <button class="btn_dispute_apply" id="btn_back" type="button">取消</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="footer"></div>
+
+<script src="assets/js/jquery-1.12.4.min.js"></script>
+<script src="assets/js/jquery.plugin-countdown.min.js"></script>
+<script src="assets/js/jquery-countdown.min.js"></script>
+<script src="assets/js/bootstrap.min.js"></script>
+<script src="assets/js/owl.carousel.min.js"></script>
+<script src="assets/js/magnific-popup.min.js"></script>
+<script src="assets/js/isotope.min.js"></script>
+<script src="assets/js/jquery.scrollbar.min.js"></script>
+<script src="assets/js/jquery-ui.min.js"></script>
+<script src="assets/js/mobile-menu.js"></script>
+<script src="assets/js/chosen.min.js"></script>
+<script src="assets/js/slick.js"></script>
+<script src="assets/js/jquery.elevateZoom.min.js"></script>
+<script src="assets/js/jquery.actual.min.js"></script>
+<script src="assets/js/fancybox/source/jquery.fancybox.js"></script>
+<script src="assets/js/lightbox.min.js"></script>
+<script src="assets/js/owl.thumbs.min.js"></script>
+<script src="assets/js/jquery.scrollbar.min.js"></script>
+<script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyC3nDHy1dARR-Pa_2jjPCjvsOR4bcILYsM'></script>
+<script src="assets/js/frontend-plugin.js"></script>
+<script src="assets/js/newjs.js"></script>
+<script src="assets/js/general.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+
+        let btn_back_el = document.getElementById("btn_back");
+        let btn_submit_el = document.getElementById("btn_submit");
+
+        let form_el = document.getElementsByClassName("dispute_apply_form")[0];
+        let order_id = document.getElementsByClassName("dispute_apply_form_value")[0].value;
+        let dispute_user_name = document.getElementsByClassName("dispute_apply_form_value")[1].value;
+        let form_reason_el = document.getElementsByClassName("dispute_apply_form_reason")[0];
+
+        //取消按鈕
+        btn_back_el.addEventListener("click", function(e){
+            e.preventDefault();
+            history.back();
+        });
+
+
+        //送出按鈕
+        btn_submit_el.addEventListener("click", function(e){
+            if(form_reason_el.value.length > 4 ){
+                e.preventDefault();
+
+                let dispute_data = new FormData();
+                dispute_data.append("order_id", order_id);
+                dispute_data.append("dispute_user_name", dispute_user_name);
+                dispute_data.append("dispute_reason", form_reason_el);
+
+                //todo 要更改url
+                fetch("https://jsonplaceholder.typicode.com/posts", {
+                    method: "POST",
+                    body: dispute_data
+                }).then(res => res.json()).then(data => {
+                    alert("已送出爭議申請");
+                    location.href = "orderDetail.html";
+                }).catch(error => {
+                    console.error("發生錯誤：", error);
+                    alert("提交時發生錯誤，請稍後再試。");
+                });
+            }else{
+                e.preventDefault();
+                alert("申請原因 請輸入五個字以上");
+            }
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>後台 | 訂單爭議明細</title>
+
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet" href="../store/plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="../store/dist/css/adminlte.min.css">
+    <!-- DataTables -->
+    <link rel="stylesheet" href="../store/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="../store/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="../store/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+    <style>
+        tbody.table_info th{
+            width:20%
+        }
+        tbody.table_info td{
+            width:80%
+        }
+        button.card-btn{
+            float: right; /* 將按鈕浮動到右邊 */
+            margin-left: 10px; /* 可以調整按鈕之間的間距 */
+        }
+    </style>
+</head>
+
+<body class="hold-transition sidebar-mini">
+    <div class="wrapper">
+    <!--header & aside -->
+        <div class="storeheader"></div>
+        <div class="storeaside"></div>
+
+    <!-- 功能       -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1>訂單爭議明細</h1>
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                <li class="breadcrumb-item active">訂單爭議明細</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div><!-- /.container-fluid -->
+            </section>
+
+            <!-- Main content -->
+            <section class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="card-title">訂單資訊</div>
+                                    <button class="card-btn">回上一頁</button>
+                                    <button class="card-btn">儲存</button>
+                                </div>
+                                <!-- /.card-header -->
+                                <div class="card-body p-0">
+                                    <table class="table table-sm" width="100%" style="text-align:center;table-layout: fixed">
+                                        <thead>
+                                        <tr>
+                                            <th>爭議編號</th>
+                                            <th>訂單編號</th>
+                                            <th>會員編號</th>
+                                            <th>會員姓名</th>
+                                            <th>店家名稱</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>R240706001</td>
+                                            <td>2407010004</td>
+                                            <td>0977123456</td>
+                                            <td>黃園美</td>
+                                            <td>五十嵐永和店</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                            <!-- /.card -->
+
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">商品資訊</h3>
+                                </div>
+                                <!-- /.card-header -->
+                                <div class="card-body p-0">
+                                    <table class="table table-sm" width="100%" style="text-align:center;table-layout: fixed">
+                                        <thead>
+                                        <tr>
+                                            <th>商品名稱</th>
+                                            <th>冰塊</th>
+                                            <th>甜度</th>
+                                            <th>數量</th>
+                                            <th>商品小計</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>芒果青</td>
+                                            <td>微冰</td>
+                                            <td>無糖</td>
+                                            <td>2</td>
+                                            <td><span>$ </span>120</td>
+                                        </tr>
+                                        <tr>
+                                            <td>紅茶拿鐵</td>
+                                            <td>少冰</td>
+                                            <td>半糖</td>
+                                            <td>1</td>
+                                            <td><span>$ </span>70</td>
+                                        </tr>
+                                        <tr>
+                                            <td>珍珠奶茶</td>
+                                            <td>正常</td>
+                                            <td>微糖</td>
+                                            <td>1</td>
+                                            <td><span>$ </span>75</td>
+                                        </tr>
+                                        </tbody>
+                                        <tfoot>
+                                        <tr>
+                                            <td colspan="5"></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3"></td>
+                                            <th>商品小計</th>
+                                            <td><span>$ </span>265</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3"></td>
+                                            <th>平台處理費</th>
+                                            <td><span>$ </span>10</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3"></td>
+                                            <th>會員錢包折抵</th>
+                                            <td><span>$ -</span>10</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3"></td>
+                                            <th>優惠券折抵</th>
+                                            <td><span>$ -</span>5</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3"></td>
+                                            <th>集點折抵</th>
+                                            <td><span>$ -</span>5</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3"></td>
+                                            <th>付款金額</th>
+                                            <td><span>$ </span>265</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3"></td>
+                                            <th>付款方式</th>
+                                            <td>信用卡</td>
+                                        </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                            <!-- /.card -->
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">爭議資訊</h3>
+                                </div>
+                                <!-- /.card-header -->
+                                <div class="card-body p-0">
+                                    <table class="table">
+                                        <tbody class="table_info">
+                                        <tr>
+                                            <th>申請日期</th>
+                                            <td>2024/07/26 20:40</td>
+                                        </tr>
+                                        <tr>
+                                            <th>爭議原因</th>
+                                            <td>珍珠奶茶裡 沒有珍珠zzzzzzzzzzzzzzzzzzzzzz</td>
+                                        </tr>
+                                        <tr>
+                                            <th>處理狀態</th>
+                                            <td>
+                                                <select>
+                                                    <option value=”0” selected>請選擇</option>
+                                                    <option value=”1”>未處理</option>
+                                                    <option value=”2”>同意</option>
+                                                    <option value=”3”>不同意</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>退款金額</th>
+                                            <td>
+                                                <input type="text" style="width: 100%">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>不同意原因</th>
+                                            <td>
+                                                <textarea style="width: 100%;height: 50;"></textarea>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th rowspan="3">內部備註</th>
+                                            <td rowspan="3">
+                                                <textarea style="width: 100%;height: 50;"></textarea>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                        </tr>
+                                        <tr>
+                                        </tr>
+                                        <tr>
+                                            <th>更新日期</th>
+                                            <td>2024/07/27 16:33</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                            <!-- /.card -->
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+                </div><!-- /.container-fluid -->
+            </section>
+            <!-- /.content -->
+        </div>
+
+    <!--footer -->
+        <div class="storefooter"></div>
+    </div>
+
+    <script src="../store/plugins/jquery/jquery.min.js"></script>
+    <script src="../store/plugins/jquery-ui/jquery-ui.min.js"></script>
+    <script src="../store/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../store/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+
+    <script src="../store/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="../store/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="../store/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="../store/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="../store/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="../store/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+
+    <script src="../store/dist/js/adminlte.js"></script>
+    <script src="../store/dist/js/demo.js"></script>
+    <script src="../store/dist/js/storegeneral.js"></script>
+    <!-- Page specific script -->
+    <script>
+
+
+
+    </script>
+</body>
+
+</html>

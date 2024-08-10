@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="shortcut icon" type="image/x-icon" href="assets/images/favicon.png" />
+    <link
+            href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i&display=swap"
+            rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,300i,400,400i,700,700i&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="assets/css/animate.min.css">
+    <link rel="stylesheet" href="assets/css/jquery-ui.css">
+    <link rel="stylesheet" href="assets/css/slick.css">
+    <link rel="stylesheet" href="assets/css/chosen.min.css">
+    <link rel="stylesheet" href="assets/css/pe-icon-7-stroke.css">
+    <link rel="stylesheet" href="assets/css/magnific-popup.min.css">
+    <link rel="stylesheet" href="assets/css/lightbox.min.css">
+    <link rel="stylesheet" href="assets/js/fancybox/source/jquery.fancybox.css">
+    <link rel="stylesheet" href="assets/css/jquery.scrollbar.min.css">
+    <link rel="stylesheet" href="assets/css/mobile-menu.css">
+    <link rel="stylesheet" href="assets/fonts/flaticon/flaticon.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.bootcss.com/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+
+    <style>
+        /* background-color: #f5f5f5; */
+        /*header & footer*/
+        div.header-message>h1 {
+            margin: 0 auto;
+            border-radius: 50%;
+            color: #73B4BA;
+        }
+
+        .header-user-links li {
+            display: inline-block;
+        }
+
+        .header-user-links i {
+            border-radius: 50%;
+            font-size: 20px;
+            margin-left: 10px;
+        }
+
+
+        .query-bar a {
+            margin-left: 10px;
+            margin-right: 10px;
+            border-radius: 50%;
+        }
+
+        .query-bar input {
+            background-color: white;
+            width: 80%;
+        }
+
+        #query-member {
+            min-width: 200px;
+            padding-left: 10px;
+        }
+
+        #query-member li {
+            min-width: 100%;
+        }
+
+        #query-member img {
+            width: 100%;
+        }
+
+        #query-member .account-list {
+            margin-top: 10%;
+        }
+
+        .reset-margin {
+            margin: 0;
+            margin-top: 2%;
+            background-color: #f5f5f5;
+        }
+
+        .member-aside {
+            width: 30%;
+            height: 100%;
+            margin: 0 auto;
+            /* background-color: #f8f8f8; */
+
+        }
+
+        .member-introduction {
+            margin: 0 auto;
+            margin-right: 30px;
+            padding-top: 55px;
+            padding-right: 20px;
+            padding-bottom: 45px;
+            padding-left: 20px;
+            background-color: white;
+        }
+
+        .member-introduction div {
+            text-align: center;
+            overflow: hidden;
+        }
+
+
+        .member-list {
+            margin-right: 30px;
+            margin-top: 50px;
+            padding-top: 55px;
+            padding-right: 20px;
+            padding-bottom: 50px;
+            padding-left: 60px;
+            background-color: white;
+        }
+
+        .member-list li {
+            height: 60px;
+            font-size: 18px;
+            text-align: left;
+            list-style-type: none;
+        }
+
+        .warn {
+            display: inline;
+            color: #ff5e7d;
+        }
+
+        .remind {
+            color: #9b9b9b;
+            font-size: 12px;
+        }
+
+        .userPhoto {
+            margin: 0 auto;
+            display: inline-block;
+            width: 30%;
+            border-radius: 50%;
+        }
+
+        .sex {
+            font-size: 16px;
+            display: block;
+        }
+
+
+        /*訂單明細區塊*/
+        /* 整個區塊 */
+        .left-sidebar .content-area{
+            margin-top: 10px;
+            float: left;
+            width: 100%;
+            border-radius: 1%;
+        }
+        div.shop-top-control{
+            display:flex;
+        }
+        /* 灰色大區塊 */
+        div.order_div{
+            margin: 5px;
+            padding: 5px;
+            width: 50%;
+            height: 100%;
+            border-radius: 1%;
+        }
+
+        /* 店家區塊 */
+        div.store_info{
+            background-color: white;
+            text-align: left;
+            display:inline-flex;
+            padding: 20px 0px  20px 0px  ;
+            border-radius: 1%;
+        }
+        div.store_info div.store_name{
+            font-size: 20px;
+            font-weight: bold;
+            line-height: 2;
+            color: #517d81;
+        }
+        /* 店家區塊 > 店家logo */
+        div.store_logo {
+            width: 30%;
+            height: 30%;
+            min-width: 50px;
+            max-width: 80px;
+            aspect-ratio: 1/1;  /* 設定元素的寬高比例為1:1 */
+            margin: 15px auto;   /* 這個置中方式(好像)只會對區塊元素生效 */
+            overflow: hidden;
+            border: 1px solid #00000020;
+            border-radius: 50%;
+        }
+        div.store_logo img.store_logo_img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /*  店家區塊 > 店家詳細 */
+        div.store_detail {
+            width: 60%;
+        }
+        div.store_detail div.store_name{
+            font-weight: bold;
+            color: black;
+
+        }
+        div.store_detail div.store_info_text span{
+            color: black;
+            line-height: 1;
+        }
+        /*  店家區塊 > 店家詳細 */
+        div.store_others{
+            width: 20%;
+            display: inline;
+        }
+        div.store_others > button.btn_dispute_apply{
+            margin-top: 15px;
+        }
+        div.store_others > .state_dispute_apply{
+            text-align: center;
+        }
+
+        /* 訂單明細區塊 */
+        div.order_info{
+            padding-top: 5px ;
+            margin: 5px 0px 0px 0px;
+            background-color: white;
+            border-radius: 1%;
+        }
+        div.order_info table.order_info_tb{
+            color: black;
+            border-collapse: collapse; /* 合併邊框 */
+            width: 100%; /* 調整寬度 */
+            border-top:0;
+        }
+        div.order_info th{
+            font-weight: bold;
+            width: 120px;
+        }
+        div.order_info th,td{
+            border-bottom: 2px solid #c2c1c172; /* 設置下框線，黑色實線 */
+            border-top:0;
+            padding: 8px; /* 設置內邊距 */
+            text-align: left; /* 文字靠左 */
+        }
+        /* btn 評分 */
+        button.btn_order_star{
+            float: right; /* 將按鈕浮動到右邊 */
+            margin-right: 20px;
+        }
+        button.btn_order_star.-close {
+            background-color:#e4e4e48e;
+            color: black;
+        }
+        /* btn 爭議 */
+        button.btn_dispute_apply{
+            float: right; /* 將按鈕浮動到右邊 */
+            margin-right: 20px;
+        }
+        button.btn_dispute_apply.-close{
+            background-color:#e4e4e48e;
+            color: black;
+        }
+
+        /* 回上一頁 */
+        .order_btn_back_div{
+            display: flex;
+            justify-content: center; /* 水平置中 */
+        }
+
+        /* 商品區塊 */
+        div.product_info{
+            width: 100%;
+            height: 100%;
+            background-color: white;
+            border-radius: 1%;
+        }
+        div.product_info li.product_li{
+            padding: 5px;
+            list-style-type: none;
+        }
+        div.product_info li.product_li ul{
+            padding: 20px;
+            margin: 5px;
+            background-color: #f1f1f1;
+        }
+        div.product_info li.product_li ul.product_ul div.product_name{
+            font-weight: bold;
+            color: black;
+            line-height: 2;
+            font-size: 16px;
+        }
+        div.product_info li.product_li ul.product_ul span{
+            line-height: 2;
+            font-size: 14px;
+        }
+        /* 商品區塊-總計金額 */
+        div.product_info div.product_total{
+            padding: 10px 20px ;
+            color: black;
+        }
+        div.product_info div.pay_money{
+            padding: 10px 20px 20px 20px;
+            font-weight: bold;
+            color: #517d81;
+            font-size: 18px;
+        }
+
+        /* 訂單評分-燈箱 */
+        button.btn_order_star{
+            cursor: pointer;
+        }
+        #lightbox_star{
+            /*   border: 1px solid red; */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: hsla(0, 0%, 0%, .5);
+        }
+        .none{
+            display: none;
+        }
+        #lightbox_star > form{
+            background-color: white;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 10px;
+            height:550px;
+            padding: 10px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .star_title_div{
+            height: 300px; /* 設定高度，以便於垂直置中 */
+        }
+        p.star_title{
+            margin-top: 30px;
+            font-weight: bold;
+            color: black;
+            font-size: 18px;
+            text-align: center;
+        }
+        .star_order_id_div{
+            display: grid;
+            place-items: center;
+            margin-bottom: 50px;
+        }
+        input#star_order_id{
+            text-align: center;
+            height: 30px;
+            width: 300px;
+            border:  0px solid #bebebee4;
+            font-weight: bold;
+            color: black;
+            font-size: 18px;
+        }
+        /* ==== 燈箱 > 評分星號區塊 ===== */
+        div.star_block{
+            display: inline-block;
+            margin-top: 10px;
+            margin-bottom: 50px;
+            display: flex;
+            justify-content: center; /* 水平置中 */
+            padding: 5px; /* 添加內邊距 */
+        }
+        /* ==== 燈箱 > 單個星號區塊 ===== */
+        div.star_block > span.star{
+            font-size: 30px;
+            cursor: pointer;
+            display: inline-block;
+            margin-right: 3px;
+        }
+        /* ==== 燈箱 > 星號變色 ===== */
+        div.star_block > span.star.-on{
+            color: yellow;
+        }
+        /* ===== 燈箱 > 評分建議區塊 ===== */
+        textarea#star_text{
+            border: 0.5px rgba(128, 128, 128, 0.5) solid;
+            margin: 0px 10% 10px 10%;
+            max-height: 100px;
+            min-height: 100px;
+            max-width: 80%;
+            min-width: 80%;
+        }
+        /* ===== 燈箱 > 評分按鈕 ===== */
+        div.btn_star_close_div {
+            display: flex;
+            justify-content: center; /* 水平置中 */
+            padding: 5px; /* 添加內邊距 */
+        }
+        div.btn_star_close_div > button{
+            padding: 10px 20px; /* 按鈕內部的內邊距 */
+            margin: 10px;
+        }
+
+    </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="main-content main-content-product left-sidebar">
+    <div class="container">
+        <div class="row">
+            <div class="content-area shop-grid-content no-banner col-lg-9 col-md-9 col-sm-12 col-xs-12">
+                <div class="shop-top-control" style="width: 100%;height: 100%;">
+                    <div class="order_div" style="width: 50%;height: 100%;">
+                        <div class="store_info" style= "width: 100%;height: 20%;">
+                            <div class="store_logo">
+                                <img class="store_logo_img" src="../img/50blue.png" alt="店家logo">
+                            </div>
+                            <div class="store_detail">
+                                <div class="store_name">五十嵐汐止店</div>
+                                <span><b>店家資訊</b></span><br>
+                                <div class="store_info_text">
+                                    <span>📞</span><span>02-12345555</span><br>
+                                    <span>📍</span><span>新北市汐止區中山路55號</span>
+                                </div>
+                            </div>
+                            <div class="store_others">
+                                <button type="button" class="btn_order_star">訂單評分</button>
+                                <button class="btn_dispute_apply">爭議申請</button>
+
+                                <!-- 訂單評分燈箱 -->
+                                <div id="lightbox_star" class="none">
+                                    <form action=”#” method="#">
+                                        <div class="star_title_div ">
+                                            <p class="star_title">訂單編號</p>
+                                            <div class="star_order_id_div">
+                                                <input id="star_order_id" type="text" name="star_order_id" placeholder="2407200001" disabled>
+                                            </div>
+                                            <p class="star_title">關於訂單的評分</p>
+                                            <div class="star_block">
+                                                <span class="star" data-star="1"><i class="fas fa-star"></i></span>
+                                                <span class="star" data-star="2"><i class="fas fa-star"></i></span>
+                                                <span class="star" data-star="3"><i class="fas fa-star"></i></span>
+                                                <span class="star" data-star="4"><i class="fas fa-star"></i></span>
+                                                <span class="star" data-star="5"><i class="fas fa-star"></i></span>
+                                            </div>
+                                            <p class="star_title">關於訂單的意見</p>
+                                            <textarea id="star_text" type="text" name="star_text" placeholder="建議可對口味、包裝等細節提供評論"></textarea>
+                                            <div class="btn_star_close_div" >
+                                                <button type="button" id="btn_star_submit">送出</button>
+                                                <button type="button" id="btn_star_close">取消</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="order_info" style="width: 100%; height: 80%;">
+                            <table class="order_info_tb">
+                                <tbody>
+                                <tr>
+                                    <th>訂單編號</th>
+                                    <td>2407200001</td>
+                                </tr>
+                                <tr>
+                                    <th>訂單狀態</th>
+                                    <td>訂單完成</td>
+                                </tr>
+                                <tr>
+                                    <th>取貨時間</th>
+                                    <td>2024/07/02 11:42</td>
+                                </tr>
+                                <tr>
+                                    <th>付款金額</th>
+                                    <td>$170</td>
+                                </tr>
+                                <tr>
+                                    <th>付款方式</th>
+                                    <td>信用卡</td>
+                                </tr>
+                                <tr>
+                                    <th>發票開立方式</th>
+                                    <td>xx公司 12345555 XX12345678</td>
+                                </tr>
+                                <tr>
+                                    <th>取貨方式</th>
+                                    <td>自取</td>
+                                </tr>
+                                <tr>
+                                    <th>取貨人</th>
+                                    <td>sandy</td>
+                                </tr>
+                                <tr>
+                                    <th>取貨人電話</th>
+                                    <td>0911234567</td>
+                                </tr>
+                                <tr>
+                                    <th>取貨人地址</th>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <th>訂單備註</th>
+                                    <td>可能會晚點五分鐘取貨</td>
+                                </tr>
+                                <tr>
+                                    <th>訂單成立時間</th>
+                                    <td id="order_date">2024/07/31 09:11</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="order_btn_back_div">
+                            <button class="order_btn_back">回上一頁</button>
+                        </div>
+                    </div>
+                    <div class="order_div" >
+                        <div class="product_info" >
+                            <div class="product_list">
+                                <li class="product_li">
+                                    <ul class="product_ul">
+                                        <div class="product_name">珍珠奶茶</div>
+                                        <span>去冰</span><span> / </span><span>無糖</span><span> / </span>
+                                        <span> $</span><span>45</span><span> / </span>
+                                        <span>1</span><span>項</span>
+                                    </ul>
+                                    <ul class="product_ul">
+                                        <div class="product_name">珍珠奶茶</div>
+                                        <span>去冰</span><span> / </span><span>無糖</span><span> / </span>
+                                        <span> $</span><span>45</span><span> / </span>
+                                        <span>1</span><span>項</span>
+                                    </ul>
+                                    <ul class="product_ul">
+                                        <div class="product_name">珍珠奶茶</div>
+                                        <span>去冰</span><span> / </span><span>無糖</span><span> / </span>
+                                        <span> $</span><span>45</span><span> / </span>
+                                        <span>1</span><span>項</span>
+                                    </ul>
+                                </li>
+                            </div>
+                            <div class="product_total">
+                                <span>商品  x </span><span> 2</span>
+                            </div>
+                            <div class="pay_money">
+                                <span>應付金額</span>
+                                <span class="pay_money_num">$</span> <span class="pay_money_num">170</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="footer"></div>
+
+<script src="assets/js/jquery-1.12.4.min.js"></script>
+<script src="assets/js/jquery.plugin-countdown.min.js"></script>
+<script src="assets/js/jquery-countdown.min.js"></script>
+<script src="assets/js/bootstrap.min.js"></script>
+<script src="assets/js/owl.carousel.min.js"></script>
+<script src="assets/js/magnific-popup.min.js"></script>
+<script src="assets/js/isotope.min.js"></script>
+<script src="assets/js/jquery.scrollbar.min.js"></script>
+<script src="assets/js/jquery-ui.min.js"></script>
+<script src="assets/js/mobile-menu.js"></script>
+<script src="assets/js/chosen.min.js"></script>
+<script src="assets/js/slick.js"></script>
+<script src="assets/js/jquery.elevateZoom.min.js"></script>
+<script src="assets/js/jquery.actual.min.js"></script>
+<script src="assets/js/fancybox/source/jquery.fancybox.js"></script>
+<script src="assets/js/lightbox.min.js"></script>
+<script src="assets/js/owl.thumbs.min.js"></script>
+<script src="assets/js/jquery.scrollbar.min.js"></script>
+<script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyC3nDHy1dARR-Pa_2jjPCjvsOR4bcILYsM'></script>
+<script src="assets/js/frontend-plugin.js"></script>
+<script src="assets/js/newjs.js"></script>
+<script src="assets/js/general.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+
+        //======訂單評分按鈕-燈箱=============//
+        // 1-1.打開燈箱
+        let lightbox_el = document.getElementById("lightbox_star");
+        var btn_order_star = document.getElementsByClassName("btn_order_star")[0];
+        btn_order_star.addEventListener("click", function(){
+            lightbox_el.classList.remove("none");
+        });
+        // 1-2. 關閉燈箱
+        var btn_star_close = document.getElementById("btn_star_close");
+        btn_star_close.addEventListener("click", function(){
+            lightbox_el.classList.add("none");
+        });
+        lightbox_el.addEventListener("click", function(){
+            this.classList.add("none");
+        });
+        lightbox_el.querySelector("form").addEventListener("click", function(e){
+            e.stopPropagation();
+        });
+
+        // 2. 評分星星點擊
+        let span_el;
+        let star_title_div_el = document.getElementsByClassName("star_title_div")[0];
+        star_title_div_el.addEventListener("click", function(e){
+            if(e.target.closest("span.star")){
+                span_el = e.target.closest("span.star");
+                let current_star = parseInt(span_el.getAttribute("data-star"));
+                let star_span = span_el.closest("div.star_block").querySelectorAll("span.star");
+                star_span.forEach(function(star_item, i){
+                    if(parseInt(star_item.getAttribute("data-star")) <= current_star){
+                        star_span[i].classList.add("-on");
+                    }else{
+                        star_span[i].classList.remove("-on");
+                    }
+                });
+            }
+        });
+
+        //todo 待確認 抓星星數
+        if (span_el) {
+            let star_text = getElementById("star_text");
+            let star_int = parseInt(span_el.getAttribute("data-star"));
+            //todo 待確認 抓星星數
+
+        }
+        let btn_star_submit = document.getElementById("btn_star_submit");
+        let star_order_id = document.getElementById("star_order_id");
+
+
+        // 3. 評分submit btn 點擊後檢查欄位，送資料到後端，關閉視窗後disabled btn
+        btn_star_submit.addEventListener("click", function(e){
+            if(star_text.value.length > 0){
+
+                let star_data = new FormData();
+                star_data.append("order_id", star_order_id);
+                //  star_data.append("star_int", star_int);
+                star_data.append("star_text", star_text);
+
+                //  todo 待確認 url & star_int
+                fetch("https://jsonplaceholder.typicode.com/posts", {
+                    method: "POST",
+                    body: star_data
+                }).then(res => res.json()).then(data => {
+                    alert("已送出評分");
+                    btn_star_close.click();
+                    btn_order_star.classList.add("-close");
+                    btn_order_star.setAttribute("disabled", "disabled");
+                    btn_order_star.innerHTML="完成評分";
+                }).catch((error) =>{
+                    console.error("發生錯誤：", error);
+                    alert("提交時發生錯誤，請稍後再試。");
+                    btn_star_close.click();
+                });
+            }else{
+                alert("至少需完成評分");
+            }
+        });
+
+        //=========================================================================================
+        //btn 爭議申請
+        // 1. 當訂單建立日超過2天 鎖定爭議btn
+        var btn_dispute_apply = document.getElementsByClassName("btn_dispute_apply")[0];
+        let order_date_el = document.getElementById("order_date");
+        if (order_date_el) {
+            const date_text = order_date_el.textContent; // 取得 <td> 裡的文本
+            const date_part1 = date_text.split(' ');
+            const date_part2 = date_part1[0].split('/');
+            const date_part3 = date_part1[1].split(':');
+            const order_date = new Date(date_part2[0], date_part2[1] - 1, date_part2[2], date_part3[0], date_part3[1]);
+            const order_date_3day = new Date(order_date);
+            order_date_3day.setDate(order_date_3day.getDate() + 2);
+
+            let now_date = new Date();
+            if(order_date_3day > now_date){
+                btn_dispute_apply.classList.add("-close");
+                btn_dispute_apply.setAttribute("disabled", "disabled");
+                btn_dispute_apply.innerHTML="已送爭議";
+            }
+        }
+        // 2. 爭議btn 可點擊時 link爭議申請表
+        btn_dispute_apply.addEventListener("click", function(){
+            location.href = "orderDispute.html";
+            //todo 待後端完成 check變數連結
+
+        });
+
+        //
+        // todo
+        // 3.  如果後端已有爭議資料 更改 鎖定爭議btn
+        // if(){
+        //     btn_dispute_apply.click();
+        //     btn_dispute_apply.classList.add("-close");
+        //     btn_dispute_apply.setAttribute("disabled", "disabled");
+        //     btn_dispute_apply.innerHTML="已送爭議";
+        // }
+
+        //=========================================================================================
+        //btn 回上一頁
+        var order_btn_back = document.getElementsByClassName("order_btn_back")[0];
+        order_btn_back.addEventListener("click", function(){
+            history.back();
+        });
+
+    });
+
+    //====================================
+</script>
+</body>
+</html>

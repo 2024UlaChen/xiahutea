@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="shortcut icon" type="image/x-icon" href="assets/images/favicon.png" />
+    <link
+            href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i&display=swap"
+            rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,300i,400,400i,700,700i&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="assets/css/animate.min.css">
+    <link rel="stylesheet" href="assets/css/jquery-ui.css">
+    <link rel="stylesheet" href="assets/css/slick.css">
+    <link rel="stylesheet" href="assets/css/chosen.min.css">
+    <link rel="stylesheet" href="assets/css/pe-icon-7-stroke.css">
+    <link rel="stylesheet" href="assets/css/magnific-popup.min.css">
+    <link rel="stylesheet" href="assets/css/lightbox.min.css">
+    <link rel="stylesheet" href="assets/js/fancybox/source/jquery.fancybox.css">
+    <link rel="stylesheet" href="assets/css/jquery.scrollbar.min.css">
+    <link rel="stylesheet" href="assets/css/mobile-menu.css">
+    <link rel="stylesheet" href="assets/fonts/flaticon/flaticon.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.bootcss.com/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+
+    <style>
+        /* background-color: #f5f5f5; */
+
+        div.header-message>h1 {
+            margin: 0 auto;
+            border-radius: 50%;
+            color: #73B4BA;
+        }
+
+        .header-user-links li {
+            display: inline-block;
+        }
+
+        .header-user-links i {
+            border-radius: 50%;
+            font-size: 20px;
+            margin-left: 10px;
+        }
+
+
+        .query-bar a {
+            margin-left: 10px;
+            margin-right: 10px;
+            border-radius: 50%;
+        }
+
+        .query-bar input {
+            background-color: white;
+            width: 80%;
+        }
+
+        #query-member {
+            min-width: 200px;
+            padding-left: 10px;
+        }
+
+        #query-member li {
+            min-width: 100%;
+        }
+
+        #query-member img {
+            width: 100%;
+        }
+
+        #query-member .account-list {
+            margin-top: 10%;
+        }
+
+        .reset-margin {
+            margin: 0;
+            margin-top: 2%;
+            background-color: #f5f5f5;
+        }
+
+        .member-aside {
+            width: 30%;
+            height: 100%;
+            margin: 0 auto;
+            /* background-color: #f8f8f8; */
+
+        }
+
+        .member-introduction {
+            margin: 0 auto;
+            margin-right: 30px;
+            padding-top: 55px;
+            padding-right: 20px;
+            padding-bottom: 45px;
+            padding-left: 20px;
+            background-color: white;
+        }
+
+        .member-introduction div {
+            text-align: center;
+            overflow: hidden;
+        }
+
+
+        .member-list {
+            margin-right: 30px;
+            margin-top: 50px;
+            padding-top: 55px;
+            padding-right: 20px;
+            padding-bottom: 50px;
+            padding-left: 60px;
+            background-color: white;
+        }
+
+        .member-list li {
+            height: 60px;
+            font-size: 18px;
+            text-align: left;
+            list-style-type: none;
+        }
+
+        .warn {
+            display: inline;
+            color: #ff5e7d;
+        }
+
+        .remind {
+            color: #9b9b9b;
+            font-size: 12px;
+        }
+
+        .userPhoto {
+            margin: 0 auto;
+            display: inline-block;
+            width: 30%;
+            border-radius: 50%;
+        }
+
+        .sex {
+            font-size: 16px;
+            display: block;
+        }
+
+
+
+        .left-sidebar .content-area{
+            float: left;
+            width: 100%;
+        }
+        .shop-top-control{
+            margin-top: 10px;
+        }
+        div.one_order_status{
+            background-color: #73B4BA;
+        }
+        span.one_order_status_text{
+            font-size: 28px;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            line-height:100px ;
+        }
+        input.select_date{
+            border: 0px;
+            width: 150px;
+        }
+        .select_btn{
+            color: white;
+        }
+        span.title{
+            margin: 20px;
+        }
+
+        div.one_order_list{
+            border-bottom: 1px #e4e4e48e solid;
+        }
+        div.one_order_list_circle{
+            display: inline-block;
+            margin-top: 50px;
+            width: 100px;
+            height: 100px;
+            line-height:180px ;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        img.store_logo{
+            object-fit:cover;
+            width: 100%;
+            height: 100%;
+            vertical-align:baseline ;
+        }
+        div.one_order_store_name span{
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            line-height: 2;
+            color: #517d81;
+        }
+        div.order_detail>span{
+            color: #517d81;
+            font-size: 14px;
+        }
+        div.order_price>span{
+            color: #517d81;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        div.order_time>span{
+            color: #517d81;
+            font-size: 12px;
+            line-height: 2;
+        }
+        ul.order_list_ul{
+            display:  inline;
+        }
+    /*  訂單列表  */
+        .left-sidebar .content-area{
+            float: left;
+            width: 100%;
+        }
+        div.one_order_status{
+            background-color: #73B4BA;
+        }
+        span.one_order_status_text{
+            font-size: 28px;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            line-height:100px ;
+        }
+        span.title{
+            margin: 20px;
+        }
+
+        div.one_order_list{
+            border-bottom: .5px #e4e4e48e solid;
+        }
+        div.one_order_list_circle{
+            display: inline-block;
+            margin-top: 50px;
+            width: 100px;
+            height: 100px;
+            line-height:180px ;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        img.store_logo{
+            object-fit:cover;
+            width: 100%;
+            height: 100%;
+            vertical-align:baseline ;
+        }
+        div.one_order_store_name span{
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            line-height: 2;
+            color: #517d81;
+        }
+        div.order_detail>span{
+            color: #517d81;
+            font-size: 14px;
+        }
+        div.order_price>span{
+            color: #517d81;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        div.order_time>span{
+            color: #517d81;
+            font-size: 12px;
+            line-height: 2;
+        }
+        .order_id{
+            display: none;
+        }
+        /* 爭議狀態 */
+        div.dispute_status.-close{
+            display: none;
+        }
+
+        ul.order_list_ul{
+            display:  inline;
+        }
+
+    </style>
+</head>
+
+<body>
+<div class="header"></div>
+<div class="main-content main-content-product left-sidebar">
+    <div class="container">
+        <div class="row">
+            <div class="content-area shop-grid-content no-banner col-lg-9 col-md-9 col-sm-12 col-xs-12">
+                <div class="site-main" style="width: 100%">
+                    <!-- 查詢區塊 -->
+                    <div class="shop-top-control" style="width: 100%;">
+                        <form class="select-item select-form" id="order_status">
+                            <span class="title">訂單狀態</span>
+                            <select title="sort" data-placeholder="12 Products/Page" class="chosen-select">
+                                <option value=”0” selected>請選擇</option>
+                                <option value=”1”>訂單成立</option>
+                                <option value=”2”>準備完成</option>
+                                <option value=”3”>外送中</option>
+                                <option value=”4”>訂單完成</option>
+                            </select>
+                        </form>
+                        <form class="select-item select-form" >
+                            <span class="title">訂單日期</span>
+                            <input id="select_date_from" type="date"></input>
+                            <span> ~ </span>
+                            <input id="select_date_to" type="date"></input>
+                        </form>
+                        <form class="select-item select-form" >
+                            <button class="select_btn">查詢</button>
+                        </form>
+                    </div>
+                    <!-- 訂單區塊 -->
+                    <ul class="row list-products auto-clear equal-container product-grid order_list_ul">
+                        <li class="product-item  col-lg-4 col-md-6 col-sm-6 col-xs-6 col-ts-12 style-1">
+                            <div class="product-inner equal-element" style="border-radius: 20px">
+                                <div class="product-thumb">
+                                    <div class="thumb-inner" >
+                                        <a href="#">
+                                            <div>
+                                                <div class="one_order_status" style="width: 100%; height:100px">
+                                                    <span class="one_order_status_text">訂單完成</span>
+                                                </div>
+                                                <div class="one_order_list" style="width: 100%;height: 200px">
+                                                    <div class="one_order_list_circle">
+                                                        <img class="store_logo" src="../img/aniceholiday_logo.jpg" alt="店家logo">
+                                                    </div>
+                                                    <div class="one_order_store_name">
+                                                        <span>
+                                                            一沐日永和店
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="product-info">
+                                    <div class="group-info">
+                                        <div class="order_id">
+                                            <span>訂單編號</span>
+                                        </div>
+                                        <div class="order_detail">
+                                            <span></span><span>5</span><span> 項商品</span>
+                                        </div>
+                                        <div class="order_price">
+                                            <span>共 </span><span>245</span><span> 元</span>
+                                        </div>
+                                        <div class="order_time">
+                                            <span>2024/07/20 18:11</span>
+                                        </div>
+                                        <div class="order_time dispute_status -close" >
+                                            <span>爭議狀態：</span><span>已同意申請</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="product-item  col-lg-4 col-md-6 col-sm-6 col-xs-6 col-ts-12 style-1">
+                            <div class="product-inner equal-element" style="border-radius: 20px">
+                                <div class="product-thumb">
+                                    <div class="thumb-inner" >
+                                        <a href="#">
+                                            <div>
+                                                <div class="one_order_status" style="width: 100%; height:100px">
+                                                    <span class="one_order_status_text">準備完成</span>
+                                                </div>
+                                                <div class="one_order_list" style="width: 100%;height: 200px">
+                                                    <div class="one_order_list_circle">
+                                                        <img class="store_logo" src="../img/50blue.png" alt="店家logo">
+                                                    </div>
+                                                    <div class="one_order_store_name">
+                                                        <span>
+                                                            50嵐新莊店
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="product-info">
+                                    <div class="group-info">
+                                        <div class="order_detail">
+                                            <span></span><span>5</span><span> 項商品</span>
+                                        </div>
+                                        <div class="order_price">
+                                            <span>共 </span><span>245</span><span> 元</span>
+                                        </div>
+                                        <div class="order_time">
+                                            <span>2024/07/20 18:11</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="product-item  col-lg-4 col-md-6 col-sm-6 col-xs-6 col-ts-12 style-1">
+                            <div class="product-inner equal-element" style="border-radius: 20px">
+                                <div class="product-thumb">
+                                    <div class="thumb-inner" >
+                                        <a href="#">
+                                            <div>
+                                                <div class="one_order_status" style="width: 100%; height:100px">
+                                                    <span class="one_order_status_text">準備完成</span>
+                                                </div>
+                                                <div class="one_order_list" style="width: 100%;height: 200px">
+                                                    <div class="one_order_list_circle">
+                                                        <img class="store_logo" src="../img/aniceholiday_logo.jpg" alt="店家logo">
+                                                    </div>
+                                                    <div class="one_order_store_name">
+                                                        <span>
+                                                            一沐日永和店
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="product-info">
+                                    <div class="group-info">
+                                        <div class="order_detail">
+                                            <span></span><span>5</span><span> 項商品</span>
+                                        </div>
+                                        <div class="order_price">
+                                            <span>共 </span><span>245</span><span> 元</span>
+                                        </div>
+                                        <div class="order_time">
+                                            <span>2024/07/20 18:11</span>
+                                        </div>
+                                        <div class="order_time dispute_status">
+                                            <span>爭議狀態：</span><span>已同意申請</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="product-item  col-lg-4 col-md-6 col-sm-6 col-xs-6 col-ts-12 style-1">
+                            <div class="product-inner equal-element" style="border-radius: 20px">
+                                <div class="product-thumb">
+                                    <div class="thumb-inner" >
+                                        <a href="#">
+                                            <div>
+                                                <div class="one_order_status" style="width: 100%; height:100px">
+                                                    <span class="one_order_status_text">訂單完成</span>
+                                                </div>
+                                                <div class="one_order_list" style="width: 100%;height: 200px">
+                                                    <div class="one_order_list_circle">
+                                                        <img class="store_logo" src="../img/aniceholiday_logo.jpg" alt="店家logo">
+                                                    </div>
+                                                    <div class="one_order_store_name">
+                                                        <span>
+                                                            一沐日永和店
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="product-info">
+                                    <div class="group-info">
+                                        <div class="order_detail">
+                                            <span></span><span>5</span><span> 項商品</span>
+                                        </div>
+                                        <div class="order_price">
+                                            <span>共 </span><span>245</span><span> 元</span>
+                                        </div>
+                                        <div class="order_time">
+                                            <span>2024/07/20 18:11</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="footer"></div>
+
+<script src="assets/js/jquery-1.12.4.min.js"></script>
+<script src="assets/js/jquery.plugin-countdown.min.js"></script>
+<script src="assets/js/jquery-countdown.min.js"></script>
+<script src="assets/js/bootstrap.min.js"></script>
+<script src="assets/js/owl.carousel.min.js"></script>
+<script src="assets/js/magnific-popup.min.js"></script>
+<script src="assets/js/isotope.min.js"></script>
+<script src="assets/js/jquery.scrollbar.min.js"></script>
+<script src="assets/js/jquery-ui.min.js"></script>
+<script src="assets/js/mobile-menu.js"></script>
+<script src="assets/js/chosen.min.js"></script>
+<script src="assets/js/slick.js"></script>
+<script src="assets/js/jquery.elevateZoom.min.js"></script>
+<script src="assets/js/jquery.actual.min.js"></script>
+<script src="assets/js/fancybox/source/jquery.fancybox.js"></script>
+<script src="assets/js/lightbox.min.js"></script>
+<script src="assets/js/owl.thumbs.min.js"></script>
+<script src="assets/js/jquery.scrollbar.min.js"></script>
+<script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyC3nDHy1dARR-Pa_2jjPCjvsOR4bcILYsM'></script>
+<script src="assets/js/frontend-plugin.js"></script>
+<script src="assets/js/newjs.js"></script>
+<script src="assets/js/general.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+
+        // 點擊訂單區塊 link訂單明細
+        let order_arr = document.querySelectorAll("div.product-inner");
+        for(i = 0; i < order_arr.length; i++ ){
+            let order_item = document.getElementsByClassName("product-inner")[i];
+
+            order_item.addEventListener("click", function(){
+                location.href = "orderDetail.html";
+                //待後端完成 check變數連結
+
+            });
+        }
+        // ==========================================================================
+
+        //todo
+        // 如果有爭議訂單 則顯示爭議狀態
+        let dispute_status = document.getElementById("dispute_status");
+        // if(){
+        //     dispute_status.classList.add("-close");
+        // }
+
+    });
+
+</script>
+</body>
+</html>

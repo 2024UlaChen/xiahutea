@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AdminLTE 3 | Log in (v2)</title>
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+<!--    <link rel="stylesheet" href="dist/css/all.min.css">-->
+    <!-- icheck bootstrap -->
+<!--    <link rel="stylesheet" href="dist/css/icheck-bootstrap.min.css">-->
+    <!-- Theme style -->
+    <link rel="stylesheet" href="dist/css/adminlte.min.css">
+
+    <style>
+        .button-group {
+            display: flex;
+            margin-bottom: 15px;
+            opacity: .7;
+
+        }
+
+        .toggle-button {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            background-color: #f5f5f5;
+            cursor: pointer;
+            border-radius: 4px 0 0 4px;
+            box-sizing: border-box;
+            margin: 0;
+        }
+
+        .toggle-button:last-child {
+            border-radius: 0 4px 4px 0;
+            border-left: 0;
+        }
+
+        .toggle-button.active {
+            background-color: #73B4BA;
+            color: #fff;
+        }
+
+    </style>
+</head>
+<body class="hold-transition login-page">
+<div class="login-box">
+    <!-- /.login-logo -->
+    <div class="card card-outline card-primary">
+        <div class="card-header text-center">
+            <a href="../../index2.html" class="h1"><b>XIAHUTEA</b> 後台</a>
+        </div>
+        <div class="card-body">
+            <p class="login-box-msg">Sign in to start your session</p>
+
+            <form action="#" method="post">
+                <div class="button-group" >
+                    <button class="toggle-button active" id="store-login">店家登入</button>
+                    <button class="toggle-button" id="administrator-login">管理員登入</button>
+                </div>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="用戶名稱">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-envelope"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group mb-3">
+                    <input type="password" class="form-control" placeholder="用戶密碼">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-lock"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-8">
+                        <div class="icheck-primary">
+                            <input type="checkbox" id="remember">
+                            <label for="remember">
+                                Remember Me
+                            </label>
+                        </div>
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-4">
+                        <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+                    </div>
+                    <!-- /.col -->
+                </div>
+            </form>
+
+
+            <p class="mb-1">
+                <a href="forgot-password.html">I forgot my password</a>
+            </p>
+            <p class="mb-0">
+                <a href="../joinUs.html" class="text-center">Register a new membership</a>
+            </p>
+        </div>
+        <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+</div>
+<!-- /.login-box -->
+
+<!-- jQuery -->
+<script src="../assets/js/jquery-1.12.4.min.js"></script>
+<script src="../assets/js/jquery-ui.min.js"></script>
+<!-- Bootstrap 4 -->
+<!--<script src="../assets/js/bootstrap.bundle.min.js"></script>-->
+<!-- AdminLTE App -->
+<script src="dist/js/adminlte.min.js"></script>
+
+<script>
+    let store_login_button = document.getElementById("store-login");
+    let administrator_login_button = document.getElementById("administrator-login");
+    $("#store-login").on("click", function(e) {
+        e.preventDefault();
+        $(this).addClass("active");
+        $("#administrator-login").removeClass('active');
+
+    });
+
+    $("#administrator-login").on("click", function(e)  {
+        e.preventDefault();
+        $(this).addClass('active');
+        $("#store-login").removeClass('active');
+    });
+
+</script>
+</body>
+</html>
