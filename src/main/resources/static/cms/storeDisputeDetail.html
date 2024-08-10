@@ -7,13 +7,12 @@
     <title>後台 | 訂單爭議明細</title>
 
     <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <link rel="stylesheet" href="../store/plugins/fontawesome-free/css/all.min.css">
-    <link rel="stylesheet" href="../store/dist/css/adminlte.min.css">
-    <!-- DataTables -->
-    <link rel="stylesheet" href="../store/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-    <link rel="stylesheet" href="../store/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
-    <link rel="stylesheet" href="../store/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
     <style>
         tbody.table_info th{
             width:20%
@@ -25,18 +24,26 @@
             float: right; /* 將按鈕浮動到右邊 */
             margin-left: 10px; /* 可以調整按鈕之間的間距 */
         }
+        input#dispute_money , #select_status{
+            width: 90%;
+        }
+        .input_text{
+            width: 90%;
+            max-height: 80px;
+            min-height: 80px;
+        }
     </style>
 </head>
 
 <body class="hold-transition sidebar-mini">
     <div class="wrapper">
-    <!--header & aside -->
+        <!--header & aside -->
         <div class="storeheader"></div>
         <div class="storeaside"></div>
-
-    <!-- 功能       -->
+        <!--/.header & aside -->
+        <!-- main    -->
         <div class="content-wrapper">
-            <!-- Content Header (Page header) -->
+            <!-- 功能 Header    -->
             <section class="content-header">
                 <div class="container-fluid">
                     <div class="row mb-2">
@@ -50,139 +57,138 @@
                             </ol>
                         </div>
                     </div>
-                </div><!-- /.container-fluid -->
+                </div>
             </section>
-
+            <!-- /.功能 Header -->
             <!-- Main content -->
             <section class="content">
                 <div class="container-fluid">
                     <div class="row">
+                        <!--     左區塊             -->
                         <div class="col-md-6">
+                            <!--     訂單資訊 區塊       -->
                             <div class="card">
                                 <div class="card-header">
                                     <div class="card-title">訂單資訊</div>
-                                    <button class="card-btn">回上一頁</button>
-                                    <button class="card-btn">儲存</button>
+                                    <button class="card-btn" id="btn_dispute_back">回上一頁</button>
+                                    <button class="card-btn" id="btn_dispute_save">儲存</button>
                                 </div>
-                                <!-- /.card-header -->
                                 <div class="card-body p-0">
-                                    <table class="table table-sm" width="100%" style="text-align:center;table-layout: fixed">
+                                    <table class="table table-sm" style="text-align:center;table-layout: fixed">
                                         <thead>
-                                        <tr>
-                                            <th>爭議編號</th>
-                                            <th>訂單編號</th>
-                                            <th>會員編號</th>
-                                            <th>會員姓名</th>
-                                            <th>店家名稱</th>
-                                        </tr>
+                                            <tr>
+                                                <th>爭議編號</th>
+                                                <th>訂單編號</th>
+                                                <th>會員編號</th>
+                                                <th>會員姓名</th>
+                                                <th>店家名稱</th>
+                                            </tr>
                                         </thead>
                                         <tbody>
-                                        <tr>
-                                            <td>R240706001</td>
-                                            <td>2407010004</td>
-                                            <td>0977123456</td>
-                                            <td>黃園美</td>
-                                            <td>五十嵐永和店</td>
-                                        </tr>
+                                            <tr>
+                                                <td id="dispute_id">R240706001</td>
+                                                <td id="order_id">2407010004</td>
+                                                <td>0977123456</td>
+                                                <td>黃園美</td>
+                                                <td>五十嵐永和店</td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
-                                <!-- /.card-body -->
                             </div>
-                            <!-- /.card -->
-
+                            <!--   /.訂單資訊 區塊       -->
+                            <!--     商品資訊 區塊       -->
                             <div class="card">
                                 <div class="card-header">
                                     <h3 class="card-title">商品資訊</h3>
                                 </div>
-                                <!-- /.card-header -->
                                 <div class="card-body p-0">
-                                    <table class="table table-sm" width="100%" style="text-align:center;table-layout: fixed">
+                                    <table class="table table-sm" style="text-align:center;table-layout: fixed">
                                         <thead>
-                                        <tr>
-                                            <th>商品名稱</th>
-                                            <th>冰塊</th>
-                                            <th>甜度</th>
-                                            <th>數量</th>
-                                            <th>商品小計</th>
-                                        </tr>
+                                            <tr>
+                                                <th>商品名稱</th>
+                                                <th>冰塊</th>
+                                                <th>甜度</th>
+                                                <th>數量</th>
+                                                <th>商品小計</th>
+                                            </tr>
                                         </thead>
                                         <tbody>
-                                        <tr>
-                                            <td>芒果青</td>
-                                            <td>微冰</td>
-                                            <td>無糖</td>
-                                            <td>2</td>
-                                            <td><span>$ </span>120</td>
-                                        </tr>
-                                        <tr>
-                                            <td>紅茶拿鐵</td>
-                                            <td>少冰</td>
-                                            <td>半糖</td>
-                                            <td>1</td>
-                                            <td><span>$ </span>70</td>
-                                        </tr>
-                                        <tr>
-                                            <td>珍珠奶茶</td>
-                                            <td>正常</td>
-                                            <td>微糖</td>
-                                            <td>1</td>
-                                            <td><span>$ </span>75</td>
-                                        </tr>
+                                            <tr>
+                                                <td>芒果青</td>
+                                                <td>微冰</td>
+                                                <td>無糖</td>
+                                                <td>2</td>
+                                                <td>120</td>
+                                            </tr>
+                                            <tr>
+                                                <td>紅茶拿鐵</td>
+                                                <td>少冰</td>
+                                                <td>半糖</td>
+                                                <td>1</td>
+                                                <td>70</td>
+                                            </tr>
+                                            <tr>
+                                                <td>珍珠奶茶</td>
+                                                <td>正常</td>
+                                                <td>微糖</td>
+                                                <td>1</td>
+                                                <td>75</td>
+                                            </tr>
                                         </tbody>
                                         <tfoot>
-                                        <tr>
-                                            <td colspan="5"></td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="3"></td>
-                                            <th>商品小計</th>
-                                            <td><span>$ </span>265</td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="3"></td>
-                                            <th>平台處理費</th>
-                                            <td><span>$ </span>10</td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="3"></td>
-                                            <th>會員錢包折抵</th>
-                                            <td><span>$ -</span>10</td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="3"></td>
-                                            <th>優惠券折抵</th>
-                                            <td><span>$ -</span>5</td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="3"></td>
-                                            <th>集點折抵</th>
-                                            <td><span>$ -</span>5</td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="3"></td>
-                                            <th>付款金額</th>
-                                            <td><span>$ </span>265</td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="3"></td>
-                                            <th>付款方式</th>
-                                            <td>信用卡</td>
-                                        </tr>
+                                            <tr>
+                                                <td colspan="5"></td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="3"></td>
+                                                <th>商品小計</th>
+                                                <td id="payment_amount">265</td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="3"></td>
+                                                <th>平台處理費</th>
+                                                <td id="order_free_amount">10</td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="3"></td>
+                                                <th>會員錢包折抵</th>
+                                                <td><span>-</span>10</td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="3"></td>
+                                                <th>優惠券折抵</th>
+                                                <td><span>-</span>5</td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="3"></td>
+                                                <th>集點折抵</th>
+                                                <td><span>-</span>5</td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="3"></td>
+                                                <th>付款金額</th>
+                                                <td>265</td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="3"></td>
+                                                <th>付款方式</th>
+                                                <td>信用卡</td>
+                                            </tr>
                                         </tfoot>
                                     </table>
                                 </div>
-                                <!-- /.card-body -->
                             </div>
-                            <!-- /.card -->
+                            <!-- /.商品資訊 區塊 -->
                         </div>
-                        <!-- /.col -->
+                        <!-- /.左區塊 -->
+                        <!--     右區塊             -->
                         <div class="col-md-6">
+                            <!--     爭議資訊 區塊       -->
                             <div class="card">
                                 <div class="card-header">
                                     <h3 class="card-title">爭議資訊</h3>
                                 </div>
-                                <!-- /.card-header -->
                                 <div class="card-body p-0">
                                     <table class="table">
                                         <tbody class="table_info">
@@ -192,40 +198,43 @@
                                         </tr>
                                         <tr>
                                             <th>爭議原因</th>
-                                            <td>珍珠奶茶裡 沒有珍珠zzzzzzzzzzzzzzzzzzzzzz</td>
+                                            <td>珍珠奶茶裡 沒有珍珠</td>
                                         </tr>
                                         <tr>
                                             <th>處理狀態</th>
                                             <td>
-                                                <select>
-                                                    <option value=”0” selected>請選擇</option>
-                                                    <option value=”1”>未處理</option>
-                                                    <option value=”2”>同意</option>
-                                                    <option value=”3”>不同意</option>
-                                                </select>
+                                                <label style="width: 100%;height: 50%;">
+                                                    <select id="select_status">
+                                                        <option value="1" selected>未處理</option>
+                                                        <option value="2">同意</option>
+                                                        <option value="3">不同意</option>
+                                                    </select>
+                                                </label>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th>退款金額</th>
                                             <td>
-                                                <input type="text" style="width: 100%">
+                                                <label style="width: 100%;height: 50%;">
+                                                    <input id="dispute_money" type="text" disabled>
+                                                </label>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th>不同意原因</th>
                                             <td>
-                                                <textarea style="width: 100%;height: 50;"></textarea>
+                                                <label style="width: 100%;height: 50%;">
+                                                    <textarea class="input_text" disabled></textarea>
+                                                </label>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <th rowspan="3">內部備註</th>
-                                            <td rowspan="3">
-                                                <textarea style="width: 100%;height: 50;"></textarea>
+                                            <th>內部備註</th>
+                                            <td>
+                                                <label style="width: 100%;height: 50%;">
+                                                    <textarea class="input_text"></textarea>
+                                                </label>
                                             </td>
-                                        </tr>
-                                        <tr>
-                                        </tr>
-                                        <tr>
                                         </tr>
                                         <tr>
                                             <th>更新日期</th>
@@ -234,42 +243,144 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <!-- /.card-body -->
                             </div>
-                            <!-- /.card -->
+                            <!--   /.爭議資訊 區塊       -->
                         </div>
-                        <!-- /.col -->
                     </div>
-                    <!-- /.row -->
-                </div><!-- /.container-fluid -->
+                </div>
             </section>
-            <!-- /.content -->
+            <!-- /.Main content -->
         </div>
 
-    <!--footer -->
+        <!--footer -->
         <div class="storefooter"></div>
+        <!--/.footer -->
     </div>
 
-    <script src="../store/plugins/jquery/jquery.min.js"></script>
-    <script src="../store/plugins/jquery-ui/jquery-ui.min.js"></script>
-    <script src="../store/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="../store/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
-
-    <script src="../store/plugins/datatables/jquery.dataTables.min.js"></script>
-    <script src="../store/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-    <script src="../store/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-    <script src="../store/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-    <script src="../store/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-    <script src="../store/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-
-    <script src="../store/dist/js/adminlte.js"></script>
-    <script src="../store/dist/js/demo.js"></script>
-    <script src="../store/dist/js/storegeneral.js"></script>
+    <script src="plugins/jquery/jquery.min.js"></script>
+    <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
+    <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+    <script src="plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="dist/js/adminlte.js"></script>
+    <script src="dist/js/demo.js"></script>
+    <script src="js/storegeneral.js"></script>
     <!-- Page specific script -->
     <script>
+        document.addEventListener("DOMContentLoaded", function() {
+
+            let order_id = document.getElementById("order_id");
+            let dispute_id = document.getElementById("dispute_id");
+            let dispute_money = document.getElementById("dispute_money");
+            let reject_reason = document.getElementsByClassName("input_text")[0];
+            let dispute_notes = document.getElementsByClassName("input_text")[1];
+            let dispute_status = document.getElementById("select_status");
+
+            //===========================================================================
+            //1. btn 回上一頁
+            const btn_dispute_back = document.getElementById("btn_dispute_back");
+
+            btn_dispute_back.addEventListener("click", function(){
+                history.back();
+            });
+
+            // 2. select 判斷爭議狀態選單- 因狀態不同而顯示不同的輸入欄位
+            dispute_status.addEventListener("change", function (){
+               // 2.1 狀態為 同意時，不可輸入reject_reason，值需清空
+                if(dispute_status.value === '2'){
+                    console.log(dispute_status.value);
+                    dispute_money.removeAttribute("disabled");
+                    reject_reason.setAttribute("disabled", "disabled");
+                    reject_reason.value = "";
+                } else if(dispute_status.value === '3'){
+                    // 2.2 狀態為 不同意時，不可輸入dispute_money，值需清空
+                    console.log(dispute_status.value);
+                    dispute_money.setAttribute("disabled", "disabled");
+                    reject_reason.removeAttribute("disabled");
+                    dispute_money.value = "";
+                }else {
+                    // 2.3 狀態為 未處理 ，不可輸入dispute_money & reject_reason，值需清空
+                    dispute_money.setAttribute("disabled", "disabled");
+                    reject_reason.setAttribute("disabled", "disabled");
+                    dispute_money.value = "";
+                    reject_reason.value = "";
+                }
+            });
+
+            // 3. input 欄位 - dispute_money 判斷輸入金額範圍
+            dispute_money.addEventListener("blur", function (){
+                let payment_amount = parseInt(document.getElementById("payment_amount").innerText);
+                let order_free_amount = parseInt(document.getElementById("order_free_amount").innerText);
+                if(parseFloat(dispute_money.value) > payment_amount + order_free_amount || parseFloat(dispute_money.value) < 0 || dispute_money.value === "" ){
+                    alert("退款金額輸入錯誤");
+                    dispute_money.value = 0;
+                }
+            });
+
+            // 4. input 欄位 - reject_reason 判斷字數長度
+            reject_reason.addEventListener("blur", function (){
+                if(reject_reason.value.length < 1 ){
+                    alert("請輸入不同意爭議原因");
+                }
+            });
+        //===========================================================================
+            // todo: 點擊儲存btn 後端需儲存內容
+            // 5. 更改內容後，點擊儲存btn 需儲存內容 並依狀態更改按鈕css
+            const btn_dispute_save = document.getElementById("btn_dispute_save");
+            btn_dispute_save.addEventListener("click", function(){
+
+                // 5.1 點擊btn 檢查必填欄位
+                let check_valve = false;
+                if (dispute_status.value === '1' ) {
+                    check_valve = true;
+                }else if (dispute_status.value === '2' && dispute_money.value.trim() !== "") {
+                    check_valve = true;
+                }else if (dispute_status.value === '3' && reject_reason.value.trim() !== "") {
+                    check_valve = true;
+                } else {
+                    alert("請確認所有必填欄位已完成");
+                    return;
+                }
+
+                // 5.2 如果符合5.1檢查條件，執行打包資料
+                if (check_valve) {
+                    let order_data = new FormData();
+                    order_data.append("order_id", order_id.innerText);
+                    order_data.append("dispute_id", dispute_id.innerText);
+                    order_data.append("dispute_money", dispute_money.value);
+                    order_data.append("reject_reason", reject_reason.value);
+                    order_data.append("dispute_notes", dispute_notes.value);
+                    order_data.append("dispute_status", dispute_status.value);
+
+                    //  todo: 待確認 url
+                    fetch("https://jsonplaceholder.typicode.com/posts", {
+                        method: "POST",
+                        body: order_data
+                    }).then(res => res.json()).then(data => {
+                        // todo: 5.3 儲存內容到後端 前台需顯示更新後的內容
 
 
-
+                        // 5.4 如果爭議狀態為已同意/不同意，鎖定-儲存btn&狀態選單
+                        if(dispute_status.value === '3' || dispute_status.value === '2'){
+                            btn_dispute_save.setAttribute("disabled", "disabled");
+                            dispute_status.setAttribute("disabled", "disabled");
+                            dispute_money.setAttribute("disabled", "disabled");
+                            reject_reason.setAttribute("disabled", "disabled");
+                        }
+                        alert("已更新");
+                    }).catch((error) =>{
+                        console.error("發生錯誤：", error);
+                        alert("提交時發生錯誤，請稍後再試。");
+                    });
+                }
+            });
+            //===========================================================================
+        });
     </script>
 </body>
 
