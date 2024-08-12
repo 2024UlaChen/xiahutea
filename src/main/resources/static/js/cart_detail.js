@@ -290,8 +290,6 @@ document.addEventListener("DOMContentLoaded",function(){
       e.stopPropagation();
     })
 
-
-
 //********************************************日期時間選擇器*************************************
   new AirDatepicker('#myDatepicker', {
     locale:{
@@ -307,8 +305,6 @@ document.addEventListener("DOMContentLoaded",function(){
       firstDay: 1},
     timepicker: true,
   });
-
-
 
   //********************************************第二頁按鈕事件*************************************
   //取貨人資料

@@ -392,6 +392,34 @@ input.qtyminus {
   font-size: 15px;
 }
 
+.lightbox-radio-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.lightbox-radio-group input[type="radio"] {
+  display: none;
+}
+
+.lightbox-radio-group label {
+  display: inline-block;
+  flex: 0 0 30%;
+  background-color: #f0f0f0;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+  padding: 5px 0;
+  font-size: 14px;
+}
+
+.lightbox-radio-group input[type="radio"]:checked + label {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
 /*light燈箱for刪除訂單*/
 #lightbox-delete{
   position: fixed;
@@ -504,7 +532,7 @@ input.qtyminus {
   box-sizing: border-box;
   width: 45%;
   flex-direction: column;
-  box-shadow: #999;
+
 }
 
 
@@ -578,7 +606,6 @@ textarea.text2store{
   box-sizing: border-box;
   width: 45%;
   flex-direction: column;
-  box-shadow: #999;
 }
 
 /*開立發票 */
@@ -594,7 +621,6 @@ textarea.text2store{
   box-sizing: border-box;
   width: 45%;
   flex-direction: column;
-  box-shadow: #999;
 }
 
 .vehicle-detail{
@@ -674,7 +700,6 @@ input.uniform-numbers{
   box-sizing: border-box;
   width: 45%;
   flex-direction: column;
-  box-shadow: #999;
 }
 
 .order-detail-content thead th {
