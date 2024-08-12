@@ -86,7 +86,7 @@ document.addEventListener("DOMContentLoaded",function(){
 //         })
 //         .catch(error => console.error('Error fetching store data:', error));
 // });
-  //第一頁按鈕事件
+  //********************************************第一頁按鈕事件*************************************
   //刪除、修改訂單
   //修改
   for(let i =0;i<btn_edit_el.length;i++){
@@ -291,8 +291,27 @@ document.addEventListener("DOMContentLoaded",function(){
     })
 
 
-    //第二頁
-    //取貨人資料
+
+//********************************************日期時間選擇器*************************************
+  new AirDatepicker('#myDatepicker', {
+    locale:{
+      days: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+      daysShort: ['日', '一', '二', '三', '四', '五', '六'],
+      daysMin: ['日', '一', '二', '三', '四', '五', '六'],
+      months: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+      monthsShort: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+      today: '今天',
+      clear: '清除',
+      dateFormat: 'yyyy-MM-dd',
+      timeFormat: 'HH:mm',
+      firstDay: 1},
+    timepicker: true,
+  });
+
+
+
+  //********************************************第二頁按鈕事件*************************************
+  //取貨人資料
     select_cellphone_el.addEventListener("click",function(){
       input_cellphone_el.disabled = false;
       input_phone_zone_el.disabled = true;
@@ -380,7 +399,7 @@ document.addEventListener("DOMContentLoaded",function(){
       e.stopPropagation()
     })
 
-    //第三頁按鈕事件綁定
+  //********************************************第三頁按鈕事件*************************************
     btn_backto_last_page2_el.addEventListener("click",function(e){
       step3_el.classList.remove("active");
       step2_el.classList.add("active");
@@ -393,23 +412,4 @@ document.addEventListener("DOMContentLoaded",function(){
        }
       e.stopPropagation()
     })
-
-
-
-//****************************************************結帳流程1時間選擇套件****************************************
-  new AirDatepicker('#myDatepicker', {
-      locale:{
-          days: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
-          daysShort: ['日', '一', '二', '三', '四', '五', '六'],
-          daysMin: ['日', '一', '二', '三', '四', '五', '六'],
-          months: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
-          monthsShort: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
-          today: '今天',
-          clear: '清除',
-          dateFormat: 'yyyy-MM-dd',
-          timeFormat: 'HH:mm',
-          firstDay: 1},
-      timepicker: true,
-  });
-
 })
