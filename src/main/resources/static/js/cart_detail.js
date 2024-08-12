@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded",function(){
   let delete_detail_el = document.getElementsByClassName("delete-detail")[0];
   let lightbox_content_el = document.getElementsByClassName("lightbox-content")[0];
   let confirm_delete_el = document.getElementById("confirm-delete");
-  let cancel_delete_el = document.getElementById("cancle-delete");
+  let cancel_delete_el = document.getElementById("cancel-delete");
 
   //取貨方式
   let pick_up_input_el = document.getElementsByClassName("pick-up-input")[0];
