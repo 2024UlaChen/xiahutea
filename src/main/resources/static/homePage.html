@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>夏虎茶</title>
+    <link rel="shortcut icon" type="image/x-icon" href="assets/images/favicon.png" />
+    <link
+        href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,300i,400,400i,700,700i&display=swap" rel="stylesheet">
 <!-- <link rel="stylesheet" href="./assets/css/bootstrap.min.css"> -->
     <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"> -->
     <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> -->
@@ -11,9 +16,139 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <link rel="stylesheet" href=".././static/assets/css/slick.css">
     <link rel="stylesheet" href="./assets/css/font-awesome.min.css">
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <!-- <link rel="stylesheet" href="assets/css/bootstrap.min.css"> -->
+    <!-- <link rel="stylesheet" href="assets/css/font-awesome.min.css"> -->
+    <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="assets/css/animate.min.css">
+    <link rel="stylesheet" href="assets/css/jquery-ui.css">
+    <!-- <link rel="stylesheet" href="assets/css/slick.css"> -->
+    <link rel="stylesheet" href="assets/css/chosen.min.css">
+    <link rel="stylesheet" href="assets/css/pe-icon-7-stroke.css">
+    <link rel="stylesheet" href="assets/css/magnific-popup.min.css">
+    <link rel="stylesheet" href="assets/css/lightbox.min.css">
+    <link rel="stylesheet" href="assets/js/fancybox/source/jquery.fancybox.css">
+    <link rel="stylesheet" href="assets/css/jquery.scrollbar.min.css">
+    <link rel="stylesheet" href="assets/css/mobile-menu.css">
+    <link rel="stylesheet" href="assets/fonts/flaticon/flaticon.css">
+    <link rel="stylesheet" href="assets/css/style.css">
 
 <!--    <link rel="stylesheet" href="./slicktools/slick-theme.css">-->
     <style>
+        div.header-message>h1 {
+            margin: 0 auto;
+            border-radius: 50%;
+            color: #73B4BA;
+        }
+         
+
+        .header-user-links li {
+            display: inline-block;
+        }
+
+        .header-user-links i {
+            border-radius: 50%;
+            font-size: 20px;
+            margin-left: 10px;
+        }
+
+
+        .query-bar a {
+            margin-left: 10px;
+            margin-right: 10px;
+            border-radius: 50%;
+        }
+
+        .query-bar input {
+            background-color: white;
+            width: 80%;
+        }
+
+        #query-member {
+            min-width: 200px;
+            padding-left: 10px;
+        }
+
+        #query-member li {
+            min-width: 100%;
+        }
+
+        #query-member img {
+            width: 100%;
+        }
+
+        #query-member .account-list {
+            margin-top: 10%;
+        }
+
+        .reset-margin {
+            margin: 0;
+            margin-top: 2%;
+            background-color: #f5f5f5;
+        }
+
+        .member-aside {
+            width: 30%;
+            height: 100%;
+            margin: 0 auto;
+            
+
+        }
+
+        .member-introduction {
+            margin: 0 auto;
+            margin-right: 30px;
+            padding-top: 55px;
+            padding-right: 20px;
+            padding-bottom: 45px;
+            padding-left: 20px;
+            background-color: white;
+        }
+
+        .member-introduction div {
+            text-align: center;
+            overflow: hidden;
+        }
+
+
+        .member-list {
+            margin-right: 30px;
+            margin-top: 50px;
+            padding-top: 55px;
+            padding-right: 20px;
+            padding-bottom: 50px;
+            padding-left: 60px;
+            background-color: white;
+        }
+
+        .member-list li {
+            height: 60px;
+            font-size: 18px;
+            text-align: left;
+            list-style-type: none;
+        }
+
+        .warn {
+            display: inline;
+            color: #ff5e7d;
+        }
+
+        .remind {
+            color: #9b9b9b;
+            font-size: 12px;
+        }
+
+        .userPhoto {
+            margin: 0 auto;
+            display: inline-block;
+            width: 30%;
+            border-radius: 50%;
+        }
+
+        .sex {
+            font-size: 16px;
+            display: block;
+        } 
         .IndexImgNameFontSize{
             font-weight: bold; 
             color:black
@@ -92,118 +227,120 @@
     </style>
 </head>
 <body>
-<header class="header style2">
-    <div class="top-bar">
-        <div class="container">
+    <!--導覽bar 吃不到組長設定-->
+    <header class="header style2">
+        <div class="top-bar">
+          <div class="container">
             <div class="row">
-                <div class="col-lg-12">
-                    <div class="col-lg-3">
-                        <div class="header-message">
-                            <h1>夏虎茶</h1>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="query-bar">
-                            <a href="#">
-                                <i class="fa fa-search" aria-hidden="true"></i>
-                            </a>
-                            <input type="text" placeholder="搜尋品牌、門市或商品" name="" id="">
-                            <a href="#">
-                <span>
-                  <i class="fa fa-times" aria-hidden="true"></i>
-                </span>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <ul class="header-user-links top-bar-right">
-                            <li>
-                                <a href="#">
-                  <span>
-                    <i class="fa fa-book" aria-hidden="true"></i>
-                  </span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                  <span>
-                    <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                  </span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                  <span>
-                    <i class="fa fa-bell" aria-hidden="true"></i>
-                  </span>
-                                </a>
-                            </li>
-                            <li class="teamo-dropdown block-account">
-                                <a href="#" data-teamo="teamo-dropdown">
-                  <span>
-                    <i class="fa fa-user-circle" aria-hidden="true"></i>
-                  </span>
-                                </a>
-                                <ul class="teamo-submenu" id="query-member">
-                                    <li class="switcher-option">
-                                        <div class="account-list row">
-                                            <div class="col-lg-12 no-padding">
-                                                <div class="col-sm-4">
-                                                    <img src="/assets/images/xiahutealogo.jpg" alt="userPhoto">
-                                                </div>
-                                                <div class="col-lg-8">
-                                                    <span>userName</span>
-                                                    <span>userAccount</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="switcher-option">
-                                        <a href="#">
-                                            <span> 帳號設定 </span>
-                                        </a>
-                                    </li>
-                                    <li class="switcher-option">
-                                        <a href="#">
-                                            <span> 會員卡 </span>
-                                        </a>
-                                    </li>
-                                    <li class="switcher-option">
-                                        <a href="#">
-                                            <span> 我的券夾 </span>
-                                        </a>
-                                    </li>
-                                    <hr>
-                                    <li class="switcher-option">
-                                        <a href="#">
-                                            <span> 訂單管理 </span>
-                                        </a>
-                                    </li>
-                                    <li class="switcher-option">
-                                        <a href="#">
-                                            <span> 意見回饋 </span>
-                                        </a>
-                                    </li>
-                                    <li class="switcher-option">
-                                        <a href="#">
-                                            <span> 常見問題 </span>
-                                        </a>
-                                    </li>
-                                    <hr>
-                                    <li class="switcher-option">
-                                        <a href="#">
-                                            <span> 登出 </span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
+              <div class="col-lg-12">
+                <div class="col-lg-3">
+                  <div class="header-message">
+                    <h1>夏虎茶</h1>
+                  </div>
                 </div>
+                <div class="col-lg-6">
+                  <div class="query-bar">
+                    <a href="#">
+                      <i class="fa fa-search" aria-hidden="true"></i>
+                    </a>
+                    <input type="text" placeholder="搜尋品牌、門市或商品" name="" id="">
+                    <a href="#">
+                      <span>
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                      </span>
+                    </a>
+                  </div>
+                </div>
+                <div class="col-lg-3">
+                  <ul class="header-user-links top-bar-right">
+                    <li>
+                      <a href="#">
+                        <span>
+                          <i class="fa fa-book" aria-hidden="true"></i>
+                        </span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#">
+                        <span>
+                          <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                        </span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#">
+                        <span>
+                          <i class="fa fa-bell" aria-hidden="true"></i>
+                        </span>
+                      </a>
+                    </li>
+                    <li class="teamo-dropdown block-account">
+                      <a href="#" data-teamo="teamo-dropdown">
+                        <span>
+                          <i class="fa fa-user-circle" aria-hidden="true"></i>
+                        </span>
+                      </a>
+                      <ul class="teamo-submenu" id="query-member">
+                        <li class="switcher-option">
+                          <div class="account-list row">
+                            <div class="col-lg-12 no-padding">
+                              <div class="col-sm-4">
+                                <img src="/assets/images/xiahutealogo.jpg" alt="userPhoto">
+                              </div>
+                              <div class="col-lg-8">
+                                <span>userName</span>
+                                <span>userAccount</span>
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                        <li class="switcher-option">
+                          <a href="#">
+                            <span> 帳號設定 </span>
+                          </a>
+                        </li>
+                        <li class="switcher-option">
+                          <a href="#">
+                            <span> 會員卡 </span>
+                          </a>
+                        </li>
+                        <li class="switcher-option">
+                          <a href="#">
+                            <span> 我的券夾 </span>
+                          </a>
+                        </li>
+                        <hr>
+                        <li class="switcher-option">
+                          <a href="#">
+                            <span> 訂單管理 </span>
+                          </a>
+                        </li>
+                        <li class="switcher-option">
+                          <a href="#">
+                            <span> 意見回饋 </span>
+                          </a>
+                        </li>
+                        <li class="switcher-option">
+                          <a href="#">
+                            <span> 常見問題 </span>
+                          </a>
+                        </li>
+                        <hr>
+                        <li class="switcher-option">
+                          <a href="#">
+                            <span> 登出 </span>
+                          </a>
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </div>
+          </div>
         </div>
-    </div>
-</header>
+      </header>
+
     <div class="kunClass ">
         <div>
             <img class="KunSlickImg " src="https://chevigal.com/wp-content/uploads/20220227231508_23.jpg" alt="輪播" >
@@ -228,7 +365,7 @@
     </div>
     <div class="Container m-5">
         <div class="row KunSpeedSearch">
-            <div class="col-2"></div>
+            <div class="col-3"></div>
             <div class="col" id="localLog"><i class="fa-solid fa-map-location">找附近</i></div>
             
             
@@ -273,27 +410,27 @@
     
 
   
-            
-            <div class="col"><i class="fa-solid fa-store">找商家</i></div>            
-            <div class="col"><i class="fa-solid fa-shop">找品牌</i></div>            
+  
+            <div class="col"><i class="fa-solid fa-store">找品牌</i></div>          
+                   
             <div class="col"><i class="fa-solid fa-crown">集點卡</i></div>
-            <div class="col"><i class="fa-solid fa-tags">優惠券</i></div>
             <div class="col"><i class="fa-solid fa-rectangle-list">曾點過</i></div>
-            <div class="col"></div>            
-            <div class="col-2"></div>
+            <div class="col"><i class="fa-solid fa-tags">我的券夾</i></div>
+            <div class="col-3"></div>
+            
         </div>
         
         
             <div class="row justify-content-center">
                 
                 <figure class="col-3 m-3 figure  ">
-                    <img src="./AL_56228.webp" alt=""  class="rounded KunIndexSotreImg " >
+                    <img src="#" alt=""  class="rounded KunIndexSotreImg " >
                     
                     
                     <div class="row ">
                         <figcaption class="figure-caption col-10 IndexImgNameFontSize drinkAddress" data-address="106台北市大安區復興南路一段107巷39號" >得正大安計畫</figcaption>
                         <figcaption class="figure-caption col"><i class="fa-solid fa-truck"></i></figcaption>
-                        <figcaption class="figure-caption col-12 footer" ><i class="KunStar fa-solid fa-star"></i><span class="KunRank">4.8</span>&nbsp;‧&nbsp;11:00~22:00&nbsp;‧<span class="sotreDistance">??公里</span></figcaption>
+                        <figcaption class="figure-caption col-12 footer2" ><i class="KunStar fa-solid fa-star"></i><span class="KunRank">4.8</span>&nbsp;‧&nbsp;11:00~22:00&nbsp;‧<span class="sotreDistance">??公里</span></figcaption>
                     </div>                   
                     
                 </figure>
@@ -303,7 +440,7 @@
                     <div class="row">
                     <figcaption class="figure-caption col-10 IndexImgDescribeFontSize drinkAddress" style="font-weight: bold; color:black" data-address="231新北市新店區北新路一段257號">得正新店計畫</figcaption>
                     <figcaption class="figure-caption col"><i class="fa-solid fa-truck"></i></figcaption>
-                    <figcaption class="figure-caption col-12 footer" ><i class="KunStar fa-solid fa-star"></i><span class="KunRank">4.5</span>&nbsp;‧&nbsp;11:00~22:00&nbsp;‧&nbsp;<span class="sotreDistance">??公里</span></figcaption>
+                    <figcaption class="figure-caption col-12 footer2" ><i class="KunStar fa-solid fa-star"></i><span class="KunRank">4.5</span>&nbsp;‧&nbsp;11:00~22:00&nbsp;‧&nbsp;<span class="sotreDistance">??公里</span></figcaption>
                     </div>      
                 </figure>
                 <figure class="col-3 m-3 figure">
@@ -311,7 +448,7 @@
                     <div class="row">
                         <figcaption class="figure-caption col-10 IndexImgNameFontSize drinkAddress" data-address="231新北市新店區北新路二段166號">八曜和茶七張店</figcaption>
                     <figcaption class="figure-caption col"><i class="fa-solid fa-truck"></i></figcaption>
-                    <figcaption class="figure-caption col-12 footer" ><i class="KunStar fa-solid fa-star"></i><span class="KunRank">5</span>&nbsp;‧&nbsp;11:00~22:00&nbsp;‧&nbsp;<span class="sotreDistance">??公里</span></figcaption>
+                    <figcaption class="figure-caption col-12 footer2" ><i class="KunStar fa-solid fa-star"></i><span class="KunRank">5</span>&nbsp;‧&nbsp;11:00~22:00&nbsp;‧&nbsp;<span class="sotreDistance">??公里</span></figcaption>
                     </div>      
                 </figure>
                 <figure class="col-3 m-3 figure">
@@ -319,7 +456,7 @@
                     <div class="row">
                         <figcaption class="figure-caption col-10 IndexImgNameFontSize drinkAddress" data-address="105台北市松山區慶城街1號2樓">春爽唐慶成店</figcaption>
                     <figcaption class="figure-caption col"><i class="fa-solid fa-truck"></i></figcaption>
-                    <figcaption class="figure-caption col-12 footer" ><i class="KunStar fa-solid fa-star"></i><span class="KunRank">4.6</span>&nbsp;‧&nbsp;11:00~22:00&nbsp;‧&nbsp;<span class="sotreDistance">??公里</span></figcaption>
+                    <figcaption class="figure-caption col-12 footer2" ><i class="KunStar fa-solid fa-star"></i><span class="KunRank">4.6</span>&nbsp;‧&nbsp;11:00~22:00&nbsp;‧&nbsp;<span class="sotreDistance">??公里</span></figcaption>
                     </div>      
                 </figure>
                 <figure class="col-3 m-3 figure">
@@ -327,7 +464,7 @@
                     <div class="row">
                         <figcaption class="figure-caption col-10 IndexImgNameFontSize drinkAddress" data-address="231新北市新店區民族路46號1樓">一沐日大坪林店</figcaption>
                     <figcaption class="figure-caption col"><i class="fa-solid fa-truck"></i></figcaption>
-                    <figcaption class="figure-caption col-12 footer" ><i class="KunStar fa-solid fa-star"></i><span class="KunRank">4.4</span>&nbsp;‧&nbsp;11:00~22:00&nbsp;‧&nbsp;<span class="sotreDistance">??公里</span></figcaption>
+                    <figcaption class="figure-caption col-12 footer2" ><i class="KunStar fa-solid fa-star"></i><span class="KunRank">4.4</span>&nbsp;‧&nbsp;11:00~22:00&nbsp;‧&nbsp;<span class="sotreDistance">??公里</span></figcaption>
                     </div>      
                 </figure>
                 <!--here-->
@@ -336,7 +473,7 @@
                     <div class="row">
                         <figcaption class="figure-caption col-10 IndexImgNameFontSize drinkAddress" data-address="116台北市文山區景文街104號">五同好景美店</figcaption>
                     <figcaption class="figure-caption col"><i class="fa-solid fa-truck"></i></figcaption>
-                    <figcaption class="figure-caption col-12 footer" ><i class="KunStar fa-solid fa-star"></i><span class="KunRank">4.4</span>&nbsp;‧&nbsp;11:00~22:00&nbsp;‧&nbsp;<span class="sotreDistance">??公里</span></figcaption>
+                    <figcaption class="figure-caption col-12 footer2" ><i class="KunStar fa-solid fa-star"></i><span class="KunRank">4.4</span>&nbsp;‧&nbsp;11:00~22:00&nbsp;‧&nbsp;<span class="sotreDistance">??公里</span></figcaption>
                     </div>      
                 </figure>
                 <figure class="col-3 m-3 figure">
@@ -344,7 +481,7 @@
                     <div class="row">
                         <figcaption class="figure-caption col-10 IndexImgNameFontSize drinkAddress" data-address="234新北市永和區永和路一段158號">在睡五分鐘永和店</figcaption>
                     <figcaption class="figure-caption col"><i class="fa-solid fa-truck"></i></figcaption>
-                    <figcaption class="figure-caption col-12 footer" ><i class="KunStar fa-solid fa-star"></i><span class="KunRank">4.4</span>&nbsp;‧&nbsp;11:00~22:00&nbsp;‧&nbsp;<span class="sotreDistance">??公里</span></figcaption>
+                    <figcaption class="figure-caption col-12 footer2" ><i class="KunStar fa-solid fa-star"></i><span class="KunRank">4.4</span>&nbsp;‧&nbsp;11:00~22:00&nbsp;‧&nbsp;<span class="sotreDistance">??公里</span></figcaption>
                     </div>      
                 </figure>
                 <figure class="col-3 m-3 figure">
@@ -352,7 +489,7 @@
                     <div class="row">
                         <figcaption class="figure-caption col-10 IndexImgNameFontSize drinkAddress" data-address="220新北市板橋區三民路二段19號">沐白板橋店</figcaption>
                     <figcaption class="figure-caption col"><i class="fa-solid fa-truck"></i></figcaption>
-                    <figcaption class="figure-caption col-12 footer" ><i class="KunStar fa-solid fa-star"></i><span  class="KunRank">4.4</span>&nbsp;‧&nbsp;11:00~22:00&nbsp;‧&nbsp;<span class="sotreDistance">??公里</span></figcaption>
+                    <figcaption class="figure-caption col-12 footer2" ><i class="KunStar fa-solid fa-star"></i><span  class="KunRank">4.4</span>&nbsp;‧&nbsp;11:00~22:00&nbsp;‧&nbsp;<span class="sotreDistance">??公里</span></figcaption>
                     </div>      
                 </figure>
 
@@ -382,84 +519,87 @@
         </div>
       </div>
     </div>
-<footer class="footer style7">
-    <div class="container">
-        <div class="container-wapper no-padding">
-            <div class="row">
-                <div class="box-footer col-xs-12 col-sm-4 col-md-4 col-lg-4">
-                    <div class="teamo-custommenu default">
-                        <ul class="menu">
-                            <li class="menu-item">
-                                <h3>夏虎茶</h3>
-                            </li>
-                            <li class="menu-item">
-                                <a href="#">公司資訊：雲仲資訊股份有限公司</a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="#">統一編號：58364751
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="box-footer col-xs-12 col-sm-4 col-md-4 col-lg-4 hidden-xs">
-
-                </div>
-                <div class="box-footer col-xs-12 col-sm-4 col-md-4 col-lg-4">
-                    <div class="teamo-custommenu default">
-                        <ul class="menu">
-                            <li class="menu-item">
-                                <a href="#">常見問題</a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="#">隱私權條款</a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="#">意見回饋</a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="#">使用者條款</a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="#">信用卡條款</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-end">
-                <div class="row">
-                    <div class="col-sm-12 col-xs-12">
-                        <div class="teamo-socials">
-                            <ul class="socials">
-                                <li>
-                                    <a href="#" class="social-item" target="_blank">
-                                        <i class="icon fa fa-facebook"></i>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="social-item" target="_blank">
-                                        <i class="icon fa fa-twitter"></i>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="social-item" target="_blank">
-                                        <i class="icon fa fa-instagram"></i>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="coppyright">
-                            © 2024 XiaHuTea 台灣 . All rights reserved
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</footer>
 
 
+    <!-- 頁腳 -->
+    <footer class="footer style7">
+      <div class="container">
+          <div class="container-wapper no-padding">
+              <div class="row">
+                  <div class="box-footer col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                      <div class="teamo-custommenu default">
+                          <ul class="menu">
+                              <li class="menu-item">
+                                  <h3>夏虎茶</h3>
+                              </li>
+                              <li class="menu-item">
+                                  <a href="#">公司資訊：雲仲資訊股份有限公司</a>
+                              </li>
+                              <li class="menu-item">
+                                  <a href="#">統一編號：58364751
+                                  </a>
+                              </li>
+                          </ul>
+                      </div>
+                  </div>
+                  <div class="box-footer col-xs-12 col-sm-4 col-md-4 col-lg-4 hidden-xs">
+
+                  </div>
+                  <div class="box-footer col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                      <div class="teamo-custommenu default">
+                          <ul class="menu">
+                              <li class="menu-item">
+                                  <a href="#">常見問題</a>
+                              </li>
+                              <li class="menu-item">
+                                  <a href="#">隱私權條款</a>
+                              </li>
+                              <li class="menu-item">
+                                  <a href="#">意見回饋</a>
+                              </li>
+                              <li class="menu-item">
+                                  <a href="#">使用者條款</a>
+                              </li>
+                              <li class="menu-item">
+                                  <a href="#">信用卡條款</a>
+                              </li>
+                          </ul>
+                      </div>
+                  </div>
+              </div>
+              <div class="footer-end">
+                  <div class="row">
+                      <div class="col-sm-12 col-xs-12">
+                          <div class="teamo-socials">
+                              <ul class="socials">
+                                  <li>
+                                      <a href="#" class="social-item" target="_blank">
+                                          <i class="icon fa fa-facebook"></i>
+                                      </a>
+                                  </li>
+                                  <li>
+                                      <a href="#" class="social-item" target="_blank">
+                                          <i class="icon fa fa-twitter"></i>
+                                      </a>
+                                  </li>
+                                  <li>
+                                      <a href="#" class="social-item" target="_blank">
+                                          <i class="icon fa fa-instagram"></i>
+                                      </a>
+                                  </li>
+                              </ul>
+                          </div>
+                          <div class="coppyright">
+                              © 2024 XiaHuTea 台灣 . All rights reserved
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </footer>
+
+    <!-- <script src="./js/general.js"></script> -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <!-- <script src="./assets/js/bootstrap.min.js"></script> -->
