@@ -90,8 +90,8 @@ document.addEventListener("DOMContentLoaded",function(){
   //刪除、修改訂單
   //修改
   for(let i =0;i<btn_edit_el.length;i++){
-    btn_edit_el[i].addEventListener("click",function(){
-      lightbox_el.style.display="flex";
+    btn_edit_el[i].addEventListener("click",function() {
+      lightbox_el.style.display = "flex";
       document.body.style.overflow = 'hidden';
       document.body.style.paddingRight = '17px';
       // 找到點擊的按鈕
@@ -100,312 +100,282 @@ document.addEventListener("DOMContentLoaded",function(){
       let productName = cartItem.querySelector(".product-name").textContent;
       let lightboxTitle = document.querySelector("#lightbox h1");
       lightboxTitle.textContent = productName;
-      //根據每個商品提供不同選項
-      // fetchProductOptions(productName);
-      // 監聽所有 ice 按鈕的點擊事件
-      // document.querySelectorAll('button[name="ice"]').forEach(button =>
-      //   button.addEventListener("click",function(){
-      //      // 清除其他按鈕的“選中”狀態
-      //      document.querySelectorAll('button[name="ice"]').forEach(btn => {
-      //       btn.classList.remove('selected');
+      // function------提供商品選項
+      // function fetchProductOptions(productId){
+      //   fetch(`/getProductOptions?productName=${encodeURIComponent(productName)}`)
+      //   .then(response => response.json())
+      //   .then(data =>{
+      //     let ice_el = document.querySelector('.ice + .lightbox-radio-group');
+      //     let sugar_el = document.querySelector('.sugar + .lightbox-radio-group');
+      //     let materials_el = document.querySelector('.materials + .lightbox-radio-group');
+      //     data.ice.forEach(option => {
+      //      <input type="radio" id="${option.id}" name="options" value="${option.value}">
+      //      <label for="${option.id}">${option.label}</label>
+      //     });
+      //     data.sugar.forEach(option => {
+      //       //      <input type="radio" id="${option.id}" name="options" value="${option.value}">
+      //       //      <label for="${option.id}">${option.label}</label>
+      //       //     });
+      //     data.materials.forEach(option => {
+      //            <input type="radio" id="${option.id}" name="options" value="${option.value}">
+      //            <label for="${option.id}">${option.label}</label>
+      //          });
       //   });
-      //       this.classList.add('selected');
-      //   })
-      // )
-       // 監聽所有 sugar 按鈕的點擊事件
-      // document.querySelectorAll('button[name="ice"]').forEach(button =>
-      //   button.addEventListener("click",function(){
-      //      // 清除其他按鈕的“選中”狀態
-      //      document.querySelectorAll('button[name="ice"]').forEach(btn => {
-      //       btn.classList.remove('selected');
-      //   });
-      //       this.classList.add('selected');
-      //   })
-      // )
-       // 監聽所有 material 按鈕的點擊事件
-      // document.querySelectorAll('button[name="ice"]').forEach(button =>
-      //   button.addEventListener("click",function(){
-      //      // 清除其他按鈕的“選中”狀態
-      //      document.querySelectorAll('button[name="ice"]').forEach(btn => {
-      //       btn.classList.remove('selected');
-      //   });
-      //       this.classList.add('selected');
-      //   })
-      // )
-    })
-  }
-  // function------提供商品選項
-  // function fetchProductOptions(productId){
-  //   fetch(`/getProductOptions?productName=${encodeURIComponent(productName)}`)
-  //   .then(response => response.json())
-  //   .then(data =>{
-  //     let ice_el = document.querySelector('.ice');
-  //     let sugar_el = document.querySelector('.sugar');
-  //     let materials_el = document.querySelector('.materials');
-  //     data.ice.forEach(option => {
-  //       ice_el.innerHTML += `<button type="button" name="ice" value="${option}">${option}`;
-  //     });
-  //     data.sugar.forEach(option => {
-  //       sugar_el.innerHTML += `<button type="button" name="sugar" value="${option}">${option}`;
-  //     });
-  //     data.ice.forEach(option => {
-  //       materials_el.innerHTML += `<button type="button" name="material" value="${option}">${option}`;
-  //     });
-  //   });
-  // }
-  btn_modal_close_el.addEventListener("click",function(){
-    lightbox_el.style.display="none";
-    document.body.style.overflow = 'auto';
-    document.body.style.paddingRight = '0px';
-})
-  lightbox_el.addEventListener("click", function(){
-    lightbox_el.style.display="none";
-    document.body.style.overflow = 'auto';
-    document.body.style.paddingRight = '0px';
-  });
-  lightbox_el.querySelector("article").addEventListener("click", function(e){
-    e.stopPropagation();
-  });
-  //燈箱數量增減
-  qtyminus_el.addEventListener("click",function(e){
-    if(qty_el.value>0){
-      qty_el.value--;
-    }
-    e.stopPropagation();
-  })
-  qtyplus_el.addEventListener("click",function(e){
-    if(qty_el.value>=0){
-      qty_el.value++;
-    }
-    console.log(qty_el.value);
-    e.stopPropagation();
-  })
-  //刪除訂餐
-  var currentItem = null;
-  for(let i=0;i<btn_delete_el.length;i++){
-    btn_delete_el[i].addEventListener("click",function(e){
-      lightbox_delete_el.style.display="flex";
-      document.body.style.overflow = 'hidden';
-      document.body.style.paddingRight = '17px';
+      // }
+      btn_modal_close_el.addEventListener("click", function () {
+        lightbox_el.style.display = "none";
+        document.body.style.overflow = 'auto';
+        document.body.style.paddingRight = '0px';
+      })
+      lightbox_el.addEventListener("click", function () {
+        lightbox_el.style.display = "none";
+        document.body.style.overflow = 'auto';
+        document.body.style.paddingRight = '0px';
+      });
+      lightbox_el.querySelector("article").addEventListener("click", function (e) {
+        e.stopPropagation();
+      });
+      //燈箱數量增減
+      qtyminus_el.addEventListener("click", function (e) {
+        if (qty_el.value > 0) {
+          qty_el.value--;
+        }
+        e.stopPropagation();
+      })
+      qtyplus_el.addEventListener("click", function (e) {
+        if (qty_el.value >= 0) {
+          qty_el.value++;
+        }
+        console.log(qty_el.value);
+        e.stopPropagation();
+      })
+      //刪除訂餐
+      var currentItem = null;
+      for (let i = 0; i < btn_delete_el.length; i++) {
+        btn_delete_el[i].addEventListener("click", function (e) {
+          lightbox_delete_el.style.display = "flex";
+          document.body.style.overflow = 'hidden';
+          document.body.style.paddingRight = '17px';
 
-      currentItem = this.closest(".item-content");
-      var productName = this.closest(".cart-item").querySelector(".product-name").textContent;
-      delete_detail_el.innerHTML = `刪除 <span class="highlight">${productName}</span> ?`;
-    })
-  }
+          currentItem = this.closest(".item-content");
+          var productName = this.closest(".cart-item").querySelector(".product-name").textContent;
+          delete_detail_el.innerHTML = `刪除 <span class="highlight">${productName}</span> ?`;
+        })
+      }
 
-  lightbox_delete_el.addEventListener("click", function(){
-    lightbox_delete_el.style.display="none";
-    document.body.style.overflow = 'auto';
-    document.body.style.paddingRight = '0px';
-  });
-  lightbox_content_el.addEventListener("click", function(e){
-    e.stopPropagation();
-  });
+      lightbox_delete_el.addEventListener("click", function () {
+        lightbox_delete_el.style.display = "none";
+        document.body.style.overflow = 'auto';
+        document.body.style.paddingRight = '0px';
+      });
+      lightbox_content_el.addEventListener("click", function (e) {
+        e.stopPropagation();
+      });
 
-  confirm_delete_el.addEventListener("click",function(){
-    currentItem.remove();
-    lightbox_delete_el.style.display="none";
-    document.body.style.overflow = 'auto';
-    document.body.style.paddingRight = '0px';
-    currentItem=null;
-  })
-  cancel_delete_el.addEventListener("click", function(){
-    lightbox_delete_el.style.display="none";
-    document.body.style.overflow = 'auto';
-    document.body.style.paddingRight = '0px';
-  });
+      confirm_delete_el.addEventListener("click", function () {
+        currentItem.remove();
+        lightbox_delete_el.style.display = "none";
+        document.body.style.overflow = 'auto';
+        document.body.style.paddingRight = '0px';
+        currentItem = null;
+      })
+      cancel_delete_el.addEventListener("click", function () {
+        lightbox_delete_el.style.display = "none";
+        document.body.style.overflow = 'auto';
+        document.body.style.paddingRight = '0px';
+      });
 
-  //取貨方式
-  // pick_up_input_el.addEventListener("click",function(){
-  //   if(carry_out_radio_el.checked){
-  //      carry_out_radio_el.checked=false; 
-  //     }
-  //     address_el.disabled=true;
-  // })
-  // carry_out_radio_el.addEventListener("click",function(){
-  //   if(pick_up_input_el.checked){
-  //     pick_up_input_el.checked=false; 
-  //    }
-  //    address_el.disabled = false;
-  // })
+      //取貨方式
+      // pick_up_input_el.addEventListener("click",function(){
+      //   if(carry_out_radio_el.checked){
+      //      carry_out_radio_el.checked=false;
+      //     }
+      //     address_el.disabled=true;
+      // })
+      // carry_out_radio_el.addEventListener("click",function(){
+      //   if(pick_up_input_el.checked){
+      //     pick_up_input_el.checked=false;
+      //    }
+      //    address_el.disabled = false;
+      // })
 
-  pick_up_input_el.addEventListener("click",function(){
-    address_el.disabled = true;
-  })
-  carry_out_radio_el.addEventListener("click",function(){
-    address_el.disabled = false;
-    address_el.focus();
-  })
-  address_el.addEventListener("focus", function() {
-    // 清空 placeholder
-    address_el.placeholder = "";
-  });
+      pick_up_input_el.addEventListener("click", function () {
+        address_el.disabled = true;
+      })
+      carry_out_radio_el.addEventListener("click", function () {
+        address_el.disabled = false;
+        address_el.focus();
+      })
+      address_el.addEventListener("focus", function () {
+        // 清空 placeholder
+        address_el.placeholder = "";
+      });
 
 // 當輸入框失去焦點時
-  address_el.addEventListener("blur", function() {
-    // 如果輸入框為空，恢復 placeholder
-    if (address_el.value === "") {
-      address_el.placeholder = "請輸入地址";
-    }
-  });
-  //時間選擇
-  picker_el.addEventListener("focus",function(){
-    picker_el.classList.add("focus-border");
-  })
-  picker_el.addEventListener("blur", function() {
+      address_el.addEventListener("blur", function () {
+        // 如果輸入框為空，恢復 placeholder
+        if (address_el.value === "") {
+          address_el.placeholder = "請輸入地址";
+        }
+      });
+      //時間選擇
+      picker_el.addEventListener("focus", function () {
+        picker_el.classList.add("focus-border");
+      })
+      picker_el.addEventListener("blur", function () {
         picker_el.classList.remove("focus-border");
-  });
+      });
 
-  //優惠使用
-  select_coupon_input_el.addEventListener("click",function(){
-    coupon_number_el.disabled=false;
-    coupon_number_el.focus();
-  })
-  coupon_number_el.addEventListener("focus", function() {
-    coupon_number_el.placeholder = "";
-  });
-  coupon_number_el.addEventListener("blur", function() {
-    if (coupon_number_el.value === "") {
-      coupon_number_el.placeholder = "請輸入優惠券序號";
-    }
-  });
+      //優惠使用
+      select_coupon_input_el.addEventListener("click", function () {
+        coupon_number_el.disabled = false;
+        coupon_number_el.focus();
+      })
+      coupon_number_el.addEventListener("focus", function () {
+        coupon_number_el.placeholder = "";
+      });
+      coupon_number_el.addEventListener("blur", function () {
+        if (coupon_number_el.value === "") {
+          coupon_number_el.placeholder = "請輸入優惠券序號";
+        }
+      });
 
-  //頁面跳轉
-  btn_addtopurchase_el.addEventListener("click",function(e){
-    console.log("預計跳回該商家頁面");
-    e.stopPropagation();
-  })
+      //頁面跳轉
+      btn_addtopurchase_el.addEventListener("click", function (e) {
+        console.log("預計跳回該商家頁面");
+        e.stopPropagation();
+      })
 
-  btn_checkout_el.addEventListener("click",function(e){
-    step1_el.classList.remove("active");
-    step2_el.classList.add("active");
-    if(step_content_el.style.display ="flex"){
-       step_content_el.style.display ="none";
-       step_content2_el.style.display ="flex";
-       order_detail_container_el.scrollIntoView({ 
-        behavior: "smooth" // 使用平滑滾動效果
-        });
-      }
-      e.stopPropagation();
-    })
+      btn_checkout_el.addEventListener("click", function (e) {
+        step1_el.classList.remove("active");
+        step2_el.classList.add("active");
+        if (step_content_el.style.display = "flex") {
+          step_content_el.style.display = "none";
+          step_content2_el.style.display = "flex";
+          order_detail_container_el.scrollIntoView({
+            behavior: "smooth" // 使用平滑滾動效果
+          });
+        }
+        e.stopPropagation();
+      })
 
 //********************************************日期時間選擇器*************************************
-  new AirDatepicker('#myDatepicker', {
-    locale:{
-      days: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
-      daysShort: ['日', '一', '二', '三', '四', '五', '六'],
-      daysMin: ['日', '一', '二', '三', '四', '五', '六'],
-      months: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
-      monthsShort: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
-      today: '今天',
-      clear: '清除',
-      dateFormat: 'yyyy-MM-dd',
-      timeFormat: 'HH:mm',
-      firstDay: 1},
-    timepicker: true,
-  });
+      new AirDatepicker('#myDatepicker', {
+        locale: {
+          days: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+          daysShort: ['日', '一', '二', '三', '四', '五', '六'],
+          daysMin: ['日', '一', '二', '三', '四', '五', '六'],
+          months: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+          monthsShort: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+          today: '今天',
+          clear: '清除',
+          dateFormat: 'yyyy-MM-dd',
+          timeFormat: 'HH:mm',
+          firstDay: 1
+        },
+        timepicker: true,
+      });
 
-  //********************************************第二頁按鈕事件*************************************
-  //取貨人資料
-    select_cellphone_el.addEventListener("click",function(){
-      input_cellphone_el.disabled = false;
-      input_phone_zone_el.disabled = true;
-      input_phone_number_el.disabled = true;
-      input_phone_zone_el.value="";
-      input_phone_number_el.value="";
-      input_cellphone_el.focus();
-    })
-    input_cellphone_el.addEventListener("focus", function() {
-      input_cellphone_el.placeholder = "";
-    });
-    input_cellphone_el.addEventListener("blur", function() {
-      if (input_cellphone_el.value === "") {
-        input_cellphone_el.placeholder = "EX:0912345678";
-      }
-    });
+      //********************************************第二頁按鈕事件*************************************
+      //取貨人資料
+      select_cellphone_el.addEventListener("click", function () {
+        input_cellphone_el.disabled = false;
+        input_phone_zone_el.disabled = true;
+        input_phone_number_el.disabled = true;
+        input_phone_zone_el.value = "";
+        input_phone_number_el.value = "";
+        input_cellphone_el.focus();
+      })
+      input_cellphone_el.addEventListener("focus", function () {
+        input_cellphone_el.placeholder = "";
+      });
+      input_cellphone_el.addEventListener("blur", function () {
+        if (input_cellphone_el.value === "") {
+          input_cellphone_el.placeholder = "EX:0912345678";
+        }
+      });
 
-    select_phone_el.addEventListener("click",function(){
-      input_phone_zone_el.disabled = false;
-      input_cellphone_el.disabled = true;
-      input_cellphone_el.value="";
-      input_phone_zone_el.focus();
-    })
-    input_phone_zone_el.addEventListener("focus", function() {
-      input_phone_zone_el.placeholder = "";
-    });
-    input_phone_zone_el.addEventListener("blur", function() {
-      if (input_phone_zone_el.value === "") {
-        input_phone_zone_el.placeholder = "區碼";
-      }
-    });
-    input_phone_zone_el.addEventListener("input",function(){
-      if(input_phone_zone_el.value.length === 2){
-        setTimeout(function(){
-          input_phone_number_el.disabled = false; 
-          input_phone_number_el.focus();          
-        }, 10);
-      }
-    })
+      select_phone_el.addEventListener("click", function () {
+        input_phone_zone_el.disabled = false;
+        input_cellphone_el.disabled = true;
+        input_cellphone_el.value = "";
+        input_phone_zone_el.focus();
+      })
+      input_phone_zone_el.addEventListener("focus", function () {
+        input_phone_zone_el.placeholder = "";
+      });
+      input_phone_zone_el.addEventListener("blur", function () {
+        if (input_phone_zone_el.value === "") {
+          input_phone_zone_el.placeholder = "區碼";
+        }
+      });
+      input_phone_zone_el.addEventListener("input", function () {
+        if (input_phone_zone_el.value.length === 2) {
+          setTimeout(function () {
+            input_phone_number_el.disabled = false;
+            input_phone_number_el.focus();
+          }, 10);
+        }
+      })
 
-    text2store_el.addEventListener("focus", function() {
-      text2store_el.placeholder = "";
-    });
-    text2store_el.addEventListener("blur", function() {
-      if (text2store_el.value === "") {
-        text2store_el.placeholder = "請輸入文字...";
-      }
-    });
+      text2store_el.addEventListener("focus", function () {
+        text2store_el.placeholder = "";
+      });
+      text2store_el.addEventListener("blur", function () {
+        if (text2store_el.value === "") {
+          text2store_el.placeholder = "請輸入文字...";
+        }
+      });
 
-    //發票方式
-    select_paper_el.addEventListener("click",function(){
-      vehicle_number_el.disabled = true;
-      checksava_vehicle_el.disabled = true;
-      checksava_vehicle_el.checked = false;
-    })
-    select_vehicle_el.addEventListener("click",function(){
-      checksava_vehicle_el.disabled = false;
-      vehicle_number_el.disabled = false;
-      vehicle_number_el.focus();
-    })
-    //頁面跳轉
-    btn_backto_last_page_el.addEventListener("click",function(e){
-      step2_el.classList.remove("active");
-      step1_el.classList.add("active");
-      if(step_content2_el.style.display ="flex"){
-        step_content2_el.style.display ="none";
-        step_content_el.style.display ="flex";
-        order_detail_container_el.scrollIntoView({ 
-          behavior: "smooth" // 使用平滑滾動效果
+      //發票方式
+      select_paper_el.addEventListener("click", function () {
+        vehicle_number_el.disabled = true;
+        checksava_vehicle_el.disabled = true;
+        checksava_vehicle_el.checked = false;
+      })
+      select_vehicle_el.addEventListener("click", function () {
+        checksava_vehicle_el.disabled = false;
+        vehicle_number_el.disabled = false;
+        vehicle_number_el.focus();
+      })
+      //頁面跳轉
+      btn_backto_last_page_el.addEventListener("click", function (e) {
+        step2_el.classList.remove("active");
+        step1_el.classList.add("active");
+        if (step_content2_el.style.display = "flex") {
+          step_content2_el.style.display = "none";
+          step_content_el.style.display = "flex";
+          order_detail_container_el.scrollIntoView({
+            behavior: "smooth" // 使用平滑滾動效果
           });
-       }
-      e.stopPropagation()
-    })
+        }
+        e.stopPropagation()
+      })
 
-    btn_goto_next_page_el.addEventListener("click",function(e){
-      step2_el.classList.remove("active");
-      step3_el.classList.add("active");
-      if(step_content2_el.style.display ="flex"){
-        step_content2_el.style.display ="none";
-        step_content3_el.style.display ="flex";
-        order_detail_container_el.scrollIntoView({ 
-          behavior: "smooth" // 使用平滑滾動效果
+      btn_goto_next_page_el.addEventListener("click", function (e) {
+        step2_el.classList.remove("active");
+        step3_el.classList.add("active");
+        if (step_content2_el.style.display = "flex") {
+          step_content2_el.style.display = "none";
+          step_content3_el.style.display = "flex";
+          order_detail_container_el.scrollIntoView({
+            behavior: "smooth" // 使用平滑滾動效果
           });
-       }
-      e.stopPropagation()
-    })
+        }
+        e.stopPropagation()
+      })
 
-  //********************************************第三頁按鈕事件*************************************
-    btn_backto_last_page2_el.addEventListener("click",function(e){
-      step3_el.classList.remove("active");
-      step2_el.classList.add("active");
-      if(step_content3_el.style.display ="flex"){
-        step_content3_el.style.display ="none";
-        step_content2_el.style.display ="flex";
-        order_detail_container_el.scrollIntoView({ 
-          behavior: "smooth" // 使用平滑滾動效果
+      //********************************************第三頁按鈕事件*************************************
+      btn_backto_last_page2_el.addEventListener("click", function (e) {
+        step3_el.classList.remove("active");
+        step2_el.classList.add("active");
+        if (step_content3_el.style.display = "flex") {
+          step_content3_el.style.display = "none";
+          step_content2_el.style.display = "flex";
+          order_detail_container_el.scrollIntoView({
+            behavior: "smooth" // 使用平滑滾動效果
           });
-       }
-      e.stopPropagation()
+        }
+        e.stopPropagation()
+      })
     })
-})

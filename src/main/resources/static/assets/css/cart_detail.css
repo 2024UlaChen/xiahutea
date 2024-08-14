@@ -399,7 +399,7 @@ input.qtyminus {
 }
 
 .lightbox-radio-group input[type="radio"] {
-  display: none;
+    display: none;
 }
 
 .lightbox-radio-group label {
