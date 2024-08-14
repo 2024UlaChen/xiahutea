@@ -24,7 +24,7 @@
     <link rel="stylesheet" href="/css/flaticon.css">  <!--flaticon是提供免费和付费矢量图标的平台-->
     <!-- <link rel="stylesheet" href="/css/style.css"> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- Font Awesome -->
-    <link rel="stylesheet" href="/css/order_detail.css">
+    <link rel="stylesheet" href="/css/cart_detail.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/air-datepicker@3.5.3/air-datepicker.css">
     <style>
 	/*全域設定*/
@@ -372,6 +372,111 @@ hr {
   transform: translate(-50%, -50%);
 }
 
+#lightbox > article h1{
+  font-size: 25px;
+  font-weight: bold;
+  margin-bottom: 25px;
+}
+
+.lightbox_end{
+  display: flex;
+  padding: 10px;
+}
+
+input.qtyplus{
+  margin-right: 40px;
+}
+
+.qty {
+  width: 60px;
+  height: auot;
+  text-align: center;
+  border: 0;
+  border-top: 1px solid #aaa;
+  border-bottom: 1px solid #aaa;
+}
+
+
+input.qtyplus {
+  width: 70px;
+  height: auto;
+  border: 1px solid #aaa;
+  background: #f8f8f8;
+}
+
+input.qtyminus {
+  width: 70px;
+  height: auto;
+  border: 1px solid #aaa;
+  background: #f8f8f8;
+}
+
+.btn_modal_close{
+  background-color: orange;
+  color: white;
+  border: none;
+  width: 150px;
+  padding: 15px;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+/*light燈箱for刪除訂單*/
+#lightbox-delete{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: hsla(0, 0%, 0%, .5);
+}
+.lightbox-content{
+  background-color: white;
+  max-width: 90%;
+  width: 45%;
+  border-radius: 10px;
+  box-shadow: 0 0 10px #ddd;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.lightbox-content p{
+  padding: 10px;
+  font-size: 20px;
+  color: black;
+  font-family: 'Courier New', Courier, monospace;
+}
+.highlight {
+  color: red; 
+  font-weight: bold; 
+}
+.delete-button {
+  display: flex;
+  padding: 10px;
+  gap: 10px; /* 按钮间距 */
+  width: 100%;
+  justify-content: center;
+}
+
+#confirm-delete, #cancle-delete{
+  padding: 1% 7%;
+  font-size: large;
+  background-color: orange;
+  color: #fff;
+  text-align: center;
+  font-weight: bold;
+  border: none;
+  transition: all 0.4s ease 0s;
+  font-family: 'Montserrat', sans-serif;
+}
+
+#confirm-delete:hover,
+#cancle-delete:hover{
+  background-color: #b6c4b7; /* 悬停背景色 */
+}
+
+
 /**************************************************** STEP2 ******************************************/
 .step-content2{
   display: flex; /* 使用 Flexbox 佈局 */
@@ -636,472 +741,492 @@ input.uniform-numbers{
 .btn-submit-order:hover{
   background-color: #b6c4b7; /* 悬停背景色 */
 }
-</style>
-	
+
+    </style>
+
  
 
   </head>
   <body>
-    <header class="header style2">
-        <div class="top-bar">
+  <header class="header style2">
+      <div class="top-bar">
           <div class="container">
-            <div class="row">
-              <div class="col-lg-12">
-                <div class="col-lg-3">
-                  <div class="header-message">
-                    <h1>夏虎茶</h1>
-                  </div>
-                </div>
-                <div class="col-lg-6">
-                  <div class="query-bar">
-                    <a href="#">
-                      <i class="fa fa-search" aria-hidden="true"></i>
-                    </a>
-                    <input type="text" placeholder="搜尋品牌、門市或商品" name="" id="">
-                    <a href="#">
+              <div class="row">
+                  <div class="col-lg-12">
+                      <div class="col-lg-3">
+                          <div class="header-message">
+                              <h1>夏虎茶</h1>
+                          </div>
+                      </div>
+                      <div class="col-lg-6">
+                          <div class="query-bar">
+                              <a href="#">
+                                  <i class="fa fa-search" aria-hidden="true"></i>
+                              </a>
+                              <input type="text" placeholder="搜尋品牌、門市或商品" name="" id="">
+                              <a href="#">
                       <span>
                         <i class="fa fa-times" aria-hidden="true"></i>
                       </span>
-                    </a>
-                  </div>
-                </div>
-                <div class="col-lg-3">
-                  <ul class="header-user-links top-bar-right">
-                    <li>
-                      <a href="#">
+                              </a>
+                          </div>
+                      </div>
+                      <div class="col-lg-3">
+                          <ul class="header-user-links top-bar-right">
+                              <li>
+                                  <a href="#">
                         <span>
                           <i class="fa fa-book" aria-hidden="true"></i>
                         </span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#">
+                                  </a>
+                              </li>
+                              <li>
+                                  <a href="#">
                         <span>
                           <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                         </span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#">
+                                  </a>
+                              </li>
+                              <li>
+                                  <a href="#">
                         <span>
                           <i class="fa fa-bell" aria-hidden="true"></i>
                         </span>
-                      </a>
-                    </li>
-                    <li class="teamo-dropdown block-account">
-                      <a href="#" data-teamo="teamo-dropdown">
+                                  </a>
+                              </li>
+                              <li class="teamo-dropdown block-account">
+                                  <a href="#" data-teamo="teamo-dropdown">
                         <span>
                           <i class="fa fa-user-circle" aria-hidden="true"></i>
                         </span>
-                      </a>
-                      <ul class="teamo-submenu" id="query-member">
-                        <li class="switcher-option">
-                          <div class="account-list row">
-                            <div class="col-lg-12 no-padding">
-                              <div class="col-sm-4">
-                                <img src="/assets/images/xiahutealogo.jpg" alt="userPhoto">
-                              </div>
-                              <div class="col-lg-8">
-                                <span>userName</span>
-                                <span>userAccount</span>
-                              </div>
-                            </div>
-                          </div>
-                        </li>
-                        <li class="switcher-option">
-                          <a href="#">
-                            <span> 帳號設定 </span>
-                          </a>
-                        </li>
-                        <li class="switcher-option">
-                          <a href="#">
-                            <span> 會員卡 </span>
-                          </a>
-                        </li>
-                        <li class="switcher-option">
-                          <a href="#">
-                            <span> 我的券夾 </span>
-                          </a>
-                        </li>
-                        <hr>
-                        <li class="switcher-option">
-                          <a href="#">
-                            <span> 訂單管理 </span>
-                          </a>
-                        </li>
-                        <li class="switcher-option">
-                          <a href="#">
-                            <span> 意見回饋 </span>
-                          </a>
-                        </li>
-                        <li class="switcher-option">
-                          <a href="#">
-                            <span> 常見問題 </span>
-                          </a>
-                        </li>
-                        <hr>
-                        <li class="switcher-option">
-                          <a href="#">
-                            <span> 登出 </span>
-                          </a>
-                        </li>
-                      </ul>
-                    </li>
-                  </ul>
-                </div>
+                                  </a>
+                                  <ul class="teamo-submenu" id="query-member">
+                                      <li class="switcher-option">
+                                          <div class="account-list row">
+                                              <div class="col-lg-12 no-padding">
+                                                  <div class="col-sm-4">
+                                                      <img src="/assets/images/xiahutealogo.jpg" alt="userPhoto">
+                                                  </div>
+                                                  <div class="col-lg-8">
+                                                      <span>userName</span>
+                                                      <span>userAccount</span>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </li>
+                                      <li class="switcher-option">
+                                          <a href="#">
+                                              <span> 帳號設定 </span>
+                                          </a>
+                                      </li>
+                                      <li class="switcher-option">
+                                          <a href="#">
+                                              <span> 會員卡 </span>
+                                          </a>
+                                      </li>
+                                      <li class="switcher-option">
+                                          <a href="#">
+                                              <span> 我的券夾 </span>
+                                          </a>
+                                      </li>
+                                      <hr>
+                                      <li class="switcher-option">
+                                          <a href="#">
+                                              <span> 訂單管理 </span>
+                                          </a>
+                                      </li>
+                                      <li class="switcher-option">
+                                          <a href="#">
+                                              <span> 意見回饋 </span>
+                                          </a>
+                                      </li>
+                                      <li class="switcher-option">
+                                          <a href="#">
+                                              <span> 常見問題 </span>
+                                          </a>
+                                      </li>
+                                      <hr>
+                                      <li class="switcher-option">
+                                          <a href="#">
+                                              <span> 登出 </span>
+                                          </a>
+                                      </li>
+                                  </ul>
+                              </li>
+                          </ul>
+                      </div>
+                  </div>
               </div>
-            </div>
           </div>
-        </div>
-    </header>
+      </div>
+  </header>
   <!--商品明細-->
   <ol class="progress-list" >
-    <li id="step1" class="active">
-        <i class="fas fa-file" aria-hidden="true"></i>
-        確認明細
-    </li>
-    <li id="step2" >
-        <i class="fas fa-archive" aria-hidden="true"></i>
-        選擇付款
-    </li>
-    <li id="step3"> 
-        <i class="fas fa-check-circle" aria-hidden="true"></i>   
-        購物明細
-    </li>
+      <li id="step1" class="active">
+          <i class="fas fa-file" aria-hidden="true"></i>
+          確認明細
+      </li>
+      <li id="step2" >
+          <i class="fas fa-archive" aria-hidden="true"></i>
+          選擇付款
+      </li>
+      <li id="step3">
+          <i class="fas fa-check-circle" aria-hidden="true"></i>
+          購物明細
+      </li>
   </ol>
   <div class="order-detail-container">
-     <!-- Step 1: Order Details -->
-    <div id="step-1" class="step-content" style="display: flex;">
-    <a href="#" class="store-info">
-      <div class="checkout-content-img">
-        <img src="/img/kebuke.jpg" alt="Store Logo">
-      </div>
-      <div class="store-name">
-        可不可紅茶 台北店
-      </div>
-    </a>
-    <div class="item-detail">
-        <h4>購物內容</h4>
-        <div class="user-info">
-            <img src="/img/userex.jpg" alt="user_photo">
-            <p class="user-name">RAY</p>
-        </div>
-        <div class="item-content">
-            <div class="cart-item">
-                <p class="product-name">黑糖珍珠鮮奶</p>
-                <div class="product-buttons">
-                    <button class="edit-btn"><i class="fas fa-edit"></i></button>
-                    <button class="delete-btn"><i class="fas fa-trash"></i></button>
-                </div>
-            </div>
-            <div class="product-detail">
-                <p class="detail">微糖/微冰/加料/$60/2份</p>
-            </div>
-        </div>
-        <div class="item-content">
-            <div class="cart-item">
-                <p class="product-name">四季春珍波椰</p>
-                <div class="product-buttons">
-                    <button class="edit-btn"><i class="fas fa-edit"></i></button>
-                    <button class="delete-btn"><i class="fas fa-trash"></i></button>
-                </div>
-            </div>
-            <div class="product-detail">
-                <p class="detail">微糖/微冰/加料/$30/2份</p>
-            </div>
-        </div>
-    </div>
-    <!--取貨方式-->
-    <div class="recevier-method">
-        <h4>取貨方式</h4>
-        <div class="pick-up">
-            <input class="pick-up-input" type="radio" checked>
-            <label class="pick-up-label" for="pick-up-label" style="padding-top: 10px">
-              自取(約15分鐘)
-            </label>
-        </div>
-        <div class="carry-out">
-            <div class="carry-out-selection">
-                <input class="carry-out-radio" type="radio">
-                    <label class="carry-out-label" for="carry-out-label" style="padding-top: 10px">
-                    外送(約20~30分鐘)
-                    </label>
-            </div>
-            <div class="carry-out-address">
-                <input type="text" class="address" placeholder="請輸入地址" maxlength="255">
-            </div>
-        </div>
-        <h4>預計取貨時間</h4>
-        <div class="recevie-time">
-            <!-- 日期/時間<input type="date" class="start_date"><input type="time" class="start_date"> -->
-            <input id="myDatepicker" placeholder="點擊此處選擇時間">
+      <!-- Step 1: Order Details -->
+      <div id="step-1" class="step-content" style="display: flex;">
+          <a href="#" class="store-info">  <!--預計加入商家頁面跳轉-->
+              <div class="checkout-content-img">
+                  <img src="/img/kebuke.jpg" alt="Store Logo" class="store-img">
+              </div>
+              <div class="store-name">
+                  可不可紅茶 台北店
+              </div>
+          </a>
+          <div class="item-detail">
+              <h4>購物內容</h4>
+              <div class="user-info">
+                  <img src="/img/userex.jpg" alt="user_photo" class="customer-img">
+                  <p class="customer-name">RAY</p>
+              </div>
+              <div class="item-content">
+                  <div class="cart-item">
+                      <p class="product-name">黑糖珍珠鮮奶</p>
+                      <div class="product-buttons">
+                          <button class="edit-btn"><i class="fas fa-edit"></i></button>
+                          <button class="delete-btn"><i class="fas fa-trash"></i></button>
+                      </div>
+                  </div>
+                  <div class="product-detail">
+                      <p class="detail">微糖/微冰/加料/$60/2份</p>
+                  </div>
+              </div>
+              <div class="item-content">
+                  <div class="cart-item">
+                      <p class="product-name">四季春珍波椰</p>
+                      <div class="product-buttons">
+                          <button class="edit-btn"><i class="fas fa-edit"></i></button>
+                          <button class="delete-btn"><i class="fas fa-trash"></i></button>
+                      </div>
+                  </div>
+                  <div class="product-detail">
+                      <p class="detail">微糖/微冰/加料/$30/2份</p>
+                  </div>
+              </div>
+          </div>
+          <!--取貨方式-->
+          <div class="recevier-method">
+              <h4>取貨方式</h4>
+              <div class="pick-up">
+                  <input class="pick-up-input" type="radio" name="delivery" checked >
+                  <label class="pick-up-label" for="pick-up-label" style="padding-top: 10px">
+                      自取(約15分鐘)
+                  </label>
+              </div>
+              <div class="carry-out">
+                  <div class="carry-out-selection">
+                      <input class="carry-out-radio" type="radio" name="delivery">
+                      <label class="carry-out-label" for="carry-out-label" style="padding-top: 10px">
+                          外送(約20~30分鐘)
+                      </label>
+                  </div>
+                  <div class="carry-out-address">
+                      <input type="text" class="address" placeholder="請輸入地址" maxlength="255" disabled>
+                  </div>
+              </div>
+              <h4>預計取貨時間</h4>
+              <div class="recevie-time">
+                  <!-- 日期/時間<input type="date" class="start_date"><input type="time" class="start_date"> -->
+                  <input id="myDatepicker" placeholder="點擊此處選擇時間">
 
-        </div>
-    </div>
-    <!--會員卡&優惠券-->
-    <div class="coupon-use">
-       <h4>優惠使用</h4>
-       <div class="select-coupon">
-            <input class="select-coupon-input" type="radio" checked>
-            <label class="select-coupon-label" for="select-coupon-label" style="padding-top: 10px">
-            優惠券
-            </label>
-        </div>
-        <div class="coupon-number">
-            <input type="text" class="coupon-number" placeholder="優惠券序號" maxlength="50">
-        </div>
-        <div class="select-membercard">
-            <input class="select-membercard-input" type="radio">
-            <label class="select-membercard-label" for="select-membercard-label" style="padding-top: 10px">
-            會員卡
-            </label>
-        </div>
-        <div class="select-moneybag">
-            <input class="select-moneybag-input" type="radio">
-            <label class="select-moneybag-label" for="select-moneybag-label" style="padding-top: 10px">
-            會員錢包
-            </label>
-        </div>
-    </div>
-    <!--訂單彙總-->
-    <div class="amount-summary">
-        <h4>訂單彙總</h4>
-        <div class="product-detail">
-          <div class="product-unit">商品X3</div>
-          <div class="product-amount">$150</div>
-        </div>
-        <div class="coupon-minus">
-          <div class="coupon-minus-type">優惠券折抵金額</div>
-          <div class="coupon-minus-number">$50</div>
-        </div>
-        <div class="membercard-minus">
-            <div class="membercard-minus-type">會員卡折抵金額</div>
-            <div class="membercard-minus-number">$50</div>
-        </div>
-        <div class="moneybag-minus">
-            <div class="moneybag-minus-type">會員錢包折抵金額</div>
-            <div class="moneybag-minus-number">$20</div>
-        </div>
-        <hr>
-        <div class="amount-result">
-            <h4>應付金額</h4>
-            <p style="font-size: large;">$30</p>
-        </div>
-    </div>
-    <div class="btn-nextstep"> 
-        <button class="btn-addtopurchase">繼續加購</button>
-        <button class="btn-checkout">結帳</button>
-    </div>
-    <!--燈箱:修改訂單-->
-    <div id="lightbox" style="display: none;">
-      <article>
-        <h1>這是 Modal 裡的標題</h1>
-        <p>這是 Modal 段落</p>
-        <button type="button" class="btn_modal_close">關閉</button>
-      </article>
-    </div>
-    </div>   <!--Step 1: Order Details END-->
+              </div>
+          </div>
+          <!--會員卡&優惠券-->
+          <div class="coupon-use">
+              <h4>優惠使用</h4>
+              <div class="select-coupon">
+                  <input class="select-coupon-input" type="radio" name="discount" >
+                  <label class="select-coupon-label" for="select-coupon-label" style="padding-top: 10px">
+                      優惠券
+                  </label>
+              </div>
+              <div class="coupon-number-content">
+                  <input type="text" class="coupon-number" placeholder="請輸入優惠券序號" maxlength="50" disabled>
+              </div>
+              <div class="select-membercard">
+                  <input class="select-membercard-input" type="radio" name="discount">
+                  <label class="select-membercard-label" for="select-membercard-label" style="padding-top: 10px">
+                      會員卡
+                  </label>
+              </div>
+              <div class="select-moneybag">
+                  <input class="select-moneybag-input" type="radio" name="discount">
+                  <label class="select-moneybag-label" for="select-moneybag-label" style="padding-top: 10px">
+                      會員錢包
+                  </label>
+              </div>
+          </div>
+          <!--訂單彙總-->
+          <div class="amount-summary">
+              <h4>訂單彙總</h4>
+              <div class="product-detail">
+                  <div class="product-unit">商品X3</div>
+                  <div class="product-amount">$150</div>
+              </div>
+              <div class="coupon-minus">
+                  <div class="coupon-minus-type">優惠券折抵金額</div>
+                  <div class="coupon-minus-number">$50</div>
+              </div>
+              <div class="membercard-minus">
+                  <div class="membercard-minus-type">會員卡折抵金額</div>
+                  <div class="membercard-minus-number">$50</div>
+              </div>
+              <div class="moneybag-minus">
+                  <div class="moneybag-minus-type">會員錢包折抵金額</div>
+                  <div class="moneybag-minus-number">$20</div>
+              </div>
+              <hr>
+              <div class="amount-result">
+                  <h4>應付金額</h4>
+                  <p style="font-size: large;">$30</p>
+              </div>
+          </div>
+          <div class="btn-nextstep">
+              <button class="btn-addtopurchase">繼續加購</button>
+              <button class="btn-checkout">結帳</button>
+          </div>
+          <!--燈箱:修改訂單-->
+          <div id="lightbox" style="display: none;">
+              <article>
+                  <h1></h1>
+                  <h4 class="ice">冰塊</h4>
+                  <h4 class="sugar">甜度</h4>
+                  <h4 class="materials">加料</h4>
+                  <hr>
+                  <h4 class="amount">總金額:</h4>
+                  <div class="lightbox_end">
+                      <input type='button' value='-' class='qtyminus' field='quantity' />
+                      <input type='text' name='quantity' value='0' class='qty' />
+                      <input type='button' value='+' class='qtyplus' field='quantity' />
+                      <button type="button" class="btn_modal_close">更新商品</button>
+                  </div>
+              </article>
+          </div>
+          <!--燈箱:刪除訂單-->
+          <div id="lightbox-delete" style="display: none;">
+              <div class="lightbox-content">
+                  <p class="delete-detail"></p>
+                  <div class="delete-button">
+                      <button id="confirm-delete">確認</button>
+                      <button id="cancle-delete">取消</button>
+                  </div>
+              </div>
+          </div>
+      </div>   <!--Step 1: Order Details END-->
 
-    <!-- Step 2: Payment Method -->
-     <div id="step-2" class="step-content2" style="display: none;">
-        <div class="account-payable">
-            <div class="payable-unit">5份</div>
-                應付金額
-            <div class="payable-price">$300</div>
-        </div>
-        <!--取貨人資料-->
-        <div class="pickup-detail">
-            <h3>取貨人姓名</h3>
-            <input type="text" class="pickuper" required>
-            <h3>聯絡電話</h3>
-            <ul class="contact-selection">
-                <li>
-                    <input type="radio" class="select-cellphone">
-                    <label for="option1" class="label-cellphone">手機</label>
-                    <input type="text" class="input-cellphone" placeholder="EX:0912345678" >
-                </li>
-                <li>
-                    <input type="radio" class="select-phone">
-                    <label for="option2" class="label-phone">市話</label>
-                    <div class="input-phone">
-                    <input type="text" class="input-phone-zone" placeholder="區碼" maxlength="2">
-                    <input type="text" class="input-phone-number" placeholder="EX:02-1234567" maxlength="7">
-                    </div>
-                </li>
-            </ul>
-            <h3>給店家留言</h3>
-            <textarea class="text2store" rows="3" placeholder="請輸入文字..." ></textarea>
-        </div>
-        <!--付款選擇-->
-        <div class="payment-method">
-            <h3>付款方式</h3>
-            <ul class="payment-selection">
-                <li>
-                    <input type="radio" class="select-creditcard">
-                    <label for="option1" class="label-creditcard">信用卡</label>
-                </li>
-                <li>
-                    <input type="radio" class="select-cash">
-                    <label for="option2" class="label-cash">現金</label>
-                </li>
-            </ul>
-        </div>
-        <!--發票類型-->
-        <div class="invoice-type">
-            <h3>開立發票</h3>
-            <ul class="invoice-type-selection">
-                <li>
-                    <input type="radio" class="select-paper">
-                    <label for="option1" class="label-creditcard">紙本發票</label>
-                </li>
-                <li class="vehicle-detail">
-                    <input type="radio" class="select-vehicle">
-                    <label for="option2" class="label-vehicle">手機載具</label>
-                    <input type="checkbox" class="checksava-vehicle">
-                    <label for="save-default">儲存為預設</label>
-                    <input type="text" class="vehicle-number">
-                </li>
-            </ul>
-            <h3>統一編號</h3>
-            <input type="text" class="uniform-numbers">
-        </div>
-        <div class="btn-nextstep2"> 
-            <button class="btn-backto-last-page">上一步</button>
-            <button class="btn-goto-next-page">下一步</button>
-        </div>
-     </div> <!--Step 2: Payment Method END-->
+      <!-- Step 2: Payment Method -->
+      <div id="step-2" class="step-content2" style="display: none;">
+          <div class="account-payable">
+              <div class="payable-unit">5份</div>
+              應付金額
+              <div class="payable-price">$300</div>
+          </div>
+          <!--取貨人資料-->
+          <div class="pickup-detail">
+              <h3>取貨人姓名</h3>
+              <input type="text" class="pickuper" required>
+              <h3>聯絡電話</h3>
+              <ul class="contact-selection">
+                  <li>
+                      <input type="radio" class="select-cellphone" name="select-contact">
+                      <label for="option1" class="label-cellphone">手機</label>
+                      <input type="text" class="input-cellphone" placeholder="EX:0912345678" maxlength="10" disabled>
+                  </li>
+                  <li>
+                      <input type="radio" class="select-phone" name="select-contact">
+                      <label for="option2" class="label-phone">市話</label>
+                      <div class="input-phone">
+                          <input type="text" class="input-phone-zone" placeholder="區碼" maxlength="2" disabled>
+                          <input type="text" class="input-phone-number" maxlength="7" disabled>
+                      </div>
+                  </li>
+              </ul>
+              <h3>給店家留言</h3>
+              <textarea class="text2store" rows="3" placeholder="請輸入文字..." ></textarea>
+          </div>
+          <!--付款選擇-->
+          <div class="payment-method">
+              <h3>付款方式</h3>
+              <ul class="payment-selection">
+                  <li>
+                      <input type="radio" class="select-creditcard" name="pay-method">
+                      <label for="option1" class="label-creditcard">信用卡</label>
+                  </li>
+                  <li>
+                      <input type="radio" class="select-cash" name="pay-method">
+                      <label for="option2" class="label-cash">現金</label>
+                  </li>
+              </ul>
+          </div>
+          <!--發票類型-->
+          <div class="invoice-type">
+              <h3>開立發票</h3>
+              <ul class="invoice-type-selection">
+                  <li>
+                      <input type="radio" class="select-paper" name="select-invoice">
+                      <label for="option1" class="label-creditcard">紙本發票</label>
+                  </li>
+                  <li class="vehicle-detail">
+                      <input type="radio" class="select-vehicle" name="select-invoice">
+                      <label for="option2" class="label-vehicle">手機載具</label>
+                      <input type="checkbox" class="checksava-vehicle" disabled>
+                      <label for="save-default">儲存為預設</label>
+                      <input type="text" class="vehicle-number" disabled>
+                  </li>
+              </ul>
+              <h3>統一編號</h3>
+              <input type="text" class="uniform-numbers">
+          </div>
+          <div class="btn-nextstep2">
+              <button class="btn-backto-last-page">上一步</button>
+              <button class="btn-goto-next-page">下一步</button>
+          </div>
+      </div> <!--Step 2: Payment Method END-->
 
-       <!-- Step 3: 確認明細準備結單 -->
-     <div id="step-3" class="step-content3" style="display: none;" >
-        <div class="order-detail-confirm">
-            <table class="order-detail-content">
-                <thead>
-                    <tr>
-                        <th colspan="2">確認訂單明細</th>
-                    </tr>
-                </thead>
-                <tbody id="order-body">
-                    <tr>
-                        <td>訂購門市</td>
-                        <td id="store">清新福全中山店</td>
-                    </tr>
-                    <tr>
-                        <td>取貨人</td>
-                        <td id="customer">RAY</td>
-                    </tr>
-                    <tr>
-                        <td>聯絡電話</td>
-                        <td id="phone">0912345678</td>
-                    </tr>
-                    <tr>
-                        <td>取貨方式</td>
-                        <td id="pickupMethod">外送</td>
-                    </tr>
-                    <tr>
-                        <td>取貨地址</td>
-                        <td id="address">台北市松山區松江南京100號</td>
-                    </tr>
-                    <tr>
-                        <td>預計取貨時間</td>
-                        <td id="pickupTime">12:00-12:15</td>
-                    </tr>
-                    <tr>
-                        <td>付款方式</td>
-                        <td id="paymentMethod">信用卡</td>
-                    </tr>
-                    <tr>
-                        <td>開立發票方式</td>
-                        <td id="invoiceType">會員載具</td>
-                    </tr>
-                    <tr>
-                        <td>應付金額</td>
-                        <td id="amount">500</td>
-                    </tr>
-                </tbody>
-            </table>    
-        </div>
-        <div class="btn-nextstep3"> 
-            <button class="btn-backto-last-page2">上一步</button>
-            <button class="btn-submit-order">送出訂單</button>
-        </div>  
-     </div> <!--Step 3: 確認明細準備結單 END-->
+      <!-- Step 3: 確認明細準備結單 -->
+      <div id="step-3" class="step-content3" style="display: none;" >
+          <div class="order-detail-confirm">
+              <table class="order-detail-content">
+                  <thead>
+                  <tr>
+                      <th colspan="2">確認訂單明細</th>
+                  </tr>
+                  </thead>
+                  <tbody id="order-body">
+                  <tr>
+                      <td>訂購門市</td>
+                      <td id="store">清新福全中山店</td>
+                  </tr>
+                  <tr>
+                      <td>取貨人</td>
+                      <td id="customer">RAY</td>
+                  </tr>
+                  <tr>
+                      <td>聯絡電話</td>
+                      <td id="phone">0912345678</td>
+                  </tr>
+                  <tr>
+                      <td>取貨方式</td>
+                      <td id="pickupMethod">外送</td>
+                  </tr>
+                  <tr>
+                      <td>取貨地址</td>
+                      <td id="address">台北市松山區松江南京100號</td>
+                  </tr>
+                  <tr>
+                      <td>預計取貨時間</td>
+                      <td id="pickupTime">12:00-12:15</td>
+                  </tr>
+                  <tr>
+                      <td>付款方式</td>
+                      <td id="paymentMethod">信用卡</td>
+                  </tr>
+                  <tr>
+                      <td>開立發票方式</td>
+                      <td id="invoiceType">會員載具</td>
+                  </tr>
+                  <tr>
+                      <td>應付金額</td>
+                      <td id="amount">500</td>
+                  </tr>
+                  </tbody>
+              </table>
+          </div>
+          <div class="btn-nextstep3">
+              <button class="btn-backto-last-page2">上一步</button>
+              <button class="btn-submit-order">送出訂單</button>
+          </div>
+      </div> <!--Step 3: 確認明細準備結單 END-->
   </div> <!--order-detail end-->
-        <footer class="footer style7">
-            <div class="container">
-                <div class="container-wapper no-padding">
-                    <div class="row">
-                        <div class="box-footer col-xs-12 col-sm-4 col-md-4 col-lg-4">
-                            <div class="teamo-custommenu default">
-                                <ul class="menu">
-                                    <li class="menu-item">
-                                        <h3>夏虎茶</h3>
-                                    </li>
-                                    <li class="menu-item">
-                                        <a href="#">公司資訊：雲仲資訊股份有限公司</a>
-                                    </li>
-                                    <li class="menu-item">
-                                        <a href="#">統一編號：58364751
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="box-footer col-xs-12 col-sm-4 col-md-4 col-lg-4 hidden-xs">
+  <footer class="footer style7">
+      <div class="container">
+          <div class="container-wapper no-padding">
+              <div class="row">
+                  <div class="box-footer col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                      <div class="teamo-custommenu default">
+                          <ul class="menu">
+                              <li class="menu-item">
+                                  <h3>夏虎茶</h3>
+                              </li>
+                              <li class="menu-item">
+                                  <a href="#">公司資訊：雲仲資訊股份有限公司</a>
+                              </li>
+                              <li class="menu-item">
+                                  <a href="#">統一編號：58364751
+                                  </a>
+                              </li>
+                          </ul>
+                      </div>
+                  </div>
+                  <div class="box-footer col-xs-12 col-sm-4 col-md-4 col-lg-4 hidden-xs">
 
-                        </div>
-                        <div class="box-footer col-xs-12 col-sm-4 col-md-4 col-lg-4">
-                            <div class="teamo-custommenu default">
-                                <ul class="menu">
-                                    <li class="menu-item">
-                                        <a href="#">常見問題</a>
-                                    </li>
-                                    <li class="menu-item">
-                                        <a href="#">隱私權條款</a>
-                                    </li>
-                                    <li class="menu-item">
-                                        <a href="#">意見回饋</a>
-                                    </li>
-                                    <li class="menu-item">
-                                        <a href="#">使用者條款</a>
-                                    </li>
-                                    <li class="menu-item">
-                                        <a href="#">信用卡條款</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="footer-end">
-                        <div class="row">
-                            <div class="col-sm-12 col-xs-12">
-                                <div class="teamo-socials">
-                                    <ul class="socials">
-                                        <li>
-                                            <a href="#" class="social-item" target="_blank">
-                                                <i class="icon fa fa-facebook"></i>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#" class="social-item" target="_blank">
-                                                <i class="icon fa fa-twitter"></i>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#" class="social-item" target="_blank">
-                                                <i class="icon fa fa-instagram"></i>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="coppyright">
-                                    © 2024 XiaHuTea 台灣 . All rights reserved
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </footer>
+                  </div>
+                  <div class="box-footer col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                      <div class="teamo-custommenu default">
+                          <ul class="menu">
+                              <li class="menu-item">
+                                  <a href="#">常見問題</a>
+                              </li>
+                              <li class="menu-item">
+                                  <a href="#">隱私權條款</a>
+                              </li>
+                              <li class="menu-item">
+                                  <a href="#">意見回饋</a>
+                              </li>
+                              <li class="menu-item">
+                                  <a href="#">使用者條款</a>
+                              </li>
+                              <li class="menu-item">
+                                  <a href="#">信用卡條款</a>
+                              </li>
+                          </ul>
+                      </div>
+                  </div>
+              </div>
+              <div class="footer-end">
+                  <div class="row">
+                      <div class="col-sm-12 col-xs-12">
+                          <div class="teamo-socials">
+                              <ul class="socials">
+                                  <li>
+                                      <a href="#" class="social-item" target="_blank">
+                                          <i class="icon fa fa-facebook"></i>
+                                      </a>
+                                  </li>
+                                  <li>
+                                      <a href="#" class="social-item" target="_blank">
+                                          <i class="icon fa fa-twitter"></i>
+                                      </a>
+                                  </li>
+                                  <li>
+                                      <a href="#" class="social-item" target="_blank">
+                                          <i class="icon fa fa-instagram"></i>
+                                      </a>
+                                  </li>
+                              </ul>
+                          </div>
+                          <div class="coppyright">
+                              © 2024 XiaHuTea 台灣 . All rights reserved
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </footer>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="/js/jquery-1.12.4.min.js"></script>
         <script src="/js/jquery.plugin-countdown.min.js"></script>
@@ -1125,154 +1250,423 @@ input.uniform-numbers{
         <script src="/js/frontend-plugin.js"></script>
         <!--日期選擇用-->
         <script src="https://cdn.jsdelivr.net/npm/air-datepicker@3.5.3/air-datepicker.js"></script>
-        <script src="/js/order_detail.js">
-	<script>
-	document.addEventListener("DOMContentLoaded",function(){
-  //****************************************************控制購物流程階段變換及頁面跳轉****************************************
-  //元素綁定
-  //結帳流程-1
-  let order_detail_container_el = document.getElementsByClassName("order-detail-container")[0];
-  let btn_addtopurchase_el =document.getElementsByClassName("btn-addtopurchase")[0];
-  let btn_checkout_el = document.getElementsByClassName("btn-checkout")[0];
-  let step1_el = document.getElementById("step1");
-  let step2_el = document.getElementById("step2");
-  let step3_el = document.getElementById("step3");
-  let step_content_el = document.getElementsByClassName("step-content")[0];
-  let step_content2_el = document.getElementsByClassName("step-content2")[0];
-  let step_content3_el = document.getElementsByClassName("step-content3")[0];
-  //修改訂單商品
-  let btn_edit_el = document.getElementsByClassName("edit-btn");
-  let btn_delete_el = document.getElementsByClassName("delete-btn")[0];
-  //燈箱
-  let lightbox_el = document.getElementById("lightbox");
-  
-  //結帳流程-2
-  let btn_backto_last_page_el = document.getElementsByClassName("btn-backto-last-page")[0];
-  let btn_goto_next_page_el = document.getElementsByClassName("btn-goto-next-page")[0];
+        <script src="/js/cart_detail.js">
+        <script>
+            document.addEventListener("DOMContentLoaded",function(){
+            //****************************************************控制購物流程階段變換及頁面跳轉****************************************
+            //元素綁定
+            //購物流程進度條
+            let step1_el = document.getElementById("step1");
+            let step2_el = document.getElementById("step2");
+            let step3_el = document.getElementById("step3");
+            //結帳流程-1
+            //商家及使用者
+            let store_info_el = document.getElementsByClassName("store-info")[0];
+            let store_img_el = document.getElementsByClassName("store-img")[0];
+            let store_name_el = document.getElementsByClassName("store-name")[0];
+            let customer_img_el = document.getElementsByClassName("customer-img")[0];
+            let customer_name_el = document.getElementsByClassName("customer-name")[0];
 
-  //結帳流程-3
-  let btn_backto_last_page2_el = document.getElementsByClassName("btn-backto-last-page2")[0];
-  let btn_submit_order_el = document.getElementsByClassName("btn-submit-order")[0];
-  let btn_modal_close_el = document.getElementsByClassName("btn_modal_close")[0];
-  //第一頁按鈕事件
-  //刪除、修改訂單
-  for(let i =0;i<btn_edit_el.length;i++){
-    btn_edit_el[i].addEventListener("click",function(){
-      lightbox_el.style.display="flex";
-      document.body.style.overflow = 'hidden';
-      // 找到點擊的按鈕
-      let button = this;
-      let cartItem = button.closest(".cart-item");
-      let productName = cartItem.querySelector(".product-name").textContent;
-      let lightboxTitle = document.querySelector("#lightbox h1");
-      lightboxTitle.textContent = productName;
-    })
-  }
- 
-  btn_modal_close_el.addEventListener("click",function(){
-      lightbox_el.style.display="none";
-      document.body.style.overflow = 'auto';
-  })
+            let order_detail_container_el = document.getElementsByClassName("order-detail-container")[0];
+            let btn_addtopurchase_el =document.getElementsByClassName("btn-addtopurchase")[0];
+            let btn_checkout_el = document.getElementsByClassName("btn-checkout")[0];
 
-  lightbox_el.addEventListener("click", function(){
-    lightbox_el.style.display="none";
-    document.body.style.overflow = 'auto';
-  });
-  lightbox_el.querySelector("article").addEventListener("click", function(e){
-    e.stopPropagation();
-  });
+            let step_content_el = document.getElementsByClassName("step-content")[0];
+            let step_content2_el = document.getElementsByClassName("step-content2")[0];
+            let step_content3_el = document.getElementsByClassName("step-content3")[0];
+            //修改訂單商品
+            let btn_edit_el = document.getElementsByClassName("edit-btn");
+            let btn_delete_el = document.getElementsByClassName("delete-btn");
+            //燈箱
+            let lightbox_el = document.getElementById("lightbox");
+            let qtyminus_el = document.getElementsByClassName("qtyminus")[0];
+            let qtyplus_el = document.getElementsByClassName("qtyplus")[0];
+            let qty_el = document.getElementsByClassName("qty")[0];
+            let lightbox_delete_el = document.getElementById("lightbox-delete");
+            let delete_detail_el = document.getElementsByClassName("delete-detail")[0];
+            let lightbox_content_el = document.getElementsByClassName("lightbox-content")[0];
+            let confirm_delete_el = document.getElementById("confirm-delete");
+            let cancel_delete_el = document.getElementById("cancle-delete");
 
+            //取貨方式
+            let pick_up_input_el = document.getElementsByClassName("pick-up-input")[0];
+            let carry_out_radio_el = document.getElementsByClassName("carry-out-radio")[0];
+            let address_el = document.getElementsByClassName("address")[0];
+            //時間選擇
+            let picker_el = document.getElementsByClassName("pickuper")[0];
 
-  //頁面跳轉
-  btn_addtopurchase_el.addEventListener("click",function(e){
-    console.log("預計跳回該商家頁面");
-    e.stopPropagation();
-  })
+            //優惠使用
+            let coupon_number_el = document.getElementsByClassName("coupon-number")[0];
+            let select_coupon_input_el = document.getElementsByClassName("select-coupon-input")[0];
 
-  btn_checkout_el.addEventListener("click",function(e){
-    step1_el.classList.remove("active");
-    step2_el.classList.add("active");
-    if(step_content_el.style.display ="flex"){
-       step_content_el.style.display ="none";
-       step_content2_el.style.display ="flex";
-       order_detail_container_el.scrollIntoView({ 
-        behavior: "smooth" // 使用平滑滾動效果
+            //結帳流程-2
+            //取貨人
+            let btn_backto_last_page_el = document.getElementsByClassName("btn-backto-last-page")[0];
+            let btn_goto_next_page_el = document.getElementsByClassName("btn-goto-next-page")[0];
+            let select_cellphone_el = document.getElementsByClassName("select-cellphone")[0];
+            let input_cellphone_el = document.getElementsByClassName("input-cellphone")[0];
+            let select_phone_el = document.getElementsByClassName("select-phone")[0];
+            let input_phone_zone_el = document.getElementsByClassName("input-phone-zone")[0];
+            let input_phone_number_el = document.getElementsByClassName("input-phone-number")[0];
+            let text2store_el = document.getElementsByClassName("text2store")[0];
+            //發票方式
+            let select_paper_el = document.getElementsByClassName("select-paper")[0];
+            let select_vehicle_el = document.getElementsByClassName("select-vehicle")[0];
+            let checksava_vehicle_el = document.getElementsByClassName("checksava-vehicle")[0];
+            let vehicle_number_el = document.getElementsByClassName("vehicle-number")[0];
+            //結帳流程-3
+            let btn_backto_last_page2_el = document.getElementsByClassName("btn-backto-last-page2")[0];
+            let btn_submit_order_el = document.getElementsByClassName("btn-submit-order")[0];
+            let btn_modal_close_el = document.getElementsByClassName("btn_modal_close")[0];
+
+            //一進到結帳選擇頁面先get商家圖片及店名使用者
+//   const productId = 1; // 這個ID應該根據實際情況獲取
+//   const customerId = 1;
+            //商家
+//     fetch(`/api/getStoreInfo?productId=${productId}`)
+//         .then(response => response.json())
+//         .then(data => {
+//             store_info_el.href=data.storeurl;
+//             store_name_el.textContent = data.storename;
+//             store_img_el.src = data.storeimgurl;
+//         })
+//         .catch(error => console.error('Error fetching store data:', error));
+            //使用者
+// });fetch(`/api/getUsreInfo?userId=${userId}`)
+//         .then(response => response.json())
+//         .then(data => {
+//             customer_img_el_img_el.src = data.customerimg;
+            // customer_name_el.textContent=data.nickname;
+//         })
+//         .catch(error => console.error('Error fetching store data:', error));
+// });
+            //第一頁按鈕事件
+            //刪除、修改訂單
+            //修改
+            for(let i =0;i<btn_edit_el.length;i++){
+            btn_edit_el[i].addEventListener("click",function(){
+            lightbox_el.style.display="flex";
+            document.body.style.overflow = 'hidden';
+            document.body.style.paddingRight = '17px';
+            // 找到點擊的按鈕
+            let button = this;
+            let cartItem = button.closest(".cart-item");
+            let productName = cartItem.querySelector(".product-name").textContent;
+            let lightboxTitle = document.querySelector("#lightbox h1");
+            lightboxTitle.textContent = productName;
+            //根據每個商品提供不同選項
+            // fetchProductOptions(productName);
+            // 監聽所有 ice 按鈕的點擊事件
+            // document.querySelectorAll('button[name="ice"]').forEach(button =>
+            //   button.addEventListener("click",function(){
+            //      // 清除其他按鈕的“選中”狀態
+            //      document.querySelectorAll('button[name="ice"]').forEach(btn => {
+            //       btn.classList.remove('selected');
+            //   });
+            //       this.classList.add('selected');
+            //   })
+            // )
+            // 監聽所有 sugar 按鈕的點擊事件
+            // document.querySelectorAll('button[name="ice"]').forEach(button =>
+            //   button.addEventListener("click",function(){
+            //      // 清除其他按鈕的“選中”狀態
+            //      document.querySelectorAll('button[name="ice"]').forEach(btn => {
+            //       btn.classList.remove('selected');
+            //   });
+            //       this.classList.add('selected');
+            //   })
+            // )
+            // 監聽所有 material 按鈕的點擊事件
+            // document.querySelectorAll('button[name="ice"]').forEach(button =>
+            //   button.addEventListener("click",function(){
+            //      // 清除其他按鈕的“選中”狀態
+            //      document.querySelectorAll('button[name="ice"]').forEach(btn => {
+            //       btn.classList.remove('selected');
+            //   });
+            //       this.classList.add('selected');
+            //   })
+            // )
+        })
+        }
+            // function------提供商品選項
+            // function fetchProductOptions(productId){
+            //   fetch(`/getProductOptions?productName=${encodeURIComponent(productName)}`)
+            //   .then(response => response.json())
+            //   .then(data =>{
+            //     let ice_el = document.querySelector('.ice');
+            //     let sugar_el = document.querySelector('.sugar');
+            //     let materials_el = document.querySelector('.materials');
+            //     data.ice.forEach(option => {
+            //       ice_el.innerHTML += `<button type="button" name="ice" value="${option}">${option}`;
+            //     });
+            //     data.sugar.forEach(option => {
+            //       sugar_el.innerHTML += `<button type="button" name="sugar" value="${option}">${option}`;
+            //     });
+            //     data.ice.forEach(option => {
+            //       materials_el.innerHTML += `<button type="button" name="material" value="${option}">${option}`;
+            //     });
+            //   });
+            // }
+            btn_modal_close_el.addEventListener("click",function(){
+            lightbox_el.style.display="none";
+            document.body.style.overflow = 'auto';
+            document.body.style.paddingRight = '0px';
+        })
+            lightbox_el.addEventListener("click", function(){
+            lightbox_el.style.display="none";
+            document.body.style.overflow = 'auto';
+            document.body.style.paddingRight = '0px';
         });
-      }
-      e.stopPropagation();
-    })
+            lightbox_el.querySelector("article").addEventListener("click", function(e){
+            e.stopPropagation();
+        });
+            //燈箱數量增減
+            qtyminus_el.addEventListener("click",function(e){
+            if(qty_el.value>0){
+            qty_el.value--;
+        }
+            e.stopPropagation();
+        })
+            qtyplus_el.addEventListener("click",function(e){
+            if(qty_el.value>=0){
+            qty_el.value++;
+        }
+            console.log(qty_el.value);
+            e.stopPropagation();
+        })
+            //刪除訂餐
+            var currentItem = null;
+            for(let i=0;i<btn_delete_el.length;i++){
+            btn_delete_el[i].addEventListener("click",function(e){
+            lightbox_delete_el.style.display="flex";
+            document.body.style.overflow = 'hidden';
+            document.body.style.paddingRight = '17px';
+
+            currentItem = this.closest(".item-content");
+            var productName = this.closest(".cart-item").querySelector(".product-name").textContent;
+            delete_detail_el.innerHTML = `刪除 <span class="highlight">${productName}</span> ?`;
+        })
+        }
+
+            lightbox_delete_el.addEventListener("click", function(){
+            lightbox_delete_el.style.display="none";
+            document.body.style.overflow = 'auto';
+            document.body.style.paddingRight = '0px';
+        });
+            lightbox_content_el.addEventListener("click", function(e){
+            e.stopPropagation();
+        });
+
+            confirm_delete_el.addEventListener("click",function(){
+            currentItem.remove();
+            lightbox_delete_el.style.display="none";
+            document.body.style.overflow = 'auto';
+            document.body.style.paddingRight = '0px';
+            currentItem=null;
+        })
+            cancel_delete_el.addEventListener("click", function(){
+            lightbox_delete_el.style.display="none";
+            document.body.style.overflow = 'auto';
+            document.body.style.paddingRight = '0px';
+        });
+
+            //取貨方式
+            // pick_up_input_el.addEventListener("click",function(){
+            //   if(carry_out_radio_el.checked){
+            //      carry_out_radio_el.checked=false;
+            //     }
+            //     address_el.disabled=true;
+            // })
+            // carry_out_radio_el.addEventListener("click",function(){
+            //   if(pick_up_input_el.checked){
+            //     pick_up_input_el.checked=false;
+            //    }
+            //    address_el.disabled = false;
+            // })
+
+            pick_up_input_el.addEventListener("click",function(){
+            address_el.disabled = true;
+        })
+            carry_out_radio_el.addEventListener("click",function(){
+            address_el.disabled = false;
+            address_el.focus();
+        })
+            address_el.addEventListener("focus", function() {
+            // 清空 placeholder
+            address_el.placeholder = "";
+        });
+
+// 當輸入框失去焦點時
+            address_el.addEventListener("blur", function() {
+            // 如果輸入框為空，恢復 placeholder
+            if (address_el.value === "") {
+            address_el.placeholder = "請輸入地址";
+        }
+        });
+            //時間選擇
+            picker_el.addEventListener("focus",function(){
+            picker_el.classList.add("focus-border");
+        })
+            picker_el.addEventListener("blur", function() {
+            picker_el.classList.remove("focus-border");
+        });
+
+            //優惠使用
+            select_coupon_input_el.addEventListener("click",function(){
+            coupon_number_el.disabled=false;
+            coupon_number_el.focus();
+        })
+            coupon_number_el.addEventListener("focus", function() {
+            coupon_number_el.placeholder = "";
+        });
+            coupon_number_el.addEventListener("blur", function() {
+            if (coupon_number_el.value === "") {
+            coupon_number_el.placeholder = "請輸入優惠券序號";
+        }
+        });
+
+            //頁面跳轉
+            btn_addtopurchase_el.addEventListener("click",function(e){
+            console.log("預計跳回該商家頁面");
+            e.stopPropagation();
+        })
+
+            btn_checkout_el.addEventListener("click",function(e){
+            step1_el.classList.remove("active");
+            step2_el.classList.add("active");
+            if(step_content_el.style.display ="flex"){
+            step_content_el.style.display ="none";
+            step_content2_el.style.display ="flex";
+            order_detail_container_el.scrollIntoView({
+            behavior: "smooth" // 使用平滑滾動效果
+        });
+        }
+            e.stopPropagation();
+        })
+
+
+            //第二頁
+            //取貨人資料
+            select_cellphone_el.addEventListener("click",function(){
+            input_cellphone_el.disabled = false;
+            input_phone_zone_el.disabled = true;
+            input_phone_number_el.disabled = true;
+            input_phone_zone_el.value="";
+            input_phone_number_el.value="";
+            input_cellphone_el.focus();
+        })
+            input_cellphone_el.addEventListener("focus", function() {
+            input_cellphone_el.placeholder = "";
+        });
+            input_cellphone_el.addEventListener("blur", function() {
+            if (input_cellphone_el.value === "") {
+            input_cellphone_el.placeholder = "EX:0912345678";
+        }
+        });
+
+            select_phone_el.addEventListener("click",function(){
+            input_phone_zone_el.disabled = false;
+            input_cellphone_el.disabled = true;
+            input_cellphone_el.value="";
+            input_phone_zone_el.focus();
+        })
+            input_phone_zone_el.addEventListener("focus", function() {
+            input_phone_zone_el.placeholder = "";
+        });
+            input_phone_zone_el.addEventListener("blur", function() {
+            if (input_phone_zone_el.value === "") {
+            input_phone_zone_el.placeholder = "區碼";
+        }
+        });
+            input_phone_zone_el.addEventListener("input",function(){
+            if(input_phone_zone_el.value.length === 2){
+            setTimeout(function(){
+            input_phone_number_el.disabled = false;
+            input_phone_number_el.focus();
+        }, 10);
+        }
+        })
+
+            text2store_el.addEventListener("focus", function() {
+            text2store_el.placeholder = "";
+        });
+            text2store_el.addEventListener("blur", function() {
+            if (text2store_el.value === "") {
+            text2store_el.placeholder = "請輸入文字...";
+        }
+        });
+
+            //發票方式
+            select_paper_el.addEventListener("click",function(){
+            vehicle_number_el.disabled = true;
+            checksava_vehicle_el.disabled = true;
+            checksava_vehicle_el.checked = false;
+        })
+            select_vehicle_el.addEventListener("click",function(){
+            checksava_vehicle_el.disabled = false;
+            vehicle_number_el.disabled = false;
+            vehicle_number_el.focus();
+        })
+            //頁面跳轉
+            btn_backto_last_page_el.addEventListener("click",function(e){
+            step2_el.classList.remove("active");
+            step1_el.classList.add("active");
+            if(step_content2_el.style.display ="flex"){
+            step_content2_el.style.display ="none";
+            step_content_el.style.display ="flex";
+            order_detail_container_el.scrollIntoView({
+            behavior: "smooth" // 使用平滑滾動效果
+        });
+        }
+            e.stopPropagation()
+        })
+
+            btn_goto_next_page_el.addEventListener("click",function(e){
+            step2_el.classList.remove("active");
+            step3_el.classList.add("active");
+            if(step_content2_el.style.display ="flex"){
+            step_content2_el.style.display ="none";
+            step_content3_el.style.display ="flex";
+            order_detail_container_el.scrollIntoView({
+            behavior: "smooth" // 使用平滑滾動效果
+        });
+        }
+            e.stopPropagation()
+        })
+
+            //第三頁按鈕事件綁定
+            btn_backto_last_page2_el.addEventListener("click",function(e){
+            step3_el.classList.remove("active");
+            step2_el.classList.add("active");
+            if(step_content3_el.style.display ="flex"){
+            step_content3_el.style.display ="none";
+            step_content2_el.style.display ="flex";
+            order_detail_container_el.scrollIntoView({
+            behavior: "smooth" // 使用平滑滾動效果
+        });
+        }
+            e.stopPropagation()
+        })
 
 
 
-    //第二頁按鈕事件綁定
-    btn_backto_last_page_el.addEventListener("click",function(e){
-      step2_el.classList.remove("active");
-      step1_el.classList.add("active");
-      if(step_content2_el.style.display ="flex"){
-        step_content2_el.style.display ="none";
-        step_content_el.style.display ="flex";
-        order_detail_container_el.scrollIntoView({ 
-          behavior: "smooth" // 使用平滑滾動效果
-          });
-       }
-      e.stopPropagation()
-    })
+//****************************************************結帳流程1時間選擇套件****************************************
+            new AirDatepicker('#myDatepicker', {
+            locale:{
+            days: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+            daysShort: ['日', '一', '二', '三', '四', '五', '六'],
+            daysMin: ['日', '一', '二', '三', '四', '五', '六'],
+            months: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+            monthsShort: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+            today: '今天',
+            clear: '清除',
+            dateFormat: 'yyyy-MM-dd',
+            timeFormat: 'HH:mm',
+            firstDay: 1},
+            timepicker: true,
+        });
 
-    btn_goto_next_page_el.addEventListener("click",function(e){
-      step2_el.classList.remove("active");
-      step3_el.classList.add("active");
-      if(step_content2_el.style.display ="flex"){
-        step_content2_el.style.display ="none";
-        step_content3_el.style.display ="flex";
-        order_detail_container_el.scrollIntoView({ 
-          behavior: "smooth" // 使用平滑滾動效果
-          });
-       }
-      e.stopPropagation()
-    })
-
-    //第三頁按鈕事件綁定
-    btn_backto_last_page2_el.addEventListener("click",function(e){
-      step3_el.classList.remove("active");
-      step2_el.classList.add("active");
-      if(step_content3_el.style.display ="flex"){
-        step_content3_el.style.display ="none";
-        step_content2_el.style.display ="flex";
-        order_detail_container_el.scrollIntoView({ 
-          behavior: "smooth" // 使用平滑滾動效果
-          });
-       }
-      e.stopPropagation()
-    })
-
-
-
-//****************************************************時間選擇套件****************************************
-  new AirDatepicker('#myDatepicker', {
-      locale:{
-          days: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
-          daysShort: ['日', '一', '二', '三', '四', '五', '六'],
-          daysMin: ['日', '一', '二', '三', '四', '五', '六'],
-          months: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
-          monthsShort: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
-          today: '今天',
-          clear: '清除',
-          dateFormat: 'yyyy-MM-dd',
-          timeFormat: 'HH:mm',
-          firstDay: 1},
-      timepicker: true,
-  });
-
-  //control input
-  let picker_el = document.getElementsByClassName("pickuper")[0];
-  picker_el.addEventListener("focus",function(){
-      picker_el.classList.add("focus-border");
-  })
-  picker_el.addEventListener("blur", function() {
-          picker_el.classList.remove("focus-border");
-      });
-})
-</script>
-            
+        })
+	</script>
   </body>
 </html>
