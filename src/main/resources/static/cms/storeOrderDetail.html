@@ -7,13 +7,13 @@
     <title>後台 | 訂單明細</title>
 
     <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <link rel="stylesheet" href="../store/plugins/fontawesome-free/css/all.min.css">
-    <link rel="stylesheet" href="../store/dist/css/adminlte.min.css">
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="dist/css/adminlte.min.css">
     <!-- DataTables -->
-    <link rel="stylesheet" href="../store/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-    <link rel="stylesheet" href="../store/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
-    <link rel="stylesheet" href="../store/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+    <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
     <style>
         tbody.table_info th{
             width:160px
@@ -22,18 +22,19 @@
             float: right; /* 將按鈕浮動到右邊 */
             margin-left: 10px; /* 可以調整按鈕之間的間距 */
         }
+
     </style>
 </head>
 
 <body class="hold-transition sidebar-mini">
     <div class="wrapper">
-    <!--header & aside -->
+        <!--header & aside -->
         <div class="storeheader"></div>
         <div class="storeaside"></div>
-
-    <!-- 功能       -->
+        <!--/.header & aside -->
+        <!-- main -->
         <div class="content-wrapper">
-            <!-- Content Header (Page header) -->
+            <!-- 功能 Header -->
             <section class="content-header">
                 <div class="container-fluid">
                     <div class="row mb-2">
@@ -47,61 +48,62 @@
                             </ol>
                         </div>
                     </div>
-                </div><!-- /.container-fluid -->
+                </div>
             </section>
-
+            <!-- /.功能 Header -->
             <!-- Main content -->
             <section class="content">
                 <div class="container-fluid">
                     <div class="row">
+                        <!--     左區塊             -->
                         <div class="col-md-6">
+                            <!--     訂單資訊 區塊       -->
                             <div class="card">
                                 <div class="card-header">
                                     <div class="card-title">訂單資訊</div>
-                                    <button class="card-btn">回上一頁</button>
-                                    <button class="card-btn">儲存</button>
+                                    <button class="card-btn" id="btn_order_back">回上一頁</button>
+                                    <button class="card-btn" id="btn_order_save" >儲存</button>
                                 </div>
-                                <!-- /.card-header -->
                                 <div class="card-body p-0">
-                                    <table class="table table-sm" width="100%" style="text-align:center;table-layout: fixed;">
+                                    <table class="table table-sm" style="text-align:center;table-layout: fixed;">
                                         <thead>
-                                        <tr>
-                                            <th>訂單編號</th>
-                                            <th>會員編號</th>
-                                            <th>會員姓名</th>
-                                            <th>店家名稱</th>
-                                            <th>訂單狀態</th>
-                                        </tr>
+                                            <tr>
+                                                <th>訂單編號</th>
+                                                <th>會員編號</th>
+                                                <th>會員姓名</th>
+                                                <th>店家名稱</th>
+                                                <th>訂單狀態</th>
+                                            </tr>
                                         </thead>
                                         <tbody>
-                                        <tr>
-                                            <td>2407010004</td>
-                                            <td>0977123456</td>
-                                            <td>黃園美</td>
-                                            <td>五十嵐永和店</td>
-                                            <td>
-                                                <select>
-                                                    <option value=”1” selected>接受訂單</option>
-                                                    <option value=”2”>準備完成</option>
-                                                    <option value=”3”>外送中</option>
-                                                    <option value=”4”>訂單完成</option>
-                                                </select>
-                                            </td>
-                                        </tr>
+                                            <tr>
+                                                <td id="order_id">2407010004</td>
+                                                <td>0977123456</td>
+                                                <td>黃園美</td>
+                                                <td>五十嵐永和店</td>
+                                                <td>
+                                                    <label>
+                                                        <select id="select_status" >
+                                                            <option value="1" selected>訂單成立</option>
+                                                            <option value="2">準備完成</option>
+                                                            <option value="3">正在外送</option>
+                                                            <option value="4">訂單完成</option>
+                                                        </select>
+                                                    </label>
+                                                </td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
-                                <!-- /.card-body -->
                             </div>
-                            <!-- /.card -->
-
+                            <!-- /.訂單資訊 區塊   -->
+                            <!--     商品資訊 區塊       -->
                             <div class="card">
                                 <div class="card-header">
                                     <h3 class="card-title">商品資訊</h3>
                                 </div>
-                                <!-- /.card-header -->
                                 <div class="card-body p-0">
-                                    <table class="table table-sm" width="100%" style="text-align:center;table-layout: fixed;">
+                                    <table class="table table-sm" style="text-align:center;table-layout: fixed;">
                                         <thead>
                                         <tr>
                                             <th>商品名稱</th>
@@ -176,125 +178,120 @@
                                         </tfoot>
                                     </table>
                                 </div>
-                                <!-- /.card-body -->
                             </div>
-                            <!-- /.card -->
+                            <!-- /.商品資訊 區塊 -->
                         </div>
-                        <!-- /.col -->
+                        <!-- /.左區塊 -->
+                        <!--     右區塊             -->
                         <div class="col-md-6">
+                            <!--     發票資訊 區塊       -->
                             <div class="card">
                                 <div class="card-header">
                                     <h3 class="card-title">發票資訊</h3>
                                 </div>
-                                <!-- /.card-header -->
                                 <div class="card-body p-0">
                                     <table class="table">
                                         <tbody class="table_info">
-                                        <tr>
-                                            <th>開立發票方式</th>
-                                            <td>公司戶</td>
-                                        </tr>
-                                        <tr>
-                                            <th>處理費發票號碼</th>
-                                            <td>XX12345678</td>
-                                        </tr>
-                                        <tr>
-                                            <th>發票抬頭</th>
-                                            <td>台灣積體電路製造股份有限公司</td>
-                                        </tr>
-                                        <tr>
-                                            <th>發票統編</th>
-                                            <td>22099131</td>
-                                        </tr>
-                                        <tr>
-                                            <th>發票載具</th>
-                                            <td></td>
-                                        </tr>
-
+                                            <tr>
+                                                <th>開立發票方式</th>
+                                                <td>公司戶</td>
+                                            </tr>
+                                            <tr>
+                                                <th>處理費發票號碼</th>
+                                                <td>XX12345678</td>
+                                            </tr>
+                                            <tr>
+                                                <th>發票抬頭</th>
+                                                <td>台灣積體電路製造股份有限公司</td>
+                                            </tr>
+                                            <tr>
+                                                <th>發票統編</th>
+                                                <td>22099131</td>
+                                            </tr>
+                                            <tr>
+                                                <th>發票載具</th>
+                                                <td></td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
-                                <!-- /.card-body -->
                             </div>
-                            <!-- /.card -->
+                            <!-- /.發票資訊 區塊 -->
+                            <!--     取貨資訊 區塊       -->
                             <div class="card">
                                 <div class="card-header">
                                     <h3 class="card-title">取貨資訊</h3>
                                 </div>
-                                <!-- /.card-header -->
                                 <div class="card-body p-0">
                                     <table class="table">
                                         <tbody class="table_info">
-                                        <tr>
-                                            <th>取貨方式</th>
-                                            <td>自取</td>
-                                        </tr>
-                                        <tr>
-                                            <th>取貨人姓名</th>
-                                            <td>黃園美</td>
-                                        </tr>
-                                        <tr>
-                                            <th>取貨人電話</th>
-                                            <td>0977123456</td>
-                                        </tr>
-                                        <tr>
-                                            <th>取貨時間</th>
-                                            <td>2024/07/26 18:00</td>
-                                        </tr>
-                                        <tr>
-                                            <th>外送地址</th>
-                                            <td></td>
-                                        </tr>
-                                        <tr>
-                                            <th>訂單評分</th>
-                                            <td>5<span> / 5 </span></td>
-                                        </tr>
-                                        <tr>
-                                            <th>訂單評分建議</th>
-                                            <td>店員親切</td>
-                                        </tr>
-                                        <tr>
-                                            <th>訂單成立日期</th>
-                                            <td>2024/07/26 16:33</td>
-                                        </tr>
-                                        <tr>
-                                            <th>訂單更新日期</th>
-                                            <td>2024/07/28 11:53</td>
-                                        </tr>
+                                            <tr>
+                                                <th>取貨方式</th>
+                                                <td>自取</td>
+                                            </tr>
+                                            <tr>
+                                                <th>取貨人姓名</th>
+                                                <td>黃園美</td>
+                                            </tr>
+                                            <tr>
+                                                <th>取貨人電話</th>
+                                                <td>0977123456</td>
+                                            </tr>
+                                            <tr>
+                                                <th>取貨時間</th>
+                                                <td>2024/07/26 18:00</td>
+                                            </tr>
+                                            <tr>
+                                                <th>外送地址</th>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <th>訂單評分</th>
+                                                <td>5<span> / 5 </span></td>
+                                            </tr>
+                                            <tr>
+                                                <th>訂單評分建議</th>
+                                                <td>店員親切</td>
+                                            </tr>
+                                            <tr>
+                                                <th>訂單成立日期</th>
+                                                <td>2024/07/26 16:33</td>
+                                            </tr>
+                                            <tr>
+                                                <th>訂單更新日期</th>
+                                                <td>2024/07/28 11:53</td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
-                                <!-- /.card-body -->
                             </div>
-                            <!-- /.card -->
+                            <!-- /.取貨資訊 區塊 -->
                         </div>
-                        <!-- /.col -->
+                        <!-- /.右區塊  -->
                     </div>
-                    <!-- /.row -->
-                </div><!-- /.container-fluid -->
+                </div>
             </section>
-            <!-- /.content -->
+            <!-- /.Main content -->
         </div>
 
     <!--footer -->
         <div class="storefooter"></div>
+    <!--/.footer -->
     </div>
 
-    <script src="../store/plugins/jquery/jquery.min.js"></script>
-    <script src="../store/plugins/jquery-ui/jquery-ui.min.js"></script>
-    <script src="../store/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="../store/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
-
-    <script src="../store/plugins/datatables/jquery.dataTables.min.js"></script>
-    <script src="../store/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-    <script src="../store/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-    <script src="../store/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-    <script src="../store/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-    <script src="../store/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-
-    <script src="../store/dist/js/adminlte.js"></script>
-    <script src="../store/dist/js/demo.js"></script>
-    <script src="../store/dist/js/storegeneral.js"></script>
+    <script src="plugins/jquery/jquery.min.js"></script>
+    <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
+    <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+    <script src="plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="dist/js/adminlte.js"></script>
+    <script src="dist/js/demo.js"></script>
+    <script src="js/storegeneral.js"></script>
     <!-- Page specific script -->
     <script>
         $(function () {
@@ -313,6 +310,50 @@
             });
         });
     </script>
-</body>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
 
+            //===========================================================================
+            //1. btn 回上一頁
+            const btn_order_back = document.getElementById("btn_order_back");
+            btn_order_back.addEventListener("click", function(){
+                history.back();
+            });
+
+            //===========================================================================
+            // todo: 點擊儲存btn 後端需儲存內容
+            // 2. btn 儲存
+            const btn_order_save =document.getElementById("btn_order_save");
+            btn_order_save.addEventListener("click", function(){
+
+                // 2.1 打包資料
+                let order_id =document.getElementById("order_id");
+                let select_status = document.getElementById("select_status");
+
+                let order_data = new FormData();
+                order_data.append("order_id", order_id.innerText);
+                order_data.append("select_status", select_status.value);
+
+                //  todo: 待確認 url
+                fetch("https://jsonplaceholder.typicode.com/posts", {
+                    method: "POST",
+                    body: order_data
+                }).then(res => res.json()).then(data => {
+                    // todo: 2.1.2 儲存內容到後端 前台需顯示更新後的內容
+
+
+                    // 2.1.2 如果訂單狀態為訂單完成，鎖定-儲存btn&狀態選單
+                    if(select_status.value === '4'){
+                        btn_order_save.setAttribute("disabled", "disabled");
+                        select_status.setAttribute("disabled", "disabled");
+                    }
+                    alert("已更新訂單內容");
+                }).catch((error) =>{
+                    console.error("發生錯誤：", error);
+                    alert("提交時發生錯誤，請稍後再試。");
+                });
+            });
+        });
+    </script>
+</body>
 </html>
