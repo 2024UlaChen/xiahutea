@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>後台 | 商品資料</title>
+
+
+
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="dist/css/adminlte.min.css">
+    <!-- DataTables -->
+    <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+    <style>
+        img.preview {
+            width: 300px;
+            height: 350px;
+        }
+
+        ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        ul>li {
+            display: inline-block;
+            vertical-align: top;
+        }
+
+
+
+
+        .messages{
+            color: red;
+        }
+
+
+    </style>
+
+
+</head>
+
+<body class="hold-transition sidebar-mini">
+
+  <div class="wrapper">
+    <div class="storeheader"></div>
+    <div class="storeaside"></div>
+
+
+      <div class="content-wrapper">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>商品資料</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active">Projects</li>
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row justify-content-center">
+                    <!-- left column -->
+                    <div class="col-md-9">
+
+                        <div class="card card-primary  mx-auto">
+
+                            <!-- form start -->
+                            <form>
+                                <div class="card-body">
+
+                                    <div class="form-group">
+                                        <label for="productname">商品名稱</label> <span style="color: red">*</span>
+
+                                        <input type="text" class="form-control" id="productname" placeholder="請輸入商品名稱" name="productname">
+                                        <p class="messages name" ></p>
+
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="productprice">商品價格(請填台幣)</label><span style="color: red">*</span>
+                                        <input type="number" class="form-control" id="productprice" placeholder="65" name="productprice">
+                                        <p class="messages name" ></p>
+
+                                        <div class="form-group">
+                                    </div>
+                                        <label for="size">商品尺寸</label><span style="color: red">*</span>
+                                        <span for="name" class="size-message" style="color: red"></span>
+                                        <select class="custom-select rounded-0" id="size">
+                                            <option value="0">S</option>
+                                            <option value="1">M</option>
+                                            <option value="2">L</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="status">商品狀態</label><span style="color: red">*</span>
+                                        <span for="name" class="status-message" style="color: red"></span>
+                                        <select class="custom-select rounded-0" id="status">
+                                            <option value="0">上架</option>
+                                            <option value="1">下架</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="productpic">商品圖片</label>
+                                        <div class="custom-file">
+                                            <ul class="picture_list">
+
+                                            </ul>
+                                            <input type="file" class="custom-file-input" id="productpic">
+                                            <label class="custom-file-label" for="productpic">選圖</label>
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label>商品分類</label><span style="color: red">*</span>
+                                        <span for="name" class="category-message" style="color: red"></span>
+                                        <select class="category">
+                                            <option>option 1</option>
+                                            <option>option 2</option>
+                                            <option>option 3</option>
+                                            <option>option 4</option>
+                                            <option>option 5</option>
+                                        </select>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-4">
+
+                                            <label for="ice">冰塊調整</label><span style="color: red">*</span>
+                                            <span for="name" class="category-message" style="color: red"></span>
+
+                                            <div class="form-check">
+                                                <input type="checkbox" id="allice">
+                                                <label class="form-check-label">全選</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="item" type="checkbox" name="normalice"
+                                                    value="1">
+                                                <label class="form-check-label">正常冰</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="item" type="checkbox" name="lessice"
+                                                    value="2">
+                                                <label class="form-check-label">少冰</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="item" type="checkbox" name="lightice"
+                                                    value="3">
+                                                <label class="form-check-label">微冰</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="item" type="checkbox" name="icefree"
+                                                    value="4">
+                                                <label class="form-check-label">去冰</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="item" type="checkbox" name="roomtep"
+                                                    value="5">
+                                                <label class="form-check-label">常溫</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="item" type="checkbox" name="hot" value="6">
+                                                <label class="form-check-label">熱</label>
+                                            </div>
+
+                                        </div>
+
+
+                                        <div class="form-group col-4">
+                                            <label for="sweet">甜度調整</label><span style="color: red">*</span>
+                                            <span for="name" class="category-message" style="color: red"></span>
+
+                                            <div class="form-check">
+                                                <input type="checkbox" id="allsugar">
+                                                <label class="form-check-label">全選</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="itemtwo" type="checkbox" name="fullsugar" value="1">
+                                                <label class="form-check-label">全糖</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="itemtwo" type="checkbox" name="lesssugar"
+                                                    value="2">
+                                                <label class="form-check-label">少糖</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="itemtwo" type="checkbox" name="halfsugar"
+                                                    value="3">
+                                                <label class="form-check-label">半糖</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="itemtwo" type="checkbox" name="quasugar"
+                                                    value="4">
+                                                <label class="form-check-label">微糖</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="itemtwo" type="checkbox" name="nosugar">
+                                                <label class="form-check-label">無糖</label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-4">
+                                            <label for="extra">加料</label>
+
+
+                                            <div class="form-check">
+                                                <input type="checkbox" id="allmaterials">
+                                                <label class="form-check-label">全選</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="itemthree" type="checkbox" name="pearl" value="1">
+                                                <label class="form-check-label">珍珠</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="itemthree" type="checkbox" name="pudding" value="2">
+                                                <label class="form-check-label">布丁</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="itemthree" type="checkbox" name="coconut_jelly" value="3">
+                                                <label class="form-check-label">椰果</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="itemthree" type="checkbox" name="taro" value="4">
+                                                <label class="form-check-label">芋圓</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="itemthree" type="checkbox" name="herbal_jelly" value="5">
+                                                <label class="form-check-label">仙草凍</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- checkbox -->
+
+                                </div>
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                    <button type="submit" class="btn btn-primary m-3">新增商品</button>
+                                    <button type="reset" class="btn btn-secondary m-3">清空</button>
+                                </div>
+
+
+
+                            </form>
+                        </div>
+
+
+
+                    </div>
+
+
+                  </div>
+                </div>
+        </section>
+
+    </div>
+           <div class="storefooter"></div>
+
+  </div>
+
+
+
+
+    <script src="plugins/jquery/jquery.min.js"></script>
+    <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
+    <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+    <script src="plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="dist/js/adminlte.js"></script>
+    <script src="dist/js/demo.js"></script>
+    <script src="js/storegeneral.js"></script>
+    <script src="plugins/jquery-validation/jquery.validate.min.js"></script>
+  <script src="plugins/jquery-validation/additional-methods.min.js"></script>
+
+
+
+  <script>
+        <!--顯示商品圖-->
+        var the_file = document.getElementById("productpic");
+        the_file.addEventListener("change", function () {
+            let ul_el = document.getElementsByClassName("picture_list")[0];
+            ul_el.innerHTML = ""
+
+            let that = this;
+            for (let i = 0; i < this.files.length; i++) {
+                let reader = new FileReader(); reader.readAsDataURL(this.files[i]);
+                reader.addEventListener("load", function () { // console.log(reader.result); // this 是input標籤 let li_str="" ;
+                    let li_str = '';
+                    li_str += '<li>';
+                    li_str += '<img src="' + reader.result + '" class="preview">';
+                    li_str += '</li>';
+                    ul_el.insertAdjacentHTML("beforeend", li_str);
+                })
+            }
+        })
+
+       var allice=document.getElementById("allice")
+        allice.addEventListener("click",function (){
+            var that=this
+            var itemone=document.querySelectorAll("input.item")
+            itemone.forEach(function (item,i){
+                item.checked=that.checked
+            })
+        })
+        var itemone=document.querySelectorAll("input.item");
+        itemone.forEach(function (item,i){
+            item.addEventListener("click",function (){
+                var checked_length=document.querySelectorAll("input.item:checked").length;
+                var all_length=document.querySelectorAll("input.item").length;
+
+            allice.checked=(checked_length == all_length);
+            })
+        })
+
+
+      var allsugar=document.getElementById("allsugar")
+        allsugar.addEventListener("click",function (){
+            var that=this
+            var itemtwo=document.querySelectorAll("input.itemtwo")
+            itemtwo.forEach(function (item,i){
+                item.checked=that.checked
+
+            })
+
+
+        })
+
+        var itemtwo=document.querySelectorAll("input.itemtwo")
+        itemtwo.forEach(function (item,i){
+            item.addEventListener("click",function (){
+                var check_lenghttwo=document.querySelectorAll("input.itemtwo:checked").length;
+                var all_lengthtwo=document.querySelectorAll("input.itemtwo").length
+
+           allsugar.checked=(check_lenghttwo == all_lengthtwo);
+            })
+        })
+
+        var allmaterials=document.getElementById("allmaterials")
+        allmaterials.addEventListener("click",function (){
+            var that=this
+            var itemthree=document.querySelectorAll("input.itemthree")
+            itemthree.forEach(function (item,i){
+                item.checked=that.checked
+
+            })
+
+
+        })
+        var itemthree=document.querySelectorAll("input.itemthree")
+        itemtwo.forEach(function (item,i){
+            item.addEventListener("click",function (){
+                var check_lenghtthree=document.querySelectorAll("input.itemthree:checked").length;
+                var all_lengththree=document.querySelectorAll("input.itemthree").length
+
+                allmaterials.checked=(check_lenghtthree == all_lengththree);
+            })
+        })
+        // =========驗證===============
+        $(function () {
+            $.validator.setDefaults({
+                submitHandler: function () {
+                    alert( "新增成功" );
+                }
+            });
+            $('form').validate({
+                rules: {
+                    productname: {
+                        required: true,
+
+                    },
+
+
+                },
+                messages: {
+                    productname: {
+                        required: "商品名稱不為空",
+
+                    }
+
+
+                },
+                errorElement: 'span',
+                errorPlacement: function (error, element) {
+                    error.addClass('invalid-feedback');
+                    element.closest('.form-group').append(error);
+                },
+                highlight: function (element, errorClass, validClass) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    $(element).removeClass('is-invalid');
+                }
+            });
+        });
+
+
+    </script>
+
+
+
+
+</body>
+
+
+
+
+
+
+</html>
