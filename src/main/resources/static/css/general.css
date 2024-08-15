@@ -1,0 +1,53 @@
+div.header-message>h1 {
+    margin: 0 auto;
+    border-radius: 50%;
+    color: #73B4BA;
+}
+
+.header-user-links li {
+    display: inline-block;
+}
+
+.header-user-links i {
+    border-radius: 50%;
+    font-size: 20px;
+    margin-left: 10px;
+}
+
+.query-bar a {
+    margin-left: 10px;
+    margin-right: 10px;
+    border-radius: 50%;
+}
+
+.query-bar input {
+    background-color: white;
+    width: 80%;
+}
+
+#query-member {
+    min-width: 200px;
+    /*padding-left: 10px;*/
+}
+
+#query-member li {
+    min-width: 100%;
+    padding-left: 10px;
+}
+
+#query-member li:hover {
+    background-color: #dedede;
+}
+
+#query-member a {
+    display: inline-block;
+    width: 100%;
+}
+
+#query-member img {
+    width: 100%;
+}
+
+#query-member .account-list {
+    margin-top: 10%;
+}
