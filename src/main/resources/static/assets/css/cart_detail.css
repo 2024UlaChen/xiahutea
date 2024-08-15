@@ -144,12 +144,15 @@
   display: flex; /* 使用 Flexbox 佈局 */
   justify-content: space-between; /* 使內容分佈在行內兩端 */
   align-items: center; /* 垂直居中對齊 */
-   
 }
 
 .product-name {
   margin: 0; /* 移除默認的外邊距 */
   font-size: 20px;
+}
+
+.product-detail{
+  display: flex;
 }
 
 .product-buttons {
@@ -167,14 +170,6 @@
 
 .product-buttons button:hover {
   color: #0056b3;
-}
-
-
-.product-detail p{
-  text-align: left;
-  color: gray;
-  font-size:13px;
-  margin-bottom: 5px;
 }
 
 /* 運送方式 */
@@ -276,7 +271,7 @@
   text-align: left;
 }
 
-.product-detail, .coupon-minus,
+.coupon-minus,
 .membercard-minus, .moneybag-minus,
 .amount-result{
   display: flex; /* 使用 Flexbox 布局 */

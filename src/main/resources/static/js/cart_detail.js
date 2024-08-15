@@ -13,10 +13,10 @@ document.addEventListener("DOMContentLoaded",function(){
   let customer_img_el = document.getElementsByClassName("customer-img")[0];
   let customer_name_el = document.getElementsByClassName("customer-name")[0];
 
+  //流程用標籤
   let order_detail_container_el = document.getElementsByClassName("order-detail-container")[0];
   let btn_addtopurchase_el =document.getElementsByClassName("btn-addtopurchase")[0];
   let btn_checkout_el = document.getElementsByClassName("btn-checkout")[0];
-
   let step_content_el = document.getElementsByClassName("step-content")[0];
   let step_content2_el = document.getElementsByClassName("step-content2")[0];
   let step_content3_el = document.getElementsByClassName("step-content3")[0];
@@ -87,45 +87,35 @@ document.addEventListener("DOMContentLoaded",function(){
 //         .catch(error => console.error('Error fetching store data:', error));
 // });
   //********************************************第一頁按鈕事件*************************************
+    //結帳頁面購物內容來自於購物車(localstorage)
 
 
     //刪除、修改訂單
-  //修改
+  //修改---進入燈箱
   for(let i =0;i<btn_edit_el.length;i++) {
     btn_edit_el[i].addEventListener("click", function () {
       lightbox_el.style.display = "flex";
       document.body.style.overflow = 'hidden';
       document.body.style.paddingRight = '17px';
-      // 找到點擊的按鈕
+      // 找到點擊的按鈕、綁定每個checked標籤
       let button = this;
       let cartItem = button.closest(".cart-item");
       let productName = cartItem.querySelector(".product-name").textContent;
       let lightboxTitle = document.querySelector("#lightbox h1");
       lightboxTitle.textContent = productName;
-      // function------提供商品選項
-      // function fetchProductOptions(productId){
-      //   fetch(`/getProductOptions?productName=${encodeURIComponent(productName)}`)
-      //   .then(response => response.json())
-      //   .then(data =>{
-      //     let ice_el = document.querySelector('.ice + .lightbox-radio-group');
-      //     let sugar_el = document.querySelector('.sugar + .lightbox-radio-group');
-      //     let materials_el = document.querySelector('.materials + .lightbox-radio-group');
-      //     data.ice.forEach(option => {
-      //      <input type="radio" id="${option.id}" name="options" value="${option.value}">
-      //      <label for="${option.id}">${option.label}</label>
-      //     });
-      //     data.sugar.forEach(option => {
-      //       //      <input type="radio" id="${option.id}" name="options" value="${option.value}">
-      //       //      <label for="${option.id}">${option.label}</label>
-      //       //     });
-      //     data.materials.forEach(option => {
-      //            <input type="radio" id="${option.id}" name="options" value="${option.value}">
-      //            <label for="${option.id}">${option.label}</label>
-      //          });
-      //   });
-      // }
-      //燈箱關閉事件綁定
+      //這裡要callfunction
+      // fetchProductOptions(productId);
+      let selectedIce = ice_el.querySelector('input[name="ice-options"]:checked');
+
+      //燈箱更新商品按鈕事件綁定
       btn_modal_close_el.addEventListener("click", function () {
+        //指定到該點擊更新按鈕下最近的商品細項父節點
+        const itemContent = cartItem.closest(".item-content");
+        //再利用父節點指定到其下的細項
+        const productDetail = itemContent.querySelector(".product-detail");
+
+
+
         lightbox_el.style.display = "none";
         document.body.style.overflow = 'auto';
         document.body.style.paddingRight = '0px';
@@ -383,6 +373,29 @@ document.addEventListener("DOMContentLoaded",function(){
         }
         e.stopPropagation()
       })
+    //********************************************function區****************************************
+    // 提供商品選項
+    //       function fetchProductOptions(productId){
+    //         fetch(`/getProductOptions?productName=${encodeURIComponent(productName)}`)
+    //         .then(response => response.json())
+    //         .then(data =>{
+    //           let ice_el = document.querySelector('.ice + .lightbox-radio-group');
+    //           let sugar_el = document.querySelector('.sugar + .lightbox-radio-group');
+    //           let materials_el = document.querySelector('.materials + .lightbox-radio-group');
+    //           data.ice.forEach(option => {
+    //            <input type="radio" id="${option.id}" name="options" value="${option.value}">
+    //            <label for="${option.id}">${option.label}</label>
+    //           });
+    //           data.sugar.forEach(option => {
+    //                  <input type="radio" id="${option.id}" name="options" value="${option.value}">
+    //                  <label for="${option.id}">${option.label}</label>
+    //                 });
+    //           data.materials.forEach(option => {
+    //                  <input type="radio" id="${option.id}" name="options" value="${option.value}">
+    //                  <label for="${option.id}">${option.label}</label>
+    //                });
+    //         });
+    //       }
     })
 
 
