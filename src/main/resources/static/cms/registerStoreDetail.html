@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>registerStoreDetail</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/adminlte.min.css">
+</head>
+
+<body class="hold-transition sidebar-mini">
+  <div class="wrapper">
+    <div class="storeheader"></div>
+    <div class="storeaside"></div>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <section class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+            </div>
+            <div class="col-sm-6">
+              <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item active">registerStoreDetail</li>
+              </ol>
+            </div>
+          </div>
+        </div><!-- /.container-fluid -->
+      </section>
+
+      <!-- Main content -->
+      <section class="content ">
+        <div class="container-fluid col-sm-8">
+          <div class="row">
+
+            <!-- general form elements disabled -->
+            <div class="card card-warning">
+              <div class="card-header"style="background-color: #73B4BA">
+                <h3 class="card-title">註冊資訊</h3>
+              </div>
+              <!-- /.card-header -->
+              <form>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <div class="form-group">
+                        <label>店家名稱</label>
+                        <input type="text" class="form-control" placeholder="50嵐" disabled>
+                      </div>
+                    </div>
+                    <div class="col-sm-12">
+                      <div class="form-group">
+                        <label>門市地址</label>
+                        <input type="text" class="form-control" placeholder="台北市中山區遼寧街28號1樓" disabled>
+                      </div>
+                    </div>
+                    <div class="col-sm-12">
+                      <div class="form-group">
+                        <label>統一編號</label>
+                        <input type="text" class="form-control" placeholder="28533581" disabled>
+                      </div>
+                    </div>
+                    <div class="col-sm-12">
+                      <div class="form-group">
+                        <label>聯絡人</label>
+                        <input type="text" class="form-control" placeholder="馬紹維" disabled>
+                      </div>
+                    </div>
+                    <div class="col-sm-12">
+                      <div class="form-group">
+                        <label>連絡電話</label>
+                        <input type="text" class="form-control" placeholder="02-2773-7808" disabled>
+                      </div>
+                    </div>
+                    <div class="col-sm-12">
+                      <div class="form-group">
+                        <label>E-mail</label>
+                        <input type="text" class="form-control" placeholder="service@50lan.com" disabled>
+                      </div>
+                    </div>
+                    <div class="col-sm-12">
+                      <div class="form-group">
+                        <label>店家負責人</label>
+                        <input type="text" class="form-control" placeholder="馬紹維" disabled>
+                      </div>
+                    </div>
+                    <div class="col-sm-12">
+                      <div class="form-group">
+                        <label>備註</label>
+                        <input type="text" class="form-control" placeholder="" disabled>
+                      </div>
+                    </div>
+                    <div class="col-sm-12">
+                      <div class="form-group">
+                        <label>備註</label>
+                        <textarea class="form-control" rows="3" placeholder="備註" disabled></textarea>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <!-- select -->
+                      <div class="form-group">
+                        <label>狀態</label>
+                        <select class="form-control">
+                          <option>申請中</option>
+                          <option>申請成功</option>
+                          <option>申請失敗</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row justify-content-center">
+                    <div class="col-sm-2">
+                      <button type="submit" class="btn btn-info">送出</button>
+                    </div>
+                    <div class="col-sm-2">
+                      <a href="registerStoreDetailPrint.html" rel="noopener" target="_blank" class="btn btn-outline-info">列印</a>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <!-- /.row -->
+          </div>
+        </div><!-- /.container-fluid -->
+      </section>
+      <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+    <div class="storefooter"></div>
+  </div>
+  <!-- ./wrapper -->
+
+  <!-- jQuery -->
+  <script src="plugins/jquery/jquery.min.js"></script>
+  <!-- Bootstrap 4 -->
+  <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- bs-custom-file-input -->
+  <script src="plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+  <!-- AdminLTE App -->
+  <script src="dist/js/adminlte.min.js"></script>
+  <!-- AdminLTE for demo purposes -->
+  <script src="dist/js/demo.js"></script>
+  <script src="js/storegeneral.js"></script>
+  <!-- Page specific script -->
+  <script>
+    $(function () {
+      bsCustomFileInput.init();
+    });
+  </script>
+
+
+</body>
+
+</html>
