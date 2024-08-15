@@ -87,10 +87,12 @@ document.addEventListener("DOMContentLoaded",function(){
 //         .catch(error => console.error('Error fetching store data:', error));
 // });
   //********************************************第一頁按鈕事件*************************************
-  //刪除、修改訂單
+  
+
+    //刪除、修改訂單
   //修改
-  for(let i =0;i<btn_edit_el.length;i++){
-    btn_edit_el[i].addEventListener("click",function() {
+  for(let i =0;i<btn_edit_el.length;i++) {
+    btn_edit_el[i].addEventListener("click", function () {
       lightbox_el.style.display = "flex";
       document.body.style.overflow = 'hidden';
       document.body.style.paddingRight = '17px';
@@ -122,6 +124,7 @@ document.addEventListener("DOMContentLoaded",function(){
       //          });
       //   });
       // }
+      //燈箱關閉事件綁定
       btn_modal_close_el.addEventListener("click", function () {
         lightbox_el.style.display = "none";
         document.body.style.overflow = 'auto';
@@ -146,9 +149,10 @@ document.addEventListener("DOMContentLoaded",function(){
         if (qty_el.value >= 0) {
           qty_el.value++;
         }
-        console.log(qty_el.value);
         e.stopPropagation();
       })
+    })
+  }   //for-edit end **********
       //刪除訂餐
       var currentItem = null;
       for (let i = 0; i < btn_delete_el.length; i++) {
@@ -258,6 +262,7 @@ document.addEventListener("DOMContentLoaded",function(){
         }
         e.stopPropagation();
       })
+
 
 //********************************************日期時間選擇器*************************************
       new AirDatepicker('#myDatepicker', {
@@ -379,3 +384,5 @@ document.addEventListener("DOMContentLoaded",function(){
         e.stopPropagation()
       })
     })
+
+
