@@ -13,6 +13,11 @@ document.addEventListener("DOMContentLoaded",function(){
   let customer_img_el = document.getElementsByClassName("customer-img")[0];
   let customer_name_el = document.getElementsByClassName("customer-name")[0];
 
+  //訂單細項
+  let ice_el = document.querySelector('.ice + .lightbox-radio-group');
+  let sugar_el = document.querySelector('.sugar + .lightbox-radio-group');
+  let materials_el = document.querySelector('.materials + .lightbox-radio-group');
+
   //流程用標籤
   let order_detail_container_el = document.getElementsByClassName("order-detail-container")[0];
   let btn_addtopurchase_el =document.getElementsByClassName("btn-addtopurchase")[0];
@@ -23,6 +28,7 @@ document.addEventListener("DOMContentLoaded",function(){
   //修改訂單商品
   let btn_edit_el = document.getElementsByClassName("edit-btn");
   let btn_delete_el = document.getElementsByClassName("delete-btn");
+
   //燈箱
   let lightbox_el = document.getElementById("lightbox");
   let qtyminus_el = document.getElementsByClassName("qtyminus")[0];
@@ -33,6 +39,7 @@ document.addEventListener("DOMContentLoaded",function(){
   let lightbox_content_el = document.getElementsByClassName("lightbox-content")[0];
   let confirm_delete_el = document.getElementById("confirm-delete");
   let cancel_delete_el = document.getElementById("cancel-delete");
+
 
   //取貨方式
   let pick_up_input_el = document.getElementsByClassName("pick-up-input")[0];
@@ -90,7 +97,7 @@ document.addEventListener("DOMContentLoaded",function(){
     //結帳頁面購物內容來自於購物車(localstorage)
 
 
-    //刪除、修改訂單
+  //刪除、修改訂單
   //修改---進入燈箱
   for(let i =0;i<btn_edit_el.length;i++) {
     btn_edit_el[i].addEventListener("click", function () {
@@ -106,7 +113,8 @@ document.addEventListener("DOMContentLoaded",function(){
       //這裡要callfunction
       // fetchProductOptions(productId);
       let selectedIce = ice_el.querySelector('input[name="ice-options"]:checked');
-
+      let selectedSugar = sugar_el.querySelector('input[name="sugar-options"]:checked');
+      let selectedMaterials = materials_el.querySelector('input[name="materials-options"]:checked');
       //燈箱更新商品按鈕事件綁定
       btn_modal_close_el.addEventListener("click", function () {
         //指定到該點擊更新按鈕下最近的商品細項父節點
@@ -120,11 +128,13 @@ document.addEventListener("DOMContentLoaded",function(){
         document.body.style.overflow = 'auto';
         document.body.style.paddingRight = '0px';
       })
-      lightbox_el.addEventListener("click", function () {
+
+      lightbox_el.addEventListener("click", function(){
         lightbox_el.style.display = "none";
         document.body.style.overflow = 'auto';
         document.body.style.paddingRight = '0px';
       });
+
       lightbox_el.querySelector("article").addEventListener("click", function (e) {
         e.stopPropagation();
       });
@@ -379,23 +389,24 @@ document.addEventListener("DOMContentLoaded",function(){
     //         fetch(`/getProductOptions?productName=${encodeURIComponent(productName)}`)
     //         .then(response => response.json())
     //         .then(data =>{
-    //           let ice_el = document.querySelector('.ice + .lightbox-radio-group');
-    //           let sugar_el = document.querySelector('.sugar + .lightbox-radio-group');
-    //           let materials_el = document.querySelector('.materials + .lightbox-radio-group');
     //           data.ice.forEach(option => {
-    //            <input type="radio" id="${option.id}" name="options" value="${option.value}">
+    //            ice_el +=
+    //            <input type="radio" id="${option.id}" name="ice-options" value="${option.value}">
     //            <label for="${option.id}">${option.label}</label>
     //           });
     //           data.sugar.forEach(option => {
-    //                  <input type="radio" id="${option.id}" name="options" value="${option.value}">
+    //                  sugar_el +=
+    //                  <input type="radio" id="${option.id}" name="sugar-options" value="${option.value}">
     //                  <label for="${option.id}">${option.label}</label>
     //                 });
     //           data.materials.forEach(option => {
-    //                  <input type="radio" id="${option.id}" name="options" value="${option.value}">
+    //                  materials_el +=
+    //                  <input type="radio" id="${option.id}" name="materials-options" value="${option.value}">
     //                  <label for="${option.id}">${option.label}</label>
     //                });
     //         });
     //       }
+
     })
 
 
