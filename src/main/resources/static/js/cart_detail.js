@@ -87,7 +87,7 @@ document.addEventListener("DOMContentLoaded",function(){
 //         .catch(error => console.error('Error fetching store data:', error));
 // });
   //********************************************第一頁按鈕事件*************************************
-  
+
 
     //刪除、修改訂單
   //修改
@@ -138,21 +138,21 @@ document.addEventListener("DOMContentLoaded",function(){
       lightbox_el.querySelector("article").addEventListener("click", function (e) {
         e.stopPropagation();
       });
-      //燈箱數量增減
-      qtyminus_el.addEventListener("click", function (e) {
-        if (qty_el.value > 0) {
-          qty_el.value--;
-        }
-        e.stopPropagation();
-      })
-      qtyplus_el.addEventListener("click", function (e) {
-        if (qty_el.value >= 0) {
-          qty_el.value++;
-        }
-        e.stopPropagation();
-      })
     })
   }   //for-edit end **********
+    //燈箱數量增減
+    qtyminus_el.addEventListener("click", function (e) {
+        if (qty_el.value > 0) {
+            qty_el.value--;
+        }
+        e.stopPropagation();
+    })
+    qtyplus_el.addEventListener("click", function (e) {
+        if (qty_el.value >= 0) {
+            qty_el.value++;
+        }
+        e.stopPropagation();
+    })
       //刪除訂餐
       var currentItem = null;
       for (let i = 0; i < btn_delete_el.length; i++) {
