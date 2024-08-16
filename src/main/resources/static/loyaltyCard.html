@@ -4,100 +4,166 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>夏虎茶</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-    <link rel="stylesheet" href="../../../../../../Users/s5880/Desktop/JAVA培訓班二階段/java專/0720前端樣本/前台/Coupon.css">
-    <style>
-      .Kuncard {
-  width: 340px;
-  height: 210px;
-   background-size: cover; /* 確保背景圖片按比例填滿容器 */
-}
-
-        .IndexImgNameFontSize{
-            font-weight: bold; 
-            ;color:black
-
-        }
-        .KunStar{
-            color:#F9A825;
-            font-size: 16px;
-        }
-        .image-container {
-            position: relative;
-            display: inline-block;
-        }
-        .icon-overlay {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            color: white;
-            background-color: rgba(0, 0, 0, 0.5);
-            padding: 5px;
-            border-radius: 50%;
-        }
-        .KunAdsSize{
-            max-width: 60%; 
-            height: auto;
-        }
-        .KunSpeedSearch{
-            font-size: 16px;
-        }
-        .KunIndexSotreImg{
-            max-width: 100%; 
-            height: auto;
-            position: relative;
-        }
-        .favorite-text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
-            font-weight: bold;
-            font-size: 1.5rem; /* 根據需要調整字體大小 */
-            background-color: rgba(0, 0, 0, 0.5); /* 可選：增加背景以使文字更清晰 */
-            padding: 0.5rem; /* 可選：增加內邊距 */
-            border-radius: 0.25rem; /* 可選：增加圓角 */
-            text-align: center;
-        }
-        .KunNav{
-            list-style: none;
-        }
-        
-    </style>
+    
+    <link rel="shortcut icon" type="image/x-icon" href="assets/images/favicon.png"/>
+    <link
+            href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i&display=swap"
+            rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,300i,400,400i,700,700i&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="assets/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="assets/css/animate.min.css">
+    <link rel="stylesheet" href="assets/css/jquery-ui.css">
+    <link rel="stylesheet" href="assets/css/slick.css">
+    <link rel="stylesheet" href="assets/css/chosen.min.css">
+    <link rel="stylesheet" href="assets/css/pe-icon-7-stroke.css">
+    <link rel="stylesheet" href="assets/css/magnific-popup.min.css">
+    <link rel="stylesheet" href="assets/css/lightbox.min.css">
+    <link rel="stylesheet" href="assets/js/fancybox/source/jquery.fancybox.css">
+    <link rel="stylesheet" href="assets/css/jquery.scrollbar.min.css">
+    <link rel="stylesheet" href="assets/css/mobile-menu.css">
+    <link rel="stylesheet" href="assets/fonts/flaticon/flaticon.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="css/general.css">
+    <link rel="stylesheet" href="css/member.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <link
+    href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i&display=swap"
+    rel="stylesheet"
+  />
+  <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    />
+  <link
+    href="https://fonts.googleapis.com/css?family=Lato:300,300i,400,400i,700,700i&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="./css/k.css">
+  
 </head>
 <body>
-    <header>
-        <div class="Container bg-light" style="text-align: center;">
-        <div class="row ">
-            <div class="col-3 m-3">
-                夏虎茶
+  <header class="header style2">
+    <div class="top-bar">
+      <div class="container">
+        <div class="row">
+          
+            <div class="col-lg-3">
+              <div class="header-message">
+                <h1>夏虎茶</h1>
+              </div>
             </div>
-            <div class="col-3 m-3">
-                <form class="from-control d-flex">
-                    <input class="form-control " type="text" placeholder="輸入店名">
-                    <input type="submit" value="搜尋" class=" m-1 btn btn-outline-dark">
-                </form>
+            <div class="col-lg-6">
+              <div class="query-bar">
+                <a href="#">
+                  <i class="fa fa-search" aria-hidden="true"></i>
+                </a>
+                <input type="text" placeholder="搜尋品牌、門市或商品" name="" id="">
+                <a href="#">
+                  <span>
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                  </span>
+                </a>
+              </div>
             </div>
-            <div class="col-3 m-3">
-                <span><i class="fa-solid fa-tags m-2"></i></span>
-                <span><i class="fa-solid fa-cart-shopping m-2"></i></span>
-                <span><i class="fa-solid fa-bell m-2"></i></span>
-                <span><i class="fa-solid fa-circle-user m-2"></i></span>
-                
+            <div class="col-lg-3">
+              <ul class="header-user-links top-bar-right">
+                <li>
+                  <a href="orderList.html">
+                    <span>
+                      <i class="fa fa-book" aria-hidden="true"></i>
+                    </span>
+                  </a>
+                </li>
+                <li>
+                  <a href="cart_detail.html">
+                    <span>
+                      <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                    </span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    <span>
+                      <i class="fa fa-bell" aria-hidden="true"></i>
+                    </span>
+                  </a>
+                </li>
+                <li class="teamo-dropdown block-account">
+                  <a href="#" data-teamo="teamo-dropdown">
+                    <span>
+                      <i class="fa fa-user-circle" aria-hidden="true"></i>
+                    </span>
+                  </a>
+                  <ul class="teamo-submenu" id="query-member">
+                    <li class="switcher-option">
+                      <div class="account-list row">
+                        <div class="col-lg-12 no-padding">
+                          <div class="col-sm-4">
+                            <img src="/assets/images/xiahutealogo.jpg" alt="userPhoto">
+                          </div>
+                          <div class="col-lg-8">
+                            <span>userName</span>
+                            <span>userAccount</span>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <li class="switcher-option">
+                      <a href="memberSetting.html">
+                        <span> 帳號設定 </span>
+                      </a>
+                    </li>
+                    <li class="switcher-option">
+                      <a href="loyaltyCard.html">
+                        <span> 會員卡 </span>
+                      </a>
+                    </li>
+                    <li class="switcher-option">
+                      <a href="coupon.html">
+                        <span> 我的券夾 </span>
+                      </a>
+                    </li>
+                    <hr>
+                    <li class="switcher-option">
+                      <a href="orderList.html">
+                        <span> 訂單管理 </span>
+                      </a>
+                    </li>
+                    <li class="switcher-option">
+                      <a href="orderDispute.html">
+                        <span> 意見回饋 </span>
+                      </a>
+                    </li>
+                    <li class="switcher-option">
+                      <a href="faq.html">
+                        <span> 常見問題 </span>
+                      </a>
+                    </li>
+                    <hr>
+                    <li class="switcher-option">
+                      <a href="#">
+                        <span> 登出 </span>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
             </div>
-            
+          
         </div>
+      </div>
     </div>
-    </header>
+  </header>
     
     
     <div class="Container m-5">
         <h3 style="font-weight: 800;">集點卡專區</h3>
         <div class="row KunSpeedSearch">
             <div class="col-8">
-            <a href="#" style="text-underline-offset:5px;">我的集點卡</a>
+            <a href="homePage.html" style="text-underline-offset:5px;">回首頁</a>
             </div>
             
             <div class="col input-group m-1">
@@ -113,9 +179,9 @@
         
             <div class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-5">
               <div class="col">
-                <div class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 shadow-lg Kuncard" style="background-image: url('../../../../../../Users/s5880/Desktop/JAVA培訓班二階段/java專/0720前端樣本/前台/日.jpg');">
+                <div class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 shadow-lg Kuncard" style="background-image: url('https://www.kebuke.com/wp-content/uploads/2020/12/fb-banner.png'); background-size: cover; background-position: center;">
                   <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
-                    <h2 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">得正七張店</h2>
+                    <h4 class="display-8 pb-5 mb-5 lh-1 " style="color: white;">得正七張店</h4>
                     <ul class="d-flex list-unstyled mt-auto">
                       <li class="me-auto">
                         <img src="https://github.com/twbs.png" alt="Bootstrap" width="32" height="32" class="rounded-circle border border-white">
@@ -134,9 +200,10 @@
               </div>
         
               <div class="col">
-                <div class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 shadow-lg Kuncard" style="background-image: url('../../../../../../Users/s5880/Desktop/JAVA培訓班二階段/java專/0720前端樣本/前台/日.jpg');">
+                <div class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 shadow-lg Kuncard" style="background-image: url('https://koha.tw/wp-content/uploads/2024/07/%E4%B8%80%E6%B2%90%E6%97%A512%E9%80%B1%E5%B9%B4%E5%A5%B6%E9%85%AA%E4%BE%BF%E7%95%B6%E9%99%90%E9%87%8F%E7%99%BC%E5%94%AE%EF%BC%8C%E5%86%8D%E7%8F%BE%E5%8F%B0%E7%81%A3%E5%8F%A4%E6%97%A9%E5%91%B3-21.jpg');background-size: cover; background-position: center;">
                   <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
-                    <h2 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">八曜竹北店</h2>
+                    <h4 class="display-8 pb-5 mb-5 lh-1 " style="color: white;">八曜竹北店</h4>
+                    
                     <ul class="d-flex list-unstyled mt-auto">
                       <li class="me-auto">
                         <img src="https://github.com/twbs.png" alt="Bootstrap" width="32" height="32" class="rounded-circle border border-white">
@@ -155,9 +222,10 @@
               </div>
         
               <div class="col">
-                <div class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 shadow-lg Kuncard" style="background-image: url('../../../../../../Users/s5880/Desktop/JAVA培訓班二階段/java專/0720前端樣本/前台/日.jpg');">
+                <div class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 shadow-lg Kuncard" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSl_D-EJXUTpI86KdCJmoUSysFYLSh2uDegg&s');background-size: cover; background-position: center;">
                   <div class="d-flex flex-column h-100 p-5 pb-3 text-shadow-1">
-                    <h2 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">迷克夏永和店</h2>
+                    <h2 class="display-8 pb-5 mb-5 lh-1 " style="color: white;">迷克夏永和店</h2>
+                    
                     <ul class="d-flex list-unstyled mt-auto">
                       <li class="me-auto">
                         <img src="https://github.com/twbs.png" alt="Bootstrap" width="32" height="32" class="rounded-circle border border-white">
@@ -190,22 +258,116 @@
                     <div class="h-100 p-5 text-secondary  bg-dark rounded-3">
                         <h2>有夏虎茶真好，快來瞭解我們吧</h2>
                         
-                        <button class="btn btn-outline-light" type="button">快速上手</button>
+                        <a href="faq.html" class="btn btn-outline-light" type="button">快速上手</a>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="h-100 p-5 bg-light border rounded-3">
                         <h2>有夏虎茶真好，快來加入我們吧</h2>
                         
-                        <button class="btn btn-outline-secondary" type="button">手刀報名</button>
+                        <a href="joinUs.html" class="btn btn-outline-secondary" type="button">手刀報名</a>
                     </div>
                 </div>
         </div> <!--招商-->
     </div>
-<footer>
-    頁尾
+<!-- 頁腳 -->
+<footer class="footer style7">
+  <div class="container">
+      <div class="container-wapper no-padding">
+          <div class="row">
+              <div class="box-footer col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                  <div class="teamo-custommenu default">
+                      <ul class="menu">
+                          <li class="menu-item">
+                              <h3>夏虎茶</h3>
+                          </li>
+                          <li class="menu-item">
+                              <a href="#">公司資訊：雲仲資訊股份有限公司</a>
+                          </li>
+                          <li class="menu-item">
+                              <a href="#">統一編號：58364751
+                              </a>
+                          </li>
+                      </ul>
+                  </div>
+              </div>
+              <div class="box-footer col-xs-12 col-sm-4 col-md-4 col-lg-4 hidden-xs">
+
+              </div>
+              <div class="box-footer col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                  <div class="teamo-custommenu default">
+                      <ul class="menu">
+                          <li class="menu-item">
+                              <a href="faq.html">常見問題</a>
+                          </li>
+                          <li class="menu-item">
+                              <a href="#">隱私權條款</a>
+                          </li>
+                          <li class="menu-item">
+                              <a href="#">意見回饋</a>
+                          </li>
+                          <li class="menu-item">
+                              <a href="#">使用者條款</a>
+                          </li>
+                          <li class="menu-item">
+                              <a href="#">信用卡條款</a>
+                          </li>
+                      </ul>
+                  </div>
+              </div>
+          </div>
+          <div class="footer-end">
+              <div class="row">
+                  <div class="col-sm-12 col-xs-12">
+                      <div class="teamo-socials">
+                          <ul class="socials">
+                              <li>
+                                  <a href="#" class="social-item" target="_blank">
+                                    <i class="fa-brands fa fa-facebook"></i>
+                                  </a>
+                              </li>
+                              <li>
+                                  <a href="#" class="social-item" target="_blank">
+                                    <i class="fa-brands fa-twitter"></i>
+                                  </a>
+                              </li>
+                              <li>
+                                  <a href="#" class="social-item" target="_blank">
+                                    <i class="fa-brands fa-instagram"></i>
+                                  </a>
+                              </li>
+                          </ul>
+                      </div>
+                      <div class="coppyright">
+                          © 2024 XiaHuTea 台灣 . All rights reserved
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
 </footer>
 
+<script src="assets/js/jquery-1.12.4.min.js"></script>
+<script src="assets/js/jquery.plugin-countdown.min.js"></script>
+<script src="assets/js/jquery-countdown.min.js"></script>
+<script src="assets/js/bootstrap.min.js"></script>
+<script src="assets/js/owl.carousel.min.js"></script>
+<script src="assets/js/magnific-popup.min.js"></script>
+<script src="assets/js/isotope.min.js"></script>
+<script src="assets/js/jquery.scrollbar.min.js"></script>
+<script src="assets/js/jquery-ui.min.js"></script>
+<script src="assets/js/mobile-menu.js"></script>
+<script src="assets/js/chosen.min.js"></script>
+<script src="assets/js/slick.js"></script>
+<script src="assets/js/jquery.elevateZoom.min.js"></script>
+<script src="assets/js/jquery.actual.min.js"></script>
+<script src="assets/js/fancybox/source/jquery.fancybox.js"></script>
+<script src="assets/js/lightbox.min.js"></script>
+<script src="assets/js/owl.thumbs.min.js"></script>
+<script src="assets/js/jquery.scrollbar.min.js"></script>
+<script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyC3nDHy1dARR-Pa_2jjPCjvsOR4bcILYsM'></script>
+<script src="assets/js/frontend-plugin.js"></script>
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
