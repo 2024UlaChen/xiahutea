@@ -222,7 +222,7 @@
 
       <div class="container px-4 py-5" id="custom-cards">
         <div class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-5">
-          <div class="col">
+          <div class="col" data-bs-toggle="modal" data-bs-target=".exampleModal">
             <div
               class="card card-cover h-100 overflow-hidden text-dark bg-dark rounded-5 shadow-lg"
               style="background-image: url('https://hkdesignpro.com/wp-content/uploads/%E5%BE%BD%E7%AB%A0LOGO-1024x595.jpg'); background-size: cover; background-position: center; "
@@ -260,7 +260,44 @@
             </div>
           </div>
 
-          <div class="col">
+          <!-- Modal -->
+        <div
+        class="modal fade exampleModal"
+        
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">優惠券說明</h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <p>折抵十元</p>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                關閉
+              </button>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+        
+
+          <div class="col" data-bs-toggle="modal" data-bs-target=".exampleModal">
             <div
               class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 shadow-lg"
               style="background-image: url('https://hkdesignpro.com/wp-content/uploads/%E5%BE%BD%E7%AB%A0LOGO-1024x595.jpg'); background-size: cover; background-position: center;"
