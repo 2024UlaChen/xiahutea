@@ -35,12 +35,16 @@ document.addEventListener("DOMContentLoaded", function (){
     // 顯示特定頁面的資料
     function showPage(page) {
         // 隱藏所有行
-        rows.forEach(row => row.style.display = 'none');
+        rows.forEach(function(row) {
+            row.style.display = 'none';
+        });
         // 計算當前頁面要顯示的行範圍
         const start = (page - 1) * rowsPerPage;
         const end = start + rowsPerPage;
         // 顯示當前頁面的行
-        rows.slice(start, end).forEach(row => row.style.display = '');
+        rows.slice(start, end).forEach(function(row) {
+            row.style.display = '';
+        });
         // 更新按鈕狀態
         document.getElementById('prev-btn').disabled = page === 1;
         document.getElementById('next-btn').disabled = page === totalPages;
