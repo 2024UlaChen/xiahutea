@@ -526,7 +526,7 @@ export class WeienChat {
         if (this._lastMessageCard && !this._isSameDay(message.value.timestamp, this._lastMessage.value.timestamp)) {
             let dateTag = document.createElement('div');
             dateTag.classList.add('weien-message-date-tag');
-            dateTag.innerHTML = `<span>${formatMessagesDate(this._preMessage.value.timestamp)}</span>`;
+            dateTag.innerHTML = `<span>${formatMessagesDate(message.value.timestamp)}</span>`;
             listContainer.append(dateTag);
         }
 
