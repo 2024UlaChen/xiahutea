@@ -1,20 +1,20 @@
 document.addEventListener("DOMContentLoaded", function (){
     //**************************************定義變數及標籤**********************
-    const rowsPerPage = 5; // 每頁顯示的行數
+    // 每頁顯示的行數及當前頁面
+    const rowsPerPage = 5;
     let currentPage = 1;
     // 所有表格行
     const tableBody = document.getElementsByClassName("coupon-table")[0];
     const rows = Array.from(tableBody.getElementsByTagName('tr'));
     const totalRows = rows.length;
     const totalPages = Math.ceil(totalRows / rowsPerPage);
+    //上下頁按鈕
+    let btn_prev_el = document.getElementById('prev-btn');
+    let btn_next_el = document.getElementById('next-btn');
 
     //**************************************事件綁定**********************
     // 初始化顯示第一頁
     showPage(currentPage);
-
-    //上下頁按鈕
-    let btn_prev_el = document.getElementById('prev-btn');
-    let btn_next_el = document.getElementById('next-btn');
 
     // 上一頁按鈕
     btn_prev_el.addEventListener('click', function () {
