@@ -517,6 +517,11 @@
             margin-right: 8px;
             vertical-align: middle;
         }
+
+        .none {
+
+            display: none;
+        }
     </style>
 </head>
 
@@ -551,6 +556,50 @@
                         <div class="question" style="color: #ffffff;">常見問題</div>
 
 
+
+                    </div>
+                    <!-- 訂購資訊燈箱 -->
+                    <div class="modal" class="none">
+                        <div class="modal-header">
+
+                            <button class="close-btn">&times;</button>
+                        </div>
+
+                        <ul class="modal-tabs">
+                            <li class="active"><a href="#tab01">店家資訊</a></li>
+                            <li><a href="#tab02">怎取貨</a></li>
+
+                        </ul>
+                        <div id="tab01" class="modal-content">
+                            <ul>
+                                <li><strong>藍杉茶所 忠孝店</strong></li>
+                                <li>5.0 (5)</li>
+                                <li>11:30 ~ 21:30</li>
+                                <li>02-27769858</li>
+                                <li>台北市大安區忠孝東路四段77巷34號</li>
+                                <li><strong>可現金</strong></li>
+                                <li>現金單筆消費上限 $10000</li>
+                                <li>本店無印製姓名貼紙</li>
+                                <li><strong>商行資訊</strong></li>
+                                <li>斑茶創意手搖飲料店</li>
+                                <p>88369515</p>
+                        </div>
+                        <div id="tab02" class="modol-content">
+                            <table class="order_info_tb">
+                                <tbody>
+                                    <tr>
+
+                                        <td>從今日開放預訂 3 日內的訂單</td>
+                                    </tr>
+                                    <tr>
+
+                                        <td>自取</td>
+                                    </tr>
+
+
+                                </tbody>
+                            </table>
+                        </div>
 
                     </div>
 
@@ -783,7 +832,7 @@
 
                         </div>
 
-                        <button type="submit">加入購物車</button>
+                        <button type="submit"><span>加入購物車</span></button>
 
                 </form>
 
@@ -791,7 +840,7 @@
 
         </article>
 
-        <div class="modal">
+        <!-- <div class="modal">
             <div class="modal-header">
                 <h2>訂購資訊</h2>
                 <button class="close-btn">&times;</button>
@@ -814,7 +863,7 @@
                 <p>斑茶創意手搖飲料店</p>
                 <p>88369515</p>
             </div>
-        </div>
+        </div> -->
 
 
 
@@ -822,24 +871,51 @@
 
     </div>
 
-    <!-- <div id="tab-demo">
-    <ul class="tab-title">
-        <li><a href="#tab01">店家資訊</a></li>
+    <!-- <div class="modal">
+    <div class="modal-header">
+     
+        <button class="close-btn">&times;</button>
+    </div>
+        
+    <ul class="modal-tabs">
+        <li class="active"><a href="#tab01">店家資訊</a></li>
         <li><a href="#tab02">怎取貨</a></li>
       
     </ul>
-    <div id="tab01" class="tab-inner">
-        <p>tab01的內容</p>
+    <div id="tab01" class="modal-content">
+    <ul>
+    <li><strong>藍杉茶所 忠孝店</strong></li>
+    <li>5.0 (5)</li>
+    <li>11:30 ~ 21:30</li>
+    <li>02-27769858</li>
+    <li>台北市大安區忠孝東路四段77巷34號</li>
+    <li><strong>可現金</strong></li>
+    <li>現金單筆消費上限 $10000</li>
+    <li>本店無印製姓名貼紙</li>
+    <li><strong>商行資訊</strong></li>
+    <li>斑茶創意手搖飲料店</li>
+    <p>88369515</p>
     </div>
-    <div id="tab02" class="tab-inner">
-        <p>tab02的內容</p>
+    <div id="tab02" class="modol-content">
+        <table class="order_info_tb">
+            <tbody>
+                <tr>
+                  
+                    <td>從今日開放預訂 3 日內的訂單</td>
+                </tr>
+                <tr>
+                 
+                    <td>自取</td>
+                </tr>
+          
+        
+            </tbody>
+        </table>
     </div>
-    <div id="tab03" class="tab-inner">
-        <p>tab03的內容</p>
-    </div>
+  
 </div> -->
 
-    <script src="./jquery-3.7.1.min.js"></script>
+    <script src="./assets/js/jquery-1.12.4.min.js"></script>
     <script src="./slick.min.js"> </script>
 
     <script>
@@ -861,7 +937,7 @@
         $(document).ready(function () {
             $(".plus").on("click", function (e) {
                 e.preventDefault()
-                alert("rrr")
+
             })
 
 
@@ -902,7 +978,13 @@
 
 
 
+                let modal = document.querySelector("div.modal")
 
+                // 頁面上的按鈕
+                let orderinfo = document.querySelector("div.orderinfo")
+                orderinfo.addEventListener("click", function () {
+                    modal.remove("none");
+                });
 
 
 

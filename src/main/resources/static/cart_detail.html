@@ -1,751 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
   <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>訂單明細</title>
-  <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.png"/>
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i&display=swap"
-          rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Lato:300,300i,400,400i,700,700i&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/font-awesome.min.css"> <!--添加各种矢量图标-->  
-    <link rel="stylesheet" href="/css/owl.carousel.min.css">  <!--实现各种轮播效果-->
-    <link rel="stylesheet" href="/css/animate.min.css">  <!--动画效果-->
-    <link rel="stylesheet" href="/css/jquery-ui.css">  <!--用户界面库-->
-    <link rel="stylesheet" href="/css/slick.css">  <!--实现各种轮播效果 可調整性更豐富-->
-    <link rel="stylesheet" href="/css/chosen.min.css">  <!--增强 HTML 的 select 元素-->
-    <link rel="stylesheet" href="/css/pe-icon-7-stroke.css">  <!--矢量图标-->
-    <link rel="stylesheet" href="/css/magnific-popup.min.css"> <!--弹出窗口效果-->
-    <link rel="stylesheet" href="/css/lightbox.min.css">  
-    <link rel="stylesheet" href="/css/jquery.fancybox.css">  <!--响应式的模态框（modal）效果-->
-    <link rel="stylesheet" href="/css/jquery.scrollbar.min.css">  <!--滚动条样式和行为-->
-    <link rel="stylesheet" href="/css/mobile-menu.css">  <!--创建移动菜单-->
-    <link rel="stylesheet" href="/css/flaticon.css">  <!--flaticon是提供免费和付费矢量图标的平台-->
-    <!-- <link rel="stylesheet" href="/css/style.css"> -->
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="assets/css/animate.min.css">
+    <link rel="stylesheet" href="assets/css/jquery-ui.css">
+    <link rel="stylesheet" href="assets/css/slick.css">
+    <link rel="stylesheet" href="assets/css/chosen.min.css">
+    <link rel="stylesheet" href="assets/css/pe-icon-7-stroke.css">
+    <link rel="stylesheet" href="assets/css/magnific-popup.min.css">
+    <link rel="stylesheet" href="assets/css/lightbox.min.css">
+    <link rel="stylesheet" href="assets/css/jquery.scrollbar.min.css">
+    <link rel="stylesheet" href="assets/css/mobile-menu.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- Font Awesome -->
-    <link rel="stylesheet" href="/css/cart_detail.css">
+    <link rel="stylesheet" href="assets/css/cart_detail.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/air-datepicker@3.5.3/air-datepicker.css">
-    <style>
-	/*全域設定*/
-::placeholder {
-  color: #999; 
-}
-
-/* 商品進度和商家名稱 */
-.order-detail-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
-
-.progress-list{
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  margin-bottom: 60px;
-}
-
-.progress-list li{   
-  display: flex;
-  font-size: 21px;
-  flex-direction: column;
-  text-align: center;
-  justify-content: center;
-  border-radius: 50%;
-  width: 120px;
-  height: 120px;
-  background-image: linear-gradient(45deg, #995be4, #ecf2ea, #995be4);
-  position: relative;
-}
-
-.progress-list li+li{    /* 兄弟節點間格 */
-  margin-left: 120px;
-}
-
-.progress-list li+li:before{ 
-  content: '';  
-  position: absolute; 
-  width: 120px;
-  height: 7px;
-  background-color:lightblue;
-  top:0;
-  bottom: 0;
-  left: -120px;
-  margin: auto;
-}
-
-.progress-list li.active ~li{
-  background-image: linear-gradient(45deg, rgb(167, 166, 166), rgb(167, 166, 166), rgb(167, 166, 166));
-}
-
-.progress-list li.active ~li::before{
-  background-color: rgb(167, 166, 166);
-}
-
-/**************************************************** STEP1 ******************************************/
-.step-content{
-  display: flex; /* 使用 Flexbox 佈局 */
-  text-align: center; /* 將內容置中 */
-  flex-direction: column; /* 垂直堆疊子元素 */
-  align-items: center; /* 水平居中對齊子元素 */
-  width: 100%;
-}
-
-.store-info {
-  display: flex; /* 使用 Flexbox 佈局 */
-  align-items: center; /* 垂直居中對齊 */
-  padding: 10px 20px; /* 內邊距，用於內容和邊框之間的距離 */
-  background-color: #f8f9fa; /* 背景色 */
-  border: none; /* 邊框顏色和寬度 */
-  border-radius: 5px; /* 圓角，如果需要直角可以設置為0 */
-  margin: 10px; /* 外邊距，用於元素之間的距離 */
-  text-decoration: none; /* 去除默認的超鏈接下劃線 */
-  color: #343a40; /* 文字顏色 */
-  font-size: 16px; /* 文字大小 */
-  font-weight: bold; /* 文字加粗 */
-  max-width: 100%;
-  box-sizing: border-box;
-  width: 45%;
-}
-
-.checkout-content-img {
-  margin-right: 20px; /* 與文字之間的距離 */
-}
-
-.checkout-content-img img {
-  width: 100px; /* 設置圖片的寬度 */
-  height: 100px; /* 設置圖片的高度 */
-  
-}
-
-.store-name {
-  flex: 1; /* 使 store-name 元素填滿剩餘空間 */
-  text-align: left; /* 文字靠左對齊 */
-}
-
-/* 購物內容 */
-.item-detail {
-  padding: 10px 20px;
-  background-color: #f8f9fa;
-  border: none;
-  border-radius: 5px;
-  margin: 10px;
-  color: #343a40;
-  font-size: 16px;
-  font-weight: bold;
-  box-sizing: border-box;
-  width: 45%;
-}
-
-.item-detail h4{
-  text-align: left;
-}
-
-.user-info{
-  display: flex;
-  align-items: center;
-}
-
-.user-info img{
-  max-width: 20%; /* 最大宽度 500px */
-  max-height: 5%; /* 最大高度 300px */
-  width: auto; /* 自动宽度以保持比例 */
-  height: auto; /* 自动高度以保持比例 */
-  object-fit: contain; /* 保持图片纵横比，适应容器 */
-  margin-bottom: 10px;
-}
-
-.user-name{
-  margin-left: 30px;
-}
-
-
-.item-content {
-  display: flex;
-  flex-direction: column;
-  background-color: #cbd6e1;
-  margin-bottom: 8px;
-}
-
-.cart-item {
-  display: flex; /* 使用 Flexbox 佈局 */
-  justify-content: space-between; /* 使內容分佈在行內兩端 */
-  align-items: center; /* 垂直居中對齊 */
-   
-}
-
-.product-name {
-  margin: 0; /* 移除默認的外邊距 */
-  font-size: 20px;
-}
-
-.product-buttons {
-  display: flex;
-  gap: 10px;
-}
-
-.product-buttons button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 18px;
-  color: #007bff;
-}
-
-.product-buttons button:hover {
-  color: #0056b3;
-}
-
-
-.product-detail p{
-  text-align: left;
-  color: gray;
-  font-size:13px;
-  margin-bottom: 5px;
-}
-
-/* 運送方式 */
-.recevier-method {
-  padding: 10px 20px;
-  background-color: #f8f9fa;
-  border: none;
-  border-radius: 5px;
-  margin: 10px;
-  color: #343a40;
-  font-size: 16px;
-  font-weight: bold;
-  box-sizing: border-box;
-  width: 45%;
-}
-
-.recevier-method h4{
-  text-align: left;
-}
-
-
-.pick-up, .carry-out {
-  /* display: flex; */
-  margin-bottom: 5px; /* 讓選項之間有距離 */
- text-align: left;
-}
-
-
-.carry-out-address {
-  width: 100%; /* 確保輸入欄寬度填滿父容器 */
-  border: 1px solid #ccc; /* 邊框顏色為淺灰色，1px 寬度 */
-  border-radius: 4px; /* 可選：設置圓角邊框 */
-  margin-bottom: 20px;
-}
-
-.address {
-  width: 100%; /* 確保輸入欄寬度填滿父容器 */
-}
-
-.address::placeholder {
-  color: #999;
-}
-
-/*取貨時間 */
-.recevie-time{
-  text-align: left;
-}
-
-#myDatepicker::placeholder {
-  color: #999;
-}
-
-/*優惠券 */
-
-.coupon-use {
-  padding: 10px 20px;
-  background-color: #f8f9fa;
-  border: none;
-  border-radius: 5px;
-  margin: 10px;
-  color: #343a40;
-  font-size: 16px;
-  font-weight: bold;
-  box-sizing: border-box;
-  width: 45%;
-}
-.coupon-number::placeholder {
-  color: #999;
-}
-
-.coupon-use h4 {
-  text-align: left; /* 標題靠左對齊 */
-  margin-bottom: 10px; /* 增加標題和內容之間的間距 */
-}
-
-.select-coupon, .coupon-number,
-.select-membercard, .select-moneybag{
-  text-align: left;
-}
-
-.coupon-number {
-  width: 100%; /* 確保輸入欄寬度填滿父容器 */
-  border: 1px solid #ccc; /* 邊框顏色為淺灰色，1px 寬度 */
-  border-radius: 4px; /* 可選：設置圓角邊框 */
-}
-
-/*訂單彙總*/
-.amount-summary {
-  padding: 10px 20px;
-  background-color: #f8f9fa;
-  border: none;
-  border-radius: 5px;
-  margin: 10px;
-  color: #343a40;
-  font-size: 16px;
-  font-weight: bold;
-  box-sizing: border-box;
-  width: 45%;
-  text-align: left;
-}
-
-.product-detail, .coupon-minus,
-.membercard-minus, .moneybag-minus,
-.amount-result{
-  display: flex; /* 使用 Flexbox 布局 */
-  justify-content: space-between; /* 使內容兩端對齊 */
-  align-items: center; /* 垂直居中對齊 */
-  margin-bottom: 10px; /* 增加內容之間的間距 */
-}
-
-hr {
-  border: 0;
-  height: 1px;
-  background: #333; /* 設置顏色 */
-  margin: 10px 0;   /* 設置上下間距 */
-}
-.amount-result h4,p{
-  color: red;
-}
-
-/* 頁尾按鈕 */
-.btn-nextstep {
-  display: flex;
-  gap: 10px; /* 按钮间距 */
-  width: 100%;
-  justify-content: center;
-  margin: 10px 0px;
-}
-
-.btn-addtopurchase, .btn-checkout{
-  padding: 1% 7%;
-  font-size: large;
-  background-color: #65a15a;
-  color: #fff;
-  text-align: center;
-  font-weight: bold;
-  border: none;
-  transition: all 0.4s ease 0s;
-  font-family: 'Montserrat', sans-serif;
-}
-
-.btn-addtopurchase:hover,
-.btn-checkout:hover{
-  background-color: #b6c4b7; /* 悬停背景色 */
-}
-
-/*light燈箱for修改訂單*/
-#lightbox{
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  background-color: hsla(0, 0%, 0%, .5);
-}
-#lightbox > article{
-  background-color: white;
-  max-width: 90%;
-  border-radius: 10px;
-  box-shadow: 0 0 10px #ddd;
-  padding: 10px;
-  text-align: left;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-#lightbox > article h1{
-  font-size: 25px;
-  font-weight: bold;
-  margin-bottom: 25px;
-}
-
-.lightbox_end{
-  display: flex;
-  padding: 10px;
-}
-
-input.qtyplus{
-  margin-right: 40px;
-}
-
-.qty {
-  width: 60px;
-  height: auot;
-  text-align: center;
-  border: 0;
-  border-top: 1px solid #aaa;
-  border-bottom: 1px solid #aaa;
-}
-
-
-input.qtyplus {
-  width: 70px;
-  height: auto;
-  border: 1px solid #aaa;
-  background: #f8f8f8;
-}
-
-input.qtyminus {
-  width: 70px;
-  height: auto;
-  border: 1px solid #aaa;
-  background: #f8f8f8;
-}
-
-.btn_modal_close{
-  background-color: orange;
-  color: white;
-  border: none;
-  width: 150px;
-  padding: 15px;
-  font-weight: bold;
-  font-size: 15px;
-}
-
-/*light燈箱for刪除訂單*/
-#lightbox-delete{
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  background-color: hsla(0, 0%, 0%, .5);
-}
-.lightbox-content{
-  background-color: white;
-  max-width: 90%;
-  width: 45%;
-  border-radius: 10px;
-  box-shadow: 0 0 10px #ddd;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-.lightbox-content p{
-  padding: 10px;
-  font-size: 20px;
-  color: black;
-  font-family: 'Courier New', Courier, monospace;
-}
-.highlight {
-  color: red; 
-  font-weight: bold; 
-}
-.delete-button {
-  display: flex;
-  padding: 10px;
-  gap: 10px; /* 按钮间距 */
-  width: 100%;
-  justify-content: center;
-}
-
-#confirm-delete, #cancle-delete{
-  padding: 1% 7%;
-  font-size: large;
-  background-color: orange;
-  color: #fff;
-  text-align: center;
-  font-weight: bold;
-  border: none;
-  transition: all 0.4s ease 0s;
-  font-family: 'Montserrat', sans-serif;
-}
-
-#confirm-delete:hover,
-#cancle-delete:hover{
-  background-color: #b6c4b7; /* 悬停背景色 */
-}
-
-
-/**************************************************** STEP2 ******************************************/
-.step-content2{
-  display: flex; /* 使用 Flexbox 佈局 */
-  text-align: center; /* 將內容置中 */
-  flex-direction: column; /* 垂直堆疊子元素 */
-  align-items: center; /* 水平居中對齊子元素 */
-  width: 100%;
-}
-
-/*應付金額*/
-.account-payable {
-  display: flex; /* 使用 Flexbox 佈局 */
-  align-items: center; /* 垂直居中對齊 */
-  padding: 10px 5px; /* 內邊距，用於內容和邊框之間的距離 */
-  background-color: orange; /* 背景色 */
-  border: none; /* 邊框顏色和寬度 */
-  border-radius: 5px; /* 圓角，如果需要直角可以設置為0 */
-  margin: 10px; /* 外邊距，用於元素之間的距離 */
-  color: white; 
-  font-size: 20px; 
-  font-weight: bold; /* 文字加粗 */
-  max-width: 100%;
-  box-sizing: border-box;
-  width: 45%;
-  padding: 30px;
-}
-
-.payable-unit{
-  display: flex;
-  background-color: white;
-  padding: 15px 30px;
-  margin-right: 10px;
-  border-radius: 5px;
-  align-items: center; /* 垂直居中 */
-  justify-content: center; /* 水平居中 */
-  font-size:23px;
-  color: orange;
-}
-
-.payable-price {
-  margin-left: auto;
-}
-
-/*取貨人資料 */
-.pickup-detail {
-  display: flex;
-  padding: 10px 20px;
-  text-align:left;
-  background-color: #f8f9fa;
-  border-radius: 5px;
-  margin: 10px;
-  color: #343a40;
-  font-size: 22px;
-  box-sizing: border-box;
-  width: 45%;
-  flex-direction: column;
-  box-shadow: #999;
-}
-
-
-input.pickuper{
-  margin-bottom: 10px;
-  border: 1px solid #c5c0c0; /* 輕微的淺灰色邊框 */
-  padding: 0;
-  font-size: 20px;
-  width: 100%;
-}
-/* 焦點時的邊框樣式 */
-/* input.focus-border {
-  border: 1px solid #000000 !important;  
-  outline: none; 
-} */
-
-ul.contact-selection,
-ul.payment-selection,
-ul.invoice-type-selection {
-  list-style-type: none;
-  padding: 0;
-}
-
-ul.contact-selection li{
-  font-size: 20px;
-}
-
-input.input-cellphone{
-  display: block; /* 確保輸入框在新行顯示 */
-  border: 1px solid #c5c0c0;
-  margin-bottom: 10px;
-  width: 100%;
-}
-
-.input-phone{
-  display: flex;
-  box-sizing: border-box;
-  margin-bottom: 10px;
-}
-
-input.input-phone-zone{
-  border: 1px solid #c5c0c0;
-  text-align: center;
-  width: 15%;
-  margin-right: 10px;
-}
-
-input.input-phone-number{
-  border: 1px solid #c5c0c0;
-  width: 85%;
-  padding-left:5px ;
-}
-
-textarea.text2store{
-  border: 1px solid #c5c0c0; /* 輕微的淺灰色邊框 */
-  padding: 0;
-  resize: none;
-  width: 100%;
-}
-
-/*付款方式*/
-.payment-method {
-  display: flex;
-  padding: 10px 20px;
-  text-align:left;
-  background-color: #f8f9fa;
-  border-radius: 5px;
-  margin: 10px;
-  color: #343a40;
-  font-size: 22px;
-  box-sizing: border-box;
-  width: 45%;
-  flex-direction: column;
-  box-shadow: #999;
-}
-
-/*開立發票 */
-.invoice-type {
-  display: flex;
-  padding: 10px 20px;
-  text-align:left;
-  background-color: #f8f9fa;
-  border-radius: 5px;
-  margin: 10px;
-  color: #343a40;
-  font-size: 22px;
-  box-sizing: border-box;
-  width: 45%;
-  flex-direction: column;
-  box-shadow: #999;
-}
-
-.vehicle-detail{
-  display: flex;
-  flex-wrap: wrap; /* 當元素超過一行時，會換行 */
-}
-
-.label-vehicle{
-  margin-left: 6px;
-}
-
-input.checksava-vehicle{
-  margin-left: auto; 
-}
-
-input.vehicle-number{
-  display: block; 
-  border: 1px solid #c5c0c0;
-  margin-bottom: 20px;
-  width: 100%;
-  padding: 0;
-}
-
-input.uniform-numbers{
-  display: block; 
-  border: 1px solid #c5c0c0;
-  margin-bottom: 20px;
-  width: 100%;
-  padding: 0;
-}
-
-/* 頁尾按鈕 */
-.btn-nextstep2 {
-  display: flex;
-  gap: 10px; /* 按钮间距 */
-  width: 100%;
-  justify-content: center;
-  margin: 10px 0px;
-}
-
-.btn-backto-last-page, .btn-goto-next-page{
-  padding: 1% 7%;
-  font-size: large;
-  background-color: #65a15a;
-  color: #fff;
-  text-align: center;
-  font-weight: bold;
-  border: none;
-  transition: all 0.4s ease 0s;
-  font-family: 'Montserrat', sans-serif;
-}
-
-.btn-backto-last-page:hover,
-.btn-goto-next-page:hover{
-  background-color: #b6c4b7; /* 悬停背景色 */
-}
-
-/**************************************************** STEP3 ******************************************/
-.step-content3{
-  display: flex; /* 使用 Flexbox 佈局 */
-  text-align: center; /* 將內容置中 */
-  flex-direction: column; /* 垂直堆疊子元素 */
-  align-items: center; /* 水平居中對齊子元素 */
-  width: 100%;
-}
-
-/*訂單細項*/
-.order-detail-confirm{
-  display: flex;
-  padding: 10px 20px;
-  text-align:left;
-  background-color: #f8f9fa;
-  border-radius: 5px;
-  margin: 10px;
-  color: #343a40;
-  font-size: 22px;
-  box-sizing: border-box;
-  width: 45%;
-  flex-direction: column;
-  box-shadow: #999;
-}
-
-.order-detail-content thead th {
-  padding: 8px;
-  text-align: left;
-}
-
-.order-detail-content tbody td {
-  padding: 15px; /* 內邊距 */
-  border-bottom: 1px solid #ddd; /* 底部邊框 */
-}
-
-/* 頁尾按鈕 */
-.btn-nextstep3 {
-  display: flex;
-  gap: 10px; /* 按钮间距 */
-  width: 100%;
-  justify-content: center;
-  margin: 10px 0px;
-}
-
-.btn-backto-last-page2, .btn-submit-order{
-  padding: 1% 7%;
-  font-size: large;
-  background-color: #65a15a;
-  color: #fff;
-  text-align: center;
-  font-weight: bold;
-  border: none;
-  transition: all 0.4s ease 0s;
-  font-family: 'Montserrat', sans-serif;
-}
-
-.btn-backto-last-page2:hover,
-.btn-submit-order:hover{
-  background-color: #b6c4b7; /* 悬停背景色 */
-}
-
-    </style>
-
- 
-
   </head>
   <body>
   <header class="header style2">
@@ -805,7 +78,7 @@ input.uniform-numbers{
                                           <div class="account-list row">
                                               <div class="col-lg-12 no-padding">
                                                   <div class="col-sm-4">
-                                                      <img src="/assets/images/xiahutealogo.jpg" alt="userPhoto">
+                                                      <img src="assets/images/xiahutealogo.jpg" alt="userPhoto">
                                                   </div>
                                                   <div class="col-lg-8">
                                                       <span>userName</span>
@@ -880,7 +153,8 @@ input.uniform-numbers{
       <div id="step-1" class="step-content" style="display: flex;">
           <a href="#" class="store-info">  <!--預計加入商家頁面跳轉-->
               <div class="checkout-content-img">
-                  <img src="/img/kebuke.jpg" alt="Store Logo" class="store-img">
+                  <!--待修改正確圖檔-->
+                  <img src="assets/images/banner-home-6.jpg" alt="Store Logo" class="store-img">
               </div>
               <div class="store-name">
                   可不可紅茶 台北店
@@ -889,7 +163,8 @@ input.uniform-numbers{
           <div class="item-detail">
               <h4>購物內容</h4>
               <div class="user-info">
-                  <img src="/img/userex.jpg" alt="user_photo" class="customer-img">
+                  <!--待修改為正確圖片-->
+                  <img src="assets/images/product-item-5.jpg" alt="user_photo" class="customer-img">
                   <p class="customer-name">RAY</p>
               </div>
               <div class="item-content">
@@ -901,7 +176,11 @@ input.uniform-numbers{
                       </div>
                   </div>
                   <div class="product-detail">
-                      <p class="detail">微糖/微冰/加料/$60/2份</p>
+                      <div class="detail-item" data-type="sugar">ABC</div>
+                      <div class="detail-item" data-type="ice">123</div>
+                      <div class="detail-item" data-type="add-ons">456</div>
+                      <div class="detail-item" data-type="price"></div>
+                      <div class="detail-item" data-type="quantity"></div>
                   </div>
               </div>
               <div class="item-content">
@@ -1003,8 +282,51 @@ input.uniform-numbers{
               <article>
                   <h1></h1>
                   <h4 class="ice">冰塊</h4>
+                  <div class="lightbox-radio-group">
+                      <!--以下是測試選項-->
+                      <input type="radio" id="no-ice" name="ice-options" value="1">
+                      <label for="no-ice">去冰</label>
+
+                      <input type="radio" id="weibeing" name="ice-options" value="2">
+                      <label for="weibeing">微冰</label>
+
+                      <input type="radio" id="little-ice" name="ice-options" value="3">
+                      <label for="little-ice">少冰</label>
+
+                      <input type="radio"   id ="normal" name="ice-options" value="4">
+                      <label for="normal">正常冰正常冰正常冰正常冰正常冰正常冰</label>
+                  </div>
+
                   <h4 class="sugar">甜度</h4>
+                  <div class="lightbox-radio-group">
+                      <!--以下是測試選項-->
+                      <input type="radio" id="5" name="sugar-options" value="9">
+                      <label for="5">微糖</label>
+
+                      <input type="radio" id="6" name="sugar-options" value="10">
+                      <label for="6">半糖</label>
+
+                      <input type="radio" id="7" name="sugar-options" value="11">
+                      <label for="7">七分糖</label>
+
+                      <input type="radio"   id ="8" name="sugar-options" value="1">
+                      <label for="8">全糖</label>
+                  </div>
                   <h4 class="materials">加料</h4>
+                  <div class="lightbox-radio-group">
+                      <!--以下是測試選項-->
+                      <input type="radio" id="1" name="materials-options" value="5">
+                      <label for="1">珍珠</label>
+
+                      <input type="radio" id="2" name="materials-options" value="6">
+                      <label for="2">杏仁</label>
+
+                      <input type="radio" id="3" name="materials-options" value="7">
+                      <label for="3">荔枝凍</label>
+
+                      <input type="radio"   id ="4" name="materials-options" value="8">
+                      <label for="4">寒天</label>
+                  </div>
                   <hr>
                   <h4 class="amount">總金額:</h4>
                   <div class="lightbox_end">
@@ -1021,7 +343,7 @@ input.uniform-numbers{
                   <p class="delete-detail"></p>
                   <div class="delete-button">
                       <button id="confirm-delete">確認</button>
-                      <button id="cancle-delete">取消</button>
+                      <button id="cancel-delete">取消</button>
                   </div>
               </div>
           </div>
@@ -1227,446 +549,29 @@ input.uniform-numbers{
           </div>
       </div>
   </footer>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="/js/jquery-1.12.4.min.js"></script>
-        <script src="/js/jquery.plugin-countdown.min.js"></script>
-        <script src="/js/jquery-countdown.min.js"></script>
-        <script src="/js/bootstrap.min.js"></script>
-        <script src="/js/owl.carousel.min.js"></script>
-        <script src="/js/magnific-popup.min.js"></script>
-        <script src="/js/isotope.min.js"></script>
-        <script src="/js/jquery.scrollbar.min.js"></script>
-        <script src="/js/jquery-ui.min.js"></script>
-        <script src="/js/mobile-menu.js"></script>
-        <script src="/js/chosen.min.js"></script>
-        <script src="/js/slick.js"></script>
-        <script src="/js/jquery.elevateZoom.min.js"></script>
-        <script src="/js/jquery.actual.min.js"></script>
-        <script src="/js/fancybox/source/jquery.fancybox.js"></script>
-        <script src="/js/lightbox.min.js"></script>
-        <script src="/js/owl.thumbs.min.js"></script>
-        <script src="/js/jquery.scrollbar.min.js"></script>
-        <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyC3nDHy1dARR-Pa_2jjPCjvsOR4bcILYsM'></script>
-        <script src="/js/frontend-plugin.js"></script>
+<!--        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>-->
+<!--        <script src="/js/jquery-1.12.4.min.js"></script>-->
+<!--        <script src="/js/jquery.plugin-countdown.min.js"></script>-->
+<!--        <script src="/js/jquery-countdown.min.js"></script>-->
+<!--        <script src="/js/bootstrap.min.js"></script>-->
+<!--        <script src="/js/owl.carousel.min.js"></script>-->
+<!--        <script src="/js/magnific-popup.min.js"></script>-->
+<!--        <script src="/js/isotope.min.js"></script>-->
+<!--        <script src="/js/jquery.scrollbar.min.js"></script>-->
+<!--        <script src="/js/jquery-ui.min.js"></script>-->
+<!--        <script src="/js/mobile-menu.js"></script>-->
+<!--        <script src="/js/chosen.min.js"></script>-->
+<!--        <script src="/js/slick.js"></script>-->
+<!--        <script src="/js/jquery.elevateZoom.min.js"></script>-->
+<!--        <script src="/js/jquery.actual.min.js"></script>-->
+<!--        <script src="/js/fancybox/source/jquery.fancybox.js"></script>-->
+<!--        <script src="/js/lightbox.min.js"></script>-->
+<!--        <script src="/js/owl.thumbs.min.js"></script>-->
+<!--        <script src="/js/jquery.scrollbar.min.js"></script>-->
+<!--        <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyC3nDHy1dARR-Pa_2jjPCjvsOR4bcILYsM'></script>-->
+<!--        <script src="/js/frontend-plugin.js"></script>-->
         <!--日期選擇用-->
         <script src="https://cdn.jsdelivr.net/npm/air-datepicker@3.5.3/air-datepicker.js"></script>
-        <script src="/js/cart_detail.js">
-        <script>
-            document.addEventListener("DOMContentLoaded",function(){
-            //****************************************************控制購物流程階段變換及頁面跳轉****************************************
-            //元素綁定
-            //購物流程進度條
-            let step1_el = document.getElementById("step1");
-            let step2_el = document.getElementById("step2");
-            let step3_el = document.getElementById("step3");
-            //結帳流程-1
-            //商家及使用者
-            let store_info_el = document.getElementsByClassName("store-info")[0];
-            let store_img_el = document.getElementsByClassName("store-img")[0];
-            let store_name_el = document.getElementsByClassName("store-name")[0];
-            let customer_img_el = document.getElementsByClassName("customer-img")[0];
-            let customer_name_el = document.getElementsByClassName("customer-name")[0];
-
-            let order_detail_container_el = document.getElementsByClassName("order-detail-container")[0];
-            let btn_addtopurchase_el =document.getElementsByClassName("btn-addtopurchase")[0];
-            let btn_checkout_el = document.getElementsByClassName("btn-checkout")[0];
-
-            let step_content_el = document.getElementsByClassName("step-content")[0];
-            let step_content2_el = document.getElementsByClassName("step-content2")[0];
-            let step_content3_el = document.getElementsByClassName("step-content3")[0];
-            //修改訂單商品
-            let btn_edit_el = document.getElementsByClassName("edit-btn");
-            let btn_delete_el = document.getElementsByClassName("delete-btn");
-            //燈箱
-            let lightbox_el = document.getElementById("lightbox");
-            let qtyminus_el = document.getElementsByClassName("qtyminus")[0];
-            let qtyplus_el = document.getElementsByClassName("qtyplus")[0];
-            let qty_el = document.getElementsByClassName("qty")[0];
-            let lightbox_delete_el = document.getElementById("lightbox-delete");
-            let delete_detail_el = document.getElementsByClassName("delete-detail")[0];
-            let lightbox_content_el = document.getElementsByClassName("lightbox-content")[0];
-            let confirm_delete_el = document.getElementById("confirm-delete");
-            let cancel_delete_el = document.getElementById("cancle-delete");
-
-            //取貨方式
-            let pick_up_input_el = document.getElementsByClassName("pick-up-input")[0];
-            let carry_out_radio_el = document.getElementsByClassName("carry-out-radio")[0];
-            let address_el = document.getElementsByClassName("address")[0];
-            //時間選擇
-            let picker_el = document.getElementsByClassName("pickuper")[0];
-
-            //優惠使用
-            let coupon_number_el = document.getElementsByClassName("coupon-number")[0];
-            let select_coupon_input_el = document.getElementsByClassName("select-coupon-input")[0];
-
-            //結帳流程-2
-            //取貨人
-            let btn_backto_last_page_el = document.getElementsByClassName("btn-backto-last-page")[0];
-            let btn_goto_next_page_el = document.getElementsByClassName("btn-goto-next-page")[0];
-            let select_cellphone_el = document.getElementsByClassName("select-cellphone")[0];
-            let input_cellphone_el = document.getElementsByClassName("input-cellphone")[0];
-            let select_phone_el = document.getElementsByClassName("select-phone")[0];
-            let input_phone_zone_el = document.getElementsByClassName("input-phone-zone")[0];
-            let input_phone_number_el = document.getElementsByClassName("input-phone-number")[0];
-            let text2store_el = document.getElementsByClassName("text2store")[0];
-            //發票方式
-            let select_paper_el = document.getElementsByClassName("select-paper")[0];
-            let select_vehicle_el = document.getElementsByClassName("select-vehicle")[0];
-            let checksava_vehicle_el = document.getElementsByClassName("checksava-vehicle")[0];
-            let vehicle_number_el = document.getElementsByClassName("vehicle-number")[0];
-            //結帳流程-3
-            let btn_backto_last_page2_el = document.getElementsByClassName("btn-backto-last-page2")[0];
-            let btn_submit_order_el = document.getElementsByClassName("btn-submit-order")[0];
-            let btn_modal_close_el = document.getElementsByClassName("btn_modal_close")[0];
-
-            //一進到結帳選擇頁面先get商家圖片及店名使用者
-//   const productId = 1; // 這個ID應該根據實際情況獲取
-//   const customerId = 1;
-            //商家
-//     fetch(`/api/getStoreInfo?productId=${productId}`)
-//         .then(response => response.json())
-//         .then(data => {
-//             store_info_el.href=data.storeurl;
-//             store_name_el.textContent = data.storename;
-//             store_img_el.src = data.storeimgurl;
-//         })
-//         .catch(error => console.error('Error fetching store data:', error));
-            //使用者
-// });fetch(`/api/getUsreInfo?userId=${userId}`)
-//         .then(response => response.json())
-//         .then(data => {
-//             customer_img_el_img_el.src = data.customerimg;
-            // customer_name_el.textContent=data.nickname;
-//         })
-//         .catch(error => console.error('Error fetching store data:', error));
-// });
-            //第一頁按鈕事件
-            //刪除、修改訂單
-            //修改
-            for(let i =0;i<btn_edit_el.length;i++){
-            btn_edit_el[i].addEventListener("click",function(){
-            lightbox_el.style.display="flex";
-            document.body.style.overflow = 'hidden';
-            document.body.style.paddingRight = '17px';
-            // 找到點擊的按鈕
-            let button = this;
-            let cartItem = button.closest(".cart-item");
-            let productName = cartItem.querySelector(".product-name").textContent;
-            let lightboxTitle = document.querySelector("#lightbox h1");
-            lightboxTitle.textContent = productName;
-            //根據每個商品提供不同選項
-            // fetchProductOptions(productName);
-            // 監聽所有 ice 按鈕的點擊事件
-            // document.querySelectorAll('button[name="ice"]').forEach(button =>
-            //   button.addEventListener("click",function(){
-            //      // 清除其他按鈕的“選中”狀態
-            //      document.querySelectorAll('button[name="ice"]').forEach(btn => {
-            //       btn.classList.remove('selected');
-            //   });
-            //       this.classList.add('selected');
-            //   })
-            // )
-            // 監聽所有 sugar 按鈕的點擊事件
-            // document.querySelectorAll('button[name="ice"]').forEach(button =>
-            //   button.addEventListener("click",function(){
-            //      // 清除其他按鈕的“選中”狀態
-            //      document.querySelectorAll('button[name="ice"]').forEach(btn => {
-            //       btn.classList.remove('selected');
-            //   });
-            //       this.classList.add('selected');
-            //   })
-            // )
-            // 監聽所有 material 按鈕的點擊事件
-            // document.querySelectorAll('button[name="ice"]').forEach(button =>
-            //   button.addEventListener("click",function(){
-            //      // 清除其他按鈕的“選中”狀態
-            //      document.querySelectorAll('button[name="ice"]').forEach(btn => {
-            //       btn.classList.remove('selected');
-            //   });
-            //       this.classList.add('selected');
-            //   })
-            // )
-        })
-        }
-            // function------提供商品選項
-            // function fetchProductOptions(productId){
-            //   fetch(`/getProductOptions?productName=${encodeURIComponent(productName)}`)
-            //   .then(response => response.json())
-            //   .then(data =>{
-            //     let ice_el = document.querySelector('.ice');
-            //     let sugar_el = document.querySelector('.sugar');
-            //     let materials_el = document.querySelector('.materials');
-            //     data.ice.forEach(option => {
-            //       ice_el.innerHTML += `<button type="button" name="ice" value="${option}">${option}`;
-            //     });
-            //     data.sugar.forEach(option => {
-            //       sugar_el.innerHTML += `<button type="button" name="sugar" value="${option}">${option}`;
-            //     });
-            //     data.ice.forEach(option => {
-            //       materials_el.innerHTML += `<button type="button" name="material" value="${option}">${option}`;
-            //     });
-            //   });
-            // }
-            btn_modal_close_el.addEventListener("click",function(){
-            lightbox_el.style.display="none";
-            document.body.style.overflow = 'auto';
-            document.body.style.paddingRight = '0px';
-        })
-            lightbox_el.addEventListener("click", function(){
-            lightbox_el.style.display="none";
-            document.body.style.overflow = 'auto';
-            document.body.style.paddingRight = '0px';
-        });
-            lightbox_el.querySelector("article").addEventListener("click", function(e){
-            e.stopPropagation();
-        });
-            //燈箱數量增減
-            qtyminus_el.addEventListener("click",function(e){
-            if(qty_el.value>0){
-            qty_el.value--;
-        }
-            e.stopPropagation();
-        })
-            qtyplus_el.addEventListener("click",function(e){
-            if(qty_el.value>=0){
-            qty_el.value++;
-        }
-            console.log(qty_el.value);
-            e.stopPropagation();
-        })
-            //刪除訂餐
-            var currentItem = null;
-            for(let i=0;i<btn_delete_el.length;i++){
-            btn_delete_el[i].addEventListener("click",function(e){
-            lightbox_delete_el.style.display="flex";
-            document.body.style.overflow = 'hidden';
-            document.body.style.paddingRight = '17px';
-
-            currentItem = this.closest(".item-content");
-            var productName = this.closest(".cart-item").querySelector(".product-name").textContent;
-            delete_detail_el.innerHTML = `刪除 <span class="highlight">${productName}</span> ?`;
-        })
-        }
-
-            lightbox_delete_el.addEventListener("click", function(){
-            lightbox_delete_el.style.display="none";
-            document.body.style.overflow = 'auto';
-            document.body.style.paddingRight = '0px';
-        });
-            lightbox_content_el.addEventListener("click", function(e){
-            e.stopPropagation();
-        });
-
-            confirm_delete_el.addEventListener("click",function(){
-            currentItem.remove();
-            lightbox_delete_el.style.display="none";
-            document.body.style.overflow = 'auto';
-            document.body.style.paddingRight = '0px';
-            currentItem=null;
-        })
-            cancel_delete_el.addEventListener("click", function(){
-            lightbox_delete_el.style.display="none";
-            document.body.style.overflow = 'auto';
-            document.body.style.paddingRight = '0px';
-        });
-
-            //取貨方式
-            // pick_up_input_el.addEventListener("click",function(){
-            //   if(carry_out_radio_el.checked){
-            //      carry_out_radio_el.checked=false;
-            //     }
-            //     address_el.disabled=true;
-            // })
-            // carry_out_radio_el.addEventListener("click",function(){
-            //   if(pick_up_input_el.checked){
-            //     pick_up_input_el.checked=false;
-            //    }
-            //    address_el.disabled = false;
-            // })
-
-            pick_up_input_el.addEventListener("click",function(){
-            address_el.disabled = true;
-        })
-            carry_out_radio_el.addEventListener("click",function(){
-            address_el.disabled = false;
-            address_el.focus();
-        })
-            address_el.addEventListener("focus", function() {
-            // 清空 placeholder
-            address_el.placeholder = "";
-        });
-
-// 當輸入框失去焦點時
-            address_el.addEventListener("blur", function() {
-            // 如果輸入框為空，恢復 placeholder
-            if (address_el.value === "") {
-            address_el.placeholder = "請輸入地址";
-        }
-        });
-            //時間選擇
-            picker_el.addEventListener("focus",function(){
-            picker_el.classList.add("focus-border");
-        })
-            picker_el.addEventListener("blur", function() {
-            picker_el.classList.remove("focus-border");
-        });
-
-            //優惠使用
-            select_coupon_input_el.addEventListener("click",function(){
-            coupon_number_el.disabled=false;
-            coupon_number_el.focus();
-        })
-            coupon_number_el.addEventListener("focus", function() {
-            coupon_number_el.placeholder = "";
-        });
-            coupon_number_el.addEventListener("blur", function() {
-            if (coupon_number_el.value === "") {
-            coupon_number_el.placeholder = "請輸入優惠券序號";
-        }
-        });
-
-            //頁面跳轉
-            btn_addtopurchase_el.addEventListener("click",function(e){
-            console.log("預計跳回該商家頁面");
-            e.stopPropagation();
-        })
-
-            btn_checkout_el.addEventListener("click",function(e){
-            step1_el.classList.remove("active");
-            step2_el.classList.add("active");
-            if(step_content_el.style.display ="flex"){
-            step_content_el.style.display ="none";
-            step_content2_el.style.display ="flex";
-            order_detail_container_el.scrollIntoView({
-            behavior: "smooth" // 使用平滑滾動效果
-        });
-        }
-            e.stopPropagation();
-        })
-
-
-            //第二頁
-            //取貨人資料
-            select_cellphone_el.addEventListener("click",function(){
-            input_cellphone_el.disabled = false;
-            input_phone_zone_el.disabled = true;
-            input_phone_number_el.disabled = true;
-            input_phone_zone_el.value="";
-            input_phone_number_el.value="";
-            input_cellphone_el.focus();
-        })
-            input_cellphone_el.addEventListener("focus", function() {
-            input_cellphone_el.placeholder = "";
-        });
-            input_cellphone_el.addEventListener("blur", function() {
-            if (input_cellphone_el.value === "") {
-            input_cellphone_el.placeholder = "EX:0912345678";
-        }
-        });
-
-            select_phone_el.addEventListener("click",function(){
-            input_phone_zone_el.disabled = false;
-            input_cellphone_el.disabled = true;
-            input_cellphone_el.value="";
-            input_phone_zone_el.focus();
-        })
-            input_phone_zone_el.addEventListener("focus", function() {
-            input_phone_zone_el.placeholder = "";
-        });
-            input_phone_zone_el.addEventListener("blur", function() {
-            if (input_phone_zone_el.value === "") {
-            input_phone_zone_el.placeholder = "區碼";
-        }
-        });
-            input_phone_zone_el.addEventListener("input",function(){
-            if(input_phone_zone_el.value.length === 2){
-            setTimeout(function(){
-            input_phone_number_el.disabled = false;
-            input_phone_number_el.focus();
-        }, 10);
-        }
-        })
-
-            text2store_el.addEventListener("focus", function() {
-            text2store_el.placeholder = "";
-        });
-            text2store_el.addEventListener("blur", function() {
-            if (text2store_el.value === "") {
-            text2store_el.placeholder = "請輸入文字...";
-        }
-        });
-
-            //發票方式
-            select_paper_el.addEventListener("click",function(){
-            vehicle_number_el.disabled = true;
-            checksava_vehicle_el.disabled = true;
-            checksava_vehicle_el.checked = false;
-        })
-            select_vehicle_el.addEventListener("click",function(){
-            checksava_vehicle_el.disabled = false;
-            vehicle_number_el.disabled = false;
-            vehicle_number_el.focus();
-        })
-            //頁面跳轉
-            btn_backto_last_page_el.addEventListener("click",function(e){
-            step2_el.classList.remove("active");
-            step1_el.classList.add("active");
-            if(step_content2_el.style.display ="flex"){
-            step_content2_el.style.display ="none";
-            step_content_el.style.display ="flex";
-            order_detail_container_el.scrollIntoView({
-            behavior: "smooth" // 使用平滑滾動效果
-        });
-        }
-            e.stopPropagation()
-        })
-
-            btn_goto_next_page_el.addEventListener("click",function(e){
-            step2_el.classList.remove("active");
-            step3_el.classList.add("active");
-            if(step_content2_el.style.display ="flex"){
-            step_content2_el.style.display ="none";
-            step_content3_el.style.display ="flex";
-            order_detail_container_el.scrollIntoView({
-            behavior: "smooth" // 使用平滑滾動效果
-        });
-        }
-            e.stopPropagation()
-        })
-
-            //第三頁按鈕事件綁定
-            btn_backto_last_page2_el.addEventListener("click",function(e){
-            step3_el.classList.remove("active");
-            step2_el.classList.add("active");
-            if(step_content3_el.style.display ="flex"){
-            step_content3_el.style.display ="none";
-            step_content2_el.style.display ="flex";
-            order_detail_container_el.scrollIntoView({
-            behavior: "smooth" // 使用平滑滾動效果
-        });
-        }
-            e.stopPropagation()
-        })
-
-
-
-//****************************************************結帳流程1時間選擇套件****************************************
-            new AirDatepicker('#myDatepicker', {
-            locale:{
-            days: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
-            daysShort: ['日', '一', '二', '三', '四', '五', '六'],
-            daysMin: ['日', '一', '二', '三', '四', '五', '六'],
-            months: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
-            monthsShort: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
-            today: '今天',
-            clear: '清除',
-            dateFormat: 'yyyy-MM-dd',
-            timeFormat: 'HH:mm',
-            firstDay: 1},
-            timepicker: true,
-        });
-
-        })
-	</script>
+        <script src="js/cart_detail.js"></script>
   </body>
 </html>
