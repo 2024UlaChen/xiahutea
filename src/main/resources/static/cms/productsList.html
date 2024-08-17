@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>AdminLTE 3 | Projects</title>
+    <title>後台 | 商品列表</title>
 
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -14,6 +14,16 @@
     <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+<style>
+    #numberPageModule {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding-top: 10px;
+    }
+
+</style>
+
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -51,7 +61,7 @@
                     <div class="col-md-12">
                         <div>
                             <div class="card-header">
-                                <button type="button" class="btn btn-primary">新增商品</button>
+                                <button type="button" class="btn btn-primary" id="add">新增商品</button>
 
                                 <div class="card-tools">
                                     <div class="input-group">
@@ -106,27 +116,25 @@
                                         <tbody>
                                             <tr>
                                                 <td>
-                                                    <span>01</span>
+                                                    01
                                                 </td>
                                                 <td>
-                                                    <span>奶茶類</span>
+                                                    奶茶類
                                                 </td>
                                                 <td>
-
-                                                    <div>珍珠奶茶</div>
-
+                                                    珍珠奶茶
                                                 </td>
                                                 <td>
-                                                    <span>$65</span>
+                                                    $65
                                                 </td>
                                                 <td>
-                                                    <span>M</span>
+                                                    M
                                                 </td>
                                                 <td>
                                                     <span class="badge badge-success">上架</span>
                                                 </td>
                                                 <td class="project-actions text-right">
-                                                    <a class="btn btn-info btn-sm" href="#">
+                                                    <a class="btn btn-info btn-sm" href="#" id="update_btn">
                                                         <i class="fas fa-pencil-alt">
                                                         </i>
                                                         編輯
@@ -140,29 +148,26 @@
                                             </tr>
                                             <tr>
                                                 <td>
-                                                    <span>02</span>
+                                                    02
                                                 </td>
                                                 <td>
-                                                    <span>奶茶類</span>
+                                                    奶茶類
                                                 </td>
                                                 <td>
-
-                                                    <div>紅茶拿鐵</div>
-
-
+                                                    紅茶拿鐵
                                                 </td>
                                                 <td>
-                                                    <span>$65</span>
+                                                   $65
                                                 </td>
                                                 <td>
-                                                    <span>M</span>
+                                                    M
                                                 </td>
                                                 <td>
                                                     <span class="badge badge-success"
                                                         style="background-color: red;">下架</span>
                                                 </td>
                                                 <td class="project-actions text-right">
-                                                    <a class="btn btn-info btn-sm" href="#">
+                                                    <a class="btn btn-info btn-sm" href="#" id="update_btn">
                                                         <i class="fas fa-pencil-alt">
                                                         </i>
                                                         編輯
@@ -174,11 +179,39 @@
                                                     </a>
                                                 </td>
                                             </tr>
-
-
-
-
-
+                                            <tr>
+                                                <td>
+                                                    02
+                                                </td>
+                                                <td>
+                                                    奶茶類
+                                                </td>
+                                                <td>
+                                                    紅茶拿鐵
+                                                </td>
+                                                <td>
+                                                    $65
+                                                </td>
+                                                <td>
+                                                    M
+                                                </td>
+                                                <td>
+                                                    <span class="badge badge-success"
+                                                          style="background-color: red;">下架</span>
+                                                </td>
+                                                <td class="project-actions text-right">
+                                                    <a class="btn btn-info btn-sm" href="#" id="update_btn">
+                                                        <i class="fas fa-pencil-alt">
+                                                        </i>
+                                                        編輯
+                                                    </a>
+                                                    <a class="btn btn-danger btn-sm" href="#" id="delete_btn">
+                                                        <i class="fas fa-trash">
+                                                        </i>
+                                                        刪除
+                                                    </a>
+                                                </td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -186,19 +219,35 @@
 
                             </div>
                             <!-- /.card -->
-                            <nav aria-label="Page navigation example">
-                                <ul class="pagination justify-content-end">
-                                    <li class="page-item disabled">
-                                        <a class="page-link">上頁</a>
-                                    </li>
-                                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#">下頁</a>
-                                    </li>
-                                </ul>
-                            </nav>
+                            <div class="page">
+                                <div id="numberPageModule">
+                                    <label for="numberPage">跳至第</label>
+                                    <input id="numberPage" type="number" value="1" min="1" max="100">頁
+                                </div>
+                               <div class="pagetwo">
+                                   <nav aria-label="Page navigation example">
+                                       <ul class="pagination justify-content-center">
+                                           <li class="page-item disabled">
+                                               <a class="page-link" href="javascript:;" onClick="goPage(${currentPage - 1},${pageSize})">Previous</a>
+                                           </li>
+                                           <li class="page-item"><a class="page-link" href="javascript:;" onClick="goPage(1,${pageSize})">1</a></li>
+                                           <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                           <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                           <li class="page-item">
+                                               <a class="page-link"href="javascript:;" onClick="goPage(${currentPage + 1},${pageSize})">Next</a>
+                                           </li>
+                                       </ul>
+                                   </nav>
+
+                               </div>
+
+
+
+
+
+                            </div>
+
+
                         </div>
                     </div>
                 </div>
@@ -228,12 +277,20 @@
 
 <script>
 
-
+   //單筆移除
     $('#myTable').on('click', '#delete_btn', function () {
 
         $(this).closest("tr").remove();
     })
 
+    // 跳轉新增商品
+    $('#add').on('click',function (){
+      window.location.href="addProducts.html"
+    })
+
+   $('#myTable').on('click','#update_btn', function () {
+       window.location.href="addProducts.html"
+   })
 </script>
 
 </body>

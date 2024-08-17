@@ -34,11 +34,13 @@
         }
 
 
+ span.alert {
+
+     color:red
+ }
 
 
-        .messages{
-            color: red;
-        }
+
 
 
     </style>
@@ -83,25 +85,23 @@
 
                                     <div class="form-group">
                                         <label for="productname">商品名稱</label> <span style="color: red">*</span>
-
                                         <input type="text" class="form-control" id="productname" placeholder="請輸入商品名稱" name="productname">
-                                        <p class="messages name" ></p>
-
+                                        <span for="name" class="productname-message alert"></span>
                                     </div>
                                     <div class="form-group">
                                         <label for="productprice">商品價格(請填台幣)</label><span style="color: red">*</span>
-                                        <input type="number" class="form-control" id="productprice" placeholder="65" name="productprice">
-                                        <p class="messages name" ></p>
+                                        <input type="number" class="form-control" id="productprice" placeholder="65" name="productprice" min="1" max="999">
+                                        <span for="name" class="productprice-message alert"></span>
+                                    </div>
 
                                         <div class="form-group">
-                                    </div>
-                                        <label for="size">商品尺寸</label><span style="color: red">*</span>
-                                        <span for="name" class="size-message" style="color: red"></span>
-                                        <select class="custom-select rounded-0" id="size">
+                                            <label for="size">商品尺寸</label><span style="color: red">*</span>
+                                            <select class="custom-select rounded-0" id="size" name="productsize">
                                             <option value="0">S</option>
                                             <option value="1">M</option>
                                             <option value="2">L</option>
                                         </select>
+                                            <span for="name" class="productsize-message alert"></span>
                                     </div>
 
                                     <div class="form-group">
@@ -149,7 +149,7 @@
                                             </div>
                                             <div class="form-check">
                                                 <input class="item" type="checkbox" name="normalice"
-                                                    value="1">
+                                                    value="1" checked>
                                                 <label class="form-check-label">正常冰</label>
                                             </div>
                                             <div class="form-check">
@@ -185,11 +185,11 @@
                                             <span for="name" class="category-message" style="color: red"></span>
 
                                             <div class="form-check">
-                                                <input type="checkbox" id="allsugar">
+                                                <input type="checkbox" id="allsugar" name="category">
                                                 <label class="form-check-label">全選</label>
                                             </div>
                                             <div class="form-check">
-                                                <input class="itemtwo" type="checkbox" name="fullsugar" value="1">
+                                                <input class="itemtwo" type="checkbox" name="fullsugar" value="1" checked>
                                                 <label class="form-check-label">全糖</label>
                                             </div>
                                             <div class="form-check">
@@ -287,6 +287,7 @@
     <script src="js/storegeneral.js"></script>
     <script src="plugins/jquery-validation/jquery.validate.min.js"></script>
   <script src="plugins/jquery-validation/additional-methods.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/validate.js/0.13.1/validate.min.js"></script>
 
 
 
@@ -309,7 +310,7 @@
                 })
             }
         })
-
+       // 冰的全選
        var allice=document.getElementById("allice")
         allice.addEventListener("click",function (){
             var that=this
@@ -318,6 +319,7 @@
                 item.checked=that.checked
             })
         })
+
         var itemone=document.querySelectorAll("input.item");
         itemone.forEach(function (item,i){
             item.addEventListener("click",function (){
@@ -328,7 +330,7 @@
             })
         })
 
-
+      // 糖的全選
       var allsugar=document.getElementById("allsugar")
         allsugar.addEventListener("click",function (){
             var that=this
@@ -351,6 +353,7 @@
             })
         })
 
+        // 加料全選
         var allmaterials=document.getElementById("allmaterials")
         allmaterials.addEventListener("click",function (){
             var that=this
@@ -372,44 +375,48 @@
             })
         })
         // =========驗證===============
-        $(function () {
-            $.validator.setDefaults({
-                submitHandler: function () {
-                    alert( "新增成功" );
-                }
-            });
-            $('form').validate({
-                rules: {
-                    productname: {
-                        required: true,
-
-                    },
-
-
-                },
-                messages: {
-                    productname: {
-                        required: "商品名稱不為空",
-
-                    }
-
-
-                },
-                errorElement: 'span',
-                errorPlacement: function (error, element) {
-                    error.addClass('invalid-feedback');
-                    element.closest('.form-group').append(error);
-                },
-                highlight: function (element, errorClass, validClass) {
-                    $(element).addClass('is-invalid');
-                },
-                unhighlight: function (element, errorClass, validClass) {
-                    $(element).removeClass('is-invalid');
-                }
-            });
+        // 監聽 form 表單
+        const form = document.querySelector("form");
+        form.addEventListener("submit", function (e) {
+            e.preventDefault();
+            checkValue();
         });
 
+        let constraints = {
+          productname: {// 對應 input 的 name
+                presence: true //
+            },
+            productprice: {// 對應 input 的 name
+                presence: true //
+            },
 
+
+        };
+
+        // 檢查
+        function checkValue() {
+            const result = validate(form, constraints);
+            cleanMessage();
+            if (result) {
+                setMessage(result);
+            }
+        }
+
+        function setMessage(result) {
+            let message;
+            let nameList = Object.keys(result);
+            nameList.forEach((name) => {
+                message = document.querySelector(`.${name}-message`);
+                message.innerHTML = "不能是空白";
+            });
+        }
+
+        function cleanMessage() {
+            let message = document.querySelectorAll('span.alert')
+            message.forEach((label) => {
+                label.innerHTML=''
+            });
+        }
     </script>
 
 
