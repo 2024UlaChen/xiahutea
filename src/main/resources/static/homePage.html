@@ -4,357 +4,166 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>夏虎茶</title>
+    <link rel="shortcut icon" type="image/x-icon" href="assets/images/favicon.png"/>
     <link
-      rel="shortcut icon"
-      type="image/x-icon"
-      href="assets/images/favicon.png"
-    />
+            href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i&display=swap"
+            rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,300i,400,400i,700,700i&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="assets/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="assets/css/animate.min.css">
+    <link rel="stylesheet" href="assets/css/jquery-ui.css">
+    <link rel="stylesheet" href="assets/css/slick.css">
+    <link rel="stylesheet" href="assets/css/chosen.min.css">
+    <link rel="stylesheet" href="assets/css/pe-icon-7-stroke.css">
+    <link rel="stylesheet" href="assets/css/magnific-popup.min.css">
+    <link rel="stylesheet" href="assets/css/lightbox.min.css">
+    <link rel="stylesheet" href="assets/js/fancybox/source/jquery.fancybox.css">
+    <link rel="stylesheet" href="assets/css/jquery.scrollbar.min.css">
+    <link rel="stylesheet" href="assets/css/mobile-menu.css">
+    <link rel="stylesheet" href="assets/fonts/flaticon/flaticon.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="css/general.css">
+    <link rel="stylesheet" href="css/member.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
     <link
-      href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css?family=Lato:300,300i,400,400i,700,700i&display=swap"
-      rel="stylesheet"
-    />
-
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-      crossorigin="anonymous"
-    />
-    <link
+    href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i&display=swap"
+    rel="stylesheet"
+  />
+  <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
     />
-    <link rel="stylesheet" href=".././static/assets/css/slick.css" />
-    <link rel="stylesheet" href="./assets/css/font-awesome.min.css" />
-    <link rel="stylesheet" href="./assets/css/style.css" />
-
-    <link rel="stylesheet" href="assets/fonts/flaticon/flaticon.css" />
+  <link
+    href="https://fonts.googleapis.com/css?family=Lato:300,300i,400,400i,700,700i&display=swap"
+    rel="stylesheet"
+  />
+   
 
     <!--    <link rel="stylesheet" href="./slicktools/slick-theme.css">-->
-    <style>
-      div.header-message > h1 {
-        margin: 0 auto;
-        border-radius: 50%;
-        color: #73b4ba;
-      }
-
-      .header-user-links li {
-        display: inline-block;
-      }
-
-      .header-user-links i {
-        border-radius: 50%;
-        font-size: 20px;
-        margin-left: 10px;
-      }
-
-      .query-bar a {
-        margin-left: 10px;
-        margin-right: 10px;
-        border-radius: 50%;
-      }
-
-      .query-bar input {
-        background-color: white;
-        width: 80%;
-      }
-
-      #query-member {
-        min-width: 200px;
-        padding-left: 10px;
-      }
-
-      #query-member li {
-        min-width: 100%;
-      }
-
-      #query-member img {
-        width: 100%;
-      }
-
-      #query-member .account-list {
-        margin-top: 10%;
-      }
-
-      .reset-margin {
-        margin: 0;
-        margin-top: 2%;
-        background-color: #f5f5f5;
-      }
-
-      .member-aside {
-        width: 30%;
-        height: 100%;
-        margin: 0 auto;
-      }
-
-      .member-introduction {
-        margin: 0 auto;
-        margin-right: 30px;
-        padding-top: 55px;
-        padding-right: 20px;
-        padding-bottom: 45px;
-        padding-left: 20px;
-        background-color: white;
-      }
-
-      .member-introduction div {
-        text-align: center;
-        overflow: hidden;
-      }
-
-      .member-list {
-        margin-right: 30px;
-        margin-top: 50px;
-        padding-top: 55px;
-        padding-right: 20px;
-        padding-bottom: 50px;
-        padding-left: 60px;
-        background-color: white;
-      }
-
-      .member-list li {
-        height: 60px;
-        font-size: 18px;
-        text-align: left;
-        list-style-type: none;
-      }
-
-      .warn {
-        display: inline;
-        color: #ff5e7d;
-      }
-
-      .remind {
-        color: #9b9b9b;
-        font-size: 12px;
-      }
-
-      .userPhoto {
-        margin: 0 auto;
-        display: inline-block;
-        width: 30%;
-        border-radius: 50%;
-      }
-
-      .sex {
-        font-size: 16px;
-        display: block;
-      }
-      .IndexImgNameFontSize {
-        font-size: 16px;
-        font-weight: bold;
-        color: black;
-      }
-      .KunStar {
-        color: #f9a825;
-        font-size: 16px;
-      }
-      .image-container {
-        position: relative;
-        display: inline-block;
-      }
-      .icon-overlay {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        color: white;
-        background-color: rgba(0, 0, 0, 0.5);
-        padding: 5px;
-        border-radius: 50%;
-      }
-      .KunAdsSize {
-        max-width: 60%;
-        height: auto;
-      }
-      .KunHidden {
-        overflow: hidden;
-      }
-      div.slick-slide {
-        overflow: hidden;
-        background-color: rgb(221, 231, 235);
-        text-align: center;
-      }
-      .slick-slide img {
-        display: inline;
-      }
-      .KunSlickImg {
-        /* width: 600px; */
-        height: 300px;
-/* 輪播照片大小 上船要限制長寬 */
-        /* width: 50vw; */
-        /* height: 30vh; */
-        /* margin-left: 5%; */
-        /* overflow: hidden; */
-      }
-
-      .KunSpeedSearch {
-        font-size: 17px;
-      }
-      .KunIndexSotreImg {
-        /* max-width: 100%;
-        height: auto;
-        position: relative; */
-        width: 350px;
-        height: 220px;
-
-      }
-      .favorite-text {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        color: white;
-        font-weight: bold;
-        font-size: 1.5rem; /* 根據需要調整字體大小 */
-        background-color: rgba(0, 0, 0, 0.5); /* 可選：增加背景以使文字更清晰 */
-        padding: 0.5rem; /* 可選：增加內邊距 */
-        border-radius: 0.25rem; /* 可選：增加圓角 */
-        text-align: center;
-      }
-      .KunNav {
-        list-style: none;
-      }
-      .fit-picture {
-        width: 250px;
-      }
-.figure{
-    text-align: center;
-}
-
-
-    </style>
-    <link
-      rel="shortcut icon"
-      type="image/x-icon"
-      href="assets/images/favicon.png"
-    />
-    <link
-      href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css?family=Lato:300,300i,400,400i,700,700i&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="assets/css/font-awesome.min.css" />
-    <link rel="stylesheet" href="assets/css/owl.carousel.min.css" />
-    <link rel="stylesheet" href="assets/css/animate.min.css" />
-    <link rel="stylesheet" href="assets/css/jquery-ui.css" />
-
-    <link rel="stylesheet" href="assets/css/chosen.min.css" />
-    <link rel="stylesheet" href="assets/css/pe-icon-7-stroke.css" />
-    <link rel="stylesheet" href="assets/css/magnific-popup.min.css" />
-    <link rel="stylesheet" href="assets/css/lightbox.min.css" />
-    <link
-      rel="stylesheet"
-      href="assets/js/fancybox/source/jquery.fancybox.css"
-    />
-    <link rel="stylesheet" href="assets/css/jquery.scrollbar.min.css" />
-    <link rel="stylesheet" href="assets/css/mobile-menu.css" />
-
-    <style>
-      /* background-color: #f5f5f5; */
-
-      div.header-message > h1 {
-        margin: 0 auto;
-        border-radius: 50%;
-        color: #73b4ba;
-      }
-
-      .header-user-links li {
-        display: inline-block;
-      }
-
-      .header-user-links i {
-        border-radius: 50%;
-        font-size: 20px;
-        margin-left: 10px;
-      }
-
-      .query-bar a {
-        margin-left: 10px;
-        margin-right: 10px;
-        border-radius: 50%;
-      }
-
-      .query-bar input {
-        background-color: white;
-        width: 80%;
-      }
-
-      #query-member {
-        min-width: 200px;
-        padding-left: 10px;
-      }
-
-      #query-member li {
-        min-width: 100%;
-      }
-
-      #query-member img {
-        width: 100%;
-      }
-
-      #query-member .account-list {
-        margin-top: 10%;
-      }
-
-      .reset-margin {
-        margin: 0;
-        margin-top: 2%;
-        background-color: #f5f5f5;
-      }
-
-      .member-aside {
-        width: 30%;
-        height: 100%;
-        margin: 0 auto;
-        /* background-color: #f8f8f8; */
-      }
-
-      .member-introduction {
-        margin: 0 auto;
-        margin-right: 30px;
-        padding-top: 55px;
-        padding-right: 20px;
-        padding-bottom: 45px;
-        padding-left: 20px;
-        background-color: white;
-      }
-
-      .member-introduction div {
-        text-align: center;
-        overflow: hidden;
-      }
-
-      .member-list {
-        margin-right: 30px;
-        margin-top: 50px;
-        padding-top: 55px;
-        padding-right: 20px;
-        padding-bottom: 50px;
-        padding-left: 60px;
-        background-color: white;
-      }
-
-      .member-list li {
-        height: 60px;
-        font-size: 18px;
-        text-align: left;
-        list-style-type: none;
-      }
-    </style>
+        <link rel="stylesheet" href="./css/k.css">
+        
+    
+   
   </head>
   <body>
-    <div class="header"></div>
+    <!-- <div class="header"></div> -->
     <!--導覽bar 吃不到組長設定-->
-
+    <header class="header style2">
+      <div class="top-bar">
+        <div class="container">
+          <div class="row">
+            
+              <div class="col-lg-3">
+                <div class="header-message">
+                  <h1>夏虎茶</h1>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="query-bar">
+                  <a href="#">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                  </a>
+                  <input type="text" placeholder="搜尋品牌、門市或商品" name="" id="">
+                  <a href="#">
+                    <span>
+                      <i class="fa fa-times" aria-hidden="true"></i>
+                    </span>
+                  </a>
+                </div>
+              </div>
+              <div class="col-lg-3">
+                <ul class="header-user-links top-bar-right">
+                  <li>
+                    <a href="orderList.html">
+                      <span>
+                        <i class="fa fa-book" aria-hidden="true"></i>
+                      </span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="cart_detail.html">
+                      <span>
+                        <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                      </span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#">
+                      <span>
+                        <i class="fa fa-bell" aria-hidden="true"></i>
+                      </span>
+                    </a>
+                  </li>
+                  <li class="teamo-dropdown block-account">
+                    <a href="#" data-teamo="teamo-dropdown">
+                      <span>
+                        <i class="fa fa-user-circle" aria-hidden="true"></i>
+                      </span>
+                    </a>
+                    <ul class="teamo-submenu" id="query-member">
+                      <li class="switcher-option">
+                        <div class="account-list row">
+                          <div class="col-lg-12 no-padding">
+                            <div class="col-sm-4">
+                              <img src="/assets/images/xiahutealogo.jpg" alt="userPhoto">
+                            </div>
+                            <div class="col-lg-8">
+                              <span>userName</span>
+                              <span>userAccount</span>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                      <li class="switcher-option">
+                        <a href="memberSetting.html">
+                          <span> 帳號設定 </span>
+                        </a>
+                      </li>
+                      <li class="switcher-option">
+                        <a href="loyaltyCard.html">
+                          <span> 會員卡 </span>
+                        </a>
+                      </li>
+                      <li class="switcher-option">
+                        <a href="coupon.html">
+                          <span> 我的券夾 </span>
+                        </a>
+                      </li>
+                      <hr>
+                      <li class="switcher-option">
+                        <a href="orderList.html">
+                          <span> 訂單管理 </span>
+                        </a>
+                      </li>
+                      <li class="switcher-option">
+                        <a href="#">
+                          <span> 意見回饋 </span>
+                        </a>
+                      </li>
+                      <li class="switcher-option">
+                        <a href="faq.html">
+                          <span> 常見問題 </span>
+                        </a>
+                      </li>
+                      <hr>
+                      <li class="switcher-option">
+                        <a href="#">
+                          <span> 登出 </span>
+                        </a>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+            
+          </div>
+        </div>
+      </div>
+    </header>
+    
     <div class="kunClass">
       <div>
         <img
@@ -367,7 +176,7 @@
         <img
           class="KunSlickImg"
           src="https://pgw.udn.com.tw/gw/photo.php?u=https://uc.udn.com.tw/photo/2023/12/11/98/28109410.jpg&s=Y&x=0&y=99&sw=697&sh=551&sl=W&fw=800&exp=3600"
-          alt=""
+          alt="輪播"
           sizes=""
           srcset=""
         />
@@ -411,7 +220,7 @@
         </div>
 
         <!-- Button trigger modal -->
-        <div class="col" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        <div class="col" id="myModal" data-bs-toggle="modal" data-bs-target="#exampleModal">
           <i class="fa-solid fa-map"><a href="#">找區域</a></i>
         </div>
 
@@ -466,16 +275,17 @@
             </div>
           </div>
         </div>
+        <div class="col">
+          <i class="fa-solid fa-crown"
+            ><a href="./loyaltyCard.html">會員卡</a></i
+          >
+        </div>
 
         <div class="col">
           <i class="fa-solid fa-store"><a href="#">找品牌</a></i>
         </div>
 
-        <div class="col">
-          <i class="fa-solid fa-crown"
-            ><a href="./loyaltyCard.html">集點卡</a></i
-          >
-        </div>
+        
         <div class="col">
           <i class="fa-solid fa-rectangle-list"><a href="#">曾點過</a></i>
         </div>
@@ -488,12 +298,15 @@
       <!-- 商家卡片呈現 -->
 
       <div class="row justify-content-center">
-        <figure class="col-3 figure my-5">
+        <figure class="col-3 figure my-5 Heart">
           <img
             src="https://images.deliveryhero.io/image/fd-tw/tw-logos/cm2me-logo.jpg"
             alt=""
             class="rounded KunIndexSotreImg"
           />
+          
+            
+          
 
           <div class="row">
             <figcaption
@@ -501,7 +314,7 @@
               data-address="106台北市大安區復興南路一段107巷39號"
               
             >
-              得正大安計畫
+            <i class="fa-regular fa-heart" style="color: red;"></i> 得正大安計畫
             </figcaption>
             <figcaption class="figure-caption col">
               <i class="fa-2x fa-solid fa-truck"></i>
@@ -516,7 +329,7 @@
           </div>
         </figure>
 
-        <figure class="col-3 figure my-5">
+        <figure class="col-3 figure my-5 Heart">
           <img
             src="https://images.deliveryhero.io/image/fd-tw/tw-logos/cm2me-logo.jpg"
             alt=""
@@ -528,7 +341,7 @@
               style="font-weight: bold; color: black"
               data-address="231新北市新店區北新路一段257號"
             >
-              得正新店計畫
+            <i class="fa-regular fa-heart" style="color: red;"></i> 得正新店計畫
             </figcaption>
             <figcaption class="figure-caption col">
               <i class="fa-2x fa-solid fa-truck"></i>
@@ -542,7 +355,7 @@
             </figcaption>
           </div>
         </figure>
-        <figure class="col-3 figure my-5">
+        <figure class="col-3 figure my-5 Heart">
           <img
             src="https://images.deliveryhero.io/image/fd-tw/tw-logos/cm2me-logo.jpg"
             alt=""
@@ -553,7 +366,7 @@
               class="figure-caption col-6 IndexImgNameFontSize drinkAddress"
               data-address="231新北市新店區北新路二段166號"
             >
-              八曜和茶七張店
+            <i class="fa-regular fa-heart" style="color: red;"></i>  八曜和茶七張店
             </figcaption>
             <figcaption class="figure-caption col">
               <i class="fa-solid fa-truck fa-2x"></i>
@@ -567,7 +380,7 @@
             </figcaption>
           </div>
         </figure>
-        <figure class="col-3 figure my-5">
+        <figure class="col-3 figure my-5 Heart">
           <img
             src="https://images.deliveryhero.io/image/fd-tw/tw-logos/cm2me-logo.jpg"
             alt=""
@@ -578,7 +391,7 @@
               class="figure-caption col-6 IndexImgNameFontSize drinkAddress"
               data-address="105台北市松山區慶城街1號2樓"
             >
-              春爽唐慶成店
+            <i class="fa-regular fa-heart" style="color: red;"></i> 春水塘慶成店
             </figcaption>
             <figcaption class="figure-caption col">
               <i class="fa-solid fa-truck fa-2x"></i>
@@ -592,14 +405,14 @@
             </figcaption>
           </div>
         </figure>
-        <figure class="col-3 figure my-5">
+        <figure class="col-3 figure my-5 Heart">
           <img src="https://images.deliveryhero.io/image/fd-tw/tw-logos/cm2me-logo.jpg" alt="" class="rounded KunIndexSotreImg" />
           <div class="row">
             <figcaption
               class="figure-caption col-6 IndexImgNameFontSize drinkAddress"
               data-address="231新北市新店區民族路46號1樓"
             >
-              一沐日大坪林店
+            <i class="fa-regular fa-heart" style="color: red;"></i>  一沐日大坪林店
             </figcaption>
             <figcaption class="figure-caption col">
               <i class="fa-2x fa-solid fa-truck"></i>
@@ -614,14 +427,14 @@
           </div>
         </figure>
         <!--here-->
-        <figure class="col-3 figure my-5">
+        <figure class="col-3 figure my-5 Heart">
           <img src="https://images.deliveryhero.io/image/fd-tw/tw-logos/cm2me-logo.jpg" alt="" class="rounded KunIndexSotreImg" />
           <div class="row">
             <figcaption
               class="figure-caption col-6 IndexImgNameFontSize drinkAddress"
               data-address="116台北市文山區景文街104號"
             >
-              五同好景美店
+            <i class="fa-regular fa-heart" style="color: red;"></i>  五同好景美店
             </figcaption>
             <figcaption class="figure-caption col">
               <i class="fa-solid fa-truck fa-2x"></i>
@@ -635,14 +448,14 @@
             </figcaption>
           </div>
         </figure>
-        <figure class="col-3 figure my-5">
+        <figure class="col-3 figure my-5 Heart">
           <img src="https://images.deliveryhero.io/image/fd-tw/tw-logos/cm2me-logo.jpg" alt="" class="rounded KunIndexSotreImg" />
           <div class="row">
             <figcaption
               class="figure-caption col-6 IndexImgNameFontSize drinkAddress"
               data-address="234新北市永和區永和路一段158號"
             >
-              在睡五分鐘永和店
+            <i class="fa-regular fa-heart" style="color: red;"></i>  在睡五分鐘永和店
             </figcaption>
             <figcaption class="figure-caption col">
               <i class="fa-solid fa-truck fa-2x"></i>
@@ -656,16 +469,16 @@
             </figcaption>
           </div>
         </figure>
-        <figure class="col-3 figure my-5">
+        <figure class="col-3 figure my-5 Heart">
           <img src="https://images.deliveryhero.io/image/fd-tw/tw-logos/cm2me-logo.jpg" alt="" class="rounded KunIndexSotreImg" />
           <div class="row">
             <figcaption
               class="figure-caption col-6 IndexImgNameFontSize drinkAddress"
               data-address="220新北市板橋區三民路二段19號"
             >
-              沐白板橋店
+            <i class="fa-regular fa-heart" style="color: red;"></i>  沐白板橋店
             </figcaption>
-            <figcaption class="figure-caption col">
+            <figcaption class="figure-caption col Heart">
               <i class="fa-solid fa-truck fa-2x"></i>
             </figcaption>
             <figcaption class="figure-caption col-12 footer2">
@@ -684,54 +497,345 @@
           <div class="h-100 p-5 text-white bg-dark rounded-3">
             <h2>有夏虎茶真好，快來瞭解我們吧</h2>
 
-            <button class="btn btn-outline-light" type="button">
+            <a href="faq.html" class="btn btn-outline-light" type="button">
               快速上手
-            </button>
+            </a>
           </div>
         </div>
         <div class="col-md-6">
           <div class="h-100 p-5 bg-light border rounded-3">
             <h2>有夏虎茶真好，快來加入我們吧</h2>
 
-            <button class="btn btn-outline-secondary" type="button">
+            <a href="joinUs.html" class="btn btn-outline-secondary" type="button">
               手刀報名
-            </button>
+            </a>
           </div>
         </div>
       </div>
     </div>
 
     <!-- 頁腳 -->
-    <div class="footer"></div>
-
-    <script src="./js/general.js"></script>
+    <footer class="footer style7">
+      <div class="container">
+          <div class="container-wapper no-padding">
+              <div class="row">
+                  <div class="box-footer col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                      <div class="teamo-custommenu default">
+                          <ul class="menu">
+                              <li class="menu-item">
+                                  <h3>夏虎茶</h3>
+                              </li>
+                              <li class="menu-item">
+                                  <a href="#">公司資訊：雲仲資訊股份有限公司</a>
+                              </li>
+                              <li class="menu-item">
+                                  <a href="#">統一編號：58364751
+                                  </a>
+                              </li>
+                          </ul>
+                      </div>
+                  </div>
+                  <div class="box-footer col-xs-12 col-sm-4 col-md-4 col-lg-4 hidden-xs">
+  
+                  </div>
+                  <div class="box-footer col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                      <div class="teamo-custommenu default">
+                          <ul class="menu">
+                              <li class="menu-item">
+                                  <a href="#">常見問題</a>
+                              </li>
+                              <li class="menu-item">
+                                  <a href="#">隱私權條款</a>
+                              </li>
+                              <li class="menu-item">
+                                  <a href="#">意見回饋</a>
+                              </li>
+                              <li class="menu-item">
+                                  <a href="#">使用者條款</a>
+                              </li>
+                              <li class="menu-item">
+                                  <a href="#">信用卡條款</a>
+                              </li>
+                          </ul>
+                      </div>
+                  </div>
+              </div>
+              <div class="footer-end">
+                  <div class="row">
+                      <div class="col-sm-12 col-xs-12">
+                          <div class="teamo-socials">
+                              <ul class="socials">
+                                  <li>
+                                      <a href="#" class="social-item" target="_blank">
+                                        <i class="fa-brands fa fa-facebook"></i>
+                                      </a>
+                                  </li>
+                                  <li>
+                                      <a href="#" class="social-item" target="_blank">
+                                        <i class="fa-brands fa-twitter"></i>
+                                      </a>
+                                  </li>
+                                  <li>
+                                      <a href="#" class="social-item" target="_blank">
+                                        <i class="fa-brands fa-instagram"></i>
+                                      </a>
+                                  </li>
+                              </ul>
+                          </div>
+                          <div class="coppyright">
+                              © 2024 XiaHuTea 台灣 . All rights reserved
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </footer>
+  
+    <!-- <script src="./js/general.js"></script> -->
     <script
       src="https://code.jquery.com/jquery-3.7.1.min.js"
       integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
       crossorigin="anonymous"
     ></script>
-    <script
+    
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+    <!-- <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
       crossorigin="anonymous"
-    ></script>
+    ></script> -->
     <!-- <script src="./assets/js/bootstrap.min.js"></script> -->
     <!-- Bootstrap CSS -->
 
     <!-- jQuery (必要時) -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
 
     <!-- Bootstrap JS -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> -->
+    <!-- <script src="./js/cheatsheet.js"></script> -->
+<!-- 
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
       crossorigin="anonymous"
-    ></script>
+      data-bs-no-jquery="true"
+    ></script> -->
+    
+    <!-- <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.min.js" integrity="sha384-lpyLfhYuitXl2zRZ5Bn2fqnhNAKOAaM/0Kr9laMspuaMiZfGmfwRNFh8HlMy49eQ" crossorigin="anonymous"></script>
+    <script src="./assets/js/slick.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+<script src="assets/js/jquery-1.12.4.min.js"></script>
+<script src="assets/js/jquery.plugin-countdown.min.js"></script>
+<script src="assets/js/jquery-countdown.min.js"></script>
+<script src="assets/js/bootstrap.min.js"></script>
+<script src="assets/js/owl.carousel.min.js"></script>
+<script src="assets/js/magnific-popup.min.js"></script>
+<script src="assets/js/isotope.min.js"></script>
+<script src="assets/js/jquery.scrollbar.min.js"></script>
+<script src="assets/js/jquery-ui.min.js"></script>
+<script src="assets/js/mobile-menu.js"></script>
+<script src="assets/js/chosen.min.js"></script>
+<script src="assets/js/slick.js"></script>
+<script src="assets/js/jquery.elevateZoom.min.js"></script>
+<script src="assets/js/jquery.actual.min.js"></script>
+<script src="assets/js/fancybox/source/jquery.fancybox.js"></script>
+<script src="assets/js/lightbox.min.js"></script>
+<script src="assets/js/owl.thumbs.min.js"></script>
+<script src="assets/js/jquery.scrollbar.min.js"></script>
+<script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyC3nDHy1dARR-Pa_2jjPCjvsOR4bcILYsM'></script>
+<script src="assets/js/frontend-plugin.js"></script>
 
-    <script src="../static/assets/js/slick.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+      
+  document.addEventListener("DOMContentLoaded", function () {
+    //監聽有這個屬性的KunIndexSotreImg 如果有空心就改實心
+    //實心紅
+    let RedHeart = '<i class="fa-solid fa-heart" style="color: red;"></i>';
+    let noHeart = '<i class="fa-regular fa-heart"></i>';
+    let ALLStores = document.querySelectorAll('.KunIndexSotreImg');
+    ALLStores.forEach((element) => {
+      
+      element.addEventListener('click',function(){
+        console.log(this);
+        var ele = this.nextElementSibling.querySelector('.fa-heart');
+        console.log(ele);
+        if(ele.classList.contains('fa-regular')){
+          ele.classList.remove('fa-regular');
+          ele.classList.add('fa-solid');
+          ele.style.color = 'red'; // 改變顏色為紅色
+          //如果是實心 就取代 改成空心
+          //this.nextElementSibling.querySelector('.fa-solid') =noHeart;
+        }else{
+          ele.classList.remove('fa-solid');
+          ele.classList.add('fa-regular');
+          ele.style.color = 'red'; // 
+          //如果是空心 取代 改成實心
+          //this.nextElementSibling.querySelector('.fa-solid') =RedHeart;
+        }
+      });
+    } );
+    // //典籍找附近之後 過濾三公里內
+    // let localTag = document.querySelector('#localLog');
+    // localTag.addEventListener("click",function(){
+
+    //     if (navigator.geolocation) {
+    //         navigator.geolocation.getCurrentPosition(function(position){
+    //             // 取得 position 位置資訊，可於 console 中印出來看看
+    //             console.log(position);
+
+    //             let lat = position.coords.latitude;
+    //             let lng = position.coords.longitude;
+    //             //有了經緯度後開始計算距離
+    //             let allDrinkAddress = document.querySelectorAll('.drinkAddress');
+    //             // console.log(allDrinkAddress);
+    //             // allDrinkAddress.forEach(element => {
+    //             //     // console.log(element.getAttribute("data-address"));  // 取得飲料店地址
+
+    //             // });
+
+    //             });
+    //     // 有支援
+    //     }else{
+    //         alert("該瀏覽器不支援定位");
+    //     }
+
+    // });//定位找附近
+
+    let userLogin = document.querySelector(".userLogin"); //登入按鈕
+    let searchPlace = document.querySelector(".searchPlace");
+
+    //加入愛心失敗
+    let heartTag =
+      '<div class="favorite-text"><i class="fa-solid fa-heart"></i></div>';
+    let storetags = document.querySelectorAll(".KunIndexSotreImg");
+    storetags.forEach(function (item) {
+      //監聽被覆蓋
+      item.addEventListener("mouseenter", function () {
+        if (!item.parentElement.querySelector(".favorite-text")) {
+          // item.insertAdjacentHTML('afterend', heartTag);
+        }
+      });
+      item.addEventListener("mouseleave", function () {
+        console.log("走了");
+        let heartElement =
+          item.parentElement.querySelector(".favorite-text");
+        if (heartElement) {
+          // heartElement.remove();
+        }
+      });
+    }); //所有店家迴圈
+    
+
+//監聽商家
+let allSotre = document.querySelectorAll('.Heart');
+//
+
+  }); //end dom
+
+  $(document).ready(function () {
+    var districts = {
+      1: [
+        "板橋區",
+        "新莊區",
+        "中和區",
+        "永和區",
+        "三重區",
+        "蘆洲區",
+        "汐止區",
+        "土城區",
+        "樹林區",
+        "三峽區",
+        "鶯歌區",
+        "淡水區",
+        "瑞芳區",
+        "五股區",
+        "泰山區",
+        "林口區",
+      ],
+      2: [
+        "中正區",
+        "大同區",
+        "中山區",
+        "松山區",
+        "大安區",
+        "萬華區",
+        "信義區",
+        "士林區",
+        "北投區",
+        "內湖區",
+        "南港區",
+        "文山區",
+      ],
+    };
+
+    $("#PlaceSearch").change(function () {
+      var selectedCity = $(this).val();
+      var selectedArea = $("#AreaSearch");
+
+      console.log(selectedCity);
+      if (selectedCity) {
+        selectedArea.empty(); //清空之前選單
+        selectedArea.append('<option value="">請選擇區域</option>');
+        districts[selectedCity].forEach(function (row) {
+          selectedArea.append(
+            '<option value="' + row + '">' + row + "</option>"
+          );
+        });
+      }
+    }); //選擇了縣市
+
+    $("#citySelect").change(function () {
+      var selectedCity = $(this).val();
+      var districtSelect = $("#districtSelect");
+
+      districtSelect.empty(); // 清空之前的選項
+
+      if (selectedCity) {
+        districtSelect.prop("disabled", false);
+        districtSelect.append('<option value="">請選擇區域</option>');
+
+        districts[selectedCity].forEach(function (district) {
+          districtSelect.append(
+            '<option value="' + district + '">' + district + "</option>"
+          );
+        });
+      } else {
+        districtSelect.prop("disabled", true);
+        districtSelect.append('<option value="">請先選擇城市</option>');
+      }
+    });
+
+    $(".kunClass").slick({
+      centerMode: true,
+      slidesToShow: 1,
+      slidesToScroll: 1,
+      autoplay: true,
+      autoplaySpeed: 2000,
+      arrows: false,
+    });
+    $(".slick-slide").css("filter", "blur(3px)");
+    $(".slick-center").css("filter", "none");
+    // 监听 Slick 的初始化和切换事件，以确保正确应用模糊效果
+    $(".kunClass").on(
+      "init afterChange",
+      function (event, slick, currentSlide) {
+        // 确保在初始化和每次滑动后应用正确的滤镜
+        $(".slick-slide").css("filter", "blur(3px)");
+        $(".slick-slide").css("overflow", "hidden");
+        $(".slick-center").css("filter", "none");
+        $(".slick-center").css("overflow", "none");
+      }
+    );
+  });
+</script>
+
+    
     <script>
+
+      
       function initMap() {
         function getDistance() {
           //const status = document.querySelector('#status'); // 狀況
@@ -819,156 +923,7 @@
       defer
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAm4iwqRUtQfPBubWGDHpMB9cQ4uLvkM4I&libraries=places&callback=initMap"
     ></script>
-
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        // //典籍找附近之後 過濾三公里內
-        // let localTag = document.querySelector('#localLog');
-        // localTag.addEventListener("click",function(){
-
-        //     if (navigator.geolocation) {
-        //         navigator.geolocation.getCurrentPosition(function(position){
-        //             // 取得 position 位置資訊，可於 console 中印出來看看
-        //             console.log(position);
-
-        //             let lat = position.coords.latitude;
-        //             let lng = position.coords.longitude;
-        //             //有了經緯度後開始計算距離
-        //             let allDrinkAddress = document.querySelectorAll('.drinkAddress');
-        //             // console.log(allDrinkAddress);
-        //             // allDrinkAddress.forEach(element => {
-        //             //     // console.log(element.getAttribute("data-address"));  // 取得飲料店地址
-
-        //             // });
-
-        //             });
-        //     // 有支援
-        //     }else{
-        //         alert("該瀏覽器不支援定位");
-        //     }
-
-        // });//定位找附近
-
-        let userLogin = document.querySelector(".userLogin"); //登入按鈕
-        let searchPlace = document.querySelector(".searchPlace");
-
-        //加入愛心失敗
-        let heartTag =
-          '<div class="favorite-text"><i class="fa-solid fa-heart"></i></div>';
-        let storetags = document.querySelectorAll(".KunIndexSotreImg");
-        storetags.forEach(function (item) {
-          //監聽被覆蓋
-          item.addEventListener("mouseenter", function () {
-            if (!item.parentElement.querySelector(".favorite-text")) {
-              // item.insertAdjacentHTML('afterend', heartTag);
-            }
-          });
-          item.addEventListener("mouseleave", function () {
-            console.log("走了");
-            let heartElement =
-              item.parentElement.querySelector(".favorite-text");
-            if (heartElement) {
-              // heartElement.remove();
-            }
-          });
-        }); //所有店家迴圈
-      }); //end dom
-
-      $(document).ready(function () {
-        var districts = {
-          1: [
-            "板橋區",
-            "新莊區",
-            "中和區",
-            "永和區",
-            "三重區",
-            "蘆洲區",
-            "汐止區",
-            "土城區",
-            "樹林區",
-            "三峽區",
-            "鶯歌區",
-            "淡水區",
-            "瑞芳區",
-            "五股區",
-            "泰山區",
-            "林口區",
-          ],
-          2: [
-            "中正區",
-            "大同區",
-            "中山區",
-            "松山區",
-            "大安區",
-            "萬華區",
-            "信義區",
-            "士林區",
-            "北投區",
-            "內湖區",
-            "南港區",
-            "文山區",
-          ],
-        };
-
-        $("#PlaceSearch").change(function () {
-          var selectedCity = $(this).val();
-          var selectedArea = $("#AreaSearch");
-
-          console.log(selectedCity);
-          if (selectedCity) {
-            selectedArea.empty(); //清空之前選單
-            selectedArea.append('<option value="">請選擇區域</option>');
-            districts[selectedCity].forEach(function (row) {
-              selectedArea.append(
-                '<option value="' + row + '">' + row + "</option>"
-              );
-            });
-          }
-        }); //選擇了縣市
-
-        $("#citySelect").change(function () {
-          var selectedCity = $(this).val();
-          var districtSelect = $("#districtSelect");
-
-          districtSelect.empty(); // 清空之前的選項
-
-          if (selectedCity) {
-            districtSelect.prop("disabled", false);
-            districtSelect.append('<option value="">請選擇區域</option>');
-
-            districts[selectedCity].forEach(function (district) {
-              districtSelect.append(
-                '<option value="' + district + '">' + district + "</option>"
-              );
-            });
-          } else {
-            districtSelect.prop("disabled", true);
-            districtSelect.append('<option value="">請先選擇城市</option>');
-          }
-        });
-
-        $(".kunClass").slick({
-          centerMode: true,
-          slidesToShow: 1,
-          slidesToScroll: 1,
-          autoplay: true,
-          autoplaySpeed: 2000,
-          arrows: false,
-        });
-        $(".slick-slide").css("filter", "blur(3px)");
-        $(".slick-center").css("filter", "none");
-        // 监听 Slick 的初始化和切换事件，以确保正确应用模糊效果
-        $(".kunClass").on(
-          "init afterChange",
-          function (event, slick, currentSlide) {
-            // 确保在初始化和每次滑动后应用正确的滤镜
-            $(".slick-slide").css("filter", "blur(3px)");
-            $(".slick-slide").css("overflow", "hidden");
-            $(".slick-center").css("filter", "none");
-            $(".slick-center").css("overflow", "none");
-          }
-        );
-      });
-    </script>
+   
+    
   </body>
 </html>
