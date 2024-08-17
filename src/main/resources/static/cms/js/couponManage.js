@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded", function (){
             if (i === currentPage) {
                 button.classList.add('active');
             }
-            paginationContainer.appendChild(button);
+            pagination_el.appendChild(button);
         }
     }
     // 更新分頁按鈕的狀態

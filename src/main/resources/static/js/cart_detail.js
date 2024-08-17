@@ -84,8 +84,8 @@ document.addEventListener("DOMContentLoaded",function(){
 //             store_img_el.src = data.storeimgurl;
 //         })
 //         .catch(error => console.error('Error fetching store data:', error));
-  //使用者
-// });fetch(`/api/getUsreInfo?userId=${userId}`)
+// 使用者
+//     fetch(`/api/getUsreInfo?userId=${userId}`)
 //         .then(response => response.json())
 //         .then(data => {
 //             customer_img_el_img_el.src = data.customerimg;
@@ -95,10 +95,8 @@ document.addEventListener("DOMContentLoaded",function(){
 // });
   //********************************************第一頁按鈕事件*************************************
     //結帳頁面購物內容來自於購物車(localstorage)
-
-
-  //刪除、修改訂單
-  //修改---進入燈箱
+    //刪除、修改訂單
+    //修改---進入燈箱
   for(let i =0;i<btn_edit_el.length;i++) {
     btn_edit_el[i].addEventListener("click", function () {
       lightbox_el.style.display = "flex";
@@ -188,20 +186,6 @@ document.addEventListener("DOMContentLoaded",function(){
         document.body.style.overflow = 'auto';
         document.body.style.paddingRight = '0px';
       });
-
-      //取貨方式
-      // pick_up_input_el.addEventListener("click",function(){
-      //   if(carry_out_radio_el.checked){
-      //      carry_out_radio_el.checked=false;
-      //     }
-      //     address_el.disabled=true;
-      // })
-      // carry_out_radio_el.addEventListener("click",function(){
-      //   if(pick_up_input_el.checked){
-      //     pick_up_input_el.checked=false;
-      //    }
-      //    address_el.disabled = false;
-      // })
 
       pick_up_input_el.addEventListener("click", function () {
         address_el.disabled = true;
