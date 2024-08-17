@@ -151,10 +151,6 @@
   font-size: 20px;
 }
 
-.product-detail{
-  display: flex;
-}
-
 .product-buttons {
   display: flex;
   gap: 10px;
@@ -171,6 +167,11 @@
 .product-buttons button:hover {
   color: #0056b3;
 }
+
+.product-detail{
+  display: flex;
+}
+
 
 /* 運送方式 */
 .recevier-method {
@@ -257,6 +258,7 @@
 }
 
 /*訂單彙總*/
+
 .amount-summary {
   padding: 10px 20px;
   background-color: #f8f9fa;
@@ -271,6 +273,7 @@
   text-align: left;
 }
 
+.summary-product-detail,
 .coupon-minus,
 .membercard-minus, .moneybag-minus,
 .amount-result{
