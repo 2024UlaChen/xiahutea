@@ -10,7 +10,6 @@
 .container h1 {
     color: #333;
 }
-
 .form-container {
     display: flex;
     flex-direction: column;
@@ -20,42 +19,37 @@
 }
 .form-group {
     display: flex;
-    justify-content: space-between;
-    margin-bottom: 15px;
+    margin: 20px 0;
+    align-items: center; /* 垂直居中 */
 }
-.form-group label {
-    width: 20%;
+ label {
     font-weight: bold;
+    width: 120px;
+    margin-right:20px;
 }
-.form-group input, .form-group textarea, .form-group select {
-    width: 75%;
+.form-group input {
+    width: 50%;
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
 }
-.form-group input[type="radio"] {
-    width: auto;
-}
-.form-actions {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-}
-.form-actions button {
-    padding: 10px 20px;
-    font-size: 16px;
-    border: none;
+
+.form-group textarea {
+    width: 50%;
+    padding: 8px;
+    border: 1px solid #ccc;
     border-radius: 4px;
-    background-color: #00b16a;
-    color: white;
-    cursor: pointer;
+    resize: none;
+    min-height: 100px;
 }
-.form-actions button:hover {
-    background-color: #009f5e;
+
+.date-range {
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }
-.form-actions button.cancel {
-    background-color: #ccc;
-}
-.form-actions button.cancel:hover {
-    background-color: #bbb;
+
+input[type="date"] {
+    padding: 8px;
+    width: 150px; /* 日期框的寬度，可以依需求調整 */
 }
