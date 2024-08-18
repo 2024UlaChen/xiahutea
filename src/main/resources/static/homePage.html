@@ -1,705 +1,929 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>夏虎茶</title>
-<!-- <link rel="stylesheet" href="./assets/css/bootstrap.min.css"> -->
-    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"> -->
-    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-    <link rel="stylesheet" href=".././static/assets/css/slick.css">
-    <link rel="stylesheet" href="./assets/css/font-awesome.min.css">
-
-<!--    <link rel="stylesheet" href="./slicktools/slick-theme.css">-->
-    <style>
-        .IndexImgNameFontSize{
-            font-weight: bold; 
-            color:black
-
-        }
-        .KunStar{
-            color:#F9A825;
-            font-size: 16px;
-        }
-        .image-container {
-            position: relative;
-            display: inline-block;
-        }
-        .icon-overlay {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            color: white;
-            background-color: rgba(0, 0, 0, 0.5);
-            padding: 5px;
-            border-radius: 50%;
-        }
-        .KunAdsSize{
-            max-width: 60%; 
-            height: auto;
-            
-        }
-        .KunHidden{
-            overflow: hidden;
-        }
-        div.slick-slide{
-            
-            overflow:hidden;
-            background-color: rgb(221, 231, 235);
-            text-align: center;
-        }
-        .slick-slide img{
-            display: inline;
-        }
-        .KunSlickImg{
-            /* width: 100%; */
-            height: 300px;
-            
-            
-        /* width: 50vw; */
-        /* height: 30vh; */
-        /* margin-left: 5%; */
-        /* overflow: hidden; */
-    }
-        
-        .KunSpeedSearch{
-            font-size: 17px;
-        }
-        .KunIndexSotreImg{
-            max-width: 100%; 
-            height: auto;
-            position: relative;
-        }
-        .favorite-text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
-            font-weight: bold;
-            font-size: 1.5rem; /* 根據需要調整字體大小 */
-            background-color: rgba(0, 0, 0, 0.5); /* 可選：增加背景以使文字更清晰 */
-            padding: 0.5rem; /* 可選：增加內邊距 */
-            border-radius: 0.25rem; /* 可選：增加圓角 */
-            text-align: center;
-        }
-        .KunNav{
-            list-style: none;
-        }
-        
-    </style>
-</head>
-<body>
-<header class="header style2">
-    <div class="top-bar">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="col-lg-3">
-                        <div class="header-message">
-                            <h1>夏虎茶</h1>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="query-bar">
-                            <a href="#">
-                                <i class="fa fa-search" aria-hidden="true"></i>
-                            </a>
-                            <input type="text" placeholder="搜尋品牌、門市或商品" name="" id="">
-                            <a href="#">
-                <span>
-                  <i class="fa fa-times" aria-hidden="true"></i>
-                </span>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <ul class="header-user-links top-bar-right">
-                            <li>
-                                <a href="#">
-                  <span>
-                    <i class="fa fa-book" aria-hidden="true"></i>
-                  </span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                  <span>
-                    <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                  </span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                  <span>
-                    <i class="fa fa-bell" aria-hidden="true"></i>
-                  </span>
-                                </a>
-                            </li>
-                            <li class="teamo-dropdown block-account">
-                                <a href="#" data-teamo="teamo-dropdown">
-                  <span>
-                    <i class="fa fa-user-circle" aria-hidden="true"></i>
-                  </span>
-                                </a>
-                                <ul class="teamo-submenu" id="query-member">
-                                    <li class="switcher-option">
-                                        <div class="account-list row">
-                                            <div class="col-lg-12 no-padding">
-                                                <div class="col-sm-4">
-                                                    <img src="/assets/images/xiahutealogo.jpg" alt="userPhoto">
-                                                </div>
-                                                <div class="col-lg-8">
-                                                    <span>userName</span>
-                                                    <span>userAccount</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="switcher-option">
-                                        <a href="#">
-                                            <span> 帳號設定 </span>
-                                        </a>
-                                    </li>
-                                    <li class="switcher-option">
-                                        <a href="#">
-                                            <span> 會員卡 </span>
-                                        </a>
-                                    </li>
-                                    <li class="switcher-option">
-                                        <a href="#">
-                                            <span> 我的券夾 </span>
-                                        </a>
-                                    </li>
-                                    <hr>
-                                    <li class="switcher-option">
-                                        <a href="#">
-                                            <span> 訂單管理 </span>
-                                        </a>
-                                    </li>
-                                    <li class="switcher-option">
-                                        <a href="#">
-                                            <span> 意見回饋 </span>
-                                        </a>
-                                    </li>
-                                    <li class="switcher-option">
-                                        <a href="#">
-                                            <span> 常見問題 </span>
-                                        </a>
-                                    </li>
-                                    <hr>
-                                    <li class="switcher-option">
-                                        <a href="#">
-                                            <span> 登出 </span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</header>
-    <div class="kunClass ">
-        <div>
-            <img class="KunSlickImg " src="https://chevigal.com/wp-content/uploads/20220227231508_23.jpg" alt="輪播" >
-        </div>
-        <div>
-            <img class="KunSlickImg" src="https://pgw.udn.com.tw/gw/photo.php?u=https://uc.udn.com.tw/photo/2023/12/11/98/28109410.jpg&s=Y&x=0&y=99&sw=697&sh=551&sl=W&fw=800&exp=3600" alt="" sizes="" srcset="">
-        </div>
-        <div>
-            <img class="KunSlickImg" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6ffcQVEtCkd0i7Q4-j5RQiZZKcAnN1y1Ybw&s" alt="輪播" sizes="" srcset="">
-        </div>
-        <div>
-            <img class="KunSlickImg" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSaL4fNpnWebtDTQMYGtME0r0E2rzKQrCy5-g&s" alt="輪播" sizes="" srcset="">
-        </div>
-        <div>
-            <img class="KunSlickImg" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSaJEsYL7HJg2ZF_ZNXqoRJSPx4E8c2fv3a_A&s" alt="輪播" sizes="" srcset="">
-        </div>
-    </div> 
-    <!--輪播結束-->
+    <link rel="shortcut icon" type="image/x-icon" href="assets/images/favicon.png"/>
+    <link
+            href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i&display=swap"
+            rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,300i,400,400i,700,700i&display=swap" rel="stylesheet">
     
-    <div class="Container m-5" style="text-align: center;">
+    <link rel="stylesheet" href="assets/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="assets/css/animate.min.css">
+    <link rel="stylesheet" href="assets/css/jquery-ui.css">
+    <link rel="stylesheet" href="assets/css/slick.css">
+    <link rel="stylesheet" href="assets/css/chosen.min.css">
+    <link rel="stylesheet" href="assets/css/pe-icon-7-stroke.css">
+    <link rel="stylesheet" href="assets/css/magnific-popup.min.css">
+    <link rel="stylesheet" href="assets/css/lightbox.min.css">
+    <link rel="stylesheet" href="assets/js/fancybox/source/jquery.fancybox.css">
+    <link rel="stylesheet" href="assets/css/jquery.scrollbar.min.css">
+    <link rel="stylesheet" href="assets/css/mobile-menu.css">
+    <link rel="stylesheet" href="assets/fonts/flaticon/flaticon.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="css/general.css">
+    <link rel="stylesheet" href="css/member.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <link
+    href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i&display=swap"
+    rel="stylesheet"
+  />
+  <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    />
+  <link
+    href="https://fonts.googleapis.com/css?family=Lato:300,300i,400,400i,700,700i&display=swap"
+    rel="stylesheet"
+  />
+   
+
+    <!--    <link rel="stylesheet" href="./slicktools/slick-theme.css">-->
+        <link rel="stylesheet" href="./css/k.css">
         
-    </div>
-    <div class="Container m-5">
-        <div class="row KunSpeedSearch">
-            <div class="col-2"></div>
-            <div class="col" id="localLog"><i class="fa-solid fa-map-location">找附近</i></div>
+    
+   
+  </head>
+  <body>
+    <!-- <div class="header"></div> -->
+    <!--導覽bar 吃不到組長設定-->
+    <header class="header style2">
+      <div class="top-bar">
+        <div class="container">
+          <div class="row">
             
+              <div class="col-lg-3">
+                <div class="header-message">
+                  <h1>夏虎茶</h1>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="query-bar">
+                  <a href="#">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                  </a>
+                  <input type="text" placeholder="搜尋品牌、門市或商品" name="" id="">
+                  <a href="#">
+                    <span>
+                      <i class="fa fa-times" aria-hidden="true"></i>
+                    </span>
+                  </a>
+                </div>
+              </div>
+              <div class="col-lg-3">
+                <ul class="header-user-links top-bar-right">
+                  <li>
+                    <a href="orderList.html">
+                      <span>
+                        <i class="fa fa-book" aria-hidden="true"></i>
+                      </span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="cart_detail.html">
+                      <span>
+                        <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                      </span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#">
+                      <span>
+                        <i class="fa fa-bell" aria-hidden="true"></i>
+                      </span>
+                    </a>
+                  </li>
+                  <li class="teamo-dropdown block-account">
+                    <a href="#" data-teamo="teamo-dropdown">
+                      <span>
+                        <i class="fa fa-user-circle" aria-hidden="true"></i>
+                      </span>
+                    </a>
+                    <ul class="teamo-submenu" id="query-member">
+                      <li class="switcher-option">
+                        <div class="account-list row">
+                          <div class="col-lg-12 no-padding">
+                            <div class="col-sm-4">
+                              <img src="/assets/images/xiahutealogo.jpg" alt="userPhoto">
+                            </div>
+                            <div class="col-lg-8">
+                              <span>userName</span>
+                              <span>userAccount</span>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                      <li class="switcher-option">
+                        <a href="memberSetting.html">
+                          <span> 帳號設定 </span>
+                        </a>
+                      </li>
+                      <li class="switcher-option">
+                        <a href="loyaltyCard.html">
+                          <span> 會員卡 </span>
+                        </a>
+                      </li>
+                      <li class="switcher-option">
+                        <a href="coupon.html">
+                          <span> 我的券夾 </span>
+                        </a>
+                      </li>
+                      <hr>
+                      <li class="switcher-option">
+                        <a href="orderList.html">
+                          <span> 訂單管理 </span>
+                        </a>
+                      </li>
+                      <li class="switcher-option">
+                        <a href="#">
+                          <span> 意見回饋 </span>
+                        </a>
+                      </li>
+                      <li class="switcher-option">
+                        <a href="faq.html">
+                          <span> 常見問題 </span>
+                        </a>
+                      </li>
+                      <hr>
+                      <li class="switcher-option">
+                        <a href="#">
+                          <span> 登出 </span>
+                        </a>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
             
-             
-<!-- Button trigger modal -->
-<div class="col " data-bs-toggle="modal" data-bs-target="#exampleModal">
-    <i class="fa-solid fa-map">找區域</i>
-</div>
-  
-  <!-- Modal -->
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">找區域</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <select class="form-select" id="PlaceSearch" aria-label="Default select example">
-                <option selected>選擇縣市</option>
-                <option value="1">新北市</option>
-                <option value="2">台北市</option>
-                
-              </select><br>
-              
-              <select class="form-select" id="AreaSearch" aria-label="Default select example">
-                <option selected>選擇區域</option>
-                
-                
-              </select>
-
-
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
-          <button type="button" class="btn btn-primary">儲存</button>
+          </div>
         </div>
       </div>
+    </header>
+    
+    <div class="kunClass">
+      <div>
+        <img
+          class="KunSlickImg"
+          src="https://chevigal.com/wp-content/uploads/20220227231508_23.jpg"
+          alt="輪播"
+        />
+      </div>
+      <div>
+        <img
+          class="KunSlickImg"
+          src="https://pgw.udn.com.tw/gw/photo.php?u=https://uc.udn.com.tw/photo/2023/12/11/98/28109410.jpg&s=Y&x=0&y=99&sw=697&sh=551&sl=W&fw=800&exp=3600"
+          alt="輪播"
+          sizes=""
+          srcset=""
+        />
+      </div>
+      <div>
+        <img
+          class="KunSlickImg"
+          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6ffcQVEtCkd0i7Q4-j5RQiZZKcAnN1y1Ybw&s"
+          alt="輪播"
+          sizes=""
+          srcset=""
+        />
+      </div>
+      <div>
+        <img
+          class="KunSlickImg"
+          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSaL4fNpnWebtDTQMYGtME0r0E2rzKQrCy5-g&s"
+          alt="輪播"
+          sizes=""
+          srcset=""
+        />
+      </div>
+      <div>
+        <img
+          class="KunSlickImg"
+          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSaJEsYL7HJg2ZF_ZNXqoRJSPx4E8c2fv3a_A&s"
+          alt="輪播"
+          sizes=""
+          srcset=""
+        />
+      </div>
     </div>
-  </div>
-  
-    
+    <!--輪播結束-->
 
-  
-            
-            <div class="col"><i class="fa-solid fa-store">找商家</i></div>            
-            <div class="col"><i class="fa-solid fa-shop">找品牌</i></div>            
-            <div class="col"><i class="fa-solid fa-crown">集點卡</i></div>
-            <div class="col"><i class="fa-solid fa-tags">優惠券</i></div>
-            <div class="col"><i class="fa-solid fa-rectangle-list">曾點過</i></div>
-            <div class="col"></div>            
-            <div class="col-2"></div>
+    <div class="Container m-5" style="text-align: center"></div>
+    <div class="Container m-5">
+      <div class="row KunSpeedSearch">
+        <div class="col-3"></div>
+        <div class="col" id="localLog">
+          <i class="fa-solid fa-map-location"><a href="#">找附近</a></i>
         </div>
-        
-        
-            <div class="row justify-content-center">
-                
-                <figure class="col-3 m-3 figure  ">
-                    <img src="./AL_56228.webp" alt=""  class="rounded KunIndexSotreImg " >
-                    
-                    
-                    <div class="row ">
-                        <figcaption class="figure-caption col-10 IndexImgNameFontSize drinkAddress" data-address="106台北市大安區復興南路一段107巷39號" >得正大安計畫</figcaption>
-                        <figcaption class="figure-caption col"><i class="fa-solid fa-truck"></i></figcaption>
-                        <figcaption class="figure-caption col-12 footer" ><i class="KunStar fa-solid fa-star"></i><span class="KunRank">4.8</span>&nbsp;‧&nbsp;11:00~22:00&nbsp;‧<span class="sotreDistance">??公里</span></figcaption>
-                    </div>                   
-                    
-                </figure>
 
-                <figure class="col-3 m-3 figure">
-                    <img src="./photo-64b7454a3f2f3.gif" alt="" class="rounded KunIndexSotreImg"  >
-                    <div class="row">
-                    <figcaption class="figure-caption col-10 IndexImgDescribeFontSize drinkAddress" style="font-weight: bold; color:black" data-address="231新北市新店區北新路一段257號">得正新店計畫</figcaption>
-                    <figcaption class="figure-caption col"><i class="fa-solid fa-truck"></i></figcaption>
-                    <figcaption class="figure-caption col-12 footer" ><i class="KunStar fa-solid fa-star"></i><span class="KunRank">4.5</span>&nbsp;‧&nbsp;11:00~22:00&nbsp;‧&nbsp;<span class="sotreDistance">??公里</span></figcaption>
-                    </div>      
-                </figure>
-                <figure class="col-3 m-3 figure">
-                    <img src="./202404019-7.jpg" alt="" class="rounded KunIndexSotreImg" >
-                    <div class="row">
-                        <figcaption class="figure-caption col-10 IndexImgNameFontSize drinkAddress" data-address="231新北市新店區北新路二段166號">八曜和茶七張店</figcaption>
-                    <figcaption class="figure-caption col"><i class="fa-solid fa-truck"></i></figcaption>
-                    <figcaption class="figure-caption col-12 footer" ><i class="KunStar fa-solid fa-star"></i><span class="KunRank">5</span>&nbsp;‧&nbsp;11:00~22:00&nbsp;‧&nbsp;<span class="sotreDistance">??公里</span></figcaption>
-                    </div>      
-                </figure>
-                <figure class="col-3 m-3 figure">
-                    <img src="./43_20230904101040_5619.jpg" alt="" class="rounded KunIndexSotreImg" >
-                    <div class="row">
-                        <figcaption class="figure-caption col-10 IndexImgNameFontSize drinkAddress" data-address="105台北市松山區慶城街1號2樓">春爽唐慶成店</figcaption>
-                    <figcaption class="figure-caption col"><i class="fa-solid fa-truck"></i></figcaption>
-                    <figcaption class="figure-caption col-12 footer" ><i class="KunStar fa-solid fa-star"></i><span class="KunRank">4.6</span>&nbsp;‧&nbsp;11:00~22:00&nbsp;‧&nbsp;<span class="sotreDistance">??公里</span></figcaption>
-                    </div>      
-                </figure>
-                <figure class="col-3 m-3 figure">
-                    <img src="./一.webp" alt="" class="rounded KunIndexSotreImg" >
-                    <div class="row">
-                        <figcaption class="figure-caption col-10 IndexImgNameFontSize drinkAddress" data-address="231新北市新店區民族路46號1樓">一沐日大坪林店</figcaption>
-                    <figcaption class="figure-caption col"><i class="fa-solid fa-truck"></i></figcaption>
-                    <figcaption class="figure-caption col-12 footer" ><i class="KunStar fa-solid fa-star"></i><span class="KunRank">4.4</span>&nbsp;‧&nbsp;11:00~22:00&nbsp;‧&nbsp;<span class="sotreDistance">??公里</span></figcaption>
-                    </div>      
-                </figure>
-                <!--here-->
-                <figure class="col-3 m-3 figure">
-                    <img src="./五銅.jpg" alt="" class="rounded KunIndexSotreImg" >
-                    <div class="row">
-                        <figcaption class="figure-caption col-10 IndexImgNameFontSize drinkAddress" data-address="116台北市文山區景文街104號">五同好景美店</figcaption>
-                    <figcaption class="figure-caption col"><i class="fa-solid fa-truck"></i></figcaption>
-                    <figcaption class="figure-caption col-12 footer" ><i class="KunStar fa-solid fa-star"></i><span class="KunRank">4.4</span>&nbsp;‧&nbsp;11:00~22:00&nbsp;‧&nbsp;<span class="sotreDistance">??公里</span></figcaption>
-                    </div>      
-                </figure>
-                <figure class="col-3 m-3 figure">
-                    <img src="./在睡.jpg" alt="" class="rounded KunIndexSotreImg" >
-                    <div class="row">
-                        <figcaption class="figure-caption col-10 IndexImgNameFontSize drinkAddress" data-address="234新北市永和區永和路一段158號">在睡五分鐘永和店</figcaption>
-                    <figcaption class="figure-caption col"><i class="fa-solid fa-truck"></i></figcaption>
-                    <figcaption class="figure-caption col-12 footer" ><i class="KunStar fa-solid fa-star"></i><span class="KunRank">4.4</span>&nbsp;‧&nbsp;11:00~22:00&nbsp;‧&nbsp;<span class="sotreDistance">??公里</span></figcaption>
-                    </div>      
-                </figure>
-                <figure class="col-3 m-3 figure">
-                    <img src="./白.jpg" alt="" class="rounded KunIndexSotreImg" >
-                    <div class="row">
-                        <figcaption class="figure-caption col-10 IndexImgNameFontSize drinkAddress" data-address="220新北市板橋區三民路二段19號">沐白板橋店</figcaption>
-                    <figcaption class="figure-caption col"><i class="fa-solid fa-truck"></i></figcaption>
-                    <figcaption class="figure-caption col-12 footer" ><i class="KunStar fa-solid fa-star"></i><span  class="KunRank">4.4</span>&nbsp;‧&nbsp;11:00~22:00&nbsp;‧&nbsp;<span class="sotreDistance">??公里</span></figcaption>
-                    </div>      
-                </figure>
+        <!-- Button trigger modal -->
+        <div class="col" id="myModal" data-bs-toggle="modal" data-bs-target="#exampleModal">
+          <i class="fa-solid fa-map"><a href="#">找區域</a></i>
+        </div>
 
+        <!-- Modal -->
+        <div
+          class="modal fade"
+          id="exampleModal"
+          tabindex="-1"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">找區域</h5>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body">
+                <select
+                  class="form-select"
+                  id="PlaceSearch"
+                  aria-label="Default select example"
+                >
+                  <option selected>選擇縣市</option>
+                  <option value="1">新北市</option>
+                  <option value="2">台北市</option></select
+                ><br />
 
+                <select
+                  class="form-select"
+                  id="AreaSearch"
+                  aria-label="Default select example"
+                >
+                  <option selected>選擇區域</option>
+                </select>
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                >
+                  關閉
+                </button>
+                <button type="button" class="btn btn-primary">儲存</button>
+              </div>
             </div>
+          </div>
+        </div>
+        <div class="col">
+          <i class="fa-solid fa-crown"
+            ><a href="./loyaltyCard.html">會員卡</a></i
+          >
+        </div>
 
+        <div class="col">
+          <i class="fa-solid fa-store"><a href="#">找品牌</a></i>
+        </div>
 
+        
+        <div class="col">
+          <i class="fa-solid fa-rectangle-list"><a href="#">曾點過</a></i>
+        </div>
 
+        <div class="col">
+          <i class="fa-solid fa-tags"><a href="./coupon.html">我的券夾</a></i>
+        </div>
+        <div class="col-3"></div>
+      </div>
+      <!-- 商家卡片呈現 -->
 
+      <div class="row justify-content-center">
+        <figure class="col-3 figure my-5 Heart">
+          <img
+            src="https://images.deliveryhero.io/image/fd-tw/tw-logos/cm2me-logo.jpg"
+            alt=""
+            class="rounded KunIndexSotreImg"
+          />
+          
+            
+          
 
+          <div class="row">
+            <figcaption
+              class="figure-caption col-6 IndexImgNameFontSize drinkAddress"
+              data-address="106台北市大安區復興南路一段107巷39號"
+              
+            >
+            <i class="fa-regular fa-heart" style="color: red;"></i> 得正大安計畫
+            </figcaption>
+            <figcaption class="figure-caption col">
+              <i class="fa-2x fa-solid fa-truck"></i>
+            </figcaption>
+            <figcaption class="figure-caption col-12 footer2">
+              <i class="KunStar fa-solid fa-star"></i
+              ><span class="KunRank">4.8</span
+              >&nbsp;‧&nbsp;11:00~22:00&nbsp;‧<span class="sotreDistance"
+                >??公里</span
+              >
+            </figcaption>
+          </div>
+        </figure>
 
-    
-    <div class="row align-items-md-stretch">
+        <figure class="col-3 figure my-5 Heart">
+          <img
+            src="https://images.deliveryhero.io/image/fd-tw/tw-logos/cm2me-logo.jpg"
+            alt=""
+            class="rounded KunIndexSotreImg"
+          />
+          <div class="row">
+            <figcaption
+              class="figure-caption col-6 IndexImgNameFontSize drinkAddress"
+              style="font-weight: bold; color: black"
+              data-address="231新北市新店區北新路一段257號"
+            >
+            <i class="fa-regular fa-heart" style="color: red;"></i> 得正新店計畫
+            </figcaption>
+            <figcaption class="figure-caption col">
+              <i class="fa-2x fa-solid fa-truck"></i>
+            </figcaption>
+            <figcaption class="figure-caption col-12 footer2">
+              <i class="KunStar fa-solid fa-star"></i
+              ><span class="KunRank">4.5</span
+              >&nbsp;‧&nbsp;11:00~22:00&nbsp;‧&nbsp;<span class="sotreDistance"
+                >??公里</span
+              >
+            </figcaption>
+          </div>
+        </figure>
+        <figure class="col-3 figure my-5 Heart">
+          <img
+            src="https://images.deliveryhero.io/image/fd-tw/tw-logos/cm2me-logo.jpg"
+            alt=""
+            class="rounded KunIndexSotreImg"
+          />
+          <div class="row">
+            <figcaption
+              class="figure-caption col-6 IndexImgNameFontSize drinkAddress"
+              data-address="231新北市新店區北新路二段166號"
+            >
+            <i class="fa-regular fa-heart" style="color: red;"></i>  八曜和茶七張店
+            </figcaption>
+            <figcaption class="figure-caption col">
+              <i class="fa-solid fa-truck fa-2x"></i>
+            </figcaption>
+            <figcaption class="figure-caption col-12 footer2">
+              <i class="KunStar fa-solid fa-star"></i
+              ><span class="KunRank">5</span
+              >&nbsp;‧&nbsp;11:00~22:00&nbsp;‧&nbsp;<span class="sotreDistance"
+                >??公里</span
+              >
+            </figcaption>
+          </div>
+        </figure>
+        <figure class="col-3 figure my-5 Heart">
+          <img
+            src="https://images.deliveryhero.io/image/fd-tw/tw-logos/cm2me-logo.jpg"
+            alt=""
+            class="rounded KunIndexSotreImg"
+          />
+          <div class="row">
+            <figcaption
+              class="figure-caption col-6 IndexImgNameFontSize drinkAddress"
+              data-address="105台北市松山區慶城街1號2樓"
+            >
+            <i class="fa-regular fa-heart" style="color: red;"></i> 春水塘慶成店
+            </figcaption>
+            <figcaption class="figure-caption col">
+              <i class="fa-solid fa-truck fa-2x"></i>
+            </figcaption>
+            <figcaption class="figure-caption col-12 footer2">
+              <i class="KunStar fa-solid fa-star"></i
+              ><span class="KunRank">4.6</span
+              >&nbsp;‧&nbsp;11:00~22:00&nbsp;‧&nbsp;<span class="sotreDistance"
+                >??公里</span
+              >
+            </figcaption>
+          </div>
+        </figure>
+        <figure class="col-3 figure my-5 Heart">
+          <img src="https://images.deliveryhero.io/image/fd-tw/tw-logos/cm2me-logo.jpg" alt="" class="rounded KunIndexSotreImg" />
+          <div class="row">
+            <figcaption
+              class="figure-caption col-6 IndexImgNameFontSize drinkAddress"
+              data-address="231新北市新店區民族路46號1樓"
+            >
+            <i class="fa-regular fa-heart" style="color: red;"></i>  一沐日大坪林店
+            </figcaption>
+            <figcaption class="figure-caption col">
+              <i class="fa-2x fa-solid fa-truck"></i>
+            </figcaption>
+            <figcaption class="figure-caption col-12 footer2">
+              <i class="KunStar fa-solid fa-star"></i
+              ><span class="KunRank">4.4</span
+              >&nbsp;‧&nbsp;11:00~22:00&nbsp;‧&nbsp;<span class="sotreDistance"
+                >??公里</span
+              >
+            </figcaption>
+          </div>
+        </figure>
+        <!--here-->
+        <figure class="col-3 figure my-5 Heart">
+          <img src="https://images.deliveryhero.io/image/fd-tw/tw-logos/cm2me-logo.jpg" alt="" class="rounded KunIndexSotreImg" />
+          <div class="row">
+            <figcaption
+              class="figure-caption col-6 IndexImgNameFontSize drinkAddress"
+              data-address="116台北市文山區景文街104號"
+            >
+            <i class="fa-regular fa-heart" style="color: red;"></i>  五同好景美店
+            </figcaption>
+            <figcaption class="figure-caption col">
+              <i class="fa-solid fa-truck fa-2x"></i>
+            </figcaption>
+            <figcaption class="figure-caption col-12 footer2">
+              <i class="KunStar fa-solid fa-star"></i
+              ><span class="KunRank">4.4</span
+              >&nbsp;‧&nbsp;11:00~22:00&nbsp;‧&nbsp;<span class="sotreDistance"
+                >??公里</span
+              >
+            </figcaption>
+          </div>
+        </figure>
+        <figure class="col-3 figure my-5 Heart">
+          <img src="https://images.deliveryhero.io/image/fd-tw/tw-logos/cm2me-logo.jpg" alt="" class="rounded KunIndexSotreImg" />
+          <div class="row">
+            <figcaption
+              class="figure-caption col-6 IndexImgNameFontSize drinkAddress"
+              data-address="234新北市永和區永和路一段158號"
+            >
+            <i class="fa-regular fa-heart" style="color: red;"></i>  在睡五分鐘永和店
+            </figcaption>
+            <figcaption class="figure-caption col">
+              <i class="fa-solid fa-truck fa-2x"></i>
+            </figcaption>
+            <figcaption class="figure-caption col-12 footer2">
+              <i class="KunStar fa-solid fa-star"></i
+              ><span class="KunRank">4.4</span
+              >&nbsp;‧&nbsp;11:00~22:00&nbsp;‧&nbsp;<span class="sotreDistance"
+                >??公里</span
+              >
+            </figcaption>
+          </div>
+        </figure>
+        <figure class="col-3 figure my-5 Heart">
+          <img src="https://images.deliveryhero.io/image/fd-tw/tw-logos/cm2me-logo.jpg" alt="" class="rounded KunIndexSotreImg" />
+          <div class="row">
+            <figcaption
+              class="figure-caption col-6 IndexImgNameFontSize drinkAddress"
+              data-address="220新北市板橋區三民路二段19號"
+            >
+            <i class="fa-regular fa-heart" style="color: red;"></i>  沐白板橋店
+            </figcaption>
+            <figcaption class="figure-caption col Heart">
+              <i class="fa-solid fa-truck fa-2x"></i>
+            </figcaption>
+            <figcaption class="figure-caption col-12 footer2">
+              <i class="KunStar fa-solid fa-star"></i
+              ><span class="KunRank">4.4</span
+              >&nbsp;‧&nbsp;11:00~22:00&nbsp;‧&nbsp;<span class="sotreDistance"
+                >??公里</span
+              >
+            </figcaption>
+          </div>
+        </figure>
+      </div>
+
+      <div class="row align-items-md-stretch">
         <div class="col-md-6">
           <div class="h-100 p-5 text-white bg-dark rounded-3">
             <h2>有夏虎茶真好，快來瞭解我們吧</h2>
-            
-            <button class="btn btn-outline-light" type="button">快速上手</button>
+
+            <a href="faq.html" class="btn btn-outline-light" type="button">
+              快速上手
+            </a>
           </div>
         </div>
         <div class="col-md-6">
           <div class="h-100 p-5 bg-light border rounded-3">
             <h2>有夏虎茶真好，快來加入我們吧</h2>
-            
-            <button class="btn btn-outline-secondary" type="button">手刀報名</button>
+
+            <a href="joinUs.html" class="btn btn-outline-secondary" type="button">
+              手刀報名
+            </a>
           </div>
         </div>
       </div>
     </div>
-<footer class="footer style7">
-    <div class="container">
-        <div class="container-wapper no-padding">
-            <div class="row">
-                <div class="box-footer col-xs-12 col-sm-4 col-md-4 col-lg-4">
-                    <div class="teamo-custommenu default">
-                        <ul class="menu">
-                            <li class="menu-item">
-                                <h3>夏虎茶</h3>
-                            </li>
-                            <li class="menu-item">
-                                <a href="#">公司資訊：雲仲資訊股份有限公司</a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="#">統一編號：58364751
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="box-footer col-xs-12 col-sm-4 col-md-4 col-lg-4 hidden-xs">
 
-                </div>
-                <div class="box-footer col-xs-12 col-sm-4 col-md-4 col-lg-4">
-                    <div class="teamo-custommenu default">
-                        <ul class="menu">
-                            <li class="menu-item">
-                                <a href="#">常見問題</a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="#">隱私權條款</a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="#">意見回饋</a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="#">使用者條款</a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="#">信用卡條款</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-end">
-                <div class="row">
-                    <div class="col-sm-12 col-xs-12">
-                        <div class="teamo-socials">
-                            <ul class="socials">
-                                <li>
-                                    <a href="#" class="social-item" target="_blank">
-                                        <i class="icon fa fa-facebook"></i>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="social-item" target="_blank">
-                                        <i class="icon fa fa-twitter"></i>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="social-item" target="_blank">
-                                        <i class="icon fa fa-instagram"></i>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="coppyright">
-                            © 2024 XiaHuTea 台灣 . All rights reserved
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</footer>
-
-
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <!-- 頁腳 -->
+    <footer class="footer style7">
+      <div class="container">
+          <div class="container-wapper no-padding">
+              <div class="row">
+                  <div class="box-footer col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                      <div class="teamo-custommenu default">
+                          <ul class="menu">
+                              <li class="menu-item">
+                                  <h3>夏虎茶</h3>
+                              </li>
+                              <li class="menu-item">
+                                  <a href="#">公司資訊：雲仲資訊股份有限公司</a>
+                              </li>
+                              <li class="menu-item">
+                                  <a href="#">統一編號：58364751
+                                  </a>
+                              </li>
+                          </ul>
+                      </div>
+                  </div>
+                  <div class="box-footer col-xs-12 col-sm-4 col-md-4 col-lg-4 hidden-xs">
+  
+                  </div>
+                  <div class="box-footer col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                      <div class="teamo-custommenu default">
+                          <ul class="menu">
+                              <li class="menu-item">
+                                  <a href="#">常見問題</a>
+                              </li>
+                              <li class="menu-item">
+                                  <a href="#">隱私權條款</a>
+                              </li>
+                              <li class="menu-item">
+                                  <a href="#">意見回饋</a>
+                              </li>
+                              <li class="menu-item">
+                                  <a href="#">使用者條款</a>
+                              </li>
+                              <li class="menu-item">
+                                  <a href="#">信用卡條款</a>
+                              </li>
+                          </ul>
+                      </div>
+                  </div>
+              </div>
+              <div class="footer-end">
+                  <div class="row">
+                      <div class="col-sm-12 col-xs-12">
+                          <div class="teamo-socials">
+                              <ul class="socials">
+                                  <li>
+                                      <a href="#" class="social-item" target="_blank">
+                                        <i class="fa-brands fa fa-facebook"></i>
+                                      </a>
+                                  </li>
+                                  <li>
+                                      <a href="#" class="social-item" target="_blank">
+                                        <i class="fa-brands fa-twitter"></i>
+                                      </a>
+                                  </li>
+                                  <li>
+                                      <a href="#" class="social-item" target="_blank">
+                                        <i class="fa-brands fa-instagram"></i>
+                                      </a>
+                                  </li>
+                              </ul>
+                          </div>
+                          <div class="coppyright">
+                              © 2024 XiaHuTea 台灣 . All rights reserved
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </footer>
+  
+    <!-- <script src="./js/general.js"></script> -->
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.min.js"
+      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+      crossorigin="anonymous"
+    ></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+    <!-- <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script> -->
     <!-- <script src="./assets/js/bootstrap.min.js"></script> -->
-<!-- Bootstrap CSS -->
+    <!-- Bootstrap CSS -->
 
+    <!-- jQuery (必要時) -->
+    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
 
-<!-- jQuery (必要時) -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<!-- Bootstrap JS -->
-<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <!-- Bootstrap JS -->
+    <!-- <script src="./js/cheatsheet.js"></script> -->
+<!-- 
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+      data-bs-no-jquery="true"
+    ></script> -->
     
-<script src="../static/assets/js/slick.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        function initMap() {
-            function getDistance() {
-                //const status = document.querySelector('#status'); // 狀況
-                // const result = document.querySelector('#result'); // 結果
-                const drinkAddressTags = document.querySelectorAll('.drinkAddress'); // 飲料店地址
-                
-                // result.textContent = "";
+    <!-- <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.min.js" integrity="sha384-lpyLfhYuitXl2zRZ5Bn2fqnhNAKOAaM/0Kr9laMspuaMiZfGmfwRNFh8HlMy49eQ" crossorigin="anonymous"></script>
+    <script src="./assets/js/slick.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+<script src="assets/js/jquery-1.12.4.min.js"></script>
+<script src="assets/js/jquery.plugin-countdown.min.js"></script>
+<script src="assets/js/jquery-countdown.min.js"></script>
+<script src="assets/js/bootstrap.min.js"></script>
+<script src="assets/js/owl.carousel.min.js"></script>
+<script src="assets/js/magnific-popup.min.js"></script>
+<script src="assets/js/isotope.min.js"></script>
+<script src="assets/js/jquery.scrollbar.min.js"></script>
+<script src="assets/js/jquery-ui.min.js"></script>
+<script src="assets/js/mobile-menu.js"></script>
+<script src="assets/js/chosen.min.js"></script>
+<script src="assets/js/slick.js"></script>
+<script src="assets/js/jquery.elevateZoom.min.js"></script>
+<script src="assets/js/jquery.actual.min.js"></script>
+<script src="assets/js/fancybox/source/jquery.fancybox.js"></script>
+<script src="assets/js/lightbox.min.js"></script>
+<script src="assets/js/owl.thumbs.min.js"></script>
+<script src="assets/js/jquery.scrollbar.min.js"></script>
+<script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyC3nDHy1dARR-Pa_2jjPCjvsOR4bcILYsM'></script>
+<script src="assets/js/frontend-plugin.js"></script>
 
-                function error() {
-                    // status.textContent = "瀏覽器不支援定位";
-                    alert("瀏覽器不支援定位");
-                }
-
-                function success(position) {
-                    const latitude = position.coords.latitude;
-                    const longitude = position.coords.longitude;
-                    const userPosition = new google.maps.LatLng(latitude, longitude); // 取得使用者地址
-
-                    const service = new google.maps.DistanceMatrixService();
-                    const drinkAddressTags = document.querySelectorAll('.drinkAddress'); // 飲料店地址
-
-                    drinkAddressTags.forEach(function(drinkAddress){
-
-                        service.getDistanceMatrix(
-                        {
-                            origins: [userPosition],
-                            destinations: [drinkAddress.getAttribute('data-address')],
-                            travelMode: google.maps.TravelMode.DRIVING, //開車
-                            unitSystem: google.maps.UnitSystem.METRIC, // 公里
-                            avoidHighways: false,
-                            avoidTolls: false,
-                        }, callback);
-
-                    function callback(response, status) {
-                        if (status === 'OK') {
-                            // 取得使用者位置後 首先抓取 每家店的位址 進行計算
-                            const origin = response.originAddresses[0];
-                            const destination = response.destinationAddresses[0];
-                            console.log("response.rows" + response.rows[0].elements[0]);
-                            if (response.rows[0].elements[0].status === "OK") {
-                                const distance = response.rows[0].elements[0].distance.text;
-                                
-
-                                
-                                //let storeFooter = $(drinkAddress).nextAll().eq(1);//獲取當層元素
-                                const sotreFooter = $(drinkAddress).nextAll().eq(1);
-                                console.log("distance :"+distance);
-                                
-                                // sotreFooter.find('.sotreDistance').text();
-                                console.log(sotreFooter.find('.sotreDistance').html(`&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;約${distance}`));
-                                
-                                
-                                // result.textContent = `從 ${origin} 到 ${destination} 的距離是 ${distance}`;
-                            } else {
-                                const sotreFooter = $(drinkAddress).nextAll().eq(1);
-                                sotreFooter.find('.sotreDistance').text(`計算失敗}`);
-                                
-                            }
-                        } else {
-                            
-                            const sotreFooter = $(drinkAddress).nextAll().eq(1);
-                                sotreFooter.find('.sotreDistance').text(`計算失敗}`);
-                        }
-                    }
-
-
-                    })
-
-                    
-                }
-
-                if (!navigator.geolocation) {
-                    status.textContent = "不支援地理定位";
-                } else {
-                    status.textContent = '加載中...';
-                    navigator.geolocation.getCurrentPosition(success, error);
-                }
-            }
-
-            document.querySelector('#localLog').addEventListener('click', getDistance);
+<script>
+      
+  document.addEventListener("DOMContentLoaded", function () {
+    //監聽有這個屬性的KunIndexSotreImg 如果有空心就改實心
+    //實心紅
+    let RedHeart = '<i class="fa-solid fa-heart" style="color: red;"></i>';
+    let noHeart = '<i class="fa-regular fa-heart"></i>';
+    let ALLStores = document.querySelectorAll('.KunIndexSotreImg');
+    ALLStores.forEach((element) => {
+      
+      element.addEventListener('click',function(){
+        console.log(this);
+        var ele = this.nextElementSibling.querySelector('.fa-heart');
+        console.log(ele);
+        if(ele.classList.contains('fa-regular')){
+          ele.classList.remove('fa-regular');
+          ele.classList.add('fa-solid');
+          ele.style.color = 'red'; // 改變顏色為紅色
+          //如果是實心 就取代 改成空心
+          //this.nextElementSibling.querySelector('.fa-solid') =noHeart;
+        }else{
+          ele.classList.remove('fa-solid');
+          ele.classList.add('fa-regular');
+          ele.style.color = 'red'; // 
+          //如果是空心 取代 改成實心
+          //this.nextElementSibling.querySelector('.fa-solid') =RedHeart;
         }
-    </script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAm4iwqRUtQfPBubWGDHpMB9cQ4uLvkM4I&libraries=places&callback=initMap"></script> 
+      });
+    } );
+    // //典籍找附近之後 過濾三公里內
+    // let localTag = document.querySelector('#localLog');
+    // localTag.addEventListener("click",function(){
+
+    //     if (navigator.geolocation) {
+    //         navigator.geolocation.getCurrentPosition(function(position){
+    //             // 取得 position 位置資訊，可於 console 中印出來看看
+    //             console.log(position);
+
+    //             let lat = position.coords.latitude;
+    //             let lng = position.coords.longitude;
+    //             //有了經緯度後開始計算距離
+    //             let allDrinkAddress = document.querySelectorAll('.drinkAddress');
+    //             // console.log(allDrinkAddress);
+    //             // allDrinkAddress.forEach(element => {
+    //             //     // console.log(element.getAttribute("data-address"));  // 取得飲料店地址
+
+    //             // });
+
+    //             });
+    //     // 有支援
+    //     }else{
+    //         alert("該瀏覽器不支援定位");
+    //     }
+
+    // });//定位找附近
+
+    let userLogin = document.querySelector(".userLogin"); //登入按鈕
+    let searchPlace = document.querySelector(".searchPlace");
+
+    //加入愛心失敗
+    let heartTag =
+      '<div class="favorite-text"><i class="fa-solid fa-heart"></i></div>';
+    let storetags = document.querySelectorAll(".KunIndexSotreImg");
+    storetags.forEach(function (item) {
+      //監聽被覆蓋
+      item.addEventListener("mouseenter", function () {
+        if (!item.parentElement.querySelector(".favorite-text")) {
+          // item.insertAdjacentHTML('afterend', heartTag);
+        }
+      });
+      item.addEventListener("mouseleave", function () {
+        console.log("走了");
+        let heartElement =
+          item.parentElement.querySelector(".favorite-text");
+        if (heartElement) {
+          // heartElement.remove();
+        }
+      });
+    }); //所有店家迴圈
     
-    
-    <script>
-        document.addEventListener("DOMContentLoaded",function(){
 
-            // //典籍找附近之後 過濾三公里內
-            // let localTag = document.querySelector('#localLog');
-            // localTag.addEventListener("click",function(){
+//監聽商家
+let allSotre = document.querySelectorAll('.Heart');
+//
 
-            //     if (navigator.geolocation) {
-            //         navigator.geolocation.getCurrentPosition(function(position){
-            //             // 取得 position 位置資訊，可於 console 中印出來看看
-            //             console.log(position);
-                        
-            //             let lat = position.coords.latitude;
-            //             let lng = position.coords.longitude;
-            //             //有了經緯度後開始計算距離
-            //             let allDrinkAddress = document.querySelectorAll('.drinkAddress');
-            //             // console.log(allDrinkAddress);
-            //             // allDrinkAddress.forEach(element => {
-            //             //     // console.log(element.getAttribute("data-address"));  // 取得飲料店地址
+  }); //end dom
 
-            //             // });
-
-
-                        
-            //             });
-            //     // 有支援
-            //     }else{
-            //         alert("該瀏覽器不支援定位");
-            //     }
-
-            // });//定位找附近
-
-
-            let userLogin = document.querySelector('.userLogin'); //登入按鈕
-            let searchPlace = document.querySelector('.searchPlace');
-            
-            
-
-
-                //加入愛心失敗
-            let heartTag ='<div class="favorite-text"><i class="fa-solid fa-heart"></i></div>';
-            let storetags = document.querySelectorAll('.KunIndexSotreImg');
-            storetags.forEach(function(item){
-                //監聽被覆蓋
-                item.addEventListener('mouseenter',function(){
-                    if (!item.parentElement.querySelector('.favorite-text')) {
-                // item.insertAdjacentHTML('afterend', heartTag);
-            }
-                });
-                item.addEventListener('mouseleave',function(){
-                    console.log('走了')
-                    let heartElement = item.parentElement.querySelector('.favorite-text');
-                    if (heartElement) {
-                        // heartElement.remove();
-                    }
-                });
-            }); //所有店家迴圈
-
-            
-
-        
-
-        }); //end dom    
-        
-        
-
-        $(document).ready(function() {
-            var districts = {
-        "1": ["板橋區", "新莊區", "中和區", "永和區", "三重區", "蘆洲區", "汐止區", "土城區", "樹林區", "三峽區", "鶯歌區", "淡水區", "瑞芳區", "五股區", "泰山區", "林口區"],
-        "2": ["中正區", "大同區", "中山區", "松山區", "大安區", "萬華區", "信義區", "士林區", "北投區", "內湖區", "南港區", "文山區"]
+  $(document).ready(function () {
+    var districts = {
+      1: [
+        "板橋區",
+        "新莊區",
+        "中和區",
+        "永和區",
+        "三重區",
+        "蘆洲區",
+        "汐止區",
+        "土城區",
+        "樹林區",
+        "三峽區",
+        "鶯歌區",
+        "淡水區",
+        "瑞芳區",
+        "五股區",
+        "泰山區",
+        "林口區",
+      ],
+      2: [
+        "中正區",
+        "大同區",
+        "中山區",
+        "松山區",
+        "大安區",
+        "萬華區",
+        "信義區",
+        "士林區",
+        "北投區",
+        "內湖區",
+        "南港區",
+        "文山區",
+      ],
     };
 
-    $('#PlaceSearch').change(function(){
-        var selectedCity = $(this).val();
-        var selectedArea = $('#AreaSearch');
-        
-        console.log(selectedCity);
-        if(selectedCity){
-            selectedArea.empty(); //清空之前選單
-            selectedArea.append('<option value="">請選擇區域</option>');
-            districts[selectedCity].forEach(function(row){
-                selectedArea.append('<option value="' + row + '">' + row + '</option>')
-            });
-            
-        }
+    $("#PlaceSearch").change(function () {
+      var selectedCity = $(this).val();
+      var selectedArea = $("#AreaSearch");
 
-
-
+      console.log(selectedCity);
+      if (selectedCity) {
+        selectedArea.empty(); //清空之前選單
+        selectedArea.append('<option value="">請選擇區域</option>');
+        districts[selectedCity].forEach(function (row) {
+          selectedArea.append(
+            '<option value="' + row + '">' + row + "</option>"
+          );
+        });
+      }
     }); //選擇了縣市
 
-    $('#citySelect').change(function() {
-        var selectedCity = $(this).val();
-        var districtSelect = $('#districtSelect');
+    $("#citySelect").change(function () {
+      var selectedCity = $(this).val();
+      var districtSelect = $("#districtSelect");
 
-        districtSelect.empty(); // 清空之前的選項
+      districtSelect.empty(); // 清空之前的選項
 
-        if (selectedCity) {
-            districtSelect.prop('disabled', false);
-            districtSelect.append('<option value="">請選擇區域</option>');
+      if (selectedCity) {
+        districtSelect.prop("disabled", false);
+        districtSelect.append('<option value="">請選擇區域</option>');
 
-            districts[selectedCity].forEach(function(district) {
-                districtSelect.append('<option value="' + district + '">' + district + '</option>');
-            });
-        } else {
-            districtSelect.prop('disabled', true);
-            districtSelect.append('<option value="">請先選擇城市</option>');
-        }
+        districts[selectedCity].forEach(function (district) {
+          districtSelect.append(
+            '<option value="' + district + '">' + district + "</option>"
+          );
+        });
+      } else {
+        districtSelect.prop("disabled", true);
+        districtSelect.append('<option value="">請先選擇城市</option>');
+      }
     });
 
-
-
-
-            $('.kunClass').slick({
-                centerMode: true,
-                slidesToShow: 1,
-                slidesToScroll: 1,
-                autoplay: true,
-                autoplaySpeed: 2000,
-                arrows: false,
-                
-            });
-            $('.slick-slide').css('filter', 'blur(3px)');
-            $('.slick-center').css('filter', 'none');
-             // 监听 Slick 的初始化和切换事件，以确保正确应用模糊效果
-        $('.kunClass').on('init afterChange', function(event, slick, currentSlide){
+    $(".kunClass").slick({
+      centerMode: true,
+      slidesToShow: 1,
+      slidesToScroll: 1,
+      autoplay: true,
+      autoplaySpeed: 2000,
+      arrows: false,
+    });
+    $(".slick-slide").css("filter", "blur(3px)");
+    $(".slick-center").css("filter", "none");
+    // 监听 Slick 的初始化和切换事件，以确保正确应用模糊效果
+    $(".kunClass").on(
+      "init afterChange",
+      function (event, slick, currentSlide) {
         // 确保在初始化和每次滑动后应用正确的滤镜
-                        $('.slick-slide').css('filter', 'blur(3px)');
-                        $('.slick-slide').css('overflow','hidden');
-                        $('.slick-center').css('filter', 'none');
-                        $('.slick-center').css('overflow','none');
-                    });
+        $(".slick-slide").css("filter", "blur(3px)");
+        $(".slick-slide").css("overflow", "hidden");
+        $(".slick-center").css("filter", "none");
+        $(".slick-center").css("overflow", "none");
+      }
+    );
+  });
+</script>
 
     
+    <script>
 
+      
+      function initMap() {
+        function getDistance() {
+          //const status = document.querySelector('#status'); // 狀況
+          // const result = document.querySelector('#result'); // 結果
+          const drinkAddressTags = document.querySelectorAll(".drinkAddress"); // 飲料店地址
 
-        });  
+          // result.textContent = "";
 
+          function error() {
+            // status.textContent = "瀏覽器不支援定位";
+            alert("瀏覽器不支援定位");
+          }
 
-        
-        </script>
-</body>
+          function success(position) {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+            const userPosition = new google.maps.LatLng(latitude, longitude); // 取得使用者地址
+
+            const service = new google.maps.DistanceMatrixService();
+            const drinkAddressTags = document.querySelectorAll(".drinkAddress"); // 飲料店地址
+
+            drinkAddressTags.forEach(function (drinkAddress) {
+              service.getDistanceMatrix(
+                {
+                  origins: [userPosition],
+                  destinations: [drinkAddress.getAttribute("data-address")],
+                  travelMode: google.maps.TravelMode.DRIVING, //開車
+                  unitSystem: google.maps.UnitSystem.METRIC, // 公里
+                  avoidHighways: false,
+                  avoidTolls: false,
+                },
+                callback
+              );
+
+              function callback(response, status) {
+                if (status === "OK") {
+                  // 取得使用者位置後 首先抓取 每家店的位址 進行計算
+                  const origin = response.originAddresses[0];
+                  const destination = response.destinationAddresses[0];
+                  console.log("response.rows" + response.rows[0].elements[0]);
+                  if (response.rows[0].elements[0].status === "OK") {
+                    const distance = response.rows[0].elements[0].distance.text;
+
+                    //let storeFooter = $(drinkAddress).nextAll().eq(1);//獲取當層元素
+                    const sotreFooter = $(drinkAddress).nextAll().eq(1);
+                    console.log("distance :" + distance);
+
+                    // sotreFooter.find('.sotreDistance').text();
+                    console.log(
+                      sotreFooter
+                        .find(".sotreDistance")
+                        .html(
+                          `&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;約${distance}`
+                        )
+                    );
+
+                    // result.textContent = `從 ${origin} 到 ${destination} 的距離是 ${distance}`;
+                  } else {
+                    const sotreFooter = $(drinkAddress).nextAll().eq(1);
+                    sotreFooter.find(".sotreDistance").text(`計算失敗}`);
+                  }
+                } else {
+                  const sotreFooter = $(drinkAddress).nextAll().eq(1);
+                  sotreFooter.find(".sotreDistance").text(`計算失敗}`);
+                }
+              }
+            });
+          }
+
+          if (!navigator.geolocation) {
+            status.textContent = "不支援地理定位";
+          } else {
+            status.textContent = "加載中...";
+            navigator.geolocation.getCurrentPosition(success, error);
+          }
+        }
+
+        document
+          .querySelector("#localLog")
+          .addEventListener("click", getDistance);
+      }
+    </script>
+    <script
+      async
+      defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAm4iwqRUtQfPBubWGDHpMB9cQ4uLvkM4I&libraries=places&callback=initMap"
+    ></script>
+   
+    
+  </body>
 </html>
