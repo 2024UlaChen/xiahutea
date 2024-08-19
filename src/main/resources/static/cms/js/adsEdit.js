@@ -17,13 +17,14 @@ document.addEventListener("DOMContentLoaded", function () {
         description_el.value = adsData.description;
         start_date_el.value = adsData.startDate;
         end_date_el.value = adsData.endDate;
+        if (adsData.homepageDisplay === '是') {
+            check_homedisplay_el.checked = true;
+        }
+        if(adsData.status === '啟用'){
+            check_active_el.checked = true;
+        }
     }
-    if (adsData.homepageDisplay === '是') {
-        check_homedisplay_el.checked = true;
-    }
-    if(adsData.status === '啟用'){
-        check_active_el.checked = true;
-    }
+    localStorage.clear();
 
     //***********************************日期選擇限制******************************
     start_date_el.addEventListener('change', function () {

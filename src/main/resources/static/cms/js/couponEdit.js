@@ -7,12 +7,15 @@ document.addEventListener("DOMContentLoaded",function () {
     let no_limit_el = document.getElementById("no-limit")
     let is_limit_el = document.getElementById("is-limit")
     let limit_amount_el = document.getElementById("limit-amount")
+    let active_el = document.getElementById("active")
+    let no_active_el = document.getElementById("no-active")
     let coupon_discount_el = document.getElementById("input-coupon-discount")
     let coupon_detail_el = document.getElementById("coupon-detail")
 
 
 
     //***********************************接收localstorage資料*********************
+
     const couponData = JSON.parse(localStorage.getItem('couponData'));
     if(couponData){
         coupon_title_el.value = couponData.title;
@@ -20,12 +23,14 @@ document.addEventListener("DOMContentLoaded",function () {
         coupon_start_date_el.value = couponData.startDate;
         coupon_end_date_el.value = couponData.endDate;
         coupon_discount_el.value = couponData.discount;
+        if (couponData.status === '啟用') {
+            active_el.checked = true;
+        }else{
+            no_active_el.checked = true;
+        }
     }
-    if (couponData.status === '啟用') {
-        document.getElementById("active").checked = true;
-    }else{
-        document.getElementById("no-active").checked = true;
-    }
+
+    localStorage.clear();
 
     //***********************************檢查placeholder*********************
     coupon_detail_el.addEventListener('input', checkDetailContent);
@@ -54,21 +59,35 @@ document.addEventListener("DOMContentLoaded",function () {
     document.getElementById('coupon-form').addEventListener('submit', function (event) {
         event.preventDefault();
 
-        const noLimitChecked = document.getElementById('no-limit').checked;
-        const isLimitChecked = document.getElementById('is-limit').checked;
-        const activeChecked = document.getElementById('active').checked;
-        const noactiveChecked = document.getElementById('no-active').checked;
+        const noLimitChecked = no_limit_el.checked;
+        const isLimitChecked = is_limit_el.checked;
+        const activeChecked = active_el.checked;
+        const noactiveChecked = no_active_el.checked;
 
         // 檢查是否至少選擇了一個選項
-        if (!activeChecked && !noactiveChecked) {
-            alert('請選擇是否啟用');
-            return;
-        }
         if (!noLimitChecked && !isLimitChecked) {
-            alert('請選擇有效張數的選項。');
+            Swal.fire({
+                icon: 'error',
+                title: '錯誤',
+                text: '請選擇有效張數的選項。',
+            });
             return;
         }
-})
+        if (!activeChecked && !noactiveChecked) {
+            Swal.fire({
+                icon: 'error',
+                title: '錯誤',
+                text: '請選擇是否啟用',
+            });
+            return;
+        }
+        // 表單提交邏輯
+        Swal.fire({
+            icon: 'success',
+            title: '成功',
+            text: '表單已提交。',
+        });
+    });
     //*******************************準備表單資料發送 AJAX 請求************************
     const formData = new FormData(document.getElementById('coupon-form'));
     fetch('your-server-endpoint-url', {
