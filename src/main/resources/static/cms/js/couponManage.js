@@ -15,6 +15,24 @@ document.addEventListener("DOMContentLoaded", function () {
     let btn_next_el = document.getElementById('next-btn');
 
 
+    //**************************************修改表格資料*****************************
+    document.addEventListener('click', function (event) {
+        if (event.target.classList.contains('td-edit')) {
+            const row = event.target.closest('tr');
+            const data = {
+                title: row.cells[0].textContent,
+                id: row.cells[1].textContent,
+                discount: row.cells[2].textContent,
+                amount: row.cells[3].textContent,
+                status: row.cells[4].textContent,
+                startDate :row.cells[5].textContent,
+                endDate:row.cells[6].textContent,
+                //TODO 還要再加入優惠券描述但不是從cell來
+            };
+            localStorage.setItem('couponData', JSON.stringify(data));
+            window.location.href = 'couponEdit.html';
+        }
+    });
     //**************************************表格分頁*****************************
     // 初始顯示第一頁並創建分頁按鈕，顯示總筆數
     result_count_el.textContent = `共計 ${totalRows - 1} 筆`;

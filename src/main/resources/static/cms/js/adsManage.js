@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
             renderTable(currentPage);
         }
     }
-    //渲染表格
+    //**************************************渲染表格*****************************
     // fetch('your-api-endpoint')
     //     .then(response => response.json())
     //     .then(data => {
@@ -69,5 +69,22 @@ document.addEventListener("DOMContentLoaded", function () {
     //             tbody.appendChild(row);
     //         });
     //     })
+    //**************************************修改表格資料*****************************
+    document.addEventListener('click', function (event) {
+        if (event.target.classList.contains('td-edit')) {
+            const row = event.target.closest('tr');
+            const data = {
+                title: row.cells[0].textContent,
+                id: row.cells[1].textContent,
+                description: row.cells[2].textContent,
+                startDate: row.cells[3].textContent,
+                endDate: row.cells[4].textContent,
+                homepageDisplay: row.cells[5].textContent,
+                status: row.cells[6].textContent
+            };
+            localStorage.setItem('adsData', JSON.stringify(data));
+            window.location.href = 'adsEdit.html';
+        }
+    });
 });
 

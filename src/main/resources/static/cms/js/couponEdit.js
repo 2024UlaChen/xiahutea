@@ -1,22 +1,38 @@
 document.addEventListener("DOMContentLoaded",function () {
     //定義標籤
+    let coupon_title_el = document.getElementById("input-coupon-title")
+    let coupon_id_el = document.getElementById("input-coupon-id")
     let coupon_start_date_el = document.getElementById('coupon-start-date')
     let coupon_end_date_el = document.getElementById('coupon-end-date')
     let no_limit_el = document.getElementById("no-limit")
     let is_limit_el = document.getElementById("is-limit")
     let limit_amount_el = document.getElementById("limit-amount")
+    let coupon_discount_el = document.getElementById("input-coupon-discount")
     let coupon_detail_el = document.getElementById("coupon-detail")
 
 
 
-    //按鈕事件綁定
-    //textarea預設placeholder
+    //***********************************接收localstorage資料*********************
+    const couponData = JSON.parse(localStorage.getItem('couponData'));
+    if(couponData){
+        coupon_title_el.value = couponData.title;
+        coupon_id_el.value = couponData.id;
+        coupon_start_date_el.value = couponData.startDate;
+        coupon_end_date_el.value = couponData.endDate;
+        coupon_discount_el.value = couponData.discount;
+    }
+    if (couponData.status === '啟用') {
+        document.getElementById("active").checked = true;
+    }else{
+        document.getElementById("no-active").checked = true;
+    }
+
+    //***********************************檢查placeholder*********************
     coupon_detail_el.addEventListener('input', checkDetailContent);
     coupon_detail_el.addEventListener('blur', checkDetailContent);
-    checkDetailContent()
-// 初始檢查
+
     checkDetailContent();
-    //日期選擇限制
+    //***********************************日期選擇限制*************************
     coupon_start_date_el.addEventListener('change', function () {
         var startDate = this.value;
         coupon_end_date_el.setAttribute('min', startDate);
@@ -25,7 +41,7 @@ document.addEventListener("DOMContentLoaded",function () {
         var endDate = this.value;
         coupon_start_date_el.setAttribute('max', endDate);
     });
-    //選擇限制張數
+    //**********************************選擇限制張數*************************
     is_limit_el.addEventListener("click", function () {
         limit_amount_el.disabled = false;
         limit_amount_el.focus();
@@ -34,7 +50,7 @@ document.addEventListener("DOMContentLoaded",function () {
         limit_amount_el.value = "";
         limit_amount_el.disabled = true;
     });
-    //表單必填選項未填寫
+    //********************************表單必填選項未填寫*************************
     document.getElementById('coupon-form').addEventListener('submit', function (event) {
         event.preventDefault();
 
@@ -52,12 +68,9 @@ document.addEventListener("DOMContentLoaded",function () {
             alert('請選擇有效張數的選項。');
             return;
         }
-
 })
-    // 準備表單資料
+    //*******************************準備表單資料發送 AJAX 請求************************
     const formData = new FormData(document.getElementById('coupon-form'));
-
-    // 發送 AJAX 請求
     fetch('your-server-endpoint-url', {
         method: 'POST',
         body: formData
@@ -80,10 +93,7 @@ document.addEventListener("DOMContentLoaded",function () {
             document.getElementById('response-message').textContent = `提交失敗: ${error.message}`;
             console.error('Error:', error);
         });
-
-
-    //*************************************FUNCTION*****************************************
-    // 檢查內容並更新 placeholder
+    //*************************************檢查內容並更新 placeholder****************************
     function checkDetailContent() {
         const detailData = coupon_detail_el.value.trim();
         if (detailData === "") {
