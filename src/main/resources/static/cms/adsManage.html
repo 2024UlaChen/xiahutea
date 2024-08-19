@@ -21,231 +21,51 @@
     <div class="storeaside"></div>
     <!--查詢條件-->
     <div class="container">
-        <h1>優惠券列表</h1>
+        <h1>廣告列表</h1>
         <div class="form-group">
-            <label for="input-coupon-title" id="coupon-title">優惠券標題</label>
-            <input type="text" id="input-coupon-title">
+            <label for="input-ads-title" id="coupon-title">廣告標題</label>
+            <input type="text" id="input-ads-title">
         </div>
         <div class="form-group">
-            <label for="input-coupon-id" id="coupon-id">優惠券ID</label>
-            <input type="text" id="input-coupon-id">
+            <label for="input-ads-id" id="coupon-id">廣告ID</label>
+            <input type="text" id="input-ads-id">
         </div>
-        <label id="coupon-status">折價券狀態</label>
+        <label id="ads-status">廣告狀態</label>
         <input type="radio" id="active" name="check-active">
         <label for="active" id="label-active">啟用</label>
         <input type="radio" id="no-active" name="check-active">
         <label for="no-active" id="label-no-active">停用</label>
         <div class="button-group">
-            <button type="button" id="find-coupon" class="btn btn-block btn-default">查詢</button>
-            <a href="couponEdit.html">
-                <button type="button" id="add-coupon" class="btn btn-block btn-info">新增</button>
+            <button type="button" id="find-ads" class="btn btn-block btn-default">查詢</button>
+            <a href="adsEdit.html">
+                <button type="button" id="add-ads" class="btn btn-block btn-info">新增</button>
             </a>
         </div>
-        <!--優惠券列表-->
-        <table class="coupon-table">
+        <!--廣告列表-->
+        <table class="ads-table">
             <thead>
             <tr>
-                <th>優惠券名稱</th>
-                <th>優惠券ID</th>
-                <th>折扣金額</th>
-                <th>有效張數</th>
-                <th>狀態</th>
-                <th>折價券日期</th>
-                <th>發送時間</th>
-                <th>發送人數</th>
-                <th>使用人數</th>
+                <th>廣告名稱</th>
+                <th>廣告ID</th>
+                <th>廣告描述</th>
+                <th>開始日期</th>
+                <th>結束日期</th>
+                <th>顯示在首頁</th>
+                <th>啟用狀態</th>
                 <th>功能</th>
             </tr>
             </thead>
             <tbody>
             <tr>
-                <td>夏季折扣</td>
+                <td>大特賣888</td>
                 <td>A123456</td>
-                <td>$100</td>
-                <td>50</td>
+                <td>大特賣大特賣大特賣</td>
+                <td>2024-08-01</td>
+                <td>2024-08-31</td>
+                <td>是</td>
                 <td>啟用</td>
-                <td>2024-08-01 ~ 2024-08-31</td>
-                <td>2024-07-31 12:00</td>
-                <td>200</td>
-                <td>150</td>
                 <td>
-                    <a href="couponEdit.html">
-                        <button type="button" id="td-edit">修改</button>
-                    </a>
-                </td>
-            </tr>
-            <tr>
-                <td>夏季折扣2</td>
-                <td>B123456</td>
-                <td>$100</td>
-                <td>50</td>
-                <td>啟用</td>
-                <td>2024-08-01 ~ 2024-08-31</td>
-                <td>2024-07-31 12:00</td>
-                <td>200</td>
-                <td>150</td>
-                <td>
-                    <a href="couponEdit.html">
-                        <button type="button" id="td-edit">修改</button>
-                    </a>
-                </td>
-            </tr>
-            <tr>
-                <td>夏季折扣3</td>
-                <td>C123456</td>
-                <td>$100</td>
-                <td>50</td>
-                <td>啟用</td>
-                <td>2024-08-01 ~ 2024-08-31</td>
-                <td>2024-07-31 12:00</td>
-                <td>200</td>
-                <td>150</td>
-                <td>
-                    <a href="couponEdit.html">
-                        <button type="button" id="td-edit">修改</button>
-                    </a>
-                </td>
-            </tr>
-            <tr>
-                <td>夏季折扣4</td>
-                <td>D123456</td>
-                <td>$100</td>
-                <td>50</td>
-                <td>啟用</td>
-                <td>2024-08-01 ~ 2024-08-31</td>
-                <td>2024-07-31 12:00</td>
-                <td>200</td>
-                <td>150</td>
-                <td>
-                    <a href="couponEdit.html">
-                        <button type="button" id="td-edit">修改</button>
-                    </a>
-                </td>
-            </tr>
-            <tr>
-                <td>夏季折扣5</td>
-                <td>E123456</td>
-                <td>$100</td>
-                <td>50</td>
-                <td>啟用</td>
-                <td>2024-08-01 ~ 2024-08-31</td>
-                <td>2024-07-31 12:00</td>
-                <td>200</td>
-                <td>150</td>
-                <td>
-                    <a href="couponEdit.html">
-                        <button type="button" id="td-edit">修改</button>
-                    </a>
-                </td>
-            </tr>
-            <tr>
-                <td>夏季折扣6</td>
-                <td>F123456</td>
-                <td>$100</td>
-                <td>50</td>
-                <td>啟用</td>
-                <td>2024-08-01 ~ 2024-08-31</td>
-                <td>2024-07-31 12:00</td>
-                <td>200</td>
-                <td>150</td>
-                <td>
-                    <a href="couponEdit.html">
-                        <button type="button" id="td-edit">修改</button>
-                    </a>
-                </td>
-            </tr>
-            <tr>
-                <td>夏季折扣7</td>
-                <td>G123456</td>
-                <td>$100</td>
-                <td>50</td>
-                <td>啟用</td>
-                <td>2024-08-01 ~ 2024-08-31</td>
-                <td>2024-07-31 12:00</td>
-                <td>200</td>
-                <td>150</td>
-                <td>
-                    <a href="couponEdit.html">
-                        <button type="button" id="td-edit">修改</button>
-                    </a>
-                </td>
-            </tr>
-            <tr>
-                <td>夏季折扣8</td>
-                <td>H123456</td>
-                <td>$100</td>
-                <td>50</td>
-                <td>啟用</td>
-                <td>2024-08-01 ~ 2024-08-31</td>
-                <td>2024-07-31 12:00</td>
-                <td>200</td>
-                <td>150</td>
-                <td>
-                    <a href="couponEdit.html">
-                        <button type="button" id="td-edit">修改</button>
-                    </a>
-                </td>
-            </tr>
-            <tr>
-                <td>夏季折扣9</td>
-                <td>J123456</td>
-                <td>$100</td>
-                <td>50</td>
-                <td>啟用</td>
-                <td>2024-08-01 ~ 2024-08-31</td>
-                <td>2024-07-31 12:00</td>
-                <td>200</td>
-                <td>150</td>
-                <td>
-                    <a href="couponEdit.html">
-                        <button type="button" id="td-edit">修改</button>
-                    </a>
-                </td>
-            </tr>
-            <tr>
-                <td>夏季折扣10</td>
-                <td>K123456</td>
-                <td>$100</td>
-                <td>50</td>
-                <td>啟用</td>
-                <td>2024-08-01 ~ 2024-08-31</td>
-                <td>2024-07-31 12:00</td>
-                <td>200</td>
-                <td>150</td>
-                <td>
-                    <a href="couponEdit.html">
-                        <button type="button" id="td-edit">修改</button>
-                    </a>
-                </td>
-            </tr>
-            <tr>
-                <td>夏季折扣11</td>
-                <td>L123456</td>
-                <td>$100</td>
-                <td>50</td>
-                <td>啟用</td>
-                <td>2024-08-01 ~ 2024-08-31</td>
-                <td>2024-07-31 12:00</td>
-                <td>200</td>
-                <td>150</td>
-                <td>
-                    <a href="couponEdit.html">
-                        <button type="button" id="td-edit">修改</button>
-                    </a>
-                </td>
-            </tr>
-            <tr>
-                <td>夏季折扣12</td>
-                <td>M123456</td>
-                <td>$100</td>
-                <td>50</td>
-                <td>啟用</td>
-                <td>2024-08-01 ~ 2024-08-31</td>
-                <td>2024-07-31 12:00</td>
-                <td>200</td>
-                <td>150</td>
-                <td>
-                    <a href="couponEdit.html">
+                    <a href="adsEdit.html">
                         <button type="button" id="td-edit">修改</button>
                     </a>
                 </td>
