@@ -73,7 +73,7 @@
   text-decoration: none;
 }
 
-#removeAllButton{
+#removeButton{
   display: inline-block;
   padding: 10px 20px;
   font-size: 16px;
@@ -112,7 +112,7 @@
   margin-top: 10px;
 }
 .previewImage {
-  max-width: 400px;
-  max-height: 400px;
+  max-width: 600px;
+  max-height: 600px;
   object-fit: cover;
 }
