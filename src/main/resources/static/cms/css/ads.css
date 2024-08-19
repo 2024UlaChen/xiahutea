@@ -48,7 +48,45 @@
   font-size: 14px;
 }
 
-.container button {
+#imageUpload{
+  display: inline-block;
+  font-size: 16px;
+  color: #007bff;
+  background-color: #fff;
+  border: none;
+  border-radius: 5px;
+}
+#imageUpload::-webkit-file-upload-button {
+  display: none;
+}
+#imageUpload::before {
+  content: '選擇圖片';
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #007bff;
+  border: 1px solid #007bff;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+}
+
+#removeAllButton{
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+}
+
+#btn-submit{
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -63,10 +101,18 @@
   margin-left: 200px;
 }
 
-.container button:hover {
+#btn-submit:hover {
   background-color: #45a049;
 }
 
-/* ads-title::placeholder{
-  color: #333;
-} */
+#previewContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+.previewImage {
+  max-width: 400px;
+  max-height: 400px;
+  object-fit: cover;
+}

@@ -28,7 +28,7 @@
         </div>
         <div class="ads-descript">
             <label for="description">廣告描述：</label>
-            <textarea id="description" name="description" rows="4" maxlength="255" placeholder="可輸入255字元單位" required></textarea>
+            <textarea id="description" name="description" rows="4" maxlength="255" placeholder="可輸入255字元單位" ></textarea>
         </div>
         <div class="ads-start-time">
             <label for="start_date">開始日期：</label>
@@ -40,7 +40,9 @@
         </div>
         <div class="img-url">
             <label for="image_link">圖片上傳：</label>
-            <input type="file" id="imageUpload" name="imageUpload" accept="image/*" >
+            <input type="file" id="imageUpload" name="imageUpload" accept="image/*" multiple>
+            <button id="removeAllButton">移除全部圖片</button>
+            <div id="previewContainer"></div>
         </div>
         <div class="display-on-homepage">
             <label>
@@ -54,7 +56,7 @@
                 啟用廣告
             </label>
         </div>
-        <button type="submit">提交廣告</button>
+        <button id="btn-submit" type="submit">提交廣告</button>
     </form>
   </div>
 

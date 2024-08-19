@@ -1,9 +1,12 @@
-document.addEventListener("DOMContentLoaded", function (){
+document.addEventListener("DOMContentLoaded", function () {
     //抓取標籤
-    let title_el = document.getElementById("title");
-    let description_el = document.getElementById("description");
+    let title_el = document.getElementById("title")
+    let description_el = document.getElementById("description")
     let start_date_el = document.getElementById("start_date")
     let end_date_el = document.getElementById("end_date")
+    let file_input_el = document.getElementById("imageUpload")
+    let preview_container_el = document.getElementById('previewContainer')
+    let btn_remove_all_el = document.getElementById("removeAllButton")
     //事件綁定
     //日期選擇限制
     start_date_el.addEventListener('change', function () {
@@ -34,5 +37,26 @@ document.addEventListener("DOMContentLoaded", function (){
         if (description_el.value === "") {
             description_el.placeholder = "可輸入255字元單位";
         }
+    });
+    //圖片上傳預覽
+    file_input_el.addEventListener('change', function(event) {
+        let files = event.target.files;
+
+        for (let i = 0; i < files.length; i++) {
+            let file = files[i];
+            let reader = new FileReader();
+
+            reader.onload = function(e) {
+                let img = document.createElement('img');
+                img.src = e.target.result;
+                img.classList.add('previewImage');
+                preview_container_el.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+    btn_remove_all_el.addEventListener('click', function() {
+        preview_container_el.innerHTML = '';
+        file_input_el.value = '';
     });
 })
