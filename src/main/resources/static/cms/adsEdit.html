@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
     <link rel="stylesheet" href="dist/css/adminlte.min.css">
-    <link rel="stylesheet" href="css/ads.css">
+    <link rel="stylesheet" href="css/adsEdit.css">
       <!-- DataTables -->
       <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
       <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
@@ -38,8 +38,12 @@
             <label for="end_date">結束日期：</label>
             <input type="date" id="end_date" name="end_date" required>
         </div>
+        <div id="existingImageContainer">
+            <label for="existing-img">當前圖片：</label>
+            <div id="previewContainer"></div>
+        </div>
         <div class="img-url">
-            <label for="image_link">圖片上傳：</label>
+            <label for="image_link">圖片新增/修改：</label>
             <input type="file" id="imageUpload" name="imageUpload" accept="image/*" >
             <button id="removeButton">移除圖片</button>
             <div id="previewContainer"></div>
@@ -78,6 +82,6 @@
   <script src="dist/js/adminlte.js"></script>
   <script src="dist/js/demo.js"></script>
   <script src="js/storegeneral.js"></script>
-  <script src="js/ads.js"></script>
+  <script src="js/adsEdit.js"></script>
   </body>
 </html>
