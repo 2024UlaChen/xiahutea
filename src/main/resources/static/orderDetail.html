@@ -25,6 +25,23 @@
     <link rel="stylesheet" href="assets/css/mobile-menu.css">
     <link rel="stylesheet" href="assets/fonts/flaticon/flaticon.css">
     <link rel="stylesheet" href="assets/css/style.css">
+
+<!--    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">-->
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" /><!--全部Outlined-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" /><!--全部Rounded-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" /><!--全部Sharp-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"><!--全部icon-->
+
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings:
+                  'FILL' 1,/*是否填滿 0 or 1*/
+                  'wght' 400,/*粗細 100 ~ 700*/
+                  'GRAD' 0,/*視覺平衡粗細 -25 0 200*/
+                  'opsz' 48 /*大小*/
+        }
+    </style>
     <style>
         /* background-color: #f5f5f5; */
         /*header & footer*/
@@ -41,6 +58,7 @@
             font-size: 20px;
             margin-left: 10px;
         }
+
         .query-bar a {
             margin-left: 10px;
             margin-right: 10px;
@@ -132,15 +150,19 @@
             border-radius: 1%;
         }
         div.shop-top-control{
-            display:flex;
+            display:flex ;
+            width: 100%;
+            height: 100%;
+
         }
-        /* 灰色大區塊 */
+        /* 左右 兩區*/
         div.order_div{
             margin: 5px;
             padding: 5px;
             width: 50%;
             height: 100%;
             border-radius: 1%;
+            min-width: 450px;
         }
 
         /* 店家區塊 */
@@ -182,7 +204,6 @@
         div.store_detail div.store_name{
             font-weight: bold;
             color: black;
-
         }
         div.store_detail div.store_info_text span{
             color: black;
@@ -193,8 +214,49 @@
             width: 20%;
             display: inline;
         }
-        div.store_others > button.btn_dispute_apply{
+        /* 店家區塊 > btn爭議&評分 */
+        button.btn_order_star , button.btn_dispute_apply{
+            float: right; /* 將按鈕浮動到右邊 */
+            margin-right: 20px;
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            width: 100px;
+            height: 40px;
+            background-color: #73B4BA;
+            border: 1px solid #73B4BA;
+            font-size: 16px;
+            color: white;
+            border-radius: 5px;
+        }
+        button.btn_dispute_apply{
             margin-top: 15px;
+        }
+        button.btn_order_star.-close , button.btn_dispute_apply.-close{
+            background-color:#6c757d;
+            border: 1px solid #6c757d;
+        }
+
+        /* btn 回上一頁 */
+        .order_btn_back_div{
+            display: flex;
+            justify-content: center; /* 水平置中 */
+        }
+        .order_btn_back{
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            width: 100px;
+            height: 40px;
+            background-color: #F8F9FA;
+            border: 1px solid #73B4BA;
+            font-size: 16px;
+            color: #53a0a7;
+            border-radius: 5px;
         }
 
         /* 訂單明細區塊 */
@@ -219,30 +281,6 @@
             border-top:0;
             padding: 8px; /* 設置內邊距 */
             text-align: left; /* 文字靠左 */
-        }
-        /* btn 評分 */
-        button.btn_order_star{
-            float: right; /* 將按鈕浮動到右邊 */
-            margin-right: 20px;
-        }
-        button.btn_order_star.-close {
-            background-color:#e4e4e48e;
-            color: black;
-        }
-        /* btn 爭議 */
-        button.btn_dispute_apply{
-            float: right; /* 將按鈕浮動到右邊 */
-            margin-right: 20px;
-        }
-        button.btn_dispute_apply.-close{
-            background-color:#e4e4e48e;
-            color: black;
-        }
-
-        /* 回上一頁 */
-        .order_btn_back_div{
-            display: flex;
-            justify-content: center; /* 水平置中 */
         }
 
         /* 商品區塊 */
@@ -352,7 +390,7 @@
         }
         /* ==== 燈箱 > 星號變色 ===== */
         div.star_block > span.star.-on{
-            color: yellow;
+            color: #FAC792;
         }
         /* ===== 燈箱 > 評分建議區塊 ===== */
         textarea#star_text{
@@ -362,6 +400,7 @@
             min-height: 100px;
             max-width: 80%;
             min-width: 80%;
+            padding: 10px;
         }
         /* ===== 燈箱 > 評分按鈕 ===== */
         div.btn_star_close_div {
@@ -369,11 +408,38 @@
             justify-content: center; /* 水平置中 */
             padding: 5px; /* 添加內邊距 */
         }
-        div.btn_star_close_div > button{
+        div.btn_star_close_div > button#demo1{
             padding: 10px 20px; /* 按鈕內部的內邊距 */
             margin: 10px;
-        }
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            width: 100px;
+            height: 40px;
+            background-color: #73B4BA;
+            border: 1px solid #73B4BA;
+            font-size: 16px;
+            color: white;
+            border-radius: 5px;
 
+
+        }
+        div.btn_star_close_div > button#btn_star_close{
+            padding: 10px 20px; /* 按鈕內部的內邊距 */
+            margin: 10px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            width: 100px;
+            height: 40px;
+            background-color: #F8F9FA;
+            border: 1px solid #73B4BA;
+            font-size: 16px;
+            color: #53a0a7;
+            border-radius: 5px;
+        }
     </style>
 </head>
 
@@ -385,7 +451,7 @@
     <div class="container">
         <div class="row">
             <div class="content-area shop-grid-content no-banner col-lg-9 col-md-9 col-sm-12 col-xs-12">
-                <div class="shop-top-control" style="width: 100%;height: 100%;">
+                <div class="shop-top-control" >
                     <div class="order_div" style="width: 50%;height: 100%;">
                         <div class="store_info" style= "width: 100%;height: 20%;">
                             <div class="store_logo">
@@ -402,34 +468,43 @@
                             <div class="store_others">
                                 <button type="button" class="btn_order_star">訂單評分</button>
                                 <button class="btn_dispute_apply">爭議申請</button>
-
-                                <!-- 訂單評分燈箱 -->
-                                <div id="lightbox_star" class="none">
-                                    <form action=”#”>
-                                        <div class="star_title_div ">
-                                            <p class="star_title">訂單編號</p>
-                                            <div class="star_order_id_div">
-                                                <label for="star_order_id"></label><input id="star_order_id" type="text" name="star_order_id" value="2407200001" disabled>
-                                            </div>
-                                            <p class="star_title">關於訂單的評分</p>
-                                            <div class="star_block">
-                                                <span class="star" data-star="1"><i class="fas fa-star"></i></span>
-                                                <span class="star" data-star="2"><i class="fas fa-star"></i></span>
-                                                <span class="star" data-star="3"><i class="fas fa-star"></i></span>
-                                                <span class="star" data-star="4"><i class="fas fa-star"></i></span>
-                                                <span class="star" data-star="5"><i class="fas fa-star"></i></span>
-                                            </div>
-                                            <p class="star_title">關於訂單的意見</p>
-                                            <label for="star_text"></label><textarea id="star_text" type="text" name="star_text" placeholder="建議可對口味、包裝等細節提供評論"></textarea>
-                                            <div class="btn_star_close_div" >
-                                                <button type="button" id="btn_star_submit">送出</button>
-                                                <button type="button" id="btn_star_close">取消</button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
                             </div>
                         </div>
+
+                        <!-- 訂單評分燈箱 -->
+                        <div id="lightbox_star" class="none">
+                            <form>
+                                <div class="star_title_div ">
+                                    <p class="star_title">訂單編號</p>
+                                    <div class="star_order_id_div">
+                                        <label for="star_order_id"></label><input id="star_order_id" type="text" name="star_order_id" value="2407200001" disabled>
+                                    </div>
+                                    <p class="star_title">關於訂單的評分</p>
+                                    <div class="star_block">
+                                        <span class="star" data-star="1"><i class="fas fa-star"></i></span>
+                                        <span class="star" data-star="2"><i class="fas fa-star"></i></span>
+                                        <span class="star" data-star="3"><i class="fas fa-star"></i></span>
+                                        <span class="star" data-star="4"><i class="fas fa-star"></i></span>
+                                        <span class="star" data-star="5"><i class="fas fa-star"></i></span>
+
+                                        <!--                                                <span class="star" data-star="1"><i><img class="material-symbols-outlined" src="./img/order_star.svg" alt="star"></i></span>-->
+                                        <!--                                                <span class="star" data-star="2"><i><img class="material-symbols-outlined" src="./img/order_star.svg" alt="star"></i></span>-->
+                                        <!--                                                <span class="star" data-star="3"><i><img class="material-symbols-outlined" src="./img/order_star.svg" alt="star"></i></span>-->
+                                        <!--                                                <span class="star" data-star="4"><i><img class="material-symbols-outlined" src="./img/order_star.svg" alt="star"></i></span>-->
+                                        <!--                                                <span class="star" data-star="5"><i><img class="material-symbols-outlined" src="./img/order_star.svg" alt="star"></i></span>-->
+
+                                    </div>
+                                    <p class="star_title">關於訂單的意見</p>
+                                    <label for="star_text"></label><textarea id="star_text" type="text" name="star_text" placeholder="建議可對口味、包裝等細節提供評論"></textarea>
+                                    <div class="btn_star_close_div" >
+                                        <button type="button" id="demo1" class="btn_star_submit">送出</button>
+                                        <button type="button" id="btn_star_close">取消</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <!--/ 訂單評分燈箱 -->
+
                         <div class="order_info" style="width: 100%; height: 80%;">
                             <table class="order_info_tb">
                                 <tbody>
@@ -492,24 +567,7 @@
                         <div class="product_info" >
                             <div class="product_list">
                                 <li class="product_li">
-                                    <ul class="product_ul">
-                                        <div class="product_name">珍珠奶茶</div>
-                                        <span>去冰</span><span> / </span><span>無糖</span><span> / </span>
-                                        <span> $</span><span>45</span><span> / </span>
-                                        <span>1</span><span>項</span>
-                                    </ul>
-                                    <ul class="product_ul">
-                                        <div class="product_name">珍珠奶茶</div>
-                                        <span>去冰</span><span> / </span><span>無糖</span><span> / </span>
-                                        <span> $</span><span>45</span><span> / </span>
-                                        <span>1</span><span>項</span>
-                                    </ul>
-                                    <ul class="product_ul">
-                                        <div class="product_name">珍珠奶茶</div>
-                                        <span>去冰</span><span> / </span><span>無糖</span><span> / </span>
-                                        <span> $</span><span>45</span><span> / </span>
-                                        <span>1</span><span>項</span>
-                                    </ul>
+                                <!--   商品明細寫在JS    -->
                                 </li>
                             </div>
                             <div class="product_total">
@@ -526,8 +584,6 @@
         </div>
     </div>
 </div>
-
-
 
 <div class="footer"></div>
 
@@ -553,7 +609,11 @@
 <script src="assets/js/frontend-plugin.js"></script>
 <!--<script src="assets/js/newjs.js"></script>-->
 <script src="./js/general.js"></script>
+<!--star-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+
+<!--sweet alert  -->
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function(){
 
@@ -597,14 +657,13 @@
         // todo: 待確認 url 送資料到後端
         // 1.1.2 打開燈箱 > btn送出 點擊後檢查欄位，送資料到後端，關閉視窗後disabled btn
         let star_order_id = document.getElementById("star_order_id").value;
-        let btn_star_submit = document.getElementById("btn_star_submit");
+        let btn_star_submit = document.getElementsByClassName("btn_star_submit")[0];
 
         btn_star_submit.addEventListener("click", function(e){
             const star_count = getStar();
             let star_text = document.getElementById("star_text");
 
             if(star_count > 0){
-
                 let star_data = new FormData();
                 star_data.append("order_id", star_order_id);
                 star_data.append("star_count", star_count + '');
@@ -619,18 +678,18 @@
 
 
                     //更改btn disabled css樣式
-                    alert("已送出評分");
+                    swal("已送出評分","","success");
                     btn_star_close.click();
                     btn_order_star.classList.add("-close");
                     btn_order_star.setAttribute("disabled", "disabled");
                     btn_order_star.innerHTML="完成評分";
                 }).catch((error) =>{
                     console.error("發生錯誤：", error);
-                    alert("提交時發生錯誤，請稍後再試。");
+                    swal("提交時發生錯誤，請稍後再試。");
                     btn_star_close.click();
                 });
             }else{
-                alert("至少需完成評分");
+                swal("至少需完成評分","","error");
             }
         });
 
@@ -694,6 +753,43 @@
         order_btn_back.addEventListener("click", function(){
             history.back();
         });
+        //=========================================================================================
+        // 5. 商品列表
+        const products = [
+            {
+                name: "珍珠奶茶",
+                specifications: ["去冰", "無糖"],
+                price: 45,
+                quantity: 1
+            },
+            {
+                name: "珍珠紅茶",
+                specifications: ["少冰", "半糖"],
+                price: 40,
+                quantity: 2
+            },
+            {
+                name: "珍珠鮮奶茶",
+                specifications: ["正常冰", "全糖"],
+                price: 60,
+                quantity: 1
+            }
+        ];
+
+        let productHtml = "";
+        for(let i = 0; i < products.length ; i++){
+            productHtml += `
+                <ul class="product_ul">
+                    <div class="product_name">${products[i].name}</div>
+                    <span>${products[i].specifications[0]}</span><span> / </span><span>${products[i].specifications[1]}</span><span> / </span>
+                    <span> $</span><span>${products[i].price}</span><span> / </span>
+                    <span>${products[i].quantity}</span><span>項</span>
+                </ul>
+            `;
+        }
+        document.getElementsByClassName("product_li")[0].innerHTML = productHtml;
+
+
     });
 </script>
 </body>

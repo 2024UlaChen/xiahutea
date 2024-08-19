@@ -152,7 +152,7 @@
             border-radius: 1%;
         }
         label.dispute_form_key{
-            padding-right: 20px
+            padding-right: 20px;
         }
         label.dispute_form_value_label{
             width: 100%;
@@ -163,6 +163,7 @@
             font-weight: normal;
             background-color: #f5f5f5;
             border: 1px rgba(128, 128, 128, 0.43) solid;
+            border-radius: 5px;
         }
         textarea.dispute_form_reason{
             border: 1px gray solid;
@@ -172,20 +173,48 @@
             max-height: 100px;
             min-height: 100px;
             font-weight: normal;
+            border-radius: 5px;
+        }
+        .red_star{
+            color: red;
         }
 
         /* btn 區塊*/
         .button-container {
             display: flex;
             justify-content: center; /* 水平置中 */
-            gap: 10px; /* 添加按鈕之間的間距 */
+            gap: 30px; /* 添加按鈕之間的間距 */
             padding: 5px; /* 添加內邊距 */
         }
-        button.btn_dispute_apply{
+        button#demo1{
             display: inline-flex;
-            margin: 10px;
-            padding: 10px 20px; /* 按鈕內部的內邊距 */
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            width: 100px;
+            height: 40px;
+            background-color: #73B4BA;
+            border: 1px solid #73B4BA;
+            font-size: 16px;
+            color: white;
+            border-radius: 5px;
         }
+        button#btn_back{
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            width: 100px;
+            height: 40px;
+            background-color: #F8F9FA;
+            border: 1px solid #73B4BA;
+            font-size: 16px;
+            color: #53a0a7;
+            border-radius: 5px;
+        }
+
+
+
 
     </style>
 </head>
@@ -229,13 +258,13 @@
                     </label>
                 </div>
                 <div>
-                    <label class="dispute_form_key">申請原因</label><br>
+                    <label class="dispute_form_key">申請原因<span class="red_star"> *</span></label><br>
                     <label class="dispute_form_value_label">
                         <textarea class="dispute_form_reason" name="dispute_reason" rows="2"></textarea>
                     </label>
                 </div>
                 <div class="button-container">
-                    <button class="btn_dispute_apply" id="btn_submit" type="button">送出</button>
+                    <button class="btn_dispute_apply btn_submit" id="demo1" type="button">送出</button>
                     <button class="btn_dispute_apply" id="btn_back" type="button">取消</button>
                 </div>
             </form>
@@ -266,11 +295,12 @@
 <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyC3nDHy1dARR-Pa_2jjPCjvsOR4bcILYsM'></script>
 <script src="assets/js/frontend-plugin.js"></script>
 <script src="./js/general.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function(){
 
         let btn_back_el = document.getElementById("btn_back");
-        let btn_submit_el = document.getElementById("btn_submit");
+        let btn_submit_el = document.getElementsByClassName("btn_submit")[0];
         let order_id = document.getElementsByClassName("dispute_form_value")[0].value;
         let dispute_user_name = document.getElementsByClassName("dispute_form_value")[1].value;
         let form_reason_el = document.getElementsByClassName("dispute_form_reason")[0];
@@ -283,6 +313,7 @@
 
         // 2. btn 送出
         btn_submit_el.addEventListener("click", function(e){
+            console.log("123")
             // 2.1 點擊後 檢查文字長度，送出資料至後端
             if(form_reason_el.value.length > 0 ){
                 e.preventDefault();
@@ -301,15 +332,18 @@
                     // todo: 送出資料至後端
 
 
-                    alert("已送出爭議申請");
+
+                    // todo bug 目前的連結明細後 沒有跳alert
                     location.href = "orderDetail.html";
+                    swal("已送出爭議申請", "", "success");
+
                 }).catch(error => {
                     console.error("發生錯誤：", error);
-                    alert("提交時發生錯誤，請稍後再試。");
+                    swal("提交時發生錯誤，請稍後再試。","","error");
                 });
             }else{
                 e.preventDefault();
-                alert("申請原因 請輸入內容");
+                swal("申請原因 請輸入內容","","error");
             }
         });
     });
