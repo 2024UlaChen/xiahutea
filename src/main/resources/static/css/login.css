@@ -1,15 +1,70 @@
-.login{
+.login {
+    border-radius: 5px;
     margin: 0 auto;
-    margin-top: 5%;
-    width: 324px;
-    height: 470px;
+    margin-top: 10%;
+    margin-bottom: 10%;
+    width: 400px;
     padding: 2%;
     background-color: white;
     text-align: center;
-
+    box-shadow: 0 0 12px 0 rgba(2, 2, 2, 0.16);
 }
-.login h5 {
-}
-.loginFrom{
 
+.login div {
+    margin-bottom: 5%;
+}
+
+
+.loginBtn {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100px;
+    height: 40px;
+    background-color: #73B4BA;
+    border: 1px solid #73B4BA;
+    font-size: 16px;
+    color: white;
+    border-radius: 5px;
+    margin-bottom: 2%;
+}
+
+.registerLink {
+    color: #73B4BA;
+}
+
+.registerLink:hover {
+    font-weight: bold;
+    color: #73B4BA;
+    cursor: pointer;
+}
+
+.forgotPwd {
+    color: #6c757d;
+}
+
+.forgotPwd:hover {
+    color: #dc3545;
+    cursor: pointer;
+}
+
+.loginForm {
+    text-align: left;
+}
+
+.loginForm div {
+    margin: 0;
+    margin-left: 2%;
+    border-radius: 5px;
+}
+
+.userPhoneBlock {
+    display: flex;
+    border: 1px solid #6c757d;
+    justify-content: space-around;
+}
+
+.passwordError, .userPhoneError {
+    color: #dc3545;
+    font-size: 24px;
 }
