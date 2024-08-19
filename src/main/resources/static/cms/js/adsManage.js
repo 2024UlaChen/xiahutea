@@ -15,15 +15,13 @@ document.addEventListener("DOMContentLoaded", function () {
     let btn_next_el = document.getElementById('next-btn');
 
 
-    //**************************************RUN*****************************
+    //**************************************表格分頁*****************************
     // 初始顯示第一頁並創建分頁按鈕，顯示總筆數
     result_count_el.textContent = `共計 ${totalRows - 1} 筆`;
     renderTable(currentPage);
 
-    //**************************************事件綁定*****************************
     btn_prev_el.addEventListener("click", prevPage);
     btn_next_el.addEventListener("click", nextPage);
-    //**************************************FUNCTION****************************
     //計算當前頁面要顯示的幾筆資料
     function renderTable(page) {
         const start = (page - 1) * rowsPerPage;
@@ -46,5 +44,30 @@ document.addEventListener("DOMContentLoaded", function () {
             renderTable(currentPage);
         }
     }
+    //渲染表格
+    // fetch('your-api-endpoint')
+    //     .then(response => response.json())
+    //     .then(data => {
+    //         var tbody = document.querySelector('.ads-table tbody');
+    //         tbody.innerHTML = ''; // 清空現有的 tbody 內容
+    //
+    //         data.forEach(ad => {
+    //             var row = document.createElement('tr');
+    //             row.innerHTML = `
+    //           <td>${ad.name}</td>
+    //           <td>${ad.id}</td>
+    //           <td>${ad.description}</td>
+    //           <td>${ad.startDate}</td>
+    //           <td>${ad.endDate}</td>
+    //           <td>${ad.homepageDisplay ? '是' : '否'}</td>
+    //           <td>${ad.enabled ? '啟用' : '停用'}</td>
+    //           <td>
+    //               <a href="adsEdit.html?id=${ad.id}">
+    //                   <button type="button" id="td-edit">修改</button>
+    //               </a>
+    //           </td>
+    //             tbody.appendChild(row);
+    //         });
+    //     })
 });
 
