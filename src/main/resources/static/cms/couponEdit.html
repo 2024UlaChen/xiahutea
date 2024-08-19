@@ -21,40 +21,73 @@
     <div class="storeaside"></div>
     <!--查詢條件-->
     <div class="container">
-        <h1>優惠券新增/修改</h1>
-        <div class="form-group">
-            <label for="input-coupon-title" id="coupon-title">優惠券標題</label>
-            <input type="text" id="input-coupon-title" >
-        </div>
-        <div class="form-group">
-            <label for="input-coupon-id" id="coupon-id">優惠券ID</label>
-            <input type="text" id="input-coupon-id" >
-        </div>
+        <form id="coupon-form">
+            <h1>優惠券新增/修改</h1>
 
-        <div class="form-group">
-            <label for="coupon-detail">折價券說明</label>
-            <textarea id="coupon-detail" placeholder="請輸入優惠券說明...." rows="3" maxlength="255"></textarea>
-        </div>
-        <label id="coupon-status">折價券狀態</label>
-        <input type="radio" id="active" name="check-active">
-        <label for="active" id="label-active">啟用</label>
-        <input type="radio" id="no-active" name="check-active">
-        <label for="no-active" id="label-no-active">停用</label>
-        <div class="form-group">
-            <label for="coupon-start-date">折價券期限</label>
-            <div class="date-range">
-                <input type="date" id="coupon-start-date" placeholder="開始日期">
-                <span> ~ </span>
-                <input type="date" id="coupon-end-date" placeholder="結束日期">
+            <div class="form-group flex-row">
+                <label for="input-coupon-title" id="coupon-title">優惠券標題</label>
+                <input type="text" id="input-coupon-title">
             </div>
-        </div>
-        <label id="coupon-status">有效張數</label>
-        <input type="radio" id="no-limit" name="amount-check">
-        <label for="no-limit" id="label-no-limit">無限制</label>
-        <input type="radio" id="is-limit" name="amount-check">
-        <label for="is-limit" id="label-is-limit">有限張數</label>
-        <input type="text" id="limit-amount" disabled>
+
+            <div class="form-group flex-row">
+                <label for="input-coupon-id" id="coupon-id">優惠券ID</label>
+                <input type="text" id="input-coupon-id">
+            </div>
+
+            <div class="form-group flex-row">
+                <label for="coupon-detail">折價券說明</label>
+                <textarea id="coupon-detail" placeholder="請輸入優惠券說明...." rows="3" maxlength="255"></textarea>
+            </div>
+
+            <!-- 有效張數的部分 -->
+            <div class="form-group flex-row">
+                <label id="coupon-limit-status">有效張數</label>
+                <div class="radio-group">
+                    <input type="radio" id="no-limit" name="amount-check">
+                    <label for="no-limit" id="label-no-limit">無限制</label>
+                    <input type="radio" id="is-limit" name="amount-check">
+                    <label for="is-limit" id="label-is-limit">有限張數</label>
+                    <input type="text" id="limit-amount" disabled>
+                </div>
+            </div>
+
+            <!-- 折價券期限的部分 -->
+            <div class="form-group flex-row">
+                <label for="coupon-start-date">折價券期限</label>
+                <div class="date-range">
+                    <input type="date" id="coupon-start-date">
+                    <span> ~ </span>
+                    <input type="date" id="coupon-end-date">
+                </div>
+            </div>
+
+            <div class="form-group flex-row">
+                <label for="input-coupon-discount" id="coupon-discount">優惠券折抵金額</label>
+                <input type="text" id="input-coupon-discount">
+            </div>
+
+            <!-- 折價券狀態 -->
+            <div class="form-group flex-row">
+                <label id="coupon-status">折價券狀態</label>
+                <div class="radio-group">
+                    <input type="radio" id="active" name="check-active">
+                    <label for="active" id="label-active">啟用</label>
+                    <input type="radio" id="no-active" name="check-active">
+                    <label for="no-active" id="label-no-active">停用</label>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button type="submit" class="btn btn-block btn-info">送出</button>
+                <a href="couponManage.html">
+                    <button type="button" class="btn btn-block btn-default">回列表</button>
+                </a>
+            </div>
+            <p id="response-message"></p>
+
+        </form>
     </div>
+
     <div class="storefooter"></div>
 </div>
 
