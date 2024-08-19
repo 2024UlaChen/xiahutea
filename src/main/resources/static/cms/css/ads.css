@@ -49,13 +49,18 @@
 }
 
 .container button {
-  padding: 10px 20px;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 200px;
+  height: 40px;
+  background-color: #73B4BA;
+  border: 1px solid #73B4BA;
   font-size: 16px;
+  color: white;
+  border-radius: 5px;
+  margin-left: 200px;
 }
 
 .container button:hover {
