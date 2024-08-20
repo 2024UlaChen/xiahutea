@@ -3,13 +3,13 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>廣告管理</title>
+    <title>廣告新增/修改</title>
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
     <link rel="stylesheet" href="dist/css/adminlte.min.css">
-    <link rel="stylesheet" href="css/ads.css">
+    <link rel="stylesheet" href="css/adsEdit.css">
       <!-- DataTables -->
       <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
       <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
@@ -20,7 +20,7 @@
   <div class="storeheader"></div>
   <div class="storeaside"></div>
   <div class="container">
-    <h1>廣告管理</h1>
+    <h1>廣告新增/修改</h1>
     <form action="/submit_advertisement" method="POST">
         <div class="ads-title">
             <label for="title">廣告標題：</label>
@@ -28,7 +28,7 @@
         </div>
         <div class="ads-descript">
             <label for="description">廣告描述：</label>
-            <textarea id="description" name="description" rows="4" maxlength="255" placeholder="可輸入255字元單位" required></textarea>
+            <textarea id="description" name="description" rows="4" maxlength="255" placeholder="可輸入255字元單位" ></textarea>
         </div>
         <div class="ads-start-time">
             <label for="start_date">開始日期：</label>
@@ -38,23 +38,29 @@
             <label for="end_date">結束日期：</label>
             <input type="date" id="end_date" name="end_date" required>
         </div>
+        <div id="existingImageContainer">
+            <label for="existing-img">當前圖片：</label>
+            <div id="previewContainer"></div>
+        </div>
         <div class="img-url">
-            <label for="image_link">圖片上傳：</label>
+            <label for="image_link">圖片新增/修改：</label>
             <input type="file" id="imageUpload" name="imageUpload" accept="image/*" >
+            <button id="removeButton">移除圖片</button>
+            <div id="previewContainer"></div>
         </div>
         <div class="display-on-homepage">
             <label>
-                <input type="checkbox" name="display_on_homepage" checked>
+                <input type="checkbox"  id="check-homedisplay" name="display_on_homepage" >
                 顯示在首頁
             </label>
         </div>
         <div class="isactive">
             <label>
-                <input type="checkbox" name="enabled" checked>
+                <input type="checkbox" id="check-active" name="enabled" >
                 啟用廣告
             </label>
         </div>
-        <button type="submit">提交廣告</button>
+        <button id="btn-submit" type="submit">提交廣告</button>
     </form>
   </div>
 
@@ -76,6 +82,6 @@
   <script src="dist/js/adminlte.js"></script>
   <script src="dist/js/demo.js"></script>
   <script src="js/storegeneral.js"></script>
-  <script src="js/ads.js"></script>
+  <script src="js/adsEdit.js"></script>
   </body>
 </html>

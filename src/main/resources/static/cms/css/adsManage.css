@@ -38,7 +38,7 @@ label {
     display: flex;
 }
 
-#find-coupon{
+#find-ads{
     padding: 3px 20px;
     color: black;
     border: none;
@@ -54,7 +54,7 @@ label {
     width: 100px;
     font-weight: bolder;
 }
-#add-coupon{
+#add-ads{
     padding: 3px 20px;
     color: black;
     border: none;
@@ -68,13 +68,13 @@ label {
     border-color: #73B4BA;
 }
 
-#find-coupon:hover,
-#add-coupon:hover{
+#find-ads:hover,
+#add-ads:hover{
     background-color: #45a049;
 }
 
 /* 列表設計 */
-.coupon-table {
+.ads-table {
     width: 100%;
     border-collapse: collapse;
     margin: 20px 0;
@@ -82,17 +82,17 @@ label {
     text-align: center;
 }
 
-.coupon-table th, .coupon-table td {
+.ads-table th, .ads-table td {
     border: 1px solid #ddd;
     padding: 8px;
 }
 
-.coupon-table th {
+.ads-table th {
     background-color: #f2f2f2;
     font-weight: bold;
 }
 
-.coupon-table tr:hover {
+.ads-table tr:hover {
     background-color: #e9e9e9;
 }
 
