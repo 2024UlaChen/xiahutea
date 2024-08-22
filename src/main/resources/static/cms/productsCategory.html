@@ -100,10 +100,18 @@
         }
 
         .modal-content .buttons .save {
-            background-color: #4CAF50;
+            background-color: #73B4BA;
+            color:white;
+        }
+        .btn-add {
+            background-color: #73B4BA;
+            border-color: #73B4BA;
+        }
+        .btn-edit {
+            background-color: #FAC792;
+            border-color:  #FAC792;
             color: white;
         }
-
 
     </style>
 
@@ -140,7 +148,7 @@
                 <!-- Default box -->
                 <div style="margin-bottom: 10px;">
 
-                    <button type="button" class="btn btn-primary" id="add">新增</button>
+                    <button type="button" class="btn btn-primary btn-add" id="add">新增分類</button>
                     <div class="btn-group">
                         <button type="button" class="btn btn-default btn-sm" id="trash_btn">
                             <i class="far fa-trash-alt"></i>
@@ -224,10 +232,10 @@
 
                                     <td>
 
-                                        <a class="btn btn-info btn-sm" href="#" id="update_btn">
+                                        <a class="btn btn-sm btn-edit" href="#" id="update_btn">
                                             <i class="fas fa-pencil-alt">
                                             </i>
-                                            修改
+                                            編輯
                                         </a>
                                         <a class="btn btn-danger btn-sm" href="#" id="delete_btn">
                                             <i class="fas fa-trash">
@@ -255,10 +263,10 @@
 
                                     <td>
 
-                                        <a class="btn btn-info btn-sm" href="#" id="update_btn">
+                                        <a class="btn btn-sm btn-edit" href="#" id="update_btn">
                                             <i class="fas fa-pencil-alt">
                                             </i>
-                                            修改
+                                            編輯
                                         </a>
 
                                         <a class="btn btn-danger btn-sm" href="#" id="delete_btn">

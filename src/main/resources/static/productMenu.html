@@ -40,7 +40,8 @@
         }
 
         body {
-            background-color: #d1eced;
+            /*background-color: #d1eced;*/
+            background: #F5F5F5;
 
 
         }
@@ -365,8 +366,8 @@
 
         /* 數量 */
         /* selector */
-        button.minus,
-        button.plus {
+        input.minus,
+        input.plus {
             width: 40px;
             height: 32px;
             border: solid #fac792 1px;
@@ -409,7 +410,7 @@
         }
 
         /* 訂購人 */
-        input.person {
+       input.person {
             border: solid #fac792 1px;
             border-radius: 5px;
             width: 200px;
@@ -417,10 +418,6 @@
 
         }
 
-        .person:focus {
-
-            outline: solid #fac792 1px;
-        }
 
         /* .myclassa {
             border: 1px solid black;
@@ -499,9 +496,10 @@
 
         /* Close Button */
         .close {
-            color: #aaa;
-            /* margin-left: auto; */
-            float: right;
+            color:grey;
+             margin-left: auto;
+            padding-right:4px;
+
             font-size: 28px;
             font-weight: bold;
 
@@ -517,15 +515,15 @@
         /* Modal Header */
         .modal-header {
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-start;
             border-bottom: 1px solid #ddd;
-            padding-bottom: 10px;
+            padding-bottom: 5px;
         }
 
         /* Modal Tabs */
         .modal-tabs {
             display: flex;
-            justify-content: space-between;
+            /*justify-content: flex-start;*/
             margin-bottom: 10px;
         }
 
@@ -564,6 +562,14 @@
         .delivery-options li {
             padding: 10px 0;
             border-bottom: 1px solid #ddd;
+        }
+        .section-content {
+            margin-bottom: 20px;
+        }
+        #deliveryOptions h5 {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: #ff6600;
         }
 
     </style>
@@ -619,16 +625,13 @@
 
     <!-- 訂購資訊 -->
     <div id="myModal" class="modal">
-
         <!-- Modal content -->
         <div class="modal-content">
-
+            <div>
             <span class="close">&times;</span>
             <h3>訂購資訊</h3>
-            <!-- Modal Header with Tabs -->
+            </div>
             <div class="modal-header">
-
-
                 <div class="modal-tabs">
                     <div class="active">店家資訊</div>
                     <div>怎取貨</div>
@@ -654,14 +657,13 @@
 
             </div>
             <div id="deliveryOptions" class="modal-section">
-                <p>取貨方式</p>
-                <div class="delivery-options">
-                    <ul>
-                        <li>自取</li>
-                        <li>外送</li>
-                        <li>外送門檻</li>
-                        <!-- Add more options as needed -->
-                    </ul>
+                <h5>訂購說明</h5>
+                <div class="section-content">從今日開放預訂 4 日內的訂單</div>
+
+                <h5>取貨方式</h5>
+                <div class="section-content">
+                    <strong>外送</strong><br>
+                    營業期間都可下單
                 </div>
             </div>
 
@@ -767,9 +769,7 @@
                 <li>黑糖拿鐵 <span>80</span></li>
                 <li>橙皮拿鐵 <span>80</span></li>
                 <li>路易莎特調咖啡 <span>80</span></li>
-                <li>鸚鵡咖啡 <span>80</span></li>
-                <li>義式摩卡 <span>80</span></li>
-                <li>焦糖瑪奇朵 <span>80</span></li>
+
             </ul>
         </div>
 
@@ -781,7 +781,9 @@
     <!-- 燈箱 (飲料點選)-->
     <div id="lightbox">
         <article>
+            <span class="close">&times;</span>
             <div class="title">
+
                 <h6>大●阿薩姆紅茶</h6>
             </div>
             <form>
@@ -867,18 +869,20 @@
 
 
                         <div class="price">
-                            <span>總金額：40 元</span>
+                           <div>總金額： <span id="totalAmt">70</span>元</div>
+
                         </div>
 
                         <div class="quantity">
 <!--                            <button class="minus"><i class="fa-solid fa-minus"></i></button>-->
-                            <input type="button" value="-">
+                            <input type="button" value="-" class="minus">
                             <div class="selector">
-                                <input type="number" class="number" tabindex="0" min="1" max="999"
+                                <input type="number" class="number" min="1" id="buyNum" max="999" value="1"
                                        style="border: none;">
                             </div>
-                            <button type="button" class="plus"><i class="fa-solid fa-plus"></i></button>
-                        </div>
+                                <input type="button" value="+" class="plus">
+<!--                            <button type="button" class="plus"><i class="fa-solid fa-plus"></i></button>-->
+                            </div>
                     </div>
                     <div class="test">
                         <button type="submit">加入購物車</button>
@@ -891,7 +895,7 @@
 
 
     <div class="footer"></div>
-
+    <script src="https://kit.fontawesome.com/b0f5b7d33a.js" crossorigin="anonymous"></script>
     <script src="assets/js/jquery-1.12.4.min.js"></script>
     <script src="assets/js/jquery.plugin-countdown.min.js"></script>
     <script src="assets/js/jquery-countdown.min.js"></script>
@@ -914,7 +918,7 @@
     <script src="assets/js/frontend-plugin.js"></script>
     <!--<script src="assets/js/newjs.js"></script>-->
     <script src="./js/general.js"></script>
-<script src="https://kit.fontawesome.com/b0f5b7d33a.js" crossorigin="anonymous"></script>
+
 
 
 
@@ -941,34 +945,27 @@
             $("#lightbox").on("click", function () {
                 $("#lightbox").fadeOut();
             });
+
             $("#lightbox > article").on("click", function (e) {
                  e.stopPropagation();
 
 
             });
 
-            $(".plus").on("click", function (e) {
-                e.preventDefault()
-                //避免把談窗關掉
-            })
-
-
-            $(".minus").on("click", function (e) {
-                e.preventDefault()
-                //避免把談窗關掉
-            })
 
 
         });
 
 
-    $("div.orderInfo").on('click', function () {
-        $("#myModal").fadeIn();
+    $("div.orderinfo").on('click', function () {
+   $("#myModal").fadeIn();
     });
 
-    // $closeBtn.on('click', function () {
-    //     $modal.hide();
-    // });
+   $("span.close").on("click",function (){
+       $("#myModal").fadeOut();
+       $("#lightbox").fadeOut();
+
+   })
     //
     // $(window).on('click', function (event) {
     //     if ($(event.target).is($modal)) {
@@ -996,6 +993,46 @@
             location.href = "faq.html"
 
         });
+
+    //     燈箱數量邏輯
+    var totalAmt=$("#totalAmt").text(); //先取得span標籤的內容
+    var totalAmtInt=Number.parseInt(totalAmt);
+    var buytotal;
+    // 在 JavaScript 中，Number.parseInt 函數用來將字符串轉換為整數。這裡之所以在 totalAmt 之前加上 Number.parseInt，是因為 totalAmt 可能是一個字符串，但在計算或進行數值比較時，我們需要將其轉換為整數。
+    //   var clickBuyName='';
+    //   var clickBuyPrice=0;
+      maxBuy=999;
+      minBuy=1;
+    $(".plus").on("click",function (){
+     // totalAmt+=clickBuyPrice;
+     // $("#totalAmt").text(totalAmtInt);
+     let buyNum=Number.parseInt($("#buyNum").val());
+        buyNum=buyNum+1;
+     if(buyNum>maxBuy){
+         buyNum =maxBuy ;
+     }
+     // 避免超過1000
+     buytotal=totalAmtInt*buyNum
+        $("#buyNum").val(buyNum);
+        $("#totalAmt").text(buytotal);
+     })
+
+    $(".minus").on("click",function (){
+     // totalAmt+=clickBuyPrice
+     $("#totalAmt").text(totalAmtInt);
+     let buyNum=Number.parseInt($("#buyNum").val());
+     buyNum=buyNum-1;
+     $("#buyNum").val(buyNum);
+     if(buyNum<minBuy){
+         buyNum=minBuy
+     }
+        // 避免0根負
+        buytotal=totalAmt*buyNum;
+        $("#buyNum").val(buyNum);
+     $("#totalAmt").text(buytotal);
+
+
+    })
 
 
 </script>
