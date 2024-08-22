@@ -26,14 +26,11 @@ public class DisputeOrder {
     @JoinColumn(name = "order_id", nullable = false, insertable = false, updatable = false)
     private Orders order;
 
-
-    // todo 待資料更新 可以用order資料帶過來嗎? 還是要mapping?
+    @Column(name = "customer_id")  // 單向多對一
+    private Integer customerId;    // 顧客編號
     @ManyToOne
-    @JoinColumn(name = "customer_id", nullable = false)
-    private Integer customerId; // 顧客編號
-
-
-
+    @JoinColumn(name = "customer_id", nullable = false, insertable = false, updatable = false)
+    private Customer customer;
 
     @Column(name = "dispute_reason")
     private String disputeReason; // 爭議原因
