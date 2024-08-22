@@ -41,7 +41,6 @@ public class DisputeOrder {
     @Column(name = "dispute_status", nullable = false)
     private Integer disputeStatus; // 爭議狀態
 
-    // todo 改db
     @Column(name = "refund_amount")
     private Integer refundAmount; // 退款金額
 
