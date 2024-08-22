@@ -8,27 +8,18 @@
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
   <!-- Theme style -->
-  <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
+  <link rel="stylesheet" href="dist/css/adminlte.min.css">
   <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
-  <style>
-    html,
-body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    background: #000;
-}
+  <!-- weien-chat -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="./css/weien-chat.css">
 
+  <style>  
 .glow-on-hover {
-    /* width: 220px;
-    height: 50px; */
+    display: inline-block; /* 使其与按钮大小保持一致 */
+    padding: 10px 20px; /* 控制按钮的内边距 */
     border: none;
     outline: none;
     color: #fff;
@@ -37,6 +28,11 @@ body {
     position: relative;
     z-index: 0;
     border-radius: 10px;
+    text-align: center; /* 确保文本居中 */
+    text-decoration: none; /* 移除链接的下划线 */
+}
+.glow-on-hover:hover {
+    color: #fff; /* 鼠标悬停时文字颜色保持白色 */
 }
 
 .glow-on-hover:before {
@@ -44,7 +40,7 @@ body {
     background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
     position: absolute;
     top: -2px;
-    left:-2px;
+    left: -2px;
     background-size: 400%;
     z-index: -1;
     filter: blur(5px);
@@ -56,16 +52,12 @@ body {
     border-radius: 10px;
 }
 
-.glow-on-hover:active {
-    color: #000
-}
-
-.glow-on-hover:active:after {
-    background: transparent;
-}
-
 .glow-on-hover:hover:before {
     opacity: 1;
+}
+
+.glow-on-hover:active:before {
+    opacity: 0.5; /* 让点击时的光效稍微减弱 */
 }
 
 .glow-on-hover:after {
@@ -80,6 +72,8 @@ body {
     border-radius: 10px;
 }
 
+
+
 @keyframes glowing {
     0% { background-position: 0 0; }
     50% { background-position: 400% 0; }
@@ -88,8 +82,13 @@ body {
   </style>
 </head>
 <body class="hold-transition sidebar-mini">
+
+
 <!-- Site wrapper -->
 <div class="wrapper">
+    <div class="storeheader"></div>
+    <!-- /.navbar -->
+    <div class="storeaside"></div>
   <!-- Navbar -->
   
   <!-- /.navbar -->
@@ -141,9 +140,9 @@ body {
           </div>
             <div>
             <label class=" m-2">註冊日期起日</label>
-              <input type="date" class=" m-2">
+              <input type="date" id="searchStart" class=" m-2">
               <label class=" m-2">註冊日期迄日</label>
-              <input type="date" class=" m-2">
+              <input type="date" id="searchEnd" class=" m-2">
               <input type="submit" class="btn btn-info from-control m-2" value="搜尋">
             </div>
           </nav>
@@ -196,7 +195,7 @@ body {
                         <input type="checkbox" checked data-toggle="toggle" data-size="sm">
                       </td>
                       <td class="text-center">
-                        <button class="glow-on-hover" type="button">View</button>
+                        <a href="storeInfo.html" class="glow-on-hover" type="button">View</a>
                       </td>
                       
                   </tr>
@@ -223,7 +222,7 @@ body {
                       <input type="checkbox" checked data-toggle="toggle" data-size="sm">
                     </td>
                     <td class="text-center">
-                      <button class="glow-on-hover" type="button">View</button>
+                      <a href="storeInfo.html" class="glow-on-hover" type="button">View</a>
                     </td>
                     
                 </tr>
@@ -250,7 +249,7 @@ body {
                     <input type="checkbox" checked data-toggle="toggle" data-size="sm">
                   </td>
                   <td class="text-center">
-                    <button class="glow-on-hover" type="button">View</button>
+                    <a href="storeInfo.html" class="glow-on-hover" type="button">View</a>
                   </td>
                   
               </tr>
@@ -277,7 +276,7 @@ body {
                   <input type="checkbox" checked data-toggle="toggle" data-size="sm">
                 </td>
                 <td class="text-center">
-                  <button class="glow-on-hover" type="button">View</button>
+                  <a href="storeInfo.html" class="glow-on-hover" type="button">View</a>
                 </td>
                 
             </tr>
@@ -304,7 +303,7 @@ body {
                 <input type="checkbox" checked data-toggle="toggle" data-size="sm">
               </td>
               <td class="text-center">
-                <button class="glow-on-hover" type="button">View</button>
+                <a href="storeInfo.html" class="glow-on-hover" type="button">View</a>
               </td>
           </tr>
           <tr>
@@ -330,7 +329,7 @@ body {
               <input type="checkbox" checked data-toggle="toggle" data-size="sm">
             </td>
             <td class="text-center">
-              <button class="glow-on-hover" type="button">View</button>
+              <a href="storeInfo.html" class="glow-on-hover" type="button">View</a>
             </td>
         </tr>
         <tr>
@@ -356,7 +355,7 @@ body {
             <input type="checkbox" checked data-toggle="toggle" data-size="sm">
           </td>
           <td class="text-center">
-            <button class="glow-on-hover" type="button">View</button>
+            <a href="storeInfo.html" class="glow-on-hover" type="button">View</a>
           </td>
       </tr>
       
@@ -378,17 +377,36 @@ body {
     
   </aside> -->
   <!-- /.control-sidebar -->
+    <div class="storefooter"></div>
 </div>
 <!-- ./wrapper -->
 
 <!-- jQuery -->
-<script src="../../plugins/jquery/jquery.min.js"></script>
+<script src="plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
-<script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
-<script src="../../dist/js/adminlte.min.js"></script>
+<script src="dist/js/adminlte.min.js"></script>
 <!-- AdminLTE for demo purposes -->
-<script src="../../dist/js/demo.js"></script>
+<script src="dist/js/demo.js"></script>
+<script src="js/storegeneral.js"></script>
+<!-- weien-chat -->
+<script type="module" src="js/chat-import.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
+
+<script>
+  //查詢迄日必定大於起日
+  document.addEventListener('DOMContentLoaded',function(){
+    let searchStartDay = document.querySelector('#searchStart');
+    let searchEndDay = document.querySelector('#searchEnd');
+    searchStartDay.addEventListener('change',function(){
+      //console.log(searchStartDay.value);
+      searchEndDay.setAttribute('min', searchStartDay.value);
+    });//監聽到日期被選擇
+
+
+
+  });//DOM end
+</script>
 </body>
 </html>

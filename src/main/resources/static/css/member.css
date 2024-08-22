@@ -1,23 +1,21 @@
 .reset-margin {
     margin: 0;
     margin-top: 2%;
-    background-color: #f5f5f5;
+    background-color: transparent;
 }
 
 .memberPageName {
     font-size: 16px;
     font-weight: bold;
     color: black;
-    text-align:center;
+    text-align: center;
     line-height: 24px;
 }
 
 .member-aside {
-    width: 30%;
     height: 100%;
     margin: 0 auto;
-    /* background-color: #f8f8f8; */
-
+    /*background-color: #f8f8f8;*/
 }
 
 .member-introduction {
@@ -49,18 +47,19 @@
     font-size: 18px;
     text-align: left;
     list-style-type: none;
-    padding-left: 10px;
-
+    border-left: solid 5px white;
 }
 
-.member-list-active {
+.member-list .member-list-active {
     border-left: solid 5px #73B4BA;
 }
 
+
 .member-list div {
+    padding-left: 10px;
+
+    height: 100%;
     line-height: 100%;
-    border: 1px solid black;
-    display: inline-block;
     vertical-align: middle
 }
 

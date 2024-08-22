@@ -1,0 +1,153 @@
+
+
+.container {
+    max-width: 75%;
+    margin: 20px 0 50px 300px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+/*查詢欄設計 */
+.container h1 {
+    color: #333;
+}
+
+.container input[type="text"]{
+    width: 50%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 10px;
+    margin-bottom: 10px;
+}
+.form-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+label {
+    font-weight: bold;
+    width: 120px; /* 固定 Label 的寬度，讓所有的 Label 對齊 */
+    margin-right: 10px; /* Label 和 Input 之間的間距 */
+}
+
+.button-group {
+    display: flex;
+}
+
+#find-ads{
+    padding: 3px 20px;
+    color: black;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-left: 20px;
+}
+.btn-default {
+    background-color: #F8F9FA;
+}
+.btn-block {
+    width: 100px;
+    font-weight: bolder;
+}
+#add-ads{
+    padding: 3px 20px;
+    color: black;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-left: 20px;
+}
+.btn-info {
+    background-color: #73B4BA;
+    border-color: #73B4BA;
+}
+
+#find-ads:hover,
+#add-ads:hover{
+    background-color: #45a049;
+}
+
+/* 列表設計 */
+.ads-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 12px;
+    text-align: center;
+}
+
+.ads-table th, .ads-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.ads-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+.ads-table tr:hover {
+    background-color: #e9e9e9;
+}
+
+.td-edit{
+    padding: 3px 20px;
+    background-color: #73B4BA;
+    border-color: #73B4BA;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    text-align: center;
+    align-items: center;
+}
+/*列表頁尾 */
+.table-end{
+    display: flex;
+}
+#prev-btn,#next-btn{
+    justify-content: flex-end;
+    background-color: #F8F9FA;
+    width: 100px;
+    font-weight: bolder;
+}
+#pagination {
+    display: flex;
+    justify-content: center;
+
+}
+
+.pagination-btn {
+    margin: 0 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.pagination-btn.active {
+    background-color: #007bff;
+    color: white;
+    border: none;
+}
+
+.table-end{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+.table-end .navigation-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+#result-count,#pagination{
+    padding-top: 10px;
+}

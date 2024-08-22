@@ -14,35 +14,56 @@
     <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+    <!-- weien-chat -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="./css/weien-chat.css">
     <style>
         /* 查詢欄   */
         div.dataTables_filter label{
             font-weight:normal;
         }
+        [type=search] {
+            outline-offset: 0;
+        }
+        #select_date2_lab{
+            margin-right: 10px;
+        }
         input.select_order{
             display:inline-block;
             border:1px #C0C0C0 solid;
             margin-left: 5px;
-            width: 200px;
+            padding:0;
+            width: 220px;
             height: 30px;
-            margin-right:20px
+            margin-right:20px;
+            border-radius: 4px;
         }
         select#select_status{
             display:inline-block;
             border:1px #C0C0C0 solid;
-            width: 200px;
+            width: 220px;
             height: 30px;
             text-align: center;
             margin-left:1px;
+            border-radius: 4px;
         }
         input.select_date{
             display:inline-block;
             border:1px #C0C0C0 solid;
             margin-left: 5px;
-            width: 200px;
+            width: 220px;
             height: 30px;
             margin-right:10px;
             text-align: center;
+            border-radius: 4px;
+        }
+        /* btn 查詢*/
+        .btn-default {
+            background-color: #F8F9FA;
+        }
+        .btn-block {
+            width: 100px;
+            font-weight: bolder;
         }
 
         /* 隱藏 bs內建的查詢btn */
@@ -53,7 +74,7 @@
         /*  訂單列表  */
         #dispute_thread , #dispute_tbody{
             text-align: center;
-        ]}
+        }
     </style>
 </head>
 
@@ -113,7 +134,7 @@
                                             申請日期<input type="date" class="select_date">
                                         </label>
                                         <span>~</span>
-                                        <label>
+                                        <label id="select_date2_lab">
                                             申請日期<input type="date" class="select_date">
                                         </label>
                                         <label>處理狀態</label>
@@ -125,7 +146,7 @@
                                                 <option value="不同意">不同意</option>
                                             </select>
                                         </label>
-                                        <button id="btn_select" style="float: right;">查詢</button>
+                                        <button id="btn_select" class="btn btn-block btn-default" style="float: right;">查詢</button>
                                     </div>
                                     <!-- /.查詢欄位 -->
                                     <!-- 爭議訂單列表    -->
@@ -236,6 +257,8 @@
     <script src="dist/js/adminlte.js"></script>
     <script src="dist/js/demo.js"></script>
     <script src="js/storegeneral.js"></script>
+    <!-- weien-chat -->
+    <script type="module" src="js/chat-import.js"></script>
     <!-- Page specific script -->
     <script>
         $(function () {

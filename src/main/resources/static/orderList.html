@@ -127,48 +127,55 @@
         }
 
 
-        /* 功能區塊 */
+        /* main區塊 */
         .left-sidebar .content-area{
             float: left;
             width: 100%;
         }
         .shop-top-control{
             margin-top: 10px;
+            border-radius: 5px;
         }
 
-
-
-        span.one_order_status_text{
-            font-size: 28px;
-            color: white;
-            font-weight: bold;
-            text-align: center;
-            line-height:100px ;
-        }
-        /*  select訂單狀態 改顏色 */
+        /* 查詢欄 */
+        /*  select訂單狀態*/
         input[type="text"], input[type="email"], input[type="password"], input[type="tel"], input[type="search"], input[type="url"], textarea, select{
             background-color: white;
-            height: 30px;
+            height: 40px;
             width: 150px;
             color: black;
+            border-radius: 5px;
+            border: 1px solid #DFF3F7;
         }
-        /* 查詢欄 */
         input.select_date{
-            border: 0;
             width: 150px;
             font-weight: normal;
             text-align: center;
-            height: 30px;
+            height: 40px;
             color: black;
+            border-radius: 5px;
+            border: 1px solid #DFF3F7;
         }
         span.title{
             margin: 20px;
             color: black;
         }
 
+        /* 查詢btn */
+        #select_btn{
+            width: 100px;
+            height: 40px;
+            background-color: #F8F9FA;
+            border: 1px solid #73B4BA;
+            line-height: 20px;
+            font-size: 16px;
+            color: #53a0a7;
+            border-radius: 5px;
+        }
+
+        /* 訂單卡*/
         div.one_order_list{
             border-bottom: 1px #e4e4e48e solid;
-
         }
         div.one_order_list_circle{
             display: inline-block;
@@ -179,7 +186,6 @@
             border-radius: 50%;
             overflow: hidden;
         }
-
         img.store_logo{
             object-fit:cover;
             width: 100%;
@@ -191,32 +197,34 @@
             font-weight: bold;
             text-align: center;
             line-height: 2;
-            color: #517d81;
+            color: black;
         }
         div.order_detail>span{
-            color: #517d81;
+            color: black;
             font-size: 14px;
         }
         div.order_price>span{
-            color: #517d81;
+            color: black;
             font-size: 18px;
             font-weight: bold;
         }
         div.order_time>span{
-            color: #517d81;
+            color: black;
             font-size: 12px;
             line-height: 2;
         }
         ul.order_list_ul{
             display:  inline;
         }
-    /*  訂單列表  */
         .left-sidebar .content-area{
             float: left;
             width: 100%;
         }
-        div.one_order_status{
-            background-color: #73B4BA;
+        span.title{
+            margin: 20px;
+        }
+        .order_id{
+            display: none;
         }
         span.one_order_status_text{
             font-size: 28px;
@@ -225,58 +233,19 @@
             text-align: center;
             line-height:100px ;
         }
-        span.title{
-            margin: 20px;
+
+        /* 訂單狀態 更改css */
+        div.one_order_status.incomplete{
+            background-color: #FAC792;
+        }
+        div.one_order_status.complete{
+            background-color: #73B4BA;
         }
 
-        div.one_order_list{
-            border-bottom: .5px #e4e4e48e solid;
-        }
-        div.one_order_list_circle{
-            display: inline-block;
-            margin-top: 50px;
-            width: 100px;
-            height: 100px;
-            line-height:180px ;
-            border-radius: 50%;
-            overflow: hidden;
-        }
-
-        img.store_logo{
-            object-fit:cover;
-            width: 100%;
-            height: 100%;
-            vertical-align:baseline ;
-        }
-        div.one_order_store_name span{
-            font-size: 20px;
-            font-weight: bold;
-            text-align: center;
-            line-height: 2;
-            color: #517d81;
-        }
-        div.order_detail>span{
-            color: #517d81;
-            font-size: 14px;
-        }
-        div.order_price>span{
-            color: #517d81;
-            font-size: 18px;
-            font-weight: bold;
-        }
-        div.order_time>span{
-            color: #517d81;
-            font-size: 12px;
-            line-height: 2;
-        }
-        .order_id{
-            display: none;
-        }
         /* 爭議狀態 */
         div.dispute_status.-close{
             display: none;
         }
-
         ul.order_list_ul{
             display:  inline;
         }
@@ -306,11 +275,11 @@
                         <form class="select-item select-form" >
                             <span class="title">訂單日期</span>
                             <label>
-                                <input class="select_date" type="date"></input>
+                                <input class="select_date" type="date">
                             </label>
                             <span> ~ </span>
                             <label>
-                                <input class="select_date" type="date"></input>
+                                <input class="select_date" type="date">
                             </label>
                         </form>
                         <form class="select-item select-form" >
@@ -319,165 +288,7 @@
                     </div>
                     <!-- 訂單區塊 -->
                     <ul class="row list-products auto-clear equal-container product-grid order_list_ul">
-                        <li class="product-item  col-lg-4 col-md-6 col-sm-6 col-xs-6 col-ts-12 style-1">
-                            <div class="product-inner equal-element" style="border-radius: 20px">
-                                <div class="product-thumb">
-                                    <div class="thumb-inner" >
-                                        <a href="#">
-                                            <div>
-                                                <div class="one_order_status" style="width: 100%; height:100px">
-                                                    <span class="one_order_status_text">正在外送</span>
-                                                </div>
-                                                <div class="one_order_list" style="width: 100%;height: 200px">
-                                                    <div class="one_order_list_circle">
-                                                        <img class="store_logo" src="https://placehold.co/200x200" alt="店家logo">
-                                                    </div>
-                                                    <div class="one_order_store_name">
-                                                        <span>一沐日永和店</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="product-info">
-                                    <div class="group-info">
-                                        <div class="order_id">
-                                            <span>訂單編號</span>
-                                        </div>
-                                        <div class="order_detail">
-                                            <span></span><span>5</span><span> 項商品</span>
-                                        </div>
-                                        <div class="order_price">
-                                            <span>共 </span><span>245</span><span> 元</span>
-                                        </div>
-                                        <div class="order_time">
-                                            <span class="order_date_value">2024/07/20 18:11</span>
-                                        </div>
-                                        <div class="order_time dispute_status -close" >
-                                            <span>爭議狀態：</span><span>已同意申請</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="product-item  col-lg-4 col-md-6 col-sm-6 col-xs-6 col-ts-12 style-1">
-                            <div class="product-inner equal-element" style="border-radius: 20px">
-                                <div class="product-thumb">
-                                    <div class="thumb-inner" >
-                                        <a href="#">
-                                            <div>
-                                                <div class="one_order_status" style="width: 100%; height:100px">
-                                                    <span class="one_order_status_text">準備完成</span>
-                                                </div>
-                                                <div class="one_order_list" style="width: 100%;height: 200px">
-                                                    <div class="one_order_list_circle">
-                                                        <img class="store_logo" src="https://placehold.co/200x200" alt="店家logo">
-                                                    </div>
-                                                    <div class="one_order_store_name">
-                                                        <span>
-                                                            50嵐新莊店
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="product-info">
-                                    <div class="group-info">
-                                        <div class="order_detail">
-                                            <span></span><span>5</span><span> 項商品</span>
-                                        </div>
-                                        <div class="order_price">
-                                            <span>共 </span><span>245</span><span> 元</span>
-                                        </div>
-                                        <div class="order_time">
-                                            <span class="order_date_value">2024/07/20 18:11</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="product-item  col-lg-4 col-md-6 col-sm-6 col-xs-6 col-ts-12 style-1">
-                            <div class="product-inner equal-element" style="border-radius: 20px">
-                                <div class="product-thumb">
-                                    <div class="thumb-inner" >
-                                        <a href="#">
-                                            <div>
-                                                <div class="one_order_status" style="width: 100%; height:100px">
-                                                    <span class="one_order_status_text">準備完成</span>
-                                                </div>
-                                                <div class="one_order_list" style="width: 100%;height: 200px">
-                                                    <div class="one_order_list_circle">
-                                                        <img class="store_logo" src="https://placehold.co/200x200" alt="店家logo">
-                                                    </div>
-                                                    <div class="one_order_store_name">
-                                                        <span>
-                                                            一沐日永和店
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="product-info">
-                                    <div class="group-info">
-                                        <div class="order_detail">
-                                            <span></span><span>5</span><span> 項商品</span>
-                                        </div>
-                                        <div class="order_price">
-                                            <span>共 </span><span>245</span><span> 元</span>
-                                        </div>
-                                        <div class="order_time">
-                                            <span class="order_date_value">2024/07/20 18:11</span>
-                                        </div>
-                                        <div class="order_time dispute_status">
-                                            <span>爭議狀態：</span><span>已同意申請</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="product-item  col-lg-4 col-md-6 col-sm-6 col-xs-6 col-ts-12 style-1">
-                            <div class="product-inner equal-element" style="border-radius: 20px">
-                                <div class="product-thumb">
-                                    <div class="thumb-inner" >
-                                        <a href="#">
-                                            <div>
-                                                <div class="one_order_status" style="width: 100%; height:100px">
-                                                    <span class="one_order_status_text">訂單完成</span>
-                                                </div>
-                                                <div class="one_order_list" style="width: 100%;height: 200px">
-                                                    <div class="one_order_list_circle">
-                                                        <img class="store_logo" src="https://placehold.co/200x200" alt="店家logo">
-                                                    </div>
-                                                    <div class="one_order_store_name">
-                                                        <span>
-                                                            一沐日永和店
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="product-info">
-                                    <div class="group-info">
-                                        <div class="order_detail">
-                                            <span></span><span>5</span><span> 項商品</span>
-                                        </div>
-                                        <div class="order_price">
-                                            <span>共 </span><span>245</span><span> 元</span>
-                                        </div>
-                                        <div class="order_time">
-                                            <span class="order_date_value">2024/08/20 18:11</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
+                    <!--  JS放入訂單資料  -->
                     </ul>
                 </div>
             </div>
@@ -508,6 +319,7 @@
 <script src="assets/js/frontend-plugin.js"></script>
 <!--<script src="assets/js/newjs.js"></script>-->
 <script src="./js/general.js"></script>
+
 <script>
     document.addEventListener("DOMContentLoaded", function(){
 
@@ -562,7 +374,127 @@
 
         // ==========================================================================
         // 2.訂單列表
-        // 2.1 點擊訂單卡片 link訂單明細
+        // 2.1 抓訂單資料 TODO 待串接後端DB
+        const orders = [
+            {
+                order_status: "正在外送",
+                store_logo: "https://placehold.co/200x200",
+                store_name: "一沐日永和店",
+                order_id: "2408010002", // 如果有具體編號，替換這裡
+                items: 5,
+                total_price: 245,
+                order_date: "2024/07/20 18:11",
+                dispute_status: "已同意申請"
+            },
+            {
+                order_status: "準備完成",
+                store_logo: "https://placehold.co/200x200",
+                store_name: "50嵐新莊店",
+                order_id: "2409010002", // 如果有具體編號，替換這裡
+                items: 5,
+                total_price: 245,
+                order_date: "2024/07/20 18:11",
+                dispute_status: "" // 無爭議狀態
+            },
+            {
+                order_status: "準備完成",
+                store_logo: "https://placehold.co/200x200",
+                store_name: "一沐日永和店",
+                order_id: "2408050002", // 如果有具體編號，替換這裡
+                items: 5,
+                total_price: 245,
+                order_date: "2024/07/20 18:11",
+                dispute_status: "已同意申請"
+            },
+            {
+                order_status: "訂單完成",
+                store_logo: "https://placehold.co/200x200",
+                store_name: "一沐日永和店",
+                order_id: "2408010052", // 如果有具體編號，替換這裡
+                items: 5,
+                total_price: 245,
+                order_date: "2024/08/20 18:11",
+                dispute_status: "" // 無爭議狀態
+            },
+            {
+                order_status: "訂單成立",
+                store_logo: "https://placehold.co/200x200",
+                store_name: "一沐日永和店",
+                order_id: "2408010452", // 如果有具體編號，替換這裡
+                items: 5,
+                total_price: 245,
+                order_date: "2024/09/20 18:11",
+                dispute_status: "" // 無爭議狀態
+            }
+        ];
+
+        let orderHtml = "";
+        for(let i = 0; i < orders.length ; i++){
+            // 2.1.2 有爭議訂單時，則顯示爭議狀態文字
+            const disputeClass = orders[i].dispute_status === "" ? "-close" : "";
+
+            // 2.1.3 訂單狀態不同 更改不同顏色
+            let statusClass = "";
+            switch (orders[i].order_status) {
+                case "訂單成立":
+                case "正在外送":
+                case "準備完成":
+                    statusClass = "incomplete";  // 橘色
+                    break;
+                case "訂單完成":
+                    statusClass = "complete";  // 藍色
+                    break;
+            }
+
+            orderHtml += `
+                <li class="product-item  col-lg-4 col-md-6 col-sm-6 col-xs-6 col-ts-12 style-1">
+                    <div class="product-inner equal-element" style="border-radius: 20px">
+                        <div class="product-thumb">
+                            <div class="thumb-inner" >
+                                <a href="#">
+                                    <div>
+                                        <div class="one_order_status  ${statusClass}" style="width: 100%; height:100px">
+                                            <span class="one_order_status_text">${orders[i].order_status}</span>
+                                        </div>
+                                        <div class="one_order_list" style="width: 100%;height: 200px">
+                                            <div class="one_order_list_circle">
+                                                <img class="store_logo" src=${orders[i].store_logo} alt="店家logo">
+                                            </div>
+                                            <div class="one_order_store_name">
+                                                <span>${orders[i].store_name}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <div class="group-info">
+                                <div class="order_id">
+                                    <span>${orders[i].order_id}</span>
+                                </div>
+                                <div class="order_detail">
+                                    <span></span><span>${orders[i].items}</span><span> 項商品</span>
+                                </div>
+                                <div class="order_price">
+                                    <span>共 </span><span>${orders[i].total_price}</span><span> 元</span>
+                                </div>
+                                <div class="order_time">
+                                    <span class="order_date_value">${orders[i].order_date}</span>
+                                </div>
+                                <div class="order_time dispute_status ${disputeClass}" >
+                                    <span>爭議狀態：</span><span>${orders[i].dispute_status}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            `;
+        }
+        document.getElementsByClassName("order_list_ul")[0].innerHTML = orderHtml;
+
+
+        // 2.3 點擊訂單卡片 link訂單明細
         // todo: 待後端完成 check 變數
         let order_arr = document.querySelectorAll("div.product-inner");
         for(i = 0; i < order_arr.length; i++ ){
@@ -570,19 +502,9 @@
             order_item.addEventListener("click", function(){
                 location.href = "orderDetail.html";
                 //待後端完成 check變數連結
-
             });
         }
-
-        // 2.2 有爭議訂單時，則顯示爭議狀態文字
-        // todo: 待後端完成 check db
-        let dispute_status = document.getElementById("dispute_status");
-        // if(){
-        //     dispute_status.classList.add("-close");
-        // }
-
     });
-
 </script>
 </body>
 </html>

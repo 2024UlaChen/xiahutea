@@ -51,3 +51,13 @@ div.header-message>h1 {
 #query-member .account-list {
     margin-top: 10%;
 }
+
+.header.style2 .top-bar {
+    background: white;
+}
+.main-content {
+    background: #f9f9f9;
+}
+.footer {
+    background: white;
+}
