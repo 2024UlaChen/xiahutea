@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.awt.print.Book;
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -16,7 +17,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "orders", schema = "xiahu_db")
-public class Orders {
+public class Orders implements Serializable {
 
     //todo 確認extend & uid
 

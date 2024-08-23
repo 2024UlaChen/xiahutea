@@ -7,6 +7,8 @@ import idv.tia201.g2.web.order.vo.Orders;
 import java.util.List;
 
 public class DisputeDaoImpl implements DisputeDao {
+    //todo
+
     @Override
     public int insert(DisputeOrder disputeOrder) {
         return 0;
