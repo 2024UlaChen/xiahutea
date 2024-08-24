@@ -294,25 +294,32 @@ hr {
   color: red;
 }
 
-/* 頁尾按鈕 */
-.btn-nextstep {
-  display: flex;
-  gap: 10px; /* 按钮间距 */
-  width: 100%;
+.btn-addtopurchase{
+  display: inline-flex;
+  align-items: center;
   justify-content: center;
-  margin: 10px 0px;
+  text-align: center;
+  width: 160px;
+  height: 40px;
+  background-color: #F8F9FA;
+  border: 1px solid #73B4BA;
+  font-size: 16px;
+  color: #53a0a7;
+  border-radius: 5px;
 }
 
-.btn-addtopurchase, .btn-checkout{
-  padding: 1% 7%;
-  font-size: large;
-  background-color: #65a15a;
-  color: #fff;
+.btn-checkout{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
-  font-weight: bold;
-  border: none;
-  transition: all 0.4s ease 0s;
-  font-family: 'Montserrat', sans-serif;
+  width: 160px;
+  height: 40px;
+  background-color: #73B4BA;
+  border: 1px solid #73B4BA;
+  font-size: 16px;
+  color: white;
+  border-radius: 5px;
 }
 
 .btn-addtopurchase:hover,
@@ -652,24 +659,32 @@ input.uniform-numbers{
 }
 
 /* 頁尾按鈕 */
-.btn-nextstep2 {
-  display: flex;
-  gap: 10px; /* 按钮间距 */
-  width: 100%;
+.btn-backto-last-page{
+  display: inline-flex;
+  align-items: center;
   justify-content: center;
-  margin: 10px 0px;
+  text-align: center;
+  width: 160px;
+  height: 40px;
+  background-color: #F8F9FA;
+  border: 1px solid #73B4BA;
+  font-size: 16px;
+  color: #53a0a7;
+  border-radius: 5px;
 }
 
-.btn-backto-last-page, .btn-goto-next-page{
-  padding: 1% 7%;
-  font-size: large;
-  background-color: #65a15a;
-  color: #fff;
+.btn-goto-next-page{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
-  font-weight: bold;
-  border: none;
-  transition: all 0.4s ease 0s;
-  font-family: 'Montserrat', sans-serif;
+  width: 160px;
+  height: 40px;
+  background-color: #73B4BA;
+  border: 1px solid #73B4BA;
+  font-size: 16px;
+  color: white;
+  border-radius: 5px;
 }
 
 .btn-backto-last-page:hover,
@@ -712,24 +727,31 @@ input.uniform-numbers{
 }
 
 /* 頁尾按鈕 */
-.btn-nextstep3 {
-  display: flex;
-  gap: 10px; /* 按钮间距 */
-  width: 100%;
+.btn-backto-last-page2{
+  display: inline-flex;
+  align-items: center;
   justify-content: center;
-  margin: 10px 0px;
-}
-
-.btn-backto-last-page2, .btn-submit-order{
-  padding: 1% 7%;
-  font-size: large;
-  background-color: #65a15a;
-  color: #fff;
   text-align: center;
-  font-weight: bold;
-  border: none;
-  transition: all 0.4s ease 0s;
-  font-family: 'Montserrat', sans-serif;
+  width: 160px;
+  height: 40px;
+  background-color: #F8F9FA;
+  border: 1px solid #73B4BA;
+  font-size: 16px;
+  color: #53a0a7;
+  border-radius: 5px;
+}
+.btn-submit-order{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 160px;
+  height: 40px;
+  background-color: #73B4BA;
+  border: 1px solid #73B4BA;
+  font-size: 16px;
+  color: white;
+  border-radius: 5px;
 }
 
 .btn-backto-last-page2:hover,

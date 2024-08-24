@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>AdminLTE 3 | Projects</title>
+    <title>後台 | 商品列表</title>
 
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -14,6 +14,42 @@
     <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+<style>
+    #numberPageModule {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding-top: 10px;
+    }
+
+
+    .btn-add {
+
+            background-color: #73B4BA;
+            border-color: #73B4BA;
+
+    }
+
+    .btn-edit {
+        background-color: #FAC792;
+        border-color:  #FAC792;
+        color: white;
+    }
+
+    .on-shelf {
+        background-color:#28a745;
+        border-color:  #28a745;
+        color: white;
+
+    }
+    .off-shelf {
+        background-color:#6c757d;
+        border-color: #6c757d;
+        color: white;
+    }
+</style>
+
+
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -51,7 +87,7 @@
                     <div class="col-md-12">
                         <div>
                             <div class="card-header">
-                                <button type="button" class="btn btn-primary">新增商品</button>
+                                <button type="button" class="btn btn-primary btn-add" id="add">新增商品</button>
 
                                 <div class="card-tools">
                                     <div class="input-group">
@@ -66,7 +102,7 @@
                                         </select>
                                         <input type="search" class="form-control" placeholder="搜尋商品名稱">
                                         <div class="input-group-append">
-                                            <div class="btn btn-primary">
+                                            <div class="btn btn-primary btn-add">
                                                 <i class="fas fa-search"></i>
                                             </div>
                                         </div>
@@ -106,27 +142,25 @@
                                         <tbody>
                                             <tr>
                                                 <td>
-                                                    <span>01</span>
+                                                    01
                                                 </td>
                                                 <td>
-                                                    <span>奶茶類</span>
+                                                    奶茶類
                                                 </td>
                                                 <td>
-
-                                                    <div>珍珠奶茶</div>
-
+                                                    珍珠奶茶
                                                 </td>
                                                 <td>
-                                                    <span>$65</span>
+                                                    $65
                                                 </td>
                                                 <td>
-                                                    <span>M</span>
+                                                    M
                                                 </td>
                                                 <td>
-                                                    <span class="badge badge-success">上架</span>
+                                                    <span class="badge badge-success on-shelf">上架</span>
                                                 </td>
                                                 <td class="project-actions text-right">
-                                                    <a class="btn btn-info btn-sm" href="#">
+                                                    <a class="btn btn-edit btn-sm" href="#" id="update_btn">
                                                         <i class="fas fa-pencil-alt">
                                                         </i>
                                                         編輯
@@ -140,29 +174,26 @@
                                             </tr>
                                             <tr>
                                                 <td>
-                                                    <span>02</span>
+                                                    02
                                                 </td>
                                                 <td>
-                                                    <span>奶茶類</span>
+                                                    奶茶類
                                                 </td>
                                                 <td>
-
-                                                    <div>紅茶拿鐵</div>
-
-
+                                                    紅茶拿鐵
                                                 </td>
                                                 <td>
-                                                    <span>$65</span>
+                                                   $65
                                                 </td>
                                                 <td>
-                                                    <span>M</span>
+                                                    M
                                                 </td>
                                                 <td>
-                                                    <span class="badge badge-success"
-                                                        style="background-color: red;">下架</span>
+                                                    <span class="badge badge-success off-shelf"
+                                                        >下架</span>
                                                 </td>
                                                 <td class="project-actions text-right">
-                                                    <a class="btn btn-info btn-sm" href="#">
+                                                    <a class="btn btn-edit btn-sm" href="#" id="update_btn">
                                                         <i class="fas fa-pencil-alt">
                                                         </i>
                                                         編輯
@@ -174,11 +205,39 @@
                                                     </a>
                                                 </td>
                                             </tr>
-
-
-
-
-
+                                            <tr>
+                                                <td>
+                                                    02
+                                                </td>
+                                                <td>
+                                                    奶茶類
+                                                </td>
+                                                <td>
+                                                    紅茶拿鐵
+                                                </td>
+                                                <td>
+                                                    $65
+                                                </td>
+                                                <td>
+                                                    M
+                                                </td>
+                                                <td>
+                                                    <span class="badge badge-success off-shelf"
+                                                        >下架</span>
+                                                </td>
+                                                <td class="project-actions text-right">
+                                                    <a class="btn btn-edit btn-sm" href="#" id="update_btn">
+                                                        <i class="fas fa-pencil-alt">
+                                                        </i>
+                                                        編輯
+                                                    </a>
+                                                    <a class="btn btn-danger btn-sm" href="#" id="delete_btn">
+                                                        <i class="fas fa-trash">
+                                                        </i>
+                                                        刪除
+                                                    </a>
+                                                </td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -186,19 +245,23 @@
 
                             </div>
                             <!-- /.card -->
-                            <nav aria-label="Page navigation example">
-                                <ul class="pagination justify-content-end">
-                                    <li class="page-item disabled">
-                                        <a class="page-link">上頁</a>
-                                    </li>
-                                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#">下頁</a>
-                                    </li>
-                                </ul>
-                            </nav>
+                            <p id="page-info"></p>
+                                <nav aria-label="Page navigation example">
+                                    <ul class="pagination justify-content-end">
+                                        <li class="page-item disabled">
+                                            <a class="page-link" href="#" tabindex="-1" aria-disabled="true" id="prev">Previous</a>
+                                        </li>
+                                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                        <li class="page-item">
+                                            <a class="page-link" href="#" id="next">Next</a>
+                                        </li>
+                                    </ul>
+                                </nav>
+
+
+
                         </div>
                     </div>
                 </div>
@@ -228,11 +291,87 @@
 
 <script>
 
-
+   //單筆移除
     $('#myTable').on('click', '#delete_btn', function () {
 
         $(this).closest("tr").remove();
     })
+
+    // 跳轉新增商品
+    $('#add').on('click',function (){
+      window.location.href="addProducts.html"
+    })
+
+   $('#myTable').on('click','#update_btn', function () {
+       window.location.href="addProducts.html"
+   })
+
+
+   // const data = [
+   //     { id: 1, name: "Alice", age: 25 },
+   //     { id: 2, name: "Bob", age: 30 },
+   //     { id: 3, name: "Charlie", age: 35 },
+   //     { id: 4, name: "David", age: 40 },
+   //     { id: 5, name: "Eve", age: 22 },
+   //     { id: 6, name: "Frank", age: 28 },
+   //     { id: 7, name: "Grace", age: 26 },
+   //     { id: 8, name: "Hank", age: 32 },
+   //     { id: 9, name: "Ivy", age: 29 },
+   //     { id: 10, name: "Jack", age: 27 },
+   //     { id: 11, name: "Kate", age: 31 }
+   // ];
+   // 假設有資料了
+   // 每頁顯示幾筆資料
+var itemsPerPage=15;
+//     總筆數
+var totalRecords=data.length;
+// 算出要多少頁
+var totalPages=Math.ceil(totalRecords/itemsPerPage)
+//    當前頁數
+var currentPage=1;
+
+function renderTable (page){
+const start=(page - 1)*itemsPerPage;
+const end=start+itemsPerPage;
+ $("#myTable tbody").empty
+
+    const pageData=data.slice(start,end);
+$.each(pageData, function (index,row){
+    const tr=$("<tr></tr>");
+        tr.append(`<td>${row.id}</td>`)
+            .append(`<td>${row.productname}</td>`)
+            .append(`<td>${row.productprice}</td>`)
+    $("#myTable tbody").append(tr);
+
+})
+//   顯示幕前的頁數&總頁數
+
+   $("#page-info").text(`Page ${currentPage} of ${totalPages}`)
+
+    $("#prev").prop("disabled",currentPage === 1);
+    $("#next").prop("disabled",currentPage===totalPages);
+
+
+}
+
+function prevPage(){
+    if(currentPage>1){
+        currentPage--;
+        renderTable(currentPage)
+    }
+}
+
+function nextPage(){
+    if(currentPage<totalPages){
+        currentPage++;
+        renderTable(currentPage)
+    }
+}
+
+   renderTable(currentPage);
+
+   $("#prev").on("click", prevPage);
+   $("#next").on("click", nextPage);
 
 </script>
 
