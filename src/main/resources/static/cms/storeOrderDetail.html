@@ -14,13 +14,65 @@
     <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+    <!-- weien-chat -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="./css/weien-chat.css">
     <style>
-        tbody.table_info th{
-            width:160px
+        /* 左右main區塊  */
+        @media (min-width: 768px) {
+            .col-md-6 {
+                flex: 0 0 0;
+                max-width: 55%;
+            }
+            .left-main{
+                flex: 0 0 55%;
+
+            }
+            .right-main{
+                flex: 0 0 45%;
+            }
         }
+
+        /* 表格區塊 */
+        .table th{
+            width:25%;
+        }
+        .table td{
+            width:calc(100% - 25%);
+        }
+        tfoot th{
+            text-align: right;
+        }
+        .card-body.p-0 .table tbody>tr>td:last-of-type, .card-body.p-0 .table tbody>tr>th:last-of-type, .card-body.p-0 .table tfoot>tr>td:last-of-type, .card-body.p-0 .table tfoot>tr>th:last-of-type, .card-body.p-0 .table thead>tr>td:last-of-type, .card-body.p-0 .table thead>tr>th:last-of-type{
+            padding-right: 1px;
+            padding-left: 1.5rem;
+        }
+
+        /* btn 上一頁*/
         button.card-btn{
             float: right; /* 將按鈕浮動到右邊 */
             margin-left: 10px; /* 可以調整按鈕之間的間距 */
+        }
+        .btn-default {
+            background-color: #F8F9FA;
+        }
+        .btn-block {
+            width: 100px;
+            font-weight: bolder;
+        }
+        /* btn 儲存*/
+        .btn-block+.btn-block {
+            margin-top: 0;
+        }
+        .btn-info {
+            background-color: #73B4BA;
+            border-color: #73B4BA;
+        }
+
+        /* select狀態  */
+        #select_status{
+            border-radius: 4px;
+            max-width: 100%;
         }
 
     </style>
@@ -56,13 +108,13 @@
                 <div class="container-fluid">
                     <div class="row">
                         <!--     左區塊             -->
-                        <div class="col-md-6">
+                        <div class="col-md-6 left-main">
                             <!--     訂單資訊 區塊       -->
                             <div class="card">
                                 <div class="card-header">
                                     <div class="card-title">訂單資訊</div>
-                                    <button class="card-btn" id="btn_order_back">回上一頁</button>
-                                    <button class="card-btn" id="btn_order_save" >儲存</button>
+                                    <button class="card-btn btn btn-block btn-default" id="btn_order_back">回上一頁</button>
+                                    <button class="card-btn btn_order_save btn btn-block btn-info" id="demo1" >儲存</button>
                                 </div>
                                 <div class="card-body p-0">
                                     <table class="table table-sm" style="text-align:center;table-layout: fixed;">
@@ -81,7 +133,7 @@
                                                 <td>0977123456</td>
                                                 <td>黃園美</td>
                                                 <td>五十嵐永和店</td>
-                                                <td>
+                                                <td id="select_status_td">
                                                     <label>
                                                         <select id="select_status" >
                                                             <option value="1" selected>訂單成立</option>
@@ -119,21 +171,21 @@
                                             <td>微冰</td>
                                             <td>無糖</td>
                                             <td>2</td>
-                                            <td><span>$ </span>120</td>
+                                            <td>120</td>
                                         </tr>
                                         <tr>
                                             <td>紅茶拿鐵</td>
                                             <td>少冰</td>
                                             <td>半糖</td>
                                             <td>1</td>
-                                            <td><span>$ </span>70</td>
+                                            <td>70</td>
                                         </tr>
                                         <tr>
                                             <td>珍珠奶茶</td>
                                             <td>正常</td>
                                             <td>微糖</td>
                                             <td>1</td>
-                                            <td><span>$ </span>75</td>
+                                            <td>75</td>
                                         </tr>
                                         </tbody>
                                         <tfoot>
@@ -141,38 +193,38 @@
                                             <td colspan="5"></td>
                                         </tr>
                                         <tr>
-                                            <td colspan="3"></td>
-                                            <th>商品小計</th>
-                                            <td><span>$ </span>265</td>
+                                            <td></td>
+                                            <th colspan="3">商品小計</th>
+                                            <td>265</td>
                                         </tr>
                                         <tr>
-                                            <td colspan="3"></td>
-                                            <th>平台處理費</th>
-                                            <td><span>$ </span>10</td>
+                                            <td></td>
+                                            <th colspan="3">平台處理費</th>
+                                            <td>10</td>
                                         </tr>
                                         <tr>
-                                            <td colspan="3"></td>
-                                            <th>錢包折抵</th>
-                                            <td><span>$ -</span>10</td>
+                                            <td></td>
+                                            <th colspan="3">錢包折抵</th>
+                                            <td><span> -</span>10</td>
                                         </tr>
                                         <tr>
-                                            <td colspan="3"></td>
-                                            <th>優惠券折抵</th>
-                                            <td><span>$ -</span>5</td>
+                                            <td></td>
+                                            <th colspan="3">優惠券折抵</th>
+                                            <td><span> -</span>5</td>
                                         </tr>
                                         <tr>
-                                            <td colspan="3"></td>
-                                            <th>集點折抵</th>
-                                            <td><span>$ -</span>5</td>
+                                            <td></td>
+                                            <th colspan="3">集點折抵</th>
+                                            <td><span> -</span>5</td>
                                         </tr>
                                         <tr>
-                                            <td colspan="3"></td>
-                                            <th>付款金額</th>
-                                            <td><span>$ </span>265</td>
+                                            <td></td>
+                                            <th colspan="3">付款金額</th>
+                                            <td>265</td>
                                         </tr>
                                         <tr>
-                                            <td colspan="3"></td>
-                                            <th>付款方式</th>
+                                            <td></td>
+                                            <th colspan="3">付款方式</th>
                                             <td>信用卡</td>
                                         </tr>
                                         </tfoot>
@@ -183,7 +235,7 @@
                         </div>
                         <!-- /.左區塊 -->
                         <!--     右區塊             -->
-                        <div class="col-md-6">
+                        <div class="col-md-6 right-main">
                             <!--     發票資訊 區塊       -->
                             <div class="card">
                                 <div class="card-header">
@@ -231,7 +283,7 @@
                                             </tr>
                                             <tr>
                                                 <th>取貨人姓名</th>
-                                                <td>黃園美</td>
+                                                <td>黃BB</td>
                                             </tr>
                                             <tr>
                                                 <th>取貨人電話</th>
@@ -292,6 +344,9 @@
     <script src="dist/js/adminlte.js"></script>
     <script src="dist/js/demo.js"></script>
     <script src="js/storegeneral.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <!-- weien-chat -->
+    <script type="module" src="js/chat-import.js"></script>
     <!-- Page specific script -->
     <script>
         $(function () {
@@ -323,7 +378,7 @@
             //===========================================================================
             // todo: 點擊儲存btn 後端需儲存內容
             // 2. btn 儲存
-            const btn_order_save =document.getElementById("btn_order_save");
+            const btn_order_save =document.getElementsByClassName("btn_order_save")[0];
             btn_order_save.addEventListener("click", function(){
 
                 // 2.1 打包資料
@@ -347,10 +402,10 @@
                         btn_order_save.setAttribute("disabled", "disabled");
                         select_status.setAttribute("disabled", "disabled");
                     }
-                    alert("已更新訂單內容");
+                    swal("已更新", "", "success");
                 }).catch((error) =>{
                     console.error("發生錯誤：", error);
-                    alert("提交時發生錯誤，請稍後再試。");
+                    swal("更新失敗","","error");
                 });
             });
         });

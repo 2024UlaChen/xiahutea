@@ -526,7 +526,7 @@ export class WeienChat {
         if (this._lastMessageCard && !this._isSameDay(message.value.timestamp, this._lastMessage.value.timestamp)) {
             let dateTag = document.createElement('div');
             dateTag.classList.add('weien-message-date-tag');
-            dateTag.innerHTML = `<span>${formatMessagesDate(this._preMessage.value.timestamp)}</span>`;
+            dateTag.innerHTML = `<span>${formatMessagesDate(message.value.timestamp)}</span>`;
             listContainer.append(dateTag);
         }
 
@@ -1108,18 +1108,16 @@ export class WeienChat {
         });
 
         messageIcon.addEventListener('click',(event) => {
-            event.stopPropagation();
-            let message = textarea.value;
-            if (message.trim().length < 1) {
-                return
-            }else {
-                actionHandlers.sendMessage({
-                    chatId: this._chatSessionData.value.chatId,
-                    senderId: this.chatUserId,
-                    content: message,
-                });
-                this.state.value.textarea = '';
-            }
+            event.preventDefault();
+            let message = this.state.value.textarea;
+            if (message.trim().length < 1) return;
+
+            actionHandlers.sendMessage({
+                chatId: this._chatSessionData.value.chatId,
+                senderId: this.chatUserId,
+                content: message,
+            });
+            this.state.value.textarea = '';
         })
 
         textareaSettings().options.forEach(option => {

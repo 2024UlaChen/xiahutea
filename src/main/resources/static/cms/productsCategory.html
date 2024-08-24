@@ -100,14 +100,19 @@
         }
 
         .modal-content .buttons .save {
-            background-color: #4CAF50;
+            background-color: #73B4BA;
+            color:white;
+        }
+        .btn-add {
+            background-color: #73B4BA;
+            border-color: #73B4BA;
+        }
+        .btn-edit {
+            background-color: #FAC792;
+            border-color:  #FAC792;
             color: white;
         }
 
-        .modal-content .buttons .cancel {
-            background-color: #f44336;
-            color: white;
-        }
     </style>
 
 
@@ -143,7 +148,7 @@
                 <!-- Default box -->
                 <div style="margin-bottom: 10px;">
 
-                    <button type="button" class="btn btn-primary" id="add">新增</button>
+                    <button type="button" class="btn btn-primary btn-add" id="add">新增分類</button>
                     <div class="btn-group">
                         <button type="button" class="btn btn-default btn-sm" id="trash_btn">
                             <i class="far fa-trash-alt"></i>
@@ -154,22 +159,25 @@
                 <div id="myModal" class="modal">
 
                     <!-- Modal content -->
-                    <div class="modal-content">
-                        <span class="close">&times;</span>
-                        <h2>新增商品分類</h2>
-                        <label for="categoryName">分類名稱</label>
-                        <input type="text" id="categoryName" name="categoryName" placeholder="請輸入分類名稱">
+                    <form action="">
+                        <div class="modal-content">
+                            <span class="close">&times;</span>
+                            <h2>新增商品分類</h2>
+                            <label for="categoryName">分類名稱</label>
+                            <input type="text" id="categoryName" name="categoryName" placeholder="請輸入分類名稱">
 
-                        <label for="order">排序</label>
-                        <input type="number" id="order" name="order" value="1" min="1" max="10">
+                            <label for="order">排序</label>
+                            <input type="number" id="order" name="order" value="1" min="1" max="10">
 
-                        <p class="note">註：數字越小排序越前面</p>
+                            <p class="note">註：數字越小排序越前面</p>
 
-                        <div class="buttons">
-                            <button class="save">儲存</button>
-                            <button class="cancel">取消</button>
+                            <div class="buttons">
+                                <button class="save">儲存</button>
+
+                            </div>
                         </div>
-                    </div>
+                    </form>
+
 
                 </div>
 
@@ -224,10 +232,10 @@
 
                                     <td>
 
-                                        <a class="btn btn-info btn-sm" href="#">
+                                        <a class="btn btn-sm btn-edit" href="#" id="update_btn">
                                             <i class="fas fa-pencil-alt">
                                             </i>
-                                            修改
+                                            編輯
                                         </a>
                                         <a class="btn btn-danger btn-sm" href="#" id="delete_btn">
                                             <i class="fas fa-trash">
@@ -255,10 +263,10 @@
 
                                     <td>
 
-                                        <a class="btn btn-info btn-sm" href="#">
+                                        <a class="btn btn-sm btn-edit" href="#" id="update_btn">
                                             <i class="fas fa-pencil-alt">
                                             </i>
-                                            修改
+                                            編輯
                                         </a>
 
                                         <a class="btn btn-danger btn-sm" href="#" id="delete_btn">
@@ -329,54 +337,48 @@
 
     <script>
 <!--彈窗-->
-        var modal = document.getElementById("myModal");
-        var btn = document.getElementById("add");
-        var span = document.getElementsByClassName("close")[0];
-        btn.onclick = function () {
-            modal.style.display = "block";
-        }
-        span.onclick = function () {
-            modal.style.display = "none";
-        }
 
-        window.onclick = function (event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
+$('#add').on("click", function () {
+    $("#myModal").fadeIn();
 
 
-//  --點擊全選按--
-$("input.checkall").on("click", function () {
-
-    //   全選對應選項三
-
-    $("input.options").prop("checked", $(this).prop("checked"))
+    });
+// 按叉關掉談窗
+$("span").on("click",function (){
+    $("#myModal").fadeOut();
 })
 
-$("input.options").on("click", function () {
+
+//--點擊全選按--
+   $("input.checkall").on("click", function () {
+       $("input.options").prop("checked", $(this).prop("checked"))
+    })
+
+   $("input.options").on("click", function () {
 
     $("input.checkall").prop("checked", $("input.options").length == $("input.options:checked").length)
 })
 
-//--案垃圾桶全部清空刪除--
-$('#trash_btn').click(function () {
+//--按垃圾桶全部清空刪除--
+  $("#trash_btn").click(function () {
     let r = confirm("確定是否全部清空?")
-
-    if (r) {
+      if (r) {
         $('.options:checked').each(function () {
             $(this).closest('tr').remove();
         });
 
     }
-
-
-});
-//  單筆移除
-$('#myTable').on('click', '#delete_btn', function () {
+  });
+// --單筆刪除--
+  $("#myTable").on('click', '#delete_btn', function () {
 
     $(this).closest("tr").remove();
-})
+   })
+
+//--修改--
+  $('#myTable').on('click', '#update_btn', function () {
+    window.location.href="addProducts.html"
+ })
 
 
 
