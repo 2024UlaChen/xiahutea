@@ -1,7 +1,7 @@
-document.addEventListener("DOMContentLoaded", function (){
+document.addEventListener("DOMContentLoaded", function () {
     //**************************************定義變數及標籤**********************
     // 每頁顯示的行數及當前頁面
-    const rowsPerPage = 5;
+    const rowsPerPage = 10;
     let currentPage = 1;
     // 所有表格行
     const tableBody = document.getElementsByClassName("coupon-table")[0];
@@ -9,79 +9,85 @@ document.addEventListener("DOMContentLoaded", function (){
     const totalRows = rows.length;
     const totalPages = Math.ceil(totalRows / rowsPerPage);
     let result_count_el = document.getElementById("result-count")
+    let pagination_el = document.getElementById('pagination');
     //上下頁按鈕
     let btn_prev_el = document.getElementById('prev-btn');
     let btn_next_el = document.getElementById('next-btn');
-    let pagination_el = document.getElementById('pagination');
 
-    //**************************************RUN*************************
+
+    //**************************************修改表格資料*****************************
+    document.addEventListener('click', function (event) {
+        if (event.target.classList.contains('td-edit')) {
+            const row = event.target.closest('tr');
+            const data = {
+                title: row.cells[0].textContent,
+                id: row.cells[1].textContent,
+                discount: row.cells[2].textContent,
+                amount: row.cells[3].textContent,
+                status: row.cells[4].textContent,
+                startDate :row.cells[5].textContent,
+                endDate:row.cells[6].textContent,
+                //TODO 還要再加入優惠券描述但不是從cell來
+            };
+            localStorage.setItem('couponData', JSON.stringify(data));
+            window.location.href = 'couponEdit.html';
+        }
+    });
+    //**************************************表格分頁*****************************
     // 初始顯示第一頁並創建分頁按鈕，顯示總筆數
-    result_count_el.textContent = `共計 ${rows.length-1} 筆`;
-    showPage(currentPage);
-    createPagination();
+    result_count_el.textContent = `共計 ${totalRows - 1} 筆`;
+    renderTable(currentPage);
 
-
-
-    //**************************************事件綁定**********************
-    // 處理上一頁和下一頁按鈕點擊事件
-    btn_prev_el.addEventListener('click', function() {
-        if (currentPage > 1) {
-            showPage(currentPage - 1);
-        }
-    });
-    btn_next_el.addEventListener('click', function() {
-        if (currentPage < totalPages) {
-            showPage(currentPage + 1);
-        }
-    });
-
-    //**************************************FUNCTION**********************
-    // 顯示特定頁面的資料
-    function showPage(page) {
-        // 隱藏所有行
-        rows.forEach(function(row) {
-            row.style.display = 'none';
-        });
-        // 計算當前頁面要顯示的行範圍
+    btn_prev_el.addEventListener("click", prevPage);
+    btn_next_el.addEventListener("click", nextPage);
+    //計算當前頁面要顯示的幾筆資料
+    function renderTable(page) {
         const start = (page - 1) * rowsPerPage;
         const end = start + rowsPerPage;
-        // 顯示當前頁面的行
-        rows.slice(start, end).forEach(function(row) {
-            row.style.display = '';
-        });
-        // 更新按鈕可點擊狀態
-        btn_prev_el.disabled = page === 1;
-        btn_next_el.disabled = page === totalPages;
-        // 更新當前頁面
-        currentPage = page;
-        updatePagination();
-    }
-    // 創建分頁按鈕
-    function createPagination() {
-        pagination_el.innerHTML = ''; // 清空之前的按鈕
-        for (let i = 1; i <= totalPages; i++) {
-            const button = document.createElement('button');
-            button.textContent = i;
-            button.classList.add('pagination-btn');
-
-            // 為按鈕添加點擊事件
-            button.addEventListener('click', function() {
-                showPage(i);
+        rows.forEach((row, index)=>{
+                row.style.display = (index >= start && index < end) ? '' : 'none';
             });
-
-            // 高亮當前頁面按鈕
-            if (i === currentPage) {
-                button.classList.add('active');
-            }
-            pagination_el.appendChild(button);
+        pagination_el.textContent = `第 ${currentPage} / ${totalPages} 頁`;
+    }
+    //上下頁
+    function prevPage() {
+        if (currentPage > 1) {
+            currentPage--;
+            renderTable(currentPage);
         }
     }
-    // 更新分頁按鈕的狀態
-    function updatePagination() {
-        const buttons = document.querySelectorAll('.pagination-btn');
-        buttons.forEach(function(button) {
-            button.classList.remove('active');
-        });
-        buttons[currentPage - 1].classList.add('active');
+    function nextPage() {
+        if (currentPage < totalPages) {
+            currentPage++;
+            renderTable(currentPage);
+        }
     }
-})
+    //渲染表格
+    // fetch('your-coupon-api-endpoint')
+    //     .then(response => response.json())
+    //     .then(data => {
+    //         var tbody = document.querySelector('.coupon-table tbody');
+    //         tbody.innerHTML = ''; // 清空現有的 tbody 內容
+    //
+    //         data.forEach(coupon => {
+    //             var row = document.createElement('tr');
+    //             row.innerHTML = `
+    //           <td>${coupon.name}</td>
+    //           <td>${coupon.id}</td>
+    //           <td>$${coupon.discountAmount}</td>
+    //           <td>${coupon.availableQuantity}</td>
+    //           <td>${coupon.status}</td>
+    //           <td>${coupon.startDate} ~ ${coupon.endDate}</td>
+    //           <td>${coupon.sendTime}</td>
+    //           <td>${coupon.sentPeople}</td>
+    //           <td>${coupon.usedPeople}</td>
+    //           <td>
+    //               <a href="couponEdit.html?id=${coupon.id}">
+    //                   <button type="button" id="td-edit">修改</button>
+    //               </a>
+    //           </td>
+    //             tbody.appendChild(row);
+    //         });
+    //     });
+});
+
