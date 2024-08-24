@@ -610,7 +610,7 @@
 <!--<script src="assets/js/newjs.js"></script>-->
 <script src="./js/general.js"></script>
 <!--star-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>-->
 
 <!--sweet alert  -->
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
@@ -758,18 +758,21 @@
         const products = [
             {
                 name: "珍珠奶茶",
+                size: "小",
                 specifications: ["去冰", "無糖"],
                 price: 45,
                 quantity: 1
             },
             {
                 name: "珍珠紅茶",
+                size: "大",
                 specifications: ["少冰", "半糖"],
                 price: 40,
                 quantity: 2
             },
             {
                 name: "珍珠鮮奶茶",
+                size: "大",
                 specifications: ["正常冰", "全糖"],
                 price: 60,
                 quantity: 1
@@ -780,8 +783,8 @@
         for(let i = 0; i < products.length ; i++){
             productHtml += `
                 <ul class="product_ul">
-                    <div class="product_name">${products[i].name}</div>
-                    <span>${products[i].specifications[0]}</span><span> / </span><span>${products[i].specifications[1]}</span><span> / </span>
+                    <div class="product_name">${products[i].name}  ( ${products[i].size} )</div>
+                    <span>${products[i].specifications[0]} / ${products[i].specifications[1]}</span><span> / </span>
                     <span> $</span><span>${products[i].price}</span><span> / </span>
                     <span>${products[i].quantity}</span><span>項</span>
                 </ul>

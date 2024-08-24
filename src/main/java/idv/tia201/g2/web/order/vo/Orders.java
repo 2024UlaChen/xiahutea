@@ -34,13 +34,13 @@ public class Orders implements Serializable {
     @Column(name = "customer_id")  // 單向多對一
     private Integer customerId;    // 顧客編號
     @ManyToOne
-    @JoinColumn(name = "customer_id", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "customer_id", insertable = false, updatable = false)
     private Customer customer;
 
     @Column(name = "customer_money_discount")
     private Integer customerMoneyDiscount; // 錢包折抵金額
 
-    @Column(name = "order_status", nullable = false)
+    @Column(name = "order_status")
     private Integer orderStatus; // 訂單狀態
 
 
@@ -48,14 +48,14 @@ public class Orders implements Serializable {
     @Column(name = "store_id") //單向一對一
     private Integer storeId; // 商店編號
     @OneToOne
-    @JoinColumn(name = "store_id", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "store_id", insertable = false, updatable = false)
     private Store store;
 
     // todo 待git
     @Column(name = "customer_coupons_id") //單向一對一
     private Integer customerCouponsId;    // 優惠券編號
     @OneToOne
-    @JoinColumn(name = "customer_coupons_id", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "customer_coupons_id", insertable = false, updatable = false)
     private CustomerCoupons customerCoupon;
 
 
@@ -67,29 +67,29 @@ public class Orders implements Serializable {
     @Column(name = "loyalty_card_id")  //單向一對一
     private Integer loyaltyCardId;     // 集點卡編號
     @OneToOne
-    @JoinColumn(name = "loyalty_card_id", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "loyalty_card_id", insertable = false, updatable = false)
     private CustomerLoyaltyCard loyaltyCard;
 
 
     @Column(name = "loyalty_discount")
     private Integer loyaltyDiscount; // 集點折抵金額
 
-    @Column(name = "order_product_quantity", nullable = false)
+    @Column(name = "order_product_quantity")
     private Integer orderProductQuantity; // 商品總數量
 
-    @Column(name = "product_amount", nullable = false)
+    @Column(name = "product_amount")
     private Integer productAmount; // 商品總金額
 
-    @Column(name = "processing_fees", nullable = false)
+    @Column(name = "processing_fees")
     private Integer processingFees = 10; // 訂單處理費
 
-    @Column(name = "payment_method", nullable = false)
+    @Column(name = "payment_method")
     private Integer paymentMethod; // 付款方式
 
-    @Column(name = "payment_amount", nullable = false)
+    @Column(name = "payment_amount")
     private Integer paymentAmount; // 付款金額
 
-    @Column(name = "Invoice_method", nullable = false)
+    @Column(name = "Invoice_method")
     private Integer invoiceMethod; // 開立發票方式
 
     @Column(name = "Invoice_no")
@@ -101,19 +101,19 @@ public class Orders implements Serializable {
     @Column(name = "Invoice_carrier")
     private String invoiceCarrier; // 發票載具
 
-    @Column(name = "receiver_method", nullable = false)
+    @Column(name = "receiver_method")
     private Integer receiverMethod; // 取貨方式
 
-    @Column(name = "receiver_name", nullable = false)
+    @Column(name = "receiver_name")
     private String receiverName; // 取貨人姓名
 
-    @Column(name = "receiver_phone", nullable = false)
+    @Column(name = "receiver_phone")
     private String receiverPhone; // 取貨人手機
 
     @Column(name = "receiver_address")
     private String receiverAddress; // 取貨人地址
 
-    @Column(name = "receiver_datetime", nullable = false)
+    @Column(name = "receiver_datetime")
     @Temporal(TemporalType.TIMESTAMP)
     private Timestamp receiverDatetime; // 預計取貨時間
 
@@ -123,7 +123,7 @@ public class Orders implements Serializable {
     @Column(name = "order_feedback")
     private String orderFeedback; // 訂單評分建議
 
-    @Column(name = "order_creat_datetime", nullable = false)
+    @Column(name = "order_creat_datetime")
     @Temporal(TemporalType.TIMESTAMP)
     private Timestamp orderCreateDatetime; // 建立日期時間
 }
