@@ -52,13 +52,13 @@ public class Store extends Core {
     @Column(name = "store_phone", length = 20, unique = true)
     private String storePhone;
     //開店時間
-    @Column(name = "weekday_operating")
+    @Column(name = "opening_hours")
     @Temporal(TemporalType.TIME)
-    private Time weekdayOperating;
+    private Time openingHours;
     //關店時間
-    @Column(name = "weekend_operating")
+    @Column(name = "closing_hours")
     @Temporal(TemporalType.TIME)
-    private Time weekendOperating;//關店時間
+    private Time closingHours;//關店時間
     //是否提供外送
     @Column(name = "is_delivery")
     private Boolean isDelivery;//是否外送
