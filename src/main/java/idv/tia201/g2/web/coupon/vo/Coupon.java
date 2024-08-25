@@ -1,4 +1,4 @@
-package idv.tia201.g2.web.store.vo;
+package idv.tia201.g2.web.coupon.vo;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

@@ -1,4 +1,4 @@
-package idv.tia201.g2.web.store.vo;
+package idv.tia201.g2.web.coupon.vo;
 
 
 import jakarta.persistence.*;
@@ -14,7 +14,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CustomerCoupons {
-
+//待討論 應該放在哪一層資料夾
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "customer_coupons_id", nullable = false, updatable = false)
