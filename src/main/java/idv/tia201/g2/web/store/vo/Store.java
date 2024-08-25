@@ -127,10 +127,11 @@ public class Store extends Core {
     @Column(name = "valid_status", nullable = false)
     private Boolean validStatus;//集點卡狀態
 
-    //實現雙向 商家和顧客集點紀錄為一對多
+    //實現雙向 商家和顧客集點紀錄為一對多 關連到store屬性
     @OneToMany(mappedBy = "store")
     private List<CustomerLoyaltyCard> customerLoyaltyCards;
 
+//補充Temporal 可以指定 儲存 年月日  或 時分秒  或二合一
 
 
 }
