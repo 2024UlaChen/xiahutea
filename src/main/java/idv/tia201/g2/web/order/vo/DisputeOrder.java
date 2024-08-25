@@ -1,5 +1,6 @@
 package idv.tia201.g2.web.order.vo;
 
+import idv.tia201.g2.web.member.vo.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,11 +27,12 @@ public class DisputeOrder {
     @JoinColumn(name = "order_id", insertable = false, updatable = false)
     private Orders order;
 
+    // todo
     @Column(name = "customer_id")  // 單向多對一
     private Integer customerId;    // 顧客編號
-    @ManyToOne
-    @JoinColumn(name = "customer_id", insertable = false, updatable = false)
-    private Customer customer;
+//    @ManyToOne
+//    @JoinColumn(name = "customer_id", insertable = false, updatable = false)
+//    private Member customer;
 
     @Column(name = "dispute_reason")
     private String disputeReason; // 爭議原因

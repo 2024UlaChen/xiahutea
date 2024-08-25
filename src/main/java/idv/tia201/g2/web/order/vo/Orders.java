@@ -1,5 +1,6 @@
 package idv.tia201.g2.web.order.vo;
 
+import idv.tia201.g2.web.member.vo.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -35,7 +36,7 @@ public class Orders implements Serializable {
     private Integer customerId;    // 顧客編號
     @ManyToOne
     @JoinColumn(name = "customer_id", insertable = false, updatable = false)
-    private Customer customer;
+    private Member customer;
 
     @Column(name = "customer_money_discount")
     private Integer customerMoneyDiscount; // 錢包折抵金額
@@ -47,9 +48,9 @@ public class Orders implements Serializable {
     // todo 待git
     @Column(name = "store_id") //單向一對一
     private Integer storeId; // 商店編號
-    @OneToOne
-    @JoinColumn(name = "store_id", insertable = false, updatable = false)
-    private Store store;
+//    @OneToOne
+//    @JoinColumn(name = "store_id", insertable = false, updatable = false)
+//    private Store store;
 
     // todo 待git
     @Column(name = "customer_coupons_id") //單向一對一
