@@ -32,4 +32,8 @@ public class CustomerLoyaltyCard {
     @JoinColumn(name = "store_id",insertable = false,updatable = false)
     private Store store;
 
+    @ManyToOne
+    @JoinColumn(name="customer_id",insertable = false,updatable = false)
+    private Customer customer;
+
 }
