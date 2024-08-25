@@ -158,6 +158,12 @@ div.faq-card:last-child {
     margin-bottom: 0;
 }
 
+#chat-room{
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+}
+
 @media (max-width: 1200.98px) {
     div#faq {
         width: 90%;
@@ -195,5 +201,11 @@ div.faq-card:last-child {
 
     div#card-list {
         /*padding-top: 50px;*/
+    }
+    #chat-icon{
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+
     }
 }
