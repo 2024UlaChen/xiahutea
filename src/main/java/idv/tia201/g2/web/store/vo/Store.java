@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import java.sql.Timestamp;
 import java.sql.Time;
+import java.util.List;
 /*
  @Temporal 的主要用法
 @Temporal(TemporalType.DATE):
@@ -126,6 +127,9 @@ public class Store extends Core {
     @Column(name = "valid_status", nullable = false)
     private Boolean validStatus;//集點卡狀態
 
+    //實現雙向 商家和顧客集點紀錄為一對多
+    @OneToMany(mappedBy = "store")
+    private List<CustomerLoyaltyCard> customerLoyaltyCards;
 
 
 
