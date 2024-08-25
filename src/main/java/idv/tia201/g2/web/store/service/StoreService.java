@@ -16,7 +16,7 @@ public interface StoreService {
     Store findStoreById(Integer id);
 
     List<Store> findStoreByAddress(String address);
-    Store saveOrUpdateStore(Store store);
+    Store saveStore(Store store);
 
 
 

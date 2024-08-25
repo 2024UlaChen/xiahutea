@@ -11,9 +11,13 @@ import java.util.List;
 
 @Service
 public class StoreServiceImpl implements StoreService {
-//注入dao
+
+    private final StoreDao storeDao;
+    //注入dao
     @Autowired
-    private StoreDao storeDao;
+    public StoreServiceImpl(StoreDao storeDao) {
+        this.storeDao = storeDao;
+    }
 
     @Override
     public List<Store> findAll() {
@@ -44,7 +48,7 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public Store saveOrUpdateStore(Store store) {
+    public Store saveStore(Store store) {
         //jpa 把新增編輯統合 如果id為空就會執行新增 有id就會編輯
         //填寫招商 要執行新增 發送註冊信要引導成編輯
         return storeDao.save(store);
