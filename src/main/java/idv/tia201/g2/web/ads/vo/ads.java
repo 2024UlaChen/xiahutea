@@ -28,7 +28,7 @@ public class ads {
     @Column(name = "end_time")
     private Date endTime;
     @Column(name = "homepage_display")
-    private Boolean homeDisplay;\
+    private Boolean homeDisplay;
     private Boolean isactive;
     @Column(name = "ads_total_users_id")
     private Long adsTotalUserid;
