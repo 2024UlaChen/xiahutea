@@ -25,232 +25,10 @@
     <link rel="stylesheet" href="assets/css/mobile-menu.css">
     <link rel="stylesheet" href="assets/fonts/flaticon/flaticon.css">
     <link rel="stylesheet" href="assets/css/style.css">
-
-    <style>
-
-        * {
-            box-sizing: border-box;
-        }
-
-        div.header-message > h1 {
-            margin: 0 auto;
-            border-radius: 50%;
-            color: #73B4BA;
-        }
-
-        .header-user-links li {
-            display: inline-block;
-        }
-
-        .header-user-links i {
-            border-radius: 50%;
-            font-size: 20px;
-            margin-left: 10px;
-        }
-
-
-        .query-bar a {
-            margin-left: 10px;
-            margin-right: 10px;
-            border-radius: 50%;
-        }
-
-        .query-bar input {
-            background-color: white;
-            width: 80%;
-        }
-
-        .reset-margin {
-            margin: 0;
-            margin-top: 2%;
-            background-color: #f5f5f5;
-            padding: 20px;
-            padding-top: 0;
-            overflow: visible;
-        }
-
-        div#faq{
-            width:80%;
-            padding-right: 15px;
-            padding-left: 15px;
-            margin-right: auto;
-            margin-left: auto;
-            border-radius: 5px;
-        }
-
-        #title-list {
-            /*margin-right: 30px;*/
-            margin-top: 20px;
-            padding: 20px 10px 0px 10px;
-            background-color: white;
-            border-radius: 5px;
-        }
-
-        #title-list li {
-            height: 60px;
-            font-size: 18px;
-            text-align: left;
-            list-style-type: none;
-            color: black;
-        }
-
-        ul.faq-list {
-            margin: 24px 0 0 0;
-            padding: 0;
-            list-style: none;
-        }
-
-        ul.faq-list > li {
-            margin-bottom: 10px;
-            box-shadow: 0px 2px 0px 0px rgba(56, 55, 53, 0.33);
-        }
-
-        ul.faq-list > li:last-child {
-            margin-bottom: 0;
-        }
-
-        ul.faq-list > li > a.link_title {
-            display: block;
-            width: 100%;
-            color: black;
-            background-color: white;
-            padding: 15px 0px;
-            text-decoration: none;
-            font-size: 16px;
-        }
-
-        ul.faq-list > li > a.link_title::after {
-            content: "";
-            display: block;
-            clear: both;
-        }
-
-        ul.faq-list > li > a.link_title button.switch_btn {
-            float: right;
-            display: inline-block;
-            background: none;
-            border: 0;
-            outline: none;
-            color: #73B4BA;
-            font-size: 30px;
-            padding: 0px;
-        }
-
-        ul.faq-list > li > a.link_title button.switch_btn span.-minus {
-            display: none;
-        }
-
-        ul.faq-list > li > div.inner_block {
-            font-size: 18px;
-            color: #4a4a4a;
-            margin-top: 8px;
-            padding: 0px 0px 10px 10px;
-            line-height: 1.6;
-            display: none;
-        }
-
-        ul.faq-list > li.-on > a.link_title button.switch_btn span.-plus {
-            display: none;
-
-        }
-
-        ul.faq-list > li.-on > a.link_title button.switch_btn span.-minus {
-            display: inline-block;
-        }
-
-        div.main-content {
-            margin: 0px
-        }
-
-        div.faq-card {
-            padding: 30px;
-            background: white;
-            width: auto;
-            margin-bottom: 20px;
-            border-radius: 5px;
-        }
-
-        div.card-title {
-            font-size: 18px;
-            color: black;
-            font-weight: bold;
-        }
-
-        div#faq-query-bar {
-            background: white;
-            display: flex;
-            align-items: center;
-            margin-top: 20px;
-            border-radius: 5px;
-            box-shadow:0 0 3px 1px rgba(128, 128, 128, 0.59)
-        }
-
-        div#faq-query-bar input {
-            width: 80%;
-            border: 0px;
-            padding-right: 5px;;
-            flex: 1; /* 讓 input 佔滿剩餘的空間 */
-        }
-
-        #faq-nav {
-            padding: 0px 15px 0px 0px;
-            position: sticky;
-            top: 0;
-        }
-
-        div#faq-nav a {
-            display: flex;
-            align-items: center;
-            padding-right: 15px;
-
-        }
-
-        div#card-list {
-            margin-top: 20px;
-            padding: 0;
-
-        }
-
-        div.faq-card:last-child {
-            margin-bottom: 0;
-        }
-
-        @media (max-width: 1200.98px){
-            div#faq{
-                width: 90%;
-
-            }
-            #faq-nav{
-                z-index: 9999;
-                background-color: white;
-                padding: 0;
-            }
-            div#title-list{
-                border-bottom: 3px solid silver;
-                padding: 0;
-                /*z-index:999;*/
-                /*position: relative*/
-            }
-            div#title-list li{
-                display: inline-block;
-                margin-right: max(20px);
-
-            }
-            div#title-list li:last-child{
-                margin-right: 0;
-            }
-
-            div#title-list a{
-                background-color: #73B4BA;
-                padding: 7px  13px;
-                border-radius: 15px;
-            }
-            div#card-list{
-                /*padding-top: 50px;*/
-            }
-        }
-
-    </style>
+    <link rel="stylesheet" href="css/general.css">
+    <link rel="stylesheet" href="css/faq.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="css/weien-chat.css">
 </head>
 
 <body>
@@ -732,6 +510,16 @@
             </div>
         </div>
     </div>
+    <div class="chat-room">
+
+        <div class="chat-container">
+            <div id="weien-chat"></div>
+        </div>
+        <div id="chat-icon" class=".d-none">
+            <b class="bi bi-chat-dots"></b>
+        </div>
+
+    </div>
 </div>
 <div class="footer"></div>
 
@@ -754,66 +542,318 @@
 <script src="assets/js/lightbox.min.js"></script>
 <script src="assets/js/owl.thumbs.min.js"></script>
 <script src="assets/js/jquery.scrollbar.min.js"></script>
-<script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyC3nDHy1dARR-Pa_2jjPCjvsOR4bcILYsM'></script>
 <script src="assets/js/frontend-plugin.js"></script>
 <script src="js/general.js"></script>
+<script src="js/faq.js"></script>
+<script src="js/weien-chat-box.js"></script>
 
-<script>
-    // 問題開合
-    $("a.link_title").on("click", function (e) {
-        e.preventDefault();
-        $(this).closest("li").toggleClass("-on");
-        $(this).closest("li").find("div.inner_block").slideToggle();
-    });
+<script type="module">
+    import { actionHandlers, WeienChat } from './js/weien-chat-box.js'
 
-
-    //問題搜尋
-    function query_faq() {
-        // 關鍵字
-        let input_val = $("input#faq-input").val();
-        // 問題卡片 list
-        let uls = document.getElementsByClassName("faq-list");
-
-        //找到符合關鍵字的問題
-        for (let u = 0; u < uls.length; u++) {
-
-            let lis = uls[u].getElementsByTagName("li")
-            let flag = true;
-            for (let i = 0; i < lis.length; i++) {
-                let title = lis[i].firstElementChild.lastElementChild.innerText;
-                let txtValue = lis[i].lastElementChild.innerText;
-                if (txtValue.indexOf(input_val) > -1) {
-                    lis[i].style.display = "";
-                    flag = false;
-                }else if(title.indexOf(input_val) > -1){
-                    lis[i].style.display = "";
-                    flag = false;
-                } else {
-                    lis[i].style.display = "none";
-                }
-            }
-            if(flag){
-                uls[u].closest("div").style.display = "none"
-            }else {
-                uls[u].closest("div").style.display = ""
-            }
-        }
+    // 使用前須覆寫actionHandlers中必要的方法
+    // 詳細可以去 weien-chat.js 中的 actionHandlers查看
+    actionHandlers.getChatRoomsData = () => {
+        // 目前是傳入假資料
+        return chatRoomData;
     }
 
-    $("a#search").on("click",(e)=>{
-        e.preventDefault();
-        query_faq();
-    })
-    $(document).on("keyup",function(e){
-        // if(e.which == 13){
-        //     $("a#search").click();
-        // }
-        $("a#search").click();
-    })
+    actionHandlers.getChatMessagesData = async (chatId) => {
+        // console.log('這裡是外部定義的getChatMessagesData chatId : ' + chatId);
+        // 利用chatId去取得資料
+        // 目前是傳入假資料
+        return chatId === 2 ? messages2 : messages;
+    }
 
+    actionHandlers.loadMoreChatRooms = async (type) => {
+        // console.log(type);
+        // type是指現在的過濾模式 (全部, 未讀, 置頂)
+        // 目前是傳入假資料
+        return chatRoomData;
+    }
+
+    actionHandlers.loadMoreMessages = async () => {
+        // 目前是傳入假資料
+        return messages;
+    }
+
+    actionHandlers.getUID = async () => {
+        // 傳入totalID
+        return 'user2';
+    }
+
+    const chat = new WeienChat();
+
+    document.addEventListener('DOMContentLoaded', async () => {
+        // 加載完成以後啟動
+        await chat.init();
+        chat.state.value.showMode = 'mobile';
+        // chat.state.value.showMode = 'default';
+        chat.state.value.activeChatId = 1;
+    });
+
+    // 假資料
+    const chatRoomData = [
+        {
+            chatId: 1,
+            //chatName: 'Alice', //可不傳遞, 未設定時的顯示規則: 參與者兩人時顯示另一個人的名稱   大於兩人時顯示'會話群組 (人數)'
+            // unreadMessages: 3,
+            lastMessage: 'See you soon!',
+            lastMessageAt: '2024-07-05T17:55:00Z',
+            // photo: '/img/avatar1.jpg',
+            participants: [
+                {
+                    userId: 'user1',
+                    name: 'Alice',
+                    type: 'member',
+                    avatar: '/img/avatar1.jpg',
+                    // lastReadingAt: '2024-06-29T12:35:00Z',
+                    // online: true,  //目前無作用  未來考慮增加
+                },
+                {
+                    userId: 'user2',
+                    name: 'WeiEN',
+                    type: 'member',
+                    avatar: '/img/avatar1.jpg',
+                    // lastReadingAt: '2024-06-29T12:05:00Z',
+                    // online: true,  //目前無作用  未來考慮增加
+                },
+            ], // 參與者列表 可大於2個人
+            // notifySettings: 'on', // 'on', 'off' , 不傳遞(或非上述兩個值)則不顯示
+            // pinned: true,
+            // _lastActivity: 'new Data()' (程式額外添加的欄位, 用於偵測更新時間)
+        },
+        {
+            chatId: 2,
+            // chatName: 'Bob',
+            lastMessageAt: '2024-06-28',
+            lastMessage: 'Got it!',
+            unreadMessages: 1,
+            photo: '/img/avatar2.jpg',
+            pinned: true,
+            participants: [
+                {
+                    userId: 'user1',
+                    name: 'Alice',
+                    type: 'member',
+                    avatar: '/img/avatar1.jpg',
+                    lastReadingAt: '2024-06-29T12:35:00Z',
+                    // online: true,  //目前無作用  未來考慮增加
+                },
+                {
+                    userId: 'user2',
+                    name: 'WeiEN',
+                    type: 'member',
+                    avatar: '/img/avatar3.jpg',
+                    lastReadingAt: '2024-06-29T12:05:00Z',
+                    // online: true,  //目前無作用  未來考慮增加
+                },
+                {
+                    userId: 'user3',
+                    name: 'Bob',
+                    type: 'member',
+                    avatar: '/img/avatar2.jpg',
+                    lastReadingAt: '2024-06-29T12:05:00Z',
+                    // online: true,  //目前無作用  未來考慮增加
+                },
+            ], // 參與者列表 可大於2個人
+            notifySettings: 'off', // 'on', 'off' , 不傳遞(或非上述兩個值)則不顯示
+        },
+        {
+            chatId: 3,
+            chatName: 'Charlie',
+            lastMessageAt: '2024-06-28',
+            lastMessage: 'Let’s meet tomorrow.',
+            unreadMessages: 0,
+            photo: '/img/avatar3.jpg',
+            pinned: false,
+            participants: [
+                {
+                    userId: 'user1',
+                    name: 'Charlie',
+                    type: 'member',
+                    avatar: '/img/avatar3.jpg',
+                    lastReadingAt: '2024-06-29T12:35:00Z',
+                    // online: true,  //目前無作用  未來考慮增加
+                },
+                {
+                    userId: 'user2',
+                    name: 'WeiEN',
+                    type: 'member',
+                    avatar: '/img/avatar1.jpg',
+                    lastReadingAt: '2024-06-29T12:05:00Z',
+                    // online: true,  //目前無作用  未來考慮增加
+                },
+            ], // 參與者列表 可大於2個人
+            notifySettings: 'off', // 'on', 'off' , 不傳遞(或非上述兩個值)則不顯示
+        },
+    ];
+
+    const messages2 = [
+        {
+            messageId: 'msg20',
+            senderId: 'user2',
+            content: '喵!',
+            timestamp: '2024-07-05T17:55:00Z'
+        },
+        {
+            messageId: 'msg19',
+            senderId: 'user3',
+            content: '喵喵',
+            timestamp: '2024-07-03T17:55:00Z'
+        },
+        {
+            messageId: 'msg19',
+            senderId: 'user3',
+            content: '喵喵喵',
+            timestamp: '2024-07-03T17:55:00Z'
+        },
+        {
+            messageId: 'msg19',
+            senderId: 'user3',
+            content: '喵~~',
+            timestamp: '2024-07-03T17:55:00Z'
+        },
+        {
+            messageId: 'msg18',
+            senderId: 'user1',
+            content: '喵~~~喵!',
+            timestamp: '2024-07-03T17:50:00Z'
+        },
+        {
+            messageId: 'msg17',
+            senderId: 'user2',
+            content: '喵~~~~~~~~',
+            timestamp: '2024-07-03T17:45:00Z'
+        },
+    ]
+
+    const messages = [
+        {
+            messageId: 'msg20',
+            senderId: 'user1',
+            img: {
+                src: '/img/avatar1.jpg',
+                alt: 'alt'
+            },
+            content: '可愛貓貓',
+            timestamp: '2024-07-03T17:55:00Z'
+        },
+        {
+            messageId: 'msg19',
+            senderId: 'user1',
+            content: '但是每次進步一點點，就覺得很滿足。',
+            timestamp: '2024-07-03T17:55:00Z'
+        },
+        {
+            messageId: 'msg18',
+            senderId: 'user1',
+            content: '每天晚上回家都期待嘗試新的食譜，雖然有時候會搞砸。',
+            timestamp: '2024-07-03T17:50:00Z'
+        },
+        {
+            messageId: 'msg17',
+            senderId: 'user1',
+            content: '我最近開始學烹飪，發現這是一個很有趣的挑戰。',
+            timestamp: '2024-07-03T17:45:00Z'
+        },
+        {
+            messageId: 'msg16',
+            senderId: 'user2',
+            content: '你有保存童年的任何特別物品嗎？',
+            timestamp: '2024-07-02T14:40:00Z'
+        },
+        {
+            messageId: 'msg15',
+            senderId: 'user2',
+            content: '這些手工藝品大多是我小時候跟祖母一起做的，讓我很感慨。',
+            timestamp: '2024-07-02T14:35:00Z'
+        },
+        {
+            messageId: 'msg14',
+            senderId: 'user2',
+            content: '我最近在家整理收藏的手工藝品，發現了不少舊回憶。',
+            timestamp: '2024-07-02T14:30:00Z'
+        },
+        {
+            messageId: 'msg13',
+            senderId: 'user1',
+            content: '我還準備帶一些小吃和書籍，享受一整天的寧靜。',
+            timestamp: '2024-07-01T09:30:00Z'
+        },
+        {
+            messageId: 'msg12',
+            senderId: 'user1',
+            content: '你也喜歡釣魚嗎？在湖邊的感覺特別舒服。',
+            timestamp: '2024-07-01T09:25:00Z'
+        },
+        {
+            messageId: 'msg11',
+            senderId: 'user1',
+            content: '我打算週末去附近的湖泊釣魚，放鬆一下。',
+            timestamp: '2024-07-01T09:20:00Z'
+        },
+        {
+            messageId: 'msg10',
+            senderId: 'user1',
+            content: '最近天氣真的很適合戶外活動。',
+            timestamp: '2024-07-01T09:15:00Z'
+        },
+        {
+            messageId: 'msg9',
+            senderId: 'user2',
+            content: '聽起來挺放鬆的！希望你有個愉快的旅行！',
+            timestamp: '2024-06-29T12:55:00Z'
+        },
+        {
+            messageId: 'msg8',
+            senderId: 'user1',
+            content: '我在計劃一個小旅行，打算去附近的一個公園走走。',
+            timestamp: '2024-06-29T12:35:00Z'
+        },
+        {
+            messageId: 'msg7',
+            senderId: 'user2',
+            content: '聽起來很有趣！最近有什麼新計劃嗎？',
+            timestamp: '2024-06-29T12:30:00Z'
+        },
+        {
+            messageId: 'msg6',
+            senderId: 'user1',
+            content: '我喜歡看書、做手工藝，還有跟朋友聚聚。',
+            timestamp: '2024-06-29T12:18:00Z'
+        },
+        {
+            messageId: 'msg5',
+            senderId: 'user2',
+            content: '你平時有什麼喜歡做的休閒活動嗎？',
+            timestamp: '2024-06-29T12:06:00Z'
+        },
+        {
+            messageId: 'msg4',
+            senderId: 'user1',
+            content: '對啊，運動和新鮮空氣對身心都有好處。',
+            timestamp: '2024-06-29T12:04:00Z'
+        },
+        {
+            messageId: 'msg3',
+            senderId: 'user2',
+            content: '是啊，最近出去走走的話，感覺心情都會好很多。',
+            timestamp: '2024-06-29T12:03:00Z'
+        },
+        {
+            messageId: 'msg2',
+            senderId: 'user1',
+            content: '嘿！挺好的，最近天氣真不錯。',
+            timestamp: '2024-06-29T12:01:00Z'
+        },
+        {
+            messageId: 'msg1',
+            senderId: 'user1',
+            content: '嘿！最近過得怎麼樣？',
+            timestamp: '2024-06-29T12:00:00Z',
+        },
+    ]; // 訊息列表
 </script>
-
-
 </body>
 
 

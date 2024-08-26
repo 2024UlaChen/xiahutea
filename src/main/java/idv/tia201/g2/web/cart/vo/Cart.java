@@ -1,7 +1,6 @@
 package idv.tia201.g2.web.member.vo;
 
 import jakarta.persistence.*;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +12,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CartItem {
+public class Cart {
     @Id
     @Column(name = "cart_item_id",updatable = false)
     private Integer cartItemId;
