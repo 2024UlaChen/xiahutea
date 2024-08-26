@@ -1,13 +1,18 @@
 package idv.tia201.g2.web.user.vo;
 
+import idv.tia201.g2.core.pojo.Core;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Setter
 @Getter
-public class Administrators {
+@NoArgsConstructor
+@AllArgsConstructor
+public class Administrators extends Core {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "administrator_id")
