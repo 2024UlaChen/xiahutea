@@ -34,9 +34,9 @@ public class Orders implements Serializable {
     // todo 待GIT
     @Column(name = "customer_id")  // 單向多對一
     private Integer customerId;    // 顧客編號
-    @ManyToOne
-    @JoinColumn(name = "customer_id", insertable = false, updatable = false)
-    private Member customer;
+//    @ManyToOne
+//    @JoinColumn(name = "customer_id", insertable = false, updatable = false)
+//    private Member customer;
 
     @Column(name = "customer_money_discount")
     private Integer customerMoneyDiscount; // 錢包折抵金額
@@ -55,9 +55,9 @@ public class Orders implements Serializable {
     // todo 待git
     @Column(name = "customer_coupons_id") //單向一對一
     private Integer customerCouponsId;    // 優惠券編號
-    @OneToOne
-    @JoinColumn(name = "customer_coupons_id", insertable = false, updatable = false)
-    private CustomerCoupons customerCoupon;
+//    @OneToOne
+//    @JoinColumn(name = "customer_coupons_id", insertable = false, updatable = false)
+//    private CustomerCoupons customerCoupon;
 
 
     @Column(name = "coupon_discount")
@@ -67,9 +67,9 @@ public class Orders implements Serializable {
     // todo 待git
     @Column(name = "loyalty_card_id")  //單向一對一
     private Integer loyaltyCardId;     // 集點卡編號
-    @OneToOne
-    @JoinColumn(name = "loyalty_card_id", insertable = false, updatable = false)
-    private CustomerLoyaltyCard loyaltyCard;
+//    @OneToOne
+//    @JoinColumn(name = "loyalty_card_id", insertable = false, updatable = false)
+//    private CustomerLoyaltyCard loyaltyCard;
 
 
     @Column(name = "loyalty_discount")
