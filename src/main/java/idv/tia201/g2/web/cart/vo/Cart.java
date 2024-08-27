@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table
+@Table(name="cart_item")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -28,13 +28,4 @@ public class Cart {
     @Column(name="unit_price")
     private Integer unitPrice;
 
-    @ManyToOne
-    @JoinColumn(name = "cart_item_customer_id",
-            insertable = false, updatable = false)
-    private customer customer;
-
-    @ManyToOne
-    @JoinColumn(name = "cart_item_product_id",
-            insertable = false, updatable = false)
-    private product product;
 }
