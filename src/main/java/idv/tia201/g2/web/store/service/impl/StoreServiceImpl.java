@@ -1,0 +1,57 @@
+package idv.tia201.g2.web.store.service.impl;
+
+import idv.tia201.g2.web.store.dao.StoreDao;
+import idv.tia201.g2.web.store.service.StoreService;
+import idv.tia201.g2.web.store.vo.Store;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class StoreServiceImpl implements StoreService {
+
+    private final StoreDao storeDao;
+    //注入dao
+    @Autowired
+    public StoreServiceImpl(StoreDao storeDao) {
+        this.storeDao = storeDao;
+    }
+
+    @Override
+    public List<Store> findAll() {
+        return storeDao.findAll();
+    }
+
+    @Override
+    public List<Store> findAll(Pageable pageable) {
+        return storeDao.findAll(pageable).getContent();
+    }
+
+    @Override
+    public List<Store> findStoreByName(String name) {
+        //模糊查詢並且大小寫不敏感
+        return storeDao.findByStoreNameContainingIgnoreCase(name);
+    }
+
+    @Override
+    public Store findStoreById(Integer id) {
+        //避免空指標例外  不該觸發
+        return storeDao.findById(id).orElse(null);
+    }
+
+    @Override
+    public List<Store> findStoreByAddress(String address) {
+        //模糊區域查詢
+        return storeDao.findByStoreAddressContaining(address);
+    }
+
+    @Override
+    public Store saveStore(Store store) {
+        //jpa 把新增編輯統合 如果id為空就會執行新增 有id就會編輯
+        //填寫招商 要執行新增 發送註冊信要引導成編輯
+        return storeDao.save(store);
+    }
+
+}

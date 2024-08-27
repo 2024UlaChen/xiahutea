@@ -1,3 +1,16 @@
+input[type="submit"]{
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 40px;
+    background-color: #73B4BA;
+    border: 1px solid #73B4BA;
+    font-size: 16px;
+    color: white;
+    border-radius: 5px;
+    margin-bottom: 2%;
+}
+
 .reset-margin {
     margin: 0;
     margin-top: 2%;
