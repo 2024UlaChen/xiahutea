@@ -15,18 +15,18 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public int insert(Orders orders) {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-        Session session = sessionFactory.getCurrentSession();
-        try {
-            Transaction transaction = session.beginTransaction();
-            session.persist(orders);
-            transaction.commit();
-            return orders.getId();
-        } catch (HibernateException e) {
-            session.getTransaction().rollback();
-            e.printStackTrace();
-        }
-        return -1;
+//        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+//        Session session = sessionFactory.getCurrentSession();
+//        try {
+//            Transaction transaction = session.beginTransaction();
+//            session.persist(orders);
+//            transaction.commit();
+//            return orders.getId();
+//        } catch (HibernateException e) {
+//            session.getTransaction().rollback();
+//            e.printStackTrace();
+//        }
+       return -1;
     }
 
     @Override
