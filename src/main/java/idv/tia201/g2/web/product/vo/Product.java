@@ -1,12 +1,16 @@
 package idv.tia201.g2.web.product.vo;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Setter
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "product", schema = "xiahu_db")
 
 public class Product {
@@ -54,9 +58,6 @@ public class Product {
     private boolean herbalJelly;
     private String size;
 
-@ManyToOne
-@JoinColumn(name ="product_category_id",insertable = false,updatable = false)
-private ProductCategory productcategory;
 
 }
 
