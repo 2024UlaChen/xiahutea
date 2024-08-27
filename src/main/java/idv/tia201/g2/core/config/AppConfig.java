@@ -17,7 +17,7 @@ public class AppConfig {
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
         LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
         factoryBean.setDataSource(dataSource);
-        factoryBean.setPackagesToScan("idv.tia201.g2.*.vo");
+        factoryBean.setPackagesToScan("idv.tia201.g2.web.*.vo");
         factoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
         return factoryBean;
     }
