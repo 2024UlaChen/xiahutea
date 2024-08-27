@@ -1,23 +1,22 @@
 package idv.tia201.g2.web.user.controller;
 
-import idv.tia201.g2.web.user.service.UserLoginService;
-import idv.tia201.g2.web.user.vo.Administrators;
+import idv.tia201.g2.web.user.service.AdminService;
 import jakarta.servlet.http.HttpServlet;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/user")
 public class LoginServlet extends HttpServlet {
-    @Autowired
-    private UserLoginService userLoginService;
+    private static final long serialVersionUID = 1L;
 
-    @GetMapping("/login")
-    public void Adminlogin(@RequestParam Administrators admin) {
+    private AdminService adminService;
 
-    }
+//    @GetMapping("/login")
+//    public Administrators Adminlogin(@RequestBody Administrators admin, HttpServletRequest request) {
+//
+//
+//
+//    }
 
 }
