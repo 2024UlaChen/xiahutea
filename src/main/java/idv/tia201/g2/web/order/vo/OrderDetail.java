@@ -1,5 +1,6 @@
 package idv.tia201.g2.web.order.vo;
 
+import idv.tia201.g2.core.pojo.Core;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "order_detail", schema = "xiahu_db")
-public class OrderDetail {
+public class OrderDetail extends Core {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,9 +29,9 @@ public class OrderDetail {
 
 
     // todo 待git  單向一對多
-    @OneToMany
-    @JoinColumn(name = "product_id", referencedColumnName = "order_detail_id", nullable = false)
-    private List<Product> products; // 商品編號
+//    @OneToMany
+//    @JoinColumn(name = "product_id", referencedColumnName = "order_detail_id", nullable = false)
+//    private List<Product> products; // 商品編號
 
     @Column(name = "product_sugar")
     private String productSugar; // 甜度

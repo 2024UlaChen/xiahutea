@@ -1,0 +1,13 @@
+.btn-default {
+    background-color: #F8F9FA;
+}
+
+/*.btn-block {*/
+/*    width: 100px;*/
+/*    font-weight: bolder;*/
+/*}*/
+.userAction {
+    padding-top: 30px;
+    display: flex;
+    justify-content: center;
+}

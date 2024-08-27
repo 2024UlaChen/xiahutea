@@ -31,15 +31,23 @@
                 flex: 0 0 45%;
             }
         }
+
         /* 表格區塊 */
+        .table{
+            text-align:center;
+            table-layout: fixed;
+        }
         .table th{
             width:20%;
         }
         .table td{
             width:calc(100% - 20%);
         }
-        tfoot th{
+        .tfoot th{
             text-align: right;
+        }
+        .table_info tr{
+            text-align: left;
         }
         .card-body.p-0 .table tbody>tr>td:last-of-type, .card-body.p-0 .table tbody>tr>th:last-of-type, .card-body.p-0 .table tfoot>tr>td:last-of-type, .card-body.p-0 .table tfoot>tr>th:last-of-type, .card-body.p-0 .table thead>tr>td:last-of-type, .card-body.p-0 .table thead>tr>th:last-of-type{
             padding-right: 1px;
@@ -72,6 +80,7 @@
             border-radius: 4px;
             font-weight: 400;
             vertical-align:center;
+
         }
         .input_text{
             width: 90%;
@@ -79,6 +88,11 @@
             min-height: 80px;
             border-radius: 4px;
         }
+        .input_lab{
+            width: 100%;
+            height: 50%;
+        }
+
         /* 必填* */
         .red_star{
             color: red;
@@ -155,10 +169,11 @@
                                     <h3 class="card-title">商品資訊</h3>
                                 </div>
                                 <div class="card-body p-0">
-                                    <table class="table table-sm" style="text-align:center;table-layout: fixed">
+                                    <table class="table table-sm">
                                         <thead>
                                             <tr>
                                                 <th>商品名稱</th>
+                                                <th>尺寸</th>
                                                 <th>冰塊</th>
                                                 <th>甜度</th>
                                                 <th>數量</th>
@@ -168,6 +183,7 @@
                                         <tbody>
                                             <tr>
                                                 <td>芒果青</td>
+                                                <td>大</td>
                                                 <td>微冰</td>
                                                 <td>無糖</td>
                                                 <td>2</td>
@@ -175,6 +191,7 @@
                                             </tr>
                                             <tr>
                                                 <td>紅茶拿鐵</td>
+                                                <td>大</td>
                                                 <td>少冰</td>
                                                 <td>半糖</td>
                                                 <td>1</td>
@@ -182,49 +199,50 @@
                                             </tr>
                                             <tr>
                                                 <td>珍珠奶茶</td>
+                                                <td>小</td>
                                                 <td>正常</td>
                                                 <td>微糖</td>
                                                 <td>1</td>
                                                 <td>75</td>
                                             </tr>
                                         </tbody>
-                                        <tfoot>
+                                        <tfoot class="tfoot">
                                             <tr>
-                                                <td colspan="5"></td>
+                                                <td colspan="6"></td>
                                             </tr>
                                             <tr>
                                                 <td></td>
-                                                <th colspan="3">商品小計</th>
+                                                <th colspan="4">商品總金額</th>
                                                 <td>265</td>
                                             </tr>
                                             <tr>
                                                 <td></td>
-                                                <th colspan="3">平台處理費</th>
+                                                <th colspan="4">平台處理費</th>
                                                 <td>10</td>
                                             </tr>
                                             <tr>
                                                 <td></td>
-                                                <th colspan="3">錢包折抵</th>
+                                                <th colspan="4">錢包折抵</th>
                                                 <td><span> -</span>10</td>
                                             </tr>
                                             <tr>
                                                 <td></td>
-                                                <th colspan="3">優惠券折抵</th>
+                                                <th colspan="4">優惠券折抵</th>
                                                 <td><span> -</span>5</td>
                                             </tr>
                                             <tr>
                                                 <td></td>
-                                                <th colspan="3">集點折抵</th>
+                                                <th colspan="4">集點折抵</th>
                                                 <td><span> -</span>5</td>
                                             </tr>
                                             <tr>
                                                 <td></td>
-                                                <th colspan="3">付款金額</th>
+                                                <th colspan="4">付款金額</th>
                                                 <td>265</td>
                                             </tr>
                                             <tr>
                                                 <td></td>
-                                                <th colspan="3">付款方式</th>
+                                                <th colspan="4">付款方式</th>
                                                 <td>信用卡</td>
                                             </tr>
                                         </tfoot>
@@ -255,7 +273,7 @@
                                         <tr>
                                             <th>處理狀態</th>
                                             <td>
-                                                <label style="width: 100%;height: 50%;">
+                                                <label class="input_lab">
                                                     <select id="select_status">
                                                         <option value="1" selected>未處理</option>
                                                         <option value="2">同意</option>
@@ -267,15 +285,15 @@
                                         <tr>
                                             <th>退款金額<span class="red_star">*</span></th>
                                             <td>
-                                                <label style="width: 100%;height: 50%;">
-                                                    <input id="dispute_money"  type="text" disabled>
+                                                <label class="input_lab">
+                                                    <input id="dispute_money" type="text" disabled>
                                                 </label>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th>不同意原因<span class="red_star">*</span></th>
                                             <td>
-                                                <label style="width: 100%;height: 50%;">
+                                                <label class="input_lab">
                                                     <textarea class="input_text" disabled></textarea>
                                                 </label>
                                             </td>
@@ -283,7 +301,7 @@
                                         <tr>
                                             <th>內部備註</th>
                                             <td>
-                                                <label style="width: 100%;height: 50%;">
+                                                <label class="input_lab">
                                                     <textarea class="input_text"></textarea>
                                                 </label>
                                             </td>

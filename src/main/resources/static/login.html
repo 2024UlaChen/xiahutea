@@ -26,15 +26,45 @@
     <link rel="stylesheet" href="assets/fonts/flaticon/flaticon.css">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="css/general.css">
-    <link rel="stylesheet" href="css/member.css">
+    <link rel="stylesheet" href="css/login.css">
 </head>
 
 <body>
 <div class="header"></div>
 <div class="main-content main-content-contact">
     <div class="page-main-content">
-        <div class="container member-form">
+        <div class="container">
             <div class="row">
+                <div class="login">
+                    <h5>歡迎使用夏虎茶！線上訂餐系統</h5>
+                    <div>
+                        <div>
+                            <span>沒有帳號？ <a class="registerLink">立即註冊</a></span>
+                        </div>
+                        <div class="loginForm">
+                            <div class="userPhoneBlock">
+                                <i class="fa fa-phone"></i>
+                                <input title="userPhone" type="tel" placeholder="手機號碼" maxlength="10">
+                                <span class="userPhoneError">
+                                    <i class="fa fa-exclamation-circle"></i>
+                                </span>
+                            </div>
+                            <span class="userPhoneTip">123</span>
+                            <div class="passwordBlock">
+                                <i class="fa fa-key"></i>
+                                <input title="password" type="password" placeholder="密碼">
+                                <span class="passwordError -on">
+                                    <i class="fa fa-exclamation-circle"></i>
+                                </span>
+                            </div>
+                            <span class="passwordTip -on">123</span>
+                        </div>
+                        <button class="loginBtn">Login</button>
+                        <div class="lost_password">
+                            <a href="#" class="forgotPwd">忘記密碼</a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
