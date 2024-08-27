@@ -2,7 +2,9 @@ package idv.tia201.g2.web.product.vo;
 
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
@@ -11,6 +13,8 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "product_category", schema = "xiahu_db")
 public class ProductCategory {
 
@@ -24,8 +28,7 @@ public class ProductCategory {
     @Column(name = "product_sort")
     private Integer productsort;
 
-@OneToMany(mappedBy = "productcategory")
-    private List<Product> product;
+
 
 }
 
