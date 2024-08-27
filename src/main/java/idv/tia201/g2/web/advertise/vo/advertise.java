@@ -1,5 +1,6 @@
-package idv.tia201.g2.web.ads.vo;
+package idv.tia201.g2.web.advertise.vo;
 
+import idv.tia201.g2.web.user.vo.TotalUsers;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,12 +10,12 @@ import lombok.Setter;
 import java.util.Date;
 
 @Entity
-@Table
+@Table(name="ads")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ads {
+public class advertise {
     @Id
     @Column(name = "ads_id",updatable = false)
     private Integer adsId;
@@ -36,7 +37,7 @@ public class ads {
     private int roleTypeId;
 
     @ManyToOne
-    @JoinColumn(name = "ads_total_user_id", insertable = false, updatable = false)
-    private total_users total_users;
+    @JoinColumn(name = "ads_total_users_id", insertable = false, updatable = false)
+    private TotalUsers totalusers;
 }
 
