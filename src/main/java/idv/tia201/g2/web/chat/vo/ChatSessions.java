@@ -22,8 +22,8 @@ public class ChatSessions {
     @Column(name = "chat_status_id")
     private Integer chatStatusId;
     @Column(name = "attender_id")
-    private Integer attenderId;
+    private Long attenderId;
     @Column(name = "administrator_id")
-    private Integer administratorId;
+    private Long administratorId;
 
 }
