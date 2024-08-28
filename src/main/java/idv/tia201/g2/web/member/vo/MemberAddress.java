@@ -1,9 +1,17 @@
 package idv.tia201.g2.web.member.vo;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
-@Table(name = "customer_address")
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "customer_address",schema = "xiahu_db")
 public class MemberAddress {
 
     @Id
