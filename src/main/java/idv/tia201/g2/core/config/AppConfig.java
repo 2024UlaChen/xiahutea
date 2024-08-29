@@ -13,24 +13,26 @@ import javax.sql.DataSource;
 @Configuration
 @EnableTransactionManagement
 public class AppConfig {
-    @Bean
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
-        LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
-        factoryBean.setDataSource(dataSource);
-        factoryBean.setPackagesToScan("idv.tia201.g2.*.vo");
-        factoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
-        return factoryBean;
-    }
-
-    @Bean
-    public JpaTransactionManager transactionManager(LocalContainerEntityManagerFactoryBean entityManagerFactory) {
-        JpaTransactionManager transactionManager = new JpaTransactionManager();
-        transactionManager.setEntityManagerFactory(entityManagerFactory.getObject());
-        return transactionManager;
-    }
-
-    @Bean
-    public TransactionTemplate transactionTemplate(JpaTransactionManager transactionManager) {
-        return new TransactionTemplate(transactionManager);
-    }
+//    @Bean
+//    public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
+//        LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
+//        factoryBean.setDataSource(dataSource);
+//        factoryBean.setPackagesToScan("idv.tia201.g2.web.*.vo");
+//        factoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
+//        return factoryBean;
+//    }
+//
+//    @Bean
+//    public JpaTransactionManager transactionManager(LocalContainerEntityManagerFactoryBean entityManagerFactory) {
+//        JpaTransactionManager transactionManager = new JpaTransactionManager();
+//        transactionManager.setEntityManagerFactory(entityManagerFactory.getObject());
+//        return transactionManager;
+//    }
+//
+//    @Bean
+//    public TransactionTemplate transactionTemplate(JpaTransactionManager transactionManager) {
+//
+//        return new TransactionTemplate(transactionManager);
+//    }
+//
 }

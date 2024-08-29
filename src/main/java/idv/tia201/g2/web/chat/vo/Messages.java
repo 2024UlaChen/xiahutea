@@ -15,12 +15,12 @@ public class Messages {
     @Column(name = "message_id")
     private Long messageId;
     @Column(name = "chat_session_id")
-    private String chatSessionId;
+    private Integer chatSessionId;
     @Column(name = "message_content")
     private String messageContent;
     private byte[] attach;
     @Column(name = "sender_id")
-    private String senderId;
+    private Long senderId;
     @Column(name = "sent_at")
     private Timestamp sentAt;
 
