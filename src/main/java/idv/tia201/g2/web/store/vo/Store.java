@@ -86,8 +86,8 @@ public class Store extends Core {
     private String vat;//統編
 
 
-    @Lob
-    @Column(name = "logo", nullable = false,columnDefinition="LONGBLOB")
+
+    @Column(name = "logo", nullable = false)
     private byte[] logo;//存圖片 Lob表示大物件 對應BLOB 或是 CLOB
 
     @Column(name = "email", nullable = false, length = 50)
