@@ -9,12 +9,12 @@ import java.util.List;
 public class MemberDaoImpl implements MemberDao {
 
     @Override
-    public List<Member> selecetAll() {
+    public List<Member> findAll() {
         return null;
     }
 
     @Override
-    public Member selectByMemberId(int memberId) {
+    public Member findByMemberId(int memberId) {
         return null;
     }
 
@@ -29,17 +29,22 @@ public class MemberDaoImpl implements MemberDao {
     }
 
     @Override
-    public List<MemberAddress> selectMemberAddressByMemberId(String memberId) {
+    public List<MemberAddress> findMemberAddressByMemberId(String memberId) {
         return null;
     }
 
     @Override
-    public Member selectMemberForLogin(String username, String password) {
+    public Member findMemberForLogin(String username, String password) {
         return null;
     }
 
     @Override
     public int updateMemberInfo(Member member) {
         return 0;
+    }
+
+    @Override
+    public List<Member> findByMemberValidStatus(boolean status) {
+        return null;
     }
 }

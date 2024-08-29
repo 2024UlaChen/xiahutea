@@ -6,23 +6,25 @@ import idv.tia201.g2.web.member.vo.MemberAddress;
 import java.util.List;
 
 public interface MemberDao {
-     List<Member> selecetAll();
+     List<Member> findAll();
 
-     Member selectByMemberId(int memberId);
+     Member findByMemberId(int memberId);
 
-//     Member selectByMemberPhone(String phone);
+//     Member findByMemberPhone(String phone);
 //
-//     Member selectByMemberEmail(String email);
+//     Member findByMemberEmail(String email);
 
      int createMember(Member member);
 
      int deleteMemberAddress(int memberId);
 
-     List<MemberAddress> selectMemberAddressByMemberId(String memberId);
+     List<MemberAddress> findMemberAddressByMemberId(String memberId);
 
-     Member selectMemberForLogin(String username, String password);
+     Member findMemberForLogin(String username, String password);
 
      int updateMemberInfo(Member member);
+
+     List<Member> findByMemberValidStatus(boolean status);
 
 
 }
