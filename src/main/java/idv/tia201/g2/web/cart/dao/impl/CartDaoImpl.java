@@ -1,15 +1,18 @@
-//package idv.tia201.g2.web.cart.dao.impl;
-//
-//import idv.tia201.g2.web.cart.dao.CartDao;
-//import org.springframework.stereotype.Repository;
-//
-//
-//因取用資料來自product 及 DAO 暫時 保留此DAO，未來可針對Cart操作，若無，可移除
-//public class CartDaoImpl implements CartDao {
-//
+package idv.tia201.g2.web.cart.dao.impl;
+
+import idv.tia201.g2.web.cart.dao.CartDao;
+import idv.tia201.g2.web.product.vo.Product;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import org.hibernate.Session;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public class CartDaoImpl implements CartDao {
+
+    @PersistenceContext
+    private Session session;
 //    @Override
 //    public Product selectByProductId(Integer id) {
-//        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-//        return session.get(Product.class, id);
 //    }
-//}
+}
