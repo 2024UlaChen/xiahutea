@@ -5,7 +5,11 @@ import idv.tia201.g2.web.order.vo.Orders;
 import java.util.List;
 
 public interface OrderService {
-    Orders add(Orders order);
+
+    Orders addStar(Orders order);
+
+    Orders addOrder(Orders order);
+
     Orders update(Orders order);
     List<Orders> findAll();
 

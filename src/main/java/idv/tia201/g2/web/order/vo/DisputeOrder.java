@@ -19,13 +19,13 @@ public class DisputeOrder extends Core {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "dispute_order_id")
+    @Column(name = "dispute_order_id", updatable = false)
     private Integer disputeOrderId; // 爭議編號
 
     @Column(name = "order_id")
     private Integer orderId; // 訂單編號
     @OneToOne
-    @JoinColumn(name = "order_id", insertable = false, updatable = false)
+    @JoinColumn(name = "order_id", insertable = false,updatable = false)
     private Orders order;
 
     @Column(name = "customer_id")  // 單向多對一
@@ -34,7 +34,7 @@ public class DisputeOrder extends Core {
     @JoinColumn(name = "customer_id", insertable = false, updatable = false)
     private Member customer;
 
-    @Column(name = "dispute_reason")
+    @Column(name = "dispute_reason", updatable = false)
     private String disputeReason; // 爭議原因
 
     @Column(name = "dispute_status")
@@ -49,11 +49,11 @@ public class DisputeOrder extends Core {
     @Column(name = "dispute_notes")
     private String disputeNotes; // 爭議備註
 
-    @Column(name = "apply_datetime", insertable = true, updatable = false)
+    @Column(name = "apply_datetime", updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Timestamp applyDatetime; // 申請日期
 
-    @Column(name = "update_datetime", insertable = true, updatable = true)
+    @Column(name = "update_datetime")
     @Temporal(TemporalType.TIMESTAMP)
     private Timestamp updateDatetime; // 更新日期
 }
