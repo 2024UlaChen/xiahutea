@@ -25,19 +25,19 @@ public class DisputeOrder extends Core {
     @Column(name = "order_id")
     private Integer orderId; // 訂單編號
     @OneToOne
-    @JoinColumn(name = "order_id", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "order_id", insertable = false, updatable = false)
     private Orders order;
 
     @Column(name = "customer_id")  // 單向多對一
     private Integer customerId;    // 顧客編號
     @ManyToOne
-    @JoinColumn(name = "customer_id", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "customer_id", insertable = false, updatable = false)
     private Member customer;
 
     @Column(name = "dispute_reason")
     private String disputeReason; // 爭議原因
 
-    @Column(name = "dispute_status", nullable = false)
+    @Column(name = "dispute_status")
     private Integer disputeStatus; // 爭議狀態
 
     @Column(name = "refund_amount")
