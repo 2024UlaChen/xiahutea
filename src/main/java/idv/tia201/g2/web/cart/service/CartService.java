@@ -5,5 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public interface CartService {
 
-    Cart getProductDetail(Integer productId);
+    //點選修改品項時燈箱使用
+    Cart selectProductDetail(Integer productId);
 }
