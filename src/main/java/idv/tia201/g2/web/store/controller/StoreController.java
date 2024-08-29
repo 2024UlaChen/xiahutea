@@ -1,5 +1,6 @@
 package idv.tia201.g2.web.store.controller;
 
+import idv.tia201.g2.web.store.service.StoreService;
 import idv.tia201.g2.web.store.service.impl.StoreServiceImpl;
 import idv.tia201.g2.web.store.vo.Store;
 import idv.tia201.g2.web.store.service.impl.TestService;
@@ -18,15 +19,27 @@ public class StoreController {
     //@Autowired：這個註解用來自動注入
     // Spring 容器中的 bean。Spring 會自動查找
 
-    private final StoreServiceImpl _storeService;
+    private final StoreService _storeService;
     @Autowired
-    public StoreController(StoreServiceImpl _storeService){
+    public StoreController(StoreService _storeService){
         this._storeService = _storeService;
     }
     @GetMapping("/home")
     public List<Store> Home(){
         List<Store> storeList =  _storeService.findAll();
         return storeList;
+    }
+    @GetMapping("/storeinfo/{storeId}")
+    public Store StoreInfo(@PathVariable Integer storeId){
+        Store storeInfo =  _storeService.findStoreById(storeId);
+        return storeInfo;
+    }
+
+
+    @PostMapping("/Update")
+    public Store Update(@RequestBody Store store){
+        Store storeData = _storeService.saveStore(store);//update後丟回去瞧瞧
+        return storeData;
     }
 
 
