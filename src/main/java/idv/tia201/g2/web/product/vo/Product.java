@@ -1,10 +1,7 @@
 package idv.tia201.g2.web.product.vo;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Setter
@@ -25,7 +22,7 @@ public class Product {
     private boolean productStatus;
     private Integer productStoreId;
     @Column(name="product_picture")
-    private String productPicture;
+    private byte[] productPicture;
     @Column(name="product_category_id")
     private Integer productCategoryId;
     @Column(name="normal_ice")
@@ -57,6 +54,8 @@ public class Product {
     @Column(name = "herbal_jelly")
     private boolean herbalJelly;
     private String size;
+
+
 
 
 }
