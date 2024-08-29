@@ -1,13 +1,12 @@
 package idv.tia201.g2.web.coupon.vo;
 
 
+import idv.tia201.g2.web.member.vo.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.lang.reflect.Member;
 
 @Entity
 @Table(name ="customer_coupons")
@@ -35,10 +34,9 @@ public class CustomerCoupons {
     @JoinColumn(name = "coupon_id", insertable = false, updatable = false)
     private Coupon coupon;
     //多對一 關連到消費者 關聯欄位是customer_id
-//    @ManyToOne
-//    @JoinColumn(name = "customer_id", insertable = false, updatable = false)
-//    private Member customer;
-    //消費者的vo應該要設定為
-    //@onetomany(mappedBy = "customer") 搭起雙向mapping
+    @ManyToOne
+    @JoinColumn(name = "customer_id", insertable = false, updatable = false)
+    private Member member;
+
 
 }
