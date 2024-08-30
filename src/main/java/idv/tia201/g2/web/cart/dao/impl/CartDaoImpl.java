@@ -1,6 +1,7 @@
 package idv.tia201.g2.web.cart.dao.impl;
 
 import idv.tia201.g2.web.cart.dao.CartDao;
+import idv.tia201.g2.web.member.vo.Cart;
 import idv.tia201.g2.web.product.vo.Product;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -12,7 +13,10 @@ public class CartDaoImpl implements CartDao {
 
     @PersistenceContext
     private Session session;
-//    @Override
-//    public Product selectByProductId(Integer id) {
-//    }
+
+    @Override
+    public int insertcart(Cart cart) {
+        session.persist(cart);
+        return 1;
+    }
 }
