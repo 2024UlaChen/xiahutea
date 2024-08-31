@@ -27,8 +27,8 @@ public class ProductCategory {
     private Integer productStoreId;    // 店家編號
     @Column(name = "product_category")
     private String categoryName;    // 商品分類名稱
-    @Column(name = "product_sort")
-    private Integer productSort;
+    @Column(name = "category_sort")
+    private Integer categorySort;
 
 }
 
