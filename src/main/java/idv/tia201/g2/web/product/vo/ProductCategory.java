@@ -21,13 +21,14 @@ public class ProductCategory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer Id; // 商品分類流水號
+    @Column(name ="product_category_id" )
+    private Integer categoryId; // 商品分類流水號
     @Column (name = "product_store_id")
     private Integer productStoreId;    // 店家編號
     @Column(name = "product_category")
-    private String productCategory;    // 商品分類名稱
-    @Column(name = "product_sort")
-    private Integer productsort;
+    private String categoryName;    // 商品分類名稱
+    @Column(name = "category_sort")
+    private Integer categorySort;
 
 }
 
