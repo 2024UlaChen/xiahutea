@@ -29,7 +29,7 @@ public class StoreController {
         List<Store> storeList =  _storeService.findAll();
         return storeList;
     }
-    @GetMapping("/storeinfo/{storeId}")
+        @GetMapping("/storeinfo/{storeId}")
     public Store StoreInfo(@PathVariable Integer storeId){
         Store storeInfo =  _storeService.findStoreById(storeId);
         return storeInfo;
