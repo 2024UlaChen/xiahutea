@@ -19,7 +19,7 @@ public class MemberAddress {
     @Column(name = "customer_address_id")
     private Integer customerAddressId;
 
-    @Column(name = "customer_id")
+    @Column(name = "customer_id", updatable = false)
     private Integer customerId;
 
     @Column(name = "customer_address")
