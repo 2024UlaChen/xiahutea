@@ -22,8 +22,11 @@ public class OrderDetail extends Core {
     @Column(name = "order_detail_id")
     private Integer orderDetailId; // 訂單明細編號
 
-    @Column(name = "order_id", insertable = false, updatable = false)
+    @Column(name = "order_id")
     private Integer orderId; // 訂單編號
+    @ManyToOne
+    @JoinColumn(name = "order_id", insertable = false, updatable = false)
+    private Orders orders;
 
     @OneToMany
     @JoinColumn(name = "product_id", referencedColumnName = "order_detail_id", insertable = false, updatable = false)
