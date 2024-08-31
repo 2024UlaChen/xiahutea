@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CartDao {
-//    Cart insertfromview()
+    int insertcart(Cart cart);
 }

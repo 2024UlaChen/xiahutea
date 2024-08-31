@@ -9,7 +9,6 @@ public interface OrderDao {
     boolean update(Orders orders);
 
     Orders selectByOrderId(int orderId);
-    Orders selectBycCustomerId(int customerId);
+    List<Orders> selectBycCustomerId(int customerId);
     List<Orders> selectAll();
-
 }
