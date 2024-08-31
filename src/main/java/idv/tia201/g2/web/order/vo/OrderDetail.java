@@ -24,23 +24,26 @@ public class OrderDetail extends Core {
 
     @Column(name = "order_id")
     private Integer orderId; // 訂單編號
+    @ManyToOne
+    @JoinColumn(name = "order_id", insertable = false, updatable = false)
+    private Orders orders;
 
     @OneToMany
-    @JoinColumn(name = "product_id", referencedColumnName = "order_detail_id", nullable = false)
+    @JoinColumn(name = "product_id", referencedColumnName = "order_detail_id", insertable = false, updatable = false)
     private List<Product> products; // 商品編號
 
-    @Column(name = "product_sugar")
+    @Column(name = "product_sugar", updatable = false)
     private String productSugar; // 甜度
 
-    @Column(name = "product_temperature")
+    @Column(name = "product_temperature", updatable = false)
     private String productTemperature; // 溫度
 
-    @Column(name = "product_add_materials")
+    @Column(name = "product_add_materials", updatable = false)
     private String productAddMaterials; // 加料
 
-    @Column(name = "product_quantity")
+    @Column(name = "product_quantity", updatable = false)
     private Integer productQuantity; // 商品數量
 
-    @Column(name = "product_price")
+    @Column(name = "product_price", updatable = false)
     private Integer productPrice; // 商品單價
 }

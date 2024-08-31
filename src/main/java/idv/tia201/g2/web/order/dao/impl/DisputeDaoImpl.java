@@ -20,7 +20,7 @@ public class DisputeDaoImpl implements DisputeDao {
     }
 
     @Override
-    public Orders selectByDisputeOrderId(int disputeOrderId) {
+    public Orders selectByDisputeId(int disputeId) {
         return null;
     }
 

@@ -12,30 +12,34 @@ import java.util.List;
 @Service
 public class ProductCategoryimpl implements ProductCategoryService {
     @Autowired
-    private ProductCategoryDao dao;
+    private ProductCategoryDao productCategoryDao;
 
     @Override
     public List<ProductCategory> getAllProducts() {
+
+        return productCategoryDao.findAll();
+    }
+
+    @Override
+    public ProductCategory getProductCategoryById(Integer id) {
         return null;
     }
 
     @Override
-    public Product getProductCategoryById(Integer id) {
-        return null;
+    public boolean insertAndUpdateProduct(ProductCategory productCategory) {
+        try {
+            productCategoryDao.save(productCategory);
+            return true;
+        } catch (Exception exp) {
+            return false;
+        }
     }
 
-    @Override
-    public boolean addCategory(ProductCategory productcategory) {
-        return false;
-    }
 
-    @Override
-    public boolean updateCategory(ProductCategory productcategory) {
-        return false;
-    }
 
     @Override
     public boolean deleteCategory(Integer id) {
+
         return false;
     }
 }

@@ -175,7 +175,7 @@
         }
 
         /* 訂單卡*/
-        .product-inner {
+        .product-item .product-inner {
             border-radius: 20px;
         }
         div.one_order_list{
@@ -254,9 +254,10 @@
         }
 
         /* 爭議狀態 */
-        div.dispute_status.-close{
+        div.dispute_status_div.-off{
             display: none;
         }
+
         ul.order_list_ul{
             display:  inline;
         }
@@ -359,7 +360,6 @@
                 // 取得訂單列表資料
                 let order_status = order_status_el.innerText;
                 let order_date = order_date_el.innerText;
-
                 let show_row = true;
 
                 // 篩選條件
@@ -381,7 +381,6 @@
                row.style.display = show_row ? "" : "none";
           });
         });
-
 
         // ==========================================================================
         // 2.訂單列表
@@ -440,9 +439,7 @@
         ];
 
         let orderHtml = "";
-        for(let i = 0; i < orders.length ; i++){
-            // 2.1.2 有爭議訂單時，則顯示爭議狀態文字
-            const disputeClass = orders[i].dispute_status === "" ? "-close" : "";
+        for(let i = 0; i < orders.length ; i++) {
 
             // 2.1.3 訂單狀態不同 更改不同顏色
             let statusClass = "";
@@ -456,6 +453,8 @@
                     statusClass = "complete";  // 藍色
                     break;
             }
+            // 2.1.2 有爭議訂單時，則顯示爭議狀態文字
+           const disputeClass = orders[i].dispute_status ? "" : "-off";
 
             orderHtml += `
                 <li class="product-item  col-lg-4 col-md-6 col-sm-6 col-xs-6 col-ts-12 style-1">
@@ -493,16 +492,17 @@
                                 <div class="order_time">
                                     <span class="order_date_value">${orders[i].order_date}</span>
                                 </div>
-                                <div class="order_time dispute_status" ${disputeClass} >
-                                    <span>爭議狀態： ${orders[i].dispute_status}</span>
+                                <div class="order_time dispute_status_div ${disputeClass}">
+                                  <span class="dispute_status_sp  ${disputeClass}">爭議狀態： ${orders[i].dispute_status}</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </li>
             `;
+            document.getElementsByClassName("order_list_ul")[0].innerHTML = orderHtml;
+
         }
-        document.getElementsByClassName("order_list_ul")[0].innerHTML = orderHtml;
 
 
         // 2.3 點擊訂單卡片 link訂單明細

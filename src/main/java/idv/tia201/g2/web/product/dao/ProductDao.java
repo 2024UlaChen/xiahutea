@@ -2,19 +2,17 @@ package idv.tia201.g2.web.product.dao;
 
 import idv.tia201.g2.web.product.vo.Product;
 import idv.tia201.g2.web.product.vo.ProductCategory;
+import idv.tia201.g2.web.store.vo.Store;
 import org.hibernate.Session;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
+public interface ProductDao extends JpaRepository<Product,Integer>  {
 
-public interface ProductDao {
-    List<Product> getAllproducts();
-    int insert(Product product);
-    int updateProduct(Product product);
-    int deleteById(Integer id);
-    Product getProductById(Integer id);
-
-
-//來根據產品的 id 從資料庫中查詢並返回對應的 Product 實體。
+    List<Product> findByProductNameContaining(String name);
 }
