@@ -36,13 +36,16 @@ public class StoreController {
     }
 
 
-    @PostMapping("/Update")
+    @PostMapping("/update")
     public Store Update(@RequestBody Store store){
         Store storeData = storeService.saveStore(store);//update後丟回去瞧瞧
         return storeData;
     }
 
-
+    @PostMapping("/login")
+    public Boolean Login(@RequestBody Store store){
+        return storeService.loginStore(store);
+    }
 
 
 

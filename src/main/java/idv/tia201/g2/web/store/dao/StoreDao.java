@@ -11,12 +11,12 @@ import java.util.Optional;
 @Repository
 public interface StoreDao extends JpaRepository<Store, Integer> {
 
-   
+
     //模糊查詢店名  並且大小寫不敏感
     List<Store> findByStoreNameContainingIgnoreCase(String name);
     //區域模糊查詢
     List<Store> findByStoreAddressContaining(String address);
     //根據區域 和店名 模糊查詢
     List<Store> findByStoreNameContainingOrStoreAddressContaining(String name, String address);
-
+    Store findByVat(String vat);
 }

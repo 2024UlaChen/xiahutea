@@ -23,6 +23,7 @@ public class StoreServiceImpl implements StoreService {
 
 
     public List<StoreViewModel> GetStoreViewModels() {
+
         List<Store> list = findAll();
         List<StoreViewModel> storeViewModels = null ;
         StoreViewModel storeViewModel = null ;
@@ -38,6 +39,15 @@ public class StoreServiceImpl implements StoreService {
         }
         return storeViewModels;
     }
+
+    @Override
+    public Boolean loginStore(Store userData) {
+        if(userData.getVat() == null || userData.getPassword() ==null) {return false;}
+        Store data = storeDao.findByVat(userData.getVat());
+        if( data == null  ) {return false;}
+        return data.getPassword().equals(userData.getPassword());
+    }
+
 
     @Override
     public List<Store> findAll() {
