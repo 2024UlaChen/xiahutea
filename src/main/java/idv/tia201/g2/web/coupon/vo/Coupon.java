@@ -43,8 +43,8 @@ public class Coupon {
     private Timestamp expiredDate;
 
     //和消費者優惠券紀錄表 一對多
-    //設定一對多
-    @OneToMany(mappedBy = "coupon") //mapping到 優惠券紀錄表的coupon屬性
-    private List<CustomerCoupons> customerCoupons;
+    //設定一對多  夭壽 千萬不要
+//    @OneToMany(mappedBy = "coupon") //mapping到 優惠券紀錄表的coupon屬性
+//    private List<CustomerCoupons> customerCoupons;
 
 }
