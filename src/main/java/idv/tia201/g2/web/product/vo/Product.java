@@ -13,7 +13,9 @@ import lombok.*;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer Id;
+
+    @Column(name="product_id")
+    private Integer productId;
     @Column(name = "product_name")
     private String productName;
     @Column(name="product_price")
