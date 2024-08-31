@@ -19,26 +19,26 @@ public class StoreController {
     //@Autowired：這個註解用來自動注入
     // Spring 容器中的 bean。Spring 會自動查找
 
-    private final StoreService _storeService;
+    private final StoreService storeService;
     @Autowired
     public StoreController(StoreService _storeService){
-        this._storeService = _storeService;
+        this.storeService = _storeService;
     }
     @GetMapping("/home")
     public List<Store> Home(){
-        List<Store> storeList =  _storeService.findAll();
+        List<Store> storeList =  storeService.findAll();
         return storeList;
     }
         @GetMapping("/storeinfo/{storeId}")
     public Store StoreInfo(@PathVariable Integer storeId){
-        Store storeInfo =  _storeService.findStoreById(storeId);
+        Store storeInfo =  storeService.findStoreById(storeId);
         return storeInfo;
     }
 
 
     @PostMapping("/Update")
     public Store Update(@RequestBody Store store){
-        Store storeData = _storeService.saveStore(store);//update後丟回去瞧瞧
+        Store storeData = storeService.saveStore(store);//update後丟回去瞧瞧
         return storeData;
     }
 
