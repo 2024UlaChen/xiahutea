@@ -159,20 +159,20 @@
                 <div id="myModal" class="modal">
 
                     <!-- Modal content -->
-                    <form action="">
+                    <form id="categoryForm">
                         <div class="modal-content">
                             <span class="close">&times;</span>
                             <h2>新增商品分類</h2>
                             <label for="categoryName">分類名稱</label>
                             <input type="text" id="categoryName" name="categoryName" placeholder="請輸入分類名稱">
 
-                            <label for="order">排序</label>
-                            <input type="number" id="order" name="order" value="1" min="1" max="10">
+                            <label for="categorySort">排序</label>
+                            <input type="number" id="categorySort" name="order" value="1" min="1" max="10">
 
                             <p class="note">註：數字越小排序越前面</p>
 
                             <div class="buttons">
-                                <button class="save">儲存</button>
+                                <button class="save" type="submit">儲存</button>
 
                             </div>
                         </div>
@@ -187,7 +187,7 @@
 
 
                     <div class="card-body p-0">
-                        <table class="table table-striped projects" id="myTable">
+                        <table class="table table-striped projects" id="categoryTable">
                             <thead>
                                 <tr>
                                     <th style="width: 12%">
@@ -221,23 +221,21 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <span>奶茶類</span>
+                                        奶茶類
                                     </td>
                                     <td>
-
-                                        <span>1</span>
-
+                                        1
                                     </td>
 
 
                                     <td>
 
-                                        <a class="btn btn-sm btn-edit" href="#" id="update_btn">
+                                        <a class="btn btn-sm btn-edit update_btn" href="#">
                                             <i class="fas fa-pencil-alt">
                                             </i>
                                             編輯
                                         </a>
-                                        <a class="btn btn-danger btn-sm" href="#" id="delete_btn">
+                                        <a class="btn btn-danger btn-sm delete_btn" href="#">
                                             <i class="fas fa-trash">
                                             </i>
                                             刪除
@@ -252,24 +250,22 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <span>奶茶類</span>
+                                        奶茶類
                                     </td>
                                     <td>
-
-                                        <span>2</span>
-
+                                        2
                                     </td>
 
 
                                     <td>
 
-                                        <a class="btn btn-sm btn-edit" href="#" id="update_btn">
+                                        <a class="btn btn-sm btn-edit update_btn" href="#">
                                             <i class="fas fa-pencil-alt">
                                             </i>
                                             編輯
                                         </a>
 
-                                        <a class="btn btn-danger btn-sm" href="#" id="delete_btn">
+                                        <a class="btn btn-danger btn-sm delete_btn" href="#">
                                             <i class="fas fa-trash">
                                             </i>
                                             刪除
@@ -341,8 +337,48 @@
 $('#add').on("click", function () {
     $("#myModal").fadeIn();
 
+});
 
-    });
+$("categoryForm").on('submit',function (e){
+    e.preventDafault();
+
+    var categoryname=$('#categoryName').val().trim();
+    var categorysort=$('#categorySort').val();
+    let form_data=new FormData();
+    form_data.append("categoryname",categoryname);
+    form_data.append("categorysort",categorysort);
+    fetch('/category/add',{
+        method:"Post",
+        body:form_data
+    }).then(res=>res.json()).then(data=>{
+        var newRow = '<tr>' +
+            '<td>'+
+                '<div class="icheck-primary">'+
+                    '<input type="checkbox" value="" class="options">'+
+            '</div>'+
+            '</td>'+
+            '<td>' + data.categoryId + '</td>' + // 使用后端返回的 ID
+            '<td>' + data.categoryName + '</td>' +
+            '<td>' + data.productSort + '</td>' +
+            '<td>' +
+            '<a class="btn btn-sm btn-edit update_btn" href="#">' +
+            '<i class="fas fa-pencil-alt"></i> 編輯' +
+            '</a> ' +
+            '<a class="btn btn-danger btn-sm delete_btn" href="#">' +
+            '<i class="fas fa-trash"></i> 刪除' +
+            '</a>' +
+            '</td>' +
+            '</tr>';
+
+             $('#categoryTable').append(newRow);
+           alert('分類新增成功！');
+             $('#categoryForm')[0].reset();
+
+
+
+    }).catch()
+})
+
 // 按叉關掉談窗
 $("span").on("click",function (){
     $("#myModal").fadeOut();
@@ -370,15 +406,17 @@ $("span").on("click",function (){
     }
   });
 // --單筆刪除--
-  $("#myTable").on('click', '#delete_btn', function () {
+  $("#categoryTable").on('click', '.delete_btn', function () {
 
     $(this).closest("tr").remove();
    })
 
 //--修改--
-  $('#myTable').on('click', '#update_btn', function () {
+  $('#categoryTable').on('click', '.update_btn', function () {
     window.location.href="addProducts.html"
  })
+
+
 
 
 

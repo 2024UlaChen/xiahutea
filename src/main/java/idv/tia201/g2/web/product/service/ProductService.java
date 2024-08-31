@@ -7,11 +7,9 @@ import java.util.List;
 public interface ProductService {
 
     List<Product> getAllProducts();
-    Product getProductById(Integer id);
-    boolean addProduct(Product product);
-    boolean updateProduct(Product product);
+    List<Product> getProductsByProductName(String productName);
+    boolean insertAndUpdateProduct(Product product);
     boolean deleteProduct(Integer id);
-    Product onsale(Integer id);
-    Product offsale(Integer id);
+
 }
 
