@@ -1,12 +1,14 @@
 package idv.tia201.g2.web.store.service.impl;
 
 import idv.tia201.g2.web.store.dao.StoreDao;
+import idv.tia201.g2.web.store.model.StoreViewModel;
 import idv.tia201.g2.web.store.service.StoreService;
 import idv.tia201.g2.web.store.vo.Store;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -19,13 +21,53 @@ public class StoreServiceImpl implements StoreService {
         this.storeDao = storeDao;
     }
 
+
+    public List<StoreViewModel> GetStoreViewModels() {
+        List<Store> list = findAll();
+        List<StoreViewModel> storeViewModels = null ;
+        StoreViewModel storeViewModel = null ;
+        for(Store store : list) {
+            storeViewModel.setStoreId(store.getStoreId());
+            storeViewModel.setStoreName(store.getStoreName());
+            storeViewModel.setRegisterDay(store.getRegisterDay());
+            storeViewModel.setVat(store.getVat());
+            storeViewModel.setContactPhone(store.getContactPhone());
+            storeViewModel.setStoreStatus(store.getStoreStatus());
+
+            storeViewModels.add(storeViewModel);
+        }
+        return storeViewModels;
+    }
+
     @Override
     public List<Store> findAll() {
+        List<Store> list = storeDao.findAll();
+        for(Store store : list) {
+            store.setBankCode(null);
+            store.setBankAccount(null);
+            store.setStoreAddress(null);
+            store.setStorePhone(null);
+            store.setOpeningHours(null);
+            store.setClosingHours(null);
+            store.setIsDelivery(null);
+            store.setDeliveryDistance(null);
+            store.setDeliveryMoney(null);
+            store.setIsTakeOrders(null);
+            store.setScore(null);
+            store.setIsCash(null);
+            store.setIsCreditCard(null);
+            store.setLogo(null);
+            store.setEmail(null);
+            store.setPassword(null);
+            store.setOwner(null);
+
+        }
         return storeDao.findAll();
     }
 
     @Override
     public List<Store> findAll(Pageable pageable) {
+
         return storeDao.findAll(pageable).getContent();
     }
 
