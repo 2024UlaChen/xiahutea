@@ -3,6 +3,7 @@ package idv.tia201.g2.web.order.dao.impl;
 import idv.tia201.g2.web.order.dao.DisputeDao;
 import idv.tia201.g2.web.order.vo.DisputeOrder;
 import idv.tia201.g2.web.order.vo.Orders;
+import jakarta.persistence.TypedQuery;
 
 import java.util.List;
 
