@@ -7,9 +7,7 @@ import java.util.List;
 
 public interface ProductCategoryService {
     List<ProductCategory> getAllProducts();
-    Product getProductCategoryById(Integer id);
-    boolean addCategory(ProductCategory productcategory);
-    boolean updateCategory(ProductCategory productcategory);
+    ProductCategory getProductCategoryById(Integer id);
+    boolean insertAndUpdateProduct(ProductCategory productCategory);
     boolean deleteCategory(Integer id);
-
 }
