@@ -11,12 +11,12 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ProductDao extends JpaRepository<Product, Integer> {
+public interface ProductDao  {
 
 //    @Query("SELECT p FROM Product p WHERE p.Id= :Id AND p.productName=: productName")
 //    List<Product> findByIdAndProductName(@Param("Id") Integer id, @Param("productName") String productName);
 
-      List<Product> findByProductName(String productName);
+     List<Product> findByProductName(String productName);
 //    getAllProducts 方法通常會查詢數據庫或其他數據源，並將所有 Product 實體對象以列表的形式返回。
 //    int insert(Product product);
 //    int updateProduct(Product product);
@@ -25,6 +25,6 @@ public interface ProductDao extends JpaRepository<Product, Integer> {
     //來根據產品的 id 從資料庫中查詢並返回對應的 Product 實體。
 
 //    List<Product> findByCategoryAndName(Long categoryId, String name);
-@Query("FROM Product p WHERE p.productCategoryId = :categoryid AND p.productName = :productname")
-List<Product> findByCategoryAndProductName(@Param("category") String category, @Param("name") String name);
+//@Query("FROM Product p WHERE p.productCategoryId = :categoryid AND p.productName = :productname")
+//List<Product> findByCategoryAndProductName(@Param("category") String category, @Param("name") String name);
 }
