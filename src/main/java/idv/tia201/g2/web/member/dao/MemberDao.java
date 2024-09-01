@@ -26,7 +26,7 @@ public interface MemberDao {
     int updateMemberAddress(MemberAddress memberAddress);
 
     //delete
-    int deleteMemberAddress(int memberId);
+    int deleteByMemberAddressId(int memberId);
 
     //create
     int createMember(Member member);

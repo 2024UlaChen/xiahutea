@@ -3,11 +3,15 @@ package idv.tia201.g2.web.member.dao.impl;
 import idv.tia201.g2.web.member.dao.MemberDao;
 import idv.tia201.g2.web.member.vo.Member;
 import idv.tia201.g2.web.member.vo.MemberAddress;
+import jakarta.persistence.PersistenceContext;
+import org.hibernate.Session;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
-
+@Repository
 public class MemberDaoImpl implements MemberDao {
-
+    @PersistenceContext
+    private Session session;
 
     @Override
     public List<Member> findAll() {
@@ -45,8 +49,10 @@ public class MemberDaoImpl implements MemberDao {
     }
 
     @Override
-    public int deleteMemberAddress(int memberId) {
-        return 0;
+    public int deleteByMemberAddressId(int memberAddressId) {
+        MemberAddress memberAddress = session.load(MemberAddress.class, memberAddressId);
+        session.remove(memberAddress);
+        return 1;
     }
 
     @Override
