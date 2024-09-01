@@ -277,7 +277,7 @@
 .summary-product-detail,
 .coupon-minus,
 .membercard-minus, .moneybag-minus,
-.amount-result{
+.platform-fee,.amount-result{
   display: flex; /* 使用 Flexbox 布局 */
   justify-content: space-between; /* 使內容兩端對齊 */
   align-items: center; /* 垂直居中對齊 */

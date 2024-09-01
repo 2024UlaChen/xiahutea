@@ -51,7 +51,9 @@ document.addEventListener("DOMContentLoaded",function(){
   //優惠使用
   let coupon_number_el = document.getElementsByClassName("coupon-number")[0];
   let select_coupon_input_el = document.getElementsByClassName("select-coupon-input")[0];
-  
+  let select_membercard_input_el = document.getElementsByClassName("select-membercard-input")[0];
+  let select_moneybag_input_el = document.getElementsByClassName("select-moneybag-input")[0];
+  let moneybag_discount_number_el = document.getElementsByClassName("moneybag-discount-number")[0];
   //結帳流程-2
   //取貨人
   let btn_backto_last_page_el = document.getElementsByClassName("btn-backto-last-page")[0];
@@ -67,6 +69,8 @@ document.addEventListener("DOMContentLoaded",function(){
   let select_vehicle_el = document.getElementsByClassName("select-vehicle")[0]; 
   let checksava_vehicle_el = document.getElementsByClassName("checksava-vehicle")[0];
   let vehicle_number_el = document.getElementsByClassName("vehicle-number")[0];
+  let select_paper_uniform_el = document.getElementsByClassName("select-paper-uniform")[0];
+  let uniform_numbers_el = document.getElementsByClassName("uniform-numbers")[0];
   //結帳流程-3
   let btn_backto_last_page2_el = document.getElementsByClassName("btn-backto-last-page2")[0];
   let btn_submit_order_el = document.getElementsByClassName("btn-submit-order")[0];
@@ -119,8 +123,6 @@ document.addEventListener("DOMContentLoaded",function(){
         const itemContent = cartItem.closest(".item-content");
         //再利用父節點指定到其下的細項
         const productDetail = itemContent.querySelector(".product-detail");
-
-
 
         lightbox_el.style.display = "none";
         document.body.style.overflow = 'auto';
@@ -214,7 +216,7 @@ document.addEventListener("DOMContentLoaded",function(){
         picker_el.classList.remove("focus-border");
       });
 
-      //優惠使用
+      //優惠使用(優惠券、會員卡、會員錢包)
       select_coupon_input_el.addEventListener("click", function () {
         coupon_number_el.disabled = false;
         coupon_number_el.focus();
@@ -225,6 +227,24 @@ document.addEventListener("DOMContentLoaded",function(){
       coupon_number_el.addEventListener("blur", function () {
         if (coupon_number_el.value === "") {
           coupon_number_el.placeholder = "請輸入優惠券序號";
+        }
+      });
+
+      //TODO 加入點擊事件get會員卡點數 點選會員卡，
+      select_membercard_input_el.addEventListener("click",function (){
+
+      })
+      //TODO 加入點擊事件get會員錢包餘額
+      select_moneybag_input_el.addEventListener("click",function (){
+        moneybag_discount_number_el.disabled =false;
+        moneybag_discount_number_el.focus();
+      })
+      moneybag_discount_number_el.addEventListener("focus", function () {
+        moneybag_discount_number_el.placeholder = "";
+      });
+      moneybag_discount_number_el.addEventListener("blur", function () {
+        if (moneybag_discount_number_el.value === "") {
+          moneybag_discount_number_el.placeholder = "請輸入折抵金額";
         }
       });
 
@@ -319,14 +339,34 @@ document.addEventListener("DOMContentLoaded",function(){
       //發票方式
       select_paper_el.addEventListener("click", function () {
         vehicle_number_el.disabled = true;
+        uniform_numbers_el.disabled= true;
         checksava_vehicle_el.disabled = true;
         checksava_vehicle_el.checked = false;
+        uniform_numbers_el.value="";
       })
       select_vehicle_el.addEventListener("click", function () {
         checksava_vehicle_el.disabled = false;
         vehicle_number_el.disabled = false;
+        uniform_numbers_el.disabled= true;
         vehicle_number_el.focus();
+        uniform_numbers_el.value="";
       })
+      select_paper_uniform_el.addEventListener("click",function (){
+        uniform_numbers_el.disabled=false;
+        vehicle_number_el.disabled = true;
+        checksava_vehicle_el.disabled = true;
+        checksava_vehicle_el.checked = false;
+        uniform_numbers_el.focus();
+        vehicle_number_el.value="";
+      })
+      uniform_numbers_el.addEventListener("focus", function () {
+        uniform_numbers_el.placeholder = "";
+      });
+      uniform_numbers_el.addEventListener("blur", function () {
+        if (uniform_numbers_el.value === "") {
+          uniform_numbers_el.placeholder = "請輸入統編";
+        }
+      });
       //頁面跳轉
       btn_backto_last_page_el.addEventListener("click", function (e) {
         step2_el.classList.remove("active");
