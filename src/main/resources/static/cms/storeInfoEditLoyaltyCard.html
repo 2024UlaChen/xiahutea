@@ -39,21 +39,44 @@
           <form>
             <div class="m-3">
               <label class="form-label">集點卡名稱</label>
-              <input type="text" class="form-control" value="五十花集點卡" />
+              <input
+                required
+                id="cardname"
+                type="text"
+                class="form-control"
+                value="五十花集點卡"
+              />
             </div>
             <div class="m-3">
               <label class="form-label">點數兌換比例</label>
-              <input type="text" class="form-control" value="500" />
+              <input
+                required
+                id="rate"
+                type="number"
+                class="form-control"
+                value="500"
+              />
               <div class="form-text">輸入多少新台幣兌換一點</div>
             </div>
             <div class="m-3">
               <label class="form-label">集點卡有效期限</label>
-              <input readonly type="text" class="form-control" value="Null" />
+              <input
+                readonly
+                id="passday"
+                type="text"
+                class="form-control"
+                value="Null"
+              />
               <div class="form-text">集點卡關閉後半年後失效</div>
             </div>
             <div class="m-3">
               <div class="form-check form-check form-switch">
-                <input checked class="form-check-input" type="checkbox" />
+                <input
+                  id="cardstatus"
+                  class="form-check-input"
+                  type="checkbox"
+                  value="1"
+                />
                 <label class="form-check-label" for="flexRadioDisabled">
                   集點卡狀態
                 </label>
@@ -69,7 +92,9 @@
                   class="btn btn-primary m-3"
                   >返回</a
                 >
-                <button type="submit" class="btn btn-primary m-3">儲存</button>
+                <button id="savebtn" type="submit" class="btn btn-primary m-3">
+                  儲存
+                </button>
               </div>
               <div class="col-4"></div>
             </div>
@@ -91,13 +116,105 @@
     <script src="js/storegeneral.js"></script>
     <!-- weien-chat -->
     <script type="module" src="js/chat-import.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
       document.addEventListener("DOMContentLoaded", function () {
         let sotreid = location.search.split("?")[1];
         let infoUrlstr = `storeinfo.html?${sotreid}`;
         document.querySelector("#storeEdit").href = infoUrlstr;
-      });
+        let id = sotreid.split("=")[1];
+        let cardname = document.querySelector("#cardname").value;
+        let rate = document.querySelector("#rate").value;
+        let res = true;
+        $.ajax({
+          url: `/store/storeinfo/${sotreid.split("=")[1]}`,
+          method: "GET",
+          dataType: "JSON",
+          async: false,
+          success: function (data) {
+            document.querySelector("#cardname").value = data.loyaltyCardName;
+            document.querySelector("#rate").value = data.exchangeRate;
+            if (data.validStatus) {
+              //集點卡有效
+
+              document.querySelector("#cardstatus").setAttribute("checked", "");
+            } else {
+              document.querySelector("#passday").value =
+                data.expiredDate.split(".")[0];
+            }
+          },
+          err: function (data) {
+            Swal.fire({
+              icon: "error",
+              title: "讀取資料失敗",
+            });
+          },
+        }); //讀取資料
+        //監聽開關
+        document
+          .querySelector("#cardstatus")
+          .addEventListener("change", function () {
+            const isChecked = this.checked; // 获取开关是否被选中
+
+            if (isChecked) {
+              res = true;
+              console.log("開");
+              // 你可以在这里处理开关被选中的逻辑
+            } else {
+              res = false;
+              console.log("關");
+              // 你可以在这里处理开关未选中的逻辑
+            }
+          });
+
+        document
+          .querySelector("#savebtn")
+          .addEventListener("click", function (e) {
+            e.preventDefault(); //阻止預設行為
+
+            rate = document.querySelector("#rate").value;
+            console.log("提交比例");
+            console.log(rate);
+            cardname = document.querySelector("#cardname").value;
+            console.log("提交卡片");
+            console.log(cardname);
+            console.log(id);
+            console.log(res);
+            let model = {
+              storeId: id,
+              exchangeRate: rate,
+              loyaltyCardName: cardname,
+              validStatus: res,
+            };
+            console.log(model);
+            $.ajax({
+              url: "/store/editcard",
+              method: "post",
+              dataType: "json",
+              contentType: "application/json",
+              data: JSON.stringify(model),
+              success: function () {
+                //console.log(data);
+
+                Swal.fire({
+                  icon: "success",
+                  title: "更新成功",
+                }).then((res) => {
+                  if (res.isConfirmed) {
+                    location.reload();
+                  }
+                });
+              },
+              err: function () {
+                Swal.fire({
+                  icon: "error",
+                  title: "更新失敗",
+                });
+              },
+            });
+          }); //點擊提交
+      }); //DOM END
     </script>
   </body>
 </html>

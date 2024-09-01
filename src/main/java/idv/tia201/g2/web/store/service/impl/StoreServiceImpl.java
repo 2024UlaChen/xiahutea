@@ -119,6 +119,8 @@ public class StoreServiceImpl implements StoreService {
         return storeDao.save(oldDate);
     }
 
+
+
     @Override
     public Store editStoreInfo(Store store) {
         Store oldDate = findStoreById(store.getStoreId());
@@ -136,6 +138,7 @@ public class StoreServiceImpl implements StoreService {
         oldDate.setEmail(store.getEmail());
         return storeDao.save(oldDate);
     }
+
     @Override
     public Store editStoreLoyaltyCard(Store store) {
         Store oldDate = findStoreById(store.getStoreId());
@@ -152,7 +155,6 @@ public class StoreServiceImpl implements StoreService {
             cal.add(Calendar.MONTH, 6);
             now = new Timestamp(cal.getTimeInMillis());
             oldDate.setExpiredDate(now);
-
         }
         return storeDao.save(oldDate);
     }
