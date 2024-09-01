@@ -4,11 +4,15 @@ import idv.tia201.g2.web.store.dao.StoreDao;
 import idv.tia201.g2.web.store.model.StoreViewModel;
 import idv.tia201.g2.web.store.service.StoreService;
 import idv.tia201.g2.web.store.vo.Store;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 @Service
@@ -25,9 +29,10 @@ public class StoreServiceImpl implements StoreService {
     public List<StoreViewModel> GetStoreViewModels() {
 
         List<Store> list = findAll();
-        List<StoreViewModel> storeViewModels = null ;
-        StoreViewModel storeViewModel = null ;
+        List<StoreViewModel> storeViewModels = new ArrayList<>();
+        StoreViewModel storeViewModel = new StoreViewModel(); ;
         for(Store store : list) {
+            BeanUtils.copyProperties(store, storeViewModel);
             storeViewModel.setStoreId(store.getStoreId());
             storeViewModel.setStoreName(store.getStoreName());
             storeViewModel.setRegisterDay(store.getRegisterDay());
@@ -104,6 +109,52 @@ public class StoreServiceImpl implements StoreService {
         //jpa 把新增編輯統合 如果id為空就會執行新增 有id就會編輯
         //填寫招商 要執行新增 發送註冊信要引導成編輯
         return storeDao.save(store);
+    }
+
+    @Override
+    public Store editStorePassword(Store store){
+        //預計只回傳回PK和密碼  修改密碼
+        Store oldDate = findStoreById(store.getStoreId());
+        oldDate.setPassword(store.getPassword());
+        return storeDao.save(oldDate);
+    }
+
+    @Override
+    public Store editStoreInfo(Store store) {
+        Store oldDate = findStoreById(store.getStoreId());
+        oldDate.setContactPhone(store.getContactPhone());
+        oldDate.setContactPerson(store.getContactPerson());
+        oldDate.setOpeningHours(store.getOpeningHours());
+        oldDate.setClosingHours(store.getClosingHours());
+//        ToDo 休假日 和 令張表關聯
+        oldDate.setIsDelivery(store.getIsDelivery());
+        oldDate.setDeliveryDistance(store.getDeliveryDistance());
+        oldDate.setIsTakeOrders(store.getIsTakeOrders());
+        oldDate.setIsCash(store.getIsCash());
+        oldDate.setIsCreditCard(store.getIsCreditCard());
+        oldDate.setLogo(store.getLogo());
+        oldDate.setEmail(store.getEmail());
+        return storeDao.save(oldDate);
+    }
+    @Override
+    public Store editStoreLoyaltyCard(Store store) {
+        Store oldDate = findStoreById(store.getStoreId());
+        oldDate.setLoyaltyCardName(store.getLoyaltyCardName());
+        oldDate.setExchangeRate(store.getExchangeRate());
+        oldDate.setValidStatus(store.getValidStatus());
+        if(store.getValidStatus()){
+            oldDate.setExpiredDate(null);
+        }else{
+            //當下時間加半年
+            Timestamp now = new Timestamp(System.currentTimeMillis());
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(now);
+            cal.add(Calendar.MONTH, 6);
+            now = new Timestamp(cal.getTimeInMillis());
+            oldDate.setExpiredDate(now);
+
+        }
+        return storeDao.save(oldDate);
     }
 
 }

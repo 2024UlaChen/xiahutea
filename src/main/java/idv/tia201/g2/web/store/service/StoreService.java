@@ -19,6 +19,9 @@ public interface StoreService {
 
     List<Store> findStoreByAddress(String address);
     Store saveStore(Store store);
+    Store editStorePassword(Store store);
+    Store editStoreInfo(Store store);
+    Store editStoreLoyaltyCard(Store store);
 
 
 
