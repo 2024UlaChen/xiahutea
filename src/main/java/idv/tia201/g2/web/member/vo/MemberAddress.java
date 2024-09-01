@@ -1,5 +1,6 @@
 package idv.tia201.g2.web.member.vo;
 
+import idv.tia201.g2.core.pojo.Core;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,7 +13,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "customer_address",schema = "xiahu_db")
-public class MemberAddress {
+public class MemberAddress extends Core {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

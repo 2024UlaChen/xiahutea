@@ -1,6 +1,7 @@
 package idv.tia201.g2.web.member.service;
 
 import idv.tia201.g2.web.member.vo.Member;
+import idv.tia201.g2.web.member.vo.MemberAddress;
 
 import java.util.List;
 
@@ -9,11 +10,18 @@ public interface MemberService {
 
     Member login(Member member);
 
-    Member edit(Member member);
+    Member editMember(Member member);
 
-    List<Member> findAll();
+    MemberAddress editMemberAddress(MemberAddress memberAddress);
 
-    boolean remove(Integer id);
+    List<Member> findAllMember();
 
-    boolean save(Member member);
+    List<MemberAddress> findAllMemberAdress();
+
+    boolean saveMember(Member member);
+
+    boolean saveMemberAddress(MemberAddress memberAddress);
+
+    boolean deleteMemberAddress(Integer customerAddressId);
+
 }
