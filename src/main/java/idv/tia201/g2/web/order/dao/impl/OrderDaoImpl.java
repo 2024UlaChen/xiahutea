@@ -38,11 +38,11 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public Orders selectBycCustomerId(int customerId) {
+    public List<Orders> selectBycCustomerId(int customerId) {
         String jpql = "from Orders where customerId= :customerId";
         TypedQuery<Orders> query = session.createQuery(jpql, Orders.class)
                 .setParameter("customerId", customerId);
-        return query.getSingleResult();
+        return query.getResultList();
     }
 
     @Override
