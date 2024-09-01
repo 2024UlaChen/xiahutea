@@ -1,12 +1,13 @@
 package idv.tia201.g2.web.user.service.impl;
 
 import idv.tia201.g2.web.user.dao.AdminDao;
+import idv.tia201.g2.web.user.service.AdminService;
 import idv.tia201.g2.web.user.vo.Administrators;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AdminServiceImpl {
+public class AdminServiceImpl implements AdminService {
     @Autowired
     private AdminDao adminDao;
 
