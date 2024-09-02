@@ -1,4 +1,4 @@
-input[type="submit"]{
+input[type="submit"] {
     align-items: center;
     justify-content: center;
     text-align: center;
@@ -7,8 +7,38 @@ input[type="submit"]{
     border: 1px solid #73B4BA;
     font-size: 16px;
     color: white;
-    border-radius: 5px;
     margin-bottom: 2%;
+}
+
+select {
+    padding: 7px 20px;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="search"],
+input[type="email"],
+input[type="password"],
+input[type="tel"],
+input[type="url"],
+textarea,
+button,
+select {
+    border-radius: 5px;
+}
+
+.product-item .button:hover,
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="search"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="tel"]:focus,
+input[type="url"]:focus,
+textarea:focus,
+button:focus,
+select:focus {
+    border: 1px solid #6c757d !important;
 }
 
 .reset-margin {
@@ -88,7 +118,7 @@ input[type="submit"]{
 
 .userPhoto {
     margin: 0 auto;
-    display: inline-block;
+    display: flex;
     width: 30%;
     border-radius: 50%;
     text-align: center;
@@ -103,3 +133,4 @@ input[type="submit"]{
     padding-left: 2%;
     display: inline-block;
 }
+
