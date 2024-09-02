@@ -110,27 +110,23 @@ select:focus,
 }
 
 .member-list li:hover, .member-list li a:hover {
-    color: #73B4BA;
+    color: #FAC792;
 }
 
 .member-list li:hover {
     background-color: #F8F9FA;
-    border-left: solid 5px #F8F9FA;
+    border-left: solid 5px #FAC792;
 }
 
-.member-list div {
-    padding-left: 10px;
-    height: 100%;
-    line-height: 100%;
-    vertical-align: middle;
-}
-
-.member-list div a {
+.member-list a {
     display: inline-block;
     width: 100%;
     height: 100%;
 }
-
+.member-list a span{
+    display: flex;
+    vertical-align: middle;
+}
 
 .warn {
     display: inline;

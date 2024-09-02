@@ -1,5 +1,6 @@
 package idv.tia201.g2.web.member.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import idv.tia201.g2.core.pojo.Core;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -16,6 +17,9 @@ import java.sql.Date;
 @AllArgsConstructor
 @Table(name = "customer", schema = "xiahu_db")
 public class Member extends Core {
+
+    private static final long serialVersionUID = 6017583930175390950L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "customer_id")
@@ -45,6 +49,7 @@ public class Member extends Core {
     @Column(name = "sex")
     private Integer sex;
     @Column(name = "birthday")
+    @JsonFormat(pattern = "yyyy/MM/dd")
     private Date birthday;
 
 }

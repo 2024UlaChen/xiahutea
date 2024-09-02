@@ -12,8 +12,10 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "customer_address",schema = "xiahu_db")
+@Table(name = "customer_address", schema = "xiahu_db")
 public class MemberAddress extends Core {
+
+    private static final long serialVersionUID = -6043422118936511434L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
