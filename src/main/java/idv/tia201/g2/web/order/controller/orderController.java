@@ -15,10 +15,10 @@ public class orderController {
 
     private OrderService orderService;
 
-    @GetMapping("list")
-    public List<Orders> manage(Model model){
-
-    }
+//    @GetMapping("list")
+//    public List<Orders> manage(Model model){
+//
+//    }
 
 
 }
