@@ -1,11 +1,11 @@
 package idv.tia201.g2.web.store.controller;
 
 import idv.tia201.g2.web.store.service.StoreService;
-import idv.tia201.g2.web.store.service.impl.StoreServiceImpl;
+
 import idv.tia201.g2.web.store.vo.Store;
-import idv.tia201.g2.web.store.service.impl.TestService;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,29 +19,42 @@ public class StoreController {
     //@Autowired：這個註解用來自動注入
     // Spring 容器中的 bean。Spring 會自動查找
 
-    private final StoreService _storeService;
+    private final StoreService storeService;
     @Autowired
-    public StoreController(StoreService _storeService){
-        this._storeService = _storeService;
+    public StoreController(StoreService storeService){
+        this.storeService = storeService;
     }
     @GetMapping("/home")
     public List<Store> Home(){
-        List<Store> storeList =  _storeService.findAll();
+        List<Store> storeList =  storeService.findAll();
         return storeList;
     }
-    @GetMapping("/storeinfo/{storeId}")
+        @GetMapping("/storeinfo/{storeId}")
     public Store StoreInfo(@PathVariable Integer storeId){
-        Store storeInfo =  _storeService.findStoreById(storeId);
+        Store storeInfo =  storeService.findStoreById(storeId);
         return storeInfo;
     }
 
 
-    @PostMapping("/Update")
+    @PostMapping("/update")
     public Store Update(@RequestBody Store store){
-        Store storeData = _storeService.saveStore(store);//update後丟回去瞧瞧
+        Store storeData = storeService.saveStore(store);//update後丟回去瞧瞧 未完成
         return storeData;
     }
 
+    @PostMapping("/login")
+    public Boolean Login(@RequestBody Store store){
+        return storeService.loginStore(store);
+    }
+
+    @PostMapping("/editpwd")
+    public Store EditPwd(@RequestBody Store store){
+        return storeService.editStorePassword(store);
+    }
+    @PostMapping("/editcard")
+    public Store EditCard(@RequestBody Store store){
+        return storeService.editStoreLoyaltyCard(store);
+    }
 
 
 

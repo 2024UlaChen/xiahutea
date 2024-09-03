@@ -135,13 +135,17 @@
                   <label class="select-membercard-label" for="select-membercard-label" style="padding-top: 10px">
                       會員卡
                   </label>
-                  <p>(會員卡餘額:10點)</p>
+                  <p class="membercard-count">(會員卡餘額:<span id="membercard-number">無法獲取餘額</span>點)</p>
               </div>
               <div class="select-moneybag">
+                  <div class="select-moneybag-detail">
                   <input class="select-moneybag-input" type="radio" name="discount">
                   <label class="select-moneybag-label" for="select-moneybag-label" style="padding-top: 10px">
                       會員錢包
                   </label>
+                      <input type="text" class="moneybag-discount-number" placeholder="請輸入折抵金額" disabled>
+                  </div>
+                  <p class="moneybag-count">(會員錢包餘額:<span id="moneybag-number">無法獲取餘額</span>)</p>
               </div>
           </div>
           <!--訂單彙總-->
@@ -162,6 +166,10 @@
               <div class="moneybag-minus">
                   <div class="moneybag-minus-type">會員錢包折抵金額</div>
                   <div class="moneybag-minus-number">$20</div>
+              </div>
+              <div class="platform-fee">
+                  <div class="platform-fee-title">平台費用</div>
+                  <div class="platform-fee-number">$10</div>
               </div>
               <hr>
               <div class="amount-result">
@@ -283,10 +291,10 @@
                       <input type="radio" class="select-creditcard" name="pay-method">
                       <label for="option1" class="label-creditcard">信用卡</label>
                   </li>
-                  <li>
-                      <input type="radio" class="select-cash" name="pay-method">
-                      <label for="option2" class="label-cash">現金</label>
-                  </li>
+<!--                  <li>-->
+<!--                      <input type="radio" class="select-cash" name="pay-method">-->
+<!--                      <label for="option2" class="label-cash">現金</label>-->
+<!--                  </li>-->
               </ul>
           </div>
           <!--發票類型-->
@@ -297,16 +305,20 @@
                       <input type="radio" class="select-paper" name="select-invoice">
                       <label for="option1" class="label-creditcard">紙本發票</label>
                   </li>
+                  <li>
+                      <input type="radio" class="select-paper-uniform" name="select-invoice">
+                      <label for="option2" class="label-uniform">紙本發票(含統一編號)</label>
+                      <input type="text" class="uniform-numbers" placeholder="請輸入統編" disabled>
+                  </li>
+
                   <li class="vehicle-detail">
                       <input type="radio" class="select-vehicle" name="select-invoice">
-                      <label for="option2" class="label-vehicle">手機載具</label>
+                      <label for="option3" class="label-vehicle">手機載具</label>
                       <input type="checkbox" class="checksava-vehicle" disabled>
                       <label for="save-default">儲存為預設</label>
                       <input type="text" class="vehicle-number" disabled>
                   </li>
               </ul>
-              <h3>統一編號</h3>
-              <input type="text" class="uniform-numbers">
           </div>
           <div class="btn-nextstep2">
               <button class="btn-backto-last-page">上一步</button>
