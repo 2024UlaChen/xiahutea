@@ -208,6 +208,7 @@
     
   </aside> -->
       <!-- /.control-sidebar -->
+
       <div class="storefooter"></div>
     </div>
     <!-- ./wrapper -->
@@ -246,10 +247,6 @@
             //console.log(data);
             let str = "";
             data.forEach((store) => {
-              // console.log("店名:", store.storeName);
-              // console.log("地址:", store.storeAddress);
-              // console.log("电话:", store.storePhone);
-              // console.log("注册日:", store.registerDay);
               let storeName = store.storeName;
               let registerDay = store.registerDay.split("T")[0];
               let vat = store.vat;
@@ -257,35 +254,26 @@
               let storeStatus = store.storeStatus;
               let status = storeStatus === 1 ? "checked" : "";
               let storeId = store.storeId;
-
               str = `
+<td> # </td>
 <td>
-              #
-          </td>
-          <td>
-              <a>
-                  ${storeName}
-              </a>
-              <br/>
-              <small>
-                  註冊日${registerDay}
-              </small>
-          </td>
-          <td>
-              ${vat}
-          </td>
-          <td class="project_progress">
-              ${contactPhone}
-          </td>
-          <td class="project-state form-switch">
-            <input type="checkbox" ${status} data-toggle="toggle" data-size="sm" ">
-          </td>
-          <td class="text-center">
-            <a href="/store/storeinfo/${storeId}" class="glow-on-hover" type="button">View</a>
-          </td>
-      </tr>
+  <a> ${storeName} </a>
+  <br />
+  <small> 註冊日${registerDay} </small>
+</td>
+<td> ${vat} </td>
+<td class="project_progress"> 
+  ${contactPhone}
+ </td>
+<td class="project-state form-switch">
+  <input type="checkbox" ${status} data-toggle="toggle" data-size="sm" ">
+</td>
+<td class=" text-center">
+    <a href="/cms/storeInfo.html?storeId=${storeId}" class="glow-on-hover storeInfoLink" type="button">View</a>
+</td>
+</tr>
+              `;
 
-`;
               document
                 .querySelector("#storelist")
                 .insertAdjacentHTML("afterbegin", str);
@@ -300,8 +288,6 @@
           },
         });
       }); //DOM end
-
-      //監聽 點擊哪個商家
     </script>
   </body>
 </html>

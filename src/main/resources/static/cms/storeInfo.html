@@ -1,254 +1,426 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>商家基本資料</title>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>商家基本資料</title>
 
-  <!-- Google Font: Source Sans Pro -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-  <!-- Font Awesome -->
+    <!-- Google Font: Source Sans Pro -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback"
+    />
+    <!-- Font Awesome -->
 
-  <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css" />
+    <!-- Theme style -->
+    <link rel="stylesheet" href="dist/css/adminlte.min.css" />
 
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-  <!-- weien-chat -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-  <link rel="stylesheet" href="css/weien-chat.css">
-</head>
-<body class="hold-transition sidebar-mini">
-  
-<div class="wrapper">
-  <!-- Navbar -->
-  <div class="storeheader"></div>
-  <!-- /.navbar -->
-  <div class="storeaside"></div>
-  <!-- Main Sidebar Container -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <!-- weien-chat -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
+    <link rel="stylesheet" href="css/weien-chat.css" />
+  </head>
+  <body class="hold-transition sidebar-mini">
+    <div class="wrapper">
+      <!-- Navbar -->
+      <div class="storeheader"></div>
+      <!-- /.navbar -->
+      <div class="storeaside"></div>
+      <!-- Main Sidebar Container -->
 
-  
-<div style="margin: auto; max-width: 60%; ">
-  <h1 class="text-center">商家基本資料</h1>
-  <div class="container m-5 shadow-lg p-3 mb-5 bg-body rounded ">
-    <form >
-      <div class="m-3">
-        <label for="帳號(統編)" class="form-label">帳號</label>
-        <input
-          readonly
-          type="text"
-          class="form-control"
-          id="exampleInputEmail1"
-          value="12345678"
-          
-        />
-        
-      </div>
-      
-      <div class="m-3">
-        <label class="form-label">商店名稱</label>
-        <input readonly type="text" class="form-control" value="五十花" />
-        
-      </div>
-      <div class="m-3">
-        <label class="form-label">註冊日</label>
-        <input readonly type="date" class="form-control" value="2024-07-17" />
-      </div>
-      <div class="m-3">
-        <label class="form-label">商店地址</label>
-        <input readonly type="text" class="form-control" value="台中101大樓" />
-      </div>
-      <div class="m-3">
-        <label  class="form-label">商店電話</label>
-        <input readonly type="text" class="form-control" value="0123456789" />
-      </div>
-      <div class="m-3">
-        <label class="form-label">開始營業時間</label>
-        <input readonly type="time" class="form-control" value="10:00" />
-      </div>
-      <div class="m-3">
-        <label class="form-label">結束營業時間</label>
-        <input readonly type="time" class="form-control" value="22:00" />
-      </div>
-      <div class="m-3">
-        <label class="form-label">臨時公休日</label>
-        <input readonly
-          type="date"
-          class="form-control"
-          value=""            
-        />
-        
-      </div>
-      <div class="m-3 form-check">
-        <input disabled type="checkbox" class="form-check-input" checked />
-        <label  class="form-check-label">是否接受訂單</label>
-      </div>
-      <div class="m-3 form-check">
-        <input disabled type="checkbox" class="form-check-input"  />
-        <label class="form-check-label">是否外送</label>
-      </div>
-      <div class="m-3 input-group">
-        <label class="form-label input-group">外送門檻金額</label>
-        <input readonly type="text" class="input-group form-control" value="500" />
-        <span class="input-group-text" style="margin-right: 30px;">NTD(新台幣)</span>
-      </div>
-      <div class="m-3">
-        <label class="form-label">外送距離限制</label>
-        
-<select disabled class="form-select form-select-" aria-label=".form-select-sm example">
+      <div style="margin: auto; max-width: 60%">
+        <h1 class="text-center">商家基本資料</h1>
+        <div class="container m-5 shadow-lg p-3 mb-5 bg-body rounded">
+          <form>
+            <div class="m-3">
+              <label for="帳號(統編)" class="form-label">帳號</label>
+              <input
+                readonly
+                type="text"
+                class="form-control"
+                id="vat"
+                value="12345678"
+              />
+            </div>
 
-<option value="1">1公里</option>
-<option value="2">2公里</option>
-<option value="3">3公里</option>
-<option selected>暫不提供外送服務</option>
-</select>
+            <div class="m-3">
+              <label class="form-label">商店名稱</label>
+              <input
+                readonly
+                type="text"
+                class="form-control"
+                value="五十花"
+                id="sotreName"
+              />
+            </div>
+            <div class="m-3">
+              <label class="form-label">註冊日</label>
+              <input
+                readonly
+                type="date"
+                class="form-control"
+                value="2024-07-17"
+                id="register"
+              />
+            </div>
+            <div class="m-3">
+              <label class="form-label">商店地址</label>
+              <input
+                readonly
+                type="text"
+                class="form-control"
+                value="台中101大樓"
+                id="storeAddress"
+              />
+            </div>
+            <div class="m-3">
+              <label class="form-label">商店電話</label>
+              <input
+                readonly
+                type="text"
+                class="form-control"
+                value="0123456789"
+                id="storePhone"
+              />
+            </div>
+            <div class="m-3">
+              <label class="form-label">開始營業時間</label>
+              <input
+                readonly
+                type="time"
+                class="form-control"
+                value="10:00"
+                id="openingHours"
+              />
+            </div>
+            <div class="m-3">
+              <label class="form-label">結束營業時間</label>
+              <input
+                readonly
+                type="time"
+                class="form-control"
+                value="22:00"
+                id="closingHours"
+              />
+            </div>
+            <div class="m-3">
+              <label class="form-label">臨時公休日</label>
+              <input
+                readonly
+                type="date"
+                class="form-control"
+                value=""
+                id="rest"
+              />
+            </div>
+            <div class="m-3 form-check">
+              <input
+                disabled
+                type="checkbox"
+                class="form-check-input"
+                id="isTakeOrder"
+              />
+              <label class="form-check-label">是否接受訂單</label>
+            </div>
+            <div class="m-3 form-check">
+              <input
+                disabled
+                type="checkbox"
+                class="form-check-input"
+                id="isDelivery"
+              />
+              <label class="form-check-label">是否外送</label>
+            </div>
+            <div class="m-3 input-group">
+              <label class="form-label input-group">外送門檻金額</label>
+              <input
+                readonly
+                type="text"
+                class="input-group form-control"
+                value="500"
+                id="deliveryMoney"
+              />
+              <span class="input-group-text" style="margin-right: 30px"
+                >NTD(新台幣)</span
+              >
+            </div>
+            <div class="m-3 input-group">
+              <label class="form-label input-group">外送距離限制</label>
+              <input
+                readonly
+                type="text"
+                class="input-group form-control"
+                id="deliveryDistance"
+              />
+              <span class="input-group-text" style="margin-right: 30px"
+                >KM(公里)</span
+              >
+            </div>
 
-        
-      </div>
+            <div class="m-3">
+              <div class="form-check form-check-inline">
+                <input
+                  disabled
+                  class="form-check-input"
+                  type="checkbox"
+                  checked
+                  value="option1"
+                />
+                <label class="form-check-label" for="inlineCheckbox1"
+                  >現金</label
+                >
+              </div>
+              <div class="form-check form-check-inline">
+                <input
+                  disabled
+                  class="form-check-input"
+                  type="checkbox"
+                  value="option2"
+                  checked
+                />
+                <label class="form-check-label" for="inlineCheckbox2"
+                  >信用卡</label
+                >
+              </div>
+            </div>
 
-      <div class="m-3">
-        <div class="form-check form-check-inline">
-          <input disabled
-            class="form-check-input"
-            type="checkbox"
-            checked
-            value="option1"
-          />
-          <label class="form-check-label" for="inlineCheckbox1">現金</label>
+            <div class="m-3">
+              <label class="form-label">信箱</label>
+              <input
+                disabled
+                type="email"
+                class="form-control"
+                id="storeEmail"
+                value="name@example.com"
+              />
+            </div>
+            <div class="m-3">
+              <label class="form-label">聯絡人</label>
+              <input
+                disabled
+                type="text"
+                class="form-control"
+                value="李登輝"
+                id="contactPerson"
+              />
+            </div>
+            <div class="m-3">
+              <label class="form-label">聯絡人電話</label>
+              <input
+                disabled
+                type="text"
+                class="form-control"
+                value="911"
+                id="contactPhone"
+              />
+            </div>
+            <div class="m-3">
+              <label class="form-label">銀行代碼</label>
+              <input
+                readonly
+                type="text"
+                class="form-control"
+                value="666"
+                id="bankCode"
+              />
+            </div>
+            <div class="m-3">
+              <label class="form-label">銀行帳號</label>
+              <input
+                readonly
+                type="text"
+                class="form-control"
+                value="1234567-7654321"
+                id="bankAccount"
+              />
+            </div>
+            <div class="m-3">
+              <label class="form-label">店家所有人</label>
+              <input
+                readonly
+                type="text"
+                class="form-control"
+                value="阿扁"
+                id="owner"
+              />
+            </div>
+            <div class="m-3">
+              <label class="form-label">集點卡名稱</label>
+              <input
+                disabled
+                type="text"
+                class="form-control"
+                value="五十花集點卡"
+                id="loyaltyCardName"
+              />
+            </div>
+            <div class="m-3">
+              <label class="form-label">點數兌換比例</label>
+              <input
+                disabled
+                type="text"
+                class="form-control"
+                value="500"
+                id="exchangeRate"
+              />
+              <div class="form-text">輸入多少新台幣兌換一點</div>
+            </div>
+            <div class="m-3">
+              <label class="form-label">集點卡有效期限</label>
+              <input
+                readonly
+                type="text"
+                class="form-control"
+                value="Null"
+                id="expiredDate"
+              />
+              <div class="form-text">集點卡關閉後半年後失效</div>
+            </div>
+            <div class="m-3">
+              <div class="form-check form-check form-switch">
+                <input
+                  checked
+                  class="form-check-input"
+                  type="checkbox"
+                  disabled
+                  id="validStatus"
+                />
+                <label class="form-check-label" for="flexRadioDisabled">
+                  集點卡狀態
+                </label>
+              </div>
+            </div>
+            <div class="m-3">
+              <label class="form-check-label" for="flexRadioCheckedDisabled">
+                店家帳號狀態
+              </label>
+              <select
+                class="form-select"
+                disabled
+                aria-label=".form-select-sm example"
+                id="storeStatus"
+              >
+                <option selected value="1">啟動</option>
+                <option value="2">停權</option>
+              </select>
+            </div>
+
+            <!-- <button type="submit" class="btn btn-primary m-3">儲存</button> -->
+            <div class="row">
+              <div class="col-3"></div>
+              <div class="col-6">
+                <a id="storeEdit" href="#" class="btn btn-primary m-3">編輯</a>
+                <a
+                  id="storeLoyaltyCard"
+                  href="storeInfoEditLoyaltyCard.html"
+                  class="btn btn-primary m-3"
+                  >設定集點卡</a
+                >
+                <a href="storeList.html" class="btn btn-primary m-3">返回</a>
+              </div>
+              <div class="col-3"></div>
+            </div>
+          </form>
         </div>
-        <div class="form-check form-check-inline">
-          <input
-          disabled
-            class="form-check-input"
-            type="checkbox"
-            value="option2"
-            checked
-          />
-          <label class="form-check-label" for="inlineCheckbox2">信用卡</label>
-        </div>
-        <div class="form-check form-check-inline">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            id="inlineCheckbox3"
-            value="option3"
-            disabled
-          />
-          <label class="form-check-label" for="inlineCheckbox3"
-            >Line Pay (disabled)</label
-          >
-        </div>
       </div>
-      
-      <div class="m-3">
-        <label class="form-label">信箱</label>
-        <input
-        disabled
-          type="email"
-          class="form-control"
-          id="exampleFormControlInput1"
-          value="name@example.com"
-        />
-      </div>
-      <div class="m-3">
-        <label class="form-label">聯絡人</label>
-        <input disabled type="text" class="form-control" value="李登輝" />
-      </div>
-      <div class="m-3">
-        <label class="form-label">聯絡人電話</label>
-        <input disabled type="text" class="form-control" value="911" />
-      </div>
-      <div class="m-3">
-        <label class="form-label">銀行代碼</label>
-        <input readonly type="text" class="form-control" value="666" />
-      </div>
-      <div class="m-3">
-        <label class="form-label">銀行帳號</label>
-        <input readonly type="text" class="form-control" value="1234567-7654321" />
-      </div>
-      <div class="m-3">
-        <label class="form-label">店家所有人</label>
-        <input readonly type="text" class="form-control" value="阿扁" />
-      </div>
-      <div class="m-3">
-        <label class="form-label">集點卡名稱</label>
-        <input disabled type="text" class="form-control" value="五十花集點卡" />
-      </div>
-      <div class="m-3">
-        <label class="form-label">點數兌換比例</label>
-        <input disabled type="text" class="form-control" value="500" />
-        <div class="form-text">輸入多少新台幣兌換一點</div>
-      </div>
-      <div class="m-3">
-        <label class="form-label">集點卡有效期限</label>
-        <input readonly type="text" class="form-control" value="Null" />
-        <div class="form-text">集點卡關閉後半年後失效</div>
-      </div>
-      <div class="m-3">
-        <div class="form-check form-check form-switch">
-          <input
-            checked
-            class="form-check-input"
-            type="checkbox"              
-            disabled
-          />
-          <label class="form-check-label" for="flexRadioDisabled">
-            集點卡狀態
-          </label>
-        </div>
-        
-      </div>
-      <div class="m-3">
-        <label class="form-check-label" for="flexRadioCheckedDisabled">
-          店家帳號狀態
-        </label>
-        <select class="form-select " disabled aria-label=".form-select-sm example">
+      <!-- Content Wrapper. Contains page content -->
 
-          <option selected value="1">啟動</option>
-          <option value="2">停權</option>
-          
-          
-        </select>
-      </div>
+      <!-- /.content-wrapper -->
 
-      <!-- <button type="submit" class="btn btn-primary m-3">儲存</button> -->
-      <div class="row">
-        <div class="col-3"></div>
-        <div class="col-7">
-          <a href="storeInfoEdit.html" class="btn btn-primary m-3">編輯</a>
-          <a href="storeInfoEditLoyaltyCard.html" class="btn btn-primary m-3">設定集點卡</a>
-          <a href="storeList.html" class="btn btn-primary m-3">返回</a>
-          <button type="submit" class="btn btn-primary m-3">儲存</button>
-          
-        </div>
-             </div>
-    </form>
-    
-  </div>
+      <!-- /.control-sidebar -->
+      <div class="storefooter"></div>
+    </div>
+    <!-- ./wrapper -->
 
-</div>
-  <!-- Content Wrapper. Contains page content -->
- 
-  <!-- /.content-wrapper -->
-  
+    <!-- jQuery -->
+    <script src="plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="dist/js/adminlte.min.js"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="dist/js/demo.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+    <!-- weien-chat -->
+    <script type="module" src="js/chat-import.js"></script>
+    <script src="js/storegeneral.js"></script>
 
-  
-  <!-- /.control-sidebar -->
-  <div class="storefooter"></div>
-</div>
-<!-- ./wrapper -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        //取得storeid
+        let sotreid = location.search.split("?")[1];
 
-<!-- jQuery -->
-<script src="plugins/jquery/jquery.min.js"></script>
-<!-- Bootstrap 4 -->
-<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- AdminLTE App -->
-<script src="dist/js/adminlte.min.js"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="dist/js/demo.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-<!-- weien-chat -->
-<script type="module" src="js/chat-import.js"></script>
-<script src="js/storegeneral.js"></script>
-</body>
+        $.ajax({
+          url: `/store/storeinfo/${sotreid.split("=")[1]}`,
+          method: "GET",
+          dataType: "JSON",
+          async: false,
+          success: function (data) {
+            document.querySelector(
+              "#storeLoyaltyCard"
+            ).href = `storeInfoEditLoyaltyCard.html?sotreid=${
+              sotreid.split("=")[1]
+            }`;
+
+            document.querySelector(
+              "#storeEdit"
+            ).href = `storeInfoEdit.html?storeid=${sotreid.split("=")[1]}`;
+
+            document.querySelector("#vat").value = data.vat;
+            document.querySelector("#sotreName").value = data.storeName;
+            document.querySelector("#register").value =
+              data.registerDay.split("T")[0];
+            document.querySelector("#storeAddress").value = data.storeAddress;
+            document.querySelector("#storePhone").value = data.storePhone;
+            console.log(data.openingHours);
+            console.log(data.closingHours);
+            document.querySelector("#openingHours").value = data.openingHours;
+            document.querySelector("#closingHours").value = data.closingHours;
+
+            let isDelivery = data.isDelivery === true ? 1 : 0;
+            document.querySelector("#isDelivery").value = isDelivery;
+
+            document.querySelector("#deliveryDistance").value =
+              data.deliveryDistance;
+
+            document.querySelector("#isTakeOrder").value = data.isTakeOrders;
+            document.querySelector("#deliveryMoney").value = data.deliveryMoney;
+
+            document.querySelector("#storeEmail").value = data.email;
+            document.querySelector("#contactPerson").value = data.contactPerson;
+            document.querySelector("#contactPhone").value = data.contactPhone;
+            document.querySelector("#bankCode").value = data.bankCode;
+            document.querySelector("#bankAccount").value = data.bankAccount;
+            document.querySelector("#storeStatus").value = data.storeStatus;
+            document.querySelector("#owner").value = data.owner;
+            document.querySelector("#loyaltyCardName").value =
+              data.loyaltyCardName;
+            document.querySelector("#exchangeRate").value = data.exchangeRate;
+            document.querySelector("#expiredDate").value =
+              data.expiredDate.split("T")[0];
+            document.querySelector("#validStatus").value = data.validStatus;
+            console.log(data.expiredDate.split("T")[0]);
+
+            //success結束
+          },
+          err: function (data) {
+            console.log("失敗");
+          },
+        });
+      }); //DOM END
+    </script>
+  </body>
 </html>
