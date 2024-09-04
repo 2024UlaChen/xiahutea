@@ -6,12 +6,12 @@
     <title>Log in</title>
 
     <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!--    <link rel="stylesheet"-->
+    <!--          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">-->
 <!--     Font Awesome -->
-    <link rel="stylesheet" href="dist/css/all.min.css">
+    <!--    <link rel="stylesheet" href="dist/css/all.min.css">-->
 <!--     icheck bootstrap -->
-    <link rel="stylesheet" href="dist/css/icheck-bootstrap.min.css">
+    <!--    <link rel="stylesheet" href="plugins/icheck-bootstrap/icheck-bootstrap.min.css">-->
 
     <link rel="stylesheet" href="dist/css/adminlte.min.css">
 
@@ -22,6 +22,10 @@
             opacity: .3;
         }
 
+        #result {
+            margin: 0px 5px 5px 5px;
+            color: red;
+        }
 
     </style>
 </head>
@@ -34,32 +38,26 @@
         </div>
         <div class="card-body">
             <p class="login-box-msg">Sign in to start your session</p>
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
 
-                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn bg-white active" id="store-login">
+                    <input type="radio" name="options" autocomplete="off" checked> 店家登入
+                </label>
+                <label class="btn bg-white" id="administrator-login">
+                    <input type="radio" name="options" autocomplete="off"> 管理員登入
+                </label>
+            </div>
 
-                    <label class="btn bg-white active">
-                        <input type="radio" name="options" id="store-login" autocomplete="off" checked> 店家登入
-                    </label>
-                    <label class="btn bg-white">
-                        <input type="radio" name="options" id="administrator-login" autocomplete="off"> 管理員登入
-                    </label>
-                </div>
-                <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="用戶名稱">
-                    <div class="input-group-append">
-                        <div class="input-group-text">
-                            <span class="fas fa-envelope"></span>
-                        </div>
-                    </div>
-                </div>
-                <div class="input-group mb-3">
-                    <input type="password" class="form-control" placeholder="用戶密碼">
-                    <div class="input-group-append">
-                        <div class="input-group-text">
-                            <span class="fas fa-lock"></span>
-                        </div>
-                    </div>
-                </div>
+            <div class="input-group mb-3">
+                <input type="text" id="username" class="form-control" placeholder="用戶名稱">
+            </div>
+            <div class="input-group mb-3">
+                <input type="password" id="password" class="form-control" placeholder="用戶密碼">
+            </div>
+            <hr>
+            <div>
+                <label id="result"></label>
+            </div>
                 <div class="row">
                     <div class="col-8">
                         <div class="icheck-primary">
@@ -75,7 +73,7 @@
                     </div>
                     <!-- /.col -->
                 </div>
-            </form>
+
         </div>
         <!-- /.card-body -->
     </div>
@@ -90,6 +88,45 @@
 
 <!-- AdminLTE App -->
 <script src="./dist/js/adminlte.min.js"></script>
+
+<script>
+    let usernameInput = $("input#username")
+    let passwordInput = $("input#password")
+
+    $("button").on("click", () => {
+        let username = $(usernameInput).val();
+        let password = $(passwordInput).val();
+        let storeFlag = $("#store-login").hasClass("active");
+        if (!storeFlag) {
+            // let formData = new FormData();
+            // formData.append("adminUsername", username);
+            // formData.append("adminPassword", password);
+            fetch("/admin/login", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    adminUsername: username,
+                    adminPassword: password
+                })
+            }).then(res => res.json()).then(admin => {
+                if (admin.successful) {
+                    location = "/storeIndex.html"
+                } else {
+                    let message = admin.message
+                    $("#result").text(message);
+                    console.log(message);
+                }
+            })
+        } else {
+            console.log("store")
+        }
+
+        // console.log(username, password)
+    })
+
+</script>
 
 </body>
 </html>
