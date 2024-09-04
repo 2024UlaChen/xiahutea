@@ -98,9 +98,6 @@
         let password = $(passwordInput).val();
         let storeFlag = $("#store-login").hasClass("active");
         if (!storeFlag) {
-            // let formData = new FormData();
-            // formData.append("adminUsername", username);
-            // formData.append("adminPassword", password);
             fetch("/admin/login", {
                 method: "POST",
                 headers: {
@@ -112,7 +109,7 @@
                 })
             }).then(res => res.json()).then(admin => {
                 if (admin.successful) {
-                    location = "/storeIndex.html"
+                    location = "./storeIndex.html"
                 } else {
                     let message = admin.message
                     $("#result").text(message);

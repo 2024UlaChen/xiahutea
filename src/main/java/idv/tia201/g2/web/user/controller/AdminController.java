@@ -17,7 +17,7 @@ public class AdminController {
     public Administrator adminlogin(@RequestBody Administrator admin) {
         admin.setSuccessful(false);
         admin.setMessage("無會員資料");
-        adminService.login(admin);
+        admin = adminService.login(admin);
         return admin;
     }
 
