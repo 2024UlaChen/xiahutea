@@ -90,37 +90,71 @@
 <script src="./dist/js/adminlte.min.js"></script>
 
 <script>
+    // 取得物件
     let usernameInput = $("input#username")
     let passwordInput = $("input#password")
+    //正則表達式
+    // 要有英文字母 & 要有數字 & 不能有空白 & 長度要超過8並且小於15字元
+    let pattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{9,14}$/;
+
+    //前端確認格式
+    $(document).on("focusout", "input.form-control",(e) => {
+        // console.log($(e.target).attr('id'));
+        if($(e.target).attr('id') === "username"){
+            let username = $(usernameInput).val();
+            // console.log(pattern.test(username))
+            let usernameResult = pattern.test(username)?"":"用戶名稱錯誤"
+            $("#result").text(usernameResult);
+        }else {
+            let password = $(passwordInput).val();
+            let passwordResult = pattern.test(password)?"":"用戶密碼錯誤"
+            $("#result").text(passwordResult);
+        }
+    });
+
 
     $("button").on("click", () => {
-        let username = $(usernameInput).val();
-        let password = $(passwordInput).val();
+        let username = $(usernameInput).val().trim();
+        let password = $(passwordInput).val().trim();
+
+        let formData = new FormData();
+        formData.append("adminUsername", username);
+        formData.append("adminPassword", password)
+
         let storeFlag = $("#store-login").hasClass("active");
         if (!storeFlag) {
             fetch("/admin/login", {
                 method: "POST",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    adminUsername: username,
-                    adminPassword: password
-                })
+                body: formData
             }).then(res => res.json()).then(admin => {
                 if (admin.successful) {
                     location = "./storeIndex.html"
                 } else {
                     let message = admin.message
                     $("#result").text(message);
-                    console.log(message);
+                    // console.log(message);
                 }
             })
         } else {
-            console.log("store")
+            // fetch("/store/login", {
+            //     method: "POST",
+            //     headers: {
+            //         'Content-Type': 'application/json'
+            //     },
+            //     body: JSON.stringify({
+            //         storeName: username,
+            //         password: password
+            //     })
+            // }).then(res => res.json()).then(store => {
+            //     if (store.successful) {
+            //         location = "./storeIndex.html"
+            //     } else {
+            //         let message = admin.message
+            //         $("#result").text(message);
+            //         console.log(message);
+            //     }
+            // })
         }
-
-        // console.log(username, password)
     })
 
 </script>
