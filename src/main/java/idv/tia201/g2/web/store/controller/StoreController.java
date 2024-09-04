@@ -43,7 +43,8 @@ public class StoreController {
     }
 
     @PostMapping("/login")
-    public Boolean Login(@RequestBody Store store){
+    public Store Login(@RequestBody Store store){
+
         return storeService.loginStore(store);
     }
 
