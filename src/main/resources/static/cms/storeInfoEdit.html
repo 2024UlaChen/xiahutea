@@ -43,7 +43,7 @@
                 readonly
                 type="text"
                 class="form-control"
-                id="exampleInputEmail1"
+                id="vat"
                 value="12345678"
                 aria-describedby="emailHelp"
               />
@@ -51,7 +51,13 @@
 
             <div class="m-3">
               <label class="form-label">商店名稱</label>
-              <input readonly type="text" class="form-control" value="五十花" />
+              <input
+                readonly
+                type="text"
+                class="form-control"
+                value="五十花"
+                id="storename"
+              />
             </div>
             <div class="m-3">
               <label class="form-label">註冊日</label>
@@ -60,6 +66,7 @@
                 type="date"
                 class="form-control"
                 value="2024-07-17"
+                id="registerday"
               />
             </div>
             <div class="m-3">
@@ -69,31 +76,51 @@
                 type="text"
                 class="form-control"
                 value="台中101大樓"
+                id="storeaddress"
               />
             </div>
             <div class="m-3">
               <label class="form-label">商店電話</label>
-              <input type="text" class="form-control" value="0123456789" />
+              <input
+                id="storephone"
+                type="text"
+                class="form-control"
+                value="0123456789"
+              />
             </div>
             <div class="m-3">
               <label class="form-label">開始營業時間</label>
-              <input type="time" class="form-control" value="10:00" />
+              <input
+                type="time"
+                class="form-control"
+                value="10:00"
+                id="openingtime"
+              />
             </div>
             <div class="m-3">
               <label class="form-label">結束營業時間</label>
-              <input type="time" class="form-control" value="22:00" />
+              <input
+                type="time"
+                class="form-control"
+                value="22:00"
+                id="closingtime"
+              />
             </div>
             <div class="m-3">
               <label class="form-label">公休日</label>
-              <input type="date" class="form-control" value="" />
+              <input type="date" class="form-control" value="" id="holiday" />
               <div class="form-text">需要店休再設定即可</div>
             </div>
             <div class="m-3 form-check">
-              <input type="checkbox" class="form-check-input" checked />
+              <input
+                type="checkbox"
+                class="form-check-input"
+                id="istakeorders"
+              />
               <label class="form-check-label">是否接受訂單</label>
             </div>
             <div class="m-3 form-check">
-              <input type="checkbox" class="form-check-input" checked />
+              <input type="checkbox" class="form-check-input" id="isdelivery" />
               <label class="form-check-label">是否外送</label>
             </div>
             <div class="m-3 input-group">
@@ -104,6 +131,7 @@
                 class="input-group form-control"
                 style="margin-right: 30px"
                 value="500"
+                id="deliverymoney"
               />
             </div>
             <div class="m-3">
@@ -112,6 +140,7 @@
               <select
                 class="form-select form-select-"
                 aria-label=".form-select-sm example"
+                id="distance"
               >
                 <option value="1">1公里</option>
                 <option value="2">2公里</option>
@@ -125,8 +154,8 @@
                 <input
                   class="form-check-input"
                   type="checkbox"
-                  checked
                   value="option1"
+                  id="iscash"
                 />
                 <label class="form-check-label" for="inlineCheckbox1"
                   >現金</label
@@ -137,45 +166,49 @@
                   class="form-check-input"
                   type="checkbox"
                   value="option2"
-                  checked
+                  id="iscreditcard"
                 />
                 <label class="form-check-label" for="inlineCheckbox2"
                   >信用卡</label
                 >
               </div>
-              <div class="form-check form-check-inline">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  id="inlineCheckbox3"
-                  value="option3"
-                  disabled
-                />
-                <label class="form-check-label" for="inlineCheckbox3"
-                  >Line Pay (disabled)</label
-                >
-              </div>
             </div>
             <div class="m-3">
               <label class="form-label">商標</label>
-              <input readonly type="file" class="form-control" value="" />
+              <input
+                readonly
+                type="file"
+                class="form-control"
+                value=""
+                id="logo"
+              />
             </div>
             <div class="m-3">
               <label class="form-label">信箱</label>
               <input
                 type="email"
                 class="form-control"
-                id="exampleFormControlInput1"
+                id="mail"
                 value="name@example.com"
               />
             </div>
             <div class="m-3">
               <label class="form-label">聯絡人</label>
-              <input type="text" class="form-control" value="李登輝" />
+              <input
+                type="text"
+                class="form-control"
+                value="李登輝"
+                id="contactperson"
+              />
             </div>
             <div class="m-3">
               <label class="form-label">聯絡人電話</label>
-              <input type="text" class="form-control" value="911" />
+              <input
+                type="text"
+                class="form-control"
+                value="911"
+                id="contactphone"
+              />
             </div>
 
             <div class="row">
@@ -199,7 +232,9 @@
                   class="btn btn-primary m-3"
                   >返回</a
                 >
-                <button type="submit" class="btn btn-primary m-3">儲存</button>
+                <button type="submit" class="btn btn-primary m-3" id="savebtn">
+                  儲存
+                </button>
               </div>
               <div class="col-2"></div>
             </div>
@@ -227,6 +262,8 @@
     ></script>
     <script src="js/storegeneral.js"></script>
     <script type="module" src="js/chat-import.js"></script>
+    <!--sweetalert2-->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
       document.addEventListener("DOMContentLoaded", function () {
         let sotreid = location.search.split("?")[1];
@@ -236,7 +273,188 @@
         document.querySelector("#storeInfoTag").href = infoUrlstr;
         document.querySelector("#storeLoyaltyCardTag").href = loyaltyCardUrlstr;
         document.querySelector("#storePassWordTag").href = passWordUrlstr;
+
+        //欄位宣告
+        let vat = document.querySelector("#vat");
+        let storename = document.querySelector("#storename");
+
+        let registerday = document.querySelector("#registerday");
+
+        let storeaddress = document.querySelector("#storeaddress");
+
+        let storephone = document.querySelector("#storephone");
+
+        let openingtime = document.querySelector("#openingtime");
+
+        let closingtime = document.querySelector("#closingtime");
+
+        let holiday = document.querySelector("#holiday"); //打向其他api
+
+        let istakeorders = document.querySelector("#istakeorders");
+
+        let isdelivery = document.querySelector("#isdelivery");
+
+        let deliverymoney = document.querySelector("#deliverymoney");
+
+        let distance = document.querySelector("#distance");
+
+        let iscash = document.querySelector("#iscash");
+
+        let iscreditcard = document.querySelector("#iscreditcard");
+
+        let logo = document.querySelector("#logo");
+
+        let mail = document.querySelector("#mail");
+
+        let contactperson = document.querySelector("#contactperson");
+
+        let contactphone = document.querySelector("#contactphone");
+
+        $.ajax({
+          url: `/store/storeinfo/${sotreid.split("=")[1]}`,
+          method: "get",
+          dataType: "json",
+          async: false,
+          success: function (data) {
+            vat.value = data.vat;
+            storename.value = data.storeName;
+            registerday.value = data.registerDay.split("T")[0];
+            storeaddress.value = data.storeAddress;
+            storephone.value = data.storePhone;
+            openingtime.value = data.openingHours;
+            closingtime.value = data.closingHours;
+            if (data.isTakeOrders) {
+              istakeorders.checked = true;
+            }
+            if (data.isDelivery) {
+              isdelivery.checked = true;
+            }
+            if (data.isCash) {
+              iscash.checked = true;
+            }
+            if (data.isCreditCard) {
+              iscreditcard.checked = true;
+            }
+            deliverymoney.value = data.deliveryMoney;
+            distance.value = data.deliveryDistance;
+            mail.value = data.email;
+            contactperson.value = data.contactPerson;
+            contactphone.value = data.contactPhone;
+          },
+          err: function () {
+            Swal.fire({
+              icon: "error",
+              title: "讀取失敗",
+            });
+          },
+        }); //讀取store
+
+        document
+          .querySelector("#savebtn")
+          .addEventListener("click", function (e) {
+            e.preventDefault();
+            //商phone
+            storephone = document.querySelector("#storephone").value;
+
+            openingtime = document.querySelector("#openingtime").value;
+            console.log(openingtime);
+            console.log(openingtime + ":00");
+
+            closingtime = document.querySelector("#closingtime").value;
+
+            holiday = document.querySelector("#holiday").value;
+
+            istakeorders = document.querySelector("#istakeorders").checked
+              ? true
+              : false;
+
+            isdelivery = document.querySelector("#isdelivery").checked
+              ? true
+              : false;
+
+            deliverymoney = document.querySelector("#deliverymoney").value;
+
+            distance = document.querySelector("#distance").value;
+
+            iscash = document.querySelector("#iscash").checked ? true : false;
+
+            iscreditcard = document.querySelector("#iscreditcard").checked
+              ? true
+              : false;
+
+            logo = document.querySelector("#logo");
+            //讀取位元組
+            let reader = new FileReader();
+            let bytes = new Uint8Array();
+
+            if (logo.files.length > 0) {
+              reader.readAsArrayBuffer(logo.files[0]); //讀取檔案
+              reader.addEventListener("load", function () {
+                bytes = new Uint8Array(reader.result); //位元組陣列
+              });
+            }
+
+            mail = document.querySelector("#mail").value;
+
+            contactperson = document.querySelector("#contactperson").value;
+
+            contactphone = document.querySelector("#contactphone").value;
+            //holiday 另外處理
+
+            let formData = new FormData();
+            formData.append("storeId", sotreid.split("=")[1]);
+            formData.append("storePhone", storephone);
+            formData.append(
+              "openingHours",
+              countStr(openingtime) == 2 ? openingtime : openingtime + ":00"
+            );
+            formData.append(
+              "closingHours",
+              countStr(closingtime) == 2 ? closingtime : closingtime + ":00"
+            );
+            formData.append("isDelivery", isdelivery);
+            formData.append("deliveryDistance", distance);
+            formData.append("deliveryMoney", deliverymoney);
+            formData.append("isTakeOrders", istakeorders);
+            formData.append("isCash", iscash);
+            formData.append("isCreditCard", iscreditcard);
+            formData.append("logo", logo.files.length > 0 ? bytes : null); // 处理文件上传
+            formData.append("email", mail);
+            formData.append("contactPerson", contactperson);
+            formData.append("contactPhone", contactphone);
+
+            $.ajax({
+              url: "/store/editstoreinfo",
+              method: "POST",
+              processData: false,
+              contentType: false,
+              data: formData,
+              success: function () {
+                Swal.fire({
+                  icon: "success",
+                  title: "更新成功",
+                }).then((res) => {
+                  if (res.isConfirmed) {
+                    location.reload();
+                  }
+                });
+              },
+              err: function () {
+                Swal.fire({
+                  icon: "error",
+                  title: "更新失敗",
+                });
+              },
+            }); //編輯會員
+          }); //監聽save 但不需要提交 所以阻擋預設行為
       }); //DOM END
+
+      function countStr(str) {
+        // 根據冒號分割字串
+        const parts = str.split(":");
+        // 冒號的出現次數等於分割後的數組長度減去 1
+        return parts.length - 1;
+      }
     </script>
   </body>
 </html>
