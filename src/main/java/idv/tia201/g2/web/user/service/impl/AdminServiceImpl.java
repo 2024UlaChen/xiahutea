@@ -16,13 +16,13 @@ public class AdminServiceImpl implements AdminService {
         String username = admin.getAdminUsername();
         String password = admin.getAdminPassword();
 //        如果 username 沒填
-        if (username == null) {
+        if (username.length() == 0) {
             admin.setMessage("使用者名稱未輸入");
             admin.setSuccessful(false);
             return admin;
         }
 //        如果 password 沒填
-        if (password == null) {
+        if (password.length() == 0) {
             admin.setMessage("密碼未輸入");
             admin.setSuccessful(false);
             return admin;

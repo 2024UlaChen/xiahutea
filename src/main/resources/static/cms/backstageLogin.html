@@ -90,37 +90,74 @@
 <script src="./dist/js/adminlte.min.js"></script>
 
 <script>
+    // 取得物件
     let usernameInput = $("input#username")
     let passwordInput = $("input#password")
+    //正則表達式
+    // 要有英文字母 & 要有數字 & 不能有空白 & 長度要超過8並且小於15字元
+    let pattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{9,14}$/;
 
-    $("button").on("click", () => {
-        let username = $(usernameInput).val();
-        let password = $(passwordInput).val();
-        let storeFlag = $("#store-login").hasClass("active");
-        if (!storeFlag) {
-            fetch("/admin/login", {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    adminUsername: username,
-                    adminPassword: password
-                })
-            }).then(res => res.json()).then(admin => {
-                if (admin.successful) {
-                    location = "./storeIndex.html"
-                } else {
-                    let message = admin.message
-                    $("#result").text(message);
-                    console.log(message);
-                }
-            })
-        } else {
-            console.log("store")
+    //前端確認格式
+    $(document).on("focusout", "input.form-control",(e) => {
+        // console.log($(e.target).attr('id'));
+        if($(e.target).attr('id') === "username"){
+            let username = $(usernameInput).val();
+            // console.log(pattern.test(username))
+            let usernameResult = pattern.test(username)?"":"用戶名稱錯誤"
+            $("#result").text(usernameResult);
+        }else{
+            let password = $(passwordInput).val();
+            let passwordResult = pattern.test(password)?"":"用戶密碼錯誤"
+            $("#result").text(passwordResult);
         }
+    });
 
-        // console.log(username, password)
+    // 要先確定格式正確才可以連後端
+    $("button").on("click", () => {
+        if(!($("#result").text().length)){
+            let username = $(usernameInput).val().trim();
+            let password = $(passwordInput).val().trim();
+
+            let formData = new FormData();
+            formData.append("adminUsername", username);
+            formData.append("adminPassword", password)
+
+            if (!$("#store-login").hasClass("active")) {
+                fetch("/admin/login", {
+                    method: "POST",
+                    body: formData
+                }).then(res => res.json()).then(admin => {
+                    if (admin.successful) {
+                        sessionStorage.setItem("totalUser",JSON.stringify({userType: 3, userId: admin.administratorId}))
+                        location = "./storeIndex.html"
+                    } else {
+                        let message = admin.message
+                        $("#result").text(message);
+                        // console.log(message);
+                    }
+                })
+            } else {
+                // fetch("/store/login", {
+                //     method: "POST",
+                //     headers: {
+                //         'Content-Type': 'application/json'
+                //     },
+                //     body: JSON.stringify({
+                //         storeName: username,
+                //         password: password
+                //     })
+                // }).then(res => res.json()).then(store => {
+                //     if (store.successful) {
+                //         location = "./storeIndex.html"
+                //     } else {
+                //         let message = admin.message
+                //         $("#result").text(message);
+                //         console.log(message);
+                //     }
+                // })
+            }
+
+        }
     })
 
 </script>
