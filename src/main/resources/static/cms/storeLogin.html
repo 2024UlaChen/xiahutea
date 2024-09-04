@@ -105,55 +105,58 @@
             // console.log(pattern.test(username))
             let usernameResult = pattern.test(username)?"":"用戶名稱錯誤"
             $("#result").text(usernameResult);
-        }else {
+        }else{
             let password = $(passwordInput).val();
             let passwordResult = pattern.test(password)?"":"用戶密碼錯誤"
             $("#result").text(passwordResult);
         }
     });
 
-
+    // 要先確定格式正確才可以連後端
     $("button").on("click", () => {
-        let username = $(usernameInput).val().trim();
-        let password = $(passwordInput).val().trim();
+        if(!($("#result").text().length)){
+            let username = $(usernameInput).val().trim();
+            let password = $(passwordInput).val().trim();
 
-        let formData = new FormData();
-        formData.append("adminUsername", username);
-        formData.append("adminPassword", password)
+            let formData = new FormData();
+            formData.append("adminUsername", username);
+            formData.append("adminPassword", password)
 
-        let storeFlag = $("#store-login").hasClass("active");
-        if (!storeFlag) {
-            fetch("/admin/login", {
-                method: "POST",
-                body: formData
-            }).then(res => res.json()).then(admin => {
-                if (admin.successful) {
-                    location = "./storeIndex.html"
-                } else {
-                    let message = admin.message
-                    $("#result").text(message);
-                    // console.log(message);
-                }
-            })
-        } else {
-            // fetch("/store/login", {
-            //     method: "POST",
-            //     headers: {
-            //         'Content-Type': 'application/json'
-            //     },
-            //     body: JSON.stringify({
-            //         storeName: username,
-            //         password: password
-            //     })
-            // }).then(res => res.json()).then(store => {
-            //     if (store.successful) {
-            //         location = "./storeIndex.html"
-            //     } else {
-            //         let message = admin.message
-            //         $("#result").text(message);
-            //         console.log(message);
-            //     }
-            // })
+            if (!$("#store-login").hasClass("active")) {
+                fetch("/admin/login", {
+                    method: "POST",
+                    body: formData
+                }).then(res => res.json()).then(admin => {
+                    if (admin.successful) {
+                        sessionStorage.setItem("totalUser",JSON.stringify({userType: 3, userId: admin.administratorId}))
+                        location = "./storeIndex.html"
+                    } else {
+                        let message = admin.message
+                        $("#result").text(message);
+                        // console.log(message);
+                    }
+                })
+            } else {
+                // fetch("/store/login", {
+                //     method: "POST",
+                //     headers: {
+                //         'Content-Type': 'application/json'
+                //     },
+                //     body: JSON.stringify({
+                //         storeName: username,
+                //         password: password
+                //     })
+                // }).then(res => res.json()).then(store => {
+                //     if (store.successful) {
+                //         location = "./storeIndex.html"
+                //     } else {
+                //         let message = admin.message
+                //         $("#result").text(message);
+                //         console.log(message);
+                //     }
+                // })
+            }
+
         }
     })
 
