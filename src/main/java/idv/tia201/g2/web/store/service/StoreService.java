@@ -13,7 +13,7 @@ public interface StoreService {
     //搜尋店家 只要特定字
     List<Store> findStoreByName(String name);
     List<StoreViewModel> GetStoreViewModels();
-    Boolean loginStore(Store data);
+    Store loginStore(Store data);
     //用於查修 準確指定
     Store findStoreById(Integer id);
 
