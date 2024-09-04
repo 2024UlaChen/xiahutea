@@ -124,6 +124,8 @@ public class StoreServiceImpl implements StoreService {
     @Override
     public Store editStoreInfo(Store store) {
         Store oldDate = findStoreById(store.getStoreId());
+        oldDate.setStorePhone(store.getStorePhone());
+        oldDate.setDeliveryMoney(store.getDeliveryMoney());
         oldDate.setContactPhone(store.getContactPhone());
         oldDate.setContactPerson(store.getContactPerson());
         oldDate.setOpeningHours(store.getOpeningHours());
