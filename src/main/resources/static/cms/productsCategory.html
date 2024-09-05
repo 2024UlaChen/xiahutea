@@ -167,7 +167,7 @@
                             <input type="text" id="categoryName" name="categoryName" placeholder="請輸入分類名稱">
 
                             <label for="categorySort">排序</label>
-                            <input type="number" id="categorySort" name="order" value="1" min="1" max="10">
+                            <input type="number" id="categorySort" name="categorySort" value="1" min="1" max="10">
 
                             <p class="note">註：數字越小排序越前面</p>
 
@@ -337,47 +337,65 @@
 $('#add').on("click", function () {
     $("#myModal").fadeIn();
 
+
+
+    });
+
+
+$('#categoryForm').on('submit', function(event) {
+    event.preventDefault(); // 防止表单默认提交行为
+
+    // 获取表单数据
+    const categoryName = $('#categoryName').val();
+    const categorySort = $('#categorySort').val();
+
+    // 使用 Ajax 将数据发送到后端
+    $.ajax({
+        url: '/categories/add', // 后端处理表单数据的API路径
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            categoryName: categoryName,
+            categorySort: categorySort
+        }),
+        success: function(data) {
+            // 假设后端返回的数据中包含新增分类的 ID 和其他信息
+
+            // 生成新的表格行HTML字符串
+            var newRow = '<tr>' +
+                '<td>' +
+                '<div class="icheck-primary">' +
+                '<input type="checkbox" value="' + data.productid + '" class="options">' +
+                '</div>' +
+                '</td>' +
+                '<td>' + data.categoryName + '</td>' + // 使用返回的分类名称
+                '<td>' + data.categorySort + '</td>' + // 使用返回的分类排序
+                '<td>' +
+                '<a class="btn btn-sm btn-edit update_btn" href="#">' +
+                '<i class="fas fa-pencil-alt"></i> 編輯' +
+                '</a> ' +
+                '<a class="btn btn-danger btn-sm delete_btn" href="#">' +
+                '<i class="fas fa-trash"></i> 刪除' +
+                '</a>' +
+                '</td>' +
+                '</tr>';
+
+            // 将新行插入表格的 tbody 中
+            $('#categoryTable tbody').append(newRow);
+
+            // 清空输入框
+            $('#categoryName').val('');
+            $('#categorySort').val('1');
+
+            // 关闭模态框 (可选)
+            $('.close').click();
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            // 在这里处理错误
+            alert('新增分类失败: ' + errorThrown);
+        }
+    });
 });
-
-$("categoryForm").on('submit',function (e){
-    e.preventDafault();
-
-    var categoryname=$('#categoryName').val().trim();
-    var categorysort=$('#categorySort').val();
-    let form_data=new FormData();
-    form_data.append("categoryname",categoryname);
-    form_data.append("categorysort",categorysort);
-    fetch('/category/add',{
-        method:"Post",
-        body:form_data
-    }).then(res=>res.json()).then(data=>{
-        var newRow = '<tr>' +
-            '<td>'+
-                '<div class="icheck-primary">'+
-                    '<input type="checkbox" value="" class="options">'+
-            '</div>'+
-            '</td>'+
-            '<td>' + data.categoryId + '</td>' + // 使用后端返回的 ID
-            '<td>' + data.categoryName + '</td>' +
-            '<td>' + data.productSort + '</td>' +
-            '<td>' +
-            '<a class="btn btn-sm btn-edit update_btn" href="#">' +
-            '<i class="fas fa-pencil-alt"></i> 編輯' +
-            '</a> ' +
-            '<a class="btn btn-danger btn-sm delete_btn" href="#">' +
-            '<i class="fas fa-trash"></i> 刪除' +
-            '</a>' +
-            '</td>' +
-            '</tr>';
-
-             $('#categoryTable').append(newRow);
-           alert('分類新增成功！');
-             $('#categoryForm')[0].reset();
-
-
-
-    }).catch()
-})
 
 // 按叉關掉談窗
 $("span").on("click",function (){
@@ -406,15 +424,46 @@ $("span").on("click",function (){
     }
   });
 // --單筆刪除--
-  $("#categoryTable").on('click', '.delete_btn', function () {
+  $("#categoryTable").on('click', '.delete_btn', function (e) {
+      var $this = $(this);
+      var categoryId = $this.data('id');
 
-    $(this).closest("tr").remove();
+      if (confirm('确定要删除此分类吗？')) {
+          // 使用 fetch 发送删除请求到后端
+          fetch('/api/categories/' + categoryId, {
+              method: 'DELETE',
+          })
+              .then(response => {
+                  if (!response.ok) {
+                      throw new Error('Network response was not ok');
+                  }
+                  return response.json();
+              })
+              .then(data => {
+                  if (data.success) {
+                      // 删除表格中的这一行
+                      $this.closest('tr').remove();
+                      alert('分类已删除');
+                  } else {
+                      alert('删除失败: ' + data.message);
+                  }
+              })
+              .catch(error => {
+                  alert('删除时发生错误: ' + error.message);
+              });
+      }
+  
    })
 
 //--修改--
-  $('#categoryTable').on('click', '.update_btn', function () {
+
+
+
+
+
+    $('#categoryTable').on('click', '.update_btn', function (e) {
     window.location.href="addProducts.html"
- })
+ });
 
 
 

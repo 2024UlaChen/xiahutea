@@ -8,6 +8,7 @@ import idv.tia201.g2.web.product.vo.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import java.util.List;
  * 商品資料表單新增
  */
 @RestController
+@RequestMapping("product")
 public class ProductAddController {
 
     @Autowired
@@ -29,7 +31,7 @@ public class ProductAddController {
      * @param product
      * @return
      */
-    @PostMapping("/product/addUpdateProduct")
+    @PostMapping("addUpdateProduct")
     public boolean addUpdateProduct(@RequestBody Product product) {
         boolean flagAddUpdateProduct = false;
         if (product.getProductId() != null){
