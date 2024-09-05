@@ -42,7 +42,7 @@ public class OrderServiceImpl implements OrderService {
 
         final String invoiceCarrier = order.getInvoiceCarrier();
         final String invoiceVat = order.getInvoiceVat() + "";
-        if(order.getInvoiceMethod() == 2){  //載具
+        if(order.getInvoiceMethod() == 2){  // 載具
             if(invoiceCarrier.charAt(0) != '/' || invoiceCarrier.trim().length() != 8){
                 order.setMessage("載具輸入錯誤");
                 order.setSuccessful(false);
@@ -65,6 +65,14 @@ public class OrderServiceImpl implements OrderService {
                 order.setMessage("統編輸入錯誤");
                 order.setSuccessful(false);
                 return order;
+            }
+            for(int i = 0; i < invoiceVat.length(); i++){
+                char vatChar = invoiceVat.charAt(i);
+                if(!(vatChar>=48 && vatChar<=57)){
+                    order.setMessage("統編輸入錯誤");
+                    order.setSuccessful(false);
+                    return order;
+                }
             }
         }
         if(orderDao.insert(order)){

@@ -9,7 +9,7 @@ import java.util.Map;
 public interface CartService {
 
     //insert購物紀錄入Cart_item資料庫
-    int insertCart(Integer productId);
+//    int insertCart(Integer productId);
     //用來抓取商品和商家資料透過商品id
     Map<String, Object> getProductAndStoreDetails(int productId);
 }

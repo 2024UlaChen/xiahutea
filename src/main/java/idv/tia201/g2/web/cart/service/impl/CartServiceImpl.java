@@ -6,6 +6,7 @@
 //import idv.tia201.g2.web.product.dao.ProductDao;
 //import idv.tia201.g2.web.product.vo.Product;
 //import idv.tia201.g2.web.store.dao.StoreDao;
+//import idv.tia201.g2.web.store.vo.Store;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.stereotype.Service;
 //
@@ -22,8 +23,8 @@
 //    private CartDao cartDao;
 //
 //    //從前端讀入資料順便存一份到Cart table
-//    @Override
-//    public int insertCart(Integer productId) {
+////    @Override
+////    public int insertCart(Integer productId) {
 //        //TODO 取得Localstorage傳來的Product資料
 ////        Product product = productDao.getProductById(productId);
 //        //TODO 抓localstorage設定的甜度、冰塊、加料
@@ -37,17 +38,17 @@
 ////        return 0;
 ////    }
 //
-//    //用來抓取前端資料
+//        //用來抓取前端資料
 ////    @Override
 ////    public Map<String, Object> getProductAndStoreDetails(int productId) {
 ////        Product product = productDao.getProductById(productId);
-////      Store store = storeDao.selectStoreById(product.getStoreId());
-//        // 構建結果並返回
+////      Store store = storeDao.findById(product.getStoreId());
+////         構建結果並返回
 ////        Map<String, Object> result = new HashMap<>();
-////        result.put("product", product);
+//////        result.put("product", product);
 ////        result.put("store", store);
 ////        return result;
 ////    }
-//
-//
+////    }
 //}
+//
