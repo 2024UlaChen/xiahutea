@@ -44,6 +44,7 @@ public class Member extends Core {
     private Integer customerMoney;
     @Column(name = "customer_carrier")
     private String customerCarrier;
+    @Lob
     @Column(name = "customer_img")
     private byte[] customerImg;
     @Column(name = "sex")
