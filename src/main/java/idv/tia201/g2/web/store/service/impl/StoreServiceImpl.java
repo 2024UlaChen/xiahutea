@@ -46,11 +46,11 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public Boolean loginStore(Store userData) {
-        if(userData.getVat() == null || userData.getPassword() ==null) {return false;}
+    public Store loginStore(Store userData) {
+        if(userData.getVat() == null || userData.getPassword() ==null) {return null;}
         Store data = storeDao.findByVat(userData.getVat());
-        if( data == null  ) {return false;}
-        return data.getPassword().equals(userData.getPassword());
+        if( data == null  ) {return null;}
+        return data.getPassword().equals(userData.getPassword())? data:null;
     }
 
 
@@ -124,6 +124,8 @@ public class StoreServiceImpl implements StoreService {
     @Override
     public Store editStoreInfo(Store store) {
         Store oldDate = findStoreById(store.getStoreId());
+        oldDate.setStorePhone(store.getStorePhone());
+        oldDate.setDeliveryMoney(store.getDeliveryMoney());
         oldDate.setContactPhone(store.getContactPhone());
         oldDate.setContactPerson(store.getContactPerson());
         oldDate.setOpeningHours(store.getOpeningHours());

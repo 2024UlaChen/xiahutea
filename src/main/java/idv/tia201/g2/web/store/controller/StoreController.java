@@ -43,7 +43,8 @@ public class StoreController {
     }
 
     @PostMapping("/login")
-    public Boolean Login(@RequestBody Store store){
+    public Store Login(@RequestBody Store store){
+
         return storeService.loginStore(store);
     }
 
@@ -55,7 +56,11 @@ public class StoreController {
     public Store EditCard(@RequestBody Store store){
         return storeService.editStoreLoyaltyCard(store);
     }
-
+    @PostMapping("/editstoreinfo")
+    public Store EditStoreInfo(@ModelAttribute Store store){
+        Store storeData = storeService.editStoreInfo(store);//update後丟回去瞧瞧 未完成
+        return storeData;
+    }
 
 
 
