@@ -1,11 +1,10 @@
 package idv.tia201.g2.web.user.dao;
 
-import idv.tia201.g2.web.user.vo.Administrators;
-import org.springframework.stereotype.Repository;
+import idv.tia201.g2.web.user.vo.Administrator;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
 public interface AdminDao {
-    public Administrators selectForLogin(@RequestParam String username, String password);
+    public Administrator login(@RequestParam String username, String password);
 
 }

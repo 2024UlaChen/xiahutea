@@ -21,8 +21,8 @@ public class StoreController {
 
     private final StoreService storeService;
     @Autowired
-    public StoreController(StoreService _storeService){
-        this.storeService = _storeService;
+    public StoreController(StoreService storeService){
+        this.storeService = storeService;
     }
     @GetMapping("/home")
     public List<Store> Home(){
@@ -38,13 +38,28 @@ public class StoreController {
 
     @PostMapping("/update")
     public Store Update(@RequestBody Store store){
-        Store storeData = storeService.saveStore(store);//update後丟回去瞧瞧
+        Store storeData = storeService.saveStore(store);//update後丟回去瞧瞧 未完成
         return storeData;
     }
 
     @PostMapping("/login")
-    public Boolean Login(@RequestBody Store store){
+    public Store Login(@RequestBody Store store){
+
         return storeService.loginStore(store);
+    }
+
+    @PostMapping("/editpwd")
+    public Store EditPwd(@RequestBody Store store){
+        return storeService.editStorePassword(store);
+    }
+    @PostMapping("/editcard")
+    public Store EditCard(@RequestBody Store store){
+        return storeService.editStoreLoyaltyCard(store);
+    }
+    @PostMapping("/editstoreinfo")
+    public Store EditStoreInfo(@ModelAttribute Store store){
+        Store storeData = storeService.editStoreInfo(store);//update後丟回去瞧瞧 未完成
+        return storeData;
     }
 
 

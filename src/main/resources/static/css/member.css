@@ -1,4 +1,9 @@
-input[type="submit"]{
+/*member for default element*/
+.teamo-contact-fom .form-label, .form-control {
+    font-size: 16px;
+}
+
+input[type="submit"] {
     align-items: center;
     justify-content: center;
     text-align: center;
@@ -7,9 +12,44 @@ input[type="submit"]{
     border: 1px solid #73B4BA;
     font-size: 16px;
     color: white;
-    border-radius: 5px;
     margin-bottom: 2%;
+    border-radius: 5px;
 }
+
+select {
+    padding: 7px 20px;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="search"],
+input[type="email"],
+input[type="password"],
+input[type="tel"],
+input[type="url"],
+textarea,
+button,
+select, .form-control {
+    border-radius: 5px;
+    border: 1px solid #eeeeee;
+}
+
+.product-item .button:hover,
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="search"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="tel"]:focus,
+input[type="url"]:focus,
+textarea:focus,
+button:focus,
+select:focus,
+.form-control:focus {
+    border: 1px solid #6c757d !important;
+}
+
+/*member for special element*/
 
 .reset-margin {
     margin: 0;
@@ -18,7 +58,7 @@ input[type="submit"]{
 }
 
 .memberPageName {
-    font-size: 16px;
+    font-size: 20px;
     font-weight: bold;
     color: black;
     text-align: center;
@@ -50,12 +90,13 @@ input[type="submit"]{
 .member-list {
     margin-right: 30px;
     margin-top: 50px;
-    padding: 10px;
+    padding: 0;
     /*padding-left: 60px;*/
     background-color: white;
 }
 
 .member-list li {
+    padding: 2%;
     height: 60px;
     font-size: 18px;
     text-align: left;
@@ -65,15 +106,26 @@ input[type="submit"]{
 
 .member-list .member-list-active {
     border-left: solid 5px #73B4BA;
+    color: #73B4BA;
 }
 
+/*.member-list li:hover, .member-list li a:hover {*/
+/*    color: #FAC792;*/
+/*}*/
 
-.member-list div {
-    padding-left: 10px;
+/*.member-list li:hover {*/
+/*    background-color: #F8F9FA;*/
+/*    border-left: solid 5px #FAC792;*/
+/*}*/
 
+.member-list a {
+    display: inline-block;
+    width: 100%;
     height: 100%;
-    line-height: 100%;
-    vertical-align: middle
+}
+.member-list a span{
+    display: flex;
+    vertical-align: middle;
 }
 
 .warn {
@@ -88,7 +140,7 @@ input[type="submit"]{
 
 .userPhoto {
     margin: 0 auto;
-    display: inline-block;
+    display: flex;
     width: 30%;
     border-radius: 50%;
     text-align: center;
@@ -102,4 +154,8 @@ input[type="submit"]{
 .sex > div {
     padding-left: 2%;
     display: inline-block;
+}
+
+.member-setting > div {
+    margin-top: 2%;
 }

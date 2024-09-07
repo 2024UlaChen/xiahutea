@@ -46,11 +46,11 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public Boolean loginStore(Store userData) {
-        if(userData.getVat() == null || userData.getPassword() ==null) {return false;}
+    public Store loginStore(Store userData) {
+        if(userData.getVat() == null || userData.getPassword() ==null) {return null;}
         Store data = storeDao.findByVat(userData.getVat());
-        if( data == null  ) {return false;}
-        return data.getPassword().equals(userData.getPassword());
+        if( data == null  ) {return null;}
+        return data.getPassword().equals(userData.getPassword())? data:null;
     }
 
 
@@ -119,9 +119,13 @@ public class StoreServiceImpl implements StoreService {
         return storeDao.save(oldDate);
     }
 
+
+
     @Override
     public Store editStoreInfo(Store store) {
         Store oldDate = findStoreById(store.getStoreId());
+        oldDate.setStorePhone(store.getStorePhone());
+        oldDate.setDeliveryMoney(store.getDeliveryMoney());
         oldDate.setContactPhone(store.getContactPhone());
         oldDate.setContactPerson(store.getContactPerson());
         oldDate.setOpeningHours(store.getOpeningHours());
@@ -136,6 +140,7 @@ public class StoreServiceImpl implements StoreService {
         oldDate.setEmail(store.getEmail());
         return storeDao.save(oldDate);
     }
+
     @Override
     public Store editStoreLoyaltyCard(Store store) {
         Store oldDate = findStoreById(store.getStoreId());
@@ -152,7 +157,6 @@ public class StoreServiceImpl implements StoreService {
             cal.add(Calendar.MONTH, 6);
             now = new Timestamp(cal.getTimeInMillis());
             oldDate.setExpiredDate(now);
-
         }
         return storeDao.save(oldDate);
     }

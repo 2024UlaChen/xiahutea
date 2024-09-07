@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Log in</title>
+
+    <!-- Google Font: Source Sans Pro -->
+    <!--    <link rel="stylesheet"-->
+    <!--          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">-->
+<!--     Font Awesome -->
+    <!--    <link rel="stylesheet" href="dist/css/all.min.css">-->
+<!--     icheck bootstrap -->
+    <!--    <link rel="stylesheet" href="plugins/icheck-bootstrap/icheck-bootstrap.min.css">-->
+
+    <link rel="stylesheet" href="dist/css/adminlte.min.css">
+
+    <style>
+        .btn-group {
+            display: flex;
+            margin-bottom: 10px;
+            opacity: .3;
+        }
+
+        #result {
+            margin: 0 5px 5px 5px;
+            color: red;
+        }
+        .align-middle{
+            margin: 10px 0 0 0;
+        }
+
+    </style>
+</head>
+<body class="hold-transition login-page">
+<div class="login-box">
+    <!-- /.login-logo -->
+    <div class="card card-outline card-primary">
+        <div class="card-header text-center">
+            <a href="#" class="h1"><b>XIAHUTEA</b> 後台</a>
+        </div>
+        <div class="card-body">
+            <p class="login-box-msg">Sign in to start your session</p>
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+
+                <label class="btn bg-white active" id="store-login">
+                    <input type="radio" name="options" autocomplete="off" checked> 店家登入
+                </label>
+                <label class="btn bg-white" id="administrator-login">
+                    <input type="radio" name="options" autocomplete="off"> 管理員登入
+                </label>
+            </div>
+
+            <div class="input-group mb-3">
+                <input type="text" id="username" class="form-control" placeholder="用戶名稱">
+            </div>
+            <div class="input-group mb-3">
+                <input type="password" id="password" class="form-control" placeholder="用戶密碼">
+            </div>
+
+            <div>
+                <div id="result"></div>
+            </div>
+
+            <hr>
+                <div class="row ">
+                    <div class="col-8 ">
+                        <div class="icheck-primary">
+                            <input type="checkbox" id="remember" class="align-middle">
+                            <label for="remember" class="align-middle">
+                                Remember Me
+                            </label>
+                        </div>
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-4">
+                        <button type="submit" class="btn btn-info btn-block">登入</button>
+                    </div>
+                    <!-- /.col -->
+                </div>
+
+        </div>
+        <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+</div>
+
+<!-- jQuery -->
+<script src="./plugins/jquery/jquery.min.js"></script>
+
+<!-- Bootstrap 4 -->
+<script src="./plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- AdminLTE App -->
+<script src="./dist/js/adminlte.min.js"></script>
+
+<script>
+    // 取得物件
+    let usernameInput = $("input#username");
+    let passwordInput = $("input#password");
+    let resultEl = $("div#result");
+
+    //正則表達式
+    // 要有英文字母 & 要有數字 & 不能有空白 & 長度要超過8並且小於15字元
+    let pattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{9,14}$/;
+
+    //前端確認格式
+    $(document).on("focusout", "input.form-control",(e) => {
+        if($(e.target).attr('id') === "username"){
+            let username = $(usernameInput).val();
+            let usernameResult = pattern.test(username)?"":"用戶名稱格式錯誤"
+            $(resultEl).text(usernameResult);
+        }else{
+            let password = $(passwordInput).val();
+            let passwordResult = pattern.test(password)?"":"用戶密碼格式錯誤"
+            $(resultEl).text(passwordResult);
+        }
+    });
+
+    // 要先確定格式正確才可以連後端
+    $("button").on("click", () => {
+        let username = $(usernameInput).val().trim();
+        let password = $(passwordInput).val().trim();
+        if(!$(resultEl).text().length){
+            if(username.length === 0 || password.length === 0){
+                $(resultEl).text("請輸入用戶名稱及用戶密碼");
+                return;
+            }
+            let formData = new FormData();
+            formData.append("adminUsername", username);
+            formData.append("adminPassword", password)
+
+            // 管理員登入
+            if (!$("#store-login").hasClass("active")) {
+                fetch("/admin/login", {
+                    method: "POST",
+                    body: formData
+                }).then(res => res.json()).then(admin => {
+                    if (admin.successful) {
+                        sessionStorage.setItem("totalUser",JSON.stringify({userType: 3, userId: admin.administratorId}))
+                        location = "./storeIndex.html"
+                    } else {
+                        let message = admin.message
+                        $(resultEl).text(message);
+                    }
+                })
+            } else {
+                // 商家登入
+                // fetch("/store/login", {
+                //     method: "POST",
+                //     headers: {
+                //         'Content-Type': 'application/json'
+                //     },
+                //     body: JSON.stringify({
+                //         storeName: username,
+                //         password: password
+                //     })
+                // }).then(res => res.json()).then(store => {
+                //     if (store.successful) {
+                //         location = "./storeIndex.html"
+                //     } else {
+                //         let message = admin.message
+                //         $(resultEl).text(message);
+                //         console.log(message);
+                //     }
+                // })
+            }
+
+        }
+    })
+
+</script>
+
+</body>
+</html>
