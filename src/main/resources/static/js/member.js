@@ -19,4 +19,12 @@ document.addEventListener("DOMContentLoaded", function () {
             })
         }
     })
+
+    // 載具
+    const myCarrierText = document.querySelector("#memberCarrierText");
+    function getCarrier() {
+        JsBarcode(myCarrierText, "123456");
+    };
+    getCarrier();
 });
+
