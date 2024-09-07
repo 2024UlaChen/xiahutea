@@ -83,43 +83,42 @@ document.addEventListener("DOMContentLoaded",function(){
   // fetch(`/cart/checkoutlist/{customerID}`)
 
   const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
-  console.log(Array.isArray(cartItems));
   // // 把localstorage資料存到後端資料庫，並且抓取資料渲染
   // saveallproduct();
   // // 提取所有商品的 productId用來渲染網頁
-  // const productIds = cartItems.map(item => item.productId);
-  // findproductbyid();
+  const productIds = cartItems.map(item => item.productId);
+  findproductbyid();
   // console.log(cartItems);
   //遍歷取得的物件，動態生成標籤
-  cartItems.forEach(item =>{
-    // fetchProductByProductId(item.product_Id);
-    const itemContent = document.createElement('div');
-    const cartItem = document.createElement('div');
-    itemContent.className = 'item-content';
-    cartItem.className = 'cart-item';
-    cartItem.innerHTML = `
-        <p class="product-name">${item.product_name}</p>
-        <div class="product-buttons">
-            <button class="edit-btn"><i class="fas fa-edit"></i></button>
-            <button class="delete-btn"><i class="fas fa-trash"></i></button>
-        </div>
-            `;
-    itemContent.appendChild(cartItem);
-    //商品細項:甜度冰塊單價...等
-    const productDetail = document.createElement('div');
-    productDetail.className = 'product-detail';
-    productDetail.innerHTML = `
-        <div class="detail-item" data-type="sugar">${getSugarLevel(item)}/</div>
-        <div class="detail-item" data-type="ice">${getIceLevel(item)}/</div>
-        <div class="detail-item" data-type="add-ons">${item.add_ons || '無'}/</div>
-        <div class="detail-item" data-type="price">$${item.product_price}/ </div>
-        <div class="detail-item" data-type="size">${getSize(item.size)}</div>
-        <div class="detail-item" data-type="quantity"></div>
-        `;
-    itemContent.appendChild(productDetail);
-    item_detail_el.appendChild(itemContent);
-      }
-  )
+  // cartItems.forEach(item =>{
+  //   // fetchProductByProductId(item.product_Id);
+  //   const itemContent = document.createElement('div');
+  //   const cartItem = document.createElement('div');
+  //   itemContent.className = 'item-content';
+  //   cartItem.className = 'cart-item';
+  //   cartItem.innerHTML = `
+  //       <p class="product-name">${item.product_name}</p>
+  //       <div class="product-buttons">
+  //           <button class="edit-btn"><i class="fas fa-edit"></i></button>
+  //           <button class="delete-btn"><i class="fas fa-trash"></i></button>
+  //       </div>
+  //           `;
+  //   itemContent.appendChild(cartItem);
+  //   //商品細項:甜度冰塊單價...等
+  //   const productDetail = document.createElement('div');
+  //   productDetail.className = 'product-detail';
+  //   productDetail.innerHTML = `
+  //       <div class="detail-item" data-type="sugar">${getSugarLevel(item)}/</div>
+  //       <div class="detail-item" data-type="ice">${getIceLevel(item)}/</div>
+  //       <div class="detail-item" data-type="add-ons">${item.add_ons || '無'}/</div>
+  //       <div class="detail-item" data-type="price">$${item.product_price}/ </div>
+  //       <div class="detail-item" data-type="size">${getSize(item.size)}</div>
+  //       <div class="detail-item" data-type="quantity"></div>
+  //       `;
+  //   itemContent.appendChild(productDetail);
+  //   item_detail_el.appendChild(itemContent);
+  //     }
+  // )
 
 
   //********************************************第一頁按鈕事件*************************************
@@ -458,7 +457,7 @@ document.addEventListener("DOMContentLoaded",function(){
     }
     //用全部商品ID抓資料
     function findproductbyid(){
-      fetch('/cart/checkoutlist/findByIds', {
+      fetch('/cart/checkoutlist/findByproductIds', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -468,11 +467,30 @@ document.addEventListener("DOMContentLoaded",function(){
           .then(response => response.json())
           .then(products => {
             console.log('Products:', products);
-            // 處理返回的產品數據
+            //抓商店ID
+            const storeId = products[0].productStoreId;
+            //獲得商店資料
+            // findstorebyid(storeId);
           })
           .catch(error => {
             console.error('Error:', error);
           });
+    }
+    function findstorebyid(storeId){
+        fetch('/cart/checkoutlist/findBystoreId',{
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ storeId })
+        })
+            .then(response => response.json())
+            .then(store => {
+              console.log('Store Details:', store);
+            })
+            .catch(error => {
+              console.error('Error:', error);
+            });
     }
     //判斷冰塊
   function getIceLevel(item) {
