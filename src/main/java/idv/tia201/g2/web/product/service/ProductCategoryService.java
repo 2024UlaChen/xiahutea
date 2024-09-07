@@ -8,7 +8,8 @@ import java.util.List;
 public interface ProductCategoryService {
     List<ProductCategory> getAllCategories();
     ProductCategory getProductCategoryById(Integer id);
-    ProductCategory addCategory(ProductCategory productCategory);
-    void deleteCategory(Integer categoryId);
+   void update(ProductCategory productCategory);
+    void addCategory(ProductCategory productCategory);
+    boolean removeCategory(Integer categoryId);
 
 }
