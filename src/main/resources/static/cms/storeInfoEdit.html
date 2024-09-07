@@ -144,17 +144,7 @@
             </div>
 
             <div class="m-3">
-              <div class="form-check form-check-inline">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  value="option1"
-                  id="iscash"
-                />
-                <label class="form-check-label" for="inlineCheckbox1"
-                  >現金</label
-                >
-              </div>
+
               <div class="form-check form-check-inline">
                 <input
                   class="form-check-input"
@@ -300,7 +290,7 @@
 
         let distance = document.querySelector("#distance");
 
-        let iscash = document.querySelector("#iscash");
+
 
         let iscreditcard = document.querySelector("#iscreditcard");
 
@@ -331,9 +321,7 @@
             if (data.isDelivery) {
               isdelivery.checked = true;
             }
-            if (data.isCash) {
-              iscash.checked = true;
-            }
+
             if (data.isCreditCard) {
               iscreditcard.checked = true;
             }
@@ -378,7 +366,7 @@
 
             distance = document.querySelector("#distance").value;
 
-            iscash = document.querySelector("#iscash").checked ? true : false;
+
 
             iscreditcard = document.querySelector("#iscreditcard").checked
               ? true
@@ -421,7 +409,7 @@
             // formData.append("deliveryDistance", distance);
             // formData.append("deliveryMoney", deliverymoney);
             // formData.append("isTakeOrders", istakeorders);
-            // formData.append("isCash", iscash);
+
             // formData.append("isCreditCard", iscreditcard);
             // formData.append("logo", logo.files.length > 0 ? bytes : null); // 处理文件上传
             // formData.append("email", mail);
@@ -439,7 +427,7 @@
               deliveryDistance: distance,
               deliveryMoney: deliverymoney,
               isTakeOrders: istakeorders,
-              isCash: iscash,
+
               isCreditCard: iscreditcard,
               logo: imgfile,
               email: mail,

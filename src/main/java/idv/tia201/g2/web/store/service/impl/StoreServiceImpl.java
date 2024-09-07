@@ -69,7 +69,7 @@ public class StoreServiceImpl implements StoreService {
             store.setDeliveryMoney(null);
             store.setIsTakeOrders(null);
             store.setScore(null);
-            store.setIsCash(null);
+
             store.setIsCreditCard(null);
             store.setLogo(null);
             store.setEmail(null);
@@ -134,7 +134,7 @@ public class StoreServiceImpl implements StoreService {
         oldDate.setIsDelivery(store.getIsDelivery());
         oldDate.setDeliveryDistance(store.getDeliveryDistance());
         oldDate.setIsTakeOrders(store.getIsTakeOrders());
-        oldDate.setIsCash(store.getIsCash());
+
         oldDate.setIsCreditCard(store.getIsCreditCard());
         oldDate.setLogo(store.getLogo());
         oldDate.setEmail(store.getEmail());

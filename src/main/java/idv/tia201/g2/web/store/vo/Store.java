@@ -76,8 +76,7 @@ public class Store extends Core {
     @Column(name = "score")
     private Float score;//評分
 
-    @Column(name = "is_cash")
-    private Boolean isCash;//是否支援現金
+
 
     @Column(name = "is_credit_card")
     private Boolean isCreditCard;//是否支援魔法卡
