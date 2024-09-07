@@ -22,6 +22,7 @@ public interface StoreService {
     Store editStorePassword(Store store);
     Store editStoreInfo(Store store);
     Store editStoreLoyaltyCard(Store store);
+    byte[] findLogoById(Integer id);
 
 
 
