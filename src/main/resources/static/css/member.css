@@ -160,8 +160,21 @@ select:focus,
 .member-setting > div {
     margin-top: 2%;
 }
+.dataSave{
+    padding-top: 2%;
+    clear: both;
+}
+.dataSave button{
+    text-align: center;
+    height: 40px;
+    background-color: #73B4BA;
+    border: 1px solid #73B4BA;
+    font-size: 16px;
+    color: white;
+    border-radius: 5px;
+}
 
-/*載具*/
+/*Carrier*/
 
 .memberCarrier > div {
     display: flex;
@@ -209,7 +222,7 @@ select:focus,
     justify-content: center;
 }
 
-.modal-footer button {
+.modal-footer button ,.addressSaving button{
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -224,7 +237,7 @@ select:focus,
     border-radius: 5px;
 }
 
-.modal-footer button:hover {
+.modal-footer button:hover ,.addressSaving button:hover{
     background-color: white;
     border: 1px solid #73B4BA;
     color: #73B4BA;
@@ -256,9 +269,15 @@ select:focus,
 
 }
 
-.memberAddress li > button:hover, .memberCarrier div button > i:hover {
+.memberAddress li > button:hover, .memberCarrier div button > i:hover  {
     cursor: pointer;
     background-color: #F5F5F5;
     color: #FAC792;
     border-radius: 20px;
+}
+
+/*address*/
+.addressSaving{
+    display: flex;
+    justify-content: center;
 }
