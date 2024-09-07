@@ -161,4 +161,13 @@ public class StoreServiceImpl implements StoreService {
         return storeDao.save(oldDate);
     }
 
+    @Override
+    public byte[] findLogoById(Integer id) {
+        Store store = findStoreById(id);
+        return store.getLogo();
+
+
+
+    }
+
 }

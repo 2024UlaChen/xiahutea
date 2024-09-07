@@ -7,7 +7,10 @@ import idv.tia201.g2.web.store.vo.Store;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.List;
 
 //RestController是組合註解 他等於Controller 加上 ResponseBody 就是一個RestController
@@ -57,11 +60,21 @@ public class StoreController {
         return storeService.editStoreLoyaltyCard(store);
     }
     @PostMapping("/editstoreinfo")
-    public Store EditStoreInfo(@ModelAttribute Store store){
+    public Store EditStoreInfo(@RequestBody Store store){
         Store storeData = storeService.editStoreInfo(store);//update後丟回去瞧瞧 未完成
         return storeData;
     }
+    @PostMapping("upload")
+    public void uploadLogo(@RequestParam("img")MultipartFile[] files) throws IOException {
+        for(MultipartFile file : files){
+            file.transferTo(Paths.get("C:\\Users\\s5880\\Desktop\\TestUpload",file.getOriginalFilename()));
+        }
+    }
 
+    @GetMapping("/img/{storeid}")
+    public byte[] Img(@PathVariable Integer storeid){
+        return storeService.findLogoById(storeid);
+    }
 
 
 

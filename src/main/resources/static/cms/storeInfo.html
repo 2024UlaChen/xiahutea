@@ -312,6 +312,7 @@
                 <option selected value="1">啟動</option>
                 <option value="2">停權</option>
               </select>
+              <img src="http://127.0.0.1:8080/store/img/2" alt="imgTest" />
             </div>
 
             <!-- <button type="submit" class="btn btn-primary m-3">儲存</button> -->
@@ -411,10 +412,12 @@
             document.querySelector("#loyaltyCardName").value =
               data.loyaltyCardName;
             document.querySelector("#exchangeRate").value = data.exchangeRate;
+            console.log(data.expiredDate);
+
             document.querySelector("#expiredDate").value =
               data.expiredDate.split("T")[0];
             document.querySelector("#validStatus").value = data.validStatus;
-            console.log(data.expiredDate.split("T")[0]);
+            // console.log(data.expiredDate.split("T")[0]);
 
             //success結束
           },
