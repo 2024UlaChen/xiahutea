@@ -77,14 +77,14 @@
     width: 75%;
     border: none;
     padding-left: 0;
-
 }
 
 .passwordError, .userPhoneError {
     color: #dc3545;
     font-size: 24px;
-    display: none;
+    visibility: hidden;
 }
 .-on{
     display: inline-block;
+    visibility: visible;
 }
