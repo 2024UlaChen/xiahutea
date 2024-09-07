@@ -316,6 +316,8 @@
 
 
     <script src="plugins/jquery/jquery.min.js"></script>
+    <script src="js/storegeneral.js"></script>
+
     <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
     <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
@@ -329,7 +331,6 @@
 
     <script src="dist/js/adminlte.js"></script>
     <script src="dist/js/demo.js"></script>
-    <script src="js/storegeneral.js"></script>
 
     <script>
 <!--彈窗-->
@@ -428,7 +429,7 @@ $("span").on("click",function (){
       var $this = $(this);
       var categoryId = $this.data('id');
 
-      if (confirm('确定要删除此分类吗？')) {
+      if (confirm('確定要删除此分类吗？')) {
           // 使用 fetch 发送删除请求到后端
           fetch('/api/categories/' + categoryId, {
               method: 'DELETE',
@@ -443,13 +444,13 @@ $("span").on("click",function (){
                   if (data.success) {
                       // 删除表格中的这一行
                       $this.closest('tr').remove();
-                      alert('分类已删除');
+                      alert('分類已删除');
                   } else {
-                      alert('删除失败: ' + data.message);
+                      alert('删除失敗: ' + data.message);
                   }
               })
               .catch(error => {
-                  alert('删除时发生错误: ' + error.message);
+                  alert('删除時發生错誤: ' + error.message);
               });
       }
   

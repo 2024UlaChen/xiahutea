@@ -46,6 +46,12 @@ public class CartServiceImpl implements CartService {
     public List<Product> getProductsByIds(List<Integer> productIds) {
         return productDao.findAllById(productIds);
     }
+
+    //透過商店ID抓取store
+    @Override
+    public Store getStoreByid(Integer storeId) {
+        return storeDao.findByStoreId(storeId);
+    }
 }
 
 
