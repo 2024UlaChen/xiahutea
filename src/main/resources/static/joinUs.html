@@ -30,6 +30,12 @@
         /* background-color: #f5f5f5; */
         * {
             box-sizing: border-box;
+
+        }
+
+        #result-message {
+            font-size: 16px;
+            color: red;
         }
 
     </style>
@@ -43,7 +49,7 @@
                 <div class="content-area content-contact col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="site-main">
                         <h1>立即諮詢</h1>
-                        <label>成為夏虎茶的合作商家，與我們一起攜手向更高的目標邁進。</label>
+                        <h4>成為夏虎茶的合作商家，與我們一起攜手向更高的目標邁進。</h4>
                     </div>
                 </div>
             </div>
@@ -61,16 +67,18 @@
                         <div class="form-contact">
                             <div class="col-lg no-padding">
                                 <div class="form-message">
-                                    <h2 class="title">
+                                    <h4 class="title">
                                         歡迎留下資料，我們將有專人聯繫
-                                    </h2>
-                                    <form action="#" class="teamo-contact-fom">
+                                    </h4>
+                                    <form id="form" action="#" class="teamo-contact-fom">
                                         <div class="row">
                                             <div class="col-sm-6">
                                                 <p>
                                                     <span class="form-label">聯絡人 *</span>
                                                     <span class="form-control-wrap your-name">
-                                                    <input title="your-name" type="text" name="your-name" maxlength="20" class="form-control form-control-name">
+                                                    <input title="your-name" type="text" name="contactPerson"
+                                                           maxlength="20" class="form-control form-control-name"
+                                                           required>
                                                 </span>
                                                 </p>
                                             </div>
@@ -78,7 +86,8 @@
                                                 <p>
                                                     <span class="form-label">Email *</span>
                                                     <span class="form-control-wrap your-email">
-                                                    <input title="your-email" type="email" name="your-email" maxlength="20"class="form-control form-control-email">
+                                                    <input title="your-email" type="email" name="email" maxlength="20"
+                                                           class="form-control form-control-email" required>
                                                 </span>
                                                 </p>
                                             </div>
@@ -88,7 +97,9 @@
                                                 <p>
                                                     <span class="form-label">連絡電話*</span>
                                                     <span class="form-control-wrap your-phone">
-                                                    <input title="your-phone" type="text" name="your-phone" maxlength="10"class="form-control form-control-phone">
+                                                    <input title="your-phone" type="text" name="contactPhone"
+                                                           maxlength="10" class="form-control form-control-phone"
+                                                           required>
                                                 </span>
                                                 </p>
                                             </div>
@@ -98,7 +109,8 @@
                                                     店家名稱 *
                                                 </span>
                                                     <span class="form-control-wrap your-company">
-                                                    <input title="your-company" type="text" name="your-company" maxlength="20" class="form-control your-company">
+                                                    <input title="your-company" type="text" name="storeName"
+                                                           maxlength="20" class="form-control your-company" required>
                                                 </span>
                                                 </p>
                                             </div>
@@ -108,7 +120,8 @@
                                             門市地址 *
                                         </span>
                                             <span class="form-control-wrap address">
-                                            <input title="your-address" type="text" name="your-address" maxlength="50" class="form-control your-address">
+                                            <input title="your-address" type="text" name="storeAddress" maxlength="50"
+                                                   class="form-control your-address" required>
                                         </span>
                                         </p>
 
@@ -117,7 +130,8 @@
                                                 <p>
                                                     <span class="form-label">店家負責人 *</span>
                                                     <span class="form-control-wrap owner">
-                                                    <input title="your-owner" type="text" name="your-owner" maxlength="50" class="form-control your-owner">
+                                                    <input title="your-owner" type="text" name="owner" maxlength="50"
+                                                           class="form-control your-owner" required>
                                                 </span>
                                                 </p>
                                             </div>
@@ -125,21 +139,30 @@
                                                 <p>
                                                     <span class="form-label">統編 *</span>
                                                     <span class="form-control-wrap VAT">
-                                                    <input title="your-VAT" type="text" name="your-VAT" maxlength="50" class="form-control your-VAT">
+                                                    <input title="your-VAT" type="text" name="vat" maxlength="50"
+                                                           class="form-control your-VAT" required>
                                                 </span>
                                                 </p>
                                             </div>
                                         </div>
                                         <p>
-                                            <span class="form-label">備註</span>
-                                            <span class="wpcf7-form-control-wrap your-message">
-                                            <textarea title="your-message" name="your-message" cols="40" rows="9" class="form-control your-textarea"></textarea>
+                                        <span class="form-label">備註</span>
+                                        <span class="wpcf7-form-control-wrap your-message">
+                                            <textarea title="your-message" name="storeRemake" cols="40" rows="9"
+                                                      class="form-control your-textarea"></textarea>
                                         </span>
+
                                         </p>
+
+                                        <div id="result-message"> 後端回傳訊息</div>
+
                                         <p>
-                                            <input type="submit" value="送出" class="form-control-submit button-submit">
+                                            <input id="submit" type="submit" value="送出"
+                                                   class="form-control-submit button-submit">
                                         </p>
+
                                     </form>
+
                                 </div>
                             </div>
 
@@ -170,9 +193,18 @@
     <script src="assets/js/lightbox.min.js"></script>
     <script src="assets/js/owl.thumbs.min.js"></script>
     <script src="assets/js/jquery.scrollbar.min.js"></script>
-    <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyC3nDHy1dARR-Pa_2jjPCjvsOR4bcILYsM'></script>
-    <script src="assets/js/frontend-plugin.js"></script>
     <script src="js/general.js"></script>
+
+    <script>
+        $("#form").submit(e => {
+            e.preventDefault();
+            let formData = new FormData(e.target);
+            let vat = formData.get("vat");
+            console.log(vat)
+
+        });
+
+    </script>
 </body>
 
 
