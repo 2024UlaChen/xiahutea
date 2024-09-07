@@ -66,8 +66,11 @@ public class StoreController {
     }
     @PostMapping("upload")
     public void uploadLogo(@RequestParam("img")MultipartFile[] files) throws IOException {
+        //see see
+
         for(MultipartFile file : files){
-            file.transferTo(Paths.get("C:\\Users\\s5880\\Desktop\\TestUpload",file.getOriginalFilename()));
+            byte[] bytes = files[0].getBytes();
+            //file.transferTo(Paths.get("C:\\Users\\s5880\\Desktop\\TestUpload",file.getOriginalFilename()));
         }
     }
 
