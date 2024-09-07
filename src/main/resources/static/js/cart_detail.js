@@ -77,21 +77,22 @@ document.addEventListener("DOMContentLoaded",function(){
   let btn_submit_order_el = document.getElementsByClassName("btn-submit-order")[0];
   let btn_modal_close_el = document.getElementsByClassName("btn_modal_close")[0];
 
-  //一進到結帳選擇頁面先用localstorage抓DB
-  const cartItems = JSON.parse(localStorage.getItem('cartItems'))
-  // 確保購物車中有資料
-  // if (cartItems.length > 0) {
-  //   // 取得第一筆資料的 productId
-  //   let productId = cartItems[0].productId;
-  //   // 使用 productId 去抓取相對應的 storeId 或其他相關資料
-  //   fetchStoreDataByProductId(productId);
-  // } else {
-  //   console.log('購物車中無商品');
-  // }
-  // 從 localStorage 讀取 JSON 字符串並解析為 JavaScript 數組
+  //一進到結帳選擇頁面先用localstorage抓DB以及獲取目前登入用戶ID
+  //TODO 獲得用戶ID以抓取資料渲染
+  // const customerid = localStorage.getItem('customerId');
+  // fetch(`/cart/checkoutlist/{customerID}`)
 
+  const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+  console.log(Array.isArray(cartItems));
+  // // 把localstorage資料存到後端資料庫，並且抓取資料渲染
+  // saveallproduct();
+  // // 提取所有商品的 productId用來渲染網頁
+  // const productIds = cartItems.map(item => item.productId);
+  // findproductbyid();
+  // console.log(cartItems);
   //遍歷取得的物件，動態生成標籤
   cartItems.forEach(item =>{
+    // fetchProductByProductId(item.product_Id);
     const itemContent = document.createElement('div');
     const cartItem = document.createElement('div');
     itemContent.className = 'item-content';
@@ -108,12 +109,12 @@ document.addEventListener("DOMContentLoaded",function(){
     const productDetail = document.createElement('div');
     productDetail.className = 'product-detail';
     productDetail.innerHTML = `
-        <div class="detail-item" data-type="sugar">${getSugarLevel(item)}</div>
-        <div class="detail-item" data-type="ice">${getIceLevel(item)}</div>
-        <div class="detail-item" data-type="add-ons">${item.add_ons || '無'}</div>
-        <div class="detail-item" data-type="price">${item.product_price}</div>
+        <div class="detail-item" data-type="sugar">${getSugarLevel(item)}/</div>
+        <div class="detail-item" data-type="ice">${getIceLevel(item)}/</div>
+        <div class="detail-item" data-type="add-ons">${item.add_ons || '無'}/</div>
+        <div class="detail-item" data-type="price">$${item.product_price}/ </div>
         <div class="detail-item" data-type="size">${getSize(item.size)}</div>
-<!--        <div class="detail-item" data-type="quantity"></div>-->
+        <div class="detail-item" data-type="quantity"></div>
         `;
     itemContent.appendChild(productDetail);
     item_detail_el.appendChild(itemContent);
@@ -432,21 +433,47 @@ document.addEventListener("DOMContentLoaded",function(){
         e.stopPropagation()
       })
     //********************************************function區****************************************
-    //從LocalStorage資料抓取商品、店家資訊
-    function fetchStoreDataByProductId(productId) {
-      // 這裡應該是你用來抓取 store 資料的 fetch 或 AJAX 調用
-      // 範例 fetch 請求
-      fetch(`cart?productId=${productId}`)
-          .then(response => response.json())
+    //GET 請求：進入購物結帳頁面取得使用者
+    //POST 請求：儲存購物車資料
+    function saveallproduct(){
+      if (cartItems.length === 0) {
+        alert('Your cart is empty');
+        // window.location.href = '/home'; // 跳转到你想要的页面
+        return;
+      }
+      fetch('/cart/checkoutlist/saveItems', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(cartItems)
+      })
+          .then(response => response.text())
           .then(data => {
-            console.log('Store data:', data);
-            // 你可以在這裡進行其他處理，比如顯示商店資訊等
+            console.log('Success:', data);
           })
-          .catch(error => {
-            console.error('Error fetching store data:', error);
+          .catch((error) => {
+            console.error('Error:', error);
           });
     }
-
+    //用全部商品ID抓資料
+    function findproductbyid(){
+      fetch('/cart/checkoutlist/findByIds', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(productIds)
+      })
+          .then(response => response.json())
+          .then(products => {
+            console.log('Products:', products);
+            // 處理返回的產品數據
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+    }
     //判斷冰塊
   function getIceLevel(item) {
     if (item.ice_free) return '去冰';

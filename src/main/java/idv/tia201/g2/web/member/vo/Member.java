@@ -41,7 +41,7 @@ public class Member {
     @Column(name = "customer_img")
     private byte[] customerImg;
     @Column(name = "sex")
-    private Integer sex;
+    private String sex;
     @Column(name = "birthday")
     private Date birthday;
 
