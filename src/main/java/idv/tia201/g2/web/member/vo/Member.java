@@ -45,10 +45,11 @@ public class Member extends Core {
     @Column(name = "customer_carrier")
     private String customerCarrier;
     @Lob
-    @Column(name = "customer_img")
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "customer_img", columnDefinition="LONGBLOB")
     private byte[] customerImg;
     @Column(name = "sex")
-    private Integer sex;
+    private String sex;
     @Column(name = "birthday")
     @JsonFormat(pattern = "yyyy/MM/dd")
     private Date birthday;

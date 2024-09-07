@@ -109,14 +109,14 @@ select:focus,
     color: #73B4BA;
 }
 
-.member-list li:hover, .member-list li a:hover {
-    color: #FAC792;
-}
+/*.member-list li:hover, .member-list li a:hover {*/
+/*    color: #FAC792;*/
+/*}*/
 
-.member-list li:hover {
-    background-color: #F8F9FA;
-    border-left: solid 5px #FAC792;
-}
+/*.member-list li:hover {*/
+/*    background-color: #F8F9FA;*/
+/*    border-left: solid 5px #FAC792;*/
+/*}*/
 
 .member-list a {
     display: inline-block;
