@@ -19,6 +19,8 @@ document.addEventListener("DOMContentLoaded",function(){
   let sugar_el = document.querySelector('.sugar + .lightbox-radio-group');
   let materials_el = document.querySelector('.materials + .lightbox-radio-group');
 
+  //訂單客製化選項標簽
+  let recevier_method_el = document.getElementsByClassName('recevier-method')[0];
   //流程用標籤
   let order_detail_container_el = document.getElementsByClassName("order-detail-container")[0];
   let btn_addtopurchase_el =document.getElementsByClassName("btn-addtopurchase")[0];
@@ -433,29 +435,30 @@ document.addEventListener("DOMContentLoaded",function(){
       })
     //********************************************function區****************************************
     //GET 請求：進入購物結帳頁面取得使用者
+
     //POST 請求：儲存購物車資料
-    function saveallproduct(){
-      if (cartItems.length === 0) {
-        alert('Your cart is empty');
-        // window.location.href = '/home'; // 跳转到你想要的页面
-        return;
-      }
-      fetch('/cart/checkoutlist/saveItems', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(cartItems)
-      })
-          .then(response => response.text())
-          .then(data => {
-            console.log('Success:', data);
-          })
-          .catch((error) => {
-            console.error('Error:', error);
-          });
-    }
-    //用全部商品ID抓資料
+    // function saveallproduct(){
+    //   if (cartItems.length === 0) {
+    //     alert('Your cart is empty');
+    //     // window.location.href = '/home'; // 跳转到你想要的页面
+    //     return;
+    //   }
+    //   fetch('/cart/checkoutlist/saveItems', {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json'
+    //     },
+    //     body: JSON.stringify(cartItems)
+    //   })
+    //       .then(response => response.text())
+    //       .then(data => {
+    //         console.log('Success:', data);
+    //       })
+    //       .catch((error) => {
+    //         console.error('Error:', error);
+    //       });
+    // }
+    //用全部商品ID抓商品資料
     function findproductbyid(){
       fetch('/cart/checkoutlist/findByproductIds', {
         method: 'POST',
@@ -476,6 +479,7 @@ document.addEventListener("DOMContentLoaded",function(){
             console.error('Error:', error);
           });
     }
+    //用商品得到的商店ID來抓店家資訊
     function findstorebyid(storeId){
         fetch('/cart/checkoutlist/findBystoreId',{
           method: 'POST',
@@ -487,10 +491,31 @@ document.addEventListener("DOMContentLoaded",function(){
             .then(response => response.json())
             .then(store => {
               console.log('Store Details:', store);
+              store_name_el.innerHTML=store.storeName;
+              updateDeliveryOptions(store.isDelivery);
             })
             .catch(error => {
               console.error('Error:', error);
             });
+    }
+    //判斷店家是否有外送選項
+    function updateDeliveryOptions(isDelivery){
+      if (isDelivery){
+        const carrtoutdiv = document.createElement('div');
+        carrtoutdiv.className = 'carry-out';
+        carrtoutdiv.innerHTML=`
+          <div class="carry-out-selection">
+              <input class="carry-out-radio" type="radio" name="delivery" id="carry-out">
+                <label class="carry-out-label" for="carry-out" style="padding-top: 10px">
+                     外送
+                </label>
+          </div>
+               <div class="carry-out-address">
+                   <input type="text" class="address" placeholder="請輸入地址" maxlength="255">
+               </div>
+            `;
+        recevier_method_el.appendChild(carrtoutdiv);
+      }
     }
     //判斷冰塊
   function getIceLevel(item) {
