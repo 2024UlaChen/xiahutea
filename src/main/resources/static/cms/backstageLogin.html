@@ -23,8 +23,11 @@
         }
 
         #result {
-            margin: 0px 5px 5px 5px;
+            margin: 0 5px 5px 5px;
             color: red;
+        }
+        .align-middle{
+            margin: 10px 0 0 0;
         }
 
     </style>
@@ -54,15 +57,17 @@
             <div class="input-group mb-3">
                 <input type="password" id="password" class="form-control" placeholder="用戶密碼">
             </div>
-            <hr>
+
             <div>
-                <label id="result"></label>
+                <div id="result"></div>
             </div>
-                <div class="row">
-                    <div class="col-8">
+
+            <hr>
+                <div class="row ">
+                    <div class="col-8 ">
                         <div class="icheck-primary">
-                            <input type="checkbox" id="remember">
-                            <label for="remember">
+                            <input type="checkbox" id="remember" class="align-middle">
+                            <label for="remember" class="align-middle">
                                 Remember Me
                             </label>
                         </div>
@@ -91,37 +96,41 @@
 
 <script>
     // 取得物件
-    let usernameInput = $("input#username")
-    let passwordInput = $("input#password")
+    let usernameInput = $("input#username");
+    let passwordInput = $("input#password");
+    let resultEl = $("div#result");
+
     //正則表達式
     // 要有英文字母 & 要有數字 & 不能有空白 & 長度要超過8並且小於15字元
     let pattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{9,14}$/;
 
     //前端確認格式
     $(document).on("focusout", "input.form-control",(e) => {
-        // console.log($(e.target).attr('id'));
         if($(e.target).attr('id') === "username"){
             let username = $(usernameInput).val();
-            // console.log(pattern.test(username))
-            let usernameResult = pattern.test(username)?"":"用戶名稱錯誤"
-            $("#result").text(usernameResult);
+            let usernameResult = pattern.test(username)?"":"用戶名稱格式錯誤"
+            $(resultEl).text(usernameResult);
         }else{
             let password = $(passwordInput).val();
-            let passwordResult = pattern.test(password)?"":"用戶密碼錯誤"
-            $("#result").text(passwordResult);
+            let passwordResult = pattern.test(password)?"":"用戶密碼格式錯誤"
+            $(resultEl).text(passwordResult);
         }
     });
 
     // 要先確定格式正確才可以連後端
     $("button").on("click", () => {
-        if(!($("#result").text().length)){
-            let username = $(usernameInput).val().trim();
-            let password = $(passwordInput).val().trim();
-
+        let username = $(usernameInput).val().trim();
+        let password = $(passwordInput).val().trim();
+        if(!$(resultEl).text().length){
+            if(username.length === 0 || password.length === 0){
+                $(resultEl).text("請輸入用戶名稱及用戶密碼");
+                return;
+            }
             let formData = new FormData();
             formData.append("adminUsername", username);
             formData.append("adminPassword", password)
 
+            // 管理員登入
             if (!$("#store-login").hasClass("active")) {
                 fetch("/admin/login", {
                     method: "POST",
@@ -132,11 +141,11 @@
                         location = "./storeIndex.html"
                     } else {
                         let message = admin.message
-                        $("#result").text(message);
-                        // console.log(message);
+                        $(resultEl).text(message);
                     }
                 })
             } else {
+                // 商家登入
                 // fetch("/store/login", {
                 //     method: "POST",
                 //     headers: {
@@ -151,7 +160,7 @@
                 //         location = "./storeIndex.html"
                 //     } else {
                 //         let message = admin.message
-                //         $("#result").text(message);
+                //         $(resultEl).text(message);
                 //         console.log(message);
                 //     }
                 // })

@@ -49,25 +49,25 @@
                             </div>
                             <div>
                                 <ul class="member-list">
-                                    <li class="member-list-active">
-                                        <div>
+                                    <li>
+                                        <a href="member.html">
                                             <span>個人檔案</span>
-                                        </div>
+                                        </a>
                                     </li>
                                     <li>
-                                        <div>
+                                        <a href="memberSetting.html">
                                             <span>帳號管理</span>
-                                        </div>
+                                        </a>
                                     </li>
                                     <li>
-                                        <div>
+                                        <a href="memberAddress.html">
                                             <span>常用地址</span>
-                                        </div>
+                                        </a>
                                     </li>
                                     <li>
-                                        <div>
+                                        <a href="memberCarrier.html">
                                             <span>我的載具</span>
-                                        </div>
+                                        </a>
                                     </li>
                                 </ul>
                             </div>
@@ -78,7 +78,7 @@
                                     個人檔案
                                 </div>
                                 <hr>
-                                <form action="#" class="teamo-contact-fom member-setting">
+                                <div class="teamo-contact-fom member-setting">
                                     <div>
                                         <img class="userPhoto" src="assets/images/xiahutealogo.jpg"
                                              alt="userPhoto">
@@ -88,21 +88,22 @@
                                         <span class="form-control-wrap your-name">
                                                     <input title="your-name" type="text" name="your-name" size="40"
                                                            class="form-control form-control-name">
-                                                </span>
+                                        </span>
                                     </div>
                                     <div>
                                         <span class="form-label"><span class="warn">*</span>暱稱 </span>
                                         <span class="form-control-wrap your-email">
                                                     <input title="your-email" type="email" name="your-email" size="40"
                                                            class="form-control form-control-email">
-                                                </span>
+                                        </span>
                                     </div>
                                     <div>
                                         <span class="form-label"><span class="warn">*</span>手機號碼</span>
                                         <span class="form-control-wrap your-phone">
                                                     <input title="your-phone" type="text" name="your-phone"
-                                                           class="form-control form-control-phone">
-                                                </span>
+                                                           class="form-control form-control-phone" minlength="10"
+                                                           maxlength="10" placeholder="0912345678">
+                                        </span>
                                         <span class="remind">僅支援台灣手機</span>
                                     </div>
                                     <div>
@@ -121,14 +122,13 @@
                                                 <label for="sexNoProvide">不提供</label>
                                             </div>
                                         </div>
-
                                     </div>
                                     <div>
                                         <span class="form-label"> 生日 </span>
                                         <span class="form-control-wrap member-birthday">
                                                     <input type="date" name="birthday" id="memberBirthday"
                                                            class="form-control datepicker">
-                                                </span>
+                                        </span>
                                     </div>
                                     <div>
                                         <span class="form-label"> 居住地 </span>
@@ -153,7 +153,7 @@
                                         <input type="submit" value="SEND MESSAGE"
                                                class="form-control-submit button-submit">
                                     </div>
-                                </form>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -186,6 +186,8 @@
 <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyC3nDHy1dARR-Pa_2jjPCjvsOR4bcILYsM'></script>
 <script src="assets/js/frontend-plugin.js"></script>
 <script src="js/general.js"></script>
+<script src="js/member.js"></script>
+
 </body>
 
 
