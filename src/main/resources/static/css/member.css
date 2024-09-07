@@ -168,24 +168,97 @@ select:focus,
     justify-content: center;
     margin-top: 1%;
 }
-.memberCarrier > div span{
+
+.memberCarrier > div span {
+    display: flex;
+    align-items: center;
     margin-right: 2%;
 }
 
-.memberCarrier div > a {
+.memberCarrier div > button {
     margin-left: 2%;
+    background-color: white;
+    border: transparent 1px solid;
 
 }
-.memberCarrier div  a > i {
-    height: 30px;
-    width: 30px;
-    display: flex;
-    justify-content: center;
+
+.memberCarrier div button > i {
+    font-size: 150%;
     vertical-align: center;
+    color: #73B4BA;
+
 }
-.memberCarrier div > a:hover {
+
+.memberCarrier div > button:hover, .memberCarrier div button > i:hover {
     cursor: pointer;
     background-color: #F5F5F5;
-    border-radius: 50%;
-    color: #ff5e7d;
+    color: #FAC792;
+    border-radius: 20px;
+}
+
+.memberCarrier div > button:focus {
+    border: transparent 1px solid !important;
+}
+
+.modal-dialog {
+    width: 20%;
+}
+
+.modal-body > div {
+    display: flex;
+    justify-content: center;
+}
+
+.modal-footer button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: baseline;
+    text-align: center;
+    /*width: 100%;*/
+    height: 40px;
+    background-color: #73B4BA;
+    border: 1px solid #73B4BA;
+    font-size: 16px;
+    color: white;
+    border-radius: 5px;
+}
+
+.modal-footer button:hover {
+    background-color: white;
+    border: 1px solid #73B4BA;
+    color: #73B4BA;
+}
+
+/*address*/
+.memberAddress ul{
+    list-style: none;
+}
+.memberAddress ul i {
+    font-size: 150%;
+    color: black;
+}
+.memberAddress ul li{
+    display: flex;
+}
+
+.memberAddress li > button {
+    margin-left: 1%;
+    background-color: white;
+    border: transparent 1px solid;
+
+}
+
+.memberAddress li button > i {
+    font-size: 150%;
+    vertical-align: center;
+    color: #73B4BA;
+
+}
+
+.memberAddress li > button:hover, .memberCarrier div button > i:hover {
+    cursor: pointer;
+    background-color: #F5F5F5;
+    color: #FAC792;
+    border-radius: 20px;
 }
