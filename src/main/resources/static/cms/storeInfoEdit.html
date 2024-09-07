@@ -143,20 +143,7 @@
               </select>
             </div>
 
-            <div class="m-3">
 
-              <div class="form-check form-check-inline">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  value="option2"
-                  id="iscreditcard"
-                />
-                <label class="form-check-label" for="inlineCheckbox2"
-                  >信用卡</label
-                >
-              </div>
-            </div>
             <div class="m-3">
               <label class="form-label">商標</label>
               <input
@@ -292,7 +279,7 @@
 
 
 
-        let iscreditcard = document.querySelector("#iscreditcard");
+
 
         let logo = document.querySelector("#logo");
 
@@ -322,9 +309,7 @@
               isdelivery.checked = true;
             }
 
-            if (data.isCreditCard) {
-              iscreditcard.checked = true;
-            }
+
             deliverymoney.value = data.deliveryMoney;
             distance.value = data.deliveryDistance;
             mail.value = data.email;
@@ -368,9 +353,7 @@
 
 
 
-            iscreditcard = document.querySelector("#iscreditcard").checked
-              ? true
-              : false;
+
 
             logo = document.querySelector("#logo");
             //讀取位元組
@@ -394,7 +377,7 @@
             contactphone = document.querySelector("#contactphone").value;
             //holiday 另外處理
 
-            let formData = new FormData();
+            // let formData = new FormData();
             // formData.append("storeId", sotreid.split("=")[1]);
             // formData.append("storePhone", storephone);
             // formData.append(
@@ -410,7 +393,7 @@
             // formData.append("deliveryMoney", deliverymoney);
             // formData.append("isTakeOrders", istakeorders);
 
-            // formData.append("isCreditCard", iscreditcard);
+
             // formData.append("logo", logo.files.length > 0 ? bytes : null); // 处理文件上传
             // formData.append("email", mail);
             // formData.append("contactPerson", contactperson);
@@ -428,7 +411,7 @@
               deliveryMoney: deliverymoney,
               isTakeOrders: istakeorders,
 
-              isCreditCard: iscreditcard,
+
               logo: imgfile,
               email: mail,
               contactPerson: contactperson,
