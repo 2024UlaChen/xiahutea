@@ -20,12 +20,6 @@
       integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
       crossorigin="anonymous"
     />
-    <!-- weien-chat -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
-    />
-    <link rel="stylesheet" href="css/weien-chat.css" />
   </head>
   <body class="hold-transition sidebar-mini">
     <div class="wrapper">
@@ -149,30 +143,7 @@
               </select>
             </div>
 
-            <div class="m-3">
-              <div class="form-check form-check-inline">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  value="option1"
-                  id="iscash"
-                />
-                <label class="form-check-label" for="inlineCheckbox1"
-                  >現金</label
-                >
-              </div>
-              <div class="form-check form-check-inline">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  value="option2"
-                  id="iscreditcard"
-                />
-                <label class="form-check-label" for="inlineCheckbox2"
-                  >信用卡</label
-                >
-              </div>
-            </div>
+
             <div class="m-3">
               <label class="form-label">商標</label>
               <input
@@ -239,6 +210,14 @@
               <div class="col-2"></div>
             </div>
           </form>
+          <form
+            action="/store/upload"
+            method="POST"
+            enctype="multipart/form-data"
+          >
+            <input type="file" name="img" />
+            <input type="submit" value="提交" />
+          </form>
         </div>
       </div>
 
@@ -249,6 +228,7 @@
 
     <!-- jQuery -->
     <script src="plugins/jquery/jquery.min.js"></script>
+    <script src="js/storegeneral.js"></script>
     <!-- Bootstrap 4 -->
     <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- AdminLTE App -->
@@ -260,8 +240,7 @@
       integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
       crossorigin="anonymous"
     ></script>
-    <script src="js/storegeneral.js"></script>
-    <script type="module" src="js/chat-import.js"></script>
+
     <!--sweetalert2-->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
@@ -298,9 +277,9 @@
 
         let distance = document.querySelector("#distance");
 
-        let iscash = document.querySelector("#iscash");
 
-        let iscreditcard = document.querySelector("#iscreditcard");
+
+
 
         let logo = document.querySelector("#logo");
 
@@ -329,12 +308,8 @@
             if (data.isDelivery) {
               isdelivery.checked = true;
             }
-            if (data.isCash) {
-              iscash.checked = true;
-            }
-            if (data.isCreditCard) {
-              iscreditcard.checked = true;
-            }
+
+
             deliverymoney.value = data.deliveryMoney;
             distance.value = data.deliveryDistance;
             mail.value = data.email;
@@ -376,21 +351,22 @@
 
             distance = document.querySelector("#distance").value;
 
-            iscash = document.querySelector("#iscash").checked ? true : false;
 
-            iscreditcard = document.querySelector("#iscreditcard").checked
-              ? true
-              : false;
+
+
 
             logo = document.querySelector("#logo");
             //讀取位元組
             let reader = new FileReader();
-            let bytes = new Uint8Array();
+            let imgfile = "";
 
             if (logo.files.length > 0) {
               reader.readAsArrayBuffer(logo.files[0]); //讀取檔案
               reader.addEventListener("load", function () {
-                bytes = new Uint8Array(reader.result); //位元組陣列
+                console.log("位元組陣列");
+                console.log(reader.result);
+                imgfile = Array.from(new Uint8Array(reader.result));
+                console.log(imgfile);
               });
             }
 
@@ -401,35 +377,55 @@
             contactphone = document.querySelector("#contactphone").value;
             //holiday 另外處理
 
-            let formData = new FormData();
-            formData.append("storeId", sotreid.split("=")[1]);
-            formData.append("storePhone", storephone);
-            formData.append(
-              "openingHours",
-              countStr(openingtime) == 2 ? openingtime : openingtime + ":00"
-            );
-            formData.append(
-              "closingHours",
-              countStr(closingtime) == 2 ? closingtime : closingtime + ":00"
-            );
-            formData.append("isDelivery", isdelivery);
-            formData.append("deliveryDistance", distance);
-            formData.append("deliveryMoney", deliverymoney);
-            formData.append("isTakeOrders", istakeorders);
-            formData.append("isCash", iscash);
-            formData.append("isCreditCard", iscreditcard);
-            formData.append("logo", logo.files.length > 0 ? bytes : null); // 处理文件上传
-            formData.append("email", mail);
-            formData.append("contactPerson", contactperson);
-            formData.append("contactPhone", contactphone);
+            // let formData = new FormData();
+            // formData.append("storeId", sotreid.split("=")[1]);
+            // formData.append("storePhone", storephone);
+            // formData.append(
+            //   "openingHours",
+            //   countStr(openingtime) == 2 ? openingtime : openingtime + ":00"
+            // );
+            // formData.append(
+            //   "closingHours",
+            //   countStr(closingtime) == 2 ? closingtime : closingtime + ":00"
+            // );
+            // formData.append("isDelivery", isdelivery);
+            // formData.append("deliveryDistance", distance);
+            // formData.append("deliveryMoney", deliverymoney);
+            // formData.append("isTakeOrders", istakeorders);
+
+
+            // formData.append("logo", logo.files.length > 0 ? bytes : null); // 处理文件上传
+            // formData.append("email", mail);
+            // formData.append("contactPerson", contactperson);
+            // formData.append("contactPhone", contactphone);
+            let id = sotreid.split("=")[1];
+            let model = {
+              storeId: id,
+              storePhone: storephone,
+              openingHours:
+                countStr(openingtime) == 2 ? openingtime : openingtime + ":00",
+              closingHours:
+                countStr(closingtime) == 2 ? closingtime : closingtime + ":00",
+              isDelivery: isdelivery,
+              deliveryDistance: distance,
+              deliveryMoney: deliverymoney,
+              isTakeOrders: istakeorders,
+
+
+              logo: imgfile,
+              email: mail,
+              contactPerson: contactperson,
+              contactPhone: contactphone,
+            };
 
             $.ajax({
               url: "/store/editstoreinfo",
               method: "POST",
-              processData: false,
-              contentType: false,
-              data: formData,
+              contentType: "application/json",
+              dataType: "JSON",
+              data: JSON.stringify(model),
               success: function () {
+                console.log(JSON.stringify(model));
                 Swal.fire({
                   icon: "success",
                   title: "更新成功",
