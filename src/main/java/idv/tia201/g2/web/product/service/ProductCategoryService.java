@@ -6,8 +6,9 @@ import idv.tia201.g2.web.product.vo.ProductCategory;
 import java.util.List;
 
 public interface ProductCategoryService {
-    List<ProductCategory> getAllProducts();
+    List<ProductCategory> getAllCategories();
     ProductCategory getProductCategoryById(Integer id);
-    boolean insertAndUpdateProduct(ProductCategory productCategory);
-    boolean deleteCategory(Integer id);
+    ProductCategory addCategory(ProductCategory productCategory);
+    void deleteCategory(Integer categoryId);
+
 }

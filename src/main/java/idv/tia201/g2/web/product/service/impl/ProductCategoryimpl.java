@@ -15,7 +15,7 @@ public class ProductCategoryimpl implements ProductCategoryService {
     private ProductCategoryDao productCategoryDao;
 
     @Override
-    public List<ProductCategory> getAllProducts() {
+    public List<ProductCategory> getAllCategories() {
 
         return productCategoryDao.findAll();
     }
@@ -26,20 +26,16 @@ public class ProductCategoryimpl implements ProductCategoryService {
     }
 
     @Override
-    public boolean insertAndUpdateProduct(ProductCategory productCategory) {
-        try {
-            productCategoryDao.save(productCategory);
-            return true;
-        } catch (Exception exp) {
-            return false;
-        }
+    public ProductCategory addCategory(ProductCategory productCategory) {
+        return productCategoryDao.save(productCategory);
     }
 
 
 
-    @Override
-    public boolean deleteCategory(Integer id) {
 
-        return false;
+    @Override
+    public void deleteCategory(Integer categoryId) {
+        productCategoryDao.deleteById(categoryId);
+
     }
 }

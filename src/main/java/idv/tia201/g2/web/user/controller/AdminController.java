@@ -14,7 +14,7 @@ public class AdminController {
 
 //    @ResponseBody
     @PostMapping("/login")
-    public Administrator adminlogin(@RequestBody Administrator admin) {
+    public Administrator adminlogin(Administrator admin) {
         admin.setSuccessful(false);
         admin.setMessage("無會員資料");
         admin = adminService.login(admin);
