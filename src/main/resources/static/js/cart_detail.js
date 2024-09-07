@@ -45,9 +45,9 @@ document.addEventListener("DOMContentLoaded",function(){
 
 
   //取貨方式
+  let pick_up_el = document.getElementsByClassName('pick-up')[0];
   let pick_up_input_el = document.getElementsByClassName("pick-up-input")[0];
-  let carry_out_radio_el = document.getElementsByClassName("carry-out-radio")[0];
-  let address_el = document.getElementsByClassName("address")[0];
+
   //時間選擇
   let picker_el = document.getElementsByClassName("pickuper")[0];
 
@@ -215,25 +215,7 @@ document.addEventListener("DOMContentLoaded",function(){
         document.body.style.paddingRight = '0px';
       });
 
-      pick_up_input_el.addEventListener("click", function () {
-        address_el.disabled = true;
-      })
-      carry_out_radio_el.addEventListener("click", function () {
-        address_el.disabled = false;
-        address_el.focus();
-      })
-      address_el.addEventListener("focus", function () {
-        // 清空 placeholder
-        address_el.placeholder = "";
-      });
 
-// 當輸入框失去焦點時
-      address_el.addEventListener("blur", function () {
-        // 如果輸入框為空，恢復 placeholder
-        if (address_el.value === "") {
-          address_el.placeholder = "請輸入地址";
-        }
-      });
       //時間選擇
       picker_el.addEventListener("focus", function () {
         picker_el.classList.add("focus-border");
@@ -472,8 +454,9 @@ document.addEventListener("DOMContentLoaded",function(){
             console.log('Products:', products);
             //抓商店ID
             const storeId = products[0].productStoreId;
+            // console.log('STOREID:', storeId);
             //獲得商店資料
-            // findstorebyid(storeId);
+            findstorebyid(storeId);
           })
           .catch(error => {
             console.error('Error:', error);
@@ -486,12 +469,26 @@ document.addEventListener("DOMContentLoaded",function(){
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ storeId })
+          body: JSON.stringify(storeId)
         })
-            .then(response => response.json())
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('回傳資料異常');
+              }
+              return response.text();  // 先將響應內容作為文本讀取
+            })
+            .then(text => {
+              if (text.trim() === '') {
+                throw new Error('無回傳資料');
+              }
+              return JSON.parse(text);  // 然後解析 JSON
+            })
             .then(store => {
+              if (!store) {
+                throw new Error('找不到商店資料');
+              }
               console.log('Store Details:', store);
-              store_name_el.innerHTML=store.storeName;
+              store_name_el.innerHTML = store.storeName || 'Unknown Store';
               updateDeliveryOptions(store.isDelivery);
             })
             .catch(error => {
@@ -510,11 +507,33 @@ document.addEventListener("DOMContentLoaded",function(){
                      外送
                 </label>
           </div>
-               <div class="carry-out-address">
-                   <input type="text" class="address" placeholder="請輸入地址" maxlength="255">
-               </div>
+           <div class="carry-out-address">
+               <input type="text" class="address" placeholder="請輸入地址" maxlength="255" disabled>
+           </div>
             `;
-        recevier_method_el.appendChild(carrtoutdiv);
+        pick_up_el.insertAdjacentElement('afterend', carrtoutdiv);
+        //設定標籤&綁定事件
+        let carry_out_radio_el = document.getElementsByClassName("carry-out-radio")[0];
+        let address_el = document.getElementsByClassName("address")[0];
+        carry_out_radio_el.addEventListener("click", function () {
+          address_el.disabled = false;
+          address_el.focus();
+        })
+        address_el.addEventListener("focus", function () {
+          // 清空 placeholder
+          address_el.placeholder = "";
+        });
+        // 當輸入框失去焦點時
+        address_el.addEventListener("blur", function () {
+          // 如果輸入框為空，恢復 placeholder
+          if (address_el.value === "") {
+            address_el.placeholder = "請輸入地址";
+          }
+        });
+        //點擊自取選項關閉地址輸入框
+        pick_up_input_el.addEventListener("click", function () {
+          address_el.disabled = true;
+        })
       }
     }
     //判斷冰塊
