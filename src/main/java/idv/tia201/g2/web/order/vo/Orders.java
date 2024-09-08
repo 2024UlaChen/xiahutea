@@ -1,5 +1,6 @@
 package idv.tia201.g2.web.order.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import idv.tia201.g2.core.pojo.Core;
 import idv.tia201.g2.web.coupon.vo.CustomerCoupons;
 import idv.tia201.g2.web.member.vo.Member;
@@ -102,6 +103,7 @@ public class Orders extends Core {
 
     @Column(name = "receiver_datetime", updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss", timezone = "GMT+8")
     private Timestamp receiverDatetime; // 預計取貨時間
 
     @Column(name = "order_score", insertable = false, updatable = false)
@@ -110,7 +112,11 @@ public class Orders extends Core {
     @Column(name = "order_feedback", insertable = false, updatable = false)
     private String orderFeedback; // 訂單評分建議
 
+    @Column(name = "order_note", updatable = false)
+    private  String orderNote;
+
     @Column(name = "order_creat_datetime", updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss", timezone = "GMT+8")
     private Timestamp orderCreateDatetime; // 建立日期時間
 }
