@@ -79,49 +79,19 @@ document.addEventListener("DOMContentLoaded",function(){
   let btn_submit_order_el = document.getElementsByClassName("btn-submit-order")[0];
   let btn_modal_close_el = document.getElementsByClassName("btn_modal_close")[0];
 
+  //進入購物結帳頁面先獲得localstorage資料(購物車)
+  const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
   //一進到結帳選擇頁面先用localstorage抓DB以及獲取目前登入用戶ID
   //TODO 獲得用戶ID以抓取資料渲染
   // const customerid = localStorage.getItem('customerId');
   // fetch(`/cart/checkoutlist/{customerID}`)
 
-  const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+
   // // 把localstorage資料存到後端資料庫，並且抓取資料渲染
   // saveallproduct();
   // // 提取所有商品的 productId用來渲染網頁
   const productIds = cartItems.map(item => item.productId);
   findproductbyid();
-  // console.log(cartItems);
-  //遍歷取得的物件，動態生成標籤
-  // cartItems.forEach(item =>{
-  //   // fetchProductByProductId(item.product_Id);
-  //   const itemContent = document.createElement('div');
-  //   const cartItem = document.createElement('div');
-  //   itemContent.className = 'item-content';
-  //   cartItem.className = 'cart-item';
-  //   cartItem.innerHTML = `
-  //       <p class="product-name">${item.product_name}</p>
-  //       <div class="product-buttons">
-  //           <button class="edit-btn"><i class="fas fa-edit"></i></button>
-  //           <button class="delete-btn"><i class="fas fa-trash"></i></button>
-  //       </div>
-  //           `;
-  //   itemContent.appendChild(cartItem);
-  //   //商品細項:甜度冰塊單價...等
-  //   const productDetail = document.createElement('div');
-  //   productDetail.className = 'product-detail';
-  //   productDetail.innerHTML = `
-  //       <div class="detail-item" data-type="sugar">${getSugarLevel(item)}/</div>
-  //       <div class="detail-item" data-type="ice">${getIceLevel(item)}/</div>
-  //       <div class="detail-item" data-type="add-ons">${item.add_ons || '無'}/</div>
-  //       <div class="detail-item" data-type="price">$${item.product_price}/ </div>
-  //       <div class="detail-item" data-type="size">${getSize(item.size)}</div>
-  //       <div class="detail-item" data-type="quantity"></div>
-  //       `;
-  //   itemContent.appendChild(productDetail);
-  //   item_detail_el.appendChild(itemContent);
-  //     }
-  // )
-
 
   //********************************************第一頁按鈕事件*************************************
     //結帳頁面購物內容來自於購物車(localstorage)
@@ -440,7 +410,7 @@ document.addEventListener("DOMContentLoaded",function(){
     //         console.error('Error:', error);
     //       });
     // }
-    //用全部商品ID抓商品資料
+    //用全部localStorage商品ID抓商品資料
     function findproductbyid(){
       fetch('/cart/checkoutlist/findByproductIds', {
         method: 'POST',
@@ -449,22 +419,70 @@ document.addEventListener("DOMContentLoaded",function(){
         },
         body: JSON.stringify(productIds)
       })
-          .then(response => response.json())
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('回應異常 回應代碼: ' + response.status);
+            }
+            return response.json();
+          })
           .then(products => {
+            // 检查是否有返回商品
+            if (!products || products.length === 0) {
+              throw new Error('無商品或對應的商品');
+            }
             console.log('Products:', products);
-            //抓商店ID
+            //用抓到的商品資料配合localstorage渲染頁面
+            // renderproductdetail();
+            // 检查商品資料中是否包含商店ID
             const storeId = products[0].productStoreId;
-            // console.log('STOREID:', storeId);
-            //獲得商店資料
+            if (!storeId) {
+              throw new Error('商品缺乏商店編號');
+            }
+            console.log('storeId:',storeId);
+            //獲取商店資訊
             findstorebyid(storeId);
           })
           .catch(error => {
-            console.error('Error:', error);
+            console.error('獲取商品時出錯:', error);
+            alert('進入購物結帳失敗');
           });
     }
+    //用Localstotage中的購物車商品和返回的商品資訊生成商品明細
+    function renderproductdetail(){
+      //遍歷取得的物件，動態生成標籤
+      // cartItems.forEach(item =>{
+      //   const itemContent = document.createElement('div');
+      //   const cartItem = document.createElement('div');
+      //   itemContent.className = 'item-content';
+      //   cartItem.className = 'cart-item';
+      //   cartItem.innerHTML = `
+      //       <p class="product-name">${item.product_name}</p>
+      //       <div class="product-buttons">
+      //           <button class="edit-btn"><i class="fas fa-edit"></i></button>
+      //           <button class="delete-btn"><i class="fas fa-trash"></i></button>
+      //       </div>
+      //           `;
+      //   itemContent.appendChild(cartItem);
+      //   //商品細項:甜度冰塊單價...等
+      //   const productDetail = document.createElement('div');
+      //   productDetail.className = 'product-detail';
+      //   productDetail.innerHTML = `
+      //       <div class="detail-item" data-type="sugar">${getSugarLevel(item)}/</div>
+      //       <div class="detail-item" data-type="ice">${getIceLevel(item)}/</div>
+      //       <div class="detail-item" data-type="add-ons">${item.add_ons || '無'}/</div>
+      //       <div class="detail-item" data-type="price">$${item.product_price}/ </div>
+      //       <div class="detail-item" data-type="size">${getSize(item.size)}</div>
+      //       <div class="detail-item" data-type="quantity"></div>
+      //       `;
+      //   itemContent.appendChild(productDetail);
+      //   item_detail_el.appendChild(itemContent);
+      //     }
+      // )
+    }
+
     //用商品得到的商店ID來抓店家資訊
     function findstorebyid(storeId){
-        fetch('/cart/checkoutlist/findBystoreId',{
+        fetch('/cart/checkoutlist/findByStoreId',{
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -473,15 +491,9 @@ document.addEventListener("DOMContentLoaded",function(){
         })
             .then(response => {
               if (!response.ok) {
-                throw new Error('回傳資料異常');
+                throw new Error('回傳商店資料異常');
               }
-              return response.text();  // 先將響應內容作為文本讀取
-            })
-            .then(text => {
-              if (text.trim() === '') {
-                throw new Error('無回傳資料');
-              }
-              return JSON.parse(text);  // 然後解析 JSON
+              return response.json();  // 先將響應內容作為文本讀取
             })
             .then(store => {
               if (!store) {
@@ -498,9 +510,9 @@ document.addEventListener("DOMContentLoaded",function(){
     //判斷店家是否有外送選項
     function updateDeliveryOptions(isDelivery){
       if (isDelivery){
-        const carrtoutdiv = document.createElement('div');
-        carrtoutdiv.className = 'carry-out';
-        carrtoutdiv.innerHTML=`
+        const carryoutdiv = document.createElement('div');
+        carryoutdiv.className = 'carry-out';
+        carryoutdiv.innerHTML=`
           <div class="carry-out-selection">
               <input class="carry-out-radio" type="radio" name="delivery" id="carry-out">
                 <label class="carry-out-label" for="carry-out" style="padding-top: 10px">
@@ -511,7 +523,7 @@ document.addEventListener("DOMContentLoaded",function(){
                <input type="text" class="address" placeholder="請輸入地址" maxlength="255" disabled>
            </div>
             `;
-        pick_up_el.insertAdjacentElement('afterend', carrtoutdiv);
+        pick_up_el.insertAdjacentElement('afterend', carryoutdiv);
         //設定標籤&綁定事件
         let carry_out_radio_el = document.getElementsByClassName("carry-out-radio")[0];
         let address_el = document.getElementsByClassName("address")[0];
