@@ -26,6 +26,7 @@ public interface MemberService {
 
     //取得單一會員資料
     Member getMemberInfo(Integer memberId);
+
     //    列出所有會員地址
     List<MemberAddress> findAllMemberAdress();
 

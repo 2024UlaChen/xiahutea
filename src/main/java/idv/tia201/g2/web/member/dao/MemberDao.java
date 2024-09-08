@@ -10,7 +10,7 @@ public interface MemberDao {
 
     Member findByMemberId(int memberId);
 
-//     Member findByMemberPhone(String phone);
+     Member findByMemberPhone(String phone);
 
 //     Member findByMemberEmail(String email);
 

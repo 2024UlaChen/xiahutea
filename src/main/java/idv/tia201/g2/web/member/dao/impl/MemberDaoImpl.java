@@ -24,6 +24,12 @@ public class MemberDaoImpl implements MemberDao {
     }
 
     @Override
+    public Member findByMemberPhone(String phone) {
+        Member member = session.get(Member.class,phone);
+        return member;
+    }
+
+    @Override
     public Member findMemberForLogin(String username, String password) {
         return null;
     }
