@@ -8,8 +8,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -164,6 +166,16 @@ public class StoreServiceImpl implements StoreService {
 
 
 
+    }
+
+    @Override
+    public Store editLogoById(MultipartFile file, Integer storeId) throws IOException {
+        Store store = findStoreById(storeId);
+        store.setLogo(file.getBytes());
+        storeDao.save(store);
+
+
+        return store;
     }
 
 }

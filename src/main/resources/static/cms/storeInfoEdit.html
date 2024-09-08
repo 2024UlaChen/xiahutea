@@ -144,16 +144,7 @@
             </div>
 
 
-            <div class="m-3">
-              <label class="form-label">商標</label>
-              <input
-                readonly
-                type="file"
-                class="form-control"
-                value=""
-                id="logo"
-              />
-            </div>
+
             <div class="m-3">
               <label class="form-label">信箱</label>
               <input
@@ -215,8 +206,10 @@
             method="POST"
             enctype="multipart/form-data"
           >
+            <input type="hidden" value="" id="storeIdForImage" name="storeId">
             <input type="file" name="img" />
             <input type="submit" value="提交" />
+            <img src="" id="storeimg">
           </form>
         </div>
       </div>
@@ -279,15 +272,12 @@
 
 
 
-
-
-        let logo = document.querySelector("#logo");
-
         let mail = document.querySelector("#mail");
 
         let contactperson = document.querySelector("#contactperson");
 
         let contactphone = document.querySelector("#contactphone");
+
 
         $.ajax({
           url: `/store/storeinfo/${sotreid.split("=")[1]}`,
@@ -295,6 +285,7 @@
           dataType: "json",
           async: false,
           success: function (data) {
+            console.log(data);
             vat.value = data.vat;
             storename.value = data.storeName;
             registerday.value = data.registerDay.split("T")[0];
@@ -302,12 +293,23 @@
             storephone.value = data.storePhone;
             openingtime.value = data.openingHours;
             closingtime.value = data.closingHours;
+
+            storeImage = document.querySelector('#storeimg');
+            const base64Img = data.log;
+
+
+
+            storeImage.src = `data:image/png;base64,${base64Img}`;
+
+
+
             if (data.isTakeOrders) {
               istakeorders.checked = true;
             }
             if (data.isDelivery) {
               isdelivery.checked = true;
             }
+
 
 
             deliverymoney.value = data.deliveryMoney;
@@ -355,20 +357,10 @@
 
 
 
-            logo = document.querySelector("#logo");
-            //讀取位元組
-            let reader = new FileReader();
-            let imgfile = "";
 
-            if (logo.files.length > 0) {
-              reader.readAsArrayBuffer(logo.files[0]); //讀取檔案
-              reader.addEventListener("load", function () {
-                console.log("位元組陣列");
-                console.log(reader.result);
-                imgfile = Array.from(new Uint8Array(reader.result));
-                console.log(imgfile);
-              });
-            }
+
+
+
 
             mail = document.querySelector("#mail").value;
 
@@ -394,7 +386,7 @@
             // formData.append("isTakeOrders", istakeorders);
 
 
-            // formData.append("logo", logo.files.length > 0 ? bytes : null); // 处理文件上传
+
             // formData.append("email", mail);
             // formData.append("contactPerson", contactperson);
             // formData.append("contactPhone", contactphone);
@@ -412,7 +404,7 @@
               isTakeOrders: istakeorders,
 
 
-              logo: imgfile,
+
               email: mail,
               contactPerson: contactperson,
               contactPhone: contactphone,
