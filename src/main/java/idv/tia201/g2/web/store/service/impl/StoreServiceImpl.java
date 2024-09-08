@@ -8,8 +8,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -69,8 +71,6 @@ public class StoreServiceImpl implements StoreService {
             store.setDeliveryMoney(null);
             store.setIsTakeOrders(null);
             store.setScore(null);
-            store.setIsCash(null);
-            store.setIsCreditCard(null);
             store.setLogo(null);
             store.setEmail(null);
             store.setPassword(null);
@@ -134,8 +134,6 @@ public class StoreServiceImpl implements StoreService {
         oldDate.setIsDelivery(store.getIsDelivery());
         oldDate.setDeliveryDistance(store.getDeliveryDistance());
         oldDate.setIsTakeOrders(store.getIsTakeOrders());
-        oldDate.setIsCash(store.getIsCash());
-        oldDate.setIsCreditCard(store.getIsCreditCard());
         oldDate.setLogo(store.getLogo());
         oldDate.setEmail(store.getEmail());
         return storeDao.save(oldDate);
@@ -159,6 +157,25 @@ public class StoreServiceImpl implements StoreService {
             oldDate.setExpiredDate(now);
         }
         return storeDao.save(oldDate);
+    }
+
+    @Override
+    public byte[] findLogoById(Integer id) {
+        Store store = findStoreById(id);
+        return store.getLogo();
+
+
+
+    }
+
+    @Override
+    public Store editLogoById(MultipartFile file, Integer storeId) throws IOException {
+        Store store = findStoreById(storeId);
+        store.setLogo(file.getBytes());
+        storeDao.save(store);
+
+
+        return store;
     }
 
 }

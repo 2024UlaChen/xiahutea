@@ -27,15 +27,16 @@ public class ProductCategoryController {
 
    @PostMapping("add")
    public ResponseEntity<ProductCategory> addCategory(@RequestBody ProductCategory productCategory) {
-      ProductCategory savedCategory = productCategoryService.addCategory(productCategory);
-      return ResponseEntity.ok(savedCategory);
+      productCategoryService.addCategory(productCategory);
+      return ResponseEntity.ok(productCategory);
    }
+
 
    //http://localhost:8080/categories/delete/3
    @DeleteMapping("delete/{id}")
    public ResponseEntity<Void> deleteCategory(@PathVariable("id") Integer categoryId) {
-      productCategoryService.deleteCategory(categoryId); // 刪除指定 ID 的分類
-      return ResponseEntity.noContent().build(); //HTTP 204 No Content 成功回應碼表示請求已成功，但用戶端不需要離開當前頁面
+      productCategoryService.removeCategory(categoryId); // 刪除指定 ID 的分類
+      return ResponseEntity.noContent().build(); //HTTP 204 No Content 成功回應碼表示請求已成功，但用戶端不需離開當前頁面
    }
 
 

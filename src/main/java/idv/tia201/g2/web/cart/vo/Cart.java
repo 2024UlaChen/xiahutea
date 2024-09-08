@@ -14,6 +14,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Cart {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "cart_item_id",updatable = false)
     private Integer cartItemId;
     @Column(name ="cart_item_customer_id")
@@ -22,10 +23,9 @@ public class Cart {
     private Integer productId;
     private String sugar;
     private String temperature;
-    @Column(name="add_materials")
+    @Column(name="add_materials",nullable = true)
     private String addMaterials;
     private Integer quantity;
     @Column(name="unit_price")
     private Integer unitPrice;
-
 }
