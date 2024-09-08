@@ -21,16 +21,16 @@ public interface MemberDao {
     List<MemberAddress> findMemberAddressByMemberId(String memberId);
 
     //update
-    int updateMemberInfo(Member member);
+    boolean updateMemberInfo(Member member);
 
-    int updateMemberAddress(MemberAddress memberAddress);
+    boolean updateMemberAddress(MemberAddress memberAddress);
 
     //delete
     int deleteByMemberAddressId(int memberId);
 
     //create
-    int createMember(Member member);
+    boolean createMember(Member member);
 
-    int createMemberAddress(MemberAddress memberAddress);
+    boolean createMemberAddress(MemberAddress memberAddress);
 
 }

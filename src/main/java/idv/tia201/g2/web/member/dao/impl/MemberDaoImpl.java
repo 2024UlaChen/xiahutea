@@ -39,13 +39,15 @@ public class MemberDaoImpl implements MemberDao {
     }
 
     @Override
-    public int updateMemberInfo(Member member) {
-        return 0;
+    public boolean updateMemberInfo(Member member) {
+        session.merge(member);
+        return true;
     }
 
     @Override
-    public int updateMemberAddress(MemberAddress memberAddress) {
-        return 0;
+    public boolean updateMemberAddress(MemberAddress memberAddress) {
+        session.merge(memberAddress);
+        return true;
     }
 
     @Override
@@ -56,12 +58,14 @@ public class MemberDaoImpl implements MemberDao {
     }
 
     @Override
-    public int createMember(Member member) {
-        return 0;
+    public boolean createMember(Member member) {
+        session.persist(member);
+        return true;
     }
 
     @Override
-    public int createMemberAddress(MemberAddress memberAddress) {
-        return 0;
+    public boolean createMemberAddress(MemberAddress memberAddress) {
+        session.persist(memberAddress);
+        return true;
     }
 }

@@ -74,6 +74,10 @@ public class MemberServiceImpl implements MemberService {
     }
 
 
-    //todo  getMemberInfo
+    //todo
+    @Override
+    public Member getMemberInfo(Integer memberId) {
+        return null;
+    }
 
 }
