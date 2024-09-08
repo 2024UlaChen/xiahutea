@@ -19,15 +19,12 @@ public class OrderServiceImpl implements OrderService {
     // todo
     // 發票api
 
-    //缺訂單備註的db
-
     @Override
     public Orders addOrder(Orders order) {
         if(isEmpty(order.getReceiverAddress()) && isEmpty(order.getReceiverDatetime())){
             order.setReceiverAddress("未輸入取貨資訊");
             order.setSuccessful(false);
             return order;
-
         }
         if(isEmpty(order.getReceiverName()) || isEmpty(order.getReceiverPhone())){
             order.setReceiverAddress("未輸入聯絡資訊");
