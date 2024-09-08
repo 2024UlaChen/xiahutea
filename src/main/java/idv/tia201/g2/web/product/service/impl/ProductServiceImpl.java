@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ProductServiceimpl implements ProductService {
+public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductDao productDao;
 
@@ -18,31 +18,24 @@ public class ProductServiceimpl implements ProductService {
 
         return productDao.findAll();
     }
-
+//獲取產品名字
     public List<Product> getProductsByProductName(String productName) {
         return productDao.findByProductNameContaining(productName);
 
     }
-
+//新增
     @Override
-    public boolean insertAndUpdateProduct(Product product) {
-        try {
-            productDao.save(product);
-            return true;
-        } catch (Exception exp) {
-            return false;
-        }
+    public void addProduct(Product product) {
+
     }
-
+//刪除
     @Override
-    public boolean deleteProduct(Integer id) {
-        try {
-            Product product = new Product();
-            product.setProductId(id);
-            productDao.delete(product);
-            return true;
-        } catch (Exception exp) {
-            return false;
+    public boolean removeProduct(Integer productId) {
+       if(productDao.existsById(productId)){
+           productDao.deleteById(productId);
+           return true;
+        }else{
+           return false;
         }
     }
 }

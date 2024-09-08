@@ -26,21 +26,19 @@ public class ProductAddController {
     @Autowired
     private ProductService productService;
 
-    /**
-     * 新增 與 更新 商品資料
-     * @param product
-     * @return
-     */
-    @PostMapping("addUpdateProduct")
-    public boolean addUpdateProduct(@RequestBody Product product) {
-        boolean flagAddUpdateProduct = false;
-        if (product.getProductId() != null){
-            flagAddUpdateProduct = productService.insertAndUpdateProduct(product);
-        }
-        // 返 flagAddUpdateProduct 回前端
-        return flagAddUpdateProduct;
-    }
-}
+
+//    @PostMapping("addUpdateProduct")
+//    public boolean addUpdateProduct(@RequestBody Product product) {
+////        boolean flagAddUpdateProduct = false;
+////        if (product.getProductId() != null){
+////            flagAddUpdateProduct = productService.addUpdateProduct(product);
+////        }
+////        // 返 flagAddUpdateProduct 回前端
+////        return flagAddUpdateProduct;
+////    }
+//
+//
+//    }
 
 /**
  * 查詢 商品資料
@@ -63,7 +61,7 @@ public class ProductAddController {
 //    String productListJSON;
 //    ObjectMapper objectMapper = new ObjectMapper();
 //    try {
-//        // 将 List<Product> 转换为 JSON 字符串
+//        //
 //        productListJSON = objectMapper.writeValueAsString(productsList);
 //    } catch (JsonProcessingException e) {
 //        e.printStackTrace();
@@ -73,3 +71,4 @@ public class ProductAddController {
 //    return productListJSON;
 //}
 //
+}

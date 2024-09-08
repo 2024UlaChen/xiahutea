@@ -8,8 +8,8 @@ public interface ProductService {
 
     List<Product> getAllProducts();
     List<Product> getProductsByProductName(String productName);
-    boolean insertAndUpdateProduct(Product product);
-    boolean deleteProduct(Integer id);
+   void addProduct(Product product);
+   boolean removeProduct(Integer productId);
 
 }
 
