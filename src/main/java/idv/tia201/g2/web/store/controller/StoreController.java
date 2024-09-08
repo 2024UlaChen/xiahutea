@@ -42,8 +42,9 @@ public class StoreController {
 
 
     @PostMapping("/update")
-    public Store Update(@RequestBody Store store){
+    public Store Update(@RequestBody Store store)  {
         Store storeData = storeService.saveStore(store);//update後丟回去瞧瞧 未完成
+
         return storeData;
     }
 
@@ -82,7 +83,7 @@ public class StoreController {
         Store storeData = storeService.editStoreInfo(store);//update後丟回去瞧瞧 未完成
         return storeData;
     }
-    @PostMapping("upload")
+    @PostMapping("uploadLogo")
     public void uploadLogo(@RequestParam("img")MultipartFile file,@RequestParam("storeId") Integer storeId) throws IOException {
         //see see
 
