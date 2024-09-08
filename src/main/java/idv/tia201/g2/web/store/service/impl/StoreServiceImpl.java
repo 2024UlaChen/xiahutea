@@ -47,10 +47,28 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     public Store loginStore(Store userData) {
-        if(userData.getVat() == null || userData.getPassword() ==null) {return null;}
+        if(userData.getVat() == null || userData.getPassword() ==null) {
+            Store store = new Store();
+            store.setMessage("請輸入帳號和密碼");
+            store.setSuccessful(false);
+            return store;
+        }
         Store data = storeDao.findByVat(userData.getVat());
-        if( data == null  ) {return null;}
-        return data.getPassword().equals(userData.getPassword())? data:null;
+        if( data == null  ) {
+            data = new Store();
+            data.setSuccessful(false);
+            data.setMessage("帳號不存在 在那邊蝦按yo");
+            return data;
+        }
+        if(data.getPassword().equals(userData.getPassword())){
+
+            data.setSuccessful(true);
+            data.setMessage("登入成功");
+            return data;
+        }
+        data.setSuccessful(false);
+        data.setMessage("密碼錯誤");
+        return data;
     }
 
 
@@ -156,6 +174,8 @@ public class StoreServiceImpl implements StoreService {
         }
         return storeDao.save(oldDate);
     }
+
+
 
     @Override
     public byte[] findLogoById(Integer id) {

@@ -4,8 +4,10 @@ import idv.tia201.g2.web.store.service.StoreService;
 
 import idv.tia201.g2.web.store.vo.Store;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.boot.autoconfigure.web.client.RestTemplateAutoConfiguration;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,9 +25,12 @@ public class StoreController {
     // Spring 容器中的 bean。Spring 會自動查找
 
     private final StoreService storeService;
+    private final RestTemplateAutoConfiguration restTemplateAutoConfiguration;
+
     @Autowired
-    public StoreController(StoreService storeService){
+    public StoreController(StoreService storeService, RestTemplateAutoConfiguration restTemplateAutoConfiguration){
         this.storeService = storeService;
+        this.restTemplateAutoConfiguration = restTemplateAutoConfiguration;
     }
     @GetMapping("/home")
     public List<Store> Home(){
@@ -46,9 +51,16 @@ public class StoreController {
     }
 
     @PostMapping("/login")
-    public Store Login(@RequestBody Store store){
+    public Store Login( HttpSession session, @RequestBody Store store){
+        Store data = storeService.loginStore(store);
+        if(data.isSuccessful() ){
+            //設置session
+            session.setAttribute("storeId", data.getStoreId());
+            session.setAttribute("storeName", data.getStoreName());
+            session.setAttribute("storeLogo",data.getLogo());
+        }
 
-        return storeService.loginStore(store);
+        return data;
     }
 
     @PostMapping("/editpwd")
