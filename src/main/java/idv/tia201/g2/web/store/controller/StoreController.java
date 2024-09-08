@@ -80,14 +80,14 @@ public class StoreController {
     }
     @PostMapping("/editstoreinfo")
     public Store EditStoreInfo(@RequestBody Store store){
-        Store storeData = storeService.editStoreInfo(store);//update後丟回去瞧瞧 未完成
+        Store storeData = storeService.editStoreInfo(store);//update後丟回去瞧瞧
         return storeData;
     }
     @PostMapping("uploadLogo")
     public void uploadLogo(@RequestParam("img")MultipartFile file,@RequestParam("storeId") Integer storeId) throws IOException {
         //see see
 
-            storeService.editLogoById(file,storeId);
+            storeService.editLogoByStoreId(file,storeId);
 
 
             //file.transferTo(Paths.get("C:\\Users\\s5880\\Desktop\\TestUpload",file.getOriginalFilename()));

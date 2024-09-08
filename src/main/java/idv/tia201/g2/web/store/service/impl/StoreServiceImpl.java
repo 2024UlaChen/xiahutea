@@ -1,9 +1,11 @@
 package idv.tia201.g2.web.store.service.impl;
 
+import idv.tia201.g2.web.store.dao.StoreCalendarRepository;
 import idv.tia201.g2.web.store.dao.StoreDao;
 import idv.tia201.g2.web.store.model.StoreViewModel;
 import idv.tia201.g2.web.store.service.StoreService;
 import idv.tia201.g2.web.store.vo.Store;
+import idv.tia201.g2.web.store.vo.StoreCalendar;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -15,16 +17,19 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @Service
 public class StoreServiceImpl implements StoreService {
 
     private final StoreDao storeDao;
+    private final StoreCalendarRepository storeCalendarRepository;
     //注入dao
     @Autowired
-    public StoreServiceImpl(StoreDao storeDao) {
+    public StoreServiceImpl(StoreDao storeDao, StoreCalendarRepository storeCalendarRepository) {
         this.storeDao = storeDao;
+        this.storeCalendarRepository = storeCalendarRepository;
     }
 
 
@@ -134,7 +139,7 @@ public class StoreServiceImpl implements StoreService {
         oldDate.setIsDelivery(store.getIsDelivery());
         oldDate.setDeliveryDistance(store.getDeliveryDistance());
         oldDate.setIsTakeOrders(store.getIsTakeOrders());
-        oldDate.setLogo(store.getLogo());
+
         oldDate.setEmail(store.getEmail());
         return storeDao.save(oldDate);
     }
@@ -169,13 +174,29 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public Store editLogoById(MultipartFile file, Integer storeId) throws IOException {
+    public Store editLogoByStoreId(MultipartFile file, Integer storeId) throws IOException {
         Store store = findStoreById(storeId);
         store.setLogo(file.getBytes());
         storeDao.save(store);
 
 
         return store;
+    }
+
+    @Override
+    public void addStoreHolidayByDate(Store store, Date holiday) {
+        StoreCalendar data = new StoreCalendar();
+        data.setStoreHoliday(holiday);
+        data.setStoreId(store.getStoreId());
+        storeCalendarRepository.save(data);
+
+    }
+
+    @Override
+    public List<Store> getStoreListNoWorking(Date holiday) {
+        //取得休息店家
+        return storeCalendarRepository.findByStoreHoliday(holiday);
+
     }
 
 }
