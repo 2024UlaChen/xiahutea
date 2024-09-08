@@ -8,6 +8,7 @@ import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+
 @Repository
 public class MemberDaoImpl implements MemberDao {
     @PersistenceContext
@@ -20,13 +21,13 @@ public class MemberDaoImpl implements MemberDao {
 
     @Override
     public Member findByMemberId(int memberId) {
-        return null;
+        return session.get(Member.class, memberId);
     }
 
     @Override
     public Member findByMemberPhone(String phone) {
-        Member member = session.get(Member.class,phone);
-        return member;
+        //todo revise return data
+        return session.get(Member.class, phone);
     }
 
     @Override

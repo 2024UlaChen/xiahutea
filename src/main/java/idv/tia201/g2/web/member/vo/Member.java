@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Date;
+import java.util.Arrays;
 
 @Entity
 @Setter
@@ -54,4 +55,23 @@ public class Member extends Core {
     @JsonFormat(pattern = "yyyy/MM/dd")
     private Date birthday;
 
+    @Override
+    public String toString() {
+        return "Member{" +
+                "customerId=" + customerId +
+                ", customerAccount='" + customerAccount + '\'' +
+                ", customerPassword='" + customerPassword + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", createDate=" + createDate +
+                ", updateDate=" + updateDate +
+                ", validStatus=" + validStatus +
+                ", customerEmail='" + customerEmail + '\'' +
+                ", customerPhone='" + customerPhone + '\'' +
+                ", customerMoney=" + customerMoney +
+                ", customerCarrier='" + customerCarrier + '\'' +
+                ", customerImg=" + Arrays.toString(customerImg) +
+                ", sex='" + sex + '\'' +
+                ", birthday=" + birthday +
+                '}';
+    }
 }

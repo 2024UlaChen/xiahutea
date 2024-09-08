@@ -33,7 +33,7 @@ public class MemberServiceImpl implements MemberService {
         }
 
 
-        return null;
+        return memberDao.findByMemberId(member.getCustomerId());
     }
 
     @Override

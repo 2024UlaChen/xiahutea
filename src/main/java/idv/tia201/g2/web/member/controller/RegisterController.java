@@ -25,11 +25,12 @@ public class RegisterController extends HttpServlet {
             member.setSuccessful(false);
             return member;
         }
-        if(memberService.isExistMember(member)){
+        if (memberService.isExistMember(member)) {
             member.setMessage("duplicate member data");
             member.setSuccessful(false);
             return member;
         }
+//        System.out.println(memberService.register(member));
         return memberService.register(member);
     }
 
