@@ -8,8 +8,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -47,28 +49,10 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     public Store loginStore(Store userData) {
-        if(userData.getVat() == null || userData.getPassword() ==null) {
-            Store store = new Store();
-            store.setMessage("請輸入帳號和密碼");
-            store.setSuccessful(false);
-            return store;
-        }
+        if(userData.getVat() == null || userData.getPassword() ==null) {return null;}
         Store data = storeDao.findByVat(userData.getVat());
-        if( data == null  ) {
-            data = new Store();
-            data.setSuccessful(false);
-            data.setMessage("帳號不存在 在那邊蝦按yo");
-            return data;
-        }
-        if(data.getPassword().equals(userData.getPassword())){
-
-            data.setSuccessful(true);
-            data.setMessage("登入成功");
-            return data;
-        }
-        data.setSuccessful(false);
-        data.setMessage("密碼錯誤");
-        return data;
+        if( data == null  ) {return null;}
+        return data.getPassword().equals(userData.getPassword())? data:null;
     }
 
 
@@ -175,8 +159,6 @@ public class StoreServiceImpl implements StoreService {
         return storeDao.save(oldDate);
     }
 
-
-
     @Override
     public byte[] findLogoById(Integer id) {
         Store store = findStoreById(id);
@@ -184,6 +166,16 @@ public class StoreServiceImpl implements StoreService {
 
 
 
+    }
+
+    @Override
+    public Store editLogoById(MultipartFile file, Integer storeId) throws IOException {
+        Store store = findStoreById(storeId);
+        store.setLogo(file.getBytes());
+        storeDao.save(store);
+
+
+        return store;
     }
 
 }

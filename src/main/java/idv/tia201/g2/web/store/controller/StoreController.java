@@ -6,13 +6,10 @@ import idv.tia201.g2.web.store.vo.Store;
 
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.boot.autoconfigure.web.client.RestTemplateAutoConfiguration;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.List;
 
 //RestController是組合註解 他等於Controller 加上 ResponseBody 就是一個RestController
@@ -58,10 +55,19 @@ public class StoreController {
             session.setAttribute("storeId", data.getStoreId());
             session.setAttribute("storeName", data.getStoreName());
             session.setAttribute("storeLogo",data.getLogo());
+//            session.setMaxInactiveInterval(3600);//秒為單位  Tomcat預設 30分
         }
 
         return data;
     }
+
+    @GetMapping("getSessionStore")
+    public void GetSession(@SessionAttribute("storeName") String storeName) {
+        //看看上下文現在啥款
+        System.out.println(storeName);
+
+    }
+
 
     @PostMapping("/editpwd")
     public Store EditPwd(@RequestBody Store store){
@@ -77,19 +83,22 @@ public class StoreController {
         return storeData;
     }
     @PostMapping("upload")
-    public void uploadLogo(@RequestParam("img")MultipartFile[] files) throws IOException {
+    public void uploadLogo(@RequestParam("img")MultipartFile file,@RequestParam("storeId") Integer storeId) throws IOException {
         //see see
 
-        for(MultipartFile file : files){
-            byte[] bytes = files[0].getBytes();
+            storeService.editLogoById(file,storeId);
+
+
             //file.transferTo(Paths.get("C:\\Users\\s5880\\Desktop\\TestUpload",file.getOriginalFilename()));
-        }
+
     }
 
     @GetMapping("/img/{storeid}")
     public byte[] Img(@PathVariable Integer storeid){
         return storeService.findLogoById(storeid);
     }
+
+
 
 
 
