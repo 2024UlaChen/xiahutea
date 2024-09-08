@@ -58,7 +58,7 @@ public class RegisterStoreServiceImpl implements RegisterStoreService {
         }
 
         //統編驗證
-        if(!isValidTWBID(store.getVat())){
+        if(!isValidTWBID(store.getVat().trim())){
             store.setMessage("統一編號錯誤");
             return store;
         }
@@ -78,6 +78,7 @@ public class RegisterStoreServiceImpl implements RegisterStoreService {
             Timestamp registerDay = new Timestamp(System.currentTimeMillis());
             store.setRegisterDay(registerDay);
             storeDao.save(store);
+            store.setSuccessful(true);
             store.setMessage("成功加入會員");
         }else {
             store.setMessage("加入失敗，已是會員，若忘記密碼，請聯絡管理員");
