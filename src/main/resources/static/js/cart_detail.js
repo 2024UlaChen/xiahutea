@@ -555,6 +555,7 @@ document.addEventListener("DOMContentLoaded",function(){
   //用Localstotage中的購物車商品和返回的商品資訊生成商品明細
   function renderproductdetail(groupedItems, products){
     // 建立商品ID到商品資訊的映射
+    console.log('分類後購物車商品列表: ',groupedItems)
     const productMap = new Map();
     products.forEach(product => {
       productMap.set(product.productId, {
@@ -582,11 +583,11 @@ document.addEventListener("DOMContentLoaded",function(){
         const productDetail = document.createElement('div');
         productDetail.className = 'product-detail';
         productDetail.innerHTML = `
-          <div class="detail-item" data-type="sugar">${getSugarOption(item)}/</div>
-          <div class="detail-item" data-type="ice">${getIceOption(item)}/</div>
-          <div class="detail-item" data-type="add-ons">${getAddOns(item)}/</div>
+          <div class="detail-item" data-type="sugar">${item.sugar} /</div>
+          <div class="detail-item" data-type="ice">${item.ice} /</div>
+          <div class="detail-item" data-type="add-ons">${item.add_ons} /</div>
           <div class="detail-item" data-type="price">$${product.productPrice}/ </div>
-          <div class="detail-item" data-type="size">${getSize(item)}</div>
+          <div class="detail-item" data-type="size">${item.size} /</div>
           <div class="detail-item" data-type="quantity">${item.quantity} 杯</div>
             `;
         //將明細放到商品資訊欄
@@ -618,27 +619,27 @@ document.addEventListener("DOMContentLoaded",function(){
       }
     //判斷加料
       function getAddOns(Item) {
-        if (Item.pearl) return '珍珠';
-        if (Item.pudding) return '布丁';
-        if (Item.coconut_jelly) return '椰果';
-        if (Item.taro) return '芋頭';
-        if (Item.herbal_jelly) return '仙草';
+        if (Item.pearl) return '加珍珠';
+        if (Item.pudding) return '加布丁';
+        if (Item.coconut_jelly) return '加椰果';
+        if (Item.taro) return '加芋頭';
+        if (Item.herbal_jelly) return '加仙草';
 
         return '無加料';
       }
   // 獲取尺寸的輔助函數
-    function getSize(size) {
-      switch (size) {
-        case 1:
-          return '小杯';
-        case 2:
-          return '中杯';
-        case 3:
-          return '大杯';
-        default:
-          return '未知尺寸';
-      }
-    }
+  //   function getSize(size) {
+  //     switch (size) {
+  //       case 1:
+  //         return '小杯';
+  //       case 2:
+  //         return '中杯';
+  //       case 3:
+  //         return '大杯';
+  //       default:
+  //         return '未知尺寸';
+  //     }
+  //   }
       // 提供商品選項
       //       function fetchProductOptions(productId){
       //         fetch(`/getProductOptions?productName=${encodeURIComponent(productName)}`)
