@@ -19,6 +19,19 @@ public class OrderServiceImpl implements OrderService {
     // todo
     // 發票api
 
+    // 後臺列表查詢
+    @Override
+    public List<Orders> findAll() {
+        return orderDao.selectAll();
+    }
+
+    @Override
+    public Orders findByOrderId(int orderId) {
+        return orderDao.selectByOrderId(orderId);
+    }
+
+
+
     @Override
     public Orders addOrder(Orders order) {
         if(isEmpty(order.getReceiverAddress()) && isEmpty(order.getReceiverDatetime())){
@@ -77,7 +90,6 @@ public class OrderServiceImpl implements OrderService {
             order.setSuccessful(false);
             return order;
         }
-
         order.setMessage("訂單已成立");
         order.setSuccessful(true);
         return order;
@@ -123,8 +135,6 @@ public class OrderServiceImpl implements OrderService {
         return order;
     }
 
-    @Override
-    public List<Orders> findAll() {
-        return orderDao.selectAll();
-    }
+
+
 }

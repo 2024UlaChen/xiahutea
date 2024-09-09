@@ -10,5 +10,6 @@ public interface OrderService {
 
     Orders update(Orders order);
     List<Orders> findAll();
+    Orders findByOrderId(int orderId);
 
 }

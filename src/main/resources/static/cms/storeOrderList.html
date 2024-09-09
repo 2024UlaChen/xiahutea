@@ -70,14 +70,11 @@
         #order_thread , #order_tbody{
             text-align: center;
         }
-
-
     </style>
 </head>
 
 <body class="hold-transition sidebar-mini">
     <div class="wrapper">
-        <!--header & aside -->
         <div class="storeheader"></div>
         <div class="storeaside"></div>
         <!--/.header & aside -->
@@ -123,8 +120,7 @@
                                             店家名稱<input type="search" class="select_order">
                                         </label>
                                         <label>
-                                            訂單狀態</label>
-                                        <label>
+                                            訂單狀態
                                             <select id="select_status">
                                                 <option class="select_status_op" value="">請選擇</option>
                                                 <option class="select_status_op" value="訂單成立">訂單成立</option>
@@ -158,86 +154,7 @@
                                             </tr>
                                         </thead>
                                         <tbody id="order_tbody">
-                                            <tr>
-                                                <td class="order_date_value">2024/07/01</td>
-                                                <td class="order_id_value"><a href="./storeOrderDetail.html">2407010012</a></td>
-                                                <td class="order_username_value">廖ZZ</td>
-                                                <td class="order_status_value">準備完成</td>
-                                                <td class="order_store_value">鶴茶樓中正店</td>
-                                                <td>8</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="order_date_value">2024/07/01</td>
-                                                <td class="order_id_value"><a href="./storeOrderDetail.html">2407010010</a></td>
-                                                <td class="order_username_value">紀AA</td>
-                                                <td class="order_status_value">正在外送</td>
-                                                <td class="order_store_value">鶴茶樓中正店</td>
-                                                <td>5</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="order_date_value">2024/07/01</td>
-                                                <td class="order_id_value"><a href="./storeOrderDetail.html">2407010009</a></td>
-                                                <td class="order_username_value">鐘BB</td>
-                                                <td class="order_status_value">準備完成</td>
-                                                <td class="order_store_value">萬波新莊店</td>
-                                                <td>18</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="order_date_value">2024/07/01</td>
-                                                <td class="order_id_value"><a href="./storeOrderDetail.html">2407010007</a></td>
-                                                <td class="order_username_value">劉CC</td>
-                                                <td class="order_status_value">訂單完成</td>
-                                                <td class="order_store_value">一沐日汐止店</td>
-                                                <td>8</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="order_date_value">2024/07/01</td>
-                                                <td class="order_id_value"><a href="./storeOrderDetail.html">2407010006</a></td>
-                                                <td class="order_username_value">吳DD</td>
-                                                <td class="order_status_value">訂單完成</td>
-                                                <td class="order_store_value">得正淡水店</td>
-                                                <td>8</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="order_date_value">2024/07/01</td>
-                                                <td class="order_id_value"><a href="./storeOrderDetail.html">2407010005</a></td>
-                                                <td class="order_username_value">石EE</td>
-                                                <td class="order_status_value">訂單完成</td>
-                                                <td class="order_store_value">得正淡水店</td>
-                                                <td>5</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="order_date_value">2024/07/01</td>
-                                                <td class="order_id_value"><a href="./storeOrderDetail.html">2407010004</a></td>
-                                                <td class="order_username_value">黃FF</td>
-                                                <td class="order_status_value">訂單完成</td>
-                                                <td class="order_store_value">五十嵐永和店</td>
-                                                <td>3</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="order_date_value">2024/08/15</td>
-                                                <td class="order_id_value"><a href="./storeOrderDetail.html">2407010003</a></td>
-                                                <td class="order_username_value">王GG</td>
-                                                <td class="order_status_value">訂單完成</td>
-                                                <td class="order_store_value">萬波新莊店</td>
-                                                <td>9</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="order_date_value">2024/09/01</td>
-                                                <td class="order_id_value"><a href="./storeOrderDetail.html">2407010002</a></td>
-                                                <td class="order_username_value">汪HH</td>
-                                                <td class="order_status_value">訂單完成</td>
-                                                <td class="order_store_value">一沐日汐止店</td>
-                                                <td>4</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="order_date_value">2024/08/01</td>
-                                                <td class="order_id_value"><a href="./storeOrderDetail.html">2407010001</a></td>
-                                                <td class="order_username_value">陳II</td>
-                                                <td class="order_status_value">訂單完成</td>
-                                                <td class="order_store_value">五十嵐永和店</td>
-                                                <td>1</td>
-                                            </tr>
+                                        <!-- 列表放JS    -->
                                         </tbody>
                                     </table>
                                     <!--/.訂單列表    -->
@@ -250,9 +167,7 @@
             <!-- /.Main content -->
         </div>
         <!-- /.功能區塊    -->
-        <!--footer -->
         <div class="storefooter"></div>
-        <!--/.footer -->
     </div>
 
     <script src="plugins/jquery/jquery.min.js"></script>
@@ -269,7 +184,6 @@
     <script src="dist/js/adminlte.js"></script>
     <script src="dist/js/demo.js"></script>
 
-    <!-- Page specific script -->
     <script>
         $(function () {
             $("#example1").DataTable({
@@ -288,6 +202,7 @@
     </script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
+            fetchOrders();
 
             // 1.查詢欄
             // 1.1 輸入查詢相關欄位，點查詢btn可篩選訂單
@@ -304,7 +219,6 @@
                 let order_rows = document.querySelectorAll("tbody tr");
                 order_rows.forEach(row => {
 
-                    // 檢查是否存在所有需要的元素
                     let order_id_el = row.getElementsByClassName("order_id_value")[0];
                     let order_user_el = row.getElementsByClassName("order_username_value")[0];
                     let order_store_el = row.getElementsByClassName("order_store_value")[0];
@@ -339,7 +253,7 @@
 
                     //todo: 待資料庫完成後，再處理時區問題
                     if (select_order_date1 && select_order_date2) {
-                        let order_date_obj = new Date(order_date.replace(/-/g,'/'));
+                        let order_date_obj = new Date(order_date.replace(/-/g, '/'));
                         let date1 = new Date(select_order_date1);
                         let date2 = new Date(select_order_date2);
 
@@ -352,6 +266,43 @@
                 });
             });
         });
+
+        function fetchOrders() {
+            fetch('order/manage',{
+                method: 'GET'
+            })
+              // .then(response => response.json())
+            //  .then(data => updateOrderTable(data));
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.json();
+            })
+                  .then(data => {
+                      console.log('Fetched orders:', data); // 打印获取到的数据
+                      updateOrderTable(data);
+                  })
+                  .catch(error => console.error('Error fetching orders:', error));
+        }
+
+        function updateOrderTable(ordersList) {
+            let orderHtml = "";
+            for (let i = 0; i < ordersList.length; i++) {
+                let order = ordersList[i];
+                orderHtml += `
+                    <tr>
+                        <td class="order_date_value">${order.orderCreateDatetime}</td>
+                        <td class="order_id_value"><a href="./storeOrderDetail/${order.orderId}.html">${order.orderId}</a></td>
+                        <td class="order_username_value">${order.nickname}</td>
+                        <td class="order_status_value">${order.orderStatus}</td>
+                        <td class="order_store_value">${order.storeName}</td>
+                        <td>${order.orderProductQuantity}</td>
+                    </tr>
+                `;
+            }
+            document.getElementById("order_tbody").innerHTML = orderHtml;
+        }
     </script>
 </body>
 </html>

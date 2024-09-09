@@ -46,18 +46,17 @@ public class Orders extends Core {
 
     @Column(name = "customer_coupons_id") //單向一對一
     private Integer customerCouponsId;    // 優惠券編號
-    @OneToOne
-    @JoinColumn(name = "customer_coupons_id", insertable = false,  updatable = false)
-    private CustomerCoupons customerCoupon;
-
+//    @OneToOne
+//    @JoinColumn(name = "customer_coupons_id", insertable = false,  updatable = false)
+//    private CustomerCoupons customerCoupon;
     @Column(name = "coupon_discount", updatable = false)
     private Integer couponDiscount; // 優惠券折抵金額
 
     @Column(name = "loyalty_card_id")  //單向一對一
     private Integer loyaltyCardId;     // 集點卡編號
-    @OneToOne
-    @JoinColumn(name = "loyalty_card_id", insertable = false, updatable = false)
-    private CustomerLoyaltyCard loyaltyCard;
+//    @OneToOne
+//    @JoinColumn(name = "loyalty_card_id", insertable = false, updatable = false)
+//    private CustomerLoyaltyCard loyaltyCard;
 
     @Column(name = "loyalty_discount", updatable = false)
     private Integer loyaltyDiscount; // 集點折抵金額
@@ -117,6 +116,6 @@ public class Orders extends Core {
 
     @Column(name = "order_creat_datetime", updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy/MM/dd HH:mm", timezone = "GMT+8")
     private Timestamp orderCreateDatetime; // 建立日期時間
 }

@@ -1,29 +1,48 @@
 package idv.tia201.g2.web.order.controller;
 
+import idv.tia201.g2.core.pojo.Core;
 import idv.tia201.g2.web.order.service.OrderService;
 import idv.tia201.g2.web.order.vo.Orders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("order")
+@RequestMapping("order/manage")
 public class orderController {
 
     @Autowired
     private OrderService orderService;
 
-    // 後台 查詢列表
-    @GetMapping("list")
-    public List<Orders> readAll(){
+    // todo 渲染待確認
+
+    // 後台 顯示列表
+    @GetMapping
+    public List<Orders> manage() {
         return orderService.findAll();
     }
 
-    // 後台 連結明細
+//    @GetMapping
+//    public String manage(Model model) {
+//        List<Orders> ordersList = orderService.findAll();
+//        model.addAttribute("ordersList", ordersList);
+//        return "/storeOrderList.html";
+//    }
+
+    // 後台 顯示明細
+    @GetMapping("detail/{orderId}")
+    public Orders detail(@PathVariable Integer orderId) {
+        return orderService.findByOrderId(orderId);
+    }
+
+    // 後台 修改明細資料
+    @PutMapping
+    public Core save(@RequestBody Orders orders) {
+
+        return orderService.update(orders);
+    }
+
 
 }
