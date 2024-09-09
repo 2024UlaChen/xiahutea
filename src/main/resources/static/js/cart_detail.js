@@ -28,9 +28,6 @@ document.addEventListener("DOMContentLoaded",function(){
   let step_content_el = document.getElementsByClassName("step-content")[0];
   let step_content2_el = document.getElementsByClassName("step-content2")[0];
   let step_content3_el = document.getElementsByClassName("step-content3")[0];
-  //修改訂單商品
-  let btn_edit_el = document.getElementsByClassName("edit-btn");
-  let btn_delete_el = document.getElementsByClassName("delete-btn");
 
   //燈箱
   let lightbox_el = document.getElementById("lightbox");
@@ -90,60 +87,13 @@ document.addEventListener("DOMContentLoaded",function(){
   const groupedItems = sortCartItems(cartItems);
   // 提取所有商品的 productId用來渲染網頁，一個ID只抓一次
   const productIds = [...new Set(groupedItems.map(item => item.productId))];
-  //獲得商品ID列獲得的商品
+  //獲得商品ID列獲得的商品，並在方法中渲染前端頁面
   findproductbyid(productIds);
-  //用抓到的商品和整理後的購物車商品合併渲染
-  // renderproductdetail(products);
-  // // 把localstorage資料存到後端資料庫，並且抓取資料渲染
+  // 把localstorage資料存到後端資料庫，並且抓取資料渲染
   // saveallproduct();
 
-
-  //用得到整理過的商品列表渲染前端頁面
-
   //********************************************第一頁按鈕事件*************************************
-    //結帳頁面購物內容來自於購物車(localstorage)
-    //刪除、修改訂單
-    //修改---進入燈箱
-  for(let i =0;i<btn_edit_el.length;i++) {
-    btn_edit_el[i].addEventListener("click", function () {
-      lightbox_el.style.display = "flex";
-      document.body.style.overflow = 'hidden';
-      document.body.style.paddingRight = '17px';
-      // 找到點擊的按鈕、綁定每個checked標籤
-      let button = this;
-      let cartItem = button.closest(".cart-item");
-      let productName = cartItem.querySelector(".product-name").textContent;
-      let lightboxTitle = document.querySelector("#lightbox h1");
-      lightboxTitle.textContent = productName;
-      //這裡要callfunction
-      // fetchProductOptions(productId);
-      let selectedIce = ice_el.querySelector('input[name="ice-options"]:checked');
-      let selectedSugar = sugar_el.querySelector('input[name="sugar-options"]:checked');
-      let selectedMaterials = materials_el.querySelector('input[name="materials-options"]:checked');
-      //燈箱更新商品按鈕事件綁定
-      btn_modal_close_el.addEventListener("click", function () {
-        //指定到該點擊更新按鈕下最近的商品細項父節點
-        const itemContent = cartItem.closest(".item-content");
-        //再利用父節點指定到其下的細項
-        const productDetail = itemContent.querySelector(".product-detail");
-
-        lightbox_el.style.display = "none";
-        document.body.style.overflow = 'auto';
-        document.body.style.paddingRight = '0px';
-      })
-
-      lightbox_el.addEventListener("click", function(){
-        lightbox_el.style.display = "none";
-        document.body.style.overflow = 'auto';
-        document.body.style.paddingRight = '0px';
-      });
-
-      lightbox_el.querySelector("article").addEventListener("click", function (e) {
-        e.stopPropagation();
-      });
-    })
-  }   //for-edit end **********
-    //燈箱數量增減
+  //燈箱數量增減
     qtyminus_el.addEventListener("click", function (e) {
         if (qty_el.value > 0) {
             qty_el.value--;
@@ -156,19 +106,19 @@ document.addEventListener("DOMContentLoaded",function(){
         }
         e.stopPropagation();
     })
-      //刪除訂餐
+  //刪除訂餐
       var currentItem = null;
-      for (let i = 0; i < btn_delete_el.length; i++) {
-        btn_delete_el[i].addEventListener("click", function (e) {
-          lightbox_delete_el.style.display = "flex";
-          document.body.style.overflow = 'hidden';
-          document.body.style.paddingRight = '17px';
-
-          currentItem = this.closest(".item-content");
-          var productName = this.closest(".cart-item").querySelector(".product-name").textContent;
-          delete_detail_el.innerHTML = `刪除 <span class="highlight">${productName}</span> ?`;
-        })
-      }
+      // for (let i = 0; i < btn_delete_el.length; i++) {
+      //   btn_delete_el[i].addEventListener("click", function (e) {
+      //     lightbox_delete_el.style.display = "flex";
+      //     document.body.style.overflow = 'hidden';
+      //     document.body.style.paddingRight = '17px';
+      //
+      //     currentItem = this.closest(".item-content");
+      //     var productName = this.closest(".cart-item").querySelector(".product-name").textContent;
+      //     delete_detail_el.innerHTML = `刪除 <span class="highlight">${productName}</span> ?`;
+      //   })
+      // }
 
       lightbox_delete_el.addEventListener("click", function () {
         lightbox_delete_el.style.display = "none";
@@ -191,8 +141,6 @@ document.addEventListener("DOMContentLoaded",function(){
         document.body.style.overflow = 'auto';
         document.body.style.paddingRight = '0px';
       });
-
-
       //時間選擇
       picker_el.addEventListener("focus", function () {
         picker_el.classList.add("focus-border");
@@ -519,9 +467,7 @@ document.addEventListener("DOMContentLoaded",function(){
         carryoutdiv.innerHTML=`
           <div class="carry-out-selection">
               <input class="carry-out-radio" type="radio" name="delivery" id="carry-out">
-                <label class="carry-out-label" for="carry-out" style="padding-top: 10px">
-                     外送
-                </label>
+              <label class="carry-out-label" for="carry-out" style="padding-top: 10px">外送</label>
           </div>
            <div class="carry-out-address">
                <input type="text" class="address" placeholder="請輸入地址" maxlength="255" disabled>
@@ -594,6 +540,38 @@ document.addEventListener("DOMContentLoaded",function(){
         itemContent.appendChild(productDetail);
         //把彙整後商品資訊放到購物明細區塊
         item_detail_el.appendChild(itemContent);
+        // 動態綁定 edit-btn 事件
+        //找到最接近點擊的商品項的編輯按鈕
+        const editBtn = cartItem.querySelector('.edit-btn');
+        editBtn.addEventListener('click',function (){
+          //修改: 開啟燈箱
+          lightbox_el.style.display = "flex";
+          document.body.style.overflow = 'hidden';
+          document.body.style.paddingRight = '17px';
+          // 找到點擊最近的商品項目，將對應的商品名稱顯示在燈箱
+          let button = this;
+          let cartItem = button.closest(".cart-item");
+          let productName = cartItem.querySelector(".product-name").textContent;
+          let lightboxTitle = document.querySelector("#lightbox h1");
+          lightboxTitle.textContent = productName;
+          //獲得商品選項(冰塊甜度加料選項 目前先用固定)
+
+          //儲存最後燈箱選擇的項目
+          let selectedIce = ice_el.querySelector('input[name="ice-options"]:checked');
+          let selectedSugar = sugar_el.querySelector('input[name="sugar-options"]:checked');
+          let selectedMaterials = materials_el.querySelector('input[name="materials-options"]:checked');
+          //燈箱更新商品按鈕事件綁定
+          btn_modal_close_el.addEventListener("click", function () {
+            //指定到該點擊更新按鈕下最近的商品細項父節點
+            const itemContent = cartItem.closest(".item-content");
+            //再利用父節點指定到其下的細項
+            const productDetail = itemContent.querySelector(".product-detail");
+
+            lightbox_el.style.display = "none";
+            document.body.style.overflow = 'auto';
+            document.body.style.paddingRight = '0px';
+          })
+        })
       }
     })
   }
@@ -624,9 +602,9 @@ document.addEventListener("DOMContentLoaded",function(){
         if (Item.coconut_jelly) return '加椰果';
         if (Item.taro) return '加芋頭';
         if (Item.herbal_jelly) return '加仙草';
-
         return '無加料';
       }
+
   // 獲取尺寸的輔助函數
   //   function getSize(size) {
   //     switch (size) {
