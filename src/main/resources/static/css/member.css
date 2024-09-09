@@ -160,11 +160,13 @@ select:focus,
 .member-setting > div {
     margin-top: 2%;
 }
-.dataSave{
+
+.dataSave {
     padding-top: 2%;
     clear: both;
 }
-.dataSave button{
+
+.dataSave button {
     text-align: center;
     height: 40px;
     background-color: #73B4BA;
@@ -222,13 +224,12 @@ select:focus,
     justify-content: center;
 }
 
-.modal-footer button ,.addressSaving button{
+.modal-footer button, .addressSaving button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     vertical-align: baseline;
     text-align: center;
-    /*width: 100%;*/
     height: 40px;
     background-color: #73B4BA;
     border: 1px solid #73B4BA;
@@ -237,47 +238,56 @@ select:focus,
     border-radius: 5px;
 }
 
-.modal-footer button:hover ,.addressSaving button:hover{
+
+.modal-footer button:hover, .addressSaving button:hover, .dataSave button:hover {
     background-color: white;
     border: 1px solid #73B4BA;
     color: #73B4BA;
 }
 
 /*address*/
-.memberAddress ul{
+#memberAddress {
     list-style: none;
 }
-.memberAddress ul i {
-    font-size: 150%;
-    color: black;
-}
-.memberAddress ul li{
+
+#memberAddress li {
     display: flex;
+    align-items: center;
 }
 
-.memberAddress li > button {
-    margin-left: 1%;
+#memberAddress li i {
+    font-size: 150%;
+    margin: 1%;
+}
+
+#memberAddress li span {
+    width: 80%;
+}
+
+#memberAddress li button {
     background-color: white;
     border: transparent 1px solid;
-
-}
-
-.memberAddress li button > i {
-    font-size: 150%;
-    vertical-align: center;
     color: #73B4BA;
-
 }
 
-.memberAddress li > button:hover, .memberCarrier div button > i:hover  {
+#memberAddress li button i {
+    vertical-align: center;
+}
+
+
+#memberAddress li button:hover {
     cursor: pointer;
     background-color: #F5F5F5;
     color: #FAC792;
     border-radius: 20px;
 }
 
-/*address*/
-.addressSaving{
+#memberAddress li button i:hover {
+    cursor: pointer;
+    border-radius: 20px;
+}
+
+.addressSaving {
     display: flex;
     justify-content: center;
 }
