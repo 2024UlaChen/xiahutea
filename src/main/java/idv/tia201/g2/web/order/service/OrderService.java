@@ -8,7 +8,7 @@ public interface OrderService {
     Orders addOrder(Orders order);
     Orders addStar(Orders order);
 
-    Orders update(Orders order);
+    Orders updateStatus(Orders order);
     List<Orders> findAll();
     Orders findByOrderId(int orderId);
 

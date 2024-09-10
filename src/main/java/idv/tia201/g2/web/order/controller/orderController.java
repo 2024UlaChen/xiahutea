@@ -16,20 +16,13 @@ public class orderController {
     @Autowired
     private OrderService orderService;
 
-    // todo 渲染待確認
+    // todo
 
     // 後台 顯示列表
     @GetMapping
     public List<Orders> manage() {
         return orderService.findAll();
     }
-
-//    @GetMapping
-//    public String manage(Model model) {
-//        List<Orders> ordersList = orderService.findAll();
-//        model.addAttribute("ordersList", ordersList);
-//        return "/storeOrderList.html";
-//    }
 
     // 後台 顯示明細
     @GetMapping("detail/{orderId}")
@@ -39,9 +32,9 @@ public class orderController {
 
     // 後台 修改明細資料
     @PutMapping
-    public Core save(@RequestBody Orders orders) {
+    public Core update(@RequestBody Orders orders) {
 
-        return orderService.update(orders);
+        return orderService.updateStatus(orders);
     }
 
 

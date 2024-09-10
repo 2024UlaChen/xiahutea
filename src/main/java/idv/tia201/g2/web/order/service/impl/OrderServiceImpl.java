@@ -19,7 +19,7 @@ public class OrderServiceImpl implements OrderService {
     // todo
     // 發票api
 
-    // 後臺列表查詢
+    // 後台 訂單操作邏輯
     @Override
     public List<Orders> findAll() {
         return orderDao.selectAll();
@@ -30,8 +30,23 @@ public class OrderServiceImpl implements OrderService {
         return orderDao.selectByOrderId(orderId);
     }
 
+    @Override
+    public Orders updateStatus(Orders newOrder) {
+        final Orders oldOrder = orderDao.selectByOrderId(newOrder.getOrderId());
+        if(oldOrder.getOrderStatus() >= newOrder.getOrderStatus() ){ //舊訂單狀態值 > 新訂單狀態值
+            newOrder.setMessage("修改失敗");
+            newOrder.setSuccessful(false);
+            return newOrder;
+        }
+        orderDao.update(newOrder);
+        newOrder.setMessage("修改完成");
+        newOrder.setSuccessful(true);
+        return newOrder;
+    }
 
 
+
+    // 前台操作邏輯
     @Override
     public Orders addOrder(Orders order) {
         if(isEmpty(order.getReceiverAddress()) && isEmpty(order.getReceiverDatetime())){
@@ -118,22 +133,6 @@ public class OrderServiceImpl implements OrderService {
         return order;
     }
 
-    @Override
-    public Orders update(Orders order) {
-        final Orders oOrder = orderDao.selectByOrderId(order.getOrderId());
-        final int orderStatus = oOrder.getOrderStatus();
-        if(orderStatus < orderDao.selectByOrderId(order.getOrderId()).getOrderStatus() ){
-            order.setMessage("修改失敗");
-            order.setSuccessful(false);
-            return order;
-        }
-
-        order.setOrderStatus(orderStatus);
-        orderDao.update(order);
-        order.setMessage("修改完成");
-        order.setSuccessful(true);
-        return order;
-    }
 
 
 
