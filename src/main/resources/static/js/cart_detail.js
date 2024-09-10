@@ -558,6 +558,8 @@ document.addEventListener("DOMContentLoaded",function(){
               .forEach(radio=>{radio.checked = false});
           document.querySelectorAll(`input[name="materials-options"]`)
               .forEach(radio=>{radio.checked = false});
+            document.querySelectorAll(`input[name="size-options"]`)
+                .forEach(radio=>{radio.checked = false});
           qty_el.value = 1;
           
           lightbox_el.style.display = "flex";
@@ -576,21 +578,22 @@ document.addEventListener("DOMContentLoaded",function(){
             const selectedIce = document.querySelector('input[name="ice-options"]:checked');
             const selectedSugar = document.querySelector('input[name="sugar-options"]:checked');
             const selectedMaterials = document.querySelector('input[name="materials-options"]:checked');
-            //確認冰塊、甜度、加料、尺寸皆有選
-            if (!selectedIce || !selectedSugar || !selectedMaterials) {
+            const selectedSize = document.querySelector('input[name="size-options"]:checked');
+              //確認冰塊、甜度、加料、尺寸皆有選
+            if (!selectedIce || !selectedSugar || !selectedMaterials|| !selectedSize) {
               Swal.fire({
-                icon: 'warning',    // 顯示警告圖示
+                icon: 'warning',
                 title: '請選擇所有項目',
-                text: '請選擇所有選項（冰塊、甜度、加料）。',
+                text: '請選擇所有選項（冰塊、甜度、加料、尺寸）。',
                 confirmButtonText: '確定'
               });
-              return; // 中止操作，不進行更新
+              return;
             }
             //設定選中的選項文字
             const iceText = selectedIce.nextElementSibling.textContent;
             const sugarText = selectedSugar.nextElementSibling.textContent;
             const materialsText = selectedMaterials.nextElementSibling.textContent;
-
+            const sizeText = selectedSize.nextElementSibling.textContent;
             //指定到該點擊更新按鈕下最近的商品細項父節點
             const itemContent = cartItem.closest(".item-content");
             //再利用父節點指定到其下的細項
@@ -599,6 +602,7 @@ document.addEventListener("DOMContentLoaded",function(){
             productDetail.querySelector('[data-type="ice"]').textContent = `${iceText} / `;
             productDetail.querySelector('[data-type="sugar"]').textContent = `${sugarText} / `;
             productDetail.querySelector('[data-type="add-ons"]').textContent = `${materialsText} / `;
+            productDetail.querySelector('[data-type="size"]').textContent = `${sizeText} / `;
             productDetail.querySelector('[data-type="quantity"]').textContent = qty_el.value+' 杯';
             lightbox_el.style.display = "none";
             document.body.style.overflow = 'auto';
