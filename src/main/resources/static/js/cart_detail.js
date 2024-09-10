@@ -31,6 +31,7 @@ document.addEventListener("DOMContentLoaded",function(){
 
   //燈箱
   let lightbox_el = document.getElementById("lightbox");
+  let btnCloseLightbox = document.querySelector('.btn_close_lightbox');
   let qtyminus_el = document.getElementsByClassName("qtyminus")[0];
   let qtyplus_el = document.getElementsByClassName("qtyplus")[0];
   let qty_el = document.getElementsByClassName("qty")[0];
@@ -106,6 +107,12 @@ document.addEventListener("DOMContentLoaded",function(){
         }
         e.stopPropagation();
     })
+  //燈箱關閉(取消更新)
+  btnCloseLightbox.addEventListener('click',function (){
+    lightbox_el.style.display = "none";
+    document.body.style.overflow = 'auto';
+    document.body.style.paddingRight = '0px';
+  })
   //刪除訂餐
       var currentItem = null;
       // for (let i = 0; i < btn_delete_el.length; i++) {
@@ -541,37 +548,64 @@ document.addEventListener("DOMContentLoaded",function(){
         //把彙整後商品資訊放到購物明細區塊
         item_detail_el.appendChild(itemContent);
         // 動態綁定 edit-btn 事件
-        //找到最接近點擊的商品項的編輯按鈕
+        //鎖定這一次新建立的cartItem底下的編輯按鈕
         const editBtn = cartItem.querySelector('.edit-btn');
         editBtn.addEventListener('click',function (){
-          //修改: 開啟燈箱
+          //修改: 開啟燈箱，並重置燈箱選項
+          document.querySelectorAll(`input[name="ice-options"]`)
+              .forEach(radio=>{radio.checked = false});
+          document.querySelectorAll(`input[name="sugar-options"]`)
+              .forEach(radio=>{radio.checked = false});
+          document.querySelectorAll(`input[name="materials-options"]`)
+              .forEach(radio=>{radio.checked = false});
+          qty_el.value = 1;
+          
           lightbox_el.style.display = "flex";
           document.body.style.overflow = 'hidden';
           document.body.style.paddingRight = '17px';
           // 找到點擊最近的商品項目，將對應的商品名稱顯示在燈箱
-          let button = this;
+          let button = this;  //指這次的點擊目標
           let cartItem = button.closest(".cart-item");
           let productName = cartItem.querySelector(".product-name").textContent;
           let lightboxTitle = document.querySelector("#lightbox h1");
           lightboxTitle.textContent = productName;
           //獲得商品選項(冰塊甜度加料選項 目前先用固定)
 
-          //儲存最後燈箱選擇的項目
-          let selectedIce = ice_el.querySelector('input[name="ice-options"]:checked');
-          let selectedSugar = sugar_el.querySelector('input[name="sugar-options"]:checked');
-          let selectedMaterials = materials_el.querySelector('input[name="materials-options"]:checked');
-          //燈箱更新商品按鈕事件綁定
+          //燈箱選項更新商品
           btn_modal_close_el.addEventListener("click", function () {
+            const selectedIce = document.querySelector('input[name="ice-options"]:checked');
+            const selectedSugar = document.querySelector('input[name="sugar-options"]:checked');
+            const selectedMaterials = document.querySelector('input[name="materials-options"]:checked');
+            //確認冰塊、甜度、加料、尺寸皆有選
+            if (!selectedIce || !selectedSugar || !selectedMaterials) {
+              Swal.fire({
+                icon: 'warning',    // 顯示警告圖示
+                title: '請選擇所有項目',
+                text: '請選擇所有選項（冰塊、甜度、加料）。',
+                confirmButtonText: '確定'
+              });
+              return; // 中止操作，不進行更新
+            }
+            //設定選中的選項文字
+            const iceText = selectedIce.nextElementSibling.textContent;
+            const sugarText = selectedSugar.nextElementSibling.textContent;
+            const materialsText = selectedMaterials.nextElementSibling.textContent;
+
             //指定到該點擊更新按鈕下最近的商品細項父節點
             const itemContent = cartItem.closest(".item-content");
             //再利用父節點指定到其下的細項
             const productDetail = itemContent.querySelector(".product-detail");
 
+            productDetail.querySelector('[data-type="ice"]').textContent = `${iceText} / `;
+            productDetail.querySelector('[data-type="sugar"]').textContent = `${sugarText} / `;
+            productDetail.querySelector('[data-type="add-ons"]').textContent = `${materialsText} / `;
+            productDetail.querySelector('[data-type="quantity"]').textContent = qty_el.value+' 杯';
             lightbox_el.style.display = "none";
             document.body.style.overflow = 'auto';
             document.body.style.paddingRight = '0px';
           })
-        })
+        })    //editBtn End
+
       }
     })
   }

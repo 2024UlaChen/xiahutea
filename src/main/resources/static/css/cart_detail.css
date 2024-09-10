@@ -349,6 +349,19 @@ hr {
   transform: translate(-50%, -50%);
 }
 
+.lightbox-head{
+  display: flex;
+  justify-content: space-between;
+}
+
+.btn_close_lightbox {
+  font-size: 24px;
+  cursor: pointer;
+  position: absolute;
+  top: 13px;
+  right: 10px;
+}
+
 #lightbox > article h1{
   font-size: 25px;
   font-weight: bold;
