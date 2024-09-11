@@ -52,31 +52,47 @@
             padding-left: 1.5rem;
         }
 
-        /* btn 上一頁*/
-        button.card-btn{
-            float: right; /* 將按鈕浮動到右邊 */
-            margin-left: 10px; /* 可以調整按鈕之間的間距 */
+        /* 訂單資訊 選單按鈕 區塊 */
+        .card-header {
+            display: flex;
+            align-items: center;
         }
-        .btn-default {
-            background-color: #F8F9FA;
+        #orderTitle {
+            margin-right: auto;
         }
-        .btn-block {
-            width: 100px;
-            font-weight: bolder;
+        #select_status_div {
+            margin-right: 10px;
         }
-        /* btn 儲存*/
-        .btn-block+.btn-block {
-            margin-top: 0;
-        }
-        .btn-info {
-            background-color: #73B4BA;
-            border-color: #73B4BA;
+        .right-group {
+            display: flex;
+            align-items: center;
         }
 
         /* select狀態  */
         #select_status{
             border-radius: 4px;
-            max-width: 100%;
+            max-width: 100px;
+            width: 100px;
+            height: 30px;
+            text-align:center;
+        }
+        /* btn 儲存*/
+        .btn-block+.btn-block {
+            margin-top: 0;
+        }
+        #demo1{
+            margin-right: 10px;
+            background-color: #73B4BA;
+            border-color: #73B4BA;
+        }
+        /* btn 上一頁*/
+        #btn_order_back {
+            margin-right: 0;
+            background-color: #F8F9FA;
+        }
+        .btn-block {
+            width: 100px;
+            font-weight: bolder;
         }
 
     </style>
@@ -116,9 +132,19 @@
                             <!--     訂單資訊 區塊       -->
                             <div class="card">
                                 <div class="card-header">
-                                    <div class="card-title">訂單資訊</div>
+                                    <div class="card-title" id="orderTitle">訂單資訊</div>
+                                    <div id="select_status_div">
+                                        <label>
+                                            <select id="select_status" >
+                                                <option value="1" selected>訂單成立</option>
+                                                <option value="2">準備完成</option>
+                                                <option value="3">正在外送</option>
+                                                <option value="4">訂單完成</option>
+                                            </select>
+                                        </label>
+                                    </div>
+                                    <button class="card-btn btn_order_save btn btn-block btn-info" id="demo1">儲存</button>
                                     <button class="card-btn btn btn-block btn-default" id="btn_order_back">回上一頁</button>
-                                    <button class="card-btn btn_order_save btn btn-block btn-info" id="demo1" >儲存</button>
                                 </div>
                                 <div class="card-body p-0">
                                     <table class="table table-sm">
@@ -131,29 +157,14 @@
                                                 <th>訂單狀態</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td id="order_id">2407010004</td>
-                                                <td>0977123456</td>
-                                                <td>黃xx</td>
-                                                <td>五十嵐永和店</td>
-                                                <td id="select_status_td">
-                                                    <label>
-                                                        <select id="select_status" >
-                                                            <option value="1" selected>訂單成立</option>
-                                                            <option value="2">準備完成</option>
-                                                            <option value="3">正在外送</option>
-                                                            <option value="4">訂單完成</option>
-                                                        </select>
-                                                    </label>
-                                                </td>
-                                            </tr>
+                                        <tbody id="detail_tbody">
+                                        <!--     在js       -->
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
                             <!-- /.訂單資訊 區塊   -->
-                            <!--     商品資訊 區塊       -->
+                            <!--  商品資訊 區塊       -->
                             <div class="card">
                                 <div class="card-header">
                                     <h3 class="card-title">商品資訊</h3>
@@ -162,79 +173,18 @@
                                     <table class="table table-sm">
                                         <thead>
                                             <tr>
-                                                <th>商品名稱</th>
-                                                <th>尺寸</th>
-                                                <th>冰塊</th>
-                                                <th>甜度</th>
+                                                <th>商品</th>
+                                                <th>甜度 / 溫度</th>
+                                                <th>加料</th>
                                                 <th>數量</th>
                                                 <th>商品小計</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>芒果青</td>
-                                                <td>大</td>
-                                                <td>微冰</td>
-                                                <td>無糖</td>
-                                                <td>2</td>
-                                                <td>120</td>
-                                            </tr>
-                                            <tr>
-                                                <td>紅茶拿鐵</td>
-                                                <td>大</td>
-                                                <td>少冰</td>
-                                                <td>半糖</td>
-                                                <td>1</td>
-                                                <td>70</td>
-                                            </tr>
-                                            <tr>
-                                                <td>珍珠奶茶</td>
-                                                <td>小</td>
-                                                <td>正常</td>
-                                                <td>微糖</td>
-                                                <td>1</td>
-                                                <td>75</td>
-                                            </tr>
+                                        <tbody id="product_tbody">
+                                        <!--     在js       -->
                                         </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <td colspan="6"></td>
-                                            </tr>
-                                            <tr>
-                                                <td></td>
-                                                <th colspan="4">商品總金額</th>
-                                                <td>265</td>
-                                            </tr>
-                                            <tr>
-                                                <td></td>
-                                                <th colspan="4">平台處理費</th>
-                                                <td>10</td>
-                                            </tr>
-                                            <tr>
-                                                <td></td>
-                                                <th colspan="4">錢包折抵</th>
-                                                <td><span> -</span>10</td>
-                                            </tr>
-                                            <tr>
-                                                <td></td>
-                                                <th colspan="4">優惠券折抵</th>
-                                                <td><span> -</span>5</td>
-                                            </tr>
-                                            <tr>
-                                                <td></td>
-                                                <th colspan="4">集點折抵</th>
-                                                <td><span> -</span>5</td>
-                                            </tr>
-                                            <tr>
-                                                <td></td>
-                                                <th colspan="4">付款金額</th>
-                                                <td>265</td>
-                                            </tr>
-                                            <tr>
-                                                <td></td>
-                                                <th colspan="4">付款方式</th>
-                                                <td>信用卡</td>
-                                            </tr>
+                                        <tfoot id="product_tfoot">
+                                        <!--     在js       -->
                                         </tfoot>
                                     </table>
                                 </div>
@@ -251,27 +201,8 @@
                                 </div>
                                 <div class="card-body p-0">
                                     <table class="table">
-                                        <tbody class="table_info">
-                                            <tr>
-                                                <th>開立發票方式</th>
-                                                <td>公司戶</td>
-                                            </tr>
-                                            <tr>
-                                                <th>處理費發票號碼</th>
-                                                <td>XX12345678</td>
-                                            </tr>
-                                            <tr>
-                                                <th>發票抬頭</th>
-                                                <td>台灣積體電路製造股份有限公司</td>
-                                            </tr>
-                                            <tr>
-                                                <th>發票統編</th>
-                                                <td>22099131</td>
-                                            </tr>
-                                            <tr>
-                                                <th>發票載具</th>
-                                                <td></td>
-                                            </tr>
+                                        <tbody class="table_info" id="invoice_tbody">
+                                        <!--     在js       -->
                                         </tbody>
                                     </table>
                                 </div>
@@ -284,43 +215,8 @@
                                 </div>
                                 <div class="card-body p-0">
                                     <table class="table">
-                                        <tbody class="table_info">
-                                            <tr>
-                                                <th>取貨方式</th>
-                                                <td>自取</td>
-                                            </tr>
-                                            <tr>
-                                                <th>取貨人姓名</th>
-                                                <td>黃BB</td>
-                                            </tr>
-                                            <tr>
-                                                <th>取貨人電話</th>
-                                                <td>0977123456</td>
-                                            </tr>
-                                            <tr>
-                                                <th>取貨時間</th>
-                                                <td>2024/07/26 18:00</td>
-                                            </tr>
-                                            <tr>
-                                                <th>外送地址</th>
-                                                <td></td>
-                                            </tr>
-                                            <tr>
-                                                <th>訂單評分</th>
-                                                <td>5<span> / 5 </span></td>
-                                            </tr>
-                                            <tr>
-                                                <th>訂單評分建議</th>
-                                                <td>店員親切</td>
-                                            </tr>
-                                            <tr>
-                                                <th>訂單成立日期</th>
-                                                <td>2024/07/26 16:33</td>
-                                            </tr>
-                                            <tr>
-                                                <th>訂單更新日期</th>
-                                                <td>2024/07/28 11:53</td>
-                                            </tr>
+                                        <tbody class="table_info" id="receiver_tbody">
+                                        <!--     在js       -->
                                         </tbody>
                                     </table>
                                 </div>
@@ -376,30 +272,200 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
 
+            // todo 待更新 fetch {orderId}
+            // 顯示 明細
+            function showDetail() {
+                fetch(`/order/manage/19`)
+                      .then(response => response.json())
+                      .then(data => showText(data))
+                      .catch((error) => {
+                          console.log("catch error:" + error);
+                      });
+            }
+            function showText(data) {
+                let detailHtml = "";
+                detailHtml += `
+                        <tr>
+                            <td id="order_id">${data.orderId}</td>
+                            <td>${data.customer.customerAccount}</td>
+                            <td>${data.customer.nickname}</td>
+                            <td>${data.store.storeName}</td>
+                            <td>${statusText(data.orderStatus)}</td>
+                        </tr>
+                `;
+                document.getElementById("detail_tbody").innerHTML = detailHtml;
+
+                let invoiceHtml = "";
+                invoiceHtml=`
+                        <tr>
+                            <th>開立發票方式</th>
+                            <td>${invoiceText(data.invoiceMethod)}</td>
+                        </tr>
+                        <tr>
+                            <th>處理費發票號碼</th>
+                            <td>${data.invoiceNo}</td>
+                        </tr>
+                        <tr>
+                            <th>發票統編</th>
+                            <td>${data.invoiceVat}</td>
+                        </tr>
+                        <tr>
+                            <th>發票載具</th>
+                            <td>${data.invoiceCarrier}</td>
+                        </tr>
+                `;
+                document.getElementById("invoice_tbody").innerHTML = invoiceHtml;
+
+                let receiverHtml = "";
+                receiverHtml=`
+                        <tr>
+                            <th>取貨方式</th>
+                            <td>${data.receiverMethod}</td>
+                        </tr>
+                        <tr>
+                            <th>取貨人姓名</th>
+                            <td>${data.receiverName}</td>
+                        </tr>
+                        <tr>
+                            <th>取貨人電話</th>
+                            <td>${data.receiverPhone}</td>
+                        </tr>
+                        <tr>
+                            <th>取貨時間</th>
+                            <td>${data.receiverDatetime}</td>
+                        </tr>
+                        <tr>
+                            <th>外送地址</th>
+                            <td>${data.receiverAddress}</td>
+                        </tr>
+                        <tr>
+                            <th>訂單評分</th>
+                            <td>${data.orderScore}</td>
+                        </tr>
+                        <tr>
+                            <th>訂單評分建議</th>
+                            <td>${data.orderFeedback}</td>
+                        </tr>
+                        <tr>
+                            <th>訂單成立日期</th>
+                            <td>${data.orderCreateDatetime}</td>
+                        </tr>
+                        <!--  待確認 db-->
+                        <tr>
+                            <th>訂單更新日期</th>
+                            <td>${data.orderUpdateDatetime}</td>
+                        </tr>
+                `;
+                document.getElementById("receiver_tbody").innerHTML = receiverHtml;
+
+                let productTfootHtml = "";
+                productTfootHtml=`
+                            <tr>
+                                <td colspan="5"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <th colspan="3">商品總金額</th>
+                                <td>${data.productAmount}</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <th colspan="3">平台處理費</th>
+                                <td>${data.processingFees}</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <th colspan="3">錢包折抵</th>
+                                <td><span> -</span>${data.customerMoneyDiscount}</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <th colspan="3">優惠券折抵</th>
+                                <td><span> -</span>${data.couponDiscount}</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <th colspan="3">集點折抵</th>
+                                <td><span> -</span>${data.loyaltyDiscount}</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <th colspan="3">付款金額</th>
+                                <td>${data.paymentAmount}</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <th colspan="3">付款方式</th>
+                                <td>${paymentMethodText(data.paymentMethod)}</td>
+                            </tr>
+                `;
+                document.getElementById("product_tfoot").innerHTML = productTfootHtml;
+
+                // todo 待db完成確認
+
+                let productTbodyHtml = "";
+                let detailList = data.orderDetail;
+                for (let i = 0; i < detailList.length; i++) {
+                    productTbodyHtml=`
+                        <tr>
+                            <td>${detailList[i].product.productName} / ${detailList[i].product.size}</td>
+                            <td>${detailList[i].productSugar} / ${detailList[i].productTemperature}</td>
+                            <td>${detailList[i].productAddMaterials}</td>
+                            <td>${detailList[i].productQuantity}</td>
+                            <td>${detailList[i].productPrice}</td>
+                        </tr>
+                    `;
+                }
+                document.getElementById("product_tbody").innerHTML = productTbodyHtml;
+            }
+
+            function statusText(statusNum) {
+                switch (statusNum) {
+                    case 1 : return "訂單成立";
+                    case 2 : return "準備完成";
+                    case 3 : return "正在外送";
+                    case 4 : return "訂單完成";
+                }
+            }
+            function invoiceText(invoiceNum) {
+                switch (invoiceNum) {
+                    case 1 : return "紙本發票-無統編";
+                    case 2 : return "紙本發票-公司戶";
+                    case 3 : return "電子發票-手機載具";
+                    case 4 : return "電子發票-會員帳號";
+                }
+            }
+            function paymentMethodText(paymentMethodNum) {
+                switch (paymentMethodNum) {
+                    case 1 : return "信用卡";
+                }
+            }
             //===========================================================================
-            //1. btn 回上一頁
+            // 0. 顯示明細
+            showDetail();
+
+            //===========================================================================
+            // 1. btn 回上一頁
             const btn_order_back = document.getElementById("btn_order_back");
-            btn_order_back.addEventListener("click", function(){
+            btn_order_back.addEventListener("click", function () {
                 history.back();
             });
 
             //===========================================================================
             // todo: 點擊儲存btn 後端需儲存內容
             // 2. btn 儲存
-            const btn_order_save =document.getElementsByClassName("btn_order_save")[0];
-            btn_order_save.addEventListener("click", function(){
+            const btn_order_save = document.getElementsByClassName("btn_order_save")[0];
+            btn_order_save.addEventListener("click", function () {
 
                 // 2.1 打包資料
-                let order_id =document.getElementById("order_id");
+                let order_id = document.getElementById("order_id");
                 let select_status = document.getElementById("select_status");
-
                 let order_data = new FormData();
                 order_data.append("order_id", order_id.innerText);
                 order_data.append("select_status", select_status.value);
 
-                //  todo: 待確認 url
-                fetch("https://jsonplaceholder.typicode.com/posts", {
-                    method: "POST",
+                fetch("/order/manage", {
+                    method: "PUT",
                     body: order_data
                 }).then(res => res.json()).then(data => {
                     // todo: 2.1.2 儲存內容到後端 前台需顯示更新後的內容
@@ -411,6 +477,7 @@
                         select_status.setAttribute("disabled", "disabled");
                     }
                     Swal.fire("已更新", "", "success");
+                    location.reload();
                 }).catch((error) =>{
                     console.error("發生錯誤：", error);
                     Swal.fire("更新失敗","","error");

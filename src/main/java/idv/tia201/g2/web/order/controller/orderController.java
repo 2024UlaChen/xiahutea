@@ -16,8 +16,6 @@ public class orderController {
     @Autowired
     private OrderService orderService;
 
-    // todo
-
     // 後台 顯示列表
     @GetMapping
     public List<Orders> manage() {
@@ -25,17 +23,20 @@ public class orderController {
     }
 
     // 後台 顯示明細
-    @GetMapping("detail/{orderId}")
+    @GetMapping("{orderId}")
     public Orders detail(@PathVariable Integer orderId) {
         return orderService.findByOrderId(orderId);
     }
 
+    // todo
     // 後台 修改明細資料
     @PutMapping
-    public Core update(@RequestBody Orders orders) {
-
-        return orderService.updateStatus(orders);
+    public Orders update(
+            @SessionAttribute("order") Orders seOrders,
+            @RequestBody Orders reqOrders
+    ) {
+        final int orders = seOrders.getOrderId();
+        reqOrders.setOrderId(orders);
+        return orderService.updateStatus(reqOrders);
     }
-
-
 }
