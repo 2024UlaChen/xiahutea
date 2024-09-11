@@ -14,8 +14,6 @@ public class OrderDaoImpl implements OrderDao {
 
     @PersistenceContext
     private Session session;
-  //  private EntityManager em;
-
 
     @Override
     public boolean insert(Orders orders) {

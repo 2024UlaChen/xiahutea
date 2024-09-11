@@ -26,6 +26,13 @@ public class Orders extends Core {
     @Column(name = "order_id", updatable = false)
     private Integer orderId;          // 訂單編號
 
+    // todo
+ //   @Column(name = "order_detail_id")  // 單向一對多
+//    private Integer orderDetailId;    // 訂單明細編號
+//    @OneToMany
+//    @Column(name = "order_detail", insertable = false, updatable = false)
+//    private OrderDetail orderDetail;    // 訂單明細編號
+
     @Column(name = "customer_id")  // 單向多對一
     private Integer customerId;    // 顧客編號
     @ManyToOne
@@ -102,7 +109,7 @@ public class Orders extends Core {
 
     @Column(name = "receiver_datetime", updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy/MM/dd HH:mm", timezone = "GMT+8")
     private Timestamp receiverDatetime; // 預計取貨時間
 
     @Column(name = "order_score", insertable = false, updatable = false)
@@ -112,10 +119,17 @@ public class Orders extends Core {
     private String orderFeedback; // 訂單評分建議
 
     @Column(name = "order_note", updatable = false)
-    private  String orderNote;
+    private  String orderNote;  //訂單備註
 
     @Column(name = "order_creat_datetime", updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(pattern = "yyyy/MM/dd HH:mm", timezone = "GMT+8")
     private Timestamp orderCreateDatetime; // 建立日期時間
+
+    //TODO
+ //   @Column(name = "order_update_datetime", updatable = false)
+//    @Temporal(TemporalType.TIMESTAMP)
+//    @JsonFormat(pattern = "yyyy/MM/dd HH:mm", timezone = "GMT+8")
+//    private Timestamp orderUpdateDatetime; // 訂單更新時間
+
 }
