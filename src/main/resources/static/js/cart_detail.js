@@ -40,8 +40,9 @@ document.addEventListener("DOMContentLoaded",function(){
   let lightbox_content_el = document.getElementsByClassName("lightbox-content")[0];
   let confirm_delete_el = document.getElementById("confirm-delete");
   let cancel_delete_el = document.getElementById("cancel-delete");
-  //用一個全域變數用來裝cartItem
+  //用全域變數用來裝cartItem(用來編輯)、currentItem(用來刪除)
     let currentCartItem = null;
+    let currentItem = null;
 
 
   //取貨方式
@@ -97,9 +98,9 @@ document.addEventListener("DOMContentLoaded",function(){
   // saveallproduct();
 
   //********************************************第一頁按鈕事件*************************************
-  //燈箱數量增減
+  //燈箱:數量增減
     qtyminus_el.addEventListener("click", function (e) {
-        if (qty_el.value > 0) {
+        if (qty_el.value > 1) {
             qty_el.value--;
         }
         e.stopPropagation();
@@ -110,34 +111,22 @@ document.addEventListener("DOMContentLoaded",function(){
         }
         e.stopPropagation();
     })
-  //燈箱關閉(取消更新)
+  //燈箱:取消編輯
   btnCloseLightbox.addEventListener('click',function (){
     lightbox_el.style.display = "none";
     document.body.style.overflow = 'auto';
     document.body.style.paddingRight = '0px';
   })
-  //刪除訂餐
-      var currentItem = null;
-      // for (let i = 0; i < btn_delete_el.length; i++) {
-      //   btn_delete_el[i].addEventListener("click", function (e) {
-      //     lightbox_delete_el.style.display = "flex";
-      //     document.body.style.overflow = 'hidden';
-      //     document.body.style.paddingRight = '17px';
-      //
-      //     currentItem = this.closest(".item-content");
-      //     var productName = this.closest(".cart-item").querySelector(".product-name").textContent;
-      //     delete_detail_el.innerHTML = `刪除 <span class="highlight">${productName}</span> ?`;
-      //   })
-      // }
-
-      lightbox_delete_el.addEventListener("click", function () {
-        lightbox_delete_el.style.display = "none";
-        document.body.style.overflow = 'auto';
-        document.body.style.paddingRight = '0px';
-      });
-      lightbox_content_el.addEventListener("click", function (e) {
-        e.stopPropagation();
-      });
+  //燈箱:刪除品項
+    //點擊非燈箱區域也能關閉燈箱
+  //   lightbox_delete_el.addEventListener("click", function () {
+  //       lightbox_delete_el.style.display = "none";
+  //       document.body.style.overflow = 'auto';
+  //       document.body.style.paddingRight = '0px';
+  //     });
+  //     lightbox_content_el.addEventListener("click", function (e) {
+  //       e.stopPropagation();
+  //     });
 
       confirm_delete_el.addEventListener("click", function () {
         currentItem.remove();
@@ -145,6 +134,8 @@ document.addEventListener("DOMContentLoaded",function(){
         document.body.style.overflow = 'auto';
         document.body.style.paddingRight = '0px';
         currentItem = null;
+        //編輯過商品同步修改localstorage
+        updateLocalStorage();
       })
       cancel_delete_el.addEventListener("click", function () {
         lightbox_delete_el.style.display = "none";
@@ -587,12 +578,25 @@ document.addEventListener("DOMContentLoaded",function(){
                 btn_modal_close_el.addEventListener('click',handlelightbox);
             })    //editBtn End
               //刪除頁面商品細項
+              const deleteBtn = cartItem.querySelector('.delete-btn');
 
-          }
+              deleteBtn.addEventListener('click',function (){
+                  lightbox_delete_el.style.display = "flex";
+                  document.body.style.overflow = 'hidden';
+                  document.body.style.paddingRight = '17px';
+
+                  currentItem = this.closest(".item-content");
+                  let productName = this.closest(".cart-item").querySelector(".product-name").textContent;
+                  delete_detail_el.innerHTML = `
+                    刪除 <span class="highlight">${productName}</span> ?
+                    `;
+              })
+           }
         })
-    }
+      }
 
-    //燈箱事件綁定
+
+    //燈箱:編輯事件處理
     function handlelightbox(){
           //先檢查全域變數是否存在cartItem
         if (!currentCartItem) return;
@@ -670,10 +674,10 @@ document.addEventListener("DOMContentLoaded",function(){
             lightbox_el.style.display = "none";
             document.body.style.overflow = 'auto';
             document.body.style.paddingRight = '0px';
-        // 清除全局變數
-        currentCartItem = null;
+            // 清除全局變數
+            currentCartItem = null;
 
-    }
+        }
   //判斷冰塊
       function getIceOption(Item) {
         if (Item.normal_ice) return '正常冰';
