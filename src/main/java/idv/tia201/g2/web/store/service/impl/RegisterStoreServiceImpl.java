@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -84,6 +86,40 @@ public class RegisterStoreServiceImpl implements RegisterStoreService {
             store.setMessage("加入失敗，已是會員，若忘記密碼，請聯絡管理員");
         }
         return store;
+    }
+
+    @Override
+    public List<Store> searchRegisterStore(Store store) {
+        // 回傳的店家列表
+        List<Store> storeList = new ArrayList<>();
+        // 搜尋店家狀態
+        List<Integer> storeStatus  = new ArrayList<>();
+        if(store.getStoreStatus() == 10){           // 店家狀態 : 審核中 & 拒絕
+            storeStatus.add(0);    //狀態 : 審核中
+            storeStatus.add(4);    //狀態 : 拒絕
+        }else {
+            storeStatus.add(store.getStoreStatus());
+        }
+
+        //只依店家狀態搜尋
+        if(store.getVat() == null && store.getStoreName() == null){
+            return storeDao.findByStoreStatusIn(storeStatus);
+        }
+
+        //依店家狀態 & 統編 & 店家名稱搜尋
+        if(store.getVat() != null && store.getStoreName() != null){
+            return storeDao.findByStoreStatusInAndVatAndStoreName(storeStatus, store.getVat(), store.getStoreName());
+        }
+
+        //依店家狀態 & (統編 OR 店家名稱)
+        if (store.getVat() == null){
+            store.setVat("********");
+        }
+        if(store.getStoreName() == null){
+            store.setStoreName("********");
+        }
+        return storeDao.findByStoreStatusInAndVatOrStoreName(storeStatus, store.getVat(), store.getStoreName());
+
     }
 
 }
