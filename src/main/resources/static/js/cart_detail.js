@@ -442,7 +442,8 @@ document.addEventListener("DOMContentLoaded",function(){
           });
     }
 
-    //用商品得到的商店ID來抓店家資訊 findproductbyid->findstorebyid
+    //用商品得到的商店ID來抓店家資訊
+    //findproductbyid->findstorebyid
     function findstorebyid(storeId){
         fetch('/cart/checkoutlist/findByStoreId',{
           method: 'POST',
@@ -469,7 +470,8 @@ document.addEventListener("DOMContentLoaded",function(){
               console.error('Error:', error);
             });
     }
-    //判斷店家是否有外送選項 findproductbyid->findstorebyid->updateDeliveryOptions
+    //判斷店家是否有外送選項
+    //findproductbyid->findstorebyid->updateDeliveryOptions
     function updateDeliveryOptions(isDelivery){
       if (isDelivery){
         const carryoutdiv = document.createElement('div');
@@ -508,88 +510,89 @@ document.addEventListener("DOMContentLoaded",function(){
         })
       }
     }
-  //用Localstotage中的購物車商品和返回的商品資訊生成商品明細
+    //用Localstotage中的購物車商品和返回的商品資訊生成商品明細
     //sortCartItems->findproductbyid->renderproductdetail
-  function renderproductdetail(groupedItems, products){
+    function renderproductdetail(groupedItems, products){
     // 建立商品ID到商品資訊的映射
-    const productMap = new Map();
-    products.forEach(product => {
-      productMap.set(product.productId, {
-        productName: product.productName,
-        productPrice: product.productPrice
-      });
-    });
-    //遍歷整理後的購物車商品列，動態生成標籤
-    groupedItems.forEach(item =>{
-      const product = productMap.get(item.productId);
-      if(product){
-        const itemContent = document.createElement('div');
-        const cartItem = document.createElement('div');
-        itemContent.className = 'item-content';
-        cartItem.className = 'cart-item';
-        //將productId放入data-attribute中，後續更新Localstorage可取用
-        cartItem.dataset.productId = item.productId;
-        cartItem.innerHTML = `
-            <p class="product-name">${product.productName}</p>
-            <div class="product-buttons">
-              <button class="edit-btn"><i class="fas fa-edit"></i></button>
-              <button class="delete-btn"><i class="fas fa-trash"></i></button>
-            </div>
-            `;
-            itemContent.appendChild(cartItem);
-        //商品細項:根據整理的購物車商品資料填入明細
-        const productDetail = document.createElement('div');
-        productDetail.className = 'product-detail';
-        productDetail.innerHTML = `
-          <div class="detail-item" data-type="sugar">${item.sugar} /</div>
-          <div class="detail-item" data-type="ice">${item.ice} /</div>
-          <div class="detail-item" data-type="add-ons">${item.add_ons} /</div>
-          <div class="detail-item" data-type="price">$${product.productPrice}/ </div>
-          <div class="detail-item" data-type="size">${item.size} /</div>
-          <div class="detail-item" data-type="quantity">${item.quantity} 杯</div>
-            `;
-        //將明細放到商品資訊欄
-        itemContent.appendChild(productDetail);
-        //把彙整後商品資訊放到購物明細區塊
-        item_detail_el.appendChild(itemContent);
-        // 動態綁定 edit-btn 事件
-        //鎖定這一次新建立的cartItem底下的編輯按鈕
-        const editBtn = cartItem.querySelector('.edit-btn');
-        editBtn.addEventListener('click',function (){
-          //修改: 開啟燈箱，並重置燈箱選項
-          document.querySelectorAll(`input[name="ice-options"]`)
-              .forEach(radio=>{radio.checked = false});
-          document.querySelectorAll(`input[name="sugar-options"]`)
-              .forEach(radio=>{radio.checked = false});
-          document.querySelectorAll(`input[name="materials-options"]`)
-              .forEach(radio=>{radio.checked = false});
-            document.querySelectorAll(`input[name="size-options"]`)
-                .forEach(radio=>{radio.checked = false});
-          qty_el.value = 1;
-          
-          lightbox_el.style.display = "flex";
-          document.body.style.overflow = 'hidden';
-          document.body.style.paddingRight = '17px';
-          // 找到此項點擊編輯的商品項，將對應的商品名稱顯示在燈箱
-          let button = this;  //指這次的點擊目標
-          let cartItem = button.closest(".cart-item");
-          let productName = cartItem.querySelector(".product-name").textContent;
-          let lightboxTitle = document.querySelector("#lightbox h1");
-          lightboxTitle.textContent = productName;
-          // 保存當前的 cartItem 到全局變數
-            currentCartItem = cartItem;
-          //獲得商品選項(冰塊甜度加料選項 目前先用固定)
+        const productMap = new Map();
+        products.forEach(product => {
+          productMap.set(product.productId, {
+            productName: product.productName,
+            productPrice: product.productPrice
+          });
+        });
+        //遍歷整理後的購物車商品列，動態生成標籤
+        groupedItems.forEach(item =>{
+          const product = productMap.get(item.productId);
+          if(product){
+            const itemContent = document.createElement('div');
+            const cartItem = document.createElement('div');
+            itemContent.className = 'item-content';
+            cartItem.className = 'cart-item';
+            //將productId放入data-attribute中，後續更新Localstorage可取用
+            cartItem.dataset.productId = item.productId;
+            cartItem.innerHTML = `
+                <p class="product-name">${product.productName}</p>
+                <div class="product-buttons">
+                  <button class="edit-btn"><i class="fas fa-edit"></i></button>
+                  <button class="delete-btn"><i class="fas fa-trash"></i></button>
+                </div>
+                `;
+                itemContent.appendChild(cartItem);
+            //商品細項:根據整理的購物車商品資料填入明細
+            const productDetail = document.createElement('div');
+            productDetail.className = 'product-detail';
+            productDetail.innerHTML = `
+              <div class="detail-item" data-type="sugar">${item.sugar} /</div>
+              <div class="detail-item" data-type="ice">${item.ice} /</div>
+              <div class="detail-item" data-type="add-ons">${item.add_ons} /</div>
+              <div class="detail-item" data-type="price">$${product.productPrice}/ </div>
+              <div class="detail-item" data-type="size">${item.size} /</div>
+              <div class="detail-item" data-type="quantity">${item.quantity} 杯</div>
+                `;
+            //將明細放到商品資訊欄
+            itemContent.appendChild(productDetail);
+            //把彙整後商品資訊放到購物明細區塊
+            item_detail_el.appendChild(itemContent);
+            // 動態綁定 edit-btn 事件
+            //鎖定這一次新建立的cartItem底下的編輯按鈕
+            const editBtn = cartItem.querySelector('.edit-btn');
+            editBtn.addEventListener('click',function (){
+              //修改: 開啟燈箱，並重置燈箱選項
+              document.querySelectorAll(`input[name="ice-options"]`)
+                  .forEach(radio=>{radio.checked = false});
+              document.querySelectorAll(`input[name="sugar-options"]`)
+                  .forEach(radio=>{radio.checked = false});
+              document.querySelectorAll(`input[name="materials-options"]`)
+                  .forEach(radio=>{radio.checked = false});
+                document.querySelectorAll(`input[name="size-options"]`)
+                    .forEach(radio=>{radio.checked = false});
+              qty_el.value = 1;
 
-          //處理燈箱編輯事件
-            btn_modal_close_el.removeEventListener('click',handlelightbox);
-            btn_modal_close_el.addEventListener('click',handlelightbox);
-        })    //editBtn End
-          //刪除頁面商品細項
-      }
-    })
-  }
+              lightbox_el.style.display = "flex";
+              document.body.style.overflow = 'hidden';
+              document.body.style.paddingRight = '17px';
+              // 找到此項點擊編輯的商品項，將對應的商品名稱顯示在燈箱
+              let button = this;  //指這次的點擊目標
+              let cartItem = button.closest(".cart-item");
+              let productName = cartItem.querySelector(".product-name").textContent;
+              let lightboxTitle = document.querySelector("#lightbox h1");
+              lightboxTitle.textContent = productName;
+              // 保存當前的 cartItem 到全局變數
+                currentCartItem = cartItem;
+              //獲得商品選項(冰塊甜度加料選項 目前先用固定)
 
-  //燈箱事件綁定
+              //處理燈箱編輯事件
+                btn_modal_close_el.removeEventListener('click',handlelightbox);
+                btn_modal_close_el.addEventListener('click',handlelightbox);
+            })    //editBtn End
+              //刪除頁面商品細項
+
+          }
+        })
+    }
+
+    //燈箱事件綁定
     function handlelightbox(){
           //先檢查全域變數是否存在cartItem
         if (!currentCartItem) return;
@@ -653,8 +656,8 @@ document.addEventListener("DOMContentLoaded",function(){
                     item !== currentCartItem
                 ){
                     const existingQuantity = parseInt(item.closest(".item-content").querySelector('[data-type="quantity"]').textContent);
-                    console.log("existingQuantity : ",existingQuantity)
-                    console.log("newQuantity : ",newQuantity)
+                    // console.log("existingQuantity : ",existingQuantity)
+                    // console.log("newQuantity : ",newQuantity)
                     const totalQuantity = existingQuantity + newQuantity;
                     //更新當前購物車一模一樣品項的數項
                     item.closest(".item-content").querySelector('[data-type="quantity"]').textContent = `${totalQuantity} 杯`;
@@ -662,6 +665,7 @@ document.addEventListener("DOMContentLoaded",function(){
                     itemContent.remove();
                 }
             })
+            //編輯過商品同步修改localstorage
             updateLocalStorage();
             lightbox_el.style.display = "none";
             document.body.style.overflow = 'auto';
@@ -700,6 +704,7 @@ document.addEventListener("DOMContentLoaded",function(){
       }
 
       //更新localstorage
+      //renderproductdetail->handlelightbox->updateLocalStorage
         function updateLocalStorage() {
             //先抓目前頁面上所有商品項
             const cartItems = document.querySelectorAll(".cart-item");
