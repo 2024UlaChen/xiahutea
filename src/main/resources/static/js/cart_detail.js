@@ -40,6 +40,8 @@ document.addEventListener("DOMContentLoaded",function(){
   let lightbox_content_el = document.getElementsByClassName("lightbox-content")[0];
   let confirm_delete_el = document.getElementById("confirm-delete");
   let cancel_delete_el = document.getElementById("cancel-delete");
+  //用一個全域變數用來裝cartItem
+    let currentCartItem = null;
 
 
   //取貨方式
@@ -86,6 +88,7 @@ document.addEventListener("DOMContentLoaded",function(){
   const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
   //localstorage購物車資料分類
   const groupedItems = sortCartItems(cartItems);
+  console.log('分類後購物車商品列表: ',groupedItems)
   // 提取所有商品的 productId用來渲染網頁，一個ID只抓一次
   const productIds = [...new Set(groupedItems.map(item => item.productId))];
   //獲得商品ID列獲得的商品，並在方法中渲染前端頁面
@@ -402,7 +405,7 @@ document.addEventListener("DOMContentLoaded",function(){
     });
     return groupedItems;
   }
-    //用商品ID抓商品資料及店家資訊
+    //用商品ID抓商品資料及店家資訊 sortCartItems->findproductbyid
     function findproductbyid(productIds){
       fetch('/cart/checkoutlist/findByproductIds', {
         method: 'POST',
@@ -439,7 +442,7 @@ document.addEventListener("DOMContentLoaded",function(){
           });
     }
 
-    //用商品得到的商店ID來抓店家資訊
+    //用商品得到的商店ID來抓店家資訊 findproductbyid->findstorebyid
     function findstorebyid(storeId){
         fetch('/cart/checkoutlist/findByStoreId',{
           method: 'POST',
@@ -466,7 +469,7 @@ document.addEventListener("DOMContentLoaded",function(){
               console.error('Error:', error);
             });
     }
-    //判斷店家是否有外送選項
+    //判斷店家是否有外送選項 findproductbyid->findstorebyid->updateDeliveryOptions
     function updateDeliveryOptions(isDelivery){
       if (isDelivery){
         const carryoutdiv = document.createElement('div');
@@ -506,9 +509,9 @@ document.addEventListener("DOMContentLoaded",function(){
       }
     }
   //用Localstotage中的購物車商品和返回的商品資訊生成商品明細
+    //sortCartItems->findproductbyid->renderproductdetail
   function renderproductdetail(groupedItems, products){
     // 建立商品ID到商品資訊的映射
-    console.log('分類後購物車商品列表: ',groupedItems)
     const productMap = new Map();
     products.forEach(product => {
       productMap.set(product.productId, {
@@ -524,6 +527,8 @@ document.addEventListener("DOMContentLoaded",function(){
         const cartItem = document.createElement('div');
         itemContent.className = 'item-content';
         cartItem.className = 'cart-item';
+        //將productId放入data-attribute中，後續更新Localstorage可取用
+        cartItem.dataset.productId = item.productId;
         cartItem.innerHTML = `
             <p class="product-name">${product.productName}</p>
             <div class="product-buttons">
@@ -565,29 +570,43 @@ document.addEventListener("DOMContentLoaded",function(){
           lightbox_el.style.display = "flex";
           document.body.style.overflow = 'hidden';
           document.body.style.paddingRight = '17px';
-          // 找到點擊最近的商品項目，將對應的商品名稱顯示在燈箱
+          // 找到此項點擊編輯的商品項，將對應的商品名稱顯示在燈箱
           let button = this;  //指這次的點擊目標
           let cartItem = button.closest(".cart-item");
           let productName = cartItem.querySelector(".product-name").textContent;
           let lightboxTitle = document.querySelector("#lightbox h1");
           lightboxTitle.textContent = productName;
+          // 保存當前的 cartItem 到全局變數
+            currentCartItem = cartItem;
           //獲得商品選項(冰塊甜度加料選項 目前先用固定)
 
-          //燈箱選項更新商品
-          btn_modal_close_el.addEventListener("click", function () {
+          //處理燈箱編輯事件
+            btn_modal_close_el.removeEventListener('click',handlelightbox);
+            btn_modal_close_el.addEventListener('click',handlelightbox);
+        })    //editBtn End
+          //刪除頁面商品細項
+      }
+    })
+  }
+
+  //燈箱事件綁定
+    function handlelightbox(){
+          //先檢查全域變數是否存在cartItem
+        if (!currentCartItem) return;
             const selectedIce = document.querySelector('input[name="ice-options"]:checked');
             const selectedSugar = document.querySelector('input[name="sugar-options"]:checked');
             const selectedMaterials = document.querySelector('input[name="materials-options"]:checked');
             const selectedSize = document.querySelector('input[name="size-options"]:checked');
-              //確認冰塊、甜度、加料、尺寸皆有選
+            const newQuantity = parseInt(qty_el.value);
+            //確認冰塊、甜度、加料、尺寸皆有選
             if (!selectedIce || !selectedSugar || !selectedMaterials|| !selectedSize) {
-              Swal.fire({
-                icon: 'warning',
-                title: '請選擇所有項目',
-                text: '請選擇所有選項（冰塊、甜度、加料、尺寸）。',
-                confirmButtonText: '確定'
-              });
-              return;
+                Swal.fire({
+                    icon: 'warning',
+                    title: '請選擇所有項目',
+                    text: '請選擇所有選項（冰塊、甜度、加料、尺寸）。',
+                    confirmButtonText: '確定'
+                });
+                return;
             }
             //設定選中的選項文字
             const iceText = selectedIce.nextElementSibling.textContent;
@@ -595,25 +614,62 @@ document.addEventListener("DOMContentLoaded",function(){
             const materialsText = selectedMaterials.nextElementSibling.textContent;
             const sizeText = selectedSize.nextElementSibling.textContent;
             //指定到該點擊更新按鈕下最近的商品細項父節點
-            const itemContent = cartItem.closest(".item-content");
+            const itemContent = currentCartItem.closest(".item-content");
             //再利用父節點指定到其下的細項
             const productDetail = itemContent.querySelector(".product-detail");
 
+            //先把這次更動細項存下來後續比對用
+            const currentProduct = {
+                productName: currentCartItem.querySelector(".product-name").textContent,
+                ice: iceText,
+                sugar: sugarText,
+                materials: materialsText,
+                size: sizeText
+            };
+            //更新頁面商品細項
             productDetail.querySelector('[data-type="ice"]').textContent = `${iceText} / `;
             productDetail.querySelector('[data-type="sugar"]').textContent = `${sugarText} / `;
             productDetail.querySelector('[data-type="add-ons"]').textContent = `${materialsText} / `;
             productDetail.querySelector('[data-type="size"]').textContent = `${sizeText} / `;
-            productDetail.querySelector('[data-type="quantity"]').textContent = qty_el.value+' 杯';
+            productDetail.querySelector('[data-type="quantity"]').textContent = `${newQuantity} 杯`;
+
+            // 遍歷購物車中的商品，檢查是否有相同品名和選項的商品
+            const cartItems = document.querySelectorAll(".cart-item");
+            cartItems.forEach(item =>{
+                const itemProductName = item.querySelector(".product-name").textContent;
+                const itemIce = item.closest(".item-content").querySelector('[data-type="ice"]').textContent.trim().replace(/ \/$/, '');
+                const itemSugar = item.closest(".item-content").querySelector('[data-type="sugar"]').textContent.trim().replace(/ \/$/, '');
+                const itemMaterials = item.closest(".item-content").querySelector('[data-type="add-ons"]').textContent.trim().replace(/ \/$/, '');
+                const itemSize = item.closest(".item-content").querySelector('[data-type="size"]').textContent.trim().replace(/ \/$/, '');
+
+                // 檢查品名、冰塊、甜度、加料、尺寸是否相同
+                if (
+                    currentProduct.productName === itemProductName &&
+                    currentProduct.ice === itemIce &&
+                    currentProduct.sugar === itemSugar &&
+                    currentProduct.materials === itemMaterials &&
+                    currentProduct.size === itemSize &&
+                    // 確保不是當前修改的商品(遍歷尋找的購物車商品和當前點擊的商品
+                    item !== currentCartItem
+                ){
+                    const existingQuantity = parseInt(item.closest(".item-content").querySelector('[data-type="quantity"]').textContent);
+                    console.log("existingQuantity : ",existingQuantity)
+                    console.log("newQuantity : ",newQuantity)
+                    const totalQuantity = existingQuantity + newQuantity;
+                    //更新當前購物車一模一樣品項的數項
+                    item.closest(".item-content").querySelector('[data-type="quantity"]').textContent = `${totalQuantity} 杯`;
+                    //刪除當前編輯的商品(數量已累計可移除)
+                    itemContent.remove();
+                }
+            })
+            updateLocalStorage();
             lightbox_el.style.display = "none";
             document.body.style.overflow = 'auto';
             document.body.style.paddingRight = '0px';
-          })
-        })    //editBtn End
+        // 清除全局變數
+        currentCartItem = null;
 
-      }
-    })
-  }
-
+    }
   //判斷冰塊
       function getIceOption(Item) {
         if (Item.normal_ice) return '正常冰';
@@ -643,7 +699,44 @@ document.addEventListener("DOMContentLoaded",function(){
         return '無加料';
       }
 
-  // 獲取尺寸的輔助函數
+      //更新localstorage
+        function updateLocalStorage() {
+            //先抓目前頁面上所有商品項
+            const cartItems = document.querySelectorAll(".cart-item");
+            const cartData = [];
+            //每個抓到商品ID，甜度冰塊尺寸杯數等資訊存到陣列中
+            cartItems.forEach(item => {
+                const productDetail = item.closest(".item-content").querySelector(".product-detail");
+
+                const itemData = {
+                    productId: Number(item.dataset.productId),
+                    // 確保所有的冰塊、甜度和加料選項轉換為數字 (TINYINT 風格)
+                    normal_ice: Number(productDetail.querySelector('[data-type="ice"]').textContent.includes('正常冰') ? 1 : 0),
+                    less_ice: Number(productDetail.querySelector('[data-type="ice"]').textContent.includes('少冰') ? 1 : 0),
+                    ice_free: Number(productDetail.querySelector('[data-type="ice"]').textContent.includes('去冰') ? 1 : 0),
+                    light_ice: Number(productDetail.querySelector('[data-type="ice"]').textContent.includes('微冰') ? 1 : 0),
+                    room_temperature: Number(productDetail.querySelector('[data-type="ice"]').textContent.includes('常溫') ? 1 : 0),
+                    hot: Number(productDetail.querySelector('[data-type="ice"]').textContent.includes('熱飲') ? 1 : 0),
+                    full_sugar: Number(productDetail.querySelector('[data-type="sugar"]').textContent.includes('全糖') ? 1 : 0),
+                    less_sugar: Number(productDetail.querySelector('[data-type="sugar"]').textContent.includes('少糖') ? 1 : 0),
+                    half_sugar: Number(productDetail.querySelector('[data-type="sugar"]').textContent.includes('半糖') ? 1 : 0),
+                    quarter_sugar: Number(productDetail.querySelector('[data-type="sugar"]').textContent.includes('微糖') ? 1 : 0),
+                    no_sugar: Number(productDetail.querySelector('[data-type="sugar"]').textContent.includes('無糖') ? 1 : 0),
+                    pearl: Number(productDetail.querySelector('[data-type="add-ons"]').textContent.includes('珍珠') ? 1 : 0),
+                    pudding: Number(productDetail.querySelector('[data-type="add-ons"]').textContent.includes('布丁') ? 1 : 0),
+                    coconut_jelly: Number(productDetail.querySelector('[data-type="add-ons"]').textContent.includes('椰果') ? 1 : 0),
+                    taro: Number(productDetail.querySelector('[data-type="add-ons"]').textContent.includes('芋頭') ? 1 : 0),
+                    herbal_jelly: Number(productDetail.querySelector('[data-type="add-ons"]').textContent.includes('仙草') ? 1 : 0),
+                    size: productDetail.querySelector('[data-type="size"]').textContent.trim().replace(/ \/$/, ''),
+                    quantity: parseInt(productDetail.querySelector('[data-type="quantity"]').textContent)
+                };
+                cartData.push(itemData);
+            });
+            //覆蓋現在localstorage資料
+            localStorage.setItem('cartItems', JSON.stringify(cartData));
+        }
+
+    // 獲取尺寸的輔助函數
   //   function getSize(size) {
   //     switch (size) {
   //       case 1:
