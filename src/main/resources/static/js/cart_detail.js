@@ -15,9 +15,9 @@ document.addEventListener("DOMContentLoaded",function(){
 
   //訂單細項
   let item_detail_el = document.getElementsByClassName('item-detail')[0];
-  let ice_el = document.querySelector('.ice + .lightbox-radio-group');
-  let sugar_el = document.querySelector('.sugar + .lightbox-radio-group');
-  let materials_el = document.querySelector('.materials + .lightbox-radio-group');
+  // let ice_el = document.querySelector('.ice + .lightbox-radio-group');
+  // let sugar_el = document.querySelector('.sugar + .lightbox-radio-group');
+  // let materials_el = document.querySelector('.materials + .lightbox-radio-group');
 
   //訂單客製化選項標簽
   let recevier_method_el = document.getElementsByClassName('recevier-method')[0];
@@ -50,7 +50,8 @@ document.addEventListener("DOMContentLoaded",function(){
   let pick_up_input_el = document.getElementsByClassName("pick-up-input")[0];
 
   //時間選擇
-  let picker_el = document.getElementsByClassName("pickuper")[0];
+  // let picker_el = document.getElementsByClassName("pickuper")[0];
+    let date_input_el = document.getElementById('myDatepicker');
 
   //優惠使用
   let coupon_number_el = document.getElementsByClassName("coupon-number")[0];
@@ -118,16 +119,6 @@ document.addEventListener("DOMContentLoaded",function(){
     document.body.style.paddingRight = '0px';
   })
   //燈箱:刪除品項
-    //點擊非燈箱區域也能關閉燈箱
-  //   lightbox_delete_el.addEventListener("click", function () {
-  //       lightbox_delete_el.style.display = "none";
-  //       document.body.style.overflow = 'auto';
-  //       document.body.style.paddingRight = '0px';
-  //     });
-  //     lightbox_content_el.addEventListener("click", function (e) {
-  //       e.stopPropagation();
-  //     });
-
       confirm_delete_el.addEventListener("click", function () {
         currentItem.remove();
         lightbox_delete_el.style.display = "none";
@@ -143,12 +134,12 @@ document.addEventListener("DOMContentLoaded",function(){
         document.body.style.paddingRight = '0px';
       });
       //時間選擇
-      picker_el.addEventListener("focus", function () {
-        picker_el.classList.add("focus-border");
-      })
-      picker_el.addEventListener("blur", function () {
-        picker_el.classList.remove("focus-border");
-      });
+      // picker_el.addEventListener("focus", function () {
+      //   picker_el.classList.add("focus-border");
+      // })
+      // picker_el.addEventListener("blur", function () {
+      //   picker_el.classList.remove("focus-border");
+      // });
 
       //優惠使用(優惠券、會員卡、會員錢包)
       select_coupon_input_el.addEventListener("click", function () {
@@ -192,6 +183,7 @@ document.addEventListener("DOMContentLoaded",function(){
         step1_el.classList.remove("active");
         step2_el.classList.add("active");
         if (step_content_el.style.display = "flex") {
+
           step_content_el.style.display = "none";
           step_content2_el.style.display = "flex";
           order_detail_container_el.scrollIntoView({
@@ -200,10 +192,10 @@ document.addEventListener("DOMContentLoaded",function(){
         }
         e.stopPropagation();
       })
-
-
 //********************************************日期時間選擇器*************************************
-      new AirDatepicker('#myDatepicker', {
+    // 取得當前日期和時間
+    const now = new Date();
+    new AirDatepicker('#myDatepicker', {
         locale: {
           days: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
           daysShort: ['日', '一', '二', '三', '四', '五', '六'],
@@ -216,7 +208,10 @@ document.addEventListener("DOMContentLoaded",function(){
           timeFormat: 'HH:mm',
           firstDay: 1
         },
-        timepicker: true,
+        minDate: now, // 設定不能選擇早於當前的日期
+        timepicker: true, // 開啟時間選擇功能
+        dateFormat: 'yyyy-MM-dd HH:mm', // 設定日期和時間格式
+        minutesStep: 1 // 設定分鐘選擇間隔
       });
 
       //********************************************第二頁按鈕事件*************************************
@@ -498,6 +493,7 @@ document.addEventListener("DOMContentLoaded",function(){
         //點擊自取選項關閉地址輸入框
         pick_up_input_el.addEventListener("click", function () {
           address_el.disabled = true;
+          address_el.value='';
         })
       }
     }
@@ -669,16 +665,16 @@ document.addEventListener("DOMContentLoaded",function(){
                     itemContent.remove();
                 }
             })
-            //編輯過商品同步修改localstorage
-            updateLocalStorage();
-            lightbox_el.style.display = "none";
-            document.body.style.overflow = 'auto';
-            document.body.style.paddingRight = '0px';
-            // 清除全局變數
-            currentCartItem = null;
+                //編輯過商品同步修改localstorage
+                updateLocalStorage();
+                lightbox_el.style.display = "none";
+                document.body.style.overflow = 'auto';
+                document.body.style.paddingRight = '0px';
+                // 清除全局變數
+                currentCartItem = null;
 
         }
-  //判斷冰塊
+    //判斷冰塊
       function getIceOption(Item) {
         if (Item.normal_ice) return '正常冰';
         if (Item.less_ice) return '少冰';
@@ -744,6 +740,66 @@ document.addEventListener("DOMContentLoaded",function(){
             //覆蓋現在localstorage資料
             localStorage.setItem('cartItems', JSON.stringify(cartData));
         }
+        //訂單彙總項目更新
+        function updateDetail(){
+
+        }
+
+        //表單填送:處理商品運送方式及取貨時間
+        function checkreceivemethod(){
+        //抓到目前自取或外送選擇
+        const pickUpInput = document.querySelector('input[name="delivery"]:checked');
+        //確認至少有選擇一個
+        if (!pickUpInput) {
+            Swal.fire({
+                icon: 'warning',
+                title: '請選擇取貨方式',
+                text: '請選擇自取或外送。',
+                confirmButtonText: '確定'
+            });
+            return;
+        }
+        //根據選項填充文字
+        let receivingMethod = '';
+        if (pickUpInput.classList.contains('pick-up-input')) {
+            receivingMethod = '自取';
+        } else if (pickUpInput.classList.contains('carry-out-radio')) {
+            receivingMethod = '外送';
+        }
+        //如果選擇了外送，必須檢查地址是否已填寫
+            let addressDetail = '';
+            if (receivingMethod === '外送') {
+                addressDetail = document.querySelector('.carry-out-address .address').value;
+                if (!addressDetail.trim()) {
+                    // 如果地址沒有填寫，顯示提示訊息
+                    Swal.fire({
+                        icon: 'warning',
+                        title: '請輸入地址',
+                        text: '選擇外送時，請輸入地址。',
+                        confirmButtonText: '確定'
+                    });
+                    return; // 結束，不進行下一步
+                }
+            }
+            //判斷有無填寫取貨時間
+            if(!date_input_el.value) {
+                // 使用 SweetAlert 顯示錯誤訊息
+                Swal.fire({
+                    icon: 'error',
+                    title: '錯誤',
+                    text: '請選擇取貨時間'
+                });
+                return;
+            }
+            // 將選擇的取貨方式和地址（如果有）取貨時間儲存到 localStorage
+            const reciverMethodInfo = {
+                method: receivingMethod,
+                address: addressDetail,
+                receivertime:date_input_el.value
+            };
+            localStorage.setItem('reciverMethodInfo', JSON.stringify(reciverMethodInfo));
+        }
+
 
     // 獲取尺寸的輔助函數
   //   function getSize(size) {
