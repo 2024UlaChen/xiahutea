@@ -15,6 +15,8 @@ import java.util.List;
 public interface ProductDao extends JpaRepository<Product,Integer>  {
 
     List<Product> findByProductNameContaining(String name);
-//   用id去找分類底下的product
+//   用id去找分類底下的productm用來顯示productmenu
     List<Product> findByProductCategoryId(Integer categoryId);
+ //用產品分類及商品名稱去做查詢，搜尋欄
+    List<Product> findByProductCategoryIdAndProductNameContaining(Integer productCategoryId, String productName);
 }

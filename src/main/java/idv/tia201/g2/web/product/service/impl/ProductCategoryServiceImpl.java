@@ -68,7 +68,7 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
 
     }
         @Override
-        public boolean removeCategory (Integer categoryId){
+        public boolean deleteCategory (Integer categoryId){
          //要check是否存在，存在就刪掉，不存在false
             if (productCategoryDao.existsById(categoryId)) {
                 productCategoryDao.deleteById(categoryId);
