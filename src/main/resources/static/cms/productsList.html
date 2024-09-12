@@ -87,7 +87,7 @@
                     <div class="col-md-12">
                         <div>
                             <div class="card-header">
-                                <button type="button" class="btn btn-primary btn-add" id="add">新增商品</button>
+                                <button type="button" class="btn btn-primary btn_add" id="add">新增商品</button>
 
                                 <div class="card-tools">
                                     <div class="input-group">
@@ -102,7 +102,7 @@
                                         </select>
                                         <input type="search" class="form-control" placeholder="搜尋商品名稱">
                                         <div class="input-group-append">
-                                            <div class="btn btn-primary btn-add">
+                                            <div class="btn btn-primary search btn_add">
                                                 <i class="fas fa-search"></i>
                                             </div>
                                         </div>
@@ -292,6 +292,13 @@
 
 <script>
 
+//查詢
+// let search_btn=document.querySelector('.search');
+// search_btn.addEventListener("click",function (){
+//     alert("rrr")
+// })
+
+
    //單筆移除
     $('#myTable').on('click', '#delete_btn', function () {
 
@@ -308,72 +315,72 @@
    })
 
 
-   // const data = [
-   //     { id: 1, name: "Alice", age: 25 },
-   //     { id: 2, name: "Bob", age: 30 },
-   //     { id: 3, name: "Charlie", age: 35 },
-   //     { id: 4, name: "David", age: 40 },
-   //     { id: 5, name: "Eve", age: 22 },
-   //     { id: 6, name: "Frank", age: 28 },
-   //     { id: 7, name: "Grace", age: 26 },
-   //     { id: 8, name: "Hank", age: 32 },
-   //     { id: 9, name: "Ivy", age: 29 },
-   //     { id: 10, name: "Jack", age: 27 },
-   //     { id: 11, name: "Kate", age: 31 }
-   // ];
-   // 假設有資料了
-   // 每頁顯示幾筆資料
-var itemsPerPage=15;
-//     總筆數
-var totalRecords=data.length;
-// 算出要多少頁
-var totalPages=Math.ceil(totalRecords/itemsPerPage)
-//    當前頁數
-var currentPage=1;
-
-function renderTable (page){
-const start=(page - 1)*itemsPerPage;
-const end=start+itemsPerPage;
- $("#myTable tbody").empty
-
-    const pageData=data.slice(start,end);
-$.each(pageData, function (index,row){
-    const tr=$("<tr></tr>");
-        tr.append(`<td>${row.id}</td>`)
-            .append(`<td>${row.productname}</td>`)
-            .append(`<td>${row.productprice}</td>`)
-    $("#myTable tbody").append(tr);
-
-})
-//   顯示幕前的頁數&總頁數
-
-   $("#page-info").text(`Page ${currentPage} of ${totalPages}`)
-
-    $("#prev").prop("disabled",currentPage === 1);
-    $("#next").prop("disabled",currentPage===totalPages);
-
-
-}
-
-function prevPage(){
-    if(currentPage>1){
-        currentPage--;
-        renderTable(currentPage)
-    }
-}
-
-function nextPage(){
-    if(currentPage<totalPages){
-        currentPage++;
-        renderTable(currentPage)
-    }
-}
-
-   renderTable(currentPage);
-
-   $("#prev").on("click", prevPage);
-   $("#next").on("click", nextPage);
-
+//    // const data = [
+//    //     { id: 1, name: "Alice", age: 25 },
+//    //     { id: 2, name: "Bob", age: 30 },
+//    //     { id: 3, name: "Charlie", age: 35 },
+//    //     { id: 4, name: "David", age: 40 },
+//    //     { id: 5, name: "Eve", age: 22 },
+//    //     { id: 6, name: "Frank", age: 28 },
+//    //     { id: 7, name: "Grace", age: 26 },
+//    //     { id: 8, name: "Hank", age: 32 },
+//    //     { id: 9, name: "Ivy", age: 29 },
+//    //     { id: 10, name: "Jack", age: 27 },
+//    //     { id: 11, name: "Kate", age: 31 }
+//    // ];
+//    // 假設有資料了
+//    // 每頁顯示幾筆資料
+// var itemsPerPage=15;
+// //     總筆數
+// var totalRecords=data.length;
+// // 算出要多少頁
+// var totalPages=Math.ceil(totalRecords/itemsPerPage)
+// //    當前頁數
+// var currentPage=1;
+//
+// function renderTable (page){
+// const start=(page - 1)*itemsPerPage;
+// const end=start+itemsPerPage;
+//  $("#myTable tbody").empty
+//
+//     const pageData=data.slice(start,end);
+// $.each(pageData, function (index,row){
+//     const tr=$("<tr></tr>");
+//         tr.append(`<td>${row.id}</td>`)
+//             .append(`<td>${row.productname}</td>`)
+//             .append(`<td>${row.productprice}</td>`)
+//     $("#myTable tbody").append(tr);
+//
+// })
+// //   顯示幕前的頁數&總頁數
+//
+//    $("#page-info").text(`Page ${currentPage} of ${totalPages}`)
+//
+//     $("#prev").prop("disabled",currentPage === 1);
+//     $("#next").prop("disabled",currentPage===totalPages);
+//
+//
+// }
+//
+// function prevPage(){
+//     if(currentPage>1){
+//         currentPage--;
+//         renderTable(currentPage)
+//     }
+// }
+//
+// function nextPage(){
+//     if(currentPage<totalPages){
+//         currentPage++;
+//         renderTable(currentPage)
+//     }
+// }
+//
+//    renderTable(currentPage);
+//
+//    $("#prev").on("click", prevPage);
+//    $("#next").on("click", nextPage);
+//
 
 </script>
 
