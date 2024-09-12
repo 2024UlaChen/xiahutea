@@ -227,7 +227,7 @@
                 orderHtml += `
                     <tr>
                         <td class="order_date_value">${data[i].orderCreateDatetime}</td>
-                        <td class="order_id_value"><a href="./storeOrderDetail/${data[i].orderId}.html">${data[i].orderId}</a></td>
+                        <td class="order_id_value"><a href="./storeOrderDetail.html?orderId=${data[i].orderId}">${data[i].orderId}</a></td>
                         <td class="order_username_value">${data[i].customer.nickname}</td>
                         <td class="order_status_value">${statusText(data[i].orderStatus)}</td>
                         <td class="order_store_value">${data[i].store.storeName}</td>
@@ -246,6 +246,8 @@
                 case 4 : return "訂單完成";
             }
         }
+
+
         //------------------------------------------------------------------------------------
         // 0. 顯示列表資料
         init();

@@ -38,7 +38,8 @@ public class OrderServiceImpl implements OrderService {
             newOrder.setSuccessful(false);
             return newOrder;
         }
-        orderDao.update(newOrder);
+        oldOrder.setOrderStatus(newOrder.getOrderStatus());
+        orderDao.update(oldOrder);
         newOrder.setMessage("修改完成");
         newOrder.setSuccessful(true);
         return newOrder;
