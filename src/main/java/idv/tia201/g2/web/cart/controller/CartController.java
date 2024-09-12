@@ -4,6 +4,7 @@ import idv.tia201.g2.web.cart.service.CartService;
 import idv.tia201.g2.web.member.vo.Cart;
 import idv.tia201.g2.web.member.vo.Member;
 import idv.tia201.g2.web.product.vo.Product;
+import idv.tia201.g2.web.store.vo.Store;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
@@ -38,10 +39,16 @@ public class CartController extends HttpServlet {
 //        cartService.saveCartItems(cartItems);
 //        return "Cart items saved";
 //    }
-//    // POST 請求：獲取商品及商店資料
-//    @PostMapping("/checkoutlist/findByIds")
-//    @ResponseBody
-//    public List<Product> findProductsByIds(@RequestBody List<Integer> productIds) {
-//        return cartService.getProductsByIds(productIds);
-//    }
+    // POST 請求：獲取商品資料
+    @PostMapping("/checkoutlist/findByproductIds")
+    @ResponseBody
+    public List<Product> findProductsByIds(@RequestBody List<Integer> productIds) {
+        return cartService.getProductsByIds(productIds);
+    }
+    // POST 請求：獲取商店資料
+    @PostMapping("/checkoutlist/findBystoreId")
+    @ResponseBody
+    public Store findstoreById(Integer storeId) {
+        return cartService.getStoreByid(storeId);
+    }
 }

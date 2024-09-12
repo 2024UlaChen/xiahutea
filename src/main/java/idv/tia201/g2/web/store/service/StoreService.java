@@ -3,7 +3,9 @@ package idv.tia201.g2.web.store.service;
 import idv.tia201.g2.web.store.model.StoreViewModel;
 import idv.tia201.g2.web.store.vo.Store;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface StoreService {
@@ -22,6 +24,8 @@ public interface StoreService {
     Store editStorePassword(Store store);
     Store editStoreInfo(Store store);
     Store editStoreLoyaltyCard(Store store);
+    byte[] findLogoById(Integer id);
+    Store editLogoById(MultipartFile file, Integer storeId) throws IOException;
 
 
 
