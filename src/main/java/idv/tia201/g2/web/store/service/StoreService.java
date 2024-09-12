@@ -31,4 +31,6 @@ public interface StoreService {
     void addStoreHolidayByDate(Store store, Date holiday);
 
     List<Store> getStoreListNoWorking(Date holiday);
+    List<Store> getAllData();
+    List<Store> getAllStoreById();
 }

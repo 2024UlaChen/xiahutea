@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.web.client.RestTemplateAutoConfigu
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 //RestController是組合註解 他等於Controller 加上 ResponseBody 就是一個RestController
@@ -100,6 +101,14 @@ public class StoreController {
     }
 
 
+    @GetMapping("/test")
+    public List<Store> test(){
+        Date date = new Date(2024,6,25);
+//        List<Store> list = storeService.getAllData();
+        List<Store> list = storeService.getStoreListNoWorking(date);
+//        List<Store> list = storeService.getAllStoreById();
+        return list;
+    }
 
 
 

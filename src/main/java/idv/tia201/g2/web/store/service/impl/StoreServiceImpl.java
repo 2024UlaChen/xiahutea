@@ -186,7 +186,8 @@ public class StoreServiceImpl implements StoreService {
     @Override
     public void addStoreHolidayByDate(Store store, Date holiday) {
         StoreCalendar data = new StoreCalendar();
-        data.setStoreHoliday(holiday);
+
+
         data.setStoreId(store.getStoreId());
         storeCalendarRepository.save(data);
 
@@ -195,8 +196,17 @@ public class StoreServiceImpl implements StoreService {
     @Override
     public List<Store> getStoreListNoWorking(Date holiday) {
         //取得休息店家
-        return storeCalendarRepository.findByStoreHoliday(holiday);
+        //java.sql.Date sqlDate = new java.sql.Date(holiday.getTime());
+        return storeCalendarRepository.selectOneDayForTest();
+
 
     }
+    public List<Store> getAllData(){
+        return storeCalendarRepository.findAllByStore();
+    }
+    public List<Store> getAllStoreById(){
+        return storeCalendarRepository.findStoreByStoreId(7);
+    }
+
 
 }

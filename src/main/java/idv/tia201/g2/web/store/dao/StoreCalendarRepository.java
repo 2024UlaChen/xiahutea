@@ -13,9 +13,25 @@
     @Repository
     public interface StoreCalendarRepository extends JpaRepository<StoreCalendar, Integer> {
 
-        @Query("SELECT sc.store FROM StoreCalendar sc WHERE sc.storeHoliday = :date")
+
+        @Query("FROM Store s " +
+                "JOIN StoreCalendar sc ON " +
+                "s.storeId = sc.storeId " +
+                "WHERE YEAR(sc.storeHoliday) = YEAR(:date)" +
+                "AND MONTH(sc.storeHoliday) = MONTH(:date)" +
+                "AND DAY(sc.storeHoliday) = DAY(:date)")
         List<Store> findByStoreHoliday(@Param("date") Date date);
 
+        @Query("SELECT s FROM Store s JOIN StoreCalendar sc ON s.storeId = sc.storeId")
+        List<Store> findAllByStore();
 
+        @Query("select s FROM Store s " +
+                "JOIN StoreCalendar sc ON " +
+                "s.storeId = sc.storeId " +
+                "WHERE sc.storeHoliday = '2024-06-25'")
+        List<Store> selectOneDayForTest();
+
+        @Query("SELECT s FROM Store s JOIN StoreCalendar sc ON s.storeId = sc.storeId WHERE s.storeId = :sotreId")
+        List<Store> findStoreByStoreId(@Param("sotreId") Integer storeId);
 
     }
