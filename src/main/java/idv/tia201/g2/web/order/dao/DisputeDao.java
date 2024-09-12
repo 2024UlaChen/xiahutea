@@ -8,7 +8,7 @@ public interface DisputeDao {
     int insert(DisputeOrder disputeOrder);
     int update(DisputeOrder disputeOrder);
 
-    Orders selectByDisputeId(int disputeId);
+    DisputeOrder selectByDisputeId(int disputeOrderId);
     List<DisputeOrder> selectAll();
 
 }

@@ -212,7 +212,7 @@
         // todo 連結到訂單明細
 
         // 顯示列表函式
-        function showOrders() {
+        function init() {
             fetch('/order/manage')
                   .then(response => response.json())
                   .then(data => showText(data))
@@ -248,7 +248,7 @@
         }
         //------------------------------------------------------------------------------------
         // 0. 顯示列表資料
-        showOrders();
+        init();
 
         // 1.查詢欄
         // 1.1 輸入查詢相關欄位，點查詢btn可篩選訂單

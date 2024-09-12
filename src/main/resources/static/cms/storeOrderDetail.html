@@ -271,10 +271,92 @@
     </script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
+            // 0. 顯示明細
+            init();
 
+            //===========================================================================
+            // 1. btn 回上一頁
+            const btn_order_back = document.getElementById("btn_order_back");
+            btn_order_back.addEventListener("click", function () {
+                history.back();
+            });
+
+            //===========================================================================
+            // todo: 點擊儲存btn 後端需儲存內容
+            // 2. btn 儲存
+            const btn_order_save = document.getElementsByClassName("btn_order_save")[0];
+            btn_order_save.addEventListener("click", function () {
+
+                // 2.1 打包資料
+                let order_id = document.getElementById("order_id");
+                let select_status = document.getElementById("select_status");
+                let order_data = {
+                    orderId: order_id.innerText,
+                    orderStatus: select_status.value
+                };
+
+                // let order_data = new FormData();
+                // order_data.append("order_id", order_id.innerText);
+                // order_data.append("select_status", select_status.value);
+
+                fetch(`/order/manage/${order_id.innerText}`, {
+                    method: "PUT",
+                    headers: {
+                        'Content-Type': 'application/json' // 設置內容類型為 JSON
+                    },
+                    body: JSON.stringify(order_data) // 將資料轉為 JSON 格式
+                }).then(res => res.json()).then(data => {
+
+                    // todo: 2.1.2 儲存內容到後端 前台需顯示更新後的內容
+                    if(data.successful){
+                        updateNewStatus(data.orderStatus);
+
+                        // const status = data.orderStatus;
+                        // let select_html = `
+                        //     <label>
+                        //         <select id="select_status">
+                        //             <option value="1" ${status === 1 ? "selected" : ""}>訂單成立</option>
+                        //             <option value="2" ${status === 2 ? "selected" : ""}>準備完成</option>
+                        //             <option value="3" ${status === 3 ? "selected" : ""}>正在外送</option>
+                        //             <option value="4" ${status === 4 ? "selected" : ""}>訂單完成</option>
+                        //         </select>
+                        //     </label>
+                        // `;
+                        // document.getElementById("select_status_div").innerHTML = select_html;
+
+                        // 2.1.2 如果訂單狀態為訂單完成，鎖定-儲存btn&狀態選單
+                        if (select_status.value === '4') {
+                            btn_order_save.setAttribute("disabled", "disabled");
+                            document.getElementById("select_status").setAttribute("disabled", "disabled");
+                        }
+                        Swal.fire("已更新", "", "success");
+                    }else {
+                        Swal.fire("更新失敗", "", "error");
+                    }
+                }).catch((error) => {
+                    console.error("發生錯誤：", error);
+                });
+            });
+
+            function updateNewStatus(status) {
+                let select_html = `
+                        <label>
+                            <select id="select_status">
+                                <option value="1" ${status === 1 ? "selected" : ""}>訂單成立</option>
+                                <option value="2" ${status === 2 ? "selected" : ""}>準備完成</option>
+                                <option value="3" ${status === 3 ? "selected" : ""}>正在外送</option>
+                                <option value="4" ${status === 4 ? "selected" : ""}>訂單完成</option>
+                            </select>
+                        </label>
+                `;
+                document.getElementById("select_status_div").innerHTML = select_html;
+            }
+
+            // ------------------------------------------------------------------
             // todo 待更新 fetch {orderId}
+
             // 顯示 明細
-            function showDetail() {
+            function init() {
                 fetch(`/order/manage/19`)
                       .then(response => response.json())
                       .then(data => showText(data))
@@ -295,8 +377,7 @@
                 `;
                 document.getElementById("detail_tbody").innerHTML = detailHtml;
 
-                let invoiceHtml = "";
-                invoiceHtml=`
+                let invoiceHtml =`
                         <tr>
                             <th>開立發票方式</th>
                             <td>${invoiceText(data.invoiceMethod)}</td>
@@ -316,8 +397,7 @@
                 `;
                 document.getElementById("invoice_tbody").innerHTML = invoiceHtml;
 
-                let receiverHtml = "";
-                receiverHtml=`
+                let receiverHtml =`
                         <tr>
                             <th>取貨方式</th>
                             <td>${data.receiverMethod}</td>
@@ -440,49 +520,6 @@
                     case 1 : return "信用卡";
                 }
             }
-            //===========================================================================
-            // 0. 顯示明細
-            showDetail();
-
-            //===========================================================================
-            // 1. btn 回上一頁
-            const btn_order_back = document.getElementById("btn_order_back");
-            btn_order_back.addEventListener("click", function () {
-                history.back();
-            });
-
-            //===========================================================================
-            // todo: 點擊儲存btn 後端需儲存內容
-            // 2. btn 儲存
-            const btn_order_save = document.getElementsByClassName("btn_order_save")[0];
-            btn_order_save.addEventListener("click", function () {
-
-                // 2.1 打包資料
-                let order_id = document.getElementById("order_id");
-                let select_status = document.getElementById("select_status");
-                let order_data = new FormData();
-                order_data.append("order_id", order_id.innerText);
-                order_data.append("select_status", select_status.value);
-
-                fetch("/order/manage", {
-                    method: "PUT",
-                    body: order_data
-                }).then(res => res.json()).then(data => {
-                    // todo: 2.1.2 儲存內容到後端 前台需顯示更新後的內容
-
-
-                    // 2.1.2 如果訂單狀態為訂單完成，鎖定-儲存btn&狀態選單
-                    if(select_status.value === '4'){
-                        btn_order_save.setAttribute("disabled", "disabled");
-                        select_status.setAttribute("disabled", "disabled");
-                    }
-                    Swal.fire("已更新", "", "success");
-                    location.reload();
-                }).catch((error) =>{
-                    console.error("發生錯誤：", error);
-                    Swal.fire("更新失敗","","error");
-                });
-            });
         });
     </script>
 </body>

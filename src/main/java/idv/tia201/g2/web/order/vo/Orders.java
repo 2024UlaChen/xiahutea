@@ -33,6 +33,9 @@ public class Orders extends Core {
 //    @Column(name = "order_detail", insertable = false, updatable = false)
 //    private OrderDetail orderDetail;    // 訂單明細編號
 
+    @Column(name = "order_status")
+    private Integer orderStatus; // 訂單狀態
+
     @Column(name = "customer_id")  // 單向多對一
     private Integer customerId;    // 顧客編號
     @ManyToOne
@@ -41,9 +44,6 @@ public class Orders extends Core {
 
     @Column(name = "customer_money_discount", updatable = false)
     private Integer customerMoneyDiscount; // 錢包折抵金額
-
-    @Column(name = "order_status")
-    private Integer orderStatus; // 訂單狀態
 
     @Column(name = "store_id") //單向一對一
     private Integer storeId; // 商店編號

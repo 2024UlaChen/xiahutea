@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("order/manage")
-public class orderController {
+public class OrderController {
 
     @Autowired
     private OrderService orderService;
@@ -30,7 +30,7 @@ public class orderController {
 
     // todo
     // 後台 修改明細資料
-    @PutMapping
+    @PutMapping("{orderId}")
     public Orders update(
             @SessionAttribute("order") Orders seOrders,
             @RequestBody Orders reqOrders

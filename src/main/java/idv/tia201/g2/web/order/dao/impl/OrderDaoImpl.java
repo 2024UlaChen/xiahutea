@@ -2,7 +2,6 @@ package idv.tia201.g2.web.order.dao.impl;
 
 import idv.tia201.g2.web.order.dao.OrderDao;
 import idv.tia201.g2.web.order.vo.Orders;
-import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import org.hibernate.Session;
