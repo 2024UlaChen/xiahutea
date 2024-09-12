@@ -194,7 +194,6 @@ document.addEventListener("DOMContentLoaded",function(){
       })
 //********************************************日期時間選擇器*************************************
     // 取得當前日期和時間
-    const now = new Date();
     new AirDatepicker('#myDatepicker', {
         locale: {
           days: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
@@ -208,9 +207,8 @@ document.addEventListener("DOMContentLoaded",function(){
           timeFormat: 'HH:mm',
           firstDay: 1
         },
-        minDate: now, // 設定不能選擇早於當前的日期
+        minDate: new Date(), // 設定不能選擇早於當前的日期
         timepicker: true, // 開啟時間選擇功能
-        dateFormat: 'yyyy-MM-dd HH:mm', // 設定日期和時間格式
         minutesStep: 1 // 設定分鐘選擇間隔
       });
 

@@ -33,11 +33,11 @@
 
             <div class="form-group flex-row">
                 <label for="input-coupon-id" id="coupon-id">優惠券ID</label>
-                <input type="text" id="input-coupon-id">
+                <input type="text" id="input-coupon-id" disabled>
             </div>
 
             <div class="form-group flex-row">
-                <label for="coupon-detail">折價券說明</label>
+                <label for="coupon-detail">優惠券說明</label>
                 <textarea id="coupon-detail" placeholder="請輸入優惠券說明...." rows="3" maxlength="255"></textarea>
             </div>
 
@@ -49,7 +49,7 @@
                     <label for="no-limit" id="label-no-limit">無限制</label>
                     <input type="radio" id="is-limit" name="amount-check">
                     <label for="is-limit" id="label-is-limit">有限張數</label>
-                    <input type="text" id="limit-amount" disabled>
+                    <input type="number" id="limit-amount" disabled>
                 </div>
             </div>
 
@@ -78,7 +78,6 @@
                     <label for="no-active" id="label-no-active">停用</label>
                 </div>
             </div>
-
             <div class="button-group">
                 <button type="submit" class="btn btn-block btn-info">送出</button>
                 <a href="couponManage.html">
@@ -86,7 +85,6 @@
                 </a>
             </div>
             <p id="response-message"></p>
-
         </form>
     </div>
 

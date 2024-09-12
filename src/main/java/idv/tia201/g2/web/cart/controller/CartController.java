@@ -1,4 +1,4 @@
-package idv.tia201.g2.web.cart;
+package idv.tia201.g2.web.cart.controller;
 
 import idv.tia201.g2.web.cart.service.CartService;
 import idv.tia201.g2.web.member.vo.Cart;
