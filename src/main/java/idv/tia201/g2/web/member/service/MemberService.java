@@ -25,7 +25,7 @@ public interface MemberService {
     boolean isExistMember(Member member);
 
     //取得單一會員資料
-    Member getMemberInfo(Integer memberId);
+    Member findMemberById(Integer memberId);
 
     //    列出所有會員地址
     List<MemberAddress> findAllMemberAdress();

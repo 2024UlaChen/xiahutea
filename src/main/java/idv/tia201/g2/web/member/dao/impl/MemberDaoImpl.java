@@ -20,12 +20,13 @@ public class MemberDaoImpl implements MemberDao {
     }
 
     @Override
-    public Member findByMemberId(int memberId) {
+    public Member findMemberById(int memberId) {
+
         return session.get(Member.class, memberId);
     }
 
     @Override
-    public Member findByMemberPhone(String phone) {
+    public Member findMemberByPhone(String phone) {
         //todo revise return data
         return session.get(Member.class, phone);
     }

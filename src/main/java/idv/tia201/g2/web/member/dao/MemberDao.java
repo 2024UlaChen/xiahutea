@@ -8,9 +8,9 @@ import java.util.List;
 public interface MemberDao {
     List<Member> findAllMember();
 
-    Member findByMemberId(int memberId);
+    Member findMemberById(int memberId);
 
-     Member findByMemberPhone(String phone);
+     Member findMemberByPhone(String phone);
 
 //     Member findByMemberEmail(String email);
 

@@ -31,9 +31,7 @@ public class MemberServiceImpl implements MemberService {
             member.setSuccessful(false);
             return member;
         }
-
-
-        return memberDao.findByMemberId(member.getCustomerId());
+        return memberDao.findMemberById(member.getCustomerId());
     }
 
     @Override
@@ -53,12 +51,12 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public List<Member> findAllMember() {
-        return List.of();
+        return memberDao.findAllMember();
     }
 
     @Override
     public boolean isExistMember(Member member) {
-        if(ObjectUtils.isEmpty(memberDao.findByMemberPhone(member.getCustomerPhone()))){
+        if(ObjectUtils.isEmpty(memberDao.findMemberByPhone(member.getCustomerPhone()))){
             return false;
         }else{
             return true;
@@ -94,8 +92,8 @@ public class MemberServiceImpl implements MemberService {
 
     //todo
     @Override
-    public Member getMemberInfo(Integer memberId) {
-        return null;
+    public Member findMemberById(Integer memberId) {
+        return memberDao.findMemberById(memberId);
     }
 
 }
