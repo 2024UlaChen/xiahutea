@@ -27,13 +27,13 @@
             <h1>優惠券新增/修改</h1>
 
             <div class="form-group flex-row">
-                <label for="input-coupon-title" id="coupon-title">優惠券標題</label>
-                <input type="text" id="input-coupon-title">
+                <label for="input-coupon-id" id="coupon-id">優惠券ID</label>
+                <input type="text" id="input-coupon-id" placeholder="輸入ID可編輯對應優惠券">
             </div>
 
             <div class="form-group flex-row">
-                <label for="input-coupon-id" id="coupon-id">優惠券ID</label>
-                <input type="text" id="input-coupon-id" disabled>
+                <label for="input-coupon-title" id="coupon-title">優惠券標題</label>
+                <input type="text" id="input-coupon-title">
             </div>
 
             <div class="form-group flex-row">
@@ -57,9 +57,9 @@
             <div class="form-group flex-row">
                 <label for="coupon-start-date">折價券期限</label>
                 <div class="date-range">
-                    <input type="date" id="coupon-start-date">
+                    <input type="datetime-local" id="coupon-start-date">
                     <span> ~ </span>
-                    <input type="date" id="coupon-end-date">
+                    <input type="datetime-local" id="coupon-end-date">
                 </div>
             </div>
 
@@ -104,8 +104,8 @@
 <script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
 <script src="plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
 <script src="plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-<script src="https://unpkg.com/sweetalert2@11"></script>
-
+<!--<script src="https://unpkg.com/sweetalert2@11"></script>-->
+<script src="js/sweetalert.min.js"></script>
 <script src="dist/js/adminlte.js"></script>
 <script src="dist/js/demo.js"></script>
 <script src="js/couponEdit.js"></script>
