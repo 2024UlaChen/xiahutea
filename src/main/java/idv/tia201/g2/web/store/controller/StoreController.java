@@ -1,5 +1,6 @@
 package idv.tia201.g2.web.store.controller;
 
+
 import idv.tia201.g2.web.store.service.StoreService;
 
 import idv.tia201.g2.web.store.vo.Store;
@@ -10,7 +11,7 @@ import org.springframework.boot.autoconfigure.web.client.RestTemplateAutoConfigu
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
-import java.util.Date;
+
 import java.util.List;
 
 //RestController是組合註解 他等於Controller 加上 ResponseBody 就是一個RestController
@@ -86,12 +87,12 @@ public class StoreController {
     }
     @PostMapping("uploadLogo")
     public void uploadLogo(@RequestParam("img")MultipartFile file,@RequestParam("storeId") Integer storeId) throws IOException {
-        //see see
+
 
             storeService.editLogoByStoreId(file,storeId);
 
 
-            //file.transferTo(Paths.get("C:\\Users\\s5880\\Desktop\\TestUpload",file.getOriginalFilename()));
+
 
     }
 
@@ -101,14 +102,7 @@ public class StoreController {
     }
 
 
-    @GetMapping("/test")
-    public List<Store> test(){
-        Date date = new Date(2024,6,25);
-//        List<Store> list = storeService.getAllData();
-        List<Store> list = storeService.getStoreListNoWorking(date);
-//        List<Store> list = storeService.getAllStoreById();
-        return list;
-    }
+
 
 
 

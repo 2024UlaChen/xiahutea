@@ -15,6 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -174,13 +176,13 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public Store editLogoByStoreId(MultipartFile file, Integer storeId) throws IOException {
+    public void editLogoByStoreId(MultipartFile file, Integer storeId) throws IOException {
         Store store = findStoreById(storeId);
         store.setLogo(file.getBytes());
         storeDao.save(store);
 
 
-        return store;
+
     }
 
     @Override
@@ -194,18 +196,21 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public List<Store> getStoreListNoWorking(Date holiday) {
+    public List<Store> getStoreListNoWorking(String dateStr) throws ParseException {
         //取得休息店家
-        //java.sql.Date sqlDate = new java.sql.Date(holiday.getTime());
-        return storeCalendarRepository.selectOneDayForTest();
 
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
+        Date date = formatter.parse(dateStr);
+
+        return storeCalendarRepository.findByStoreHoliday(date);
 
     }
     public List<Store> getAllData(){
         return storeCalendarRepository.findAllByStore();
     }
-    public List<Store> getAllStoreById(){
-        return storeCalendarRepository.findStoreByStoreId(7);
+    public List<Store> getAllStoreById(Integer Id){
+        return storeCalendarRepository.findStoreByStoreId(Id);
     }
 
 
