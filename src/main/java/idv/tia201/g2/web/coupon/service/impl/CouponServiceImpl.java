@@ -6,6 +6,8 @@ import idv.tia201.g2.web.coupon.vo.Coupon;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CouponServiceImpl implements CouponService {
     @Autowired
@@ -46,5 +48,10 @@ public class CouponServiceImpl implements CouponService {
         coupon = couponDao.save(coupon);
         coupon.setSuccessful(true);
         return coupon;
+    }
+
+    @Override
+    public List<Coupon> findAllCoupons() {
+        return couponDao.findAll();
     }
 }

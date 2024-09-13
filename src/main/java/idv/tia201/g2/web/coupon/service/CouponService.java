@@ -6,5 +6,6 @@ import java.util.List;
 
 public interface CouponService {
     public Coupon saveCoupon(Coupon coupon);
+    public List<Coupon> findAllCoupons();
 //    List<Coupon> findbyCreateDate
 }
