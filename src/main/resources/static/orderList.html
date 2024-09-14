@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>我的訂單</title>
+
     <link rel="shortcut icon" type="image/x-icon" href="assets/images/favicon.png" />
-    <link
-            href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i&display=swap"
-            rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i&display=swap"
+          rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Lato:300,300i,400,400i,700,700i&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/css/font-awesome.min.css">
@@ -25,9 +24,7 @@
     <link rel="stylesheet" href="assets/css/mobile-menu.css">
     <link rel="stylesheet" href="assets/fonts/flaticon/flaticon.css">
     <link rel="stylesheet" href="assets/css/style.css">
-
 <!--    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">-->
-
 
     <style>
         /* background-color: #f5f5f5; */
@@ -77,7 +74,6 @@
             height: 100%;
             margin: 0 auto;
             /* background-color: #f8f8f8; */
-
         }
         .member-introduction {
             margin: 0 auto;
@@ -335,6 +331,9 @@
 <script>
     document.addEventListener("DOMContentLoaded", function(){
 
+        // 0.顯示列表
+        init();
+
         // 1.查詢欄
         // 1.1 輸入訂單狀態 & 訂單日期，點查詢btn可篩選訂單
         let btn_select = document.getElementById("select_btn");
@@ -369,7 +368,7 @@
 
                 //todo: 待資料庫完成後，再處理時區問題
                 if (select_order_date1 && select_order_date2) {
-                    let order_date_obj = new Date(order_date.replace(/-/g,'/'));
+                    let order_date_obj = new Date(order_date);
                     let date1 = new Date(select_order_date1);
                     let date2 = new Date(select_order_date2);
 
@@ -384,94 +383,54 @@
 
         // ==========================================================================
         // 2.訂單列表
-        // 2.1 抓訂單資料 TODO 待串接後端DB
-        const orders = [
-            {
-                order_status: "正在外送",
-                store_logo: "https://placehold.co/200x200",
-                store_name: "一沐日永和店",
-                order_id: "2408010002", // 如果有具體編號，替換這裡
-                items: 5,
-                total_price: 245,
-                order_date: "2024/07/20 18:11",
-                dispute_status: "已同意申請"
-            },
-            {
-                order_status: "準備完成",
-                store_logo: "https://placehold.co/200x200",
-                store_name: "50嵐新莊店",
-                order_id: "2409010002", // 如果有具體編號，替換這裡
-                items: 5,
-                total_price: 245,
-                order_date: "2024/07/20 18:11",
-                dispute_status: "" // 無爭議狀態
-            },
-            {
-                order_status: "準備完成",
-                store_logo: "https://placehold.co/200x200",
-                store_name: "一沐日永和店",
-                order_id: "2408050002", // 如果有具體編號，替換這裡
-                items: 5,
-                total_price: 245,
-                order_date: "2024/07/20 18:11",
-                dispute_status: "已同意申請"
-            },
-            {
-                order_status: "訂單完成",
-                store_logo: "https://placehold.co/200x200",
-                store_name: "一沐日永和店",
-                order_id: "2408010052", // 如果有具體編號，替換這裡
-                items: 5,
-                total_price: 245,
-                order_date: "2024/08/20 18:11",
-                dispute_status: "" // 無爭議狀態
-            },
-            {
-                order_status: "訂單成立",
-                store_logo: "https://placehold.co/200x200",
-                store_name: "一沐日永和店",
-                order_id: "2408010452", // 如果有具體編號，替換這裡
-                items: 5,
-                total_price: 245,
-                order_date: "2024/09/20 18:11",
-                dispute_status: "" // 無爭議狀態
-            }
-        ];
+        // 2.1 抓訂單資料 TODO 待session
+        function init() {
+            fetch(`/order/member/1`)
+                  .then(response => response.json())
+                  .then(data =>{
+                        console.log(data);
+                        showText(data);}
+                  )
+                  .catch((error) => {
+                      console.log("錯誤原因：" + error);
+                  });
+        }
 
-        let orderHtml = "";
-        for(let i = 0; i < orders.length ; i++) {
+        function showText(data){
+            let orderHtml = "";
+            for(let i = 0; i < data.length ; i++) {
 
-            // 2.1.3 訂單狀態不同 更改不同顏色
-            let statusClass = "";
-            switch (orders[i].order_status) {
-                case "訂單成立":
-                case "正在外送":
-                case "準備完成":
-                    statusClass = "incomplete";  // 橘色
-                    break;
-                case "訂單完成":
-                    statusClass = "complete";  // 藍色
-                    break;
-            }
-            // 2.1.2 有爭議訂單時，則顯示爭議狀態文字
-           const disputeClass = orders[i].dispute_status ? "" : "-off";
-
-            orderHtml += `
+                // 2.1.3 訂單狀態不同 更改不同顏色
+                let statusClass = "";
+                switch (statusText(data[i].orderStatus)) {
+                    case "訂單成立":
+                    case "正在外送":
+                    case "準備完成":
+                        statusClass = "incomplete";  // 橘色
+                        break;
+                    case "訂單完成":
+                        statusClass = "complete";  // 藍色
+                        break;
+                }
+                // 2.1.2 有爭議訂單時，則顯示爭議狀態文字
+                const disputeClass = data[i].disputeStatus ? "" : "-off";
+                // todo 待更新 disputeOrder
+                orderHtml += `
                 <li class="product-item  col-lg-4 col-md-6 col-sm-6 col-xs-6 col-ts-12 style-1">
                     <div class="product-inner equal-element">
                         <div class="product-thumb">
                             <div class="thumb-inner" >
-                                <a href="#">
+                                <a href="orderDetail.html?orderId=${data[i].orderId}">
                                     <div>
                                         <div class="one_order_status  ${statusClass}" >
-                                            <span class="one_order_status_text">${orders[i].order_status}</span>
+                                            <span class="one_order_status_text">${statusText(data[i].orderStatus)}</span>
                                         </div>
                                         <div class="one_order_list">
                                             <div class="one_order_list_circle">
-                                                <img class="store_logo" src=${orders[i].store_logo} alt="店家logo">
+                                                <img class="store_logo" src=${data[i].Logo} alt="店家logo">
                                             </div>
                                             <div class="one_order_store_name">
-                                                <span>${orders[i].store_name}</span>
+                                                <span>${data[i].storeName}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -481,40 +440,49 @@
                         <div class="product-info">
                             <div class="group-info">
                                 <div class="order_id">
-                                    <span>${orders[i].order_id}</span>
+                                    <span>${data[i].orderId}</span>
                                 </div>
                                 <div class="order_detail">
-                                    <span>${orders[i].items} 項商品</span>
+                                    <span>${data[i].orderProductQuantity} 項商品</span>
                                 </div>
                                 <div class="order_price">
-                                    <span>共 ${orders[i].total_price} 元</span>
+                                    <span>共 ${data[i].productAmount} 元</span>
                                 </div>
                                 <div class="order_time">
-                                    <span class="order_date_value">${orders[i].order_date}</span>
+                                    <span class="order_date_value">${data[i].orderCreateDatetime}</span>
                                 </div>
                                 <div class="order_time dispute_status_div ${disputeClass}">
-                                  <span class="dispute_status_sp  ${disputeClass}">爭議狀態： ${orders[i].dispute_status}</span>
+                                  <span class="dispute_status_sp  ${disputeClass}">爭議狀態： ${data[i].disputeStatus}</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </li>
             `;
-            document.getElementsByClassName("order_list_ul")[0].innerHTML = orderHtml;
+                document.getElementsByClassName("order_list_ul")[0].innerHTML = orderHtml;
+            }
+        }
 
+        function statusText(statusNum) {
+            switch (statusNum) {
+                case 1 : return "訂單成立";
+                case 2 : return "準備完成";
+                case 3 : return "正在外送";
+                case 4 : return "訂單完成";
+            }
         }
 
 
         // 2.3 點擊訂單卡片 link訂單明細
         // todo: 待後端完成 check 變數
-        let order_arr = document.querySelectorAll("div.product-inner");
-        for(i = 0; i < order_arr.length; i++ ){
-            let order_item = document.getElementsByClassName("product-inner")[i];
-            order_item.addEventListener("click", function(){
-                location.href = "orderDetail.html";
-                //待後端完成 check變數連結
-            });
-        }
+        // let order_arr = document.querySelectorAll("div.product-inner");
+        // for(i = 0; i < order_arr.length; i++ ){
+        //     let order_item = document.getElementsByClassName("product-inner")[i];
+        //     order_item.addEventListener("click", function(){
+        //         location.href = "./orderDetail.html?orderId=${orderId}";
+        //         //待後端完成 check變數連結
+        //     });
+        // }
     });
 </script>
 </body>

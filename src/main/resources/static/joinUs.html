@@ -33,7 +33,7 @@
 
         }
 
-        #result-message {
+        #resultMessage {
             font-size: 16px;
             color: red;
         }
@@ -86,7 +86,7 @@
                                                 <p>
                                                     <span class="form-label">Email *</span>
                                                     <span class="form-control-wrap your-email">
-                                                    <input title="your-email" type="email" name="email" maxlength="20"
+                                                    <input title="your-email" type="email" name="email" maxlength="80"
                                                            class="form-control form-control-email" required>
                                                 </span>
                                                 </p>
@@ -97,8 +97,8 @@
                                                 <p>
                                                     <span class="form-label">連絡電話*</span>
                                                     <span class="form-control-wrap your-phone">
-                                                    <input title="your-phone" type="text" name="contactPhone"
-                                                           maxlength="10" class="form-control form-control-phone"
+                                                    <input title="your-phone" id="phone" type="text" name="contactPhone"
+                                                           class="form-control form-control-phone"
                                                            required>
                                                 </span>
                                                 </p>
@@ -120,7 +120,7 @@
                                             門市地址 *
                                         </span>
                                             <span class="form-control-wrap address">
-                                            <input title="your-address" type="text" name="storeAddress" maxlength="50"
+                                            <input title="your-address" type="text" name="storeAddress" maxlength="80"
                                                    class="form-control your-address" required>
                                         </span>
                                         </p>
@@ -139,7 +139,7 @@
                                                 <p>
                                                     <span class="form-label">統編 *</span>
                                                     <span class="form-control-wrap VAT">
-                                                    <input title="your-VAT" type="text" name="vat" maxlength="50"
+                                                    <input title="your-VAT" id="vat" type="text" name="vat" maxlength="8"
                                                            class="form-control your-VAT" required>
                                                 </span>
                                                 </p>
@@ -154,7 +154,7 @@
 
                                         </p>
 
-                                        <div id="result-message"> 後端回傳訊息</div>
+                                        <div id="resultMessage"></div>
 
                                         <p>
                                             <input id="submit" type="submit" value="送出"
@@ -196,12 +196,73 @@
     <script src="js/general.js"></script>
 
     <script>
-        $("#form").submit(e => {
-            e.preventDefault();
-            let formData = new FormData(e.target);
-            let vat = formData.get("vat");
-            console.log(vat)
+        let resultMessageEle = $("#resultMessage");
+        let phoneEle = $("#phone");
+        let vatEle = $("#vat");
+        let form = $("#form")
 
+        function phoneCheck(phone){
+            let pattern = /(\d{2,3}-?|\(\d{2,3}\))\d{3,4}-?\d{4}|09\d{2}(\d{6}|-\d{3}-\d{3})/;
+            return pattern.test(phone)
+        }
+        function vatCheck(vat) {
+            let tmp = "12121241";
+            let sum = 0;
+            let pattern = /^\d{8}$/;
+            if (!pattern.test(vat)) {return false}
+            for (i=0; i< 8; i++) {
+                let s1 = parseInt(vat.substr(i,1));
+                let s2 = parseInt(tmp.substr(i,1));
+                sum += cal(s1*s2);
+            }
+            if (!valid(sum)) {
+                if (vat.substr(6,1)==="7") return(valid(sum+1));
+            }
+            return(valid(sum));
+        }
+        function valid(n) {
+            return (n % 10 === 0);
+        }
+        function cal(n) {
+            let sum = 0;
+            while (n!== 0) {
+                sum += (n % 10);
+                n = (n-(n%10))/10;  // 取整數
+            }
+            return sum;
+        }
+
+        $(form).submit(e => {
+            e.preventDefault();
+            let phone = $(phoneEle).val();
+            let vat = $(vatEle).val();
+            let formData = new FormData(e.target);
+
+            //確認電話
+            if(!phoneCheck(phone)){
+                $(resultMessageEle).text("連絡電話錯誤")
+                return
+            }
+
+            //確認統編
+            if(!vatCheck(vat)){
+                $(resultMessageEle).text("統一編號錯誤")
+                return
+            }
+
+            fetch("/registerstore",{
+                method: "POST",
+                body: formData
+            }).then(res => res.json()).then(store =>{
+                if(store.successful){
+                    $(resultMessageEle).text("已收到加入申請，請耐心等待回復");
+                    $(".form-control").each((index, item) => {
+                        $(item).val("");
+                    })
+                }else {
+                    $(resultMessageEle).text(store.message)
+                }
+            })
         });
 
     </script>

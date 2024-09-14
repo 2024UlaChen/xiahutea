@@ -70,7 +70,7 @@ public class Store extends Core {
     @Column(name = "delivery_money")
     private Integer deliveryMoney;//外送金額
 
-    @Column(name = "is_take_orders",nullable = false)
+    @Column(name = "is_take_orders")
     private Boolean isTakeOrders;//是否接單
 
     @Column(name = "score")
@@ -82,11 +82,11 @@ public class Store extends Core {
 
 
 
-    @Column(name = "logo", nullable = false)
+    @Column(name = "logo")
     private byte[] logo;//存圖片 Lob表示大物件 對應BLOB 或是 CLOB
 
     @Column(name = "email", nullable = false, length = 50)
-    private String email;//信蕭
+    private String email;//信箱
 
     @Column(name = "contact_person", nullable = false, length = 10)
     private String contactPerson;//聯絡人
@@ -94,33 +94,40 @@ public class Store extends Core {
     @Column(name = "contact_phone", nullable = false, length = 20)
     private String contactPhone;//連絡電話
 
-    @Column(name = "bank_code", nullable = false, length = 3)
+    @Column(name = "bank_code", length = 3)
     private String bankCode;
 
-    @Column(name = "bank_account", nullable = false, length = 20)
+    @Column(name = "bank_account", length = 20)
     private String bankAccount;
 
     @Column(name = "store_status", nullable = false)
-    private Integer storeStatus;//帳號狀態
+    private Integer storeStatus;//帳號狀態: 審核中 0  審核失敗 1 使用中 2  停權中 3
 
-    @Column(name = "password", nullable = false, length = 255)
+    @Column(name = "password", length = 255)
     private String password;
 
     @Column(name = "owner", nullable = false, length = 10)
     private String owner;
 
-    @Column(name = "loyalty_card_name", nullable = false, length = 20, unique = true)
+    @Column(name = "loyalty_card_name", length = 20, unique = true)
     private String loyaltyCardName;
 
-    @Column(name = "exchange_rate", nullable = false)
+    @Column(name = "exchange_rate")
     private Integer exchangeRate;//多少元一點
 
     @Column(name = "expired_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Timestamp expiredDate;
 
-    @Column(name = "valid_status", nullable = false)
+    @Column(name = "valid_status")
     private Boolean validStatus;//集點卡狀態
+
+    @PrePersist
+    protected void onCreate(){
+        if(registerDay == null){
+            registerDay = new Timestamp(System.currentTimeMillis());
+        }
+    }
 
     //實現雙向 商家和顧客集點紀錄為一對多 關連到store屬性
     // 非必要 不要關聯 除非一筆

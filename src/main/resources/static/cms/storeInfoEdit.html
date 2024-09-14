@@ -76,6 +76,7 @@
             <div class="m-3">
               <label class="form-label">商店電話</label>
               <input
+                      required
                 id="storephone"
                 type="text"
                 class="form-control"
@@ -85,6 +86,7 @@
             <div class="m-3">
               <label class="form-label">開始營業時間</label>
               <input
+                      required
                 type="time"
                 class="form-control"
                 value="10:00"
@@ -94,6 +96,7 @@
             <div class="m-3">
               <label class="form-label">結束營業時間</label>
               <input
+                      required
                 type="time"
                 class="form-control"
                 value="22:00"
@@ -142,21 +145,19 @@
                 <option value="0">暫不提供外送服務</option>
               </select>
             </div>
-
-
             <div class="m-3">
               <label class="form-label">商標</label>
-              <input
-                readonly
-                type="file"
-                class="form-control"
-                value=""
-                id="logo"
-              />
+              <input type="file" name="img" id="newLogo"  />
+
+              <img src="" id="storeimg" height="200px" width="200px" >
             </div>
+
+
+
             <div class="m-3">
               <label class="form-label">信箱</label>
               <input
+                      required
                 type="email"
                 class="form-control"
                 id="mail"
@@ -166,6 +167,7 @@
             <div class="m-3">
               <label class="form-label">聯絡人</label>
               <input
+                      required
                 type="text"
                 class="form-control"
                 value="李登輝"
@@ -175,6 +177,7 @@
             <div class="m-3">
               <label class="form-label">聯絡人電話</label>
               <input
+                      required
                 type="text"
                 class="form-control"
                 value="911"
@@ -215,8 +218,8 @@
             method="POST"
             enctype="multipart/form-data"
           >
-            <input type="file" name="img" />
-            <input type="submit" value="提交" />
+
+
           </form>
         </div>
       </div>
@@ -277,11 +280,7 @@
 
         let distance = document.querySelector("#distance");
 
-
-
-
-
-        let logo = document.querySelector("#logo");
+        let newLogoImg = document.querySelector('#newLogo');
 
         let mail = document.querySelector("#mail");
 
@@ -289,12 +288,14 @@
 
         let contactphone = document.querySelector("#contactphone");
 
+
         $.ajax({
           url: `/store/storeinfo/${sotreid.split("=")[1]}`,
           method: "get",
           dataType: "json",
           async: false,
           success: function (data) {
+            console.log(data);
             vat.value = data.vat;
             storename.value = data.storeName;
             registerday.value = data.registerDay.split("T")[0];
@@ -302,12 +303,23 @@
             storephone.value = data.storePhone;
             openingtime.value = data.openingHours;
             closingtime.value = data.closingHours;
+            const base64Img = data.logo;
+            storeImage = document.querySelector('#storeimg');
+
+
+
+
+            storeImage.src = `data:image/png;base64,${base64Img}`;
+
+
+
             if (data.isTakeOrders) {
               istakeorders.checked = true;
             }
             if (data.isDelivery) {
               isdelivery.checked = true;
             }
+
 
 
             deliverymoney.value = data.deliveryMoney;
@@ -352,52 +364,12 @@
             distance = document.querySelector("#distance").value;
 
 
-
-
-
-            logo = document.querySelector("#logo");
-            //讀取位元組
-            let reader = new FileReader();
-            let imgfile = "";
-
-            if (logo.files.length > 0) {
-              reader.readAsArrayBuffer(logo.files[0]); //讀取檔案
-              reader.addEventListener("load", function () {
-                console.log("位元組陣列");
-                console.log(reader.result);
-                imgfile = Array.from(new Uint8Array(reader.result));
-                console.log(imgfile);
-              });
-            }
-
             mail = document.querySelector("#mail").value;
 
             contactperson = document.querySelector("#contactperson").value;
 
             contactphone = document.querySelector("#contactphone").value;
-            //holiday 另外處理
 
-            // let formData = new FormData();
-            // formData.append("storeId", sotreid.split("=")[1]);
-            // formData.append("storePhone", storephone);
-            // formData.append(
-            //   "openingHours",
-            //   countStr(openingtime) == 2 ? openingtime : openingtime + ":00"
-            // );
-            // formData.append(
-            //   "closingHours",
-            //   countStr(closingtime) == 2 ? closingtime : closingtime + ":00"
-            // );
-            // formData.append("isDelivery", isdelivery);
-            // formData.append("deliveryDistance", distance);
-            // formData.append("deliveryMoney", deliverymoney);
-            // formData.append("isTakeOrders", istakeorders);
-
-
-            // formData.append("logo", logo.files.length > 0 ? bytes : null); // 处理文件上传
-            // formData.append("email", mail);
-            // formData.append("contactPerson", contactperson);
-            // formData.append("contactPhone", contactphone);
             let id = sotreid.split("=")[1];
             let model = {
               storeId: id,
@@ -410,9 +382,6 @@
               deliveryDistance: distance,
               deliveryMoney: deliverymoney,
               isTakeOrders: istakeorders,
-
-
-              logo: imgfile,
               email: mail,
               contactPerson: contactperson,
               contactPhone: contactphone,
@@ -424,16 +393,39 @@
               contentType: "application/json",
               dataType: "JSON",
               data: JSON.stringify(model),
-              success: function () {
+              success: function (data) {
                 console.log(JSON.stringify(model));
-                Swal.fire({
-                  icon: "success",
-                  title: "更新成功",
-                }).then((res) => {
-                  if (res.isConfirmed) {
-                    location.reload();
-                  }
-                });
+                //接著處理照片
+                if(newLogoImg.files.length> 0){
+                  console.log("進到if內了");
+                  let formData = new FormData();
+                  formData.append('storeId',data.storeId);
+                  formData.append('img',newLogoImg.files[0]);
+                  fetch('/store/uploadLogo',{
+                    method:'POST',
+                    body:formData
+                  }).then(resp =>{
+                    Swal.fire({
+                      icon: "success",
+                      title: "更新成功",
+                    }).then((res) => {
+                      if (res.isConfirmed) {
+                        location.reload();
+                      }
+                    });
+                  });
+                }else {
+                  Swal.fire({
+                    icon: "success",
+                    title: "更新成功",
+                  }).then((res) => {
+                    if (res.isConfirmed) {
+                      location.reload();
+                    }
+                  });
+                }
+
+
               },
               err: function () {
                 Swal.fire({

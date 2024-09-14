@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+    <!-- SweetAlert2 CSS樣式 -->
+    <link rel="stylesheet" href="/cms/plugins/sweetalert2/sweetalert2.css">
 
     <style>
         /* 左右main區塊  */
@@ -78,7 +80,6 @@
             border-radius: 4px;
             font-weight: 400;
             vertical-align:center;
-
         }
         .input_text{
             width: 90%;
@@ -95,7 +96,6 @@
         .red_star{
             color: red;
         }
-
     </style>
 </head>
 
@@ -320,9 +320,7 @@
             <!-- /.Main content -->
         </div>
 
-        <!--footer -->
         <div class="storefooter"></div>
-        <!--/.footer -->
     </div>
 
     <script src="plugins/jquery/jquery.min.js"></script>
@@ -338,9 +336,9 @@
     <script src="plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
     <script src="dist/js/adminlte.js"></script>
     <script src="dist/js/demo.js"></script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <!-- sweet alert  -->
+    <script src="./plugins/sweetalert2/sweetalert2.all.js"></script>
 
-    <!-- Page specific script -->
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             let order_id = document.getElementById("order_id");
@@ -385,7 +383,7 @@
                 let payment_amount = parseInt(document.getElementById("payment_amount").innerText);
                 let order_free_amount = parseInt(document.getElementById("order_free_amount").innerText);
                 if(parseFloat(dispute_money.value) > payment_amount + order_free_amount || parseFloat(dispute_money.value) < 0 || dispute_money.value === "" ){
-                    swal("退款金額輸入錯誤","","error");
+                    Swal.fire("退款金額輸入錯誤","","error");
                     dispute_money.value = 0;
                 }
             });
@@ -393,7 +391,7 @@
             // 4. input 欄位 - reject_reason 判斷字數長度
             reject_reason.addEventListener("blur", function (){
                 if(reject_reason.value.length < 1 ){
-                    swal("請輸入不同意爭議原因","","error");
+                    Swal.fire("請輸入不同意爭議原因","","error");
                 }
             });
         //===========================================================================
@@ -411,7 +409,7 @@
                 }else if (dispute_status.value === '3' && reject_reason.value.trim() !== "") {
                     check_valve = true;
                 } else {
-                    swal("請確認所有必填欄位已完成","","error");
+                    Swal.fire("請確認所有必填欄位已完成","","error");
                     return;
                 }
 
@@ -440,10 +438,10 @@
                             dispute_money.setAttribute("disabled", "disabled");
                             reject_reason.setAttribute("disabled", "disabled");
                         }
-                        swal("已更新", "", "success");
+                        Swal.fire("已更新", "", "success");
                     }).catch((error) =>{
                         console.error("發生錯誤：", error);
-                        swal("更新失敗","","error");
+                        Swal.fire("更新失敗","","error");
                     });
                 }
             });
@@ -451,5 +449,4 @@
         });
     </script>
 </body>
-
 </html>

@@ -6,10 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import idv.tia201.g2.web.product.service.ProductService;
 import idv.tia201.g2.web.product.vo.Product;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,11 +18,50 @@ import java.util.List;
  * 商品資料表單新增
  */
 @RestController
-@RequestMapping("product")
+@RequestMapping("/products")
 public class ProductAddController {
 
     @Autowired
     private ProductService productService;
+//查詢分類id以及商品名稱
+    @GetMapping("/search")
+    public List<Product> searchProducts(@RequestParam Integer categoryId, @RequestParam String productName) {
+        return productService.searchProducts(categoryId, productName);
+    }
+    // 查找所有產品
+    @GetMapping("/all")
+    public List<Product> getAllProducts() {
+        return productService.getAllProducts();
+    }
+
+    // 根據產品名稱查找產品
+    @GetMapping("/searchByName")
+    public List<Product> getProductsByProductName(@RequestParam String productName) {
+        return productService.getProductsByProductName(productName);
+    }
+
+    // 新增產品
+    @PostMapping("/add/{storeId}")
+    public Product addProduct(@PathVariable Integer storeId, @RequestBody Product product) {
+        return productService.addProduct(storeId, product);
+    }
+
+    // 編輯產品
+    @PutMapping("/edit/{storeId}/{productId}")
+    public Product editProduct(
+            @PathVariable Integer storeId,
+            @PathVariable Integer productId,
+            @RequestBody Product updatedProduct) {
+        return productService.editProduct(storeId, productId, updatedProduct);
+    }
+
+    // 刪除產品
+    @DeleteMapping("/delete/{productId}")
+    public boolean deleteProduct(@PathVariable Integer productId) {
+        return productService.deleteProduct(productId);
+    }
+
+
 
 
 //    @PostMapping("addUpdateProduct")
@@ -38,7 +75,7 @@ public class ProductAddController {
 ////    }
 //
 //
-//    }
+//
 
 /**
  * 查詢 商品資料
