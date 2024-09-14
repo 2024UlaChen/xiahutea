@@ -281,7 +281,10 @@
                 <option selected value="1">啟動</option>
                 <option value="2">停權</option>
               </select>
-              <img src="http://127.0.0.1:8080/store/img/2" alt="imgTest" />
+
+            </div>
+            <div class="m-3 d-flex align-content-center" >
+              <img src="" id="storeImg" height="200px" width="200px" />
             </div>
 
             <!-- <button type="submit" class="btn btn-primary m-3">儲存</button> -->
@@ -382,10 +385,12 @@
             document.querySelector("#exchangeRate").value = data.exchangeRate;
             console.log(data.expiredDate);
 
-            document.querySelector("#expiredDate").value =
-              data.expiredDate.split("T")[0];
+            document.querySelector("#expiredDate").value = data.expiredDate!=null?
+              data.expiredDate.split("T")[0]:  "激活中";
             document.querySelector("#validStatus").value = data.validStatus;
-            // console.log(data.expiredDate.split("T")[0]);
+            const base64image = data.logo;
+
+             document.querySelector('#storeImg').src = `data:image/png;base64,${base64image}`;
 
             //success結束
           },
