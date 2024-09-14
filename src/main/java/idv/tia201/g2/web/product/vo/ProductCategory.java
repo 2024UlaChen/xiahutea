@@ -30,5 +30,8 @@ public class ProductCategory {
     @Column(name = "category_sort")
     private Integer categorySort;
 
+
+    public ProductCategory(Integer categoryId, String categoryName) {
+    }
 }
 

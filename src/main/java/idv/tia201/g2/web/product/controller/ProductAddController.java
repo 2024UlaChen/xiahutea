@@ -58,6 +58,7 @@ public class ProductAddController {
     // 刪除產品
     @DeleteMapping("/delete/{productId}")
     public boolean deleteProduct(@PathVariable Integer productId) {
+
         return productService.deleteProduct(productId);
     }
 
