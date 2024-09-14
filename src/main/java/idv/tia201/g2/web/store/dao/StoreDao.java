@@ -24,10 +24,10 @@ public interface StoreDao extends JpaRepository<Store, Integer> {
     Page<Store> findByStoreStatusIn(List<Integer> statuses, Pageable pageable);
 
     // 依統編 & 店家名稱 & 店家狀態搜尋(可複選)
-    Page<Store> findByStoreStatusInAndVatAndStoreName(
+    Page<Store> findByStoreStatusInAndVatContainingAndStoreNameContaining(
             List<Integer> storeStatus, String vat, String storeName, Pageable pageable);
 
     // 依統編 or 店家名稱 & 店家狀態搜尋(可複選)
-    Page<Store> findByStoreStatusInAndVatOrStoreName(
+    Page<Store> findByStoreStatusInAndVatOrStoreNameContaining(
             List<Integer> storeStatus, String vat, String storeName, Pageable pageable);
 }
