@@ -49,27 +49,16 @@
             </div>
         </div>
         <div class="card-body memberSettingBody">
-            <div class="row">
-                <div class="form-group col-6">
-                    <label for="cmsMemberName"><span class="warn">*</span>姓名</label>
-                    <input type="text" class="form-control" id="cmsMemberName" placeholder="Customer Name">
-                </div>
-                <div class="form-group">
-                    <label>會員大頭照</label>
-                    <div class="input-group">
-                        <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="cmsMemberImg">
-                            <label class="custom-file-label" for="cmsMemberImg" id="cmsMemberImgLabel"></label>
-                        </div>
-                    </div>
-                </div>
+            <div class="form-group">
+                <label for="cmsMemberName"><span class="warn">*</span>姓名</label>
+                <input type="text" class="form-control" id="cmsMemberName" placeholder="Customer Name" disabled>
             </div>
 
             <div class="row">
                 <div class="form-group col-6">
                     <label><span class="warn">*</span> 性別 </label>
                     <div>
-                        <select id="cmsSexList" class="form-control custom-select">
+                        <select id="cmsSexList" class="form-control custom-select" disabled>
                             <option selected disabled>Select one</option>
                             <option>Female</option>
                             <option>Male</option>
@@ -79,55 +68,51 @@
                 </div>
                 <div class="form-group col-6">
                     <label for="cmsMemberBirthday"><span class="warn">*</span> 生日 </label>
-                    <input type="date" name="birthday" id="cmsMemberBirthday" class="form-control datepicker">
+                    <input type="date" name="birthday" id="cmsMemberBirthday" class="form-control datepicker" disabled>
                 </div>
             </div>
             <div class="form-group">
                 <label for="cmsMemberEmail"><span class="warn">*</span>Email</label>
-                <input type="email" class="form-control" id="cmsMemberEmail" placeholder="Enter email">
+                <input type="email" class="form-control" id="cmsMemberEmail" placeholder="Enter email" disabled>
             </div>
             <div>
                 <label class="form-label" for="cmsMemberPhone"><span class="warn">*</span>手機號碼</label>
                 <span class="form-control-wrap your-phone">
                     <input title="your-phone" type="text" name="your-phone" id="cmsMemberPhone"
                            class="form-control form-control-phone"
-                           minlength="10" maxlength="10" placeholder="0912345678">
+                           minlength="10" maxlength="10" placeholder="0912345678" disabled>
                 </span>
                 <span class="remind">僅支援台灣手機</span>
             </div>
-            <div>
+            <div class="form-group">
                 <label class="form-label"><span class="warn">*</span>地址</label>
-                <div class="row ">
-                    <div class=" col-3">
-                        <select id="cmsMemberCity" class="form-control custom-select">
-                            <!--                            <option selected disabled>Select one</option>-->
-                            <!--                            <option>On Hold</option>-->
-                            <!--                            <option>Canceled</option>-->
-                            <!--                            <option>Success</option>-->
-                        </select>
-                    </div>
-                    <div class="col-4">
-                        <select id="cmsMemberDistrict" class="form-control custom-select">
-                            <option selected disabled>Select one</option>
-                            <option>On Hold</option>
-                            <option>Canceled</option>
-                            <option>Success</option>
-                        </select></div>
-                    <div class="col-5">
-                        <input type="text" class="form-control" placeholder=".col-5">
-                    </div>
-                </div>
+                <button type="button" class="btn btn-tool" id="cmsMemberAddrCollapse">
+                    <i class="fas fa-plus"></i>
+                </button>
+                <ul id="cmsAddrList">
+                    <li>
+                        <label for="cmsMemberAddr">地址一</label>
+                        <input type="text" class="form-control">
+                    </li>
+                    <li>
+                        <label for="cmsMemberAddr">地址二</label>
+                        <input type="text" class="form-control" id="cmsMemberAddr">
+                    </li>
+
+                </ul>
             </div>
+
+
             <div class="form-group">
                 <label for="cmsMemberCarrier">手機載具</label>
-                <input type="text" class="form-control" id="cmsMemberCarrier" placeholder="手機載具">
+                <input type="text" class="form-control" id="cmsMemberCarrier" placeholder="手機載具" disabled>
             </div>
 
             <div class="form-group">
                 <label>是否停用</label>
                 <div class="custom-control custom-switch">
                     <input type="checkbox" class="custom-control-input" id="cmsMemberIsValid">
-                    <label class="custom-control-label" for="cmsMemberIsValid">停用</label>
+                    <label class="custom-control-label" for="cmsMemberIsValid" disabled>停用</label>
                 </div>
             </div>
 
@@ -140,7 +125,7 @@
             </div>
             <div class="form-group">
                 <label for="cmsMemberMoney">會員錢包</label>
-                <input type="number" id="cmsMemberMoney" class="form-control">
+                <input type="number" id="cmsMemberMoney" class="form-control" disabled>
             </div>
 
 

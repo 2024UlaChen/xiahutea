@@ -64,15 +64,22 @@
     padding-right: 1%;
     display: inline-block;
 }
+
 /*otherSetting*/
 .remind {
     color: #9b9b9b;
     font-size: 12px;
 }
+
 .warn {
     display: inline;
     color: #ff5e7d;
 }
+
+.hidden {
+    display: none;
+}
+
 /*MemberSetting*/
 
 .cmsMemberSetting {
@@ -90,10 +97,17 @@
     width: 95%;
     box-shadow: 0 0 12px 0 rgba(2, 2, 2, 0.16);
 }
-.custom-file-input:lang(en) , .custom-file-label::after {
+
+.custom-file-input:lang(en), .custom-file-label::after {
     display: none;
 }
-#cmsMemberImg , #cmsMemberImgLabel{
+
+#cmsMemberImg, #cmsMemberImgLabel {
     border-radius: 50%;
     border: 1px red solid;
+}
+
+#cmsAddrList {
+    padding: 0;
+    list-style-type: none;
 }
