@@ -40,12 +40,7 @@ public class RegisterStoreController {
 
         Page<Store> stores = registerStoreService.searchRegisterStore(store, page);
         Page<RegisterStoreDTO> registerStores = convertPage(stores);
-        System.out.println(stores);
         Core core = new Core();
-
-        if (stores.isEmpty()){
-
-        }
         core.setData(registerStores);
         return core;
     }
