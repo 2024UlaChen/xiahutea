@@ -3,13 +3,11 @@ package idv.tia201.g2.web.order.vo;
 import idv.tia201.g2.core.pojo.Core;
 import idv.tia201.g2.web.member.vo.Member;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import java.sql.Timestamp;
 
 @Entity
+@Builder
 @Getter
 @Setter
 @NoArgsConstructor
