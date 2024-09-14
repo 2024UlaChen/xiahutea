@@ -1,18 +1,22 @@
 package idv.tia201.g2.web.store.service.impl;
 
 import idv.tia201.g2.web.store.dao.StoreDao;
+import idv.tia201.g2.web.store.dto.RegisterStoreDTO;
 import idv.tia201.g2.web.store.service.RegisterStoreService;
 import idv.tia201.g2.web.store.vo.Store;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static idv.tia201.g2.web.store.util.Vatutil.isValidTWBID;
+import static idv.tia201.g2.web.store.util.VatUtil.isValidTWBID;
 
 @Service
 public class RegisterStoreServiceImpl implements RegisterStoreService {
@@ -89,9 +93,13 @@ public class RegisterStoreServiceImpl implements RegisterStoreService {
     }
 
     @Override
-    public List<Store> searchRegisterStore(Store store) {
+    public Page<Store> searchRegisterStore(Store store, Integer page) {
+        //分頁與排序
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "registerDay"));
+
         // 回傳的店家列表
-        List<Store> storeList = new ArrayList<>();
+        List<RegisterStoreDTO> storeList = new ArrayList<>();
+
         // 搜尋店家狀態
         List<Integer> storeStatus  = new ArrayList<>();
         if(store.getStoreStatus() == 10){           // 店家狀態 : 審核中 & 拒絕
@@ -103,12 +111,12 @@ public class RegisterStoreServiceImpl implements RegisterStoreService {
 
         //只依店家狀態搜尋
         if(store.getVat() == null && store.getStoreName() == null){
-            return storeDao.findByStoreStatusIn(storeStatus);
+            return storeDao.findByStoreStatusIn(storeStatus, pageable);
         }
 
         //依店家狀態 & 統編 & 店家名稱搜尋
         if(store.getVat() != null && store.getStoreName() != null){
-            return storeDao.findByStoreStatusInAndVatAndStoreName(storeStatus, store.getVat(), store.getStoreName());
+            return storeDao.findByStoreStatusInAndVatContainingAndStoreNameContaining(storeStatus, store.getVat(), store.getStoreName(), pageable);
         }
 
         //依店家狀態 & (統編 OR 店家名稱)
@@ -118,7 +126,7 @@ public class RegisterStoreServiceImpl implements RegisterStoreService {
         if(store.getStoreName() == null){
             store.setStoreName("********");
         }
-        return storeDao.findByStoreStatusInAndVatOrStoreName(storeStatus, store.getVat(), store.getStoreName());
+        return storeDao.findByStoreStatusInAndVatOrStoreNameContaining(storeStatus, store.getVat(), store.getStoreName(), pageable);
 
     }
 
