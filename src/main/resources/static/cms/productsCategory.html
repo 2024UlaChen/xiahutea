@@ -139,7 +139,7 @@
                             </ol>
                         </div>
                     </div>
-                </div><!-- /.container-fluid -->
+                </div>
             </section>
 
             <!-- Main content -->
@@ -272,27 +272,12 @@
                                         </a>
                                     </td>
                                 </tr>
-
-
-
-
-
                             </tbody>
                         </table>
                     </div>
-
-
                 </div>
-                <!-- /.card -->
                 <div>
                     <div>
-                        <!-- Check all button -->
-
-
-
-                        <!-- /.btn-group -->
-
-
                         <div class="btn-group">
                             <button type="button" class="btn btn-default btn-sm">
                                 <i class="fas fa-chevron-left"></i>
@@ -301,12 +286,9 @@
                                 <i class="fas fa-chevron-right"></i>
                             </button>
                         </div>
-
                     </div>
-
                 </div>
-
-    </section>
+            </section>
         </div>
         <div class="storefooter"></div>
     </div>
@@ -343,61 +325,44 @@ $('#add').on("click", function () {
     });
 
 
-$('#categoryForm').on('submit', function(event) {
-    event.preventDefault(); // 防止表单默认提交行为
+const categoryForm = document.getElementById('categoryForm');
 
-    // 获取表单数据
-    const categoryName = $('#categoryName').val();
-    const categorySort = $('#categorySort').val();
+// Add event listener for form submission
+categoryForm.addEventListener('submit', async function (event) {
+    event.preventDefault(); // Prevent the default form submission
 
-    // 使用 Ajax 将数据发送到后端
-    $.ajax({
-        url: '/categories/add', // 后端处理表单数据的API路径
-        type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify({
-            categoryName: categoryName,
-            categorySort: categorySort
-        }),
-        success: function(data) {
-            // 假设后端返回的数据中包含新增分类的 ID 和其他信息
+    // Get form data
+    const categoryName = document.getElementById('categoryName').value;
+    const categorySort = document.getElementById('categorySort').value;
 
-            // 生成新的表格行HTML字符串
-            var newRow = '<tr>' +
-                '<td>' +
-                '<div class="icheck-primary">' +
-                '<input type="checkbox" value="' + data.productid + '" class="options">' +
-                '</div>' +
-                '</td>' +
-                '<td>' + data.categoryName + '</td>' + // 使用返回的分类名称
-                '<td>' + data.categorySort + '</td>' + // 使用返回的分类排序
-                '<td>' +
-                '<a class="btn btn-sm btn-edit update_btn" href="#">' +
-                '<i class="fas fa-pencil-alt"></i> 編輯' +
-                '</a> ' +
-                '<a class="btn btn-danger btn-sm delete_btn" href="#">' +
-                '<i class="fas fa-trash"></i> 刪除' +
-                '</a>' +
-                '</td>' +
-                '</tr>';
+    // Construct the data object
+    const data = {
+        categoryName: categoryName,
+        categorySort: categorySort
+    };
 
-            // 将新行插入表格的 tbody 中
-            $('#categoryTable tbody').append(newRow);
+    try {
+        // Send the POST request using fetch API
+        const response = await fetch('/categories/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data), // Convert data to JSON
+        });
 
-            // 清空输入框
-            $('#categoryName').val('');
-            $('#categorySort').val('1');
-
-            // 关闭模态框 (可选)
-            $('.close').click();
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            // 在这里处理错误
-            alert('新增分类失败: ' + errorThrown);
+        // Check if the request was successful
+        if (response.ok) {
+            const result = await response.text(); // Get the response message
+            alert(result); // Display success message
+        } else {
+            const errorMessage = await response.text(); // Get the error message
+            alert('Error: ' + errorMessage);
         }
-    });
+    } catch (error) {
+        console.error('Error:', error); // Handle any other errors
+    }
 });
-
 // 按叉關掉談窗
 $("span").on("click",function (){
     $("#myModal").fadeOut();
@@ -429,7 +394,7 @@ $("span").on("click",function (){
       var $this = $(this);
       var categoryId = $this.data('id');
 
-      if (confirm('確定要删除此分类吗？')) {
+      if (confirm('確定要删除此分类嗎？')) {
           // 使用 fetch 发送删除请求到后端
           fetch('/api/categories/' + categoryId, {
               method: 'DELETE',
