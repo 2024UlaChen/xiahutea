@@ -194,8 +194,8 @@
                     `<li class="paginate_button page-item previous disabled" id="example2_previous">
                         <a href="#" data-dt-idx="0" tabindex="0" class="page-link">Previous</a>
                     </li>`
-                for (i; i < data.totalPages; i++) {
-                    if(data.number == i){
+                for (i; i < core.data.totalPages; i++) {
+                    if(core.data.number == i){
                         pageHtml += `
                         <li class="paginate_button page-item active">
                             <a href="#" data-dt-idx="${i+1}" tabindex="0" class="page-link">
@@ -220,15 +220,24 @@
                             </a>
                      </li>`
 
-                if(data.totalPages > 0){
+
+                if(core.data.totalPages > 0){
+                    //如果有資料，才會顯示分頁按鈕
                     $(".pagination").eq(0).html(pageHtml);
-                    if (data.number - 1 == 0){
-                        $("#example2_previous").addClass("disabled");
+
+                    //依所在頁數限制 previous & next 按鈕能不能點擊
+                    if (core.data.number - 1 < 0){
+                        $("#example2_previous").add("disabled");
+                    }else {
+                        $("#example2_previous").removeClass("disabled");
                     }
-                    if (data.number + 1 == i){
+                    if (core.data.number + 1 == i){
                         $("#example2_next").addClass("disabled");
+                    }else {
+                        $("#example2_next").removeClass("disabled");
                     }
                 }else {
+                    //如果沒資料，不會顯示分頁按鈕
                     $(".pagination").eq(0).html("");
                 }
 
@@ -236,17 +245,18 @@
             })
     }
 
-
     //進入頁面就先搜尋全部
     $(function (){
-        let url = "/registerstore/registerStoreList?storeStatus=10&page=0";
+        let url = "/registerstore/registerStoreList?";
+        url += "storeStatus=10&page=0"
         searchRegisterStore(url);
     })
 
     //依條件搜尋
     $(submitEle).on("click",e => {
         e.preventDefault();
-        let url = "/registerstore/registerStoreList?page=0";
+        let url = "/registerstore/registerStoreList?";
+        url += "page=0";
         // 依店家狀態查詢
         url += "&storeStatus=" + $(storeStatus).val();
         // 依統編查詢
@@ -257,15 +267,25 @@
         if($(storenameEle).val()){
             url += "&storeName=" + $(storenameEle).val();
         }
+        console.log(url)
         searchRegisterStore(url);
     })
 
     //點選頁碼
     $(document).on("click", "a.page-link", function(e){
         e.preventDefault();
+        let newPage = $(".paginate_button.page-item.active").children("a").attr("data-dt-idx");
         let jumpPage = $(this).attr("data-dt-idx");
-        let url = "/registerstore/registerStoreList?page=0";
-        //一頁數
+        let url = "/registerstore/registerStoreList?";
+
+        //依頁數
+        if($(this).closest("li").is(":first-child")){
+            url += "page=" + (newPage-1 - 1);
+        }else if($(this).closest("li").is(":last-child")){
+            url += "page=" + (newPage-1 + 1);
+        }else {
+            url += "page=" + (jumpPage-1);
+        }
         // 依店家狀態查詢
         url += "&storeStatus=" + $(storeStatus).val();
         // 依統編查詢
@@ -277,10 +297,12 @@
             url += "&storeName=" + $(storenameEle).val();
         }
         searchRegisterStore(url);
-
-
     })
 
+    //點選storeId
+    //TODO
+
+    //
 
 </script>
 
