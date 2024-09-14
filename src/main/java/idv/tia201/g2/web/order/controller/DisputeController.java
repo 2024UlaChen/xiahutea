@@ -24,7 +24,8 @@ public class DisputeController {
 
     @GetMapping({"disputeOrderId"})
     public DisputeOrder detail(@PathVariable Integer disputeOrderId){
-        return disputeService.findByDisputeId(disputeOrderId);
+//        return disputeService.findByDisputeId(disputeOrderId);
+        return null;
     }
 
     // todo 修改資料

@@ -2,6 +2,7 @@ package idv.tia201.g2.web.order.service.impl;
 
 import java.util.List;
 import idv.tia201.g2.web.order.dao.DisputeDao;
+import idv.tia201.g2.web.order.dto.OrderDto;
 import idv.tia201.g2.web.order.service.DisputeService;
 import idv.tia201.g2.web.order.vo.DisputeOrder;
 import idv.tia201.g2.web.order.vo.Orders;
@@ -26,7 +27,7 @@ public class DisputeServiceImpl implements DisputeService {
     }
 
     @Override
-    public DisputeOrder update(DisputeOrder disputeOrder) {
+    public OrderDto update(OrderDto orderDto) {
 
 
         return null;
@@ -38,7 +39,8 @@ public class DisputeServiceImpl implements DisputeService {
     }
 
     @Override
-    public DisputeOrder findByDisputeId(int disputeOrderId) {
-        return disputeDao.selectByDisputeId(disputeOrderId);
+    public OrderDto findByDisputeId(int disputeId) {
+//        return disputeDao.selectByDisputeId(disputeOrderId);
+        return null;
     }
 }
