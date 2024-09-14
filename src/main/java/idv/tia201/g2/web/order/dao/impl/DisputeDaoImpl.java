@@ -28,16 +28,24 @@ public class DisputeDaoImpl implements DisputeDao {
 
     @Override
     public DisputeOrder selectByDisputeId(int disputeOrderId) {
-        String jpql = "from DisputeOrder where disputeOrderId= :disputeOrderId";
-        TypedQuery<DisputeOrder> query = session.createQuery(jpql, DisputeOrder.class)
+        String hql = "from DisputeOrder where disputeOrderId= :disputeOrderId";
+        TypedQuery<DisputeOrder> query = session.createQuery(hql, DisputeOrder.class)
                 .setParameter("disputeOrderId", disputeOrderId);
         return query.getSingleResult();
     }
 
     @Override
+    public DisputeOrder selectByOrderId(int orderId) {
+        String hql = "FROM DisputeOrder WHERE orderId= :orderId";
+        TypedQuery<DisputeOrder> query = session.createQuery(hql, DisputeOrder.class)
+                .setParameter("orderId", orderId);
+        return query.getSingleResult();
+    }
+
+    @Override
     public List<DisputeOrder> selectAll() {
-        String jpql = "from DisputeOrder";
-        TypedQuery<DisputeOrder> query = session.createQuery(jpql, DisputeOrder.class);
+        String hql = "from DisputeOrder";
+        TypedQuery<DisputeOrder> query = session.createQuery(hql, DisputeOrder.class);
         return query.getResultList();
     }
 }

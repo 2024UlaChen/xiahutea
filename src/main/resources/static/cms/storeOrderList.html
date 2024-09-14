@@ -217,7 +217,7 @@
                   .then(response => response.json())
                   .then(data => showText(data))
                   .catch((error) => {
-                      console.log("catch error:" + error);
+                      console.log("錯誤原因：" + error);
                   });
         }
 
@@ -246,7 +246,6 @@
                 case 4 : return "訂單完成";
             }
         }
-
 
         //------------------------------------------------------------------------------------
         // 0. 顯示列表資料

@@ -303,6 +303,7 @@
                 }).then(res => res.json()).then(data => {
                     if(data.successful){
                         updateNewStatus(data.orderStatus);
+                        Swal.fire("更新成功", "", "success");
 
                         // todo:
                         // 2.1.2 如果訂單狀態為訂單完成，鎖定-儲存btn&狀態選單
@@ -310,13 +311,11 @@
                             btn_order_save.setAttribute("disabled", "disabled");
                             select_status.setAttribute("disabled", "disabled");
                         }
-                        Swal.fire("更新成功", "", "success");
-                        location.reload();
                     }else {
                         Swal.fire("更新失敗", "", "error");
                     }
                 }).catch((error) => {
-                    console.error("發生錯誤：", error);
+                    console.error("錯誤原因：", error);
                 });
             });
 
@@ -353,7 +352,7 @@
                           .then(response => response.json())
                           .then(data => showText(data))
                           .catch((error) => {
-                              console.log("catch error:" + error);
+                              console.log("錯誤原因:" + error);
                           });
                 }else {
                     console.error("訂單號碼錯誤");
@@ -370,72 +369,73 @@
                 let detailHtml = "";
                 detailHtml += `
                         <tr>
-                            <td id="order_id">${data.orderId}</td>
-                            <td>${data.customer.customerAccount}</td>
-                            <td>${data.customer.nickname}</td>
-                            <td>${data.store.storeName}</td>
-                            <td id="status_text">${statusText(data.orderStatus)}</td>
+                            <td id="order_id">${data[0].orderId}</td>
+                            <td>${data[0].orders.customer.customerAccount}</td>
+                            <td>${data[0].orders.customer.nickname}</td>
+                            <td>${data[0].orders.store.storeName}</td>
+                            <td id="status_text">${statusText(data[0].orders.orderStatus)}</td>
                         </tr>
                 `;
                 document.getElementById("detail_tbody").innerHTML = detailHtml;
 
-                let invoiceHtml =`
+                let invoiceHtml ="";
+                invoiceHtml =`
                         <tr>
                             <th>開立發票方式</th>
-                            <td>${invoiceText(data.invoiceMethod)}</td>
+                            <td>${invoiceText(data[0].orders.invoiceMethod)}</td>
                         </tr>
                         <tr>
                             <th>處理費發票號碼</th>
-                            <td>${data.invoiceNo}</td>
+                            <td>${data[0].orders.invoiceNo}</td>
                         </tr>
                         <tr>
                             <th>發票統編</th>
-                            <td>${data.invoiceVat}</td>
+                            <td>${nullText(data[0].orders.invoiceVat)}</td>
                         </tr>
                         <tr>
                             <th>發票載具</th>
-                            <td>${data.invoiceCarrier}</td>
+                            <td>${nullText(data[0].orders.invoiceCarrier)}</td>
                         </tr>
                 `;
                 document.getElementById("invoice_tbody").innerHTML = invoiceHtml;
 
-                let receiverHtml =`
+                let receiverHtml ="";
+                receiverHtml =`
                         <tr>
                             <th>取貨方式</th>
-                            <td>${data.receiverMethod}</td>
+                            <td>${data[0].orders.receiverMethod}</td>
                         </tr>
                         <tr>
                             <th>取貨人姓名</th>
-                            <td>${data.receiverName}</td>
+                            <td>${data[0].orders.receiverName}</td>
                         </tr>
                         <tr>
                             <th>取貨人電話</th>
-                            <td>${data.receiverPhone}</td>
+                            <td>${data[0].orders.receiverPhone}</td>
                         </tr>
                         <tr>
                             <th>取貨時間</th>
-                            <td>${data.receiverDatetime}</td>
+                            <td>${data[0].orders.receiverDatetime}</td>
                         </tr>
                         <tr>
                             <th>外送地址</th>
-                            <td>${data.receiverAddress}</td>
+                            <td>${nullText(data[0].orders.receiverAddress)}</td>
                         </tr>
                         <tr>
                             <th>訂單評分</th>
-                            <td>${data.orderScore}</td>
+                            <td>${nullText(data[0].orders.orderScore)}</td>
                         </tr>
                         <tr>
                             <th>訂單評分建議</th>
-                            <td>${data.orderFeedback}</td>
+                            <td>${nullText(data[0].orders.orderFeedback)}</td>
                         </tr>
                         <tr>
                             <th>訂單成立日期</th>
-                            <td>${data.orderCreateDatetime}</td>
+                            <td>${data[0].orders.orderCreateDatetime}</td>
                         </tr>
-                        <!--  待確認 db-->
                         <tr>
                             <th>訂單更新日期</th>
-                            <td>${data.orderUpdateDatetime}</td>
+                            <td>${nullText(data[0].orders.orderUpdateDatetime)}</td>
                         </tr>
                 `;
                 document.getElementById("receiver_tbody").innerHTML = receiverHtml;
@@ -448,59 +448,57 @@
                             <tr>
                                 <td></td>
                                 <th colspan="3">商品總金額</th>
-                                <td>${data.productAmount}</td>
+                                <td>${data[0].orders.productAmount}</td>
                             </tr>
                             <tr>
                                 <td></td>
                                 <th colspan="3">平台處理費</th>
-                                <td>${data.processingFees}</td>
+                                <td>${data[0].orders.processingFees}</td>
                             </tr>
                             <tr>
                                 <td></td>
                                 <th colspan="3">錢包折抵</th>
-                                <td><span> -</span>${data.customerMoneyDiscount}</td>
+                                <td>- ${data[0].orders.customerMoneyDiscount}</td>
                             </tr>
                             <tr>
                                 <td></td>
                                 <th colspan="3">優惠券折抵</th>
-                                <td><span> -</span>${data.couponDiscount}</td>
+                                <td>- ${data[0].orders.couponDiscount}</td>
                             </tr>
                             <tr>
                                 <td></td>
                                 <th colspan="3">集點折抵</th>
-                                <td><span> -</span>${data.loyaltyDiscount}</td>
+                                <td>- ${data[0].orders.loyaltyDiscount}</td>
                             </tr>
                             <tr>
                                 <td></td>
                                 <th colspan="3">付款金額</th>
-                                <td>${data.paymentAmount}</td>
+                                <td>${data[0].orders.paymentAmount}</td>
                             </tr>
                             <tr>
                                 <td></td>
                                 <th colspan="3">付款方式</th>
-                                <td>${paymentMethodText(data.paymentMethod)}</td>
+                                <td>${paymentMethodText(data[0].orders.paymentMethod)}</td>
                             </tr>
                 `;
                 document.getElementById("product_tfoot").innerHTML = productTfootHtml;
 
-                // todo 待db完成確認
-
                 let productTbodyHtml = "";
-                let detailList = data.orderDetail;
-                for (let i = 0; i < detailList.length; i++) {
-                    productTbodyHtml=`
+                for (let i = 0; i < data.length; i++) {
+                    productTbodyHtml +=`
                         <tr>
-                            <td>${detailList[i].product.productName} / ${detailList[i].product.size}</td>
-                            <td>${detailList[i].productSugar} / ${detailList[i].productTemperature}</td>
-                            <td>${detailList[i].productAddMaterials}</td>
-                            <td>${detailList[i].productQuantity}</td>
-                            <td>${detailList[i].productPrice}</td>
+                            <td>${data[i].product.productName} / ${productSizeText(data[i].product.size)}</td>
+                            <td>${data[i].productSugar} / ${data[i].productTemperature}</td>
+                            <td>${nullText(data[i].productAddMaterials)}</td>
+                            <td>${data[i].productQuantity}</td>
+                            <td>${data[i].productPrice}</td>
                         </tr>
                     `;
                 }
                 document.getElementById("product_tbody").innerHTML = productTbodyHtml;
             }
 
+            // todo 待確認 key & value
             function statusText(statusNum) {
                 switch (statusNum) {
                     case 1 : return "訂單成立";
@@ -520,6 +518,27 @@
             function paymentMethodText(paymentMethodNum) {
                 switch (paymentMethodNum) {
                     case 1 : return "信用卡";
+                }
+            }
+            function productSizeText(sizeNum){
+                switch (sizeNum) {
+                    case "1" : return "小杯";
+                    case "2" : return "大杯";
+                    default: return "";
+                }
+            }
+            function nullText(nullValue){
+                if(nullValue != null ){
+                    return nullValue;
+                }else{
+                    return "";
+                }
+            }
+            function nullMoney(nullValue){
+                if(nullValue !== null && nullValue !== 0){
+                    return nullValue;
+                }else{
+                    return "";
                 }
             }
         });

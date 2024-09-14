@@ -1,7 +1,12 @@
 package idv.tia201.g2.web.order.service.impl;
 
+import idv.tia201.g2.web.order.dao.DisputeDao;
 import idv.tia201.g2.web.order.dao.OrderDao;
+import idv.tia201.g2.web.order.dao.OrderDetailDao;
+import idv.tia201.g2.web.order.dto.OrderDto;
 import idv.tia201.g2.web.order.service.OrderService;
+import idv.tia201.g2.web.order.util.OrderMappingUtil;
+import idv.tia201.g2.web.order.vo.OrderDetail;
 import idv.tia201.g2.web.order.vo.Orders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,18 +21,50 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private OrderDao orderDao;
 
+    @Autowired
+    private OrderDetailDao orderDetailDao;
+
+    @Autowired
+    private DisputeDao disputeDao;
+
+    @Autowired
+    private OrderMappingUtil orderMappingUtil;
+
+
+    private OrderDto orderDto ;
+
+
     // todo
     // 發票api
 
-    // 後台 訂單操作邏輯
+    // 後台 訂單查詢
     @Override
     public List<Orders> findAll() {
         return orderDao.selectAll();
     }
+    // 後台 訂單明細
+    @Override
+    public List<OrderDetail> findByOrderId(int orderId) {
+        return orderDetailDao.selectByOrderId(orderId);
+    }
+
+//    public OrderDto findByOrderId(int orderId) {
+//        return orderMappingUtil.mapToOrderDto(
+//                orderDao.selectByOrderId(orderId),
+//                orderDetailDao.selectByOrderId(orderId),
+//                disputeDao.selectByOrderId(orderId)
+//        );
+//    }
+
+    // 前台 訂單列表
+    @Override
+    public List<Object[]> findByCustomerId(int customerId) {
+        return orderDao.selectBycCustomerId(customerId);
+    }
 
     @Override
-    public Orders findByOrderId(int orderId) {
-        return orderDao.selectByOrderId(orderId);
+    public OrderDto addOrder(OrderDto orderDto) {
+        return null;
     }
 
     @Override
@@ -101,11 +138,11 @@ public class OrderServiceImpl implements OrderService {
                 }
             }
         }
-        if(orderDao.insert(order)){
-            order.setMessage("訂單成立失敗");
-            order.setSuccessful(false);
-            return order;
-        }
+//        if(orderDao.insert(order)){
+//            order.setMessage("訂單成立失敗");
+//            order.setSuccessful(false);
+//            return order;
+//        }
         order.setMessage("訂單已成立");
         order.setSuccessful(true);
         return order;

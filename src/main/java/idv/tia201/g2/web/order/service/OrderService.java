@@ -1,15 +1,23 @@
 package idv.tia201.g2.web.order.service;
 
+import idv.tia201.g2.web.order.dto.OrderDto;
+import idv.tia201.g2.web.order.vo.OrderDetail;
 import idv.tia201.g2.web.order.vo.Orders;
 import java.util.List;
 
 public interface OrderService {
 
-    Orders addOrder(Orders order);
-    Orders addStar(Orders order);
-
-    Orders updateStatus(Orders order);
     List<Orders> findAll();
-    Orders findByOrderId(int orderId);
+    List<OrderDetail> findByOrderId(int orderId);
 
+//    OrderDto findByOrderId(int orderId);
+    List<Object[]> findByCustomerId(int customerId);
+
+    OrderDto addOrder(OrderDto orderDto);
+
+
+    Orders addOrder(Orders order);
+
+    Orders addStar(Orders order);
+    Orders updateStatus(Orders order);
 }
