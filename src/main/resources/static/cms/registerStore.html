@@ -89,13 +89,14 @@
                            aria-describedby="example2_info">
                         <thead>
                         <tr>
-                            <th scope="col-1"><input type="checkbox" id="select-all"></th>
-                            <th scope="col-1">功能</th>
+<!--                            <th scope="col-1"><input type="checkbox" id="select-all"></th>-->
+<!--                            <th scope="col-1">功能</th>-->
+                            <th scope="col-1">#</th>
+                            <th scope="col-2">註冊時間</th>
                             <th scope="col-1">商家代碼</th>
                             <th scope="col-2">店家名稱</th>
                             <th scope="col-2">統一編號</th>
                             <th scope="col-1">狀態</th>
-                            <th scope="col-2">註冊時間</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -108,28 +109,11 @@
         </section>
         <div class="row">
             <div class="col-sm-12 col-md-5">
-                <div class="dataTables_info" id="example2_info" role="status" aria-live="polite">
-                    Showing 1 to 10 of 19 entries
-                </div>
+
             </div>
             <div class="col-sm-12 col-md-7">
                 <div class="dataTables_paginate paging_simple_numbers" id="example2_paginate">
-                    <ul class="pagination"><li class="paginate_button page-item previous disabled" id="example2_previous">
-                        <a href="#" aria-controls="example2" data-dt-idx="0" tabindex="0" class="page-link">Previous</a>
-                    </li>
-                        <li class="paginate_button page-item active">
-                            <a href="#" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">
-                            1
-                            </a></li><li class="paginate_button page-item ">
-                            <a href="#" aria-controls="example2" data-dt-idx="2" tabindex="0" class="page-link">
-                                2
-                            </a>
-                        </li>
-                        <li class="paginate_button page-item next" id="example2_next">
-                            <a href="#" aria-controls="example2" data-dt-idx="3" tabindex="0" class="page-link">
-                                Next
-                            </a>
-                        </li>
+                    <ul class="pagination" id="paginate" >
                     </ul>
                 </div>
             </div>
@@ -173,42 +157,98 @@
     //建立一個搜尋註冊店家列表的方法
     function searchRegisterStore(url){
         fetch(url).then(res => res.json())
-            .then(registerStoreList => {
-                if(registerStoreList.length === 0){
+            .then(core => {
+                console.log(core)
+                if(core.data.content.length === 0){
+                    //sweetAlert
                     swal.fire("查無資料!", "請確認查詢資訊", "warning");
-                    return
                 }
+
+                //表格內容
                 let tbodyHtml = ``;
-                $.each(registerStoreList, function(index, registerStore){
-                    let flag = registerStore.storeStatus === 0;
+                $.each(core.data.content, function(index, registerStore){
+                    let flag = registerStore.storeStatus == 0;
                     let storeStatus =  flag ? "申請中" : "拒絕申請"
                     let registerDay = moment(registerStore.registerDay).format("YYYY/MM/DD");
                     tbodyHtml += `
                         <tr>
-                            <td><input type="checkbox" id="${registerStore.storeId}"></td>
-                            <td><button class=" btn-info"><b>修改</b></button></td>
-                            <td>${registerStore.storeId}</td>
+                            <td>${index + 1}</td>
+                            <td>${registerDay}</td>
+                            <td>
+                                <a href="#" id="${registerStore.storeId}">
+                                    ${registerStore.storeId}
+                                </a>
+                            </td>
                             <td>${registerStore.storeName}</td>
                             <td>${registerStore.vat}</td>
                             <td>${storeStatus}</td>
-                            <td>${registerDay}</td>
                         </tr>`
                 });
                 $("tbody").html(tbodyHtml);
+
+                //分頁
+
+                let pageHtml = ``;
+                let i = 0;
+                pageHtml +=
+                    `<li class="paginate_button page-item previous disabled" id="example2_previous">
+                        <a href="#" data-dt-idx="0" tabindex="0" class="page-link">Previous</a>
+                    </li>`
+                for (i; i < data.totalPages; i++) {
+                    if(data.number == i){
+                        pageHtml += `
+                        <li class="paginate_button page-item active">
+                            <a href="#" data-dt-idx="${i+1}" tabindex="0" class="page-link">
+                                ${i+1}
+                            </a>
+                        </li>
+                        `
+                    }else {
+                        pageHtml += `
+                            <li class="paginate_button page-item">
+                                <a href="#" data-dt-idx="${i+1}" tabindex="0" class="page-link">
+                                    ${i+1}
+                                </a>
+                            </li>
+                            `
+                    }
+                }
+                pageHtml +=
+                    `<li class="paginate_button page-item next" id="example2_next">
+                            <a href="#" data-dt-idx="${i}" tabindex="0" class="page-link">
+                                Next
+                            </a>
+                     </li>`
+
+                if(data.totalPages > 0){
+                    $(".pagination").eq(0).html(pageHtml);
+                    if (data.number - 1 == 0){
+                        $("#example2_previous").addClass("disabled");
+                    }
+                    if (data.number + 1 == i){
+                        $("#example2_next").addClass("disabled");
+                    }
+                }else {
+                    $(".pagination").eq(0).html("");
+                }
+
+
             })
     }
 
-    //一進入頁面就先搜尋全部
+
+    //進入頁面就先搜尋全部
     $(function (){
-        let url = "/registerstore/registerStoreList?";
-        searchRegisterStore(url + "storeStatus=" + $("#storeStatus").val());
+        let url = "/registerstore/registerStoreList?storeStatus=10&page=0";
+        searchRegisterStore(url);
     })
 
     //依條件搜尋
     $(submitEle).on("click",e => {
-        let url = "/registerstore/registerStoreList?";
+        e.preventDefault();
+        let url = "/registerstore/registerStoreList?page=0";
         // 依店家狀態查詢
-        url += "storeStatus=" + $(storeStatus).val();
+        url += "&storeStatus=" + $(storeStatus).val();
         // 依統編查詢
         if($(vatEle).val()){
             url += "&vat=" + $(vatEle).val();
@@ -220,24 +260,28 @@
         searchRegisterStore(url);
     })
 
+    //點選頁碼
+    $(document).on("click", "a.page-link", function(e){
+        e.preventDefault();
+        let jumpPage = $(this).attr("data-dt-idx");
+        let url = "/registerstore/registerStoreList?page=0";
+        //一頁數
+        // 依店家狀態查詢
+        url += "&storeStatus=" + $(storeStatus).val();
+        // 依統編查詢
+        if($(vatEle).val()){
+            url += "&vat=" + $(vatEle).val();
+        }
+        //依店家名稱查詢
+        if($(storenameEle).val()){
+            url += "&storeName=" + $(storenameEle).val();
+        }
+        searchRegisterStore(url);
 
-</script>
-<script>
-    $(function () {
-        // $("#example1").DataTable({
-        //     "responsive": true, "lengthChange": false, "autoWidth": false,
-        //     "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-        // }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-        // $('#example2').DataTable({
-        //     "paging": true,
-        //     "lengthChange": false,
-        //     "searching": false,
-        //     "ordering": true,
-        //     "info": true,
-        //     "autoWidth": false,
-        //     "responsive": true,
-        // });
-    });
+
+    })
+
+
 </script>
 
 </body>
