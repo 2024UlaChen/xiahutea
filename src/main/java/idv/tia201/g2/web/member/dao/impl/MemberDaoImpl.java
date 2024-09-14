@@ -8,19 +8,28 @@ import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+
 @Repository
 public class MemberDaoImpl implements MemberDao {
     @PersistenceContext
     private Session session;
 
     @Override
-    public List<Member> findAll() {
-        return List.of();
+    public List<Member> findAllMember() {
+
+        return session.createQuery("FROM Member", Member.class).getResultList();
     }
 
     @Override
-    public Member findByMemberId(int memberId) {
-        return null;
+    public Member findMemberById(int memberId) {
+
+        return session.get(Member.class, memberId);
+    }
+
+    @Override
+    public Member findMemberByPhone(String phone) {
+        //todo revise return data
+        return session.get(Member.class, phone);
     }
 
     @Override
@@ -39,13 +48,15 @@ public class MemberDaoImpl implements MemberDao {
     }
 
     @Override
-    public int updateMemberInfo(Member member) {
-        return 0;
+    public boolean updateMemberInfo(Member member) {
+        session.merge(member);
+        return true;
     }
 
     @Override
-    public int updateMemberAddress(MemberAddress memberAddress) {
-        return 0;
+    public boolean updateMemberAddress(MemberAddress memberAddress) {
+        session.merge(memberAddress);
+        return true;
     }
 
     @Override
@@ -56,12 +67,14 @@ public class MemberDaoImpl implements MemberDao {
     }
 
     @Override
-    public int createMember(Member member) {
-        return 0;
+    public boolean createMember(Member member) {
+        session.persist(member);
+        return true;
     }
 
     @Override
-    public int createMemberAddress(MemberAddress memberAddress) {
-        return 0;
+    public boolean createMemberAddress(MemberAddress memberAddress) {
+        session.persist(memberAddress);
+        return true;
     }
 }
