@@ -4,6 +4,7 @@ import idv.tia201.g2.web.member.service.MemberService;
 import idv.tia201.g2.web.member.vo.Member;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,12 +22,17 @@ public class RegisterController extends HttpServlet {
     public Member register(@RequestBody Member member) {
         if (member == null) {
             member = new Member();
-            member.setMessage("no member data");
+            member.setMessage("register - no member data");
+            member.setSuccessful(false);
+            return member;
+        }
+        if (StringUtils.isEmpty(member.getCustomerPhone())){
+            member.setMessage("register - cellphone can't be duplicate");
             member.setSuccessful(false);
             return member;
         }
         if (memberService.isExistMember(member)) {
-            member.setMessage("duplicate member data");
+            member.setMessage("register - duplicate member data");
             member.setSuccessful(false);
             return member;
         }
