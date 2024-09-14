@@ -42,7 +42,7 @@
                 <div class="card-header">
                     <form action="#">
                         <div class="row">
-                            <div class="form-group col-sm-2">
+                            <div class="form-group col-sm-3">
                                 <label>統一編號</label>
                                 <input type="search" id="vat" class="form-control form-control-lg"
                                        placeholder="請輸入統一編號">
@@ -56,15 +56,15 @@
 
                             <div class="form-group col-sm-2">
                                 <label>狀態</label>
-                                <select class="form-control form-control-lg">
-                                    <option selected>申請中</option>
-                                    <option>已成功</option>
-                                    <option>已駁回</option>
+                                <select id="storeStatus" class="form-control form-control-lg">
+                                    <option  value="0">申請中</option>
+                                    <option value="4">拒絕申請</option>
+                                    <option selected value="10">全部</option>
                                 </select>
                             </div>
 
-                            <div class="form-group col-sm-2" style="padding-top:30px">
-                                <button type="submit" class="btn btn-lg btn-info">
+                            <div class="form-group col-sm-1" style="padding-top:30px">
+                                <button type="submit" id="submit" class="btn btn-lg btn-info">
                                     <i class="fa fa-search"></i>
                                 </button>
                             </div>
@@ -89,213 +89,17 @@
                            aria-describedby="example2_info">
                         <thead>
                         <tr>
-                            <th><input type="checkbox" id="select-all"></th>
-                            <th>功能</th>
-                            <th>商家代碼</th>
-                            <th>店家名稱</th>
-                            <th>統一編號</th>
-                            <th>狀態</th>
+<!--                            <th scope="col-1"><input type="checkbox" id="select-all"></th>-->
+<!--                            <th scope="col-1">功能</th>-->
+                            <th scope="col-1">#</th>
+                            <th scope="col-2">註冊時間</th>
+                            <th scope="col-1">商家代碼</th>
+                            <th scope="col-2">店家名稱</th>
+                            <th scope="col-2">統一編號</th>
+                            <th scope="col-1">狀態</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <th><input type="checkbox" id="1001"></th>
-                            <td>
-                                <button class=" btn-info"><b>修改</b></button>
-                            </td>
-                            <td>Internet
-                                Explorer 4.0
-                            </td>
-                            <td>Win 95+</td>
-                            <td> 4</td>
-                            <td>申請中</td>
-                        </tr>
-                        <tr>
-                            <th><input type="checkbox" id="1002"></th>
-                            <td>
-                                <button class="btn-info"><i>修改</i></button>
-                            </td>
-                            <td>Internet
-                                Explorer 5.0
-                            </td>
-                            <td>Win 95+</td>
-                            <td>5</td>
-                            <td>申請中</td>
-                        </tr>
-                        <tr>
-                            <th><input type="checkbox" id="1003"></th>
-                            <td>
-                                <button class=" btn-info"><i>修改</i></button>
-                            </td>
-                            <td>Internet
-                                Explorer 5.5
-                            </td>
-                            <td>Win 95+</td>
-                            <td>5.5</td>
-                            <td>申請中</td>
-                        </tr>
-                        <tr>
-                            <th><input type="checkbox" id="1004"></th>
-                            <td>
-                                <button class=" btn-info"><i>修改</i></button>
-                            </td>
-                            <td>Internet
-                                Explorer 6
-                            </td>
-                            <td>Win 98+</td>
-                            <td>6</td>
-                            <td>申請中</td>
-                        </tr>
-                        <tr>
-                            <th><input type="checkbox" id="1005"></th>
-                            <td>
-                                <button class="btn-info"><i>修改</i></button>
-                            </td>
-                            <td>Internet Explorer 7</td>
-                            <td>Win XP SP2+</td>
-                            <td>7</td>
-                            <td>申請中</td>
-                        </tr>
-                        <tr>
-                            <th><input type="checkbox" id="1006"></th>
-                            <td>
-                                <button class=" btn-info"><i>修改</i></button>
-                            </td>
-                            <td>AOL browser (AOL desktop)</td>
-                            <td>Win XP</td>
-                            <td>6</td>
-                            <td>申請中</td>
-                        </tr>
-                        <tr>
-                            <th><input type="checkbox" id="1007"></th>
-                            <td>
-                                <button class=" btn-info"><i>修改</i></button>
-                            </td>
-                            <td>Firefox 1.0</td>
-                            <td>Win 98+ / OSX.2+</td>
-                            <td>1.7</td>
-                            <td>申請中</td>
-                        </tr>
-                        <tr>
-                            <th><input type="checkbox" id="1008"></th>
-                            <td>
-                                <button class=" btn-info"><i>修改</i></button>
-                            </td>
-                            <td>Firefox 1.5</td>
-                            <td>Win 98+ / OSX.2+</td>
-                            <td>1.8</td>
-                            <td>申請中</td>
-                        </tr>
-                        <tr>
-                            <th><input type="checkbox" id="1009"></th>
-                            <td>
-                                <button class=" btn-info"><i>修改</i></button>
-                            </td>
-                            <td>Firefox 2.0</td>
-                            <td>Win 98+ / OSX.2+</td>
-                            <td>1.8</td>
-                            <td>申請中</td>
-                        </tr>
-                        <tr>
-                            <th><input type="checkbox" id="1010"></th>
-                            <td>
-                                <button class=" btn-info"><i>修改</i></button>
-                            </td>
-                            <td>Firefox 3.0</td>
-                            <td>Win 2k+ / OSX.3+</td>
-                            <td>1.9</td>
-                            <td>申請中</td>
-                        </tr>
-                        <tr>
-                            <th><input type="checkbox" id="1011"></th>
-                            <td>
-                                <button class=" btn-info"><i>修改</i></button>
-                            </td>
-                            <td>Camino 1.0</td>
-                            <td>OSX.2+</td>
-                            <td>1.8</td>
-                            <td>申請中</td>
-                        </tr>
-                        <tr>
-                            <th><input type="checkbox" id="1012"></th>
-                            <td>
-                                <button class=" btn-info"><i>修改</i></button>
-                            </td>
-                            <td>Camino 1.5</td>
-                            <td>OSX.3+</td>
-                            <td>1.8</td>
-                            <td>申請中</td>
-                        </tr>
-                        <tr>
-                            <th><input type="checkbox" id="1013"></th>
-                            <td>
-                                <button class=" btn-info"><i>修改</i></button>
-                            </td>
-                            <td>Netscape 7.2</td>
-                            <td>Win 95+ / Mac OS 8.6-9.2</td>
-                            <td>1.7</td>
-                            <td>申請中</td>
-                        </tr>
-                        <tr>
-                            <th><input type="checkbox" id="1014"></th>
-                            <td>
-                                <button class=" btn-info"><i>修改</i></button>
-                            </td>
-                            <td>Netscape Browser 8</td>
-                            <td>Win 98SE+</td>
-                            <td>1.7</td>
-                            <td>申請中</td>
-                        </tr>
-                        <tr>
-                            <th><input type="checkbox" id="1015"></th>
-                            <td>
-                                <button class=" btn-info"><i>修改</i></button>
-                            </td>
-                            <td>Netscape Navigator 9</td>
-                            <td>Win 98+ / OSX.2+</td>
-                            <td>1.8</td>
-                            <td>申請中</td>
-                        </tr>
-                        <tr>
-                            <th><input type="checkbox" id="1016"></th>
-                            <td>
-                                <button class=" btn-info"><i>修改</i></button>
-                            </td>
-                            <td>Mozilla 1.0</td>
-                            <td>Win 95+ / OSX.1+</td>
-                            <td>1</td>
-                            <td>申請中</td>
-                        </tr>
-                        <tr>
-                            <th><input type="checkbox" id="1017"></th>
-                            <td>
-                                <button class=" btn-info"><i>修改</i></button>
-                            </td>
-                            <td>Mozilla 1.1</td>
-                            <td>Win 95+ / OSX.1+</td>
-                            <td>1.1</td>
-                            <td>申請中</td>
-                        </tr>
-                        <tr>
-                            <th><input type="checkbox" id="1019"></th>
-                            <td>
-                                <button class=" btn-info"><i>修改</i></button>
-                            </td>
-                            <td>Mozilla 1.2</td>
-                            <td>Win 95+ / OSX.1+</td>
-                            <td>1.2</td>
-                            <td>申請中</td>
-                        </tr>
-                        <tr>
-                            <th><input type="checkbox" id="1018"></th>
-                            <td>
-                                <button class=" btn-info"><i>修改</i></button>
-                            </td>
-                            <td>Mozilla 1.3</td>
-                            <td>Win 95+ / OSX.1+</td>
-                            <td>1.3</td>
-                            <td>申請中</td>
-                        </tr>
 
                         </tbody>
                     </table>
@@ -303,6 +107,17 @@
 
             </div>
         </section>
+        <div class="row">
+            <div class="col-sm-12 col-md-5">
+
+            </div>
+            <div class="col-sm-12 col-md-7">
+                <div class="dataTables_paginate paging_simple_numbers" id="example2_paginate">
+                    <ul class="pagination" id="paginate" >
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="storefooter"></div>
 </div>
@@ -313,43 +128,183 @@
 <script src="js/storegeneral.js"></script>
 <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- DataTables  & Plugins -->
-<script src="plugins/datatables/jquery.dataTables.min.js"></script>
-<script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-<script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-<script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-<script src="plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-<script src="plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-<script src="plugins/jszip/jszip.min.js"></script>
-<script src="plugins/pdfmake/pdfmake.min.js"></script>
-<script src="plugins/pdfmake/vfs_fonts.js"></script>
-<script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
-<script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
-<script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+<!--<script src="plugins/datatables/jquery.dataTables.min.js"></script>-->
+<!--<script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>-->
+<!--<script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>-->
+<!--<script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>-->
+<!--<script src="plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>-->
+<!--<script src="plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>-->
+<!--<script src="plugins/jszip/jszip.min.js"></script>-->
+<!--<script src="plugins/pdfmake/pdfmake.min.js"></script>-->
+<!--<script src="plugins/pdfmake/vfs_fonts.js"></script>-->
+<!--<script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>-->
+<!--<script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>-->
+<!--<script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>-->
+<script src="plugins/moment/moment.min.js"></script>
+<script src="plugins/sweetalert2/sweetalert2.all.js"></script>
 <!-- AdminLTE App -->
 <script src="dist/js/adminlte.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="dist/js/demo.js"></script>
 <!-- Page specific script -->
-
 <script>
-    $(function () {
-        $("#example1").DataTable({
-            "responsive": true, "lengthChange": false, "autoWidth": false,
-            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-        $('#example2').DataTable({
-            "paging": true,
-            "lengthChange": false,
-            "searching": false,
-            "ordering": true,
-            "info": true,
-            "autoWidth": false,
-            "responsive": true,
-        });
-    });
+    let vatEle = $("#vat");
+    let storenameEle = $("#storename");
+    let submitEle = $("#submit")
+    let storeStatus = $("#storeStatus")
+
+
+    //建立一個搜尋註冊店家列表的方法
+    function searchRegisterStore(url){
+        fetch(url).then(res => res.json())
+            .then(core => {
+                console.log(core)
+                if(core.data.content.length === 0){
+                    //sweetAlert
+                    swal.fire("查無資料!", "請確認查詢資訊", "warning");
+                }
+
+                //表格內容
+                let tbodyHtml = ``;
+                $.each(core.data.content, function(index, registerStore){
+                    let flag = registerStore.storeStatus == 0;
+                    let storeStatus =  flag ? "申請中" : "拒絕申請"
+                    let registerDay = moment(registerStore.registerDay).format("YYYY/MM/DD");
+                    tbodyHtml += `
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td>${registerDay}</td>
+                            <td>
+                                <a href="#" id="${registerStore.storeId}">
+                                    ${registerStore.storeId}
+                                </a>
+                            </td>
+                            <td>${registerStore.storeName}</td>
+                            <td>${registerStore.vat}</td>
+                            <td>${storeStatus}</td>
+                        </tr>`
+                });
+                $("tbody").html(tbodyHtml);
+
+                //分頁
+
+                let pageHtml = ``;
+                let i = 0;
+                pageHtml +=
+                    `<li class="paginate_button page-item previous disabled" id="example2_previous">
+                        <a href="#" data-dt-idx="0" tabindex="0" class="page-link">Previous</a>
+                    </li>`
+                for (i; i < core.data.totalPages; i++) {
+                    if(core.data.number == i){
+                        pageHtml += `
+                        <li class="paginate_button page-item active">
+                            <a href="#" data-dt-idx="${i+1}" tabindex="0" class="page-link">
+                                ${i+1}
+                            </a>
+                        </li>
+                        `
+                    }else {
+                        pageHtml += `
+                            <li class="paginate_button page-item">
+                                <a href="#" data-dt-idx="${i+1}" tabindex="0" class="page-link">
+                                    ${i+1}
+                                </a>
+                            </li>
+                            `
+                    }
+                }
+                pageHtml +=
+                    `<li class="paginate_button page-item next" id="example2_next">
+                            <a href="#" data-dt-idx="${i}" tabindex="0" class="page-link">
+                                Next
+                            </a>
+                     </li>`
+
+
+                if(core.data.totalPages > 0){
+                    //如果有資料，才會顯示分頁按鈕
+                    $(".pagination").eq(0).html(pageHtml);
+
+                    //依所在頁數限制 previous & next 按鈕能不能點擊
+                    if (core.data.number - 1 < 0){
+                        $("#example2_previous").add("disabled");
+                    }else {
+                        $("#example2_previous").removeClass("disabled");
+                    }
+                    if (core.data.number + 1 == i){
+                        $("#example2_next").addClass("disabled");
+                    }else {
+                        $("#example2_next").removeClass("disabled");
+                    }
+                }else {
+                    //如果沒資料，不會顯示分頁按鈕
+                    $(".pagination").eq(0).html("");
+                }
+
+
+            })
+    }
+
+    //進入頁面就先搜尋全部
+    $(function (){
+        let url = "/registerstore/registerStoreList?";
+        url += "storeStatus=10&page=0"
+        searchRegisterStore(url);
+    })
+
+    //依條件搜尋
+    $(submitEle).on("click",e => {
+        e.preventDefault();
+        let url = "/registerstore/registerStoreList?";
+        url += "page=0";
+        // 依店家狀態查詢
+        url += "&storeStatus=" + $(storeStatus).val();
+        // 依統編查詢
+        if($(vatEle).val()){
+            url += "&vat=" + $(vatEle).val();
+        }
+        //依店家名稱查詢
+        if($(storenameEle).val()){
+            url += "&storeName=" + $(storenameEle).val();
+        }
+        console.log(url)
+        searchRegisterStore(url);
+    })
+
+    //點選頁碼
+    $(document).on("click", "a.page-link", function(e){
+        e.preventDefault();
+        let newPage = $(".paginate_button.page-item.active").children("a").attr("data-dt-idx");
+        let jumpPage = $(this).attr("data-dt-idx");
+        let url = "/registerstore/registerStoreList?";
+
+        //依頁數
+        if($(this).closest("li").is(":first-child")){
+            url += "page=" + (newPage-1 - 1);
+        }else if($(this).closest("li").is(":last-child")){
+            url += "page=" + (newPage-1 + 1);
+        }else {
+            url += "page=" + (jumpPage-1);
+        }
+        // 依店家狀態查詢
+        url += "&storeStatus=" + $(storeStatus).val();
+        // 依統編查詢
+        if($(vatEle).val()){
+            url += "&vat=" + $(vatEle).val();
+        }
+        //依店家名稱查詢
+        if($(storenameEle).val()){
+            url += "&storeName=" + $(storenameEle).val();
+        }
+        searchRegisterStore(url);
+    })
+
+    //點選storeId
+    //TODO
+
+    //
+
 </script>
-
-
 
 </body>
 

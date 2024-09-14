@@ -24,6 +24,9 @@ public interface MemberService {
     //    判斷是否存在會員
     boolean isExistMember(Member member);
 
+    //取得單一會員資料
+    Member findMemberById(Integer memberId);
+
     //    列出所有會員地址
     List<MemberAddress> findAllMemberAdress();
 
@@ -35,5 +38,6 @@ public interface MemberService {
 
     //    刪地址
     boolean deleteByMemberAddressId(Integer customerAddressId);
+
 
 }

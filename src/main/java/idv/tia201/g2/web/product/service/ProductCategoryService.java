@@ -10,6 +10,6 @@ public interface ProductCategoryService {
     ProductCategory getProductCategoryById(Integer id);
    void update(ProductCategory productCategory);
     void addCategory(ProductCategory productCategory);
-    boolean removeCategory(Integer categoryId);
+    boolean deleteCategory(Integer categoryId);
 
 }

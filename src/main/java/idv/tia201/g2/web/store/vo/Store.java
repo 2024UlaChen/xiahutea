@@ -101,7 +101,7 @@ public class Store extends Core {
     private String bankAccount;
 
     @Column(name = "store_status", nullable = false)
-    private Integer storeStatus;//帳號狀態: 審核中 0  使用中 1  停權中 2
+    private Integer storeStatus;//帳號狀態: 審核中 0  審核失敗 1 使用中 2  停權中 3
 
     @Column(name = "password", length = 255)
     private String password;
@@ -121,6 +121,13 @@ public class Store extends Core {
 
     @Column(name = "valid_status")
     private Boolean validStatus;//集點卡狀態
+
+    @PrePersist
+    protected void onCreate(){
+        if(registerDay == null){
+            registerDay = new Timestamp(System.currentTimeMillis());
+        }
+    }
 
     //實現雙向 商家和顧客集點紀錄為一對多 關連到store屬性
     // 非必要 不要關聯 除非一筆
