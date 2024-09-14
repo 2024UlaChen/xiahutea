@@ -21,9 +21,10 @@ public class MemberCmsController {
     public List<Member> manage(Model model) {
 
         List<Member> memberList = memberService.findAllMember();
-        for(Member member:memberList){
+        for (Member member : memberList) {
             System.out.println(member);
         }
         return memberList;
     }
+
 }

@@ -16,6 +16,7 @@ public class MemberDaoImpl implements MemberDao {
 
     @Override
     public List<Member> findAllMember() {
+
         return session.createQuery("FROM Member", Member.class).getResultList();
     }
 
