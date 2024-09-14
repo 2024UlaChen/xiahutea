@@ -20,9 +20,4 @@ public class EncrypSHA {
         }
         return "";
     }
-
-    // 结果测试：
-    public static void main(String[] args) throws Exception {
-        System.out.println(SHAEncrypt("123456"));
-    }
 }
