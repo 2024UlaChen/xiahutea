@@ -18,13 +18,14 @@ public class MemberCmsController {
     private MemberService memberService;
 
     @GetMapping("manage")
-    public List<Member> manage(Model model) {
+    public void manage(Model model) {
 
         List<Member> memberList = memberService.findAllMember();
+        model.addAttribute("memberList", memberList);
+
         for (Member member : memberList) {
             System.out.println(member);
         }
-        return memberList;
     }
 
 }
