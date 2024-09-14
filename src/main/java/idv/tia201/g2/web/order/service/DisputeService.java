@@ -8,9 +8,10 @@ import java.util.List;
 
 public interface DisputeService {
 
+    DisputeOrder add(DisputeOrder disputeOrder);
+    OrderDto update(OrderDto orderDto);
+
     List<DisputeOrder> findAll();
     OrderDto findByDisputeId(int disputeId);
 
-    DisputeOrder add(DisputeOrder disputeOrder);
-    OrderDto update(OrderDto orderDto);
 }
