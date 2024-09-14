@@ -33,5 +33,4 @@ public class couponController {
     public Coupon edit(@PathVariable Integer couponId) {
         return couponService.findCouponById(couponId);
     }
-
 }
