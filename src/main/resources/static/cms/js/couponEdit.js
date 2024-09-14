@@ -5,9 +5,9 @@ document.addEventListener("DOMContentLoaded",function () {
     let input_coupon_id_el =document.getElementById('input-coupon-id')
     let coupon_start_date_el = document.getElementById('coupon-start-date')
     let coupon_end_date_el = document.getElementById('coupon-end-date')
-    let no_limit_el = document.getElementById("no-limit")
-    let is_limit_el = document.getElementById("is-limit")
-    let limit_amount_el = document.getElementById("limit-amount")
+    // let no_limit_el = document.getElementById("no-limit")
+    // let is_limit_el = document.getElementById("is-limit")
+    // let limit_amount_el = document.getElementById("limit-amount")
     let active_el = document.getElementById("active")
     let no_active_el = document.getElementById("no-active")
     let coupon_discount_el = document.getElementById("input-coupon-discount")
@@ -17,26 +17,43 @@ document.addEventListener("DOMContentLoaded",function () {
     let couponStatus;
     let startDate;
     let endDate;
+    // 取得 URL 中的 couponId 參數
+    let urlParams = new URLSearchParams(window.location.search);
+    let couponId = urlParams.get('couponId');
 
-
-    //***********************************接收localstorage資料*********************
-
-    const couponData = JSON.parse(localStorage.getItem('couponData'));
-    if (couponData) {
-        coupon_title_el.value = couponData.title;
-        coupon_id_el.value = couponData.id;
-        coupon_start_date_el.value = couponData.startDate;
-        coupon_end_date_el.value = couponData.endDate;
-        coupon_discount_el.value = couponData.discount;
-        if (couponData.status === '啟用') {
-            active_el.checked = true;
-        } else {
-            no_active_el.checked = true;
-        }
+    //********************************確認是否為修改跳轉頁面**********************
+    if (couponId) {
+        // 發送 GET 請求獲取優惠券資料
+        fetch(`/coupon/edit/${couponId}`)
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(errorData => {
+                        throw new Error(errorData.message);
+                    });
+                }
+                return response.json();
+            })
+            .then(data=> {
+                coupon_id_el.value = data.couponId;
+                coupon_title_el.value = data.couponName;
+                coupon_detail_el.textContent = data.couponRule;
+                coupon_discount_el.value = data.discount;
+                coupon_start_date_el.value = formatToDatetimeLocal(data.createDate);
+                coupon_end_date_el.value = formatToDatetimeLocal(data.expiredDate);
+                if(data.couponStatus === true){
+                    active_el.checked = true;
+                }else{
+                    no_active_el.checked = true;
+                }
+            })
+            .catch(error => {
+                swal({
+                    title: '取得數據異常',
+                    text: error.message,
+                    icon: 'error'
+                });
+            })
     }
-
-    localStorage.clear();
-
     //***********************************檢查placeholder*********************
     coupon_detail_el.addEventListener('input', checkDetailContent);
     coupon_detail_el.addEventListener('blur', checkDetailContent);
@@ -52,21 +69,21 @@ document.addEventListener("DOMContentLoaded",function () {
         coupon_start_date_el.setAttribute('max', endDate);
     });
     //**********************************選擇限制張數*************************
-    is_limit_el.addEventListener("click", function () {
-        limit_amount_el.disabled = false;
-        limit_amount_el.focus();
-    })
-    no_limit_el.addEventListener("click", function () {
-        limit_amount_el.value = "";
-        limit_amount_el.disabled = true;
-    });
-    //********************************表單必填選項未填寫*************************
+    // is_limit_el.addEventListener("click", function () {
+    //     limit_amount_el.disabled = false;
+    //     limit_amount_el.focus();
+    // })
+    // no_limit_el.addEventListener("click", function () {
+    //     limit_amount_el.value = "";
+    //     limit_amount_el.disabled = true;
+    // });
+    //********************************表單送出*********************************
     coupon_form_el.addEventListener('submit', function (event) {
         event.preventDefault();
         let activeChecked = active_el.checked;
         let noactiveChecked = no_active_el.checked;
-        let noLimitChecked = no_limit_el.checked;
-        let isLimitChecked = is_limit_el.checked;
+        // let noLimitChecked = no_limit_el.checked;
+        // let isLimitChecked = is_limit_el.checked;
         //檢查是否有填寫各欄位
         if (coupon_title_el.value === '') {
             swal({
@@ -85,14 +102,14 @@ document.addEventListener("DOMContentLoaded",function () {
             return;
         }
         // 檢查是否至少選擇了一個選項
-        if (!noLimitChecked && !isLimitChecked) {
-            swal({
-                title: '錯誤',
-                text: '請選擇有效張數的選項',
-                icon: 'error'
-            });
-            return;
-        }
+        // if (!noLimitChecked && !isLimitChecked) {
+        //     swal({
+        //         title: '錯誤',
+        //         text: '請選擇有效張數的選項',
+        //         icon: 'error'
+        //     });
+        //     return;
+        // }
         if (!activeChecked && !noactiveChecked) {
             swal({
                 title: '錯誤',
@@ -101,20 +118,13 @@ document.addEventListener("DOMContentLoaded",function () {
             });
             return;
         }
-        if (activeChecked.checked && (limit_amount_el.value === '' || limit_amount_el.value === '0')) {
-            swal({
-                title: '錯誤',
-                text: '請填寫有限張數',
-                icon: 'error'
-            });
-            return;
-        }
-        //處理起始時間、結束時間
-        // if (coupon_start_date_el.value) {
-        //     startDate = coupon_start_date_el.value + ' 00:00:00';
-        // }
-        // if (coupon_end_date_el.value) {
-        //     endDate = coupon_end_date_el.value + ' 00:00:00';
+        // if (activeChecked.checked && (limit_amount_el.value === '' || limit_amount_el.value === '0')) {
+        //     swal({
+        //         title: '錯誤',
+        //         text: '請填寫有限張數',
+        //         icon: 'error'
+        //     });
+        //     return;
         // }
         //判斷是否啟用
         if (active_el.checked) {
@@ -135,8 +145,8 @@ document.addEventListener("DOMContentLoaded",function () {
                 couponRule: coupon_detail_el.value,
                 discount: coupon_discount_el.value,
                 couponStatus: couponStatus,
-                createDate: coupon_start_date_el.value,
-                expiredDate: coupon_end_date_el.value
+                createDate: formatToBackendFormat(coupon_start_date_el.value),
+                expiredDate: formatToBackendFormat(coupon_end_date_el.value)
             })
         })
             .then(response => {
@@ -153,7 +163,12 @@ document.addEventListener("DOMContentLoaded",function () {
                         title: '提交成功',
                         text: '已成功新增/修改資料',
                         icon: 'success'
-                    });
+                    }).then((willRedirect) => {
+                        // 這裡的 `willRedirect` 表示當用戶點擊確認按鈕後才會執行
+                        if (willRedirect) {
+                            window.location.href = `couponEdit.html`;
+                        }
+                    })
                 } else {
                     swal({
                         title: '提交失敗',
@@ -176,30 +191,6 @@ document.addEventListener("DOMContentLoaded",function () {
                 // });
             });
     })
-        //*******************************準備表單資料發送 AJAX 請求************************
-        // const formData = new FormData(document.getElementById('coupon-form'));
-        // fetch('coupon/save', {
-        //     method: 'POST',
-        //     body: formData
-        // })
-        //     .then(response => {
-        //         // 驗證伺服器回應的狀態碼
-        //         if (!response.ok) {
-        //             throw new Error(`伺服器錯誤: ${response.status}`);
-        //         }
-        //         return response.json(); // 假設伺服器返回的是 JSON
-        //     })
-        //     .then(data => {
-        //         if (data.success) { // 假設伺服器回應中有一個 success 字段來標示成功
-        //             document.getElementById('response-message').textContent = '表單提交成功！';
-        //         } else {
-        //             document.getElementById('response-message').textContent = '伺服器處理失敗，請稍後再試。';
-        //         }
-        //     })
-        //     .catch(error => {
-        //         document.getElementById('response-message').textContent = `提交失敗: ${error.message}`;
-        //         console.error('Error:', error);
-        //     });
         //*************************************檢查內容並更新 placeholder****************************
         function checkDetailContent() {
             const detailData = coupon_detail_el.value.trim();
@@ -208,6 +199,18 @@ document.addEventListener("DOMContentLoaded",function () {
             } else {
                 coupon_detail_el.placeholder = "";
             }
+        }
+        // 將 YYYY-MM-DDTHH:MM 格式轉換為 yyyy/MM/dd HH:mm 格式
+        function formatToBackendFormat(dateStr) {
+            const [datePart, timePart] = dateStr.split('T');
+            const [year, month, day] = datePart.split('-');
+            return `${year}/${month}/${day} ${timePart}`;
+        }
+        // 將 yyyy/MM/dd HH:mm 格式轉換為 YYYY-MM-DDTHH:MM 格式
+        function formatToDatetimeLocal(dateStr) {
+            const [datePart, timePart] = dateStr.split(' ');
+            const [year, month, day] = datePart.split('/');
+            return `${year}-${month}-${day}T${timePart}`;
         }
     })
 

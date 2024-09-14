@@ -3,10 +3,7 @@ package idv.tia201.g2.web.coupon.controller;
 import idv.tia201.g2.web.coupon.service.CouponService;
 import idv.tia201.g2.web.coupon.vo.Coupon;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/coupon")
@@ -32,4 +29,9 @@ public class couponController {
 //        System.out.println("isSuccessful: "+savedCoupon.isSuccessful());
         return savedCoupon;
     }
+    @GetMapping("/edit/{couponId}")
+    public Coupon edit(@PathVariable Integer couponId) {
+        return couponService.findCouponById(couponId);
+    }
+
 }
