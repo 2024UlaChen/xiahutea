@@ -6,6 +6,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 
 public interface StoreService {
@@ -25,9 +27,11 @@ public interface StoreService {
     Store editStoreInfo(Store store);
     Store editStoreLoyaltyCard(Store store);
     byte[] findLogoById(Integer id);
-    Store editLogoById(MultipartFile file, Integer storeId) throws IOException;
+    void editLogoByStoreId(MultipartFile file, Integer storeId) throws IOException;
 
+    void addStoreHolidayByDate(Store store, Date holiday);
 
-
-    //是否設置移除店家??
+    List<Store> getStoreListNoWorking(String holiday) throws ParseException;
+    List<Store> getAllData();
+    List<Store> getAllStoreById(Integer Id);
 }
