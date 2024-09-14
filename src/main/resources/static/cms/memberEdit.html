@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+    <link rel="stylesheet" href="css/cmsMember.css">
 
 </head>
 <body class="hold-transition sidebar-mini">
@@ -24,231 +25,134 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Member</h1>
+                        <h1>Member Edit</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item">
                                 <a href="#">Home</a>
                             </li>
-                            <li class="breadcrumb-item active">Member Management</li>
+                            <li class="breadcrumb-item active">Member Edit</li>
                         </ol>
                     </div>
                 </div>
             </div>
         </section>
-        <section class="content">
-            <div class="card">
-                <div class="card-header">
-                    <div class="row">
-                        <div class="form-group col-sm-2">
-                            <label for="username">顧客姓名:</label>
-                            <input type="text" class="form-control form-control-lg" id="username" name="username"
-                                   placeholder="姓名">
-                        </div>
-                        <div class="form-group col-sm-3">
-                            <label for="userAccount">顧客帳號:</label>
-                            <input type="text" class="form-control form-control-lg" id="userAccount"
-                                   name="userAccount" placeholder="帳號">
-                        </div>
-                        <div class="form-group col-sm-3">
-                            <label for="userCellPhone">手機:</label>
-                            <input type="text" class="form-control form-control-lg" id="userCellPhone"
-                                   name="userCellPhone" placeholder="手機">
-                        </div>
-                        <div class="form-group col-sm-2">
-                            <label for="userStatus">狀態:</label>
-                            <select class="form-control form-control-lg" id="userStatus">
-                                <option selected>生效</option>
-                                <option>停權</option>
-                            </select>
-                        </div>
-                        <div class="form-group col-sm-2" style="padding-top:30px">
-                            <button class="btn btn-lg btn-default">
-                                <i class="fa fa-search"></i>
-                            </button>
-                            <button class="btn btn-lg btn-default">
-                                <i class="fa fa-download"></i>
-                            </button>
+        <div class="card">
+            <div class="card-header cmsMemberSetting">
+                <button type="button" class="btn btnSave" id="cmsMemberSave">儲存</button>
+                <button type="button" class="btn btnCancel" id="cmsMemberCancel">回上一頁</button>
+                <!--                <div class="card-tools">-->
+                <!--                    <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">-->
+                <!--                        <i class="fas fa-minus"></i>-->
+                <!--                    </button>-->
+            </div>
+        </div>
+        <div class="card-body memberSettingBody">
+            <div class="row">
+                <div class="form-group col-6">
+                    <label for="cmsMemberName"><span class="warn">*</span>姓名</label>
+                    <input type="text" class="form-control" id="cmsMemberName" placeholder="Customer Name">
+                </div>
+                <div class="form-group">
+                    <label>會員大頭照</label>
+                    <div class="input-group">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="cmsMemberImg">
+                            <label class="custom-file-label" for="cmsMemberImg" id="cmsMemberImgLabel"></label>
                         </div>
                     </div>
                 </div>
-                <div class="card-body p-0">
-                    <table id="example1" class="table table-striped projects">
-                        <thead>
-                        <tr>
-                            <th style="width: 20%">
-                                User Name
-                            </th>
-                            <th style="width: 20%">
-                                User Account
-                            </th>
-                            <th style="width: 20%">
-                                User CellPhone
-                            </th>
-                            <th style="width: 8%">
-                                Status
-                            </th>
-                            <th></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>
-                                <span>Allan</span>
-                            </td>
-                            <td>
-                                <span>A0000000001</span>
-                            </td>
-                            <td>
-                                <span>09123456789</span>
-                            </td>
-                            <td class="user-st">
-                                <span class="badge badge-success">Success</span>
-                            </td>
-                            <td class="project-actions text-right">
-                                <a class="btn btn-info btn-sm" href="#">
-                                    <i class="fas fa-pencil-alt">
-                                    </i>
-                                    Edit
-                                </a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <span>Bob</span>
-                            </td>
-                            <td>
-                                <span>A0000000002</span>
-                            </td>
-                            <td>
-                                <span>09123456789</span>
-                            </td>
-                            <td class="user-st">
-                                <span class="badge badge-success">Success</span>
-                            </td>
-                            <td class="project-actions text-right">
-                                <a class="btn btn-info btn-sm" href="#">
-                                    <i class="fas fa-pencil-alt">
-                                    </i>
-                                    Edit
-                                </a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <span>Charles</span>
-                            </td>
-                            <td>
-                                <span>A0000000003</span>
-                            </td>
-                            <td>
-                                <span>09123456789</span>
-                            </td>
-                            <td class="user-st">
-                                <span class="badge badge-success">Success</span>
-                            </td>
-                            <td class="project-actions text-right">
-                                <a class="btn btn-info btn-sm" href="#">
-                                    <i class="fas fa-pencil-alt">
-                                    </i>
-                                    Edit
-                                </a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <span>Dester</span>
-                            </td>
-                            <td>
-                                <span>A0000000004</span>
-                            </td>
-                            <td>
-                                <span>09123456789</span>
-                            </td>
-                            <td class="user-st">
-                                <span class="badge badge-success">Success</span>
-                            </td>
-                            <td class="project-actions text-right">
-                                <a class="btn btn-info btn-sm" href="#">
-                                    <i class="fas fa-pencil-alt">
-                                    </i>
-                                    Edit
-                                </a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <span>Ellen</span>
-                            </td>
-                            <td>
-                                <span>A0000000002</span>
-                            </td>
-                            <td>
-                                <span>09123456789</span>
-                            </td>
-                            <td class="user-st">
-                                <span class="badge badge-success">Success</span>
-                            </td>
-                            <td class="project-actions text-right">
-                                <a class="btn btn-info btn-sm" href="#">
-                                    <i class="fas fa-pencil-alt">
-                                    </i>
-                                    Edit
-                                </a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <span>Freddy</span>
-                            </td>
-                            <td>
-                                <span>A0000000002</span>
-                            </td>
-                            <td>
-                                <span>09123456789</span>
-                            </td>
-                            <td class="user-st">
-                                <span class="badge badge-success">Success</span>
-                            </td>
-                            <td class="project-actions text-right">
-                                <a class="btn btn-info btn-sm" href="#">
-                                    <i class="fas fa-pencil-alt">
-                                    </i>
-                                    Edit
-                                </a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <span>Grace</span>
-                            </td>
-                            <td>
-                                <span>A0000000002</span>
-                            </td>
-                            <td>
-                                <span>09123456789</span>
-                            </td>
-                            <td class="user-st">
-                                <span class="badge badge-success">Success</span>
-                            </td>
-                            <td class="project-actions text-right">
-                                <a class="btn btn-info btn-sm" href="#">
-                                    <i class="fas fa-pencil-alt">
-                                    </i>
-                                    Edit
-                                </a>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-6">
+                    <label><span class="warn">*</span> 性別 </label>
+                    <div>
+                        <select id="cmsSexList" class="form-control custom-select">
+                            <option selected disabled>Select one</option>
+                            <option>Female</option>
+                            <option>Male</option>
+                            <option>No Provide</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group col-6">
+                    <label for="cmsMemberBirthday"><span class="warn">*</span> 生日 </label>
+                    <input type="date" name="birthday" id="cmsMemberBirthday" class="form-control datepicker">
                 </div>
             </div>
-        </section>
-    </div>
-    <div class="storefooter"></div>
-</div>
+            <div class="form-group">
+                <label for="cmsMemberEmail"><span class="warn">*</span>Email</label>
+                <input type="email" class="form-control" id="cmsMemberEmail" placeholder="Enter email">
+            </div>
+            <div>
+                <label class="form-label" for="cmsMemberPhone"><span class="warn">*</span>手機號碼</label>
+                <span class="form-control-wrap your-phone">
+                    <input title="your-phone" type="text" name="your-phone" id="cmsMemberPhone"
+                           class="form-control form-control-phone"
+                           minlength="10" maxlength="10" placeholder="0912345678">
+                </span>
+                <span class="remind">僅支援台灣手機</span>
+            </div>
+            <div>
+                <label class="form-label"><span class="warn">*</span>地址</label>
+                <div class="row ">
+                    <div class=" col-3">
+                        <select id="cmsMemberCity" class="form-control custom-select">
+                            <!--                            <option selected disabled>Select one</option>-->
+                            <!--                            <option>On Hold</option>-->
+                            <!--                            <option>Canceled</option>-->
+                            <!--                            <option>Success</option>-->
+                        </select>
+                    </div>
+                    <div class="col-4">
+                        <select id="cmsMemberDistrict" class="form-control custom-select">
+                            <option selected disabled>Select one</option>
+                            <option>On Hold</option>
+                            <option>Canceled</option>
+                            <option>Success</option>
+                        </select></div>
+                    <div class="col-5">
+                        <input type="text" class="form-control" placeholder=".col-5">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="cmsMemberCarrier">手機載具</label>
+                <input type="text" class="form-control" id="cmsMemberCarrier" placeholder="手機載具">
+            </div>
 
+            <div class="form-group">
+                <label>是否停用</label>
+                <div class="custom-control custom-switch">
+                    <input type="checkbox" class="custom-control-input" id="cmsMemberIsValid">
+                    <label class="custom-control-label" for="cmsMemberIsValid">停用</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label"> 會員註冊日期 </label>
+                <span class="form-control-wrap CmsMemberCreateDate">
+                    <input type="date" name="birthday" id="CmsMemberCreateDate" class="form-control datepicker"
+                           disabled>
+                </span>
+            </div>
+            <div class="form-group">
+                <label for="cmsMemberMoney">會員錢包</label>
+                <input type="number" id="cmsMemberMoney" class="form-control">
+            </div>
+
+
+            <div class="form-group">
+                <label for="cmsMemberRemark">備註(記點原因 & 次數)</label>
+                <textarea id="cmsMemberRemark" class="form-control" rows="4"></textarea>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="storefooter"></div>
 <script src="plugins/jquery/jquery.min.js"></script>
 <script src="js/storegeneral.js"></script>
 <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
@@ -261,17 +165,12 @@
 <script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
 <script src="plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
 <script src="plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+<script src="plugins/sweetalert2/sweetalert2.all.min.js"></script>
 
 <script src="dist/js/adminlte.js"></script>
 <script src="dist/js/demo.js"></script>
-<script>
-    $(function () {
-        $("#example1").DataTable({
-            "responsive": true, "lengthChange": false, "autoWidth": false,
-            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-    });
-</script>
+<script src="js/cmsMemberEdit.js"></script>
+
 </body>
 
 </html>
