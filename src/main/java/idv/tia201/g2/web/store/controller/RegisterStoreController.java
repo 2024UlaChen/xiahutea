@@ -1,12 +1,17 @@
 package idv.tia201.g2.web.store.controller;
 
+import idv.tia201.g2.core.pojo.Core;
+import idv.tia201.g2.web.store.dto.RegisterStoreDTO;
 import idv.tia201.g2.web.store.service.RegisterStoreService;
 import idv.tia201.g2.web.store.vo.Store;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import javax.xml.crypto.Data;
+
+import static idv.tia201.g2.web.store.util.StoreToRegisterStore.convertPage;
 
 @RestController
 @RequestMapping("/registerstore")
@@ -22,7 +27,21 @@ public class RegisterStoreController {
         return store;
     }
 
-    public Store RegisterStoreInfo(@PathVariable Integer storeId) {
-        return null;
+    @GetMapping("/registerStoreList")
+    public Core RegisterStoreList(
+            @RequestParam Integer storeStatus,
+            @RequestParam(required = false) String vat,
+            @RequestParam(required = false) String storeName,
+            @RequestParam Integer page) {
+        Store store = new Store();
+        store.setStoreStatus(storeStatus);
+        store.setVat(vat);
+        store.setStoreName(storeName);
+
+        Page<Store> stores = registerStoreService.searchRegisterStore(store, page);
+        Page<RegisterStoreDTO> registerStores = convertPage(stores);
+        Core core = new Core();
+        core.setData(registerStores);
+        return core;
     }
 }
