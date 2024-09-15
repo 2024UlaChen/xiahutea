@@ -80,7 +80,7 @@ public class RegisterStoreServiceImpl implements RegisterStoreService {
         //依照統一編號查詢是否已是會員
         Store oldStore = storeDao.findByVat(store.getVat());
         if(oldStore == null){
-            store.setStoreStatus(1);
+            store.setStoreStatus(0);//狀態預設為0
             Timestamp registerDay = new Timestamp(System.currentTimeMillis());
             store.setRegisterDay(registerDay);
             storeDao.save(store);

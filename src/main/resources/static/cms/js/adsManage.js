@@ -15,6 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let btn_next_el = document.getElementById('next-btn');
 
 
+
     //**************************************表格分頁*****************************
     // 初始顯示第一頁並創建分頁按鈕，顯示總筆數
     result_count_el.textContent = `共計 ${totalRows - 1} 筆`;
