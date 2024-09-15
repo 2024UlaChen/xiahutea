@@ -31,7 +31,5 @@ public class ProductCategory {
     private Integer categorySort;
 
 
-    public ProductCategory(Integer categoryId, String categoryName) {
-    }
 }
 

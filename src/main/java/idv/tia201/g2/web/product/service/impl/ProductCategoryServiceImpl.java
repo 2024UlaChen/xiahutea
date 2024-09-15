@@ -1,13 +1,13 @@
 package idv.tia201.g2.web.product.service.impl;
 
 import idv.tia201.g2.web.product.dao.ProductCategoryDao;
-import idv.tia201.g2.web.product.dao.ProductDao;
+
 import idv.tia201.g2.web.product.service.ProductCategoryService;
-import idv.tia201.g2.web.product.vo.Product;
+
 import idv.tia201.g2.web.product.vo.ProductCategory;
 import idv.tia201.g2.web.store.dao.StoreDao;
 import idv.tia201.g2.web.store.vo.Store;
-import jdk.jfr.Category;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,13 +28,13 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     }
 
     @Override
-    public ProductCategory getProductCategoryById(Integer id) {
+    public ProductCategory getProductCategoryById(Integer categoryId) {
         return null;
     }
 
 
     @Override
-    public ProductCategory update(Integer storeId, ProductCategory productCategory) {
+    public ProductCategory update(Integer productStoreId, ProductCategory productCategory) {
         if (productCategory.getCategoryId() == null || !productCategoryDao.existsById(productCategory.getCategoryId())) {
             // 如果分類ID不存在，返回null
             return null;
@@ -42,7 +42,7 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
 
         // 確認該分類是否屬於該店家
         ProductCategory existingCategory = productCategoryDao.findById(productCategory.getCategoryId()).orElse(null);
-        if (existingCategory == null || !existingCategory.getProductStoreId().equals(storeId)) {
+        if (existingCategory == null || !existingCategory.getProductStoreId().equals(productStoreId)) {
             // 如果分類不屬於該店家，返回null
             return null;
         }
@@ -54,7 +54,7 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
         }
 
         // 查找已有的分類排序
-        ProductCategory categoryWithSameSort = productCategoryDao.findByCategorySortAndStoreId(productCategory.getCategorySort(), storeId);
+        ProductCategory categoryWithSameSort = productCategoryDao.findByCategorySortAndProductStoreId(productCategory.getCategorySort(), productStoreId);
 
         // 檢查分類排序是否已存在，並確保檢查的分類排序不屬於其他分類
         if (categoryWithSameSort == null || categoryWithSameSort.getCategoryId().equals(productCategory.getCategoryId())) {
@@ -69,30 +69,29 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
 
     }
 
-    public ProductCategory addproductCategory(Integer storeId, ProductCategory productCategory) {
+    public ProductCategory addproductCategory(ProductCategory productCategory) {
 
         // 查詢是否有這個店家
-        Store store = storeDao.findById(storeId).orElse(null);
-        if (store == null) {
-            // 如果找不到店家，返回null
-            return null;
-        }
+//        Store store = storeDao.findById(productCategory.getProductStoreId()).orElse(null);
+//        if (store == null) {
+//            // 如果找不到店家，返回null
+//            return null;
+//        }
+//
+if (productCategory.getCategoryName() == null || productCategory.getCategoryName().isEmpty()) {
 
-        // 檢查分類名稱是否為空或null
-        if (productCategory.getCategoryName() == null || productCategory.getCategoryName().isEmpty()) {
-            // 如果分類名稱無效，返回null，表示操作失敗
             return null;
         }
-
-        // 檢查分類排序是否在同一個店家內已存在
-        if (productCategoryDao.findByCategorySortAndStoreId(productCategory.getCategorySort(), store.getStoreId()) != null) {
-            // 如果分類排序已經存在，返回null，表示分類排序重複
-            return null;
-        }
+//
+//        // 檢查分類排序是否在同一個店家內已存在
+//        if (productCategoryDao.findByCategorySortAndProductStoreId(productCategory.getCategorySort(), store.getStoreId()) != null) {
+//            // 如果分類排序已經存在，返回null，表示分類排序重複
+//            return null;
+//        }
 
         // 如果一切檢查都通過，則保存分類
-        productCategoryDao.save(productCategory);
 
+        productCategoryDao.save(productCategory);
         // 返回保存的產品分類
         return productCategory;
     }
@@ -120,7 +119,7 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
 
         if (allExist) {
             // 如果所有ID都存在，則執行刪除
-            productCategoryDao.deleteAllById(ids);
+            productCategoryDao.deleteAllByCategoryIdIn(ids);
             return true; // 返回刪除成功
         } else {
             // 如果有ID不存在，返回刪除失敗

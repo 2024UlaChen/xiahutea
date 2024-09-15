@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface ProductCategoryService {
     List<ProductCategory> getAllCategories();
-    ProductCategory getProductCategoryById(Integer id);
-   public ProductCategory update(Integer storeId,ProductCategory productCategory);
-    public ProductCategory addproductCategory(Integer storeId,ProductCategory productCategory);
+    ProductCategory getProductCategoryById(Integer categoryId);
+   public ProductCategory update(Integer productStoreId,ProductCategory productCategory);
+    public ProductCategory addproductCategory(ProductCategory productCategory);
     public boolean deleteCategory(Integer categoryId);
    public boolean deleteBatch(List<Integer> ids);
 //   批量刪除

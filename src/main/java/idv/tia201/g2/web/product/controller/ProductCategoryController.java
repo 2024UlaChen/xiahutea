@@ -2,17 +2,14 @@ package idv.tia201.g2.web.product.controller;
 
 
 import idv.tia201.g2.web.product.service.ProductCategoryService;
-import idv.tia201.g2.web.product.service.ProductService;
+
 import idv.tia201.g2.web.product.vo.ProductCategory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.annotation.WebServlet;
-import java.util.ArrayList;
+import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+
 
 @RestController
 @RequestMapping("/categories")
@@ -38,22 +35,21 @@ public class ProductCategoryController {
 
    // 添加新分类
    @PostMapping("/add")
-   public ProductCategory addCategory(@RequestParam Integer storeId, @RequestBody ProductCategory productCategory) {
-      ProductCategory addedCategory = productCategoryService.addproductCategory(storeId, productCategory);
-      return addedCategory;
+   public ProductCategory addCategory(@RequestBody ProductCategory productCategory) {
+      return productCategoryService.addproductCategory(productCategory);
    }
 
    // 更新分类
    @PutMapping("/update")
-   public ProductCategory updateCategory(@RequestParam Integer storeId, @RequestBody ProductCategory productCategory) {
-      ProductCategory updatedCategory = productCategoryService.update(storeId, productCategory);
+   public ProductCategory updateCategory(@RequestParam Integer productStoreId, @RequestBody ProductCategory productCategory) {
+      ProductCategory updatedCategory = productCategoryService.update(productStoreId, productCategory);
       return updatedCategory;
    }
 
    // 删除分类
-   @DeleteMapping("/delete/{id}")
-   public boolean deleteCategory(@PathVariable Integer id) {
-      return productCategoryService.deleteCategory(id);
+   @DeleteMapping("/delete/{categoryId}")
+   public boolean deleteCategory(@PathVariable Integer categoryId) {
+      return productCategoryService.deleteCategory(categoryId);
    }
 
 //  批量刪除分類
