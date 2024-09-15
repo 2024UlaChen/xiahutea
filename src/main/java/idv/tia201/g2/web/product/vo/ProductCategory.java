@@ -30,5 +30,6 @@ public class ProductCategory {
     @Column(name = "category_sort")
     private Integer categorySort;
 
+
 }
 

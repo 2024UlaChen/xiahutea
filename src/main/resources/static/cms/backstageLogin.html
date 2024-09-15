@@ -93,80 +93,95 @@
 
 <!-- AdminLTE App -->
 <script src="./dist/js/adminlte.min.js"></script>
+<script src="../js/dataCheck.js"></script>
+
 
 <script>
     // 取得物件
     let usernameInput = $("input#username");
     let passwordInput = $("input#password");
     let resultEl = $("div#result");
+    let rememberEle = $("input#remember");
 
-    //正則表達式
-    // 要有英文字母 & 要有數字 & 不能有空白 & 長度要超過8並且小於15字元
-    let pattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{9,14}$/;
-
-    //前端確認格式
-    $(document).on("focusout", "input.form-control",(e) => {
-        if($(e.target).attr('id') === "username"){
-            let username = $(usernameInput).val();
-            let usernameResult = pattern.test(username)?"":"用戶名稱格式錯誤"
-            $(resultEl).text(usernameResult);
-        }else{
-            let password = $(passwordInput).val();
-            let passwordResult = pattern.test(password)?"":"用戶密碼格式錯誤"
-            $(resultEl).text(passwordResult);
-        }
-    });
-
-    // 要先確定格式正確才可以連後端
     $("button").on("click", () => {
+        $(resultEl).text("");
         let username = $(usernameInput).val().trim();
         let password = $(passwordInput).val().trim();
-        if(!$(resultEl).text().length){
-            if(username.length === 0 || password.length === 0){
-                $(resultEl).text("請輸入用戶名稱及用戶密碼");
+        let rememberMe = $(rememberEle).prop("checked")
+
+
+        //確認有無輸入
+        if(username.length === 0 || password.length === 0){
+            $(resultEl).text("請輸入用戶名稱及用戶密碼");
+            return;
+        }
+
+        //先確認密碼格式
+        if( !wordCheck(password) ){
+            $(resultEl).text("使用者名稱或密碼錯誤");
+            return;
+        }
+
+        let formData = new FormData();
+        formData.append("adminUsername", username);
+        formData.append("adminPassword", password)
+
+        // 管理員登入
+        if (!$("#store-login").hasClass("active")) {
+            //確認帳號格式
+            if( !wordCheck(username) ){
+                $(resultEl).text("使用者名稱或密碼錯誤");
                 return;
             }
-            let formData = new FormData();
-            formData.append("adminUsername", username);
-            formData.append("adminPassword", password)
 
-            // 管理員登入
-            if (!$("#store-login").hasClass("active")) {
-                fetch("/admin/login", {
-                    method: "POST",
-                    body: formData
-                }).then(res => res.json()).then(admin => {
-                    if (admin.successful) {
-                        sessionStorage.setItem("totalUser",JSON.stringify({userType: 3, userId: admin.administratorId}))
-                        location = "./storeIndex.html"
-                    } else {
-                        let message = admin.message
-                        $(resultEl).text(message);
-                    }
-                })
-            } else {
-                // 商家登入
-                // fetch("/store/login", {
-                //     method: "POST",
-                //     headers: {
-                //         'Content-Type': 'application/json'
-                //     },
-                //     body: JSON.stringify({
-                //         storeName: username,
-                //         password: password
-                //     })
-                // }).then(res => res.json()).then(store => {
-                //     if (store.successful) {
-                //         location = "./storeIndex.html"
-                //     } else {
-                //         let message = admin.message
-                //         $(resultEl).text(message);
-                //         console.log(message);
-                //     }
-                // })
+            // 格式都正確才會連後端
+            fetch("/admin/login", {
+                method: "POST",
+                body: formData
+            }).then(res => res.json()).then(admin => {
+                if (admin.successful) {
+                    location = "./storeIndex.html"
+                } else {
+                    let message = admin.message
+                    $(resultEl).text(message);
+                }
+            })
+        // 商家登入
+        } else {
+            //統編驗證
+            if( !vatCheck(username) ){
+                $(resultEl).text("使用者名稱或密碼錯誤");
+                return;
             }
-
+            // fetch("/store/login", {
+            //     method: "POST",
+            //     headers: {
+            //         'Content-Type': 'application/json'
+            //     },
+            //     body: JSON.stringify({
+            //         storeName: username,
+            //         password: password
+            //     })
+            // }).then(res => res.json()).then(store => {
+            //     if (store.successful) {
+            //         location = "./storeIndex.html"
+            //     } else {
+            //         let message = admin.message
+            //         $(resultEl).text(message);
+            //     }
+            // })
         }
+
+        if(rememberMe){
+            localStorage.setItem("username",username)
+            localStorage.setItem("password",password)
+        }
+    })
+
+    //一進入頁面就從 localStorag 抓取資料
+    $(function (){
+        $(usernameInput).val(localStorage.getItem("username"))
+        $(passwordInput).val(localStorage.getItem("password"))
     })
 
 </script>

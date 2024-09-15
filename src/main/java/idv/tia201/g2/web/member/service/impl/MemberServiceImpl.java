@@ -21,12 +21,12 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Member register(Member member) {
-        if(StringUtils.isEmpty(member.getCustomerPhone())){
+        if (StringUtils.isEmpty(member.getCustomerPhone())) {
             member.setMessage("手機未輸入");
             member.setSuccessful(false);
             return member;
         }
-        if(StringUtils.isEmpty(member.getCustomerPassword())){
+        if (StringUtils.isEmpty(member.getCustomerPassword())) {
             member.setMessage("密碼未輸入");
             member.setSuccessful(false);
             return member;
@@ -56,9 +56,9 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public boolean isExistMember(Member member) {
-        if(ObjectUtils.isEmpty(memberDao.findMemberByPhone(member.getCustomerPhone()))){
+        if (ObjectUtils.isEmpty(memberDao.findMemberByPhone(member.getCustomerPhone()))) {
             return false;
-        }else{
+        } else {
             return true;
         }
     }
@@ -89,8 +89,6 @@ public class MemberServiceImpl implements MemberService {
         }
     }
 
-
-    //todo
     @Override
     public Member findMemberById(Integer memberId) {
         return memberDao.findMemberById(memberId);
