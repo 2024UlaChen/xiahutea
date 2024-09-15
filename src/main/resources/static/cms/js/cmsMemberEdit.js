@@ -21,28 +21,7 @@ const saveBtn = document.querySelector("#cmsMemberSave");
 const addrCollapseBtn = document.querySelector("#cmsMemberAddrCollapse");
 
 
-
-function getCmsList(){
-    fetch(`cms/manage`
-    )
-        .then(resp => resp.json())
-        .then(body => {
-            const {successful, message} = body;
-            if (successful) {
-                const {id, nickname, roleId, image} = body;
-                sessionStorage.setItem('id', id);
-                sessionStorage.setItem('nickname', nickname);
-                sessionStorage.setItem('roleId', roleId);
-                sessionStorage.setItem('image', image);
-                location = '../index.html';
-            } else {
-                errMsg.textContent = message;
-            }
-        });
-}
-
 document.addEventListener("DOMContentLoaded", () => {
-    getCmsList();
 })
 cancelBtn.addEventListener("click", function () {
     Swal.fire({
@@ -64,11 +43,12 @@ addrCollapseBtn.addEventListener("click", function () {
     const collapseIcon = this.firstElementChild;
 
     if(collapseIcon.classList.contains("fa-plus")){
-        console.log(1)
+
     }
     collapseIcon.classList.toggle("fa-plus");
     collapseIcon.classList.toggle("fa-minus");
     cmsAddrList.classList.toggle("hidden");
+
 
 
 })
