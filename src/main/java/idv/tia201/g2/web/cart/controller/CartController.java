@@ -1,4 +1,4 @@
-package idv.tia201.g2.web.cart;
+package idv.tia201.g2.web.cart.controller;
 
 import idv.tia201.g2.web.cart.service.CartService;
 import idv.tia201.g2.web.member.vo.Cart;
@@ -46,9 +46,9 @@ public class CartController extends HttpServlet {
         return cartService.getProductsByIds(productIds);
     }
     // POST 請求：獲取商店資料
-    @PostMapping("/checkoutlist/findBystoreId")
+    @PostMapping("/checkoutlist/findByStoreId")
     @ResponseBody
-    public Store findstoreById(Integer storeId) {
+    public Store findstoreById(@RequestBody Integer storeId) {
         return cartService.getStoreByid(storeId);
     }
 }

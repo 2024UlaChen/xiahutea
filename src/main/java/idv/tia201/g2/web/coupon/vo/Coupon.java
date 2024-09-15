@@ -1,5 +1,7 @@
 package idv.tia201.g2.web.coupon.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import idv.tia201.g2.core.pojo.Core;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,7 +18,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Coupon {
+public class Coupon extends Core {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "coupon_id",nullable = false,updatable = false)
@@ -36,10 +38,12 @@ public class Coupon {
     //儲存 年 月 日 十 分 秒
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date", nullable = false, updatable = false)
+    @JsonFormat(pattern = "yyyy/MM/dd HH:mm", timezone = "GMT+8")
     private Timestamp createDate;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "expired_date")
+    @JsonFormat(pattern = "yyyy/MM/dd HH:mm", timezone = "GMT+8")
     private Timestamp expiredDate;
 
     //和消費者優惠券紀錄表 一對多

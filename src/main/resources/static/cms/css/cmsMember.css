@@ -33,13 +33,13 @@
     color: #f38f27;
 }
 
-.btnCancel {
+.btnCancel, .btnDownload, .btnQuery {
     background-color: #6c757d;
     border: 1px solid #6c757d;
     color: white;
 }
 
-.btnCancel:hover {
+.btnCancel:hover, .btnDownload:hover, .btnQuery:hover {
     background-color: white;
     border: 1px solid #6c757d;
     color: #6c757d;
@@ -50,9 +50,13 @@
 }
 
 .userAction {
-    padding-top: 30px;
     display: flex;
     justify-content: center;
+    align-items: flex-end;
+}
+
+.userAction button {
+    margin-right: 2%;
 }
 
 .cmsSex {
@@ -102,12 +106,35 @@
     display: none;
 }
 
-#cmsMemberImg, #cmsMemberImgLabel {
-    border-radius: 50%;
-    border: 1px red solid;
-}
-
 #cmsAddrList {
     padding: 0;
     list-style-type: none;
+}
+
+/*member manage*/
+
+.table td, .table th {
+    vertical-align: middle;
+    font-size: 16px;
+
+}
+
+
+.memberStatus {
+    font-size: 16px;
+    display: inline-block;
+    text-align: center;
+    height: 40px;
+    margin-right: 1%;
+    border-radius: 5px;
+    vertical-align: bottom;
+    width: 80%;
+    padding: 10%;
+
+}
+.valid{
+    background-color: #28a745;
+}
+.inValid{
+    background-color: #6c757d;
 }
