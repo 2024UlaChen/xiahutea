@@ -414,7 +414,7 @@ document.getElementById("categoryTable").addEventListener('click', function(e) {
         var deleteBtn = e.target;
         var categoryId = deleteBtn.getAttribute('data-id');
 
-        if (confirm('確定要删除此分类嗎？')) {
+        if (confirm('確定要删除此分類嗎？')) {
             // 使用 fetch 发送删除请求到后端
             fetch('/categories/delete/' + categoryId, {
                 method: 'DELETE',
@@ -434,7 +434,10 @@ document.getElementById("categoryTable").addEventListener('click', function(e) {
                             icon: "success"
                         });
                     } else {
-                        alert('删除失敗: ' + data.message);
+                        Swal.fire({
+                            icon: "error",
+                            text: "分類新增錯誤",
+                        });
                     }
                 })
                 .catch(error => {
