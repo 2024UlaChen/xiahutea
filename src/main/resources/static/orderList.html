@@ -389,14 +389,14 @@
                   .then(response => response.json())
                   .then(data =>{
                         console.log(data);
-                        showText(data);}
+                      showDB(data);}
                   )
                   .catch((error) => {
                       console.log("錯誤原因：" + error);
                   });
         }
 
-        function showText(data){
+        function showDB(data){
             let orderHtml = "";
             for(let i = 0; i < data.length ; i++) {
 
