@@ -367,10 +367,10 @@
             // 找明細
             function showDB(data) {
                 let detailHtml = "";
-                detailHtml += `
+                detailHtml = `
                         <tr>
                             <td id="order_id">${data[0].orderId}</td>
-                            <td>${data[0].orders.customer.customerAccount}</td>
+                            <td>${data[0].orders.customer.customerRemark}</td>
                             <td>${data[0].orders.customer.nickname}</td>
                             <td>${data[0].orders.store.storeName}</td>
                             <td id="status_text">${statusText(data[0].orders.orderStatus)}</td>

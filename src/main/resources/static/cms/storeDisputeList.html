@@ -234,7 +234,7 @@
                     disputeHtml += `
                          <tr>
                             <td class="dispute_date_value">${data[i].applyDatetime}</td>
-                            <td class="dispute_id_value"><a href="./storeDisputeDetail.html">${data[i].disputeOrderId}</a></td>
+                            <td class="dispute_id_value"><a href="./storeDisputeDetail.html?disputeOrderId=${data[i].disputeOrderId}">${data[i].disputeOrderId}</a></td>
                             <td class="order_id_value">${data[i].orderId}</td>
                             <td class="order_username_value">${data[i].order.customer.nickname}</td>
                             <td class="order_store_value">${data[i].order.store.storeName}</td>

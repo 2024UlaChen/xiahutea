@@ -11,7 +11,7 @@ public interface OrderService {
     List<OrderDetail> findByOrderId(int orderId);
 
 //    OrderDto findByOrderId(int orderId);
-    List<Object[]> findByCustomerId(int customerId);
+    List<OrderDto> findByCustomerId(int customerId);
 
     OrderDto addOrder(OrderDto orderDto);
 

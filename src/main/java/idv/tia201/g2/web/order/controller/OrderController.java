@@ -15,7 +15,6 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-
     // 後台 顯示列表
     @GetMapping("manage")
     public List<Orders> manage() {
@@ -28,10 +27,6 @@ public class OrderController {
         return orderService.findByOrderId(orderId);
     }
 
-//    public OrderDto detail(@PathVariable Integer orderId) {
-//        return orderService.findByOrderId(orderId);
-//    }
-
     // 後台 修改明細
     @PutMapping("manage/{orderId}")
     public Orders update(
@@ -42,11 +37,19 @@ public class OrderController {
         return orderService.updateStatus(reqOrders);
     }
 
+
+
+    //todo
+    //    public OrderDto detail(@PathVariable Integer orderId) {
+//        return orderService.findByOrderId(orderId);
+//    }
+
     // --------------前台-----------------------------
     // 前台 顯示列表
     @GetMapping("member/{customerId}")
     public List<Object[]> memberOrder(@PathVariable Integer customerId) {
-        return orderService.findByCustomerId(customerId);
+//        return orderService.findByCustomerId(customerId);
+        return null;
     }
 
     // 前台 顯示明細
