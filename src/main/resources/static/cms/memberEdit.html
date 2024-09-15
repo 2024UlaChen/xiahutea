@@ -50,21 +50,14 @@
         </div>
         <div class="card-body memberSettingBody">
             <div class="form-group">
-                <label for="cmsMemberName"><span class="warn">*</span>姓名</label>
-                <input type="text" class="form-control" id="cmsMemberName" placeholder="Customer Name" disabled>
+                <label for="cmsMemberName"><span class="warn">*</span>暱稱</label>
+                <input type="text" class="form-control" id="cmsMemberName" placeholder="會員暱稱" disabled>
             </div>
 
             <div class="row">
                 <div class="form-group col-6">
                     <label><span class="warn">*</span> 性別 </label>
-                    <div>
-                        <select id="cmsSexList" class="form-control custom-select" disabled>
-                            <option selected disabled>Select one</option>
-                            <option>Female</option>
-                            <option>Male</option>
-                            <option>No Provide</option>
-                        </select>
-                    </div>
+                    <input type="text" class="form-control" id="cmsSex" placeholder="性別" disabled>
                 </div>
                 <div class="form-group col-6">
                     <label for="cmsMemberBirthday"><span class="warn">*</span> 生日 </label>
@@ -112,7 +105,7 @@
                 <label>是否停用</label>
                 <div class="custom-control custom-switch">
                     <input type="checkbox" class="custom-control-input" id="cmsMemberIsValid">
-                    <label class="custom-control-label" for="cmsMemberIsValid" disabled>停用</label>
+                    <label class="custom-control-label" for="cmsMemberIsValid" >停用</label>
                 </div>
             </div>
 
