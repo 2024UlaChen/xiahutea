@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -17,37 +18,29 @@ public class MemberCmsController {
 
     @GetMapping
     public List<Member> manage(Model model) {
-        List<Member> memberList = memberService.findAllMember();
-//        model.addAttribute("memberList", memberList);
-        for (Member member : memberList) {
-            System.out.println(member);
+        return memberService.findAllMember();
+    }
+
+    @GetMapping("{memberId}")
+    public Member manage(Model model, @PathVariable Integer memberId) {
+        return memberService.findMemberById(memberId);
+    }
+
+
+    @PostMapping
+    public List<Member> manage(Model model, @RequestBody Member member) {
+        if (member == null) {
+            member = new Member();
+            member.setMessage("no member data");
+            member.setSuccessful(false);
+            return null;
+        }
+//        TODO REVISE
+        List<Member> memberList = new ArrayList<>();
+        memberList = memberService.findQueryMember(member);
+        for(Member m : memberList) {
+            System.out.println(m);
         }
         return memberList;
     }
-    @GetMapping("{memberId}")
-    public Member manage(Model model, @PathVariable Integer memberId) {
-        Member member = memberService.findMemberById(memberId);
-        System.out.println(member);
-//        model.addAttribute("member", member);
-        return member;
-    }
-
-
-//    @PostMapping
-//    public List<Member> manage(Model model, @RequestBody Member member) {
-//        if (member == null) {
-//            member = new Member();
-//            member.setMessage("no member data");
-//            member.setSuccessful(false);
-//            return member;
-//        }
-//        System.out.println(member);
-//        if(member.getValidStatus()!=null){
-//            memberService.findMemberByValidStatus(member.getValidStatus());
-//        }
-////        Member member = memberService.findMemberById(memberId);
-////        System.out.println(member);
-////        model.addAttribute("member", member);
-//        return null;
-//    }
 }
