@@ -1,5 +1,6 @@
 package idv.tia201.g2.web.order.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import idv.tia201.g2.core.pojo.Core;
 import idv.tia201.g2.web.member.vo.Member;
 import jakarta.persistence.*;
@@ -49,9 +50,11 @@ public class DisputeOrder extends Core {
 
     @Column(name = "apply_datetime", updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(pattern = "yyyy/MM/dd HH:mm", timezone = "GMT+8")
     private Timestamp applyDatetime; // 申請日期
 
     @Column(name = "update_datetime")
     @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(pattern = "yyyy/MM/dd HH:mm", timezone = "GMT+8")
     private Timestamp updateDatetime; // 更新日期
 }

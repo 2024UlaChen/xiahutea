@@ -162,69 +162,7 @@
                                             </tr>
                                         </thead>
                                         <tbody id="dispute_tbody">
-                                            <tr>
-                                                <td class="dispute_date_value">2024/07/01</td>
-                                                <td class="dispute_id_value"><a href="./storeDisputeDetail.html">R240701001</a></td>
-                                                <td class="order_id_value">2407010013</td>
-                                                <td class="order_username_value">陳QQ</td>
-                                                <td class="order_store_value">一沐日汐止店</td>
-                                                <td class="dispute_status_value">未處理</td>
-                                                <td>300</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="dispute_date_value">2024/08/01</td>
-                                                <td class="dispute_id_value"><a href="./storeDisputeDetail.html">R240701002</a></td>
-                                                <td class="order_id_value">2407010010</td>
-                                                <td class="order_username_value">廖NN</td>
-                                                <td class="order_store_value">鶴茶樓中正店</td>
-                                                <td class="dispute_status_value">同意</td>
-                                                <td>80</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="dispute_date_value">2024/09/01</td>
-                                                <td class="dispute_id_value"><a href="./storeDisputeDetail.html">R240721004</a></td>
-                                                <td class="order_id_value">2407210099</td>
-                                                <td class="order_username_value">潘AA</td>
-                                                <td class="order_store_value">得正淡水店</td>
-                                                <td class="dispute_status_value">不同意</td>
-                                                <td>1100</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="dispute_date_value">2024/07/15</td>
-                                                <td class="dispute_id_value"><a href="./storeDisputeDetail.html">R240901044</a></td>
-                                                <td class="order_id_value">2408110013</td>
-                                                <td class="order_username_value">紀FF</td>
-                                                <td class="order_store_value">鶴茶樓中正店</td>
-                                                <td class="dispute_status_value">同意</td>
-                                                <td>50</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="dispute_date_value">2024/08/15</td>
-                                                <td class="dispute_id_value"><a href="./storeDisputeDetail.html">R240709001</a></td>
-                                                <td class="order_id_value">2407090019</td>
-                                                <td class="order_username_value">鐘XX</td>
-                                                <td class="order_store_value">萬波新莊店</td>
-                                                <td class="dispute_status_value">同意</td>
-                                                <td>180</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="dispute_date_value">2024/08/10</td>
-                                                <td class="dispute_id_value"><a href="./storeDisputeDetail.html">R240711041</a></td>
-                                                <td class="order_id_value">2407080083</td>
-                                                <td class="order_username_value">吳YY</td>
-                                                <td class="order_store_value">鶴茶樓中正店</td>
-                                                <td class="dispute_status_value">未處理</td>
-                                                <td>220</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="dispute_date_value">2024/07/01</td>
-                                                <td class="dispute_id_value"><a href="./storeDisputeDetail.html">R240706001</a></td>
-                                                <td class="order_id_value">2407040047</td>
-                                                <td class="order_username_value">劉zz</td>
-                                                <td class="order_store_value">一沐日汐止店</td>
-                                                <td class="dispute_status_value">未處理</td>
-                                                <td>240</td>
-                                            </tr>
+                                        <!--   JS      -->
                                         </tbody>
                                     </table>
                                     <!-- /.爭議訂單列表    -->
@@ -278,6 +216,51 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
 
+            // 0.顯示列表DB
+            init();
+
+            function init() {
+                fetch('/dispute/manage')
+                      .then(response => response.json())
+                      .then(data => showDB(data))
+                      .catch((error) => {
+                          console.log("錯誤原因：" + error);
+                      });
+            }
+
+            function showDB(data) {
+                let disputeHtml = "";
+                for(let i = 0; i < data.length; i++){
+                    disputeHtml += `
+                         <tr>
+                            <td class="dispute_date_value">${data[i].applyDatetime}</td>
+                            <td class="dispute_id_value"><a href="./storeDisputeDetail.html">${data[i].disputeOrderId}</a></td>
+                            <td class="order_id_value">${data[i].orderId}</td>
+                            <td class="order_username_value">${data[i].order.customer.nickname}</td>
+                            <td class="order_store_value">${data[i].order.store.storeName}</td>
+                            <td class="dispute_status_value">${statusText(data[i].disputeStatus)}</td>
+                            <td>${nullText(data[i].refundAmount)}</td>
+                         </tr>
+                    `;
+                }
+                document.getElementById("dispute_tbody").innerHTML = disputeHtml;
+            }
+            function statusText(statusNum) {
+                switch (statusNum) {
+                    case 1 : return "未處理";
+                    case 2 : return "同意";
+                    case 3 : return "不同意";
+                }
+            }
+            function nullText(nullValue){
+                if(nullValue != null ){
+                    return nullValue;
+                }else{
+                    return "待審核";
+                }
+            }
+
+            //----------------------------------------------------------------------------------
             // 1.查詢欄
             // 1.1 輸入查詢相關欄位，點查詢btn可篩選訂單
             let btn_select = document.getElementById("btn_select");
@@ -334,7 +317,7 @@
 
                     //todo: 待資料庫完成後，再處理時區問題
                     if (select_dispute_date1 && select_dispute_date2) {
-                        let order_date_obj = new Date(order_date.replace(/-/g,'/'));
+                        let order_date_obj = new Date(order_date);
                         let date1 = new Date(select_dispute_date1);
                         let date2 = new Date(select_dispute_date2);
                         if (order_date_obj < date1 || order_date_obj > date2) {
