@@ -22,7 +22,6 @@ public class MemberDaoImpl implements MemberDao {
 
     @Override
     public Member findMemberById(int memberId) {
-
         return session.get(Member.class, memberId);
     }
 
