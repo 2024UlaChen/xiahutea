@@ -63,9 +63,25 @@
 
             <!-- general form elements disabled -->
             <div class="card card-warning">
-              <div class="card-header"style="background-color: #73B4BA">
-                <h3 class="card-title">註冊資訊</h3>
+              <div class="card-header" style="background-color: #73B4BA">
+                <div class="row">
+
+                  <div class="col-sm-2 d-flex align-items-center">
+                    <h3 class="card-title">註冊資訊</h3>
+                  </div>
+                  <div class="col-sm-8">
+                  </div>
+                  <div class="col-sm-1">
+                    <button class="btn btn-outline-dark" id="print">列印</button>
+                  </div>
+                  <div class="col-sm-1">
+                    <button class="btn btn-outline-dark" id="sendmail">發信</button>
+                  </div>
+
+                </div>
+
               </div>
+
               <!-- /.card-header -->
               <form>
                 <div class="card-body">
@@ -85,7 +101,7 @@
                     <div class="col-sm-12">
                       <div class="form-group">
                         <label>統一編號</label>
-                        <input type="text" id="vat" class="form-control"  disabled>
+                        <input type="text" id="vat" class="form-control" disabled>
                       </div>
                     </div>
                     <div class="col-sm-12">
@@ -135,10 +151,10 @@
                   </div>
                   <div class="row justify-content-center">
                     <div class="col-sm-2">
-                      <button type="submit" class="btn btn-info">送出</button>
+                      <button type="submit" class="btn btn-info" id="submitBtn">送出</button>
                     </div>
                     <div class="col-sm-2">
-                      <button class="btn btn-outline-info" id="print">列印</button>
+                      <button type="reset" class="btn btn-info" id="modifyBtn">修改</button>
                     </div>
                   </div>
                 </div>

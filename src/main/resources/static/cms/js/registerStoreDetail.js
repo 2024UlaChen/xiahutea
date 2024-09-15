@@ -4,10 +4,10 @@ function getParameter(parameter){
     let url = new URL(getUrlString);
     return url.searchParams.get(parameter)
 }
+
 // 從後端抓資料渲染到前端
 function init(){
     let storeId = getParameter("storeId");
-    console.log(storeId)
     fetch(`/registerstore/registerStoreDetail?storeId=${storeId}`)
         .then(res => res.json())
         .then(data => {
@@ -23,16 +23,34 @@ function init(){
                 $("#storeStatus").val(0);
             }else{
                 $("#storeStatus").val(4);
+                $("#storeStatus").addClass("disabled")
             }
         })
 }
 
+//進入頁面就抓資料
+$(function () {
+    init();
+})
+
+//點擊列印按鈕
 $("#print").on("click",e=>{
     e.preventDefault();
     window.print();
 })
 
-//一進入就抓資料
-$(function () {
-    init();
+//點擊修改按鈕
+$("#modifyBtn").on("click",e=>{
+    e.preventDefault();
+    $("input.form-control").removeAttr("disabled")
+    $("textarea#storeRemark").removeAttr("disabled");
+    $("input#vat").attr("disabled",true);
 })
+
+//點擊送出按鈕
+$("#submitBtn").on("click",e=>{
+
+})
+
+
+//點擊寄信
