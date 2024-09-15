@@ -22,7 +22,5 @@ public class OrderDto {
     private Orders orders;
     private DisputeOrder disputeOrder;
     private List<OrderDetail> orderDetails;
-    private OMemberDto oMemberDto;
-    private OStoreDto oStoreDto;
 
 }

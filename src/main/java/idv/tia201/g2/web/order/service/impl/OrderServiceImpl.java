@@ -1,7 +1,5 @@
 package idv.tia201.g2.web.order.service.impl;
 
-import idv.tia201.g2.web.member.dao.MemberDao;
-import idv.tia201.g2.web.member.vo.Member;
 import idv.tia201.g2.web.order.dao.DisputeDao;
 import idv.tia201.g2.web.order.dao.OrderDao;
 import idv.tia201.g2.web.order.dao.OrderDetailDao;
@@ -10,8 +8,6 @@ import idv.tia201.g2.web.order.service.OrderService;
 import idv.tia201.g2.web.order.util.OrderMappingUtil;
 import idv.tia201.g2.web.order.vo.OrderDetail;
 import idv.tia201.g2.web.order.vo.Orders;
-import idv.tia201.g2.web.store.dao.StoreDao;
-import idv.tia201.g2.web.store.vo.Store;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,12 +28,6 @@ public class OrderServiceImpl implements OrderService {
     private DisputeDao disputeDao;
 
     @Autowired
-    private MemberDao memberDao;
-
-    @Autowired
-    private StoreDao storeDao;
-
-    @Autowired
     private OrderMappingUtil orderMappingUtil;
 
 
@@ -55,13 +45,7 @@ public class OrderServiceImpl implements OrderService {
         return orderDetailDao.selectByOrderId(orderId);
     }
 
-//    public OrderDto findByOrderId(int orderId) {
-//        return orderMappingUtil.mapToOrderDto(
-//                orderDao.selectByOrderId(orderId),
-//                orderDetailDao.selectByOrderId(orderId),
-//                disputeDao.selectByOrderId(orderId)
-//        );
-//    }
+// todo
 
     // 前台 訂單列表
     @Override
@@ -70,9 +54,6 @@ public class OrderServiceImpl implements OrderService {
 //        if (order == null) {
 //            return null;
 //        }
-//        Member member = order.getCustomer();
-//        Store store = order.getStore();
-
         return null;
     }
 
