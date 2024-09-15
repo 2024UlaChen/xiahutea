@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -31,6 +31,7 @@ public class ProductServiceImpl implements ProductService {
     public List<Product> searchProducts(Integer categoryId, String productName) {
         return productDao.findByProductCategoryIdAndProductNameContaining(categoryId, productName);
     }
+
     //獲取產品名字
     public List<Product> getProductsByProductName(String productName) {
         return productDao.findByProductNameContaining(productName);
@@ -53,73 +54,72 @@ public class ProductServiceImpl implements ProductService {
         } else {
             return null;
         }
-    };
+    }
+
+    ;
 
     @Override
     public Product editProduct(Integer storeId, Integer productId, Product updatedProduct) {
-     // 根據 storeId 直接查詢店家
-    Store store = storeDao.findById(storeId).orElse(null);
-    if (store == null) {
-        // 店家不存在，返回 null
-        return null;
+        // 根據 storeId 直接查詢店家
+        Store store = storeDao.findById(storeId).orElse(null);
+        if (store == null) {
+            // 店家不存在，返回 null
+            return null;
+        }
+
+        // 根據 productId 直接查詢商品
+        Product existingProduct = productDao.findById(productId).orElse(null);
+        if (existingProduct == null) {
+            // 商品不存在，返回 null
+            return null;
+        }
+
+        // 檢查商品名稱是否為空，防止無商品名稱送出表單
+        if (updatedProduct.getProductName() == null || updatedProduct.getProductName().trim().isEmpty()) {
+            // 商品名稱為空，返回 null
+            return null;
+        }
+
+        // 更新商品資訊
+        existingProduct.setProductName(updatedProduct.getProductName());
+        existingProduct.setProductPrice(updatedProduct.getProductPrice());
+        existingProduct.setProductStatus(updatedProduct.isProductStatus());
+        existingProduct.setProductPicture(updatedProduct.getProductPicture());
+        existingProduct.setProductCategoryId(updatedProduct.getProductCategoryId());
+
+        // 其他屬性也可以根據需要更新
+        existingProduct.setNormalIce(updatedProduct.isNormalIce());
+        existingProduct.setLessIce(updatedProduct.isLessIce());
+        existingProduct.setIceFree(updatedProduct.isIceFree());
+        existingProduct.setLightIce(updatedProduct.isLightIce());
+        existingProduct.setRoomTemperature(updatedProduct.isRoomTemperature());
+        existingProduct.setHot(updatedProduct.isHot());
+        existingProduct.setFullSugar(updatedProduct.isFullSugar());
+        existingProduct.setLessSugar(updatedProduct.isLessSugar());
+        existingProduct.setHalfSugar(updatedProduct.isHalfSugar());
+        existingProduct.setQuarterSugar(updatedProduct.isQuarterSugar());
+        existingProduct.setNoSugar(updatedProduct.isNoSugar());
+        existingProduct.setPearl(updatedProduct.isPearl());
+        existingProduct.setPudding(updatedProduct.isPudding());
+        existingProduct.setCoconutJelly(updatedProduct.isCoconutJelly());
+        existingProduct.setTaro(updatedProduct.isTaro());
+        existingProduct.setHerbalJelly(updatedProduct.isHerbalJelly());
+        existingProduct.setSize(updatedProduct.getSize());
+
+        // 保存更新後的商品
+        return productDao.save(existingProduct);
     }
 
-    // 根據 productId 直接查詢商品
-    Product existingProduct = productDao.findById(productId).orElse(null);
-    if (existingProduct == null) {
-        // 商品不存在，返回 null
-        return null;
-    }
-
-    // 檢查商品名稱是否為空，防止無商品名稱送出表單
-    if (updatedProduct.getProductName() == null || updatedProduct.getProductName().trim().isEmpty()) {
-        // 商品名稱為空，返回 null
-        return null;
-    }
-
-    // 更新商品資訊
-    existingProduct.setProductName(updatedProduct.getProductName());
-    existingProduct.setProductPrice(updatedProduct.getProductPrice());
-    existingProduct.setProductStatus(updatedProduct.isProductStatus());
-    existingProduct.setProductPicture(updatedProduct.getProductPicture());
-    existingProduct.setProductCategoryId(updatedProduct.getProductCategoryId());
-
-    // 其他屬性也可以根據需要更新
-    existingProduct.setNormalIce(updatedProduct.isNormalIce());
-    existingProduct.setLessIce(updatedProduct.isLessIce());
-    existingProduct.setIceFree(updatedProduct.isIceFree());
-    existingProduct.setLightIce(updatedProduct.isLightIce());
-    existingProduct.setRoomTemperature(updatedProduct.isRoomTemperature());
-    existingProduct.setHot(updatedProduct.isHot());
-    existingProduct.setFullSugar(updatedProduct.isFullSugar());
-    existingProduct.setLessSugar(updatedProduct.isLessSugar());
-    existingProduct.setHalfSugar(updatedProduct.isHalfSugar());
-    existingProduct.setQuarterSugar(updatedProduct.isQuarterSugar());
-    existingProduct.setNoSugar(updatedProduct.isNoSugar());
-    existingProduct.setPearl(updatedProduct.isPearl());
-    existingProduct.setPudding(updatedProduct.isPudding());
-    existingProduct.setCoconutJelly(updatedProduct.isCoconutJelly());
-    existingProduct.setTaro(updatedProduct.isTaro());
-    existingProduct.setHerbalJelly(updatedProduct.isHerbalJelly());
-    existingProduct.setSize(updatedProduct.getSize());
-
-    // 保存更新後的商品
-    return productDao.save(existingProduct);
-    }
-
-   //刪除
+    //刪除
     @Override
     public boolean deleteProduct(Integer productId) {
-        // 根據 productId 檢查商品是否存在，可能為null
-        Product product = productDao.findById(productId).orElse(null);
-        // 檢查是否為 null
-        if (product == null) {
-            // 商品不存在，返回 false
-            return false;
+        if (productDao.existsById(productId)) {
+            productDao.deleteById(productId);
+            return true; // 表示删除成功
+        } else {
+            //
+            return false; // 表示找不到紀錄
         }
-        // 商品存在，進行刪除
-        productDao.deleteById(productId);
-        return true;
-    }
 
-};
+    }
+}

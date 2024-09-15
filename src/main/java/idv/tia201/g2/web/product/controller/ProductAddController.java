@@ -1,15 +1,14 @@
 package idv.tia201.g2.web.product.controller;
 
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import idv.tia201.g2.web.product.service.ProductService;
 import idv.tia201.g2.web.product.vo.Product;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
 
@@ -58,6 +57,7 @@ public class ProductAddController {
     // 刪除產品
     @DeleteMapping("/delete/{productId}")
     public boolean deleteProduct(@PathVariable Integer productId) {
+
         return productService.deleteProduct(productId);
     }
 
