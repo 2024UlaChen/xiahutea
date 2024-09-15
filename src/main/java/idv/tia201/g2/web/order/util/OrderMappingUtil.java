@@ -1,131 +1,71 @@
 package idv.tia201.g2.web.order.util;
 
-import idv.tia201.g2.web.order.dto.OrderDetailDto;
+import idv.tia201.g2.web.member.vo.Member;
+import idv.tia201.g2.web.order.dto.OMemberDto;
+import idv.tia201.g2.web.order.dto.OStoreDto;
 import idv.tia201.g2.web.order.dto.OrderDto;
 import idv.tia201.g2.web.order.vo.DisputeOrder;
 import idv.tia201.g2.web.order.vo.OrderDetail;
 import idv.tia201.g2.web.order.vo.Orders;
+import idv.tia201.g2.web.store.dao.StoreDao;
+import idv.tia201.g2.web.store.vo.Store;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class OrderMappingUtil {
-    // DAO和DTO互相轉換
 
-    // 用在DTO @builder簡化程式碼的Set
-    public OrderDto mapToOrderDto(Orders order, List<OrderDetail> orderDetails, DisputeOrder disputeOrder) {
-        List<OrderDetailDto> orderDetailDto = orderDetails.stream().map(orderDetail ->
-                OrderDetailDto.builder()
-                        .orderDetailId(orderDetail.getOrderDetailId())
-                        .productId(orderDetail.getProductId())
-                        .productSugar(orderDetail.getProductSugar())
-                        .productTemperature(orderDetail.getProductTemperature())
-                        .productAddMaterials(orderDetail.getProductAddMaterials())
-                        .productQuantity(orderDetail.getProductQuantity())
-                        .productPrice(orderDetail.getProductPrice())
-                        .build()
-        ).collect(Collectors.toList());
 
-        return OrderDto.builder()
-                .orderId(order.getOrderId())
-                .orderStatus(order.getOrderStatus())
-                .customerId(order.getCustomerId())
-                .customerMoneyDiscount(order.getCustomerMoneyDiscount())
-                .storeId(order.getStoreId())
-                .loyaltyCardId(order.getLoyaltyCardId())
-                .loyaltyDiscount(order.getLoyaltyDiscount())
-                .customerCouponsId(order.getCustomerCouponsId())
-                .couponDiscount(order.getCouponDiscount())
-                .orderProductQuantity(order.getOrderProductQuantity())
-                .productAmount(order.getProductAmount())
-                .processingFees(order.getProcessingFees())
-                .paymentMethod(order.getPaymentMethod())
-                .paymentAmount(order.getPaymentAmount())
-                .invoiceMethod(order.getInvoiceMethod())
-                .invoiceNo(order.getInvoiceNo())
-                .invoiceVat(order.getInvoiceVat())
-                .invoiceCarrier(order.getInvoiceCarrier())
-                .receiverMethod(order.getReceiverMethod())
-                .receiverName(order.getReceiverName())
-                .receiverPhone(order.getReceiverPhone())
-                .receiverAddress(order.getReceiverAddress())
-                .receiverDatetime(order.getReceiverDatetime())
-                .orderNote(order.getOrderNote())
-                .orderScore(order.getOrderScore())
-                .orderFeedback(order.getOrderFeedback())
-                .orderCreateDatetime(order.getOrderCreateDatetime())
-                .orderUpdateDatetime(order.getOrderUpdateDatetime())
-                .orderDetails(orderDetailDto)
-                .disputeOrderId(disputeOrder.getDisputeOrderId())
-                .disputeStatus(disputeOrder.getDisputeStatus())
-                .disputeReason(disputeOrder.getDisputeReason())
-                .refundAmount(disputeOrder.getRefundAmount())
-                .rejectReason(disputeOrder.getRejectReason())
-                .disputeNotes(disputeOrder.getDisputeNotes())
-                .applyDatetime(disputeOrder.getApplyDatetime())
-                .updateDatetime(disputeOrder.getUpdateDatetime())
-                .build();
+
+
+    public OrderDto createOrderDto(
+            Orders order, DisputeOrder disputeOrder, List<OrderDetail> orderDetails,
+            Member member , Store store
+    ) {
+        OrderDto orderDto = new OrderDto();
+
+        // 複製 Orders 屬性
+        Orders orderCopy = new Orders();
+        BeanUtils.copyProperties(order, orderCopy);
+        orderDto.setOrders(orderCopy);
+
+        // 複製 DisputeOrder 屬性
+        DisputeOrder disputeOrderCopy = new DisputeOrder();
+        BeanUtils.copyProperties(disputeOrder, disputeOrderCopy);
+        orderDto.setDisputeOrder(disputeOrderCopy);
+
+        // 複製 OrderDetail 屬性
+        List<OrderDetail> orderDetailCopies = orderDetails.stream()
+                .map(orderDetail -> {
+                    OrderDetail orderDetailCopy = new OrderDetail();
+                    BeanUtils.copyProperties(orderDetail, orderDetailCopy);
+                    return orderDetailCopy;
+                })
+                .collect(Collectors.toList());
+        orderDto.setOrderDetails(orderDetailCopies);
+
+        // 複製 MemberDTO 屬性
+        OMemberDto oMemberDto = createMemberDto(member);
+        orderDto.setOMemberDto(oMemberDto);
+
+        // 複製 StoreDTO 屬性
+        OStoreDto oStoreDto = createStoreDto(store);
+        orderDto.setOStoreDto(oStoreDto);
+
+        return orderDto;
     }
 
-    public Orders mapToOrder(OrderDto orderDto) {
-        return Orders.builder()
-                .orderId(orderDto.getOrderId())
-                .orderStatus(orderDto.getOrderStatus())
-                .customerId(orderDto.getCustomerId())
-                .customerMoneyDiscount(orderDto.getCustomerMoneyDiscount())
-                .storeId(orderDto.getStoreId())
-                .loyaltyCardId(orderDto.getLoyaltyCardId())
-                .loyaltyDiscount(orderDto.getLoyaltyDiscount())
-                .customerCouponsId(orderDto.getCustomerCouponsId())
-                .couponDiscount(orderDto.getCouponDiscount())
-                .orderProductQuantity(orderDto.getOrderProductQuantity())
-                .productAmount(orderDto.getProductAmount())
-                .processingFees(orderDto.getProcessingFees())
-                .paymentMethod(orderDto.getPaymentMethod())
-                .paymentAmount(orderDto.getPaymentAmount())
-                .invoiceMethod(orderDto.getInvoiceMethod())
-                .invoiceNo(orderDto.getInvoiceNo())
-                .invoiceVat(orderDto.getInvoiceVat())
-                .invoiceCarrier(orderDto.getInvoiceCarrier())
-                .receiverMethod(orderDto.getReceiverMethod())
-                .receiverName(orderDto.getReceiverName())
-                .receiverPhone(orderDto.getReceiverPhone())
-                .receiverAddress(orderDto.getReceiverAddress())
-                .receiverDatetime(orderDto.getReceiverDatetime())
-                .orderNote(orderDto.getOrderNote())
-                .orderScore(orderDto.getOrderScore())
-                .orderFeedback(orderDto.getOrderFeedback())
-                .orderCreateDatetime(orderDto.getOrderCreateDatetime())
-                .orderUpdateDatetime(orderDto.getOrderUpdateDatetime())
-                .build();
+    private OMemberDto createMemberDto(Member member) {
+        OMemberDto oMemberDto = new OMemberDto();
+        BeanUtils.copyProperties(member, oMemberDto);
+        return oMemberDto;
     }
 
-    public DisputeOrder mapToDisputeOrder(OrderDto orderDto) {
-        return DisputeOrder.builder()
-                .disputeOrderId(orderDto.getDisputeOrderId())
-                .disputeStatus(orderDto.getDisputeStatus())
-                .disputeReason(orderDto.getDisputeReason())
-                .refundAmount(orderDto.getRefundAmount())
-                .rejectReason(orderDto.getRejectReason())
-                .disputeNotes(orderDto.getDisputeNotes())
-                .applyDatetime(orderDto.getApplyDatetime())
-                .updateDatetime(orderDto.getUpdateDatetime())
-                .build();
-    }
-
-    public List<OrderDetail> mapToOrderDetails(OrderDto orderDto) {
-        return orderDto.getOrderDetails().stream().map(orderDetailDto ->
-                OrderDetail.builder()
-                        .orderDetailId(orderDetailDto.getOrderDetailId())
-                        .productId(orderDetailDto.getProductId())
-                        .productSugar(orderDetailDto.getProductSugar())
-                        .productTemperature(orderDetailDto.getProductTemperature())
-                        .productAddMaterials(orderDetailDto.getProductAddMaterials())
-                        .productQuantity(orderDetailDto.getProductQuantity())
-                        .productPrice(orderDetailDto.getProductPrice())
-                        .build()
-        ).collect(Collectors.toList());
+    private OStoreDto createStoreDto(Store store) {
+        OStoreDto oStoreDto = new OStoreDto();
+        BeanUtils.copyProperties(store, oStoreDto);
+        return oStoreDto;
     }
 }
