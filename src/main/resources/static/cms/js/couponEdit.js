@@ -34,6 +34,13 @@ document.addEventListener("DOMContentLoaded",function () {
                 return response.json();
             })
             .then(data=> {
+                if(data.couponId ===null){
+                    Swal.fire({
+                        title: '查無此優惠券資料',
+                        text: '查無此優惠券資料',
+                        icon: 'error'
+                    });
+                }
                 coupon_id_el.value = data.couponId;
                 coupon_title_el.value = data.couponName;
                 coupon_detail_el.textContent = data.couponRule;

@@ -18,15 +18,16 @@ public class couponManageController {
     public List<Coupon> getCoupons() {
         return couponService.findAllCoupons();
     }
-    @DeleteMapping("/delete/{couponId}")
-    public Core delete(@PathVariable Integer couponId){
-        final Core core = new Core();
-        if(couponId==null) {
-            core.setMessage("無id");
-            core.setSuccessful(false);
-        }else {
-            core.setSuccessful(couponService.removeCoupon(couponId));
-        }
-        return core;
-    }
+//    @DeleteMapping("/delete/{couponId}")
+//    public Core delete(@PathVariable Integer couponId){
+//        final Core core = new Core();
+//        if(couponId==null) {
+//            core.setMessage("無id");
+//            core.setSuccessful(false);
+//        }else {
+//            core.setMessage("無此商品ID資料:"+couponId);
+//            core.setSuccessful(couponService.removeCoupon(couponId));
+//        }
+//        return core;
+//    }
 }

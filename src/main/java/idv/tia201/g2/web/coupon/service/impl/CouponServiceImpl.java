@@ -74,13 +74,19 @@ public class CouponServiceImpl implements CouponService {
 
     @Override
     public Coupon findCouponById(Integer couponId) {
+//        return couponDao.findById(couponId)
+//                .orElseThrow(() -> new EntityNotFoundException("Coupon not found with id: " + couponId));
         return couponDao.findById(couponId)
-                .orElseThrow(() -> new EntityNotFoundException("Coupon not found with id: " + couponId));
+                .orElse(new Coupon());
     }
 
-    @Override
-    public boolean removeCoupon(Integer couponId) {
-         couponDao.deleteById(couponId);
-         return true;
+//    @Override
+//    public boolean removeCoupon(Integer couponId) {
+//            Coupon coupon = findCouponById(couponId);
+//            if(coupon==null){
+//                return false;
+//            }
+//            couponDao.deleteById(couponId);
+//            return true;
+//        }
     }
-}

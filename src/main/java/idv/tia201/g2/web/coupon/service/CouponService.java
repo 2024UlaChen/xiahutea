@@ -9,5 +9,5 @@ public interface CouponService {
     public Coupon saveCoupon(Coupon coupon);
     public List<Coupon> findAllCoupons();
     public Coupon findCouponById(Integer id);
-    public boolean removeCoupon(Integer couponId);
+//    public boolean removeCoupon(Integer couponId);
 }

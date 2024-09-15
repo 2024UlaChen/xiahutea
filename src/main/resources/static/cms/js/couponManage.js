@@ -78,24 +78,24 @@ document.addEventListener("DOMContentLoaded", function () {
 
         }
     });
-    //**************************************刪除表格資料*****************************
-    document.addEventListener('click', function (e) {
-        if (e.target.classList.contains('td-delete')) {
-            let couponId = e.target.getAttribute('data-id');
-            Swal.fire({
-                title: "確定要刪除嗎?",
-                text: "刪除後將無法恢復該項目!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonText: "刪除",
-                cancelButtonText: "取消",
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    deleteCoupon(couponId);  // 調用刪除函數，傳入 ID
-                }
-            });
-            }
-        })
+    // //**************************************刪除表格資料*****************************
+    // document.addEventListener('click', function (e) {
+    //     if (e.target.classList.contains('td-delete')) {
+    //         let couponId = e.target.getAttribute('data-id');
+    //         Swal.fire({
+    //             title: "確定要刪除嗎?",
+    //             text: "刪除後將無法恢復該項目!",
+    //             icon: "warning",
+    //             showCancelButton: true,
+    //             confirmButtonText: "刪除",
+    //             cancelButtonText: "取消",
+    //         }).then((result) => {
+    //             if (result.isConfirmed) {
+    //                 deleteCoupon(couponId);  // 調用刪除函數，傳入 ID
+    //             }
+    //         });
+    //         }
+    //     })
     //**************************************FUNCTION區*****************************
     //渲染表格function
     function showAllCoupon(coupons) {
@@ -112,7 +112,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 <td>${coupon.expiredDate}</td>
                 <td>
                     <button type="button" class="td-edit" data-id="${coupon.couponId}">修改</button>
-                    <button type="button" class="td-delete" data-id="${coupon.couponId}">刪除</button>
                 </td>
             `;
             tableBody_el.appendChild(row);
@@ -154,39 +153,39 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     //刪除表格資料
-    function deleteCoupon(couponId) {
-        fetch(`/coupon/manage/delete/${couponId}`, {
-            method: 'DELETE',
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('刪除失敗');
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.successful) {
-                    Swal.fire({
-                        title: '成功刪除!',
-                        icon: 'success',
-                    }).then(() => {
-                        location.reload();
-                    });
-                } else {
-                    Swal.fire({
-                        title: '刪除失敗',
-                        text: data.message,
-                        icon: 'error'
-                    });
-                }
-            })
-            .catch(error => {
-                Swal.fire({
-                    title: '刪除失敗',
-                    text: error.message,
-                    icon: 'error'
-                });
-            });
-        }
+    // function deleteCoupon(couponId) {
+    //     fetch(`/coupon/manage/delete/${couponId}`, {
+    //         method: 'DELETE',
+    //     })
+    //         .then(response => {
+    //             if (!response.ok) {
+    //                 throw new Error('刪除失敗');
+    //             }
+    //             return response.json();
+    //         })
+    //         .then(data => {
+    //             if (data.successful) {
+    //                 Swal.fire({
+    //                     title: '成功刪除!',
+    //                     icon: 'success',
+    //                 }).then(() => {
+    //                     location.reload();
+    //                 });
+    //             } else {
+    //                 Swal.fire({
+    //                     title: '後端刪除失敗',
+    //                     text: data.message,
+    //                     icon: 'error'
+    //                 });
+    //             }
+    //         })
+    //         .catch(error => {
+    //             Swal.fire({
+    //                 title: '刪除失敗',
+    //                 text: error.message,
+    //                 icon: 'error'
+    //             });
+    //         });
+    //     }
     })
 
