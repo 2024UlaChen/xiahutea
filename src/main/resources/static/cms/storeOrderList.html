@@ -2,357 +2,319 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>後台 | 訂單管理</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>後台 | 訂單管理</title>
 
-    <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
-    <link rel="stylesheet" href="dist/css/adminlte.min.css">
-    <!-- DataTables -->
-    <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-    <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
-    <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="dist/css/adminlte.min.css">
+  <!-- DataTables -->
+  <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+  <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
 
-    <style>
+  <style>
 
-        /* 查詢欄   */
-        div.dataTables_filter label{
-            font-weight:normal;
-        }
-        [type=search] {
-            outline-offset: 0;
-        }
-        input.select_order{
-            display:inline-block;
-            border:1px #C0C0C0 solid;
-            margin-left: 5px;
-            width: 220px;
-            height: 30px;
-            margin-right:20px;
-            border-radius: 4px;
-        }
-        select#select_status{
-            display:inline-block;
-            border:1px #C0C0C0 solid;
-            margin-left: 2px;
-            width: 220px;
-            height: 30px;
-            text-align: center;
-            border-radius: 4px;
-        }
-        input.select_date{
-            display:inline-block;
-            border:1px #C0C0C0 solid;
-            margin-left: 5px;
-            width: 220px;
-            height: 30px;
-            margin-right:10px;
-            text-align: center;
-            border-radius: 4px;
-        }
-        /* btn 查詢*/
-        .btn-default {
-            background-color: #F8F9FA;
-            float: right;
-        }
-        .btn-block {
-            width: 100px;
-            font-weight: bolder;
-        }
-                                                                                                   /* 隱藏 bs內建的查詢btn */
-        div.dataTables_wrapper div.dataTables_filter{
-            display: none;
-        }
+      /* 查詢欄   */
+      div.dataTables_filter label {
+          font-weight: normal;
+      }
 
-        /*  訂單列表  */
-        #order_thread , #order_tbody{
-            text-align: center;
-        }
+      [type=search] {
+          outline-offset: 0;
+      }
 
+      input.select_order {
+          display: inline-block;
+          border: 1px #C0C0C0 solid;
+          margin-left: 5px;
+          width: 220px;
+          height: 30px;
+          margin-right: 20px;
+          border-radius: 4px;
+      }
 
-    </style>
+      select#select_status {
+          display: inline-block;
+          border: 1px #C0C0C0 solid;
+          margin-left: 2px;
+          width: 220px;
+          height: 30px;
+          text-align: center;
+          border-radius: 4px;
+      }
+
+      input.select_date {
+          display: inline-block;
+          border: 1px #C0C0C0 solid;
+          margin-left: 5px;
+          width: 220px;
+          height: 30px;
+          margin-right: 10px;
+          text-align: center;
+          border-radius: 4px;
+      }
+
+      /* btn 查詢*/
+      .btn-default {
+          background-color: #F8F9FA;
+          float: right;
+      }
+
+      .btn-block {
+          width: 100px;
+          font-weight: bolder;
+      }
+
+      /* 隱藏 bs內建的查詢btn */
+      div.dataTables_wrapper div.dataTables_filter {
+          display: none;
+      }
+
+      /*  訂單列表  */
+      #order_thread, #order_tbody {
+          text-align: center;
+      }
+  </style>
 </head>
 
 <body class="hold-transition sidebar-mini">
-    <div class="wrapper">
-        <!--header & aside -->
-        <div class="storeheader"></div>
-        <div class="storeaside"></div>
-        <!--/.header & aside -->
+<div class="wrapper">
+  <div class="storeheader"></div>
+  <div class="storeaside"></div>
+  <!--/.header & aside -->
 
-        <!-- 功能區塊    -->
-        <div class="content-wrapper">
-            <!--訂單區塊內的header-->
-            <section class="content-header">
-                <div class="container-fluid">
-                    <div class="row mb-2">
-                        <div class="col-sm-6">
-                            <h1>訂單管理</h1>
-                        </div>
-                        <div class="col-sm-6">
-                            <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                <li class="breadcrumb-item active">訂單管理</li>
-                            </ol>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Main content-->
-            <section class="content">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h3 class="card-title">訂單列表</h3>
-                                </div>
-                                <div class="card-body">
-                                    <!-- 查詢欄位 -->
-                                    <div class="dataTables_filter">
-                                        <label>
-                                            訂單編號<input type="search" class="select_order">
-                                        </label>
-                                        <label>
-                                            會員姓名<input type="search" class="select_order">
-                                        </label>
-                                        <label>
-                                            店家名稱<input type="search" class="select_order">
-                                        </label>
-                                        <label>
-                                            訂單狀態</label>
-                                        <label>
-                                            <select id="select_status">
-                                                <option class="select_status_op" value="">請選擇</option>
-                                                <option class="select_status_op" value="訂單成立">訂單成立</option>
-                                                <option class="select_status_op" value="準備完成">準備完成</option>
-                                                <option class="select_status_op" value="正在外送">正在外送</option>
-                                                <option class="select_status_op" value="訂單完成">訂單完成</option>
-                                            </select>
-                                        </label>
-                                        <br>
-                                        <label>
-                                            訂單日期<input type="date" class="select_date">
-                                        </label>
-                                        <span>~</span>
-                                        <label>
-                                            訂單日期<input type="date" class="select_date">
-                                        </label>
-                                        <button id="btn_select" class="btn btn-block btn-default">查詢</button>
-                                    </div>
-                                    <!-- /.查詢欄位 -->
-
-                                    <!-- 訂單列表   -->
-                                    <table id="example1" class="table table-bordered table-striped">
-                                        <thead id="order_thread">
-                                            <tr>
-                                                <th>訂單日期</th>
-                                                <th>訂單編號</th>
-                                                <th>會員姓名</th>
-                                                <th>訂單狀態</th>
-                                                <th>店家名稱</th>
-                                                <th>商品數量</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="order_tbody">
-                                            <tr>
-                                                <td class="order_date_value">2024/07/01</td>
-                                                <td class="order_id_value"><a href="./storeOrderDetail.html">2407010012</a></td>
-                                                <td class="order_username_value">廖ZZ</td>
-                                                <td class="order_status_value">準備完成</td>
-                                                <td class="order_store_value">鶴茶樓中正店</td>
-                                                <td>8</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="order_date_value">2024/07/01</td>
-                                                <td class="order_id_value"><a href="./storeOrderDetail.html">2407010010</a></td>
-                                                <td class="order_username_value">紀AA</td>
-                                                <td class="order_status_value">正在外送</td>
-                                                <td class="order_store_value">鶴茶樓中正店</td>
-                                                <td>5</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="order_date_value">2024/07/01</td>
-                                                <td class="order_id_value"><a href="./storeOrderDetail.html">2407010009</a></td>
-                                                <td class="order_username_value">鐘BB</td>
-                                                <td class="order_status_value">準備完成</td>
-                                                <td class="order_store_value">萬波新莊店</td>
-                                                <td>18</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="order_date_value">2024/07/01</td>
-                                                <td class="order_id_value"><a href="./storeOrderDetail.html">2407010007</a></td>
-                                                <td class="order_username_value">劉CC</td>
-                                                <td class="order_status_value">訂單完成</td>
-                                                <td class="order_store_value">一沐日汐止店</td>
-                                                <td>8</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="order_date_value">2024/07/01</td>
-                                                <td class="order_id_value"><a href="./storeOrderDetail.html">2407010006</a></td>
-                                                <td class="order_username_value">吳DD</td>
-                                                <td class="order_status_value">訂單完成</td>
-                                                <td class="order_store_value">得正淡水店</td>
-                                                <td>8</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="order_date_value">2024/07/01</td>
-                                                <td class="order_id_value"><a href="./storeOrderDetail.html">2407010005</a></td>
-                                                <td class="order_username_value">石EE</td>
-                                                <td class="order_status_value">訂單完成</td>
-                                                <td class="order_store_value">得正淡水店</td>
-                                                <td>5</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="order_date_value">2024/07/01</td>
-                                                <td class="order_id_value"><a href="./storeOrderDetail.html">2407010004</a></td>
-                                                <td class="order_username_value">黃FF</td>
-                                                <td class="order_status_value">訂單完成</td>
-                                                <td class="order_store_value">五十嵐永和店</td>
-                                                <td>3</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="order_date_value">2024/08/15</td>
-                                                <td class="order_id_value"><a href="./storeOrderDetail.html">2407010003</a></td>
-                                                <td class="order_username_value">王GG</td>
-                                                <td class="order_status_value">訂單完成</td>
-                                                <td class="order_store_value">萬波新莊店</td>
-                                                <td>9</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="order_date_value">2024/09/01</td>
-                                                <td class="order_id_value"><a href="./storeOrderDetail.html">2407010002</a></td>
-                                                <td class="order_username_value">汪HH</td>
-                                                <td class="order_status_value">訂單完成</td>
-                                                <td class="order_store_value">一沐日汐止店</td>
-                                                <td>4</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="order_date_value">2024/08/01</td>
-                                                <td class="order_id_value"><a href="./storeOrderDetail.html">2407010001</a></td>
-                                                <td class="order_username_value">陳II</td>
-                                                <td class="order_status_value">訂單完成</td>
-                                                <td class="order_store_value">五十嵐永和店</td>
-                                                <td>1</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    <!--/.訂單列表    -->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            <!-- /.Main content -->
+  <!-- 功能區塊    -->
+  <div class="content-wrapper">
+    <!--訂單區塊內的header-->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>訂單管理</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">訂單管理</li>
+            </ol>
+          </div>
         </div>
-        <!-- /.功能區塊    -->
-        <!--footer -->
-        <div class="storefooter"></div>
-        <!--/.footer -->
-    </div>
+      </div>
+    </section>
 
-    <script src="plugins/jquery/jquery.min.js"></script>
-    <script src="js/storegeneral.js"></script>
-    <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
-    <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
-    <script src="plugins/datatables/jquery.dataTables.min.js"></script>
-    <script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-    <script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-    <script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-    <script src="plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-    <script src="plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-    <script src="dist/js/adminlte.js"></script>
-    <script src="dist/js/demo.js"></script>
+    <!-- Main content-->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">訂單列表</h3>
+              </div>
+              <div class="card-body">
+                <!-- 查詢欄位 -->
+                <div class="dataTables_filter">
+                  <label>
+                    訂單編號<input type="search" class="select_order">
+                  </label>
+                  <label>
+                    會員姓名<input type="search" class="select_order">
+                  </label>
+                  <label>
+                    店家名稱<input type="search" class="select_order">
+                  </label>
+                  <label>
+                    訂單狀態
+                    <select id="select_status">
+                      <option class="select_status_op" value="">請選擇</option>
+                      <option class="select_status_op" value="訂單成立">訂單成立</option>
+                      <option class="select_status_op" value="準備完成">準備完成</option>
+                      <option class="select_status_op" value="正在外送">正在外送</option>
+                      <option class="select_status_op" value="訂單完成">訂單完成</option>
+                    </select>
+                  </label>
+                  <br>
+                  <label>
+                    訂單日期<input type="date" class="select_date">
+                  </label>
+                  <span>~</span>
+                  <label>
+                    訂單日期<input type="date" class="select_date">
+                  </label>
+                  <button id="btn_select" class="btn btn-block btn-default">查詢</button>
+                </div>
+                <!-- /.查詢欄位 -->
 
+                <!-- 訂單列表   -->
+                <table id="example1" class="table table-bordered table-striped">
+                  <thead id="order_thread">
+                  <tr>
+                    <th>訂單日期</th>
+                    <th>訂單編號</th>
+                    <th>會員姓名</th>
+                    <th>訂單狀態</th>
+                    <th>店家名稱</th>
+                    <th>商品數量</th>
+                  </tr>
+                  </thead>
+                  <tbody id="order_tbody">
+                  <!-- 列表放JS    -->
+                  </tbody>
+                </table>
+                <!--/.訂單列表    -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- /.Main content -->
+  </div>
+  <!-- /.功能區塊    -->
+  <div class="storefooter"></div>
+</div>
 
-    <!-- Page specific script -->
-    <script>
-        $(function () {
-            $("#example1").DataTable({
-                "responsive": true, "lengthChange": false, "autoWidth": false,
-            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-            $('#example2').DataTable({
-                "paging": true,
-                "lengthChange": false,
-                "searching": true,
-                "ordering": true,
-                "info": true,
-                "autoWidth": false,
-                "responsive": true,
+<script src="plugins/jquery/jquery.min.js"></script>
+<script src="js/storegeneral.js"></script>
+<script src="plugins/jquery-ui/jquery-ui.min.js"></script>
+<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+<script src="plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+<script src="plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+<script src="dist/js/adminlte.js"></script>
+<script src="dist/js/demo.js"></script>
+
+<script>
+    $(function () {
+        $("#example1").DataTable({
+            "responsive": true, "lengthChange": false, "autoWidth": false,
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+        $('#example2').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+        });
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // todo 連結到訂單明細
+
+        // 顯示列表函式
+        function init() {
+            fetch('/order/manage')
+                  .then(response => response.json())
+                  .then(data => showText(data))
+                  .catch((error) => {
+                      console.log("錯誤原因：" + error);
+                  });
+        }
+
+        function showText(data) {
+            let orderHtml = "";
+            for (let i = 0; i < data.length; i++) {
+                orderHtml += `
+                    <tr>
+                        <td class="order_date_value">${data[i].orderCreateDatetime}</td>
+                        <td class="order_id_value"><a href="./storeOrderDetail.html?orderId=${data[i].orderId}">${data[i].orderId}</a></td>
+                        <td class="order_username_value">${data[i].customer.nickname}</td>
+                        <td class="order_status_value">${statusText(data[i].orderStatus)}</td>
+                        <td class="order_store_value">${data[i].store.storeName}</td>
+                        <td>${data[i].orderProductQuantity}</td>
+                    </tr>
+                `;
+            }
+            document.getElementById("order_tbody").innerHTML = orderHtml;
+        }
+
+        function statusText(statusNum) {
+            switch (statusNum) {
+                case 1 : return "訂單成立";
+                case 2 : return "準備完成";
+                case 3 : return "正在外送";
+                case 4 : return "訂單完成";
+            }
+        }
+
+        //------------------------------------------------------------------------------------
+        // 0. 顯示列表資料
+        init();
+
+        // 1.查詢欄
+        // 1.1 輸入查詢相關欄位，點查詢btn可篩選訂單
+        let btn_select = document.getElementById("btn_select");
+        btn_select.addEventListener("click", function () {
+
+            let select_order_id = document.getElementsByClassName("select_order")[0]?.value.toLowerCase() || "";
+            let select_order_user = document.getElementsByClassName("select_order")[1]?.value.toLowerCase() || "";
+            let select_order_store = document.getElementsByClassName("select_order")[2]?.value.toLowerCase() || "";
+            let select_order_status = document.getElementById("select_status").value || "";
+            let select_order_date1 = document.getElementsByClassName("select_date")[0]?.value || "";
+            let select_order_date2 = document.getElementsByClassName("select_date")[1]?.value || "";
+
+            let order_rows = document.querySelectorAll("tbody tr");
+            order_rows.forEach(row => {
+
+                let order_id_el = row.getElementsByClassName("order_id_value")[0];
+                let order_user_el = row.getElementsByClassName("order_username_value")[0];
+                let order_store_el = row.getElementsByClassName("order_store_value")[0];
+                let order_status_el = row.getElementsByClassName("order_status_value")[0];
+                let order_date_el = row.getElementsByClassName("order_date_value")[0];
+
+                if (!order_id_el || !order_user_el || !order_store_el || !order_status_el || !order_date_el) {
+                    return; // 跳過此列
+                }
+                // 取得訂單列表資料
+                let order_id = order_id_el.innerText.trim().toLowerCase();
+                let order_user = order_user_el.innerText.trim().toLowerCase();
+                let order_store = order_store_el.innerText.trim().toLowerCase();
+                let order_status = order_status_el.innerText.trim();
+                let order_date = order_date_el.innerText.trim();
+
+                let show_row = true;
+
+                // 篩選條件
+                if (select_order_id && !order_id.includes(select_order_id)) {
+                    show_row = false;
+                }
+                if (select_order_user && !order_user.includes(select_order_user)) {
+                    show_row = false;
+                }
+                if (select_order_store && !order_store.includes(select_order_store)) {
+                    show_row = false;
+                }
+                if (select_order_status && order_status !== select_order_status) {
+                    show_row = false;
+                }
+
+                //todo: 待資料庫完成後，再處理時區問題
+                if (select_order_date1 && select_order_date2) {
+                    let order_date_obj = new Date(order_date);
+                    // let date1String = `${select_order_date1}T00:00:00+08:00`;
+                    // let date2String = `${select_order_date2}T00:00:00+08:00`;
+                    let date1 = new Date(select_order_date1);
+                    let date2 = new Date(select_order_date2);
+
+                    if (order_date_obj < date1 || order_date_obj > date2) {
+                        show_row = false;
+                    }
+                }
+                // 顯示或隱藏該列
+                row.style.display = show_row ? "" : "none";
             });
         });
-    </script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-
-            // 1.查詢欄
-            // 1.1 輸入查詢相關欄位，點查詢btn可篩選訂單
-            let btn_select = document.getElementById("btn_select");
-            btn_select.addEventListener("click", function () {
-
-                let select_order_id = document.getElementsByClassName("select_order")[0]?.value.toLowerCase() || "";
-                let select_order_user = document.getElementsByClassName("select_order")[1]?.value.toLowerCase() || "";
-                let select_order_store = document.getElementsByClassName("select_order")[2]?.value.toLowerCase() || "";
-                let select_order_status = document.getElementById("select_status").value || "";
-                let select_order_date1 = document.getElementsByClassName("select_date")[0]?.value || "";
-                let select_order_date2 = document.getElementsByClassName("select_date")[1]?.value || "";
-
-                let order_rows = document.querySelectorAll("tbody tr");
-                order_rows.forEach(row => {
-
-                    // 檢查是否存在所有需要的元素
-                    let order_id_el = row.getElementsByClassName("order_id_value")[0];
-                    let order_user_el = row.getElementsByClassName("order_username_value")[0];
-                    let order_store_el = row.getElementsByClassName("order_store_value")[0];
-                    let order_status_el = row.getElementsByClassName("order_status_value")[0];
-                    let order_date_el = row.getElementsByClassName("order_date_value")[0];
-
-                    if (!order_id_el || !order_user_el || !order_store_el || !order_status_el || !order_date_el) {
-                        return; // 跳過此列
-                    }
-                    // 取得訂單列表資料
-                    let order_id = order_id_el.innerText.trim().toLowerCase();
-                    let order_user = order_user_el.innerText.trim().toLowerCase();
-                    let order_store = order_store_el.innerText.trim().toLowerCase();
-                    let order_status = order_status_el.innerText.trim();
-                    let order_date = order_date_el.innerText.trim();
-
-                    let show_row = true;
-
-                    // 篩選條件
-                    if (select_order_id && !order_id.includes(select_order_id)) {
-                        show_row = false;
-                    }
-                    if (select_order_user && !order_user.includes(select_order_user)) {
-                        show_row = false;
-                    }
-                    if (select_order_store && !order_store.includes(select_order_store)) {
-                        show_row = false;
-                    }
-                    if (select_order_status && order_status !== select_order_status) {
-                        show_row = false;
-                    }
-
-                    //todo: 待資料庫完成後，再處理時區問題
-                    if (select_order_date1 && select_order_date2) {
-                        let order_date_obj = new Date(order_date.replace(/-/g,'/'));
-                        let date1 = new Date(select_order_date1);
-                        let date2 = new Date(select_order_date2);
-
-                        if (order_date_obj < date1 || order_date_obj > date2) {
-                            show_row = false;
-                        }
-                    }
-                    // 顯示或隱藏該列
-                    row.style.display = show_row ? "" : "none";
-                });
-            });
-        });
-    </script>
+    });
+</script>
 </body>
 </html>

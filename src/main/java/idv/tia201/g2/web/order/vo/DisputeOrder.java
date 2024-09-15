@@ -3,13 +3,11 @@ package idv.tia201.g2.web.order.vo;
 import idv.tia201.g2.core.pojo.Core;
 import idv.tia201.g2.web.member.vo.Member;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import java.sql.Timestamp;
 
 @Entity
+@Builder
 @Getter
 @Setter
 @NoArgsConstructor
@@ -28,6 +26,9 @@ public class DisputeOrder extends Core {
     @JoinColumn(name = "order_id", insertable = false,updatable = false)
     private Orders order;
 
+    @Column(name = "dispute_status")
+    private Integer disputeStatus; // 爭議狀態
+
     @Column(name = "customer_id")  // 單向多對一
     private Integer customerId;    // 顧客編號
     @ManyToOne
@@ -37,9 +38,6 @@ public class DisputeOrder extends Core {
     @Column(name = "dispute_reason", updatable = false)
     private String disputeReason; // 爭議原因
 
-    @Column(name = "dispute_status")
-    private Integer disputeStatus; // 爭議狀態
-
     @Column(name = "refund_amount")
     private Integer refundAmount; // 退款金額
 
@@ -47,7 +45,7 @@ public class DisputeOrder extends Core {
     private String rejectReason; // 不同意原因
 
     @Column(name = "dispute_notes")
-    private String disputeNotes; // 爭議備註
+    private String disputeNotes; // 內部備註
 
     @Column(name = "apply_datetime", updatable = false)
     @Temporal(TemporalType.TIMESTAMP)

@@ -7,6 +7,8 @@ import idv.tia201.g2.web.member.vo.MemberAddress;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -19,7 +21,17 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Member register(Member member) {
-        return null;
+        if (StringUtils.isEmpty(member.getCustomerPhone())) {
+            member.setMessage("手機未輸入");
+            member.setSuccessful(false);
+            return member;
+        }
+        if (StringUtils.isEmpty(member.getCustomerPassword())) {
+            member.setMessage("密碼未輸入");
+            member.setSuccessful(false);
+            return member;
+        }
+        return memberDao.findMemberById(member.getCustomerId());
     }
 
     @Override
@@ -39,12 +51,16 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public List<Member> findAllMember() {
-        return List.of();
+        return memberDao.findAllMember();
     }
 
     @Override
     public boolean isExistMember(Member member) {
-        return false;
+        if (ObjectUtils.isEmpty(memberDao.findMemberByPhone(member.getCustomerPhone()))) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     @Override
@@ -72,4 +88,10 @@ public class MemberServiceImpl implements MemberService {
             return false;
         }
     }
+
+    @Override
+    public Member findMemberById(Integer memberId) {
+        return memberDao.findMemberById(memberId);
+    }
+
 }

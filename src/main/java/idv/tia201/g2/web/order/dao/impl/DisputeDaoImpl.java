@@ -2,30 +2,50 @@ package idv.tia201.g2.web.order.dao.impl;
 
 import idv.tia201.g2.web.order.dao.DisputeDao;
 import idv.tia201.g2.web.order.vo.DisputeOrder;
-import idv.tia201.g2.web.order.vo.Orders;
-
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
+import org.hibernate.Session;
+import org.springframework.stereotype.Repository;
 import java.util.List;
 
+@Repository
 public class DisputeDaoImpl implements DisputeDao {
-    //todo
+
+    @PersistenceContext
+    private Session session;
 
     @Override
     public int insert(DisputeOrder disputeOrder) {
-        return 0;
+        session.persist(disputeOrder);
+        return 1;
     }
 
     @Override
     public int update(DisputeOrder disputeOrder) {
-        return 0;
+        session.merge(disputeOrder);
+        return 1;
     }
 
     @Override
-    public Orders selectByDisputeId(int disputeId) {
-        return null;
+    public DisputeOrder selectByDisputeId(int disputeOrderId) {
+        String hql = "from DisputeOrder where disputeOrderId= :disputeOrderId";
+        TypedQuery<DisputeOrder> query = session.createQuery(hql, DisputeOrder.class)
+                .setParameter("disputeOrderId", disputeOrderId);
+        return query.getSingleResult();
+    }
+
+    @Override
+    public DisputeOrder selectByOrderId(int orderId) {
+        String hql = "FROM DisputeOrder WHERE orderId= :orderId";
+        TypedQuery<DisputeOrder> query = session.createQuery(hql, DisputeOrder.class)
+                .setParameter("orderId", orderId);
+        return query.getSingleResult();
     }
 
     @Override
     public List<DisputeOrder> selectAll() {
-        return List.of();
+        String hql = "from DisputeOrder";
+        TypedQuery<DisputeOrder> query = session.createQuery(hql, DisputeOrder.class);
+        return query.getResultList();
     }
 }

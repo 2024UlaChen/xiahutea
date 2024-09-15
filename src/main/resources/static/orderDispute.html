@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>訂單爭議申請</title>
+
     <link rel="shortcut icon" type="image/x-icon" href="assets/images/favicon.png" />
-    <link
-            href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i&display=swap"
-            rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i&display=swap"
+          rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Lato:300,300i,400,400i,700,700i&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/css/font-awesome.min.css">
@@ -25,6 +24,8 @@
     <link rel="stylesheet" href="assets/css/mobile-menu.css">
     <link rel="stylesheet" href="assets/fonts/flaticon/flaticon.css">
     <link rel="stylesheet" href="assets/css/style.css">
+    <!-- SweetAlert2 CSS樣式 -->
+    <link rel="stylesheet" href="/cms/plugins/sweetalert2/sweetalert2.css">
 
     <style>
         /* background-color: #f5f5f5; */
@@ -74,7 +75,6 @@
             height: 100%;
             margin: 0 auto;
             /* background-color: #f8f8f8; */
-
         }
         .member-introduction {
             margin: 0 auto;
@@ -295,7 +295,9 @@
 <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyC3nDHy1dARR-Pa_2jjPCjvsOR4bcILYsM'></script>
 <script src="assets/js/frontend-plugin.js"></script>
 <script src="./js/general.js"></script>
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<!-- sweet alert  -->
+<script src="cms/plugins/sweetalert2/sweetalert2.all.js"></script>
+
 <script>
     document.addEventListener("DOMContentLoaded", function(){
 
@@ -332,18 +334,23 @@
                     // todo: 送出資料至後端
 
 
-
-                    // todo bug 目前的連結明細後 沒有跳alert
-                    location.href = "orderDetail.html";
-                    swal("已送出爭議申請", "", "success");
-
+                    Swal.fire({
+                        title: '已送出爭議申請',
+                        text: '',
+                        icon: 'success',
+                        timer: 1500,  // 設置彈窗在1.5秒後自動關閉
+                        showConfirmButton: false  // 隱藏確認按鈕
+                    }).then(() => {
+                        // 彈窗關閉後跳轉到orderDetail.html
+                        location.href = "orderDetail.html";
+                    });
                 }).catch(error => {
                     console.error("發生錯誤：", error);
-                    swal("提交時發生錯誤，請稍後再試。","","error");
+                    Swal.fire('提交時發生錯誤，請稍後再試。','', 'error');
                 });
             }else{
                 e.preventDefault();
-                swal("申請原因 請輸入內容","","error");
+                Swal.fire('申請原因 請輸入內容','', 'error');
             }
         });
     });
