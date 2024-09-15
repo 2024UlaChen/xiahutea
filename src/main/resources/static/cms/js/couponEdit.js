@@ -34,6 +34,13 @@ document.addEventListener("DOMContentLoaded",function () {
                 return response.json();
             })
             .then(data=> {
+                if(data.couponId ===null){
+                    Swal.fire({
+                        title: '查無此優惠券資料',
+                        text: '查無此優惠券資料',
+                        icon: 'error'
+                    });
+                }
                 coupon_id_el.value = data.couponId;
                 coupon_title_el.value = data.couponName;
                 coupon_detail_el.textContent = data.couponRule;
@@ -47,12 +54,12 @@ document.addEventListener("DOMContentLoaded",function () {
                 }
             })
             .catch(error => {
-                swal({
+                Swal.fire({
                     title: '取得數據異常',
                     text: error.message,
                     icon: 'error'
                 });
-            })
+            });
     }
     //***********************************檢查placeholder*********************
     coupon_detail_el.addEventListener('input', checkDetailContent);
@@ -86,7 +93,7 @@ document.addEventListener("DOMContentLoaded",function () {
         // let isLimitChecked = is_limit_el.checked;
         //檢查是否有填寫各欄位
         if (coupon_title_el.value === '') {
-            swal({
+            Swal.fire({
                 title: '錯誤',
                 text: '請填寫優惠券標題',
                 icon: 'error'
@@ -94,7 +101,7 @@ document.addEventListener("DOMContentLoaded",function () {
             return;
         }
         if (coupon_detail_el.value === '') {
-            swal({
+            Swal.fire({
                 title: '錯誤',
                 text: '請填寫優惠券說明',
                 icon: 'error'
@@ -111,7 +118,7 @@ document.addEventListener("DOMContentLoaded",function () {
         //     return;
         // }
         if (!activeChecked && !noactiveChecked) {
-            swal({
+            Swal.fire({
                 title: '錯誤',
                 text: '請選擇是否啟用',
                 icon: 'error'
@@ -159,26 +166,28 @@ document.addEventListener("DOMContentLoaded",function () {
             })
             .then(body => {
                 if (body.successful) {
-                    swal({
+                    Swal.fire({
                         title: '提交成功',
                         text: '已成功新增/修改資料',
-                        icon: 'success'
-                    }).then((willRedirect) => {
-                        // 這裡的 `willRedirect` 表示當用戶點擊確認按鈕後才會執行
-                        if (willRedirect) {
-                            window.location.href = `couponEdit.html`;
+                        icon: 'success',
+                        confirmButtonText: '確定' // 可以設定確認按鈕的文本
+                    }).then((result) => {
+                        // result.isConfirmed 表示用戶點擊了確認按鈕
+                        if (result.isConfirmed) {
+                            window.location.href = 'couponEdit.html';
                         }
-                    })
+                    });
                 } else {
-                    swal({
+                    Swal.fire({
                         title: '提交失敗',
                         text: body.message,
                         icon: 'error'
                     });
+
                 }
             })
             .catch(error => {
-                swal({
+                Swal.fire({
                     title: '網路交換數據異常',
                     text: error.message,
                     icon: 'error'
