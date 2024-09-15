@@ -150,7 +150,7 @@
                                             </tr>
                                         </thead>
                                         <tbody id="detail_tbody">
-                                        <!-- JS         -->
+                                        <!--   JS       -->
                                         </tbody>
                                     </table>
                                 </div>
@@ -173,11 +173,10 @@
                                             </tr>
                                         </thead>
                                         <tbody id="product_tbody">
-
-                                        <!--  JS                    -->
+                                        <!--   JS       -->
                                         </tbody>
                                         <tfoot class="tfoot" id="product_tfoot">
-                                        <!--   JS             -->
+                                        <!--   JS       -->
                                         </tfoot>
                                     </table>
                                 </div>
@@ -195,54 +194,6 @@
                                 <div class="card-body p-0">
                                     <table class="table">
                                         <tbody class="table_info" id="dispute_tbody">
-                                        <tr>
-                                            <th>申請日期</th>
-                                            <td>2024/07/26 20:40</td>
-                                        </tr>
-                                        <tr>
-                                            <th>爭議原因</th>
-                                            <td>珍珠奶茶裡 沒有珍珠</td>
-                                        </tr>
-                                        <tr>
-                                            <th>處理狀態</th>
-                                            <td>
-                                                <label class="input_lab">
-                                                    <select id="select_status">
-                                                        <option value="1" selected>未處理</option>
-                                                        <option value="2">同意</option>
-                                                        <option value="3">不同意</option>
-                                                    </select>
-                                                </label>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>退款金額<span class="red_star">*</span></th>
-                                            <td>
-                                                <label class="input_lab">
-                                                    <input id="dispute_money" type="text" disabled>
-                                                </label>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>不同意原因<span class="red_star">*</span></th>
-                                            <td>
-                                                <label class="input_lab">
-                                                    <textarea class="input_text" disabled></textarea>
-                                                </label>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>內部備註</th>
-                                            <td>
-                                                <label class="input_lab">
-                                                    <textarea class="input_text"></textarea>
-                                                </label>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>更新日期</th>
-                                            <td>2024/07/27 16:33</td>
-                                        </tr>
                                         <!--   JS       -->
                                         </tbody>
                                     </table>
@@ -255,7 +206,6 @@
             </section>
             <!-- /.Main content -->
         </div>
-
         <div class="storefooter"></div>
     </div>
 
@@ -281,43 +231,94 @@
             // 0. 顯示明細
             init();
 
-            function init(){
-                let orderId = getQueryParam("orderId");
-                if (orderId) {
-                    fetch(`/manage/${disputeOrderId}`)
+            function init() {
+                let disputeOrderId = getQueryParam("disputeOrderId");
+                if (disputeOrderId) {
+                    fetch(`/dispute/manage/${disputeOrderId}`)
                           .then(resp => resp.json())
                           .then(data => showDB(data))
                           .catch((error) => {
                               console.log("錯誤原因:" + error);
                           });
-                }else {
+                } else {
                     console.error("訂單號碼錯誤");
                 }
             }
+
             // 取得URL的查詢參數
             function getQueryParam(param) {
                 let urlParams = new URLSearchParams(window.location.search);
                 return urlParams.get(param);
             }
-            // todo
+
             // 找明細
-            function showDB() {
+            function showDB(data) {
                 let detailHtml = "";
                 detailHtml = `
                         <tr>
-                            <td id="dispute_id">${data[0].dispute.disputeId}</td>
-                            <td id="order_id">${data[0].dispute.orderId}</td>
-                            <td>${data[0].customer.customerRemark}</td>
-                            <td>${data[0].customer.nickname}</td>
-                            <td>${data[0].store.storeName}</td>
-                            <td id="status_text">${statusText(data[0].dispute.disputeStatus)}</td>
+                            <td id="dispute_id">${data.disputeOrder.disputeOrderId}</td>
+                            <td id="order_id">${data.orders.orderId}</td>
+                            <td>${data.orders.customer.customerId}</td>
+                            <td>${data.orders.customer.nickname}</td>
+                            <td>${data.orders.store.storeName}</td>
+                            <td id="status_text">${statusText(data.disputeOrder.disputeStatus)}</td>
                         </tr>
                 `;
                 document.getElementById("detail_tbody").innerHTML = detailHtml;
 
                 let disputeHtml = "";
+                disputeHtml = `
+                        <tr>
+                            <th>申請日期</th>
+                            <td>${data.disputeOrder.applyDatetime}</td>
+                        </tr>
+                        <tr>
+                            <th>爭議原因</th>
+                            <td>${data.disputeOrder.disputeReason}</td>
+                        </tr>
+                        <tr>
+                            <th>處理狀態</th>
+                            <td>
+                                <label class="input_lab">
+                                    <select id="select_status">
+                                        <option value="1" selected>未處理</option>
+                                        <option value="2">同意</option>
+                                        <option value="3">不同意</option>
+                                    </select>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>退款金額<span class="red_star">*</span></th>
+                            <td>
+                                <label class="input_lab">
+                                    <input id="dispute_money" type="text" value="${nullMoney(data.disputeOrder.refundAmount)}" disabled>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>不同意原因<span class="red_star">*</span></th>
+                            <td>
+                                <label class="input_lab">
+                                    <textarea class="input_text" disabled >${nullMoney(data.disputeOrder.rejectReason)}</textarea>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>內部備註</th>
+                            <td>
+                                <label class="input_lab">
+                                    <textarea class="input_text">${nullMoney(data.disputeOrder.disputeNotes)}</textarea>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>更新日期</th>
+                            <td>${data.disputeOrder.updateDatetime}</td>
+                        </tr>
+                `;
 
-                document.getElementById("dispute_tbody").innerHTML = detailHtml;
+                document.getElementById("dispute_tbody").innerHTML = disputeHtml;
 
                 let productTfootHtml = "";
                 productTfootHtml = `
@@ -327,56 +328,93 @@
                             <tr>
                                 <td></td>
                                 <th colspan="3">商品總金額</th>
-                                <td>${data[0].orders.productAmount}</td>
+                                <td>${data.orders.productAmount}</td>
                             </tr>
                             <tr>
                                 <td></td>
                                 <th colspan="3">平台處理費</th>
-                                <td>${data[0].orders.processingFees}</td>
+                                <td>${data.orders.processingFees}</td>
                             </tr>
                             <tr>
                                 <td></td>
                                 <th colspan="3">錢包折抵</th>
-                                <td>- ${data[0].orders.customerMoneyDiscount}</td>
+                                <td>- ${data.orders.customerMoneyDiscount}</td>
                             </tr>
                             <tr>
                                 <td></td>
                                 <th colspan="3">優惠券折抵</th>
-                                <td>- ${data[0].orders.couponDiscount}</td>
+                                <td>- ${data.orders.couponDiscount}</td>
                             </tr>
                             <tr>
                                 <td></td>
                                 <th colspan="3">集點折抵</th>
-                                <td>- ${data[0].orders.loyaltyDiscount}</td>
+                                <td>- ${data.orders.loyaltyDiscount}</td>
                             </tr>
                             <tr>
                                 <td></td>
                                 <th colspan="3">付款金額</th>
-                                <td>${data[0].orders.paymentAmount}</td>
+                                <td>${data.orders.paymentAmount}</td>
                             </tr>
                             <tr>
                                 <td></td>
                                 <th colspan="3">付款方式</th>
-                                <td>${paymentMethodText(data[0].orders.paymentMethod)}</td>
+                                <td>${paymentMethodText(data.orders.paymentMethod)}</td>
                             </tr>
                 `;
                 document.getElementById("product_tfoot").innerHTML = productTfootHtml;
 
                 let productTbodyHtml = "";
-                for (let i = 0; i < data.length; i++) {
+                let orderDetailsList = data.orderDetails;
+                for (let i = 0; i < orderDetailsList.length; i++) {
                     productTbodyHtml += `
                         <tr>
-                            <td>${data[i].product.productName} / ${productSizeText(data[i].product.size)}</td>
-                            <td>${data[i].productSugar} / ${data[i].productTemperature}</td>
-                            <td>${nullText(data[i].productAddMaterials)}</td>
-                            <td>${data[i].productQuantity}</td>
-                            <td>${data[i].productPrice}</td>
+                            <td>${orderDetailsList[i].product.productName} / ${productSizeText(orderDetailsList[i].product.size)}</td>
+                            <td>${orderDetailsList[i].productSugar} / ${orderDetailsList[i].productTemperature}</td>
+                            <td>${nullText(orderDetailsList[i].productAddMaterials)}</td>
+                            <td>${orderDetailsList[i].productQuantity}</td>
+                            <td>${orderDetailsList[i].productPrice}</td>
                         </tr>
                     `;
                 }
                 document.getElementById("product_tbody").innerHTML = productTbodyHtml;
             }
+            // todo 待確認 key & value
+            function statusText(statusNum) {
+                switch (statusNum) {
+                    case 1 :
+                        return "未處理";
+                    case 2 :
+                        return "同意";
+                    case 3 :
+                        return "不同意";
+                }
+            }
+            function productSizeText(sizeNum){
+                switch (sizeNum) {
+                    case "1" : return "小杯";
+                    case "2" : return "大杯";
+                    default: return "";
+                }
+            }
+            function paymentMethodText() {
+                 return "信用卡";
+            }
+            function nullText(nullValue){
+                if(nullValue != null ){
+                    return nullValue;
+                }else{
+                    return "";
+                }
+            }
+            function nullMoney(nullValue){
+                if(nullValue !== null && nullValue !== 0){
+                    return nullValue;
+                }else{
+                    return "";
+                }
+            }
 
+            //---------------------------------------------------------------------------
 
             let order_id = document.getElementById("order_id");
             let dispute_id = document.getElementById("dispute_id");
@@ -388,25 +426,25 @@
 
             //1. btn 回上一頁
             const btn_dispute_back = document.getElementById("btn_dispute_back");
-            btn_dispute_back.addEventListener("click", function(){
+            btn_dispute_back.addEventListener("click", function () {
                 history.back();
             });
 
             // 2. select 判斷爭議狀態選單- 因狀態不同而顯示不同的輸入欄位
-            dispute_status.addEventListener("change", function (){
-               // 2.1 狀態為 同意時，不可輸入reject_reason，值需清空
-                if(dispute_status.value === '2'){
+            dispute_status.addEventListener("change", function () {
+                // 2.1 狀態為 同意時，不可輸入reject_reason，值需清空
+                if (dispute_status.value === '2') {
                     console.log(dispute_status.value);
                     dispute_money.removeAttribute("disabled");
                     reject_reason.setAttribute("disabled", "disabled");
                     reject_reason.value = "";
-                } else if(dispute_status.value === '3'){
+                } else if (dispute_status.value === '3') {
                     // 2.2 狀態為 不同意時，不可輸入dispute_money，值需清空
                     console.log(dispute_status.value);
                     dispute_money.setAttribute("disabled", "disabled");
                     reject_reason.removeAttribute("disabled");
                     dispute_money.value = "";
-                }else {
+                } else {
                     // 2.3 狀態為 未處理 ，不可輸入dispute_money & reject_reason，值需清空
                     dispute_money.setAttribute("disabled", "disabled");
                     reject_reason.setAttribute("disabled", "disabled");
@@ -416,37 +454,37 @@
             });
 
             // 3. input 欄位 - dispute_money 判斷輸入金額範圍
-            dispute_money.addEventListener("blur", function (){
+            dispute_money.addEventListener("blur", function () {
                 let payment_amount = parseInt(document.getElementById("payment_amount").innerText);
                 let order_free_amount = parseInt(document.getElementById("order_free_amount").innerText);
-                if(parseFloat(dispute_money.value) > payment_amount + order_free_amount || parseFloat(dispute_money.value) < 0 || dispute_money.value === "" ){
-                    Swal.fire("退款金額輸入錯誤","","error");
+                if (parseFloat(dispute_money.value) > payment_amount + order_free_amount || parseFloat(dispute_money.value) < 0 || dispute_money.value === "") {
+                    Swal.fire("退款金額輸入錯誤", "", "error");
                     dispute_money.value = 0;
                 }
             });
 
             // 4. input 欄位 - reject_reason 判斷字數長度
-            reject_reason.addEventListener("blur", function (){
-                if(reject_reason.value.length < 1 ){
-                    Swal.fire("請輸入不同意爭議原因","","error");
+            reject_reason.addEventListener("blur", function () {
+                if (reject_reason.value.length < 1) {
+                    Swal.fire("請輸入不同意爭議原因", "", "error");
                 }
             });
-        //===========================================================================
+            //===========================================================================
             // todo: 點擊儲存btn 後端需儲存內容
             // 5. 更改內容後，點擊儲存btn 需儲存內容 並依狀態更改按鈕css
             const btn_dispute_save = document.getElementsByClassName("btn_dispute_save")[0];
-            btn_dispute_save.addEventListener("click", function(){
+            btn_dispute_save.addEventListener("click", function () {
 
                 // 5.1 點擊btn 檢查必填欄位
                 let check_valve = false;
-                if (dispute_status.value === '1' ) {
+                if (dispute_status.value === '1') {
                     check_valve = true;
-                }else if (dispute_status.value === '2' && dispute_money.value.trim() !== "") {
+                } else if (dispute_status.value === '2' && dispute_money.value.trim() !== "") {
                     check_valve = true;
-                }else if (dispute_status.value === '3' && reject_reason.value.trim() !== "") {
+                } else if (dispute_status.value === '3' && reject_reason.value.trim() !== "") {
                     check_valve = true;
                 } else {
-                    Swal.fire("請確認所有必填欄位已完成","","error");
+                    Swal.fire("請確認所有必填欄位已完成", "", "error");
                     return;
                 }
 
@@ -469,16 +507,16 @@
 
 
                         // 5.4 如果爭議狀態為已同意/不同意，鎖定-儲存btn&狀態選單
-                        if(dispute_status.value === '3' || dispute_status.value === '2'){
+                        if (dispute_status.value === '3' || dispute_status.value === '2') {
                             btn_dispute_save.setAttribute("disabled", "disabled");
                             dispute_status.setAttribute("disabled", "disabled");
                             dispute_money.setAttribute("disabled", "disabled");
                             reject_reason.setAttribute("disabled", "disabled");
                         }
                         Swal.fire("已更新", "", "success");
-                    }).catch((error) =>{
+                    }).catch((error) => {
                         console.error("發生錯誤：", error);
-                        Swal.fire("更新失敗","","error");
+                        Swal.fire("更新失敗", "", "error");
                     });
                 }
             });
