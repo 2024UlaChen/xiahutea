@@ -21,6 +21,9 @@ public interface MemberService {
     //    列出所有member
     List<Member> findAllMember();
 
+    List<Member> findQueryMember(Member member);
+
+    List<Member>  findMemberByValidStatus(Boolean memberValidStatus);
     //    判斷是否存在會員
     boolean isExistMember(Member member);
 
