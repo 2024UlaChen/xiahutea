@@ -8,8 +8,8 @@ public interface DisputeDao {
 
     List<DisputeOrder> selectAll();
     DisputeOrder selectByDisputeId(int disputeOrderId);
-    DisputeOrder selectByOrderId(int orderId);
 
+    DisputeOrder selectByOrderId(int orderId);
     int insert(DisputeOrder disputeOrder);
     int update(DisputeOrder disputeOrder);
 

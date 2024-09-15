@@ -146,16 +146,11 @@
                                                 <th>會員編號</th>
                                                 <th>會員姓名</th>
                                                 <th>店家名稱</th>
+                                                <th>爭議狀態</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td id="dispute_id">R240706001</td>
-                                                <td id="order_id">2407010004</td>
-                                                <td>0977123456</td>
-                                                <td>黃BB</td>
-                                                <td>五十嵐永和店</td>
-                                            </tr>
+                                        <tbody id="detail_tbody">
+                                        <!-- JS         -->
                                         </tbody>
                                     </table>
                                 </div>
@@ -170,79 +165,19 @@
                                     <table class="table table-sm">
                                         <thead>
                                             <tr>
-                                                <th>商品名稱</th>
-                                                <th>尺寸</th>
-                                                <th>冰塊</th>
-                                                <th>甜度</th>
+                                                <th>商品</th>
+                                                <th>甜度 / 溫度</th>
+                                                <th>加料</th>
                                                 <th>數量</th>
                                                 <th>商品小計</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>芒果青</td>
-                                                <td>大</td>
-                                                <td>微冰</td>
-                                                <td>無糖</td>
-                                                <td>2</td>
-                                                <td>120</td>
-                                            </tr>
-                                            <tr>
-                                                <td>紅茶拿鐵</td>
-                                                <td>大</td>
-                                                <td>少冰</td>
-                                                <td>半糖</td>
-                                                <td>1</td>
-                                                <td>70</td>
-                                            </tr>
-                                            <tr>
-                                                <td>珍珠奶茶</td>
-                                                <td>小</td>
-                                                <td>正常</td>
-                                                <td>微糖</td>
-                                                <td>1</td>
-                                                <td>75</td>
-                                            </tr>
+                                        <tbody id="product_tbody">
+
+                                        <!--  JS                    -->
                                         </tbody>
-                                        <tfoot class="tfoot">
-                                            <tr>
-                                                <td colspan="6"></td>
-                                            </tr>
-                                            <tr>
-                                                <td></td>
-                                                <th colspan="4">商品總金額</th>
-                                                <td>265</td>
-                                            </tr>
-                                            <tr>
-                                                <td></td>
-                                                <th colspan="4">平台處理費</th>
-                                                <td>10</td>
-                                            </tr>
-                                            <tr>
-                                                <td></td>
-                                                <th colspan="4">錢包折抵</th>
-                                                <td><span> -</span>10</td>
-                                            </tr>
-                                            <tr>
-                                                <td></td>
-                                                <th colspan="4">優惠券折抵</th>
-                                                <td><span> -</span>5</td>
-                                            </tr>
-                                            <tr>
-                                                <td></td>
-                                                <th colspan="4">集點折抵</th>
-                                                <td><span> -</span>5</td>
-                                            </tr>
-                                            <tr>
-                                                <td></td>
-                                                <th colspan="4">付款金額</th>
-                                                <td>265</td>
-                                            </tr>
-                                            <tr>
-                                                <td></td>
-                                                <th colspan="4">付款方式</th>
-                                                <td>信用卡</td>
-                                            </tr>
+                                        <tfoot class="tfoot" id="product_tfoot">
+                                        <!--   JS             -->
                                         </tfoot>
                                     </table>
                                 </div>
@@ -259,7 +194,7 @@
                                 </div>
                                 <div class="card-body p-0">
                                     <table class="table">
-                                        <tbody class="table_info">
+                                        <tbody class="table_info" id="dispute_tbody">
                                         <tr>
                                             <th>申請日期</th>
                                             <td>2024/07/26 20:40</td>
@@ -308,6 +243,7 @@
                                             <th>更新日期</th>
                                             <td>2024/07/27 16:33</td>
                                         </tr>
+                                        <!--   JS       -->
                                         </tbody>
                                     </table>
                                 </div>
@@ -341,6 +277,107 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
+
+            // 0. 顯示明細
+            init();
+
+            function init(){
+                let orderId = getQueryParam("orderId");
+                if (orderId) {
+                    fetch(`/manage/${disputeOrderId}`)
+                          .then(resp => resp.json())
+                          .then(data => showDB(data))
+                          .catch((error) => {
+                              console.log("錯誤原因:" + error);
+                          });
+                }else {
+                    console.error("訂單號碼錯誤");
+                }
+            }
+            // 取得URL的查詢參數
+            function getQueryParam(param) {
+                let urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get(param);
+            }
+            // todo
+            // 找明細
+            function showDB() {
+                let detailHtml = "";
+                detailHtml = `
+                        <tr>
+                            <td id="dispute_id">${data[0].dispute.disputeId}</td>
+                            <td id="order_id">${data[0].dispute.orderId}</td>
+                            <td>${data[0].customer.customerRemark}</td>
+                            <td>${data[0].customer.nickname}</td>
+                            <td>${data[0].store.storeName}</td>
+                            <td id="status_text">${statusText(data[0].dispute.disputeStatus)}</td>
+                        </tr>
+                `;
+                document.getElementById("detail_tbody").innerHTML = detailHtml;
+
+                let disputeHtml = "";
+
+                document.getElementById("dispute_tbody").innerHTML = detailHtml;
+
+                let productTfootHtml = "";
+                productTfootHtml = `
+                            <tr>
+                                <td colspan="5"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <th colspan="3">商品總金額</th>
+                                <td>${data[0].orders.productAmount}</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <th colspan="3">平台處理費</th>
+                                <td>${data[0].orders.processingFees}</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <th colspan="3">錢包折抵</th>
+                                <td>- ${data[0].orders.customerMoneyDiscount}</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <th colspan="3">優惠券折抵</th>
+                                <td>- ${data[0].orders.couponDiscount}</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <th colspan="3">集點折抵</th>
+                                <td>- ${data[0].orders.loyaltyDiscount}</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <th colspan="3">付款金額</th>
+                                <td>${data[0].orders.paymentAmount}</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <th colspan="3">付款方式</th>
+                                <td>${paymentMethodText(data[0].orders.paymentMethod)}</td>
+                            </tr>
+                `;
+                document.getElementById("product_tfoot").innerHTML = productTfootHtml;
+
+                let productTbodyHtml = "";
+                for (let i = 0; i < data.length; i++) {
+                    productTbodyHtml += `
+                        <tr>
+                            <td>${data[i].product.productName} / ${productSizeText(data[i].product.size)}</td>
+                            <td>${data[i].productSugar} / ${data[i].productTemperature}</td>
+                            <td>${nullText(data[i].productAddMaterials)}</td>
+                            <td>${data[i].productQuantity}</td>
+                            <td>${data[i].productPrice}</td>
+                        </tr>
+                    `;
+                }
+                document.getElementById("product_tbody").innerHTML = productTbodyHtml;
+            }
+
+
             let order_id = document.getElementById("order_id");
             let dispute_id = document.getElementById("dispute_id");
             let dispute_money = document.getElementById("dispute_money");

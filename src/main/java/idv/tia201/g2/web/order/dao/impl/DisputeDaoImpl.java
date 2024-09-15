@@ -14,6 +14,33 @@ public class DisputeDaoImpl implements DisputeDao {
     @PersistenceContext
     private Session session;
 
+    // 後台 爭議列表
+    @Override
+    public List<DisputeOrder> selectAll() {
+        String hql = "from DisputeOrder";
+        TypedQuery<DisputeOrder> query = session.createQuery(hql, DisputeOrder.class);
+        return query.getResultList();
+    }
+
+    // 後台 爭議明細
+    @Override
+    public DisputeOrder selectByDisputeId(int disputeOrderId) {
+        String hql = "from DisputeOrder where disputeOrderId= :disputeOrderId";
+        TypedQuery<DisputeOrder> query = session.createQuery(hql, DisputeOrder.class)
+                .setParameter("disputeOrderId", disputeOrderId);
+        return query.getSingleResult();
+    }
+
+    //--------------------------------------
+    //todo
+    @Override
+    public DisputeOrder selectByOrderId(int orderId) {
+        String hql = "FROM DisputeOrder WHERE orderId= :orderId";
+        TypedQuery<DisputeOrder> query = session.createQuery(hql, DisputeOrder.class)
+                .setParameter("orderId", orderId);
+        return query.getSingleResult();
+    }
+
     @Override
     public int insert(DisputeOrder disputeOrder) {
         session.persist(disputeOrder);
@@ -26,26 +53,5 @@ public class DisputeDaoImpl implements DisputeDao {
         return 1;
     }
 
-    @Override
-    public DisputeOrder selectByDisputeId(int disputeOrderId) {
-        String hql = "from DisputeOrder where disputeOrderId= :disputeOrderId";
-        TypedQuery<DisputeOrder> query = session.createQuery(hql, DisputeOrder.class)
-                .setParameter("disputeOrderId", disputeOrderId);
-        return query.getSingleResult();
-    }
 
-    @Override
-    public DisputeOrder selectByOrderId(int orderId) {
-        String hql = "FROM DisputeOrder WHERE orderId= :orderId";
-        TypedQuery<DisputeOrder> query = session.createQuery(hql, DisputeOrder.class)
-                .setParameter("orderId", orderId);
-        return query.getSingleResult();
-    }
-
-    @Override
-    public List<DisputeOrder> selectAll() {
-        String hql = "from DisputeOrder";
-        TypedQuery<DisputeOrder> query = session.createQuery(hql, DisputeOrder.class);
-        return query.getResultList();
-    }
 }
