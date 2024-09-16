@@ -417,12 +417,16 @@ document.addEventListener("DOMContentLoaded",function(){
             }
             console.log('storeId:',storeId);
             //獲取商店資訊
-            findstorebyid(storeId);
+            findstorebyid(2);
             renderproductdetail(groupedItems,products);
           })
           .catch(error => {
-            console.error('獲取商品時出錯:', error);
-            alert('進入購物結帳失敗');
+              console.error('獲取商品時出錯:', error);
+              Swal.fire({
+                  title: '錯誤',
+                  text: error,
+                  icon: 'error'
+              });
           });
     }
 
@@ -447,13 +451,76 @@ document.addEventListener("DOMContentLoaded",function(){
                 throw new Error('找不到商店資料');
               }
               console.log('Store Details:', store);
+              //判斷現在是不是營業時間
+                if (!isinOpeningHours(store.openingHours, store.closingHours)) {
+                    Swal.fire({
+                        title: '錯誤',
+                        text: `目前該店 ${store.storeName} 不在營業時間內！`,
+                        icon: 'error',
+                        confirmButtonText: '確定'
+                    }).then(() => {
+                        window.location.href = 'homePage.html';
+                    });
+                }
+                //渲染店名
               store_name_el.innerHTML = store.storeName || '無此店家';
+                //處理商家logo
+              if(store.logo){
+                  //將圖片轉base64格式
+                  // const base64Logo = arrayBufferToBase64(store.logo);
+                  const imageFormat = detectImageFormat(store.logo);
+                  store_img_el.src = `data:image/${imageFormat};base64,${store.logo}`;
+              }
+              //是否提供外送選項
               updateDeliveryOptions(store.isDelivery);
             })
             .catch(error => {
               console.error('Error:', error);
             });
     }
+    //判斷圖片檔案格式
+    function detectImageFormat(base64String) {
+        if (base64String.startsWith("data:image/jpeg")) {
+            return 'jpeg';
+        } else if (base64String.startsWith("data:image/png")) {
+            return 'png';
+        }
+        // 如果格式無法識別，返回png
+        return 'png';
+    }
+    //轉換店家圖片格式
+    //findproductbyid->findstorebyid>arrayBufferToBase64
+    // function arrayBufferToBase64(buffer) {
+    //     let binary = '';
+    //     let bytes = new Uint8Array(buffer);
+    //     let len = bytes.byteLength;
+    //     for (let i = 0; i < len; i++) {
+    //         binary += String.fromCharCode(bytes[i]);
+    //     }
+    //     return window.btoa(binary);
+    // }
+    //判斷是否目前時間為營業時間
+    function isinOpeningHours(openingHours, closingHours) {
+        const now = new Date();
+        //["HH", "MM", "SS"]->[HH, MM, SS]->[openHours(HH), openMinutes(MM)]
+        const [openHours, openMinutes] = openingHours.split(':').map(Number);
+        const [closeHours, closeMinutes] = closingHours.split(':').map(Number);
+
+        // Construct Date objects for opening and closing times
+        const openTime = new Date(now);
+        openTime.setHours(openHours, openMinutes, 0, 0);
+
+        const closeTime = new Date(now);
+        closeTime.setHours(closeHours, closeMinutes, 0, 0);
+
+        // 商店的營業時間跨越午夜情形
+        if (closeTime < openTime) {
+            closeTime.setDate(closeTime.getDate() + 1);
+        }
+        //判斷現在時間是否落在營業區間返回true,false
+        return now >= openTime && now <= closeTime;
+    }
+
     //判斷店家是否有外送選項
     //findproductbyid->findstorebyid->updateDeliveryOptions
     function updateDeliveryOptions(isDelivery){
