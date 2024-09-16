@@ -1,5 +1,6 @@
 package idv.tia201.g2.web.member.service.impl;
 
+import idv.tia201.g2.web.member.dao.MemberAddrDao;
 import idv.tia201.g2.web.member.dao.MemberDao;
 import idv.tia201.g2.web.member.service.MemberService;
 import idv.tia201.g2.web.member.vo.Member;
@@ -19,6 +20,8 @@ public class MemberServiceImpl implements MemberService {
 
     @Autowired
     MemberDao memberDao;
+    @Autowired
+    MemberAddrDao memberAddrDao;
 
     @Override
     public Member register(Member member) {
@@ -92,8 +95,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public List<MemberAddress> findAllMemberAdress() {
-        return List.of();
+    public List<MemberAddress> findAddressByMemberId(Integer memberId) {
+        return memberAddrDao.findAddressByMemberId(memberId);
     }
 
     @Override

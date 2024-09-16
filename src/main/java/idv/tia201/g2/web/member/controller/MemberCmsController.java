@@ -3,6 +3,7 @@ package idv.tia201.g2.web.member.controller;
 
 import idv.tia201.g2.web.member.service.MemberService;
 import idv.tia201.g2.web.member.vo.Member;
+import idv.tia201.g2.web.member.vo.MemberAddress;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -38,9 +39,14 @@ public class MemberCmsController {
 //        TODO REVISE
         List<Member> memberList = new ArrayList<>();
         memberList = memberService.findQueryMember(member);
-        for(Member m : memberList) {
+        for (Member m : memberList) {
             System.out.println(m);
         }
         return memberList;
+    }
+
+    @GetMapping("address/{memberId}")
+    public List<MemberAddress> getMemberAddress(@PathVariable Integer memberId) {
+        return memberService.findAddressByMemberId(memberId);
     }
 }

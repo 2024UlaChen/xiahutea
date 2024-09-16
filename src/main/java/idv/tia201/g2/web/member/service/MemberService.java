@@ -31,7 +31,7 @@ public interface MemberService {
     Member findMemberById(Integer memberId);
 
     //    列出所有會員地址
-    List<MemberAddress> findAllMemberAdress();
+    List<MemberAddress> findAddressByMemberId(Integer memberId);
 
     //    儲存
     boolean saveMember(Member member);
