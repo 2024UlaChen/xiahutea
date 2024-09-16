@@ -417,7 +417,7 @@ document.addEventListener("DOMContentLoaded",function(){
             }
             console.log('storeId:',storeId);
             //獲取商店資訊
-            findstorebyid(2);
+            findstorebyid(3);
             renderproductdetail(groupedItems,products);
           })
           .catch(error => {
@@ -451,15 +451,18 @@ document.addEventListener("DOMContentLoaded",function(){
                 throw new Error('找不到商店資料');
               }
               console.log('Store Details:', store);
-              //判斷現在是不是營業時間
-                if (!isinOpeningHours(store.openingHours, store.closingHours)) {
+              //判斷現在是不是營業時間及是否接單
+                if (!isinOpeningHours(store.openingHours, store.closingHours)
+                    || !store.isTakeOrders) {
                     Swal.fire({
                         title: '錯誤',
-                        text: `目前該店 ${store.storeName} 不在營業時間內！`,
+                        text: `目前該店 ${store.storeName} 不在營業時間或不接單！`,
                         icon: 'error',
                         confirmButtonText: '確定'
                     }).then(() => {
                         window.location.href = 'homePage.html';
+                        // 之後改成跳回上一頁
+                        // window.history.back();
                     });
                 }
                 //渲染店名
