@@ -40,10 +40,10 @@ document.addEventListener("DOMContentLoaded",function(){
   let lightbox_content_el = document.getElementsByClassName("lightbox-content")[0];
   let confirm_delete_el = document.getElementById("confirm-delete");
   let cancel_delete_el = document.getElementById("cancel-delete");
-  //用全域變數用來裝cartItem(用來編輯)、currentItem(用來刪除)
+  //用全域變數用來裝cartItem(用來編輯)、currentItem(用來刪除)、loginMember(用來裝目前登入會員)
     let currentCartItem = null;
     let currentItem = null;
-
+    let loginMember = null;
 
   //取貨方式
   let pick_up_el = document.getElementsByClassName('pick-up')[0];
@@ -61,6 +61,7 @@ document.addEventListener("DOMContentLoaded",function(){
   let moneybag_discount_number_el = document.getElementsByClassName("moneybag-discount-number")[0];
   let couponDropdown_el = document.getElementsByClassName('coupon-dropdown')[0];
   let couponSelect_el = document.getElementById('coupon-select');
+  let coupon_minus_number_el = document.getElementsByClassName('coupon-minus-number')[0];
   //結帳流程-2
   //取貨人
   let btn_backto_last_page_el = document.getElementsByClassName("btn-backto-last-page")[0];
@@ -108,7 +109,7 @@ document.addEventListener("DOMContentLoaded",function(){
               }
               console.log('Member Details:', member);
               //將取得會員資訊儲存
-
+              loginMember = member;
               //放入會員資料
               customer_name_el.textContent = member.nickname;
           })
@@ -119,7 +120,7 @@ document.addEventListener("DOMContentLoaded",function(){
                   icon: 'error'
               });
           })
-  }
+    }
 
 
   //獲得localstorage資料(購物車)
@@ -180,19 +181,21 @@ document.addEventListener("DOMContentLoaded",function(){
       //優惠使用(優惠券、會員卡、會員錢包)
       select_coupon_input_el.addEventListener("click", function () {
           couponSelect_el.disabled=false;
-        // coupon_number_el.disabled = false;
-        // coupon_number_el.focus();
+          getcoupons(loginMember.customerId);
       })
-      // coupon_number_el.addEventListener("focus", function () {
-      //   coupon_number_el.placeholder = "";
-      // });
-      // coupon_number_el.addEventListener("blur", function () {
-      //   if (coupon_number_el.value === "") {
-      //     coupon_number_el.placeholder = "請輸入優惠券序號";
-      //   }
-      // });
+
+      //點選優惠券時動態更新結帳明細折抵金額
+      couponSelect_el.addEventListener('change',function (){
+          let selectedOption = couponSelect_el.options[couponSelect_el.selectedIndex];
+          let discount = selectedOption.getAttribute('data-discount');
+          coupon_minus_number_el.textContent = `$${discount}`;
+      })
+
       //TODO 加入點擊事件get會員卡點數 點選會員卡，
       select_membercard_input_el.addEventListener("click",function (){
+          //清除優惠券欄位
+          couponSelect_el.innerHTML = '<option disabled selected >請選擇優惠券</option>';
+          coupon_minus_number_el.textContent = '$0';
           couponSelect_el.disabled=true;
       })
       //TODO 加入點擊事件get會員錢包餘額
@@ -455,7 +458,7 @@ document.addEventListener("DOMContentLoaded",function(){
             }
             console.log('storeId:',storeId);
             //獲取商店資訊
-            findstorebyid(3);
+            findstorebyid(storeId);
             renderproductdetail(groupedItems,products);
           })
           .catch(error => {
@@ -490,19 +493,19 @@ document.addEventListener("DOMContentLoaded",function(){
               }
               console.log('Store Details:', store);
               //判斷現在是不是營業時間及是否接單
-                if (!isinOpeningHours(store.openingHours, store.closingHours)
-                    || !store.isTakeOrders) {
-                    Swal.fire({
-                        title: '錯誤',
-                        text: `目前該店 ${store.storeName} 不在營業時間或不接單！`,
-                        icon: 'error',
-                        confirmButtonText: '確定'
-                    }).then(() => {
-                        window.location.href = 'homePage.html';
-                        // 之後改成跳回上一頁
-                        // window.history.back();
-                    });
-                }
+              //   if (!isinOpeningHours(store.openingHours, store.closingHours)
+              //       || !store.isTakeOrders) {
+              //       Swal.fire({
+              //           title: '錯誤',
+              //           text: `目前該店 ${store.storeName} 不在營業時間或不接單！`,
+              //           icon: 'error',
+              //           confirmButtonText: '確定'
+              //       }).then(() => {
+              //           window.location.href = 'homePage.html';
+              //           // 之後改成跳回上一頁
+              //           // window.history.back();
+              //       });
+              //   }
                 //渲染店名
               store_name_el.innerHTML = store.storeName || '無此店家';
                 //處理商家logo
@@ -924,19 +927,21 @@ document.addEventListener("DOMContentLoaded",function(){
         }
         //F14 獲得的優惠券動態生成選項
         function getcoupons(customerId){
-            fetch('/cart/getCoupon/${customerId}')
+            fetch(`/cart/getCoupon/${customerId}`)
                 .then(response => response.json())
                 .then(coupons => {
-                    couponSelect_el.innerHTML = ''; // 清空現有選項
+                    console.log("coupons : ",coupons)
                     coupons.forEach(coupon => {
                         let option = document.createElement('option');
                         option.value = coupon.couponId;
                         option.textContent = coupon.couponName;
+                        option.setAttribute('data-discount', coupon.discount);
                         couponSelect_el.appendChild(option);
                     });
                 })
                 .catch(error => console.error('Error loading coupons:', error));
         }
+        //F20 計算訂單金額
 
 
 

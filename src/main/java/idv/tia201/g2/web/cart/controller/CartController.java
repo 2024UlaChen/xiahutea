@@ -37,10 +37,10 @@ public class CartController extends HttpServlet {
 //        return cartService.findAddressbyId(customerId);
 //    }
     // GET 請求：取得使用者的優惠券
-//    @GetMapping("/getCoupon/{customerId}")
-//    public List<Coupon> getCoupons(@PathVariable int customerId){
-//        return null;
-//    }
+    @GetMapping("/getCoupon/{customerId}")
+    public List<Coupon> getCoupons(@PathVariable int customerId){
+        return cartService.findCouponsByCustomerId(customerId);
+    }
 
     // POST 請求：獲取商品資料
     @PostMapping("/checkoutlist/findByproductIds")

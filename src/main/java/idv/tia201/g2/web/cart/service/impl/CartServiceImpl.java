@@ -2,6 +2,7 @@ package idv.tia201.g2.web.cart.service.impl;
 
 import idv.tia201.g2.web.cart.service.CartService;
 import idv.tia201.g2.web.cart.dao.CartDao;
+import idv.tia201.g2.web.coupon.dao.CouponDao;
 import idv.tia201.g2.web.coupon.vo.Coupon;
 import idv.tia201.g2.web.coupon.vo.CustomerCoupons;
 import idv.tia201.g2.web.member.dao.MemberAddrDao;
@@ -33,6 +34,8 @@ public class CartServiceImpl implements CartService {
     private CartDao cartDao;
     @Autowired
     private MemberDao memberDao;
+    @Autowired
+    private CouponDao couponDao;
 //    @Autowired
 //    private CustomerDao customerDao;
 //    @Autowired
@@ -67,9 +70,9 @@ public class CartServiceImpl implements CartService {
     }
 
 //    @Override
-//    public List<Coupon> findCouponsByCustomerId(Integer customerId) {
-//        return List.of();
-//    }
+    public List<Coupon> findCouponsByCustomerId(Integer customerId) {
+        return couponDao.findCouponIdsByCutomerId(customerId);
+    }
 
 //    @Override
 //    public List<MemberAddress> findAddressbyId(Integer customerId) {
