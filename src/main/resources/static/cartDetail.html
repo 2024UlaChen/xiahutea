@@ -48,7 +48,6 @@
       <div id="step-1" class="step-content" style="display: flex;">
           <a href="#" class="store-info">  <!--預計加入商家頁面跳轉-->
               <div class="checkout-content-img">
-                  <!--待修改正確圖檔-->
                   <img alt="Store Logo" class="store-img">
               </div>
               <div class="store-name"></div>
@@ -58,7 +57,7 @@
               <div class="user-info">
                   <!--待修改為正確圖片-->
                   <img src="assets/images/product-item-5.jpg" alt="user_photo" class="customer-img">
-                  <p class="customer-name">RAY</p>
+                  <p class="customer-name"></p>
               </div>
           </div>
           <!--取貨方式-->
@@ -85,9 +84,14 @@
                       優惠券
                   </label>
               </div>
-              <div class="coupon-number-content">
-                  <input type="text" class="coupon-number" placeholder="請輸入優惠券序號" maxlength="50" disabled>
+              <div class="coupon-dropdown" >
+                  <select id="coupon-select" name="coupon" class="coupon-select"  disabled>
+                      <option disabled selected>請選擇優惠券</option>
+                  </select>
               </div>
+<!--              <div class="coupon-number-content">-->
+<!--                  <input type="text" class="coupon-number" placeholder="請輸入優惠券序號" maxlength="50" disabled>-->
+<!--              </div>-->
               <div class="select-membercard">
                   <input class="select-membercard-input" type="radio" name="discount">
                   <label class="select-membercard-label" for="select-membercard-label" style="padding-top: 10px">
