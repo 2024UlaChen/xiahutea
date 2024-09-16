@@ -1,5 +1,6 @@
 package idv.tia201.g2.web.coupon.service.impl;
 
+import idv.tia201.g2.core.pojo.Core;
 import idv.tia201.g2.web.coupon.dao.CouponDao;
 import idv.tia201.g2.web.coupon.service.CouponService;
 import idv.tia201.g2.web.coupon.vo.Coupon;
@@ -73,7 +74,19 @@ public class CouponServiceImpl implements CouponService {
 
     @Override
     public Coupon findCouponById(Integer couponId) {
+//        return couponDao.findById(couponId)
+//                .orElseThrow(() -> new EntityNotFoundException("Coupon not found with id: " + couponId));
         return couponDao.findById(couponId)
-                .orElseThrow(() -> new EntityNotFoundException("Coupon not found with id: " + couponId));
+                .orElse(new Coupon());
     }
-}
+
+//    @Override
+//    public boolean removeCoupon(Integer couponId) {
+//            Coupon coupon = findCouponById(couponId);
+//            if(coupon==null){
+//                return false;
+//            }
+//            couponDao.deleteById(couponId);
+//            return true;
+//        }
+    }

@@ -4,12 +4,10 @@ import idv.tia201.g2.core.pojo.Core;
 import idv.tia201.g2.web.store.dto.RegisterStoreDTO;
 import idv.tia201.g2.web.store.service.RegisterStoreService;
 import idv.tia201.g2.web.store.vo.Store;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.xml.crypto.Data;
 
 import static idv.tia201.g2.web.store.util.StoreToRegisterStore.convertPage;
 
@@ -43,5 +41,13 @@ public class RegisterStoreController {
         Core core = new Core();
         core.setData(registerStores);
         return core;
+    }
+
+    @GetMapping("/registerStoreDetail")
+    public RegisterStoreDTO RegisterStoreDetail(@RequestParam Integer storeId) {
+        Store store = new Store();
+        store.setStoreId(storeId);
+        RegisterStoreDTO registerStoreDTO = registerStoreService.searchRegisterStoreDetail(store);
+        return registerStoreDTO;
     }
 }
