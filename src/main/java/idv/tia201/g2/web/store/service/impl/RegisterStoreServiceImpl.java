@@ -137,4 +137,55 @@ public class RegisterStoreServiceImpl implements RegisterStoreService {
         return StoreToRegisterStore.convertToRegisterStore(result);
     }
 
+    public Store editRegisterStore(Store newData){
+        //必填欄位
+        if (newData.getContactPerson() == null || newData.getContactPerson().isEmpty()) {
+            newData.setMessage("請輸入聯絡人資料");
+            return newData;
+        }
+        if (newData.getEmail() == null || newData.getEmail().isEmpty()) {
+            newData.setMessage("請輸入E-mail");
+            return newData;
+        }
+        if (newData.getContactPhone() == null || newData.getContactPhone().isEmpty()) {
+            newData.setMessage("請輸入聯絡人電話");
+            return newData;
+        }
+        if (newData.getStoreName() == null || newData.getStoreName().isEmpty()) {
+            newData.setMessage("請輸入店家名稱");
+            return newData;
+        }
+        if (newData.getStoreAddress() == null || newData.getStoreAddress().isEmpty()) {
+            newData.setMessage("請輸入店家地址");
+            return newData;
+        }
+        if (newData.getOwner() == null || newData.getOwner().isEmpty()) {
+            newData.setMessage("請輸入店家負責人");
+            return newData;
+        }
+
+        //電話驗證
+        String phonePattern = "(\\d{2,3}-?|\\(\\d{2,3}\\))\\d{3,4}-?\\d{4}|09\\d{2}(\\d{6}|-\\d{3}-\\d{3})";
+        boolean phoneMatcher = Pattern.matches(phonePattern, newData.getContactPhone());
+        if (!phoneMatcher) {
+            newData.setMessage("聯絡電話錯誤");
+            return newData;
+        }
+
+        //E-mail驗證
+        String emailPattern = "^(.+)@(.+)$";
+        boolean emailMatcher = Pattern.matches(emailPattern, newData.getEmail());
+        if (!emailMatcher) {
+            newData.setMessage("信箱錯誤");
+            return newData;
+        }
+
+
+        //依 userId 存資料
+        Store save = storeDao.save(newData);
+        save.setSuccessful(true);
+        save.setMessage("更新成功");
+        save.setSuccessful(true);
+        return save;
+    }
 }

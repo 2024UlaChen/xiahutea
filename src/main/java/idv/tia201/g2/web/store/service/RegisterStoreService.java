@@ -5,8 +5,8 @@ import idv.tia201.g2.web.store.vo.Store;
 import org.springframework.data.domain.Page;
 
 public interface RegisterStoreService {
-    public Store register(Store store);
-    public Page<Store> searchRegisterStore(Store store, Integer page);
-
+    Store register(Store store);
+    Page<Store> searchRegisterStore(Store store, Integer page);
     RegisterStoreDTO searchRegisterStoreDetail(Store store);
+    Store editRegisterStore(Store newData);
 }
