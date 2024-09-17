@@ -37,18 +37,25 @@ public class StoreController {
         List<Store> storeList =  storeService.findAll();
         return storeList;
     }
-        @GetMapping("/storeinfo/{storeId}")
-    public Store StoreInfo(@PathVariable Integer storeId){
-        Store storeInfo =  storeService.findStoreById(storeId);
-        return storeInfo;
+    @GetMapping("/storeinfo/{storeId}")
+    public Store StoreInfo(HttpSession session,@PathVariable Integer storeId){
+        if(checkStoreLogin(session,storeId)){
+            return storeService.findStoreById(storeId);
+        }
+        Store store = new Store();
+        store.setSuccessful(false);
+        return store;
     }
 
 
     @PostMapping("/update")
-    public Store Update(@RequestBody Store store)  {
-        Store storeData = storeService.saveStore(store);//update後丟回去瞧瞧 未完成
+    public Store Update(HttpSession session, @RequestBody Store store)  {
+        if(checkStoreLogin(session,store.getStoreId())){
+            return storeService.saveStore(store);
 
-        return storeData;
+
+        }
+        return null;
     }
 
     @PostMapping("/login")
@@ -59,41 +66,55 @@ public class StoreController {
             session.setAttribute("storeId", data.getStoreId());
             session.setAttribute("storeName", data.getStoreName());
             session.setAttribute("storeLogo",data.getLogo());
+            session.setAttribute("loginStatus",true);
+            session.setAttribute("loginType","store");
+
 //            session.setMaxInactiveInterval(3600);//秒為單位  Tomcat預設 30分
         }
 
         return data;
     }
 
-    @GetMapping("getSessionStore")
-    public void GetSession(@SessionAttribute("storeName") String storeName) {
-        //看看上下文現在啥款
-        System.out.println(storeName);
+    @GetMapping("/logout")
+    public void Logout(HttpSession session){
+        //登出
+        session.removeAttribute("storeId");
+        session.removeAttribute("storeName");
+        session.removeAttribute("storeLogo");
+        session.removeAttribute("loginStatus");
+        session.removeAttribute("loginType");
 
     }
-
 
     @PostMapping("/editpwd")
-    public Store EditPwd(@RequestBody Store store){
-        return storeService.editStorePassword(store);
+    public Store EditPwd(HttpSession session,@RequestBody Store store){
+        if(checkStoreLogin(session,store.getStoreId())){
+            return storeService.editStorePassword(store);
+        }
+        return null;
     }
     @PostMapping("/editcard")
-    public Store EditCard(@RequestBody Store store){
-        return storeService.editStoreLoyaltyCard(store);
+    public Store EditCard(HttpSession session, @RequestBody Store store){
+        if(checkStoreLogin(session,store.getStoreId())){
+            return storeService.editStoreLoyaltyCard(store);
+        }
+        return null;
     }
     @PostMapping("/editstoreinfo")
-    public Store EditStoreInfo(@RequestBody Store store){
-        Store storeData = storeService.editStoreInfo(store);//update後丟回去瞧瞧
-        return storeData;
+    public Store EditStoreInfo(HttpSession session, @RequestBody Store store){
+        if(checkStoreLogin(session,store.getStoreId())){
+            return storeService.editStoreInfo(store);
+        }
+        return null;
     }
     @PostMapping("uploadLogo")
-    public void uploadLogo(@RequestParam("img")MultipartFile file,@RequestParam("storeId") Integer storeId) throws IOException {
+    public boolean uploadLogo(HttpSession session, @RequestParam("img")MultipartFile file,@RequestParam("storeId") Integer storeId) throws IOException {
 
-
+        if(checkStoreLogin(session,storeId)){
             storeService.editLogoByStoreId(file,storeId);
-
-
-
+            return true;
+        }
+        return false;
 
     }
 
@@ -104,12 +125,38 @@ public class StoreController {
 
     @PostMapping("/storerest")
     public List<Store> StoreList(@RequestBody String date) throws ParseException {
-        //列出2024-06-25沒有休息的店家
+        //列出yyyy-MM-dd沒有休息的店家
         return storeService.getStoreListWorking(date);
     }
 
 
 
+
+
+
+    public boolean IsStoreLogin(@SessionAttribute("loginType") String loginData) {
+        //看看是否為商家
+        return loginData.equals("store");
+
+    }
+    public boolean IsLogin(@SessionAttribute("loginStatus") boolean status) {
+        return status;
+    }
+
+
+    public boolean checkStoreLogin(HttpSession session,Integer storeId){
+        //登入中 是 商家登入 是 該商家
+        if(session.getAttribute("loginStatus") != null){
+            boolean status = (boolean) session.getAttribute("loginStatus");
+            String loginType = (String) session.getAttribute("loginType");
+
+            return IsLogin(status) && IsStoreLogin(loginType) && session.getAttribute("storeId").equals(storeId);
+
+
+        }
+        return false;
+
+    }
 
 
 }

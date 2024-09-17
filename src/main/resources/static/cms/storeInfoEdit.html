@@ -295,6 +295,10 @@
           dataType: "json",
           async: false,
           success: function (data) {
+            if(!data.successful){
+              //登入失敗
+              location.href = "./backstageLogin.html";
+            }
             console.log(data);
             vat.value = data.vat;
             storename.value = data.storeName;

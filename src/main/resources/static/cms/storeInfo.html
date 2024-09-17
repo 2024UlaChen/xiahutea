@@ -343,6 +343,14 @@
           dataType: "JSON",
           async: false,
           success: function (data) {
+            console.log(data.successful);
+            if(!data.successful){
+              //登入失敗
+              location.href = "./backstageLogin.html";
+            }
+
+
+
             document.querySelector(
               "#storeLoyaltyCard"
             ).href = `storeInfoEditLoyaltyCard.html?sotreid=${
@@ -396,6 +404,8 @@
           },
           err: function (data) {
             console.log("失敗");
+            console.log(data);
+
           },
         });
       }); //DOM END

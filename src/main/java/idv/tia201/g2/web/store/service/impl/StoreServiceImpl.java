@@ -60,10 +60,17 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     public Store loginStore(Store userData) {
+
         if(userData.getVat() == null || userData.getPassword() ==null) {return null;}
         Store data = storeDao.findByVat(userData.getVat());
         if( data == null  ) {return null;}
-        return data.getPassword().equals(userData.getPassword())? data:null;
+        if(data.getPassword().equals(userData.getPassword())){
+            //密碼正確 登入成功
+            data.setMessage("登入成功");
+            data.setSuccessful(true);
+            return data;
+        }
+        return null;
     }
 
 
@@ -106,7 +113,10 @@ public class StoreServiceImpl implements StoreService {
     @Override
     public Store findStoreById(Integer id) {
         //避免空指標例外  不該觸發
-        return storeDao.findById(id).orElse(null);
+        Store data = storeDao.findById(id).orElse(null);
+        if(data == null) {return null;}
+        data.setSuccessful(true);
+        return data;
     }
 
     @Override
@@ -147,6 +157,7 @@ public class StoreServiceImpl implements StoreService {
         oldDate.setIsTakeOrders(store.getIsTakeOrders());
 
         oldDate.setEmail(store.getEmail());
+
         return storeDao.save(oldDate);
     }
 
