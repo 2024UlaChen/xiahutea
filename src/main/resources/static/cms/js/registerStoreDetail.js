@@ -3,6 +3,7 @@ let storeIdEle = $("#storeId")
 let form = $("#form");
 let phoneError = $("#phoneError");
 let contactPhoneEle = $("#contactPhone")
+let formControlEle = $(".form-control")
 
 // 從網址抓參數
 function getParameter(parameter){
@@ -27,7 +28,7 @@ function init(){
             $("#storeRemark").val(data.storeRemark);
             $("#owner").val(data.contactPerson);
 
-            if(data.storeStatus == 0){
+            if(data.storeStatus === 0){
                 $(storeStatusEle).val(0);
                 $(storeStatusEle).removeAttr("disabled");
             }else{
@@ -35,6 +36,7 @@ function init(){
                 $(storeStatusEle).attr("disabled",true);
             }
         })
+    $("#submitBtn").attr("disabled",true);
 }
 
 //進入頁面就抓資料
@@ -52,16 +54,16 @@ $("#print").on("click",e=>{
 $("#modifyBtn").on("click",e=>{
     e.preventDefault();
     $(".form-control").removeAttr("disabled")
-    // $("textarea#storeRemark").removeAttr("disabled");
     $("input#vat").attr("disabled",true);
     $(storeIdEle).attr("disabled",true)
+    $("#submitBtn").removeAttr("disabled");
 })
 
 //點擊送出按鈕
 $(form).submit(e => {
     e.preventDefault();
     $(phoneError).text("")
-    $(".form-control").removeAttr("disabled")
+    $(formControlEle).removeAttr("disabled")
     let contactPhone = $(contactPhoneEle).val();
     let formData = new FormData(e.target);
 
@@ -71,24 +73,44 @@ $(form).submit(e => {
         return
     }
 
+    //渲染前端
     fetch("/registerstore/edit", {
         method: "POST",
         body: formData
     }).then(res => res.json()).then(data => {
-        console.log(data.successful);
-        console.log(data.message);
-        if (data.successful) {
-            swal.fire("更新成功!", "", "success");
-        } else {
+        if (!data.successful) {
             swal.fire("更新失敗!", data.message, "warning")
+            return;
         }
-    })
-    $(".form-control").attr("disabled",true);
+        if(data.storeStatus === 1){
+            swal.fire("更新成功",data.storeName + "已成為正式店家", "success");
+            location.replace("./registerStore.html")
+        }else if (data.storeStatus === 0){
+            swal.fire("更新成功!", data.storeName + "尚在申請中", "success");
+        }else{
+            swal.fire("更新成功!", data.storeName + "被拒絕申請", "success");
+        }
 
-    if($(storeStatusEle).val() == 0) {
+    })
+
+    //鎖住資料
+    $(formControlEle).attr("disabled",true);
+
+    //如果狀態為申請中，就可以再變動
+    if($(storeStatusEle).val() === "0") {
         $(storeStatusEle).removeAttr("disabled");
     }
 
+    // 鎖住送出按鈕
+    $("#submitBtn").attr("disabled",true);
+})
+
+//變更店家狀態即可送出
+$(storeStatusEle).change(function(e){
+    // console.log($(this).val());
+    if ($(this).val() !== 0 && $(contactPhoneEle).attr("disabled") === "disabled" ){
+        $("#submitBtn").removeAttr("disabled");
+    }
 })
 
 
