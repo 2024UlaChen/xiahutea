@@ -3,34 +3,34 @@ package idv.tia201.g2.web.coupon.controller;
 import idv.tia201.g2.web.coupon.service.CouponService;
 import idv.tia201.g2.web.coupon.vo.Coupon;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
-@RequestMapping("/coupon")
-public class couponController {
-    @Autowired
+@RequestMapping("coupon")
+public class CouponController {
+
     private CouponService couponService;
 
-    @PostMapping("/save")
-    public Coupon register(@RequestBody Coupon coupon) {
-        if(coupon == null) {
-            coupon = new Coupon();
-            coupon.setMessage("無優惠券資訊");
-            coupon.setSuccessful(false);
-            return coupon;
-        }
-        Coupon savedCoupon = couponService.saveCoupon(coupon);
-//        System.out.println("CouponId: "+savedCoupon.getCouponId());
-//        System.out.println("CouponName: "+savedCoupon.getCouponName());
-//        System.out.println("Discount: "+savedCoupon.getDiscount());
-//        System.out.println("CreateDate: "+savedCoupon.getCreateDate());
-//        System.out.println("ExpiredDate: "+savedCoupon.getExpiredDate());
-//        System.out.println("Message: "+savedCoupon.getMessage());
-//        System.out.println("isSuccessful: "+savedCoupon.isSuccessful());
-        return savedCoupon;
+    @Autowired
+    public CouponController(CouponService couponService) {
+        this.couponService = couponService;
+
     }
-    @GetMapping("/edit/{couponId}")
-    public Coupon edit(@PathVariable Integer couponId) {
-        return couponService.findCouponById(couponId);
+
+    @GetMapping("test")
+    public List<Coupon> t1() {
+        List<Integer> list = new ArrayList<>();
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        list.add(4);
+        return couponService.getCoupons(list);
+
     }
+
 }
