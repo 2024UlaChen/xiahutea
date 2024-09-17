@@ -15,6 +15,8 @@ public interface MemberService {
     //    編輯
     Member editMember(Member member);
 
+    Integer updateMemberByValidSatusAndCustomerRemark(Member member);
+
     //    編輯地址
     MemberAddress editMemberAddress(MemberAddress memberAddress);
 
@@ -23,9 +25,10 @@ public interface MemberService {
 
     List<Member> findQueryMember(Member member);
 
-    List<Member>  findMemberByValidStatus(Boolean memberValidStatus);
+    List<Member> findMemberByValidStatus(Boolean memberValidStatus);
+
     //    判斷是否存在會員
-    boolean isExistMember(Member member);
+    Boolean isExistMember(Member member);
 
     //取得單一會員資料
     Member findMemberById(Integer memberId);
@@ -34,13 +37,13 @@ public interface MemberService {
     List<MemberAddress> findAddressByMemberId(Integer memberId);
 
     //    儲存
-    boolean saveMember(Member member);
+    Boolean saveMember(Member member);
 
     //    存地址
-    boolean saveMemberAddress(MemberAddress memberAddress);
+    Boolean saveMemberAddress(MemberAddress memberAddress);
 
     //    刪地址
-    boolean deleteByMemberAddressId(Integer customerAddressId);
+    Boolean deleteByMemberAddressId(Integer customerAddressId);
 
 
 }

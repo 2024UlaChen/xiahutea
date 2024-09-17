@@ -15,11 +15,13 @@ const downloadBtn = document.querySelector("#cmsMemberDownload");
 function isCheckedSuccess(target) {
     target.previousElementSibling.textContent = "";
     target.previousElementSibling.classList.remove("checkInValid");
+    target.classList.remove("inputCheckInValid");
     return true;
 }
 
 function isCheckedFalse(target) {
     target.previousElementSibling.classList.add("checkInValid");
+    target.classList.add("inputCheckInValid");
     return false;
 }
 
@@ -52,6 +54,7 @@ function MemberIdValid(memberId) {
     })
 }
 
+// TODO - 動態query
 queryBtn.addEventListener("click", function () {
     if ((cmsQueryMemberNameTxt.value.trim() === "" && cmsQueryMemberIdTxt.value.trim() === "" &&
         cmsQueryMemberCellphoneTxt.value.trim() === "" && cmsQueryMemberStatusTxt.value === "default")) {
@@ -70,8 +73,8 @@ queryBtn.addEventListener("click", function () {
             }),
         }).then(res => res.json()).then(data => {
             $.each(data, function (index, item) {
-                let statusClassName = (item.validStatus) ? "statusIsValid" : "statusInValid";
-                let statusChiName = (item.validStatus) ? "生效" : "停權";
+                let statusClassName = (item.validStatus) ? "statusInValid" : "statusIsValid";
+                let statusChiName = (item.validStatus) ? "停權" : "生效";
                 queryMemberList += `
                 <tr data-listindex="${index}">
                     <td>
@@ -101,15 +104,6 @@ queryBtn.addEventListener("click", function () {
         });
 
     }
-    // TODO - add js vialation
-    // else if (!(MemberIdValid(cmsQueryMemberIdTxt) && phoneValid(cmsQueryMemberCellphoneTxt))) {
-    //     console.log(MemberIdValid(cmsQueryMemberIdTxt));
-    //     console.log(MemberIdValid(cmsQueryMemberIdTxt));
-    //
-    //     Swal.fire("請更正查詢資料", "", "error");
-    // }
-
-
 })
 
 
@@ -119,8 +113,8 @@ function getCmsMemberList() {
         .then(res => res.json())
         .then(data => {
             $.each(data, function (index, item) {
-                let statusClassName = (item.validStatus) ? "statusIsValid" : "statusInValid";
-                let statusChiName = (item.validStatus) ? "生效" : "停權";
+                let statusClassName = (item.validStatus) ? "statusInValid" : "statusIsValid";
+                let statusChiName = (item.validStatus) ? "停權" : "生效";
                 queryMemberList += `
                 <tr data-listindex="${index}">
                     <td>
@@ -151,23 +145,17 @@ function getCmsMemberList() {
 }
 
 
-//TODO
 function getCmsMemberInfoById(memberid) {
     fetch(`manage/` + memberid)
         .then(res => res.json())
         .then(data => {
-
             sessionStorage.setItem("memberDetail", JSON.stringify(data));
-            location.href="../cms/memberEdit.html";
+            location.href = "../cms/memberEdit.html";
         });
 }
 
-//TODO
 memberList.addEventListener("click", function (e) {
     if (e.target.classList.contains("btnEdit")) {
-        let nowItem = e.target.closest("tr");
-
-        // memberId
         e.target.closest("tr").querySelectorAll("td").forEach(item => {
             if (item.dataset.memberid !== undefined) {
                 getCmsMemberInfoById(item.dataset.memberid);
