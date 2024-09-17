@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
+import java.text.ParseException;
 import java.util.List;
 
 //RestController是組合註解 他等於Controller 加上 ResponseBody 就是一個RestController
@@ -101,6 +102,11 @@ public class StoreController {
         return storeService.findLogoById(storeid);
     }
 
+    @PostMapping("/storerest")
+    public List<Store> StoreList(@RequestBody String date) throws ParseException {
+        //列出2024-06-25沒有休息的店家
+        return storeService.getStoreListWorking(date);
+    }
 
 
 

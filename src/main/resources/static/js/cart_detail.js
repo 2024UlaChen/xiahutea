@@ -40,10 +40,10 @@ document.addEventListener("DOMContentLoaded",function(){
   let lightbox_content_el = document.getElementsByClassName("lightbox-content")[0];
   let confirm_delete_el = document.getElementById("confirm-delete");
   let cancel_delete_el = document.getElementById("cancel-delete");
-  //用全域變數用來裝cartItem(用來編輯)、currentItem(用來刪除)
+  //用全域變數用來裝cartItem(用來編輯)、currentItem(用來刪除)、loginMember(用來裝目前登入會員)
     let currentCartItem = null;
     let currentItem = null;
-
+    let loginMember = null;
 
   //取貨方式
   let pick_up_el = document.getElementsByClassName('pick-up')[0];
@@ -54,11 +54,14 @@ document.addEventListener("DOMContentLoaded",function(){
     let date_input_el = document.getElementById('myDatepicker');
 
   //優惠使用
-  let coupon_number_el = document.getElementsByClassName("coupon-number")[0];
+  // let coupon_number_el = document.getElementsByClassName("coupon-number")[0];
   let select_coupon_input_el = document.getElementsByClassName("select-coupon-input")[0];
   let select_membercard_input_el = document.getElementsByClassName("select-membercard-input")[0];
   let select_moneybag_input_el = document.getElementsByClassName("select-moneybag-input")[0];
   let moneybag_discount_number_el = document.getElementsByClassName("moneybag-discount-number")[0];
+  let couponDropdown_el = document.getElementsByClassName('coupon-dropdown')[0];
+  let couponSelect_el = document.getElementById('coupon-select');
+  let coupon_minus_number_el = document.getElementsByClassName('coupon-minus-number')[0];
   //結帳流程-2
   //取貨人
   let btn_backto_last_page_el = document.getElementsByClassName("btn-backto-last-page")[0];
@@ -81,10 +84,44 @@ document.addEventListener("DOMContentLoaded",function(){
   let btn_submit_order_el = document.getElementsByClassName("btn-submit-order")[0];
   let btn_modal_close_el = document.getElementsByClassName("btn_modal_close")[0];
 
-  //一進到結帳選擇頁面先用localstorage抓DB以及獲取目前登入用戶ID
+  //一進到結帳選擇頁面先用localstorage抓DB以及獲取sessionstorage目前登入用戶ID
   //TODO 獲得用戶ID以抓取資料渲染
-  // const customerid = localStorage.getItem('customerId');
-  // fetch(`/cart/checkoutlist/{customerID}`)
+  const customer = sessionStorage.getItem('customer');
+  if(customer){
+      let customerData = JSON.parse(customer);
+      let customerId = customerData.customerId;
+      fetch(`/cart/checkoutlist/${customerId}`)
+          .then(response=>{
+              if (!response.ok) {
+                  return response.json().then(errorData => {
+                      throw new Error(errorData.message);
+                  });
+              }
+              return response.json();
+          })
+          .then(member=>{
+              if(member ==null){
+                  Swal.fire({
+                      title: '查無此會員資料',
+                      text: '查無此會員資料 ID='+customerid,
+                      icon: 'error'
+                  });
+              }
+              console.log('Member Details:', member);
+              //將取得會員資訊儲存
+              loginMember = member;
+              //放入會員資料
+              customer_name_el.textContent = member.nickname;
+          })
+          .catch(error => {
+              Swal.fire({
+                  title: '取得會員數據異常',
+                  text: error.message,
+                  icon: 'error'
+              });
+          })
+    }
+
 
   //獲得localstorage資料(購物車)
   const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
@@ -143,24 +180,28 @@ document.addEventListener("DOMContentLoaded",function(){
 
       //優惠使用(優惠券、會員卡、會員錢包)
       select_coupon_input_el.addEventListener("click", function () {
-        coupon_number_el.disabled = false;
-        coupon_number_el.focus();
+          couponSelect_el.disabled=false;
+          getcoupons(loginMember.customerId);
       })
-      coupon_number_el.addEventListener("focus", function () {
-        coupon_number_el.placeholder = "";
-      });
-      coupon_number_el.addEventListener("blur", function () {
-        if (coupon_number_el.value === "") {
-          coupon_number_el.placeholder = "請輸入優惠券序號";
-        }
-      });
+
+      //點選優惠券時動態更新結帳明細折抵金額
+      couponSelect_el.addEventListener('change',function (){
+          let selectedOption = couponSelect_el.options[couponSelect_el.selectedIndex];
+          let discount = selectedOption.getAttribute('data-discount');
+          coupon_minus_number_el.textContent = `$${discount}`;
+      })
 
       //TODO 加入點擊事件get會員卡點數 點選會員卡，
       select_membercard_input_el.addEventListener("click",function (){
-
+          //清除優惠券欄位
+          couponSelect_el.innerHTML = '<option disabled selected >請選擇優惠券</option>';
+          coupon_minus_number_el.textContent = '$0';
+          couponSelect_el.disabled=true;
       })
       //TODO 加入點擊事件get會員錢包餘額
+
       select_moneybag_input_el.addEventListener("click",function (){
+          couponSelect_el.disabled=true;
         moneybag_discount_number_el.disabled =false;
         moneybag_discount_number_el.focus();
       })
@@ -359,7 +400,7 @@ document.addEventListener("DOMContentLoaded",function(){
     //         console.error('Error:', error);
     //       });
     // }
-  //localstorage購物車資料分類
+  //F01 localstorage購物車資料分類
   function sortCartItems(cartItems){
     const groupedItems = [];
     //將全部購物車項目依序讀出分類、累加
@@ -389,7 +430,7 @@ document.addEventListener("DOMContentLoaded",function(){
     });
     return groupedItems;
   }
-    //用商品ID抓商品資料及店家資訊 sortCartItems->findproductbyid
+    //F02 用商品ID抓商品資料及店家資訊 sortCartItems->findproductbyid
     function findproductbyid(productIds){
       fetch('/cart/checkoutlist/findByproductIds', {
         method: 'POST',
@@ -421,12 +462,16 @@ document.addEventListener("DOMContentLoaded",function(){
             renderproductdetail(groupedItems,products);
           })
           .catch(error => {
-            console.error('獲取商品時出錯:', error);
-            alert('進入購物結帳失敗');
+              console.error('獲取商品時出錯:', error);
+              Swal.fire({
+                  title: '錯誤',
+                  text: error,
+                  icon: 'error'
+              });
           });
     }
 
-    //用商品得到的商店ID來抓店家資訊
+    //F03 用商品得到的商店ID來抓店家資訊
     //findproductbyid->findstorebyid
     function findstorebyid(storeId){
         fetch('/cart/checkoutlist/findByStoreId',{
@@ -447,23 +492,102 @@ document.addEventListener("DOMContentLoaded",function(){
                 throw new Error('找不到商店資料');
               }
               console.log('Store Details:', store);
+              //判斷現在是不是營業時間及是否接單
+              //   if (!isinOpeningHours(store.openingHours, store.closingHours)
+              //       || !store.isTakeOrders) {
+              //       Swal.fire({
+              //           title: '錯誤',
+              //           text: `目前該店 ${store.storeName} 不在營業時間或不接單！`,
+              //           icon: 'error',
+              //           confirmButtonText: '確定'
+              //       }).then(() => {
+              //           window.location.href = 'homePage.html';
+              //           // 之後改成跳回上一頁
+              //           // window.history.back();
+              //       });
+              //   }
+                //渲染店名
               store_name_el.innerHTML = store.storeName || '無此店家';
+                //處理商家logo
+              if(store.logo){
+                  //將圖片轉base64格式
+                  // const base64Logo = arrayBufferToBase64(store.logo);
+                  const imageFormat = detectImageFormat(store.logo);
+                  store_img_el.src = `data:image/${imageFormat};base64,${store.logo}`;
+              }
+              //是否提供外送選項
               updateDeliveryOptions(store.isDelivery);
             })
             .catch(error => {
               console.error('Error:', error);
             });
     }
-    //判斷店家是否有外送選項
+    //F04 判斷圖片檔案格式
+    function detectImageFormat(base64String) {
+        if (base64String.startsWith("data:image/jpeg")) {
+            return 'jpeg';
+        } else if (base64String.startsWith("data:image/png")) {
+            return 'png';
+        }
+        // 如果格式無法識別，返回png
+        return 'png';
+    }
+    //轉換店家圖片格式
+    //findproductbyid->findstorebyid>arrayBufferToBase64
+    // function arrayBufferToBase64(buffer) {
+    //     let binary = '';
+    //     let bytes = new Uint8Array(buffer);
+    //     let len = bytes.byteLength;
+    //     for (let i = 0; i < len; i++) {
+    //         binary += String.fromCharCode(bytes[i]);
+    //     }
+    //     return window.btoa(binary);
+    // }
+    //F05 判斷是否目前時間為營業時間
+    function isinOpeningHours(openingHours, closingHours) {
+        const now = new Date();
+        //["HH", "MM", "SS"]->[HH, MM, SS]->[openHours(HH), openMinutes(MM)]
+        const [openHours, openMinutes] = openingHours.split(':').map(Number);
+        const [closeHours, closeMinutes] = closingHours.split(':').map(Number);
+
+        // Construct Date objects for opening and closing times
+        const openTime = new Date(now);
+        openTime.setHours(openHours, openMinutes, 0, 0);
+
+        const closeTime = new Date(now);
+        closeTime.setHours(closeHours, closeMinutes, 0, 0);
+
+        // 商店的營業時間跨越午夜情形
+        if (closeTime < openTime) {
+            closeTime.setDate(closeTime.getDate() + 1);
+        }
+        //判斷現在時間是否落在營業區間返回true,false
+        return now >= openTime && now <= closeTime;
+    }
+
+    //F06 判斷店家是否有外送選項
     //findproductbyid->findstorebyid->updateDeliveryOptions
     function updateDeliveryOptions(isDelivery){
       if (isDelivery){
+        //獲得用戶常用地址
+
+        //外送(常用地址)
+        // const carryoutdefalut = document.createElement('div');
+        // carryoutdefalut.className ='carry-out-default';
+        // carryoutdefalut.innerHTML=`
+        //     <input class="carry-out-default-radio" type="radio" name="delivery" id="carry-out-default">
+        //     <label class="carry-out-default-label" for="carry-out-default" style="padding-top: 10px">外送(常用地址)</label>
+        //     <div class="common-address-options" style="display: none;">
+        //     </div>
+        //
+        //     `;
+        //外送(自填地址)
         const carryoutdiv = document.createElement('div');
         carryoutdiv.className = 'carry-out';
         carryoutdiv.innerHTML=`
           <div class="carry-out-selection">
               <input class="carry-out-radio" type="radio" name="delivery" id="carry-out">
-              <label class="carry-out-label" for="carry-out" style="padding-top: 10px">外送</label>
+              <label class="carry-out-label" for="carry-out" style="padding-top: 10px">外送(自填地址)</label>
           </div>
            <div class="carry-out-address">
                <input type="text" class="address" placeholder="請輸入地址" maxlength="255" disabled>
@@ -495,7 +619,11 @@ document.addEventListener("DOMContentLoaded",function(){
         })
       }
     }
-    //用Localstotage中的購物車商品和返回的商品資訊生成商品明細
+    //用customerID獲得常用地址
+    // function getAddressbyId(customer){
+    //
+    // }
+    //F07 用Localstotage中的購物車商品和返回的商品資訊生成商品明細
     //sortCartItems->findproductbyid->renderproductdetail
     function renderproductdetail(groupedItems, products){
     // 建立商品ID到商品資訊的映射
@@ -590,7 +718,7 @@ document.addEventListener("DOMContentLoaded",function(){
       }
 
 
-    //燈箱:編輯事件處理
+    //F08 燈箱:編輯事件處理
     function handlelightbox(){
           //先檢查全域變數是否存在cartItem
         if (!currentCartItem) return;
@@ -672,7 +800,7 @@ document.addEventListener("DOMContentLoaded",function(){
                 currentCartItem = null;
 
         }
-    //判斷冰塊
+    //F11 判斷冰塊
       function getIceOption(Item) {
         if (Item.normal_ice) return '正常冰';
         if (Item.less_ice) return '少冰';
@@ -682,7 +810,7 @@ document.addEventListener("DOMContentLoaded",function(){
         if (Item.hot) return '熱飲';
         return '未選擇';
       }
-    //判斷甜度
+    //F12 判斷甜度
       function getSugarOption(Item) {
         if (Item.full_sugar) return '全糖';
         if (Item.less_sugar) return '少糖';
@@ -691,7 +819,7 @@ document.addEventListener("DOMContentLoaded",function(){
         if (Item.no_sugar) return '無糖';
         return '未選擇';
       }
-    //判斷加料
+    //F13 判斷加料
       function getAddOns(Item) {
         if (Item.pearl) return '加珍珠';
         if (Item.pudding) return '加布丁';
@@ -701,7 +829,7 @@ document.addEventListener("DOMContentLoaded",function(){
         return '無加料';
       }
 
-      //更新localstorage
+      //F09 更新localstorage
       //renderproductdetail->handlelightbox->updateLocalStorage
         function updateLocalStorage() {
             //先抓目前頁面上所有商品項
@@ -743,7 +871,7 @@ document.addEventListener("DOMContentLoaded",function(){
 
         }
 
-        //表單填送:處理商品運送方式及取貨時間
+        //F10表單填送:處理商品運送方式及取貨時間
         function checkreceivemethod(){
         //抓到目前自取或外送選擇
         const pickUpInput = document.querySelector('input[name="delivery"]:checked');
@@ -797,6 +925,24 @@ document.addEventListener("DOMContentLoaded",function(){
             };
             localStorage.setItem('reciverMethodInfo', JSON.stringify(reciverMethodInfo));
         }
+        //F14 獲得的優惠券動態生成選項
+        function getcoupons(customerId){
+            fetch(`/cart/getCoupon/${customerId}`)
+                .then(response => response.json())
+                .then(coupons => {
+                    console.log("coupons : ",coupons)
+                    coupons.forEach(coupon => {
+                        let option = document.createElement('option');
+                        option.value = coupon.couponId;
+                        option.textContent = coupon.couponName;
+                        option.setAttribute('data-discount', coupon.discount);
+                        couponSelect_el.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Error loading coupons:', error));
+        }
+        //F20 計算訂單金額
+
 
 
     // 獲取尺寸的輔助函數
