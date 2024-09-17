@@ -43,7 +43,7 @@ addrCollapseBtn.addEventListener("click", function () {
 })
 
 function loadCmsMemberInfo() {
-    let sessionDetail = JSON.parse(sessionStorage.getItem("memberDetail"));
+    let sessionDetail = JSON.parse(sessionStorage.getItem("cmsMemberDetail"));
     cmsMemberBirthdayTxt.value = sessionDetail.birthday.replaceAll("/", "-");
     CmsMemberCreateDateTxt.value = sessionDetail.createDate.replaceAll("/", "-");
     cmsMemberCarrierTxt.value = sessionDetail.customerCarrier;
@@ -78,14 +78,14 @@ cancelBtn.addEventListener("click", function () {
         cancelButtonText: "否"
     }).then((result) => {
         if (result.isConfirmed) {
-            sessionStorage.removeItem("memberDetail");
+            sessionStorage.removeItem("cmsMemberDetail");
             location.href = "./memberManage.html"
         }
     });
 });
 
 function updateMemberInfo() {
-    let changeSessionDetail = JSON.parse(sessionStorage.getItem("memberDetail"));
+    let changeSessionDetail = JSON.parse(sessionStorage.getItem("cmsMemberDetail"));
     const memberId = changeSessionDetail.customerId;
     if (changeSessionDetail.customerRemark === cmsMemberRemarkTxt.value && changeSessionDetail.validStatus === cmsMemberIsValidTxt.checked) {
         Swal.fire("與目前設定無差異", "", "error");
@@ -107,14 +107,15 @@ function updateMemberInfo() {
                     fetch(`manage/${memberId}`)
                         .then(res => res.json())
                         .then(data => {
-                            sessionStorage.removeItem("memberDetail");
-                            sessionStorage.setItem("memberDetail", JSON.stringify(data));
+                            sessionStorage.removeItem("cmsMemberDetail");
+                            sessionStorage.setItem("cmsMemberDetail", JSON.stringify(data));
                         })
                 }else{
+                    //TODO
 
                 }
-                // sessionStorage.removeItem("memberDetail");
-                // sessionStorage.setItem("memberDetail", JSON.stringify(data));
+                // sessionStorage.removeItem("cmsMemberDetail");
+                // sessionStorage.setItem("cmsMemberDetail", JSON.stringify(data));
                 // loadCmsMemberInfo();
             })
         Swal.fire("已儲存!", "", "success");

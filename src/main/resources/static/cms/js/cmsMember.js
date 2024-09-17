@@ -149,7 +149,7 @@ function getCmsMemberInfoById(memberid) {
     fetch(`manage/` + memberid)
         .then(res => res.json())
         .then(data => {
-            sessionStorage.setItem("memberDetail", JSON.stringify(data));
+            sessionStorage.setItem("cmsMemberDetail", JSON.stringify(data));
             location.href = "../cms/memberEdit.html";
         });
 }
