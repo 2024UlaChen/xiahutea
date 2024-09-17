@@ -8,7 +8,6 @@ let storeStatus = $("#storeStatus")
 function searchRegisterStore(url) {
     fetch(url).then(res => res.json())
         .then(core => {
-            console.log(core)
             if (core.data.content.length === 0) {
                 //sweetAlert
                 swal.fire("查無資料!", "請確認查詢資訊", "warning");
@@ -117,7 +116,6 @@ $(submitEle).on("click", e => {
     if ($(storenameEle).val()) {
         url += "&storeName=" + $(storenameEle).val();
     }
-    console.log(url)
     searchRegisterStore(url);
 })
 
