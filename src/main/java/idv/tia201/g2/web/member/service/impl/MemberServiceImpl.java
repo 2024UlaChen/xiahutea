@@ -63,7 +63,6 @@ public class MemberServiceImpl implements MemberService {
             member.setSuccessful(false);
             return member;
         }
-
         member.setMessage("登入成功");
         member.setSuccessful(true);
         return member;
@@ -72,6 +71,16 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Member editMember(Member member) {
         return null;
+    }
+
+    @Override
+    public Integer updateMemberByValidSatusAndCustomerRemark(Member member) {
+        if (member.getCustomerRemark() == null) {
+            member.setMessage("customer remark data is null");
+            member.setSuccessful(false);
+            return 0;
+        }
+        return memberDao.updateMemberInfo(member.getCustomerId(), member.getValidStatus(), member.getCustomerRemark());
     }
 
     @Override
@@ -86,7 +95,7 @@ public class MemberServiceImpl implements MemberService {
 
 
     @Override
-    public boolean isExistMember(Member member) {
+    public Boolean isExistMember(Member member) {
         if (ObjectUtils.isEmpty(memberDao.findMemberByPhone(member.getCustomerPhone()))) {
             return false;
         } else {
@@ -100,22 +109,21 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public boolean saveMember(Member member) {
+    public Boolean saveMember(Member member) {
         return false;
     }
 
     @Override
-    public boolean saveMemberAddress(MemberAddress memberAddress) {
+    public Boolean saveMemberAddress(MemberAddress memberAddress) {
         return false;
     }
 
     @Override
-    public boolean deleteByMemberAddressId(Integer customerAddressId) {
+    public Boolean deleteByMemberAddressId(Integer customerAddressId) {
         try {
             int resultCount = memberDao.deleteByMemberAddressId(customerAddressId);
             return resultCount > 0;
         } catch (Exception e) {
-//            logger.error();
             return false;
         }
     }
@@ -132,7 +140,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public List<Member> findQueryMember(Member member) {
-        //        TODO REVISE
+//        TODO REVISE
         if (!ObjectUtils.isEmpty(member.getValidStatus())) {
             return findMemberByValidStatus(member.getValidStatus());
         } else if (!StringUtils.isEmpty(member.getNickname())) {

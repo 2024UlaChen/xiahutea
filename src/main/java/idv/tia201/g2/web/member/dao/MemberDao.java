@@ -16,21 +16,23 @@ public interface MemberDao {
 
     Member findMemberForLogin(String username, String password);
 
-    List<Member> findMemberByValidStatus(boolean status);
+    List<Member> findMemberByValidStatus(Boolean status);
 
     List<Member> findMemberByNickname(String nickname);
 
-    List<Member> findMemberByQueryParam(String nickname, Integer memberId, String phone, boolean status);
+    List<Member> findMemberByQueryParam(String nickname, Integer memberId, String phone, Boolean status);
 
     List<MemberAddress> findMemberAddressByMemberId(String memberId);
 
     //update
     boolean updateMemberInfo(Member member);
 
+    Integer updateMemberInfo(Integer memberId, Boolean status, String memberRemark);
+
     boolean updateMemberAddress(MemberAddress memberAddress);
 
     //delete
-    int deleteByMemberAddressId(int memberId);
+    Integer deleteByMemberAddressId(Integer memberId);
 
     //create
     boolean createMember(Member member);
