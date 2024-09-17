@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import static idv.tia201.g2.web.store.util.StoreToRegisterStore.convertPage;
+import static idv.tia201.g2.web.store.util.StoreToRegisterStore.convertToRegisterStore;
 
 @RestController
 @RequestMapping("/registerstore")
@@ -17,7 +18,7 @@ public class RegisterStoreController {
     @Autowired
     private RegisterStoreService registerStoreService;
 
-    @PostMapping
+    @PostMapping("/register")
     public Store RegisterStore(Store store) {
         store.setSuccessful(false);
         store.setMessage("加入失敗");
@@ -25,7 +26,7 @@ public class RegisterStoreController {
         return store;
     }
 
-    @GetMapping("/registerStoreList")
+    @GetMapping("/registerstorelist")
     public Core RegisterStoreList(
             @RequestParam Integer storeStatus,
             @RequestParam(required = false) String vat,
@@ -43,11 +44,21 @@ public class RegisterStoreController {
         return core;
     }
 
-    @GetMapping("/registerStoreDetail")
+    @GetMapping("/registerStoredetail")
     public RegisterStoreDTO RegisterStoreDetail(@RequestParam Integer storeId) {
         Store store = new Store();
+
         store.setStoreId(storeId);
         RegisterStoreDTO registerStoreDTO = registerStoreService.searchRegisterStoreDetail(store);
         return registerStoreDTO;
     }
+
+    @PostMapping("/edit")
+    public RegisterStoreDTO editRegisterStore(Store store) {
+        store.setSuccessful(false);
+        Store save = registerStoreService.editRegisterStore(store);
+        RegisterStoreDTO registerStoreDTO = convertToRegisterStore(save);
+        return registerStoreDTO;
+    }
+
 }
