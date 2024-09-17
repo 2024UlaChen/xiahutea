@@ -55,7 +55,7 @@ public class MemberDaoImpl implements MemberDao {
     }
 
     @Override
-    public List<Member> findMemberByValidStatus(boolean status) {
+    public List<Member> findMemberByValidStatus(Boolean status) {
         final String sql = "select * from CUSTOMER where valid_status = :status ";
         return session
                 .createNativeQuery(sql, Member.class)
@@ -64,7 +64,7 @@ public class MemberDaoImpl implements MemberDao {
     }
 
     @Override
-    public List<Member> findMemberByQueryParam(String nickname, Integer memberId, String phone, boolean status) {
+    public List<Member> findMemberByQueryParam(String nickname, Integer memberId, String phone, Boolean status) {
 //        TODO REVISE
         final String sql = "select * from CUSTOMER where valid_status = :status and " +
                 " nickname = :nickname and  CUSTOMER_PHONE = :phone and  customer_id = :memberId ";
@@ -89,13 +89,26 @@ public class MemberDaoImpl implements MemberDao {
     }
 
     @Override
+    public Integer updateMemberInfo(Integer memberId, Boolean status, String memberRemark) {
+        final String sql = "update CUSTOMER set valid_status = :status , " +
+                " customer_remark = :memberRemark  where  customer_id = :memberId ";
+        return session
+                .createNativeQuery(sql, Member.class)
+                .setParameter("status", status)
+                .setParameter("memberRemark", memberRemark)
+                .setParameter("memberId", memberId)
+                .executeUpdate();
+
+    }
+
+    @Override
     public boolean updateMemberAddress(MemberAddress memberAddress) {
         session.merge(memberAddress);
         return true;
     }
 
     @Override
-    public int deleteByMemberAddressId(int memberAddressId) {
+    public Integer deleteByMemberAddressId(Integer memberAddressId) {
         MemberAddress memberAddress = session.load(MemberAddress.class, memberAddressId);
         session.remove(memberAddress);
         return 1;
