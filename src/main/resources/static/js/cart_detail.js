@@ -942,9 +942,7 @@ document.addEventListener("DOMContentLoaded",function(){
                 .catch(error => console.error('Error loading coupons:', error));
         }
         //F20 計算訂單金額
-        function Calculatetotal(){
 
-        }
 
 
     // 獲取尺寸的輔助函數
