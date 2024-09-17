@@ -40,41 +40,50 @@
 }
 
 /*Carrier*/
+/*for sweet alert change*/
+.sweetAlertFont {
+    font-size: 16px;
+    font-weight: bold;
+}
+.checkInValid {
+    color: #dc3545;
+    font-weight: bold;
+}
+/*carrier normal setting*/
 
-.memberCarrier > div {
+.memberCarrier div {
     display: flex;
     justify-content: center;
     margin-top: 1%;
 }
 
-.memberCarrier > div span {
+.memberCarrier div span {
     display: flex;
     align-items: center;
     margin-right: 2%;
 }
 
-.memberCarrier div > button {
-    margin-left: 2%;
+.memberCarrier div button {
     background-color: white;
     border: transparent 1px solid;
 
 }
 
-.memberCarrier div button > i {
+.memberCarrier div button i {
     font-size: 150%;
     vertical-align: center;
     color: #73B4BA;
 
 }
 
-.memberCarrier div > button:hover, .memberCarrier div button > i:hover {
+.memberCarrier div button:hover, .memberCarrier div button i:hover {
     cursor: pointer;
     background-color: #F5F5F5;
     color: #FAC792;
     border-radius: 20px;
 }
 
-.memberCarrier div > button:focus {
+.memberCarrier div button:focus {
     border: transparent 1px solid !important;
 }
 
