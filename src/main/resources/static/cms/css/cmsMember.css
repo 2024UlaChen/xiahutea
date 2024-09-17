@@ -132,9 +132,16 @@
     padding: 10%;
 
 }
-.valid{
+
+.statusIsValid {
     background-color: #28a745;
 }
-.inValid{
+
+.statusInValid {
     background-color: #6c757d;
+}
+
+.checkInValid {
+    color: #dc3545;
+    font-weight: bold;
 }

@@ -41,28 +41,33 @@
         <section class="content">
             <div class="card">
                 <div class="card-header">
-                    <div class="row">
+                    <div class="row" id="cmsQueryBar">
                         <div class="form-group col-sm-3">
-                            <label for="cmsQueryMemberName">顧客姓名:</label>
+                            <label for="cmsQueryMemberName">顧客暱稱:</label>
+                            <span class="errorTip"></span>
                             <input type="text" class="form-control form-control-lg" id="cmsQueryMemberName"
                                    name="cmsQueryMemberName"
                                    placeholder="姓名">
                         </div>
                         <div class="form-group col-sm-3">
-                            <label for="cmsQueryMemberAccount">顧客帳號:</label>
-                            <input type="text" class="form-control form-control-lg" id="cmsQueryMemberAccount"
-                                   name="cmsQueryMemberAccount" placeholder="帳號">
+                            <label for="cmsQueryMemberId">顧客編號:</label>
+                            <span class="errorTip"></span>
+                            <input type="text" class="form-control form-control-lg" id="cmsQueryMemberId"
+                                   name="cmsQueryMemberId" placeholder="編號" data-error="編號輸入錯誤">
                         </div>
                         <div class="form-group col-sm-3">
                             <label for="cmsQueryMemberCellphone">手機:</label>
-                            <input type="text" class="form-control form-control-lg" id="cmsQueryMemberCellphone"
+                            <span class="errorTip"></span>
+                            <input type="text" class="form-control form-control-lg " id="cmsQueryMemberCellphone"
+                                   required
+                                   maxlength="10" min="10" pattern="[0-9]{10}" data-error="手機輸入錯誤"
                                    name="cmsQueryMemberCellphone" placeholder="手機">
                         </div>
                         <div class="form-group col-sm-2">
                             <label for="cmsQueryMemberStatus">狀態:</label>
                             <select class="form-control form-control-lg" id="cmsQueryMemberStatus">
-                                <option selected disabled>請選擇</option>
-                                <option value="success">生效</option>
+                                <option selected value="default">請選擇</option>
+                                <option value="true">生效</option>
                                 <option value="false">停權</option>
                             </select>
                         </div>
@@ -80,8 +85,8 @@
                     <table class="table table-bordered table-striped">
                         <thead>
                         <tr>
-                            <th class="col-sm-2"> 顧客姓名</th>
-                            <th class="col-sm-2"> 顧客帳號</th>
+                            <th class="col-sm-2"> 顧客暱稱</th>
+                            <th class="col-sm-2"> 顧客編號</th>
                             <th class="col-sm-3"> 顧客信箱</th>
                             <th class="col-sm-3"> 顧客手機</th>
                             <th class="col-sm-1"> 狀態</th>
@@ -148,6 +153,7 @@
 <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
 <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
 
 <script src="plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
@@ -160,6 +166,8 @@
 <script src="plugins/jszip/jszip.min.js"></script>
 <script src="plugins/pdfmake/pdfmake.min.js"></script>
 <script src="plugins/pdfmake/vfs_fonts.js"></script>
+<script src="plugins/sweetalert2/sweetalert2.all.min.js"></script>
+
 <script src="dist/js/adminlte.js"></script>
 <script src="dist/js/demo.js"></script>
 <script src="js/cmsMember.js"></script>

@@ -27,18 +27,54 @@ public class MemberDaoImpl implements MemberDao {
 
     @Override
     public Member findMemberByPhone(String phone) {
-        //todo revise return data
-        return session.get(Member.class, phone);
+        final String sql = "select * from CUSTOMER where CUSTOMER_PHONE = :phone ";
+        return session
+                .createNativeQuery(sql, Member.class)
+                .setParameter("phone", phone)
+                .getResultList().get(0);
     }
 
     @Override
-    public Member findMemberForLogin(String username, String password) {
-        return null;
+    public List<Member> findMemberByNickname(String nickname) {
+        final String sql = "select * from CUSTOMER where nickname = :nickname ";
+        return session
+                .createNativeQuery(sql, Member.class)
+                .setParameter("nickname", nickname)
+                .getResultList();
     }
 
     @Override
-    public List<Member> findByMemberValidStatus(boolean status) {
-        return List.of();
+    public Member findMemberForLogin(String phone, String password) {
+        //todo follow - need to revise
+        final String sql = "select * from CUSTOMER where CUSTOMER_PHONE = :phone and CUSTOMER_PASSWORD = :password";
+        return session
+                .createNativeQuery(sql, Member.class)
+                .setParameter("phone", phone)
+                .setParameter("password", password)
+                .getResultList().get(0);
+    }
+
+    @Override
+    public List<Member> findMemberByValidStatus(boolean status) {
+        final String sql = "select * from CUSTOMER where valid_status = :status ";
+        return session
+                .createNativeQuery(sql, Member.class)
+                .setParameter("status", status)
+                .getResultList();
+    }
+
+    @Override
+    public List<Member> findMemberByQueryParam(String nickname, Integer memberId, String phone, boolean status) {
+//        TODO REVISE
+        final String sql = "select * from CUSTOMER where valid_status = :status and " +
+                " nickname = :nickname and  CUSTOMER_PHONE = :phone and  customer_id = :memberId ";
+        return session
+                .createNativeQuery(sql, Member.class)
+                .setParameter("nickname", nickname)
+                .setParameter("phone", phone)
+                .setParameter("memberId", memberId)
+                .setParameter("status", status)
+                .getResultList();
     }
 
     @Override
@@ -76,4 +112,5 @@ public class MemberDaoImpl implements MemberDao {
         session.persist(memberAddress);
         return true;
     }
+
 }

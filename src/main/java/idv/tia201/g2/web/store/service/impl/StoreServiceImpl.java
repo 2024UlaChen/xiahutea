@@ -38,8 +38,13 @@ public class StoreServiceImpl implements StoreService {
     public List<StoreViewModel> GetStoreViewModels() {
 
         List<Store> list = findAll();
+
+
         List<StoreViewModel> storeViewModels = new ArrayList<>();
-        StoreViewModel storeViewModel = new StoreViewModel(); ;
+
+
+        StoreViewModel storeViewModel = new StoreViewModel();
+
         for(Store store : list) {
             BeanUtils.copyProperties(store, storeViewModel);
             storeViewModel.setStoreId(store.getStoreId());
@@ -48,7 +53,6 @@ public class StoreServiceImpl implements StoreService {
             storeViewModel.setVat(store.getVat());
             storeViewModel.setContactPhone(store.getContactPhone());
             storeViewModel.setStoreStatus(store.getStoreStatus());
-
             storeViewModels.add(storeViewModel);
         }
         return storeViewModels;
@@ -196,14 +200,35 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public List<Store> getStoreListNoWorking(String dateStr) throws ParseException {
-        //取得休息店家
+    public List<Store> getStoreListWorking(String dateStr) throws ParseException {
+        //取得上班店家
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-
         Date date = formatter.parse(dateStr);
 
-        return storeCalendarRepository.findByStoreHoliday(date);
+        List<Store> AllStore = storeDao.findAll();
+        List<Store> NoWorkingList = storeCalendarRepository.findByStoreHoliday(date);
+        List<Integer> allIdList = new ArrayList<>();
+        for(Store store : AllStore) {
+            allIdList.add(store.getStoreId());
+        }
+
+        List<Integer> NoWorkingIdlist = new ArrayList<>();
+        for(Store store : NoWorkingList) {
+            Integer id = store.getStoreId();
+            if(!NoWorkingIdlist.contains(id)) {
+                NoWorkingIdlist.add(id);
+            }
+        }
+        allIdList.removeAll(NoWorkingIdlist); //取得上班店家Id清單
+        List<Store> WorkingList = new ArrayList<>();
+        for(Integer id : allIdList) {
+            WorkingList.add(findStoreById(id));
+        }
+
+
+
+        return WorkingList;
 
     }
     public List<Store> getAllData(){
@@ -212,6 +237,8 @@ public class StoreServiceImpl implements StoreService {
     public List<Store> getAllStoreById(Integer Id){
         return storeCalendarRepository.findStoreByStoreId(Id);
     }
+
+
 
 
 }
