@@ -1,13 +1,147 @@
-.btn-default {
-    background-color: #F8F9FA;
+/*button setting*/
+.btn {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 40px;
+    font-size: 16px;
+    margin-right: 1%;
+    border-radius: 5px;
 }
 
-/*.btn-block {*/
-/*    width: 100px;*/
-/*    font-weight: bolder;*/
-/*}*/
+.btnSave {
+    background-color: #73B4BA;
+    border: 1px solid #73B4BA;
+    color: white;
+}
+
+.btnSave:hover {
+    background-color: white;
+    border: 1px solid #73B4BA;
+    color: #73B4BA;
+}
+
+.btnEdit {
+    background-color: #FAC792;
+    border: 1px solid #FAC792;
+    color: white;
+}
+
+.btnEdit:hover {
+    background-color: white;
+    border: 1px solid #FAC792;
+    color: #f38f27;
+}
+
+.btnCancel, .btnDownload, .btnQuery {
+    background-color: #6c757d;
+    border: 1px solid #6c757d;
+    color: white;
+}
+
+.btnCancel:hover, .btnDownload:hover, .btnQuery:hover {
+    background-color: white;
+    border: 1px solid #6c757d;
+    color: #6c757d;
+}
+
+.hidden {
+    display: none;
+}
+
 .userAction {
-    padding-top: 30px;
     display: flex;
     justify-content: center;
+    align-items: flex-end;
+}
+
+.userAction button {
+    margin-right: 2%;
+}
+
+.cmsSex {
+    font-size: 16px;
+    display: block;
+}
+
+.cmsSex > div {
+    padding-right: 1%;
+    display: inline-block;
+}
+
+/*otherSetting*/
+.remind {
+    color: #9b9b9b;
+    font-size: 12px;
+}
+
+.warn {
+    display: inline;
+    color: #ff5e7d;
+}
+
+.hidden {
+    display: none;
+}
+
+/*MemberSetting*/
+
+.cmsMemberSetting {
+    display: flex;
+    justify-content: end;
+}
+
+.card {
+    position: sticky;
+    top: 0;
+}
+
+.memberSettingBody {
+    margin: 0 auto;
+    width: 95%;
+    box-shadow: 0 0 12px 0 rgba(2, 2, 2, 0.16);
+}
+
+.custom-file-input:lang(en), .custom-file-label::after {
+    display: none;
+}
+
+#cmsAddrList {
+    padding: 0;
+    list-style-type: none;
+}
+
+/*member manage*/
+
+.table td, .table th {
+    vertical-align: middle;
+    font-size: 16px;
+
+}
+
+
+.memberStatus {
+    font-size: 16px;
+    display: inline-block;
+    text-align: center;
+    height: 40px;
+    margin-right: 1%;
+    border-radius: 5px;
+    vertical-align: bottom;
+    width: 80%;
+    padding: 10%;
+
+}
+
+.statusIsValid {
+    background-color: #28a745;
+}
+
+.statusInValid {
+    background-color: #6c757d;
+}
+
+.checkInValid {
+    color: #dc3545;
+    font-weight: bold;
 }

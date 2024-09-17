@@ -13,8 +13,6 @@
     <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="./css/weien-chat.css">
     <link rel="stylesheet" href="css/cmsMember.css">
 </head>
 <body class="hold-transition sidebar-mini">
@@ -26,385 +24,122 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Member</h1>
+                        <h1>Member Manage</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item">
                                 <a href="#">Home</a>
                             </li>
-                            <li class="breadcrumb-item active">Member Management</li>
+                            <li class="breadcrumb-item active">Member Manage</li>
                         </ol>
                     </div>
                 </div>
             </div>
         </section>
-        <div class="card-body">
-            <table id="example2" class="table table-bordered table-striped">
-                <thead>
-                <tr>
-                    <th>Rendering engine</th>
-                    <th>Browser</th>
-                    <th>Platform(s)</th>
-                    <th>Engine version</th>
-                    <th>CSS grade</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>Trident</td>
-                    <td>Internet
-                        Explorer 4.0
-                    </td>
-                    <td>Win 95+</td>
-                    <td> 4</td>
-                    <td>X</td>
-                </tr>
-                <tr>
-                    <td>Trident</td>
-                    <td>Internet
-                        Explorer 5.0
-                    </td>
-                    <td>Win 95+</td>
-                    <td>5</td>
-                    <td>C</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
+
         <section class="content">
             <div class="card">
                 <div class="card-header">
-                    <div class="row">
+                    <div class="row" id="cmsQueryBar">
                         <div class="form-group col-sm-3">
-                            <label for="username">顧客姓名:</label>
-                            <input type="text" class="form-control form-control-lg" id="username" name="username"
+                            <label for="cmsQueryMemberName">顧客暱稱:</label>
+                            <span class="errorTip"></span>
+                            <input type="text" class="form-control form-control-lg" id="cmsQueryMemberName"
+                                   name="cmsQueryMemberName"
                                    placeholder="姓名">
                         </div>
                         <div class="form-group col-sm-3">
-                            <label for="userAccount">顧客帳號:</label>
-                            <input type="text" class="form-control form-control-lg" id="userAccount"
-                                   name="userAccount" placeholder="帳號">
+                            <label for="cmsQueryMemberId">顧客編號:</label>
+                            <span class="errorTip"></span>
+                            <input type="text" class="form-control form-control-lg" id="cmsQueryMemberId"
+                                   name="cmsQueryMemberId" placeholder="編號" data-error="編號輸入錯誤">
                         </div>
                         <div class="form-group col-sm-3">
-                            <label for="userCellPhone">手機:</label>
-                            <input type="text" class="form-control form-control-lg" id="userCellPhone"
-                                   name="userCellPhone" placeholder="手機">
+                            <label for="cmsQueryMemberCellphone">手機:</label>
+                            <span class="errorTip"></span>
+                            <input type="text" class="form-control form-control-lg " id="cmsQueryMemberCellphone"
+                                   required
+                                   maxlength="10" min="10" pattern="[0-9]{10}" data-error="手機輸入錯誤"
+                                   name="cmsQueryMemberCellphone" placeholder="手機">
                         </div>
                         <div class="form-group col-sm-2">
-                            <label for="userStatus">狀態:</label>
-                            <select class="form-control form-control-lg" id="userStatus">
-                                <option selected>生效</option>
-                                <option>停權</option>
+                            <label for="cmsQueryMemberStatus">狀態:</label>
+                            <select class="form-control form-control-lg" id="cmsQueryMemberStatus">
+                                <option selected value="default">請選擇</option>
+                                <option value="true">生效</option>
+                                <option value="false">停權</option>
                             </select>
                         </div>
                         <div class="form-group col-sm-1 userAction">
-                            <button class="btn btn-lg btn-default">
+                            <button class="btn-lg btnQuery" id="cmsMemberQuery">
                                 <i class="fa fa-search"></i>
                             </button>
-                            <button class="btn btn-lg btn-default ">
+                            <button class="btn-lg btnDownload" id="cmsMemberDownload">
                                 <i class="fa fa-download"></i>
                             </button>
                         </div>
                     </div>
                 </div>
-                <div class="card-body p-0">
-                    <table id="example1" class="table table-bordered table-striped">
+                <div>
+                    <table class="table table-bordered table-striped">
                         <thead>
                         <tr>
-                            <th style="width: 20%">
-                                User Name
-                            </th>
-                            <th style="width: 20%">
-                                User Account
-                            </th>
-                            <th style="width: 20%">
-                                User CellPhone
-                            </th>
-                            <th style="width: 8%">
-                                Status
-                            </th>
-                            <th></th>
+                            <th class="col-sm-2"> 顧客暱稱</th>
+                            <th class="col-sm-2"> 顧客編號</th>
+                            <th class="col-sm-3"> 顧客信箱</th>
+                            <th class="col-sm-3"> 顧客手機</th>
+                            <th class="col-sm-1"> 狀態</th>
+                            <th class="col-sm-2"> 設定</th>
                         </tr>
                         </thead>
-                        <tbody>
-                        <tr>
-                            <td>
-                                <span>Allan</span>
-                            </td>
-                            <td>
-                                <span>A0000000001</span>
-                            </td>
-                            <td>
-                                <span>09123456789</span>
-                            </td>
-                            <td class="user-st">
-                                <span class="badge badge-success">Success</span>
-                            </td>
-                            <td class="project-actions text-right">
-                                <a class="btn btn-info btn-sm" href="#">
-                                    <i class="fas fa-pencil-alt">
-                                    </i>
-                                    Edit
-                                </a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <span>Bob</span>
-                            </td>
-                            <td>
-                                <span>A0000000002</span>
-                            </td>
-                            <td>
-                                <span>09123456789</span>
-                            </td>
-                            <td class="user-st">
-                                <span class="badge badge-success memberStatus">Success</span>
-                            </td>
-                            <td class="project-actions text-right">
-                                <a class="btn btn-info btn-sm" href="#">
-                                    <i class="fas fa-pencil-alt">
-                                    </i>
-                                    Edit
-                                </a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <span>Charles</span>
-                            </td>
-                            <td>
-                                <span>A0000000003</span>
-                            </td>
-                            <td>
-                                <span>09123456789</span>
-                            </td>
-                            <td class="user-st">
-                                <span class="badge badge-success">Success</span>
-                            </td>
-                            <td class="project-actions text-right">
-                                <a class="btn btn-info btn-sm" href="#">
-                                    <i class="fas fa-pencil-alt">
-                                    </i>
-                                    Edit
-                                </a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <span>Dester</span>
-                            </td>
-                            <td>
-                                <span>A0000000004</span>
-                            </td>
-                            <td>
-                                <span>09123456789</span>
-                            </td>
-                            <td class="user-st">
-                                <span class="badge badge-success">Success</span>
-                            </td>
-                            <td class="project-actions text-right">
-                                <a class="btn btn-info btn-sm" href="#">
-                                    <i class="fas fa-pencil-alt">
-                                    </i>
-                                    Edit
-                                </a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <span>Ellen</span>
-                            </td>
-                            <td>
-                                <span>A0000000002</span>
-                            </td>
-                            <td>
-                                <span>09123456789</span>
-                            </td>
-                            <td class="user-st">
-                                <span class="badge badge-success">Success</span>
-                            </td>
-                            <td class="project-actions text-right">
-                                <a class="btn btn-info btn-sm" href="#">
-                                    <i class="fas fa-pencil-alt">
-                                    </i>
-                                    Edit
-                                </a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <span>Freddy</span>
-                            </td>
-                            <td>
-                                <span>A0000000002</span>
-                            </td>
-                            <td>
-                                <span>09123456789</span>
-                            </td>
-                            <td class="user-st">
-                                <span class="badge badge-success">Success</span>
-                            </td>
-                            <td class="project-actions text-right">
-                                <a class="btn btn-info btn-sm" href="#">
-                                    <i class="fas fa-pencil-alt">
-                                    </i>
-                                    Edit
-                                </a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <span>Grace</span>
-                            </td>
-                            <td>
-                                <span>A0000000002</span>
-                            </td>
-                            <td>
-                                <span>09123456789</span>
-                            </td>
-                            <td class="user-st">
-                                <span class="badge badge-success">Success</span>
-                            </td>
-                            <td class="project-actions text-right">
-                                <a class="btn btn-info btn-sm" href="#">
-                                    <i class="fas fa-pencil-alt">
-                                    </i>
-                                    Edit
-                                </a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <span>Grace</span>
-                            </td>
-                            <td>
-                                <span>A0000000002</span>
-                            </td>
-                            <td>
-                                <span>09123456789</span>
-                            </td>
-                            <td class="user-st">
-                                <span class="badge badge-success">Success</span>
-                            </td>
-                            <td class="project-actions text-right">
-                                <a class="btn btn-info btn-sm" href="#">
-                                    <i class="fas fa-pencil-alt">
-                                    </i>
-                                    Edit
-                                </a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <span>Grace</span>
-                            </td>
-                            <td>
-                                <span>A0000000002</span>
-                            </td>
-                            <td>
-                                <span>09123456789</span>
-                            </td>
-                            <td class="user-st">
-                                <span class="badge badge-success">Success</span>
-                            </td>
-                            <td class="project-actions text-right">
-                                <a class="btn btn-info btn-sm" href="#">
-                                    <i class="fas fa-pencil-alt">
-                                    </i>
-                                    Edit
-                                </a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <span>Grace</span>
-                            </td>
-                            <td>
-                                <span>A0000000002</span>
-                            </td>
-                            <td>
-                                <span>09123456789</span>
-                            </td>
-                            <td class="user-st">
-                                <span class="badge badge-success">Success</span>
-                            </td>
-                            <td class="project-actions text-right">
-                                <a class="btn btn-info btn-sm" href="#">
-                                    <i class="fas fa-pencil-alt">
-                                    </i>
-                                    Edit
-                                </a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <span>Grace</span>
-                            </td>
-                            <td>
-                                <span>A0000000002</span>
-                            </td>
-                            <td>
-                                <span>09123456789</span>
-                            </td>
-                            <td class="user-st">
-                                <span class="badge badge-success">Success</span>
-                            </td>
-                            <td class="project-actions text-right">
-                                <a class="btn btn-info btn-sm" href="#">
-                                    <i class="fas fa-pencil-alt">
-                                    </i>
-                                    Edit
-                                </a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <span>Grace</span>
-                            </td>
-                            <td>
-                                <span>A0000000002</span>
-                            </td>
-                            <td>
-                                <span>09123456789</span>
-                            </td>
-                            <td class="user-st">
-                                <span class="badge badge-success">Success</span>
-                            </td>
-                            <td class="project-actions text-right">
-                                <a class="btn btn-info btn-sm" href="#">
-                                    <i class="fas fa-pencil-alt">
-                                    </i>
-                                    Edit
-                                </a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <span>Grace</span>
-                            </td>
-                            <td>
-                                <span>A0000000002</span>
-                            </td>
-                            <td>
-                                <span>09123456789</span>
-                            </td>
-                            <td class="user-st">
-                                <span class="badge badge-success">Success</span>
-                            </td>
-                            <td class="project-actions text-right">
-                                <a class="btn btn-info btn-sm" href="#">
-                                    <i class="fas fa-pencil-alt">
-                                    </i>
-                                    Edit
-                                </a>
-                            </td>
-                        </tr>
+                        <tbody id="memberList">
+                        <!--                        <tr>-->
+                        <!--                            <td>-->
+                        <!--                                <span>Allan</span>-->
+                        <!--                            </td>-->
+                        <!--                            <td>-->
+                        <!--                                <span>A0000000001</span>-->
+                        <!--                            </td>-->
+                        <!--                            <td>-->
+                        <!--                                <span>A0000000001@mail</span>-->
+                        <!--                            </td>-->
+                        <!--                            <td>-->
+                        <!--                                <span>09123456789</span>-->
+                        <!--                            </td>-->
+                        <!--                            <td>-->
+                        <!--                                <span class="badge badge-success memberStatus">生效</span>-->
+                        <!--                            </td>-->
+                        <!--                            <td>-->
+                        <!--                                <button class="btn btnEdit">-->
+                        <!--                                    <i class="fas fa-pencil-alt"> </i> 修改-->
+                        <!--                                </button>-->
+                        <!--                            </td>-->
+                        <!--                        </tr>-->
+                        <!--                        <tr>-->
+                        <!--                            <td>-->
+                        <!--                                <span>Bob</span>-->
+                        <!--                            </td>-->
+                        <!--                            <td>-->
+                        <!--                                <span>A0000000002</span>-->
+                        <!--                            </td>-->
+                        <!--                            <td>-->
+                        <!--                                <span>A0000000002@mail</span>-->
+                        <!--                            </td>-->
+                        <!--                            <td>-->
+                        <!--                                <span>09123456789</span>-->
+                        <!--                            </td>-->
+                        <!--                            <td>-->
+                        <!--                                <span class="badge badge-success memberStatus inValid">停權</span>-->
+                        <!--                            </td>-->
+                        <!--                            <td>-->
+                        <!--                                <button class="btn btnEdit">-->
+                        <!--                                    <i class="fas fa-pencil-alt"> </i> 修改-->
+                        <!--                                </button>-->
+                        <!--                            </td>-->
+                        <!--                        </tr>-->
                         </tbody>
                     </table>
-
-
                 </div>
             </div>
         </section>
@@ -413,9 +148,12 @@
 </div>
 
 <script src="plugins/jquery/jquery.min.js"></script>
+<script src="js/storegeneral.js"></script>
+
 <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
 <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
 
 <script src="plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
@@ -428,11 +166,11 @@
 <script src="plugins/jszip/jszip.min.js"></script>
 <script src="plugins/pdfmake/pdfmake.min.js"></script>
 <script src="plugins/pdfmake/vfs_fonts.js"></script>
+<script src="plugins/sweetalert2/sweetalert2.all.min.js"></script>
+
 <script src="dist/js/adminlte.js"></script>
 <script src="dist/js/demo.js"></script>
-<script src="js/storegeneral.js"></script>
 <script src="js/cmsMember.js"></script>
-<script type="module" src="js/chat-import.js"></script>
 
 </body>
 

@@ -2,7 +2,7 @@ package idv.tia201.g2.web.store.util;
 
 import java.util.regex.Pattern;
 
-public class Vatutil {
+public class VatUtil {
     public static final Pattern TWBID_PATTERN = Pattern.compile("^[0-9]{8}$");
 
     public static boolean isValidTWBID(String twbid) {

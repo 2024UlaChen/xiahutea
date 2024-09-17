@@ -1,10 +1,8 @@
 package idv.tia201.g2.web.user.vo;
 
+import idv.tia201.g2.core.pojo.Core;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name = "total_users")
@@ -12,17 +10,16 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class TotalUsers {
+public class TotalUsers extends Core {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "total_user_id")
-    private Long totalUserId;
+    private Long totalUserId;       // 0:消費者 、 1:店家 、 3:管理員
     @Column(name = "users_type_id")
     private Integer userTypeId;
     @Column(name = "user_id")
     private Integer userId;
-
 
 }
 
