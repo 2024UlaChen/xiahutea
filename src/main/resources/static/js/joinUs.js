@@ -23,7 +23,7 @@ $(form).submit(e => {
         return
     }
 
-    fetch("/registerstore", {
+    fetch("/registerstore/register", {
         method: "POST",
         body: formData
     }).then(res => res.json()).then(store => {
