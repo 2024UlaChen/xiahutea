@@ -113,14 +113,20 @@ public class Store extends Core {
     private String loyaltyCardName;
 
     @Column(name = "exchange_rate")
-    private Integer exchangeRate;//多少元一點
+    private Integer exchangeRate;
+    //多少元一點
 
     @Column(name = "expired_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Timestamp expiredDate;
 
     @Column(name = "valid_status")
-    private Boolean validStatus;//集點卡狀態
+    private Boolean validStatus;
+    //集點卡狀態
+
+    @Column(name = "store_remake")
+    private String storeRemark;
+    //商家備註
 
     @PrePersist
     protected void onCreate(){

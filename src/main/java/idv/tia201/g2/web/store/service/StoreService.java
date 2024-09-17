@@ -31,7 +31,7 @@ public interface StoreService {
 
     void addStoreHolidayByDate(Store store, Date holiday);
 
-    List<Store> getStoreListNoWorking(String holiday) throws ParseException;
+    List<Store> getStoreListWorking(String holiday) throws ParseException;
     List<Store> getAllData();
     List<Store> getAllStoreById(Integer Id);
 }
