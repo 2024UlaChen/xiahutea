@@ -44,7 +44,6 @@ document.addEventListener("DOMContentLoaded",function(){
     let currentCartItem = null;
     let currentItem = null;
     let loginMember = null;
-
   //取貨方式
   let pick_up_el = document.getElementsByClassName('pick-up')[0];
   let pick_up_input_el = document.getElementsByClassName("pick-up-input")[0];
@@ -61,7 +60,15 @@ document.addEventListener("DOMContentLoaded",function(){
   let moneybag_discount_number_el = document.getElementsByClassName("moneybag-discount-number")[0];
   let couponDropdown_el = document.getElementsByClassName('coupon-dropdown')[0];
   let couponSelect_el = document.getElementById('coupon-select');
-  let coupon_minus_number_el = document.getElementsByClassName('coupon-minus-number')[0];
+  //訂單彙總
+  let product_amount_el = document.getElementsByClassName('product-amount')[0];
+  let product_unit_el = document.getElementsByClassName('product-unit')[0];
+    let coupon_minus_number_el = document.getElementsByClassName('coupon-minus-number')[0];
+    let CouponAmountText=null;
+  let CouponAmount=null;
+
+  let total_amount_el = document.getElementsByClassName('total-amount')[0];
+
   //結帳流程-2
   //取貨人
   let btn_backto_last_page_el = document.getElementsByClassName("btn-backto-last-page")[0];
@@ -122,7 +129,6 @@ document.addEventListener("DOMContentLoaded",function(){
           })
     }
 
-
   //獲得localstorage資料(購物車)
   const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
   //localstorage購物車資料分類
@@ -179,6 +185,7 @@ document.addEventListener("DOMContentLoaded",function(){
       // });
 
       //優惠使用(優惠券、會員卡、會員錢包)
+      //獲得使用者優惠券選項
       select_coupon_input_el.addEventListener("click", function () {
           couponSelect_el.disabled=false;
           getcoupons(loginMember.customerId);
@@ -189,6 +196,7 @@ document.addEventListener("DOMContentLoaded",function(){
           let selectedOption = couponSelect_el.options[couponSelect_el.selectedIndex];
           let discount = selectedOption.getAttribute('data-discount');
           coupon_minus_number_el.textContent = `$${discount}`;
+          // Calculatetotal();
       })
 
       //TODO 加入點擊事件get會員卡點數 點選會員卡，
@@ -233,6 +241,8 @@ document.addEventListener("DOMContentLoaded",function(){
         }
         e.stopPropagation();
       })
+      //計算總額
+      document.addEventListener('click',Calculatetotal)
 //********************************************日期時間選擇器*************************************
     // 取得當前日期和時間
     new AirDatepicker('#myDatepicker', {
@@ -634,6 +644,9 @@ document.addEventListener("DOMContentLoaded",function(){
             productPrice: product.productPrice
           });
         });
+        //先定義區域變數算總額、數量
+        // let totalAmount = 0;
+        // let totalquanity = 0;
         //遍歷整理後的購物車商品列，動態生成標籤
         groupedItems.forEach(item =>{
           const product = productMap.get(item.productId);
@@ -712,9 +725,10 @@ document.addEventListener("DOMContentLoaded",function(){
                   delete_detail_el.innerHTML = `
                     刪除 <span class="highlight">${productName}</span> ?
                     `;
-              })
-           }
+                })
+            }
         })
+        Calculatetotal();
       }
 
 
@@ -943,7 +957,33 @@ document.addEventListener("DOMContentLoaded",function(){
         }
         //F20 計算訂單金額
         function Calculatetotal(){
+            let totalAmount = 0;
+            let totalquanity = 0;
+            // 抓所有的商品明細項目，根據 data-type 屬性來取得價格和數量
+            document.querySelectorAll('.item-content')
+                .forEach(itemContent => {
+                // 找到該商品的價格元素和數量元素
+                let priceEl = itemContent.querySelector('div[data-type="price"]');
+                let quantityEl = itemContent.querySelector('div[data-type="quantity"]');
+                // 從元素中提取價格和數量
+                let priceText = priceEl.textContent.trim();
+                let quantityText = quantityEl.textContent.trim();
+                // 去掉價格的符號和數量的文字，並轉換為數值型態
+                let price = parseFloat(priceText.replace('$', '').replace('/', ''));
+                let quantity = parseInt(quantityText.replace(' 杯', ''));
+                // 累加每個商品的總額及數量
+                totalquanity += quantity;
+                totalAmount += price * quantity;
+            });
+            //商品總數與折扣前總價
+            product_unit_el.textContent=`商品X${totalquanity}`;
+            product_amount_el.textContent =`$${totalAmount}`;
+            //優惠券折抵
+            CouponAmountText = coupon_minus_number_el.textContent.trim();
+            CouponAmount = parseFloat(CouponAmountText.replace('$', ''));
+            totalAmount -= CouponAmount;
 
+            total_amount_el.textContent = `$${totalAmount}`;
         }
 
 
