@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import idv.tia201.g2.core.vo.AddressDetailVo;
 import idv.tia201.g2.core.vo.AddressVo;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
+@Transactional
 public class AddrService {
     private static final RestTemplate ADDR_CLIENT = new RestTemplate();
     private static final String ADDR_URL = "https://api.opencube.tw/twzipcode";
@@ -41,7 +43,8 @@ public class AddrService {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+//        System.out.println(AddrService.getAddrFromJson());
 
     }
 }
