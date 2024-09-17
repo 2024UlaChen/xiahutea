@@ -19,6 +19,6 @@ public interface CartService {
     public List<Product> getProductsByIds(List<Integer> productIds);
     public Store getStoreById(Integer storeId);
     public Member findmemberById(Integer customerId);
-//    public List<MemberAddress> findAddressbyId(Integer customerId);
+    public List<MemberAddress> findAddressbyId(Integer customerId);
     public List<Coupon> findCouponsByCustomerId(Integer customerId);
 }

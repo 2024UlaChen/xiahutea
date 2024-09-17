@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded",function(){
   let store_name_el = document.getElementsByClassName("store-name")[0];
   let customer_img_el = document.getElementsByClassName("customer-img")[0];
   let customer_name_el = document.getElementsByClassName("customer-name")[0];
+  let customerId;
 
   //訂單細項
   let item_detail_el = document.getElementsByClassName('item-detail')[0];
@@ -47,6 +48,7 @@ document.addEventListener("DOMContentLoaded",function(){
   //取貨方式
   let pick_up_el = document.getElementsByClassName('pick-up')[0];
   let pick_up_input_el = document.getElementsByClassName("pick-up-input")[0];
+  let recevie_time_el = document.getElementsByClassName('recevie-time')[0];
 
   //時間選擇
   // let picker_el = document.getElementsByClassName("pickuper")[0];
@@ -96,7 +98,7 @@ document.addEventListener("DOMContentLoaded",function(){
   const customer = sessionStorage.getItem('customer');
   if(customer){
       let customerData = JSON.parse(customer);
-      let customerId = customerData.customerId;
+      customerId = customerData.customerId;
       fetch(`/cart/checkoutlist/${customerId}`)
           .then(response=>{
               if (!response.ok) {
@@ -183,6 +185,7 @@ document.addEventListener("DOMContentLoaded",function(){
       // picker_el.addEventListener("blur", function () {
       //   picker_el.classList.remove("focus-border");
       // });
+      //外送選項
 
       //優惠使用(優惠券、會員卡、會員錢包)
       //獲得使用者優惠券選項
@@ -502,7 +505,7 @@ document.addEventListener("DOMContentLoaded",function(){
                 throw new Error('找不到商店資料');
               }
               console.log('Store Details:', store);
-              //判斷現在是不是營業時間及是否接單
+              //判斷現在是不是營業時間及是否接單(測試時可先註解)
               //   if (!isinOpeningHours(store.openingHours, store.closingHours)
               //       || !store.isTakeOrders) {
               //       Swal.fire({
@@ -579,22 +582,10 @@ document.addEventListener("DOMContentLoaded",function(){
     //findproductbyid->findstorebyid->updateDeliveryOptions
     function updateDeliveryOptions(isDelivery){
       if (isDelivery){
-        //獲得用戶常用地址
-
-        //外送(常用地址)
-        // const carryoutdefalut = document.createElement('div');
-        // carryoutdefalut.className ='carry-out-default';
-        // carryoutdefalut.innerHTML=`
-        //     <input class="carry-out-default-radio" type="radio" name="delivery" id="carry-out-default">
-        //     <label class="carry-out-default-label" for="carry-out-default" style="padding-top: 10px">外送(常用地址)</label>
-        //     <div class="common-address-options" style="display: none;">
-        //     </div>
-        //
-        //     `;
-        //外送(自填地址)
-        const carryoutdiv = document.createElement('div');
-        carryoutdiv.className = 'carry-out';
-        carryoutdiv.innerHTML=`
+          //外送(自填地址)
+          const carryoutdiv = document.createElement('div');
+          carryoutdiv.className = 'carry-out';
+          carryoutdiv.innerHTML=`
           <div class="carry-out-selection">
               <input class="carry-out-radio" type="radio" name="delivery" id="carry-out">
               <label class="carry-out-label" for="carry-out" style="padding-top: 10px">外送(自填地址)</label>
@@ -603,25 +594,87 @@ document.addEventListener("DOMContentLoaded",function(){
                <input type="text" class="address" placeholder="請輸入地址" maxlength="255" disabled>
            </div>
             `;
-        pick_up_el.insertAdjacentElement('afterend', carryoutdiv);
-        //設定標籤&綁定事件
-        let carry_out_radio_el = document.getElementsByClassName("carry-out-radio")[0];
-        let address_el = document.getElementsByClassName("address")[0];
-        carry_out_radio_el.addEventListener("click", function () {
-          address_el.disabled = false;
-          address_el.focus();
-        })
-        address_el.addEventListener("focus", function () {
-          // 清空 placeholder
-          address_el.placeholder = "";
-        });
-        // 當輸入框失去焦點時
-        address_el.addEventListener("blur", function () {
-          // 如果輸入框為空，恢復 placeholder
-          if (address_el.value === "") {
-            address_el.placeholder = "請輸入地址";
-          }
-        });
+          pick_up_el.insertAdjacentElement('afterend', carryoutdiv);
+          //抓取標籤以便運用
+          let carry_out_radio_el = document.getElementsByClassName("carry-out-radio")[0];
+          let address_el = document.getElementsByClassName("address")[0];
+
+          carry_out_radio_el.addEventListener("click", function () {
+              address_el.disabled = false;
+              address_el.focus();
+          })
+          address_el.addEventListener("focus", function () {
+              // 清空 placeholder
+              address_el.placeholder = "";
+          });
+          // 當輸入框失去焦點時
+          address_el.addEventListener("blur", function () {
+              // 如果輸入框為空，恢復 placeholder
+              if (address_el.value === "") {
+                  address_el.placeholder = "請輸入地址";
+              }
+          });
+        //獲得用戶常用地址,若有則生成選項
+        fetch(`/cart/checkoutlist/Memberaddress/${customerId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(address=> {
+                if (address && address.length > 0) {
+                    // 資料存在，處理地址資料
+                    console.log('User Address:', address);
+                    //先建立外送(預設地址)選項
+                    const carryoutdefalut = document.createElement('div');
+                    carryoutdefalut.className ='carry-out-default';
+                    carryoutdefalut.innerHTML+=`
+                         <input class="carryout-default-input" type="radio" name="delivery">
+                         <label class="carryout-default-label" for="pick-up-label" style="padding-top: 10px">
+                         外送(預設地址)
+                         </label>
+                    `;
+                    carryoutdiv.insertAdjacentElement('afterend', carryoutdefalut);
+                    //建立外送(預設地址) 地址選項區塊
+                    const suboptions = document.createElement('div')
+                    suboptions.style.display="none";
+                    suboptions.className = 'sub-options';
+                    carryoutdefalut.appendChild(suboptions);
+                    let sub_options_el = document.getElementsByClassName('sub-options')[0];
+                    //在地址選項區塊生成每個子選項一個div區塊
+                    address.forEach(data=>{
+                        const addressItem = document.createElement('div');
+                        addressItem.innerHTML = `
+                            <input type="radio" name="member-address" id="address-${data.customerAddressId}">
+                            <label for="address-${data.customerAddressId}">${data.customerAddress}</label>
+                            `;
+                        sub_options_el.appendChild(addressItem);  // 將每組 input 和 label 添加到 sub-options 中
+                        })
+
+                    //點擊外送(預設地址)展開子選項
+                    let carryout_default_input_el = document.getElementsByClassName('carryout-default-input')[0];
+                    carryout_default_input_el.addEventListener('click',function (){
+                        suboptions.style.display="block";
+                        address_el.disabled = true;
+                        address_el.textContent="";
+                    })
+
+                    // 點擊自取、外送(自填)選項關閉外送地址選項區塊
+                    pick_up_input_el.addEventListener("click", function () {
+                        suboptions.style.display = "none";  // 隱藏外送地址選項
+                    })
+                    carry_out_radio_el.addEventListener("click", function () {
+                        suboptions.style.display = "none";
+                        address_el.textContent="";
+                    })
+                    } else {
+                    console.log('No address data found.');
+                }
+            })
+            .catch(error => console.error('Error loading coupons:', error));
+
+        //針對預設地址選項以外的情形綁定事件
         //點擊自取選項關閉地址輸入框
         pick_up_input_el.addEventListener("click", function () {
           address_el.disabled = true;
@@ -629,10 +682,7 @@ document.addEventListener("DOMContentLoaded",function(){
         })
       }
     }
-    //用customerID獲得常用地址
-    // function getAddressbyId(customer){
-    //
-    // }
+
     //F07 用Localstotage中的購物車商品和返回的商品資訊生成商品明細
     //sortCartItems->findproductbyid->renderproductdetail
     function renderproductdetail(groupedItems, products){
@@ -644,9 +694,6 @@ document.addEventListener("DOMContentLoaded",function(){
             productPrice: product.productPrice
           });
         });
-        //先定義區域變數算總額、數量
-        // let totalAmount = 0;
-        // let totalquanity = 0;
         //遍歷整理後的購物車商品列，動態生成標籤
         groupedItems.forEach(item =>{
           const product = productMap.get(item.productId);
@@ -728,11 +775,10 @@ document.addEventListener("DOMContentLoaded",function(){
                 })
             }
         })
+        //渲染完商品項目後，初步計算總額
         Calculatetotal();
       }
-
-
-    //F08 燈箱:編輯事件處理
+    //F08 燈箱:編輯事件處理(在按下確認更新時觸發)
     function handlelightbox(){
           //先檢查全域變數是否存在cartItem
         if (!currentCartItem) return;

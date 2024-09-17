@@ -38,14 +38,14 @@ public class CartServiceImpl implements CartService {
     private CouponDao couponDao;
 //    @Autowired
 //    private CustomerDao customerDao;
-//    @Autowired
-//    private MemberAddrDao memberAddrDao;
+    @Autowired
+    private MemberAddrDao memberAddrDao;
 
     //抓取會員資料
-    //    @Override
-    //    public Member getCustomerinfo(Integer customerID) {
-    //        return memberDao.findByMemberId(customerID);
-    //    }
+    @Override
+    public Member findmemberById(Integer customerId) {
+        return memberDao.findMemberById(customerId);
+    }
 
     //批量insert cart資料
     public void saveCartItems(List<Cart> cartItems) {
@@ -64,20 +64,15 @@ public class CartServiceImpl implements CartService {
         return storeDao.findByStoreId(storeId);
     }
 
-    @Override
-    public Member findmemberById(Integer customerId) {
-        return memberDao.findMemberById(customerId);
-    }
-
 //    @Override
     public List<Coupon> findCouponsByCustomerId(Integer customerId) {
         return couponDao.findCouponIdsByCutomerId(customerId);
     }
 
-//    @Override
-//    public List<MemberAddress> findAddressbyId(Integer customerId) {
-//        return memberAddrDao.findMemberAddressByMemberId(String.valueOf(customerId));
-//    }
+    @Override
+    public List<MemberAddress> findAddressbyId(Integer customerId) {
+        return memberAddrDao.findAddressByMemberId(customerId);
+    }
 }
 
 

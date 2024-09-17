@@ -32,10 +32,10 @@ public class CartController extends HttpServlet {
             return cartService.findmemberById(customerId);
     }
     // GET 請求：取得使用者常用地址
-//    @GetMapping("/checkoutlist/Memberaddress/{customerId}")
-//    public List<MemberAddress> getMemberAddress(@PathVariable int customerId) {
-//        return cartService.findAddressbyId(customerId);
-//    }
+    @GetMapping("/checkoutlist/Memberaddress/{customerId}")
+    public List<MemberAddress> getMemberAddress(@PathVariable int customerId) {
+        return cartService.findAddressbyId(customerId);
+    }
     // GET 請求：取得使用者的優惠券
     @GetMapping("/getCoupon/{customerId}")
     public List<Coupon> getCoupons(@PathVariable int customerId){
