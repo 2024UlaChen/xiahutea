@@ -1,3 +1,7 @@
+#phoneError{
+    color: red;
+}
+
 
 @media print {
     * {

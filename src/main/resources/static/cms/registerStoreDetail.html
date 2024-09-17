@@ -62,55 +62,62 @@
               </div>
 
               <!-- /.card-header -->
-              <form>
+              <form id="form" action="#" class="teamo-contact-fom">
                 <div class="card-body">
                   <div class="row">
                     <div class="col-sm-12">
                       <div class="form-group">
+                        <label>店家編號</label>
+                        <input type="text" id="storeId" name="storeId" class="form-control" disabled required>
+                      </div>
+                    </div>
+                    <div class="col-sm-12">
+                      <div class="form-group">
                         <label>店家名稱</label>
-                        <input type="text" id="storeName" class="form-control" id="storeName" disabled>
+                        <input type="text" id="storeName" name="storeName" class="form-control" disabled required>
                       </div>
                     </div>
                     <div class="col-sm-12">
                       <div class="form-group">
                         <label>門市地址</label>
-                        <input type="text" id="storeAddress" class="form-control" id="storeAddress" disabled>
+                        <input type="text" id="storeAddress" name="storeAddress" class="form-control" disabled required>
                       </div>
                     </div>
                     <div class="col-sm-12">
                       <div class="form-group">
                         <label>統一編號</label>
-                        <input type="text" id="vat" class="form-control" disabled>
+                        <input type="text" id="vat" name="vat" class="form-control" disabled >
                       </div>
                     </div>
                     <div class="col-sm-12">
                       <div class="form-group">
                         <label>聯絡人</label>
-                        <input type="text" id="contactPerson" class="form-control" disabled>
+                        <input type="text" id="contactPerson" name="contactPerson" class="form-control" disabled required>
                       </div>
                     </div>
                     <div class="col-sm-12">
                       <div class="form-group">
                         <label>連絡電話</label>
-                        <input type="text" id="contactPhone" class="form-control" disabled>
+                        <label id="phoneError"></label>
+                        <input type="text" id="contactPhone" name="contactPhone" class="form-control" disabled required>
                       </div>
                     </div>
                     <div class="col-sm-12">
                       <div class="form-group">
                         <label>E-mail</label>
-                        <input type="text" id="email" class="form-control" disabled>
+                        <input type="email" id="email" name="email" class="form-control" disabled required>
                       </div>
                     </div>
                     <div class="col-sm-12">
                       <div class="form-group">
                         <label>店家負責人</label>
-                        <input type="text" id="owner" class="form-control" disabled>
+                        <input type="text" id="owner" name="owner" class="form-control" disabled required>
                       </div>
                     </div>
                     <div class="col-sm-12">
                       <div class="form-group">
                         <label style="height:auto">備註</label>
-                        <textarea class="form-control" id="storeRemark" disabled
+                        <textarea class="form-control" id="storeRemark" name="storeRemark" disabled
                                   style="resize:none;height:150PX; width:100%; overflow-x:visible;overflow-y:visible;"></textarea>
                       </div>
                     </div>
@@ -120,10 +127,10 @@
                       <!-- select -->
                       <div class="form-group">
                         <label>狀態</label>
-                        <select class="form-control" id="storeStatus">
+                        <select class="form-control" name="storeStatus" id="storeStatus">
                           <option value="0">申請中</option>
                           <option value="1">申請成功</option>
-                          <option value="4">申請失敗</option>
+                          <option value="4">拒絕申請</option>
                         </select>
                       </div>
                     </div>
@@ -155,13 +162,16 @@
   <script src="js/storegeneral.js"></script>
   <!-- Bootstrap 4 -->
   <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="plugins/sweetalert2/sweetalert2.all.js"></script>
+  <!-- Page specific script -->
+  <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
   <!-- AdminLTE App -->
   <script src="dist/js/adminlte.min.js"></script>
   <!-- AdminLTE for demo purposes -->
   <script src="dist/js/demo.js"></script>
-  <!-- Page specific script -->
-  <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
+  <script src="../js/dataCheck.js"></script>
   <script src="./js/registerStoreDetail.js"></script>
+
 
 
 
