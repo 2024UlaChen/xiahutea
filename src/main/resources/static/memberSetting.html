@@ -26,7 +26,9 @@
     <link rel="stylesheet" href="assets/fonts/flaticon/flaticon.css">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="css/general.css">
+    <link rel="stylesheet" href="css/memberGeneralSetting.css">
     <link rel="stylesheet" href="css/member.css">
+
 </head>
 
 <body>
@@ -87,32 +89,29 @@
                                 </div>
                                 <hr>
                                 <div class="teamo-contact-fom member-setting">
-
                                     <div>
-                                        <span class="form-label"><span class="warn">*</span>真實姓名</span>
+                                        <span class="form-label"><span class="warn">＊</span>舊密碼</span>
                                         <span class="form-control-wrap your-name">
-                                                    <input title="your-name" type="text" name="your-name" size="40"
-                                                           class="form-control form-control-name">
+                                            <input title="oldPassword" type="text" name="your-name" size="40"
+                                                   class="form-control form-control-name " data-password="1">
                                         </span>
                                     </div>
                                     <div>
-                                        <span class="form-label"><span class="warn">*</span>真實姓名</span>
+                                        <span class="form-label"><span class="warn">＊</span>新密碼</span>
                                         <span class="form-control-wrap your-name">
-                                                    <input title="your-name" type="text" name="your-name" size="40"
-                                                           class="form-control form-control-name">
+                                            <input title="newPassword" type="text" name="your-name" size="40"
+                                                   class="form-control form-control-name" data-password="2">
                                         </span>
                                     </div>
                                     <div>
-                                        <span class="form-label"><span class="warn">*</span>真實姓名</span>
+                                        <span class="form-label"><span class="warn">＊</span>再次輸入新密碼</span>
                                         <span class="form-control-wrap your-name">
-                                                    <input title="your-name" type="text" name="your-name" size="40"
-                                                           class="form-control form-control-name">
+                                            <input title="checkNewPassword" type="text" name="your-name" size="40"
+                                                   class="form-control form-control-name" data-password="3">
                                         </span>
                                     </div>
-
-                                    <div>
-                                        <input type="submit" value="SEND MESSAGE"
-                                               class="form-control-submit button-submit">
+                                    <div class="dataSave">
+                                        <button>修改密碼</button>
                                     </div>
                                 </div>
                             </div>
@@ -148,7 +147,7 @@
 <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyC3nDHy1dARR-Pa_2jjPCjvsOR4bcILYsM'></script>
 <script src="assets/js/frontend-plugin.js"></script>
 <script src="js/general.js"></script>
-<script src="js/member.js"></script>
+<script src="js/memberGeneral.js"></script>
 </body>
 
 

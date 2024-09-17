@@ -3,13 +3,13 @@ package idv.tia201.g2.web.order.vo;
 import idv.tia201.g2.core.pojo.Core;
 import idv.tia201.g2.web.product.vo.Product;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
+import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
+@Builder
 @Getter
 @Setter
 @NoArgsConstructor
@@ -28,9 +28,11 @@ public class OrderDetail extends Core {
     @JoinColumn(name = "order_id", insertable = false, updatable = false)
     private Orders orders;
 
-    @OneToMany
-    @JoinColumn(name = "product_id", referencedColumnName = "order_detail_id", insertable = false, updatable = false)
-    private List<Product> products; // 商品編號
+    @Column(name = "product_id")
+    private Integer productId; // 商品編號
+    @OneToOne
+    @JoinColumn(name = "product_id",  insertable = false, updatable = false)
+    private Product product;
 
     @Column(name = "product_sugar", updatable = false)
     private String productSugar; // 甜度
@@ -39,7 +41,7 @@ public class OrderDetail extends Core {
     private String productTemperature; // 溫度
 
     @Column(name = "product_add_materials", updatable = false)
-    private String productAddMaterials; // 加料
+    private String productAddMaterials = ""; // 加料
 
     @Column(name = "product_quantity", updatable = false)
     private Integer productQuantity; // 商品數量

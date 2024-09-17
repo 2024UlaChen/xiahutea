@@ -27,4 +27,6 @@ public class RegisterStoreDTO {
 
     private String owner;
 
+    private String storeRemark;
+
 }

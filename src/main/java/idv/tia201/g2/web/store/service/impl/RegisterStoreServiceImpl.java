@@ -3,6 +3,7 @@ package idv.tia201.g2.web.store.service.impl;
 import idv.tia201.g2.web.store.dao.StoreDao;
 import idv.tia201.g2.web.store.dto.RegisterStoreDTO;
 import idv.tia201.g2.web.store.service.RegisterStoreService;
+import idv.tia201.g2.web.store.util.StoreToRegisterStore;
 import idv.tia201.g2.web.store.vo.Store;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -80,7 +81,7 @@ public class RegisterStoreServiceImpl implements RegisterStoreService {
         //依照統一編號查詢是否已是會員
         Store oldStore = storeDao.findByVat(store.getVat());
         if(oldStore == null){
-            store.setStoreStatus(1);
+            store.setStoreStatus(0);//狀態預設為0
             Timestamp registerDay = new Timestamp(System.currentTimeMillis());
             store.setRegisterDay(registerDay);
             storeDao.save(store);
@@ -128,6 +129,12 @@ public class RegisterStoreServiceImpl implements RegisterStoreService {
         }
         return storeDao.findByStoreStatusInAndVatOrStoreNameContaining(storeStatus, store.getVat(), store.getStoreName(), pageable);
 
+    }
+
+    @Override
+    public RegisterStoreDTO searchRegisterStoreDetail(Store store) {
+        Store result = storeDao.findByStoreId(store.getStoreId());
+        return StoreToRegisterStore.convertToRegisterStore(result);
     }
 
 }

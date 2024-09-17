@@ -23,7 +23,7 @@ public class StoreToRegisterStore {
         List<RegisterStoreDTO> registerStoreList = storePage.getContent()
                 .stream()
                 .map(StoreToRegisterStore::convertToRegisterStore)
-                .collect(Collectors.toList());
+                .toList();
 
         return new PageImpl<>(registerStoreList, storePage.getPageable(), storePage.getTotalElements());
     }

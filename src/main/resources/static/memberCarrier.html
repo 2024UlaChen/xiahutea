@@ -26,6 +26,7 @@
     <link rel="stylesheet" href="assets/fonts/flaticon/flaticon.css">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="css/general.css">
+    <link rel="stylesheet" href="css/memberGeneralSetting.css">
     <link rel="stylesheet" href="css/member.css">
 </head>
 
@@ -50,24 +51,24 @@
                             <div>
                                 <ul class="member-list">
                                     <li>
-                                        <div>
+                                        <a href="member.html">
                                             <span>個人檔案</span>
-                                        </div>
+                                        </a>
                                     </li>
                                     <li>
-                                        <div>
+                                        <a href="memberSetting.html">
                                             <span>帳號管理</span>
-                                        </div>
+                                        </a>
                                     </li>
                                     <li>
-                                        <div>
+                                        <a href="memberAddress.html">
                                             <span>常用地址</span>
-                                        </div>
+                                        </a>
                                     </li>
-                                    <li class="member-list-active">
-                                        <div>
+                                    <li>
+                                        <a href="memberCarrier.html">
                                             <span>我的載具</span>
-                                        </div>
+                                        </a>
                                     </li>
                                 </ul>
                             </div>
@@ -78,21 +79,81 @@
                                     我的載具
                                 </div>
                                 <hr>
-                                <div>
-                                    <span>歡迎使用你訂！</span>
-                                    <span>您可以設定 載具條碼 囉！</span>
-
-                                    <div class="myCarrier">
-                                        <div class="myCarrierText">
-                                            <span>載具條碼</span>
-                                            <a>
-                                                <i class="fa fa-pencil"></i>
-                                            </a>
-                                            <a>
-                                                <i class="fa fa-trash"></i>
-                                            </a>
+                                <div class="memberCarrier">
+                                    <div>
+                                        <span>歡迎使用夏虎茶！</span>
+                                        <span>您可以設定 載具條碼 囉！</span>
+                                    </div>
+                                    <div>
+                                        <span>載具條碼</span>
+                                        <span id="memberCarrierText"></span>
+                                        <button id="carrierEdit">
+                                            <i class="fa fa-pencil"></i>
+                                        </button>
+                                        <button id="carrierDelete">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </div>
+                                    <div>
+                                        <svg id="memberCarrierBarcode"></svg>
+                                    </div>
+                                </div>
+                                <div class="modal fade" id="carrierEditing" tabindex="-1" role="dialog"
+                                     aria-labelledby="myModalLabelEdit" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal">
+                                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                                </button>
+                                                <h4 class="modal-title" id="myModalLabelEdit">我的載具</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div>
+                                                    <label for="myCarrier">請輸入載具條碼，輸入確認後會自動產生條碼</label>
+                                                </div>
+                                                <div>
+                                                    <input type="text" id="myCarrier" maxlength="8" minlength="8"
+                                                           placeholder="首位為/，英文字母大寫">
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-primary" id="carrierSaving">儲存
+                                                </button>
+                                            </div>
                                         </div>
-                                        <div class="myCarrierImg"></div>
+                                    </div>
+                                </div>
+                                <div class="modal fade" id="carrierDeleting" tabindex="-1" role="dialog"
+                                     aria-labelledby="myModalLabelDel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal">
+                                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                                </button>
+                                                <h4 class="modal-title" id="myModalLabelDel">確定刪除載具?</h4>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-primary">刪除</button>
+                                                <button type="button" class="btn btn-primary">取消</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal fade" id="carrierStatus" tabindex="-1" role="dialog"
+                                     aria-labelledby="myModalLabelStatus" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal">
+                                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                123
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -127,6 +188,11 @@
 <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyC3nDHy1dARR-Pa_2jjPCjvsOR4bcILYsM'></script>
 <script src="assets/js/frontend-plugin.js"></script>
 <script src="js/general.js"></script>
+<script src="https://cdn.jsdelivr.net/jsbarcode/3.3.20/JsBarcode.all.min.js"></script>
+<script src="cms/plugins/sweetalert2/sweetalert2.all.min.js"></script>
+<script src="js/memberGeneral.js"></script>
+<script src="js/memberCarrier.js"></script>
+
 </body>
 
 

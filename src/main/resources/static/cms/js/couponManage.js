@@ -3,91 +3,189 @@ document.addEventListener("DOMContentLoaded", function () {
     // 每頁顯示的行數及當前頁面
     const rowsPerPage = 10;
     let currentPage = 1;
-    // 所有表格行
-    const tableBody = document.getElementsByClassName("coupon-table")[0];
-    const rows = Array.from(tableBody.getElementsByTagName('tr'));
-    const totalRows = rows.length;
-    const totalPages = Math.ceil(totalRows / rowsPerPage);
+    let tableBody_el = document.getElementById('tablebody')
     let result_count_el = document.getElementById("result-count")
     let pagination_el = document.getElementById('pagination');
+    // let tbody_el = document.querySelector('.coupon-table tbody');
+    let rows = [];
+    let totalRows = 0;
+    let totalPages = 0;
+    //用來存後端抓到的全部優惠券
+    let coupons;
+
     //上下頁按鈕
     let btn_prev_el = document.getElementById('prev-btn');
     let btn_next_el = document.getElementById('next-btn');
 
+    //查詢按鈕
+    let find_coupon_el = document.getElementById('find-coupon');
 
-    //**************************************修改表格資料*****************************
-    document.addEventListener('click', function (event) {
-        if (event.target.classList.contains('td-edit')) {
-            const row = event.target.closest('tr');
-            const data = {
-                title: row.cells[0].textContent,
-                id: row.cells[1].textContent,
-                discount: row.cells[2].textContent,
-                amount: row.cells[3].textContent,
-                status: row.cells[4].textContent,
-                startDate :row.cells[5].textContent,
-                endDate:row.cells[6].textContent,
-                //TODO 還要再加入優惠券描述但不是從cell來
-            };
-            localStorage.setItem('couponData', JSON.stringify(data));
-            window.location.href = 'couponEdit.html';
-        }
-    });
-    //**************************************表格分頁*****************************
-    // 初始顯示第一頁並創建分頁按鈕，顯示總筆數
-    result_count_el.textContent = `共計 ${totalRows - 1} 筆`;
-    renderTable(currentPage);
-
+    //進入頁面先抓優惠券列表
+    fetch('/coupon/manage')
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(errorData => {
+                    throw new Error(errorData.message);
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            coupons = data;
+            showAllCoupon(data);
+        })
+        .catch(error => {
+            Swal.fire({
+                title: '取得數據異常',
+                text: error.message,
+                icon: 'error'
+            });
+        })
+    //表格分頁按鈕事件綁定
     btn_prev_el.addEventListener("click", prevPage);
     btn_next_el.addEventListener("click", nextPage);
-    //計算當前頁面要顯示的幾筆資料
-    function renderTable(page) {
-        const start = (page - 1) * rowsPerPage;
-        const end = start + rowsPerPage;
-        rows.forEach((row, index)=>{
-                row.style.display = (index >= start && index < end) ? '' : 'none';
-            });
-        pagination_el.textContent = `第 ${currentPage} / ${totalPages} 頁`;
+
+    //**************************************搜尋功能*****************************
+    find_coupon_el.addEventListener('click', function () {
+        const titleInput = document.getElementById('input-coupon-title').value.trim();
+        const idInput = document.getElementById('input-coupon-id').value.trim();
+        const statusChecked = document.querySelector('input[name="check-active"]:checked');
+        let filteredCoupons = coupons;  // 使用全域變數 coupons 來進行篩選
+
+        // 篩選條件
+        if (titleInput) {
+            filteredCoupons = filteredCoupons.filter(coupon => coupon.couponName.includes(titleInput));
+        }
+        if (idInput) {
+            filteredCoupons = filteredCoupons.filter(coupon => String(coupon.couponId) === idInput);
+        }
+        if (statusChecked) {
+            const isActive = statusChecked.id === 'active';  // 如果選中 "啟用" 則為 true，否則為 false
+            filteredCoupons = filteredCoupons.filter(coupon => coupon.couponStatus === isActive);
+        }
+        // 清空表格並顯示篩選結果
+        showAllCoupon(filteredCoupons);
+    })
+    //**************************************修改表格資料*****************************
+    document.addEventListener('click', function (e) {
+        if (e.target.classList.contains('td-edit')) {
+            let couponId = e.target.getAttribute('data-id');
+            if (couponId && couponId !== 'undefined') {
+                window.location.href = `couponEdit.html?couponId=${couponId}`;
+            } else {
+                window.location.href = `couponEdit.html`;
+            }
+
+        }
+    });
+    // //**************************************刪除表格資料*****************************
+    // document.addEventListener('click', function (e) {
+    //     if (e.target.classList.contains('td-delete')) {
+    //         let couponId = e.target.getAttribute('data-id');
+    //         Swal.fire({
+    //             title: "確定要刪除嗎?",
+    //             text: "刪除後將無法恢復該項目!",
+    //             icon: "warning",
+    //             showCancelButton: true,
+    //             confirmButtonText: "刪除",
+    //             cancelButtonText: "取消",
+    //         }).then((result) => {
+    //             if (result.isConfirmed) {
+    //                 deleteCoupon(couponId);  // 調用刪除函數，傳入 ID
+    //             }
+    //         });
+    //         }
+    //     })
+    //**************************************FUNCTION區*****************************
+    //渲染表格function
+    function showAllCoupon(coupons) {
+        tableBody_el.innerHTML = '';
+        coupons.forEach(coupon => {
+            const couponStatus = coupon.couponStatus ? '啟用' : '未啟用';
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${coupon.couponId}</td>
+                <td>${coupon.couponName}</td>
+                <td>${coupon.discount}</td>
+                <td>${couponStatus}</td>
+                <td>${coupon.createDate}</td>
+                <td>${coupon.expiredDate}</td>
+                <td>
+                    <button type="button" class="td-edit" data-id="${coupon.couponId}">修改</button>
+                </td>
+            `;
+            tableBody_el.appendChild(row);
+        })
+        // 初始顯示第一頁並創建分頁按鈕，顯示總筆數
+        rows = Array.from(tableBody_el.getElementsByTagName('tr'));
+        totalRows = rows.length;
+        totalPages = Math.ceil(totalRows / rowsPerPage);
+        result_count_el.textContent = `共計 ${totalRows} 筆`;
+        renderTable(currentPage, totalPages);
     }
+
+    //計算當前頁面要顯示的幾筆資料
+    function renderTable(currentPage, totalPages) {
+        const start = (currentPage - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+        rows.forEach((row, index) => {
+            row.style.display = (index >= start && index < end) ? '' : 'none';
+        });
+        pagination_el.textContent = `第 ${currentPage} / ${totalPages} 頁`;
+        // 設定按鈕狀態
+        btn_prev_el.disabled = currentPage === 1;
+        btn_next_el.disabled = currentPage === totalPages;
+    }
+
     //上下頁
     function prevPage() {
         if (currentPage > 1) {
             currentPage--;
-            renderTable(currentPage);
+            renderTable(currentPage, totalPages);
         }
     }
+
     function nextPage() {
         if (currentPage < totalPages) {
             currentPage++;
-            renderTable(currentPage);
+            renderTable(currentPage, totalPages);
         }
     }
-    //渲染表格
-    // fetch('your-coupon-api-endpoint')
-    //     .then(response => response.json())
-    //     .then(data => {
-    //         var tbody = document.querySelector('.coupon-table tbody');
-    //         tbody.innerHTML = ''; // 清空現有的 tbody 內容
-    //
-    //         data.forEach(coupon => {
-    //             var row = document.createElement('tr');
-    //             row.innerHTML = `
-    //           <td>${coupon.name}</td>
-    //           <td>${coupon.id}</td>
-    //           <td>$${coupon.discountAmount}</td>
-    //           <td>${coupon.availableQuantity}</td>
-    //           <td>${coupon.status}</td>
-    //           <td>${coupon.startDate} ~ ${coupon.endDate}</td>
-    //           <td>${coupon.sendTime}</td>
-    //           <td>${coupon.sentPeople}</td>
-    //           <td>${coupon.usedPeople}</td>
-    //           <td>
-    //               <a href="couponEdit.html?id=${coupon.id}">
-    //                   <button type="button" id="td-edit">修改</button>
-    //               </a>
-    //           </td>
-    //             tbody.appendChild(row);
+
+    //刪除表格資料
+    // function deleteCoupon(couponId) {
+    //     fetch(`/coupon/manage/delete/${couponId}`, {
+    //         method: 'DELETE',
+    //     })
+    //         .then(response => {
+    //             if (!response.ok) {
+    //                 throw new Error('刪除失敗');
+    //             }
+    //             return response.json();
+    //         })
+    //         .then(data => {
+    //             if (data.successful) {
+    //                 Swal.fire({
+    //                     title: '成功刪除!',
+    //                     icon: 'success',
+    //                 }).then(() => {
+    //                     location.reload();
+    //                 });
+    //             } else {
+    //                 Swal.fire({
+    //                     title: '後端刪除失敗',
+    //                     text: data.message,
+    //                     icon: 'error'
+    //                 });
+    //             }
+    //         })
+    //         .catch(error => {
+    //             Swal.fire({
+    //                 title: '刪除失敗',
+    //                 text: error.message,
+    //                 icon: 'error'
+    //             });
     //         });
-    //     });
-});
+    //     }
+    })
 

@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Date;
+import java.util.Arrays;
 
 @Entity
 @Setter
@@ -24,34 +25,66 @@ public class Member extends Core {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "customer_id")
     private Integer customerId;
-    @Column(name = "customer_account")
-    private String customerAccount;
+
     @Column(name = "customer_password")
     private String customerPassword;
+
     @Column(name = "nickname")
     private String nickname;
+
     @Column(name = "create_date", updatable = false)
     private Date createDate;
+
     @Column(name = "update_date")
     private Date updateDate;
+
     @Column(name = "valid_status", insertable = false)
     private Boolean validStatus;
+
     @Column(name = "customer_email")
     private String customerEmail;
+
     @Column(name = "customer_phone")
     private String customerPhone;
+
     @Column(name = "customer_money", insertable = false)
     private Integer customerMoney;
+
     @Column(name = "customer_carrier")
     private String customerCarrier;
+
     @Lob
     @Basic(fetch = FetchType.LAZY)
-    @Column(name = "customer_img", columnDefinition="LONGBLOB")
+    @Column(name = "customer_img", columnDefinition = "LONGBLOB")
     private byte[] customerImg;
+
     @Column(name = "sex")
     private String sex;
+
     @Column(name = "birthday")
     @JsonFormat(pattern = "yyyy/MM/dd")
     private Date birthday;
 
+    @Column(name = "customer_remark")
+    private String customerRemark;
+
+    @Override
+    public String toString() {
+        return "Member{" +
+                "customerId=" + customerId +
+                ", customerPassword='" + customerPassword + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", createDate=" + createDate +
+                ", updateDate=" + updateDate +
+                ", validStatus=" + validStatus +
+                ", customerEmail='" + customerEmail + '\'' +
+                ", customerPhone='" + customerPhone + '\'' +
+                ", customerMoney=" + customerMoney +
+                ", customerCarrier='" + customerCarrier + '\'' +
+                ", customerImg=" + Arrays.toString(customerImg) +
+                ", sex='" + sex + '\'' +
+                ", birthday=" + birthday +
+                ", customerRemark='" + customerRemark + '\'' +
+                '}';
+    }
 }

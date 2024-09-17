@@ -26,7 +26,9 @@
     <link rel="stylesheet" href="assets/fonts/flaticon/flaticon.css">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="css/general.css">
+    <link rel="stylesheet" href="css/memberGeneralSetting.css">
     <link rel="stylesheet" href="css/member.css">
+
 </head>
 
 <body>
@@ -50,24 +52,24 @@
                             <div>
                                 <ul class="member-list">
                                     <li>
-                                        <div>
+                                        <a href="member.html">
                                             <span>個人檔案</span>
-                                        </div>
+                                        </a>
                                     </li>
                                     <li>
-                                        <div>
+                                        <a href="memberSetting.html">
                                             <span>帳號管理</span>
-                                        </div>
-                                    </li>
-                                    <li class="member-list-active">
-                                        <div>
-                                            <span>常用地址</span>
-                                        </div>
+                                        </a>
                                     </li>
                                     <li>
-                                        <div>
+                                        <a href="memberAddress.html">
+                                            <span>常用地址</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="memberCarrier.html">
                                             <span>我的載具</span>
-                                        </div>
+                                        </a>
                                     </li>
                                 </ul>
                             </div>
@@ -78,6 +80,34 @@
                                     常用地址
                                 </div>
                                 <hr>
+                                <div>
+                                    <ul id="memberAddress">
+                                        <li>
+                                            <i class="fa fa-map-marker" aria-hidden="true"></i>
+                                            <span>新竹縣寶山鄉 www</span>
+                                            <button data-address-edit="1">
+                                                <i class="fa fa-pencil"></i>
+                                            </button>
+                                            <button data-address-delete="1">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                        </li>
+                                        <li>
+                                            <i class="fa fa-map-marker" aria-hidden="true"></i>
+                                            <span>台北市中山區南京東路三段219號</span>
+                                            <button data-address-edit="2">
+                                                <i class="fa fa-pencil"></i>
+                                            </button>
+                                            <button data-address-delete="2">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                        </li>
+                                    </ul>
+                                    <hr>
+                                    <div class="addressSaving">
+                                        <button>新增地址</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -110,6 +140,7 @@
 <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyC3nDHy1dARR-Pa_2jjPCjvsOR4bcILYsM'></script>
 <script src="assets/js/frontend-plugin.js"></script>
 <script src="js/general.js"></script>
+<script src="js/memberGeneral.js"></script>
 </body>
 
 
