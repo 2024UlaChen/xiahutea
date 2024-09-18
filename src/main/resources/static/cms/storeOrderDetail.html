@@ -403,7 +403,7 @@
                 receiverHtml =`
                         <tr>
                             <th>取貨方式</th>
-                            <td>${data[0].orders.receiverMethod}</td>
+                            <td>${receiverMethodText(data[0].orders.receiverMethod)}</td>
                         </tr>
                         <tr>
                             <th>取貨人姓名</th>
@@ -530,6 +530,12 @@
                     return nullValue;
                 }else{
                     return "";
+                }
+            }
+            function receiverMethodText(receiverNum){
+                switch (receiverNum) {
+                    case 1 : return "自取";
+                    case 2 : return "外送";
                 }
             }
             function nullMoney(nullValue){
