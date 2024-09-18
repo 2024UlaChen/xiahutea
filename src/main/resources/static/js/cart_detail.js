@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded",function(){
   let customer_img_el = document.getElementsByClassName("customer-img")[0];
   let customer_name_el = document.getElementsByClassName("customer-name")[0];
   let customerId;
+  let storeId;
 
   //訂單細項
   let item_detail_el = document.getElementsByClassName('item-detail')[0];
@@ -62,10 +63,19 @@ document.addEventListener("DOMContentLoaded",function(){
   let moneybag_discount_number_el = document.getElementsByClassName("moneybag-discount-number")[0];
   let couponDropdown_el = document.getElementsByClassName('coupon-dropdown')[0];
   let couponSelect_el = document.getElementById('coupon-select');
+  let membercard_count_el = document.getElementsByClassName('membercard-count')[0];
+  let membercard_number_el = document.getElementById('membercard-number');
+  let moneybag_count_el = document.getElementsByClassName('moneybag-count')[0]
+
+
+
+
   //訂單彙總
   let product_amount_el = document.getElementsByClassName('product-amount')[0];
   let product_unit_el = document.getElementsByClassName('product-unit')[0];
     let coupon_minus_number_el = document.getElementsByClassName('coupon-minus-number')[0];
+  let membercard_minus_number_el = document.getElementsByClassName('membercard-minus-number')[0];
+  let moneybag_minus_number_el = document.getElementsByClassName('moneybag-minus-number')[0];
     let CouponAmountText=null;
   let CouponAmount=null;
 
@@ -191,6 +201,10 @@ document.addEventListener("DOMContentLoaded",function(){
       //獲得使用者優惠券選項
       select_coupon_input_el.addEventListener("click", function () {
           couponSelect_el.disabled=false;
+          membercard_count_el.style.display = "none";
+          moneybag_count_el.style.display= "none";
+          membercard_minus_number_el.textContent = '$0';
+          moneybag_minus_number_el.textContent = '$0';
           getcoupons(loginMember.customerId);
       })
 
@@ -199,22 +213,32 @@ document.addEventListener("DOMContentLoaded",function(){
           let selectedOption = couponSelect_el.options[couponSelect_el.selectedIndex];
           let discount = selectedOption.getAttribute('data-discount');
           coupon_minus_number_el.textContent = `$${discount}`;
-          // Calculatetotal();
+          // Calculatetotal(); 移到document點擊
       })
 
-      //TODO 加入點擊事件get會員卡點數 點選會員卡，
+      //加入點擊事件get會員卡點數
       select_membercard_input_el.addEventListener("click",function (){
-          //清除優惠券欄位
+          // GetMemberCardPoint(customerId,storeId);
+          membercard_count_el.style.display = "flex";
+          moneybag_count_el.style.display= "none";
+          //清除優惠券欄位及會員卡優惠
           couponSelect_el.innerHTML = '<option disabled selected >請選擇優惠券</option>';
-          coupon_minus_number_el.textContent = '$0';
           couponSelect_el.disabled=true;
+          coupon_minus_number_el.textContent = '$0';
+          moneybag_minus_number_el.textContent = '$0';
+
       })
       //TODO 加入點擊事件get會員錢包餘額
-
       select_moneybag_input_el.addEventListener("click",function (){
+          moneybag_count_el.style.display = "flex";
+          moneybag_discount_number_el.disabled =false;
+          moneybag_discount_number_el.focus();
+          membercard_count_el.style.display = "none";
+          //清除優惠券及會員卡優惠
+          couponSelect_el.innerHTML = '<option disabled selected >請選擇優惠券</option>';
           couponSelect_el.disabled=true;
-        moneybag_discount_number_el.disabled =false;
-        moneybag_discount_number_el.focus();
+          coupon_minus_number_el.textContent = '$0';
+          membercard_minus_number_el.textContent = '$0';
       })
       moneybag_discount_number_el.addEventListener("focus", function () {
         moneybag_discount_number_el.placeholder = "";
@@ -465,7 +489,7 @@ document.addEventListener("DOMContentLoaded",function(){
             }
             console.log('Products:', products);
             // 检查商品資料中是否包含商店ID
-            const storeId = products[0].productStoreId;
+              storeId = products[0].productStoreId;
             if (!storeId) {
               throw new Error('商品缺乏商店編號');
             }
@@ -988,7 +1012,14 @@ document.addEventListener("DOMContentLoaded",function(){
         //F14 獲得的優惠券動態生成選項
         function getcoupons(customerId){
             fetch(`/cart/getCoupon/${customerId}`)
-                .then(response => response.json())
+                .then(response=>{
+                    if (!response.ok) {
+                        return response.json().then(errorData => {
+                            throw new Error(errorData.message);
+                        });
+                    }
+                    return response.json();
+                })
                 .then(coupons => {
                     console.log("coupons : ",coupons)
                     coupons.forEach(coupon => {
@@ -1000,6 +1031,25 @@ document.addEventListener("DOMContentLoaded",function(){
                     });
                 })
                 .catch(error => console.error('Error loading coupons:', error));
+        }
+        //F15 獲得會員卡餘額及相關事件綁定
+        function GetMemberCardPoint(customerId, storeId){
+            fetch(`/cart/checkoutlist/getMemberCard/${customerId}/${storeId}`)
+                .then(response=>{
+                    if (!response.ok) {
+                        return response.json().then(errorData => {
+                            throw new Error(errorData.message);
+                        });
+                    }
+                    return response.json();
+                })
+                .then(data=>{
+                    console.log("會員卡積分:", data.points);
+                    membercard_number_el.textContent=data.points;
+                })
+                .catch(error=>{
+                    console.error('Error loading coupons:', error);
+                })
         }
         //F20 計算訂單金額
         function Calculatetotal(){

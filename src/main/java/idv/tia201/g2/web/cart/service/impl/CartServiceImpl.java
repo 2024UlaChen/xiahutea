@@ -15,6 +15,7 @@ import idv.tia201.g2.web.member.vo.Member;
 import idv.tia201.g2.web.product.vo.Product;
 
 import idv.tia201.g2.web.store.dao.StoreDao;
+import idv.tia201.g2.web.store.vo.CustomerLoyaltyCard;
 import idv.tia201.g2.web.store.vo.Store;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -67,6 +68,11 @@ public class CartServiceImpl implements CartService {
 //    @Override
     public List<Coupon> findCouponsByCustomerId(Integer customerId) {
         return couponDao.findCouponIdsByCutomerId(customerId);
+    }
+
+    @Override
+    public CustomerLoyaltyCard findMemberLoyalCardById(Integer customerId, Integer storeId) {
+        return null;
     }
 
     @Override

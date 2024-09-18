@@ -6,6 +6,7 @@ import idv.tia201.g2.web.member.vo.Cart;
 import idv.tia201.g2.web.member.vo.Member;
 import idv.tia201.g2.web.member.vo.MemberAddress;
 import idv.tia201.g2.web.product.vo.Product;
+import idv.tia201.g2.web.store.vo.CustomerLoyaltyCard;
 import idv.tia201.g2.web.store.vo.Store;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -62,4 +63,10 @@ public class CartController extends HttpServlet {
 //        cartService.saveCartItems(cartItems);
 //        return "Cart items saved";
 //    }
+    //GET 請求:獲得會員卡餘額
+    @GetMapping("/checkoutlist/getMemberCard/{customerId}/{storeId}")
+    public CustomerLoyaltyCard getMemberCard(@PathVariable int customerId, @PathVariable int storeId) {
+        return null;
+    }
 }
+
