@@ -2,6 +2,7 @@ package idv.tia201.g2.web.order.dao.impl;
 
 import idv.tia201.g2.web.order.dao.DisputeDao;
 import idv.tia201.g2.web.order.vo.DisputeOrder;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import org.hibernate.Session;
@@ -48,7 +49,11 @@ public class DisputeDaoImpl implements DisputeDao {
         String hql = "FROM DisputeOrder WHERE orderId= :orderId";
         TypedQuery<DisputeOrder> query = session.createQuery(hql, DisputeOrder.class)
                 .setParameter("orderId", orderId);
-        return query.getSingleResult();
+        try {
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     @Override

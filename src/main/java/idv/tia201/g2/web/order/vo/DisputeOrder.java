@@ -36,7 +36,7 @@ public class DisputeOrder extends Core {
     @JoinColumn(name = "customer_id", insertable = false, updatable = false)
     private Member customer;
 
-    @Column(name = "dispute_reason", updatable = false)
+    @Column(name = "dispute_reason")
     private String disputeReason; // 爭議原因
 
     @Column(name = "refund_amount")

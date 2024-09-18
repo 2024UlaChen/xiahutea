@@ -10,7 +10,7 @@ public interface DisputeService  {
 
     List<DisputeOrder> findAll();
     OrderDto findByDisputeOrderId(int disputeOrderId);
-
+    OrderDto findByOrderId(int orderId);
     DisputeOrder add(DisputeOrder disputeOrder);
     DisputeOrder updateInfo(DisputeOrder disputeOrder);
 

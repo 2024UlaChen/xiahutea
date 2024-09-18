@@ -1,5 +1,6 @@
 package idv.tia201.g2.web.order.service.impl;
 
+import java.sql.Timestamp;
 import java.util.List;
 import idv.tia201.g2.web.order.dao.DisputeDao;
 import idv.tia201.g2.web.order.dao.OrderDao;
@@ -33,7 +34,7 @@ public class DisputeServiceImpl implements DisputeService {
     private OrderMappingUtil orderMappingUtil;
 
     // FINISH
-    //後台 爭議列表
+    // 後台 爭議列表
     @Override
     public List<DisputeOrder> findAll() {
         return disputeDao.selectAll();
@@ -52,15 +53,49 @@ public class DisputeServiceImpl implements DisputeService {
         return orderMappingUtil.createOrderDto(order, disputeOrder, orderDetails);
     }
 
-    //------------------------------------------------------
-    // todo
-
-    @Override
-    public DisputeOrder add(DisputeOrder disputeOrder) {
-//        return (disputeDao.insert(disputeOrder));
-        return null;
+    // 前台 爭議申請 顯示
+    public OrderDto findByOrderId(int orderId) {
+        Orders order = orderDao.selectByOrderId(orderId);
+        List<OrderDetail> orderDetails = orderDetailDao.selectByOrderId(orderId);
+        DisputeOrder disputeOrder = disputeDao.selectByOrderId(orderId);
+        if(order == null) {
+            return null;
+        }
+        return orderMappingUtil.createOrderDto(order, disputeOrder, orderDetails);
     }
 
+    // 前台 爭議申請 新增
+    @Override
+    public DisputeOrder add(DisputeOrder disputeOrder) {
+        if(!(isEmpty(disputeOrder.getDisputeOrderId()))) {
+            disputeOrder.setMessage("申請失敗，已有爭議資料");
+            disputeOrder.setSuccessful(false);
+            return disputeOrder;
+        }
+        if(isEmpty(disputeOrder.getOrderId())) {
+            disputeOrder.setMessage("申請失敗，無訂單編號");
+            disputeOrder.setSuccessful(false);
+            return disputeOrder;
+        }
+        if(isEmpty(disputeOrder.getDisputeReason())) {
+            disputeOrder.setMessage("申請失敗，無爭議原因");
+            disputeOrder.setSuccessful(false);
+            return disputeOrder;
+        }
+        disputeOrder.setOrderId(disputeOrder.getOrderId());
+        disputeOrder.setDisputeStatus(1);
+        disputeOrder.setDisputeReason(disputeOrder.getDisputeReason());
+        disputeOrder.setApplyDatetime(new Timestamp(System.currentTimeMillis()));
+        disputeDao.insert(disputeOrder);
+        disputeOrder.setMessage("申請完成");
+        disputeOrder.setSuccessful(true);
+        return disputeOrder;
+    }
+
+    //------------------------------------------------------
+
+
+    // todo
     @Override
     public DisputeOrder updateInfo(DisputeOrder newDispute) {
         final DisputeOrder oldDispute = disputeDao.selectByDisputeId(newDispute.getDisputeOrderId());
