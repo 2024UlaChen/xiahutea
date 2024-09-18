@@ -5,10 +5,19 @@ import jakarta.mail.*;
 import jakarta.mail.internet.AddressException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.stereotype.Component;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.text.MessageFormat;
 import java.util.Properties;
 
-
+@Component
 public class MailUtil {
 
     private static final String SENDER = "tiaxiahutea@gmail.com";
@@ -46,5 +55,33 @@ public class MailUtil {
         properties.put("mail.smtp.port", "587");
         return properties;
     }
+
+    public void sendAttachmentsMail(Mail mail) throws MessagingException, IOException {
+        Session session = getSession();
+        MimeMessage message = new MimeMessage(session);
+        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+        helper.setSubject(mail.getSubject());
+        helper.setText(buildContent("title"), true);
+        helper.setTo(mail.getRecipient());
+        helper.setFrom(new InternetAddress(SENDER));
+        Transport.send(message);
+    }
+
+    public String buildContent(String title) throws IOException {
+        //加载邮件html模板
+        Resource resource = new ClassPathResource("static/templates/mailtemplate.ftl");
+        StringBuffer buffer = new StringBuffer();
+        String line = "";
+        try (
+                InputStream inputStream = resource.getInputStream();
+                BufferedReader fileReader = new BufferedReader(new InputStreamReader(inputStream));
+        ) {
+            while ((line = fileReader.readLine()) != null) {
+                buffer.append(line);
+            }
+        }
+        return MessageFormat.format(buffer.toString().replace("{", "'{'").replace("}", "'}'"), title);
+    }
+
 
 }
