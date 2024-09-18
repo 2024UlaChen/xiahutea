@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static org.springframework.util.ObjectUtils.isEmpty;
+
 @Service
 @Transactional
 public class DisputeServiceImpl implements DisputeService {
@@ -30,6 +32,7 @@ public class DisputeServiceImpl implements DisputeService {
     @Autowired
     private OrderMappingUtil orderMappingUtil;
 
+    // FINISH
     //後台 爭議列表
     @Override
     public List<DisputeOrder> findAll() {
@@ -49,8 +52,7 @@ public class DisputeServiceImpl implements DisputeService {
         return orderMappingUtil.createOrderDto(order, disputeOrder, orderDetails);
     }
 
-
-
+    //------------------------------------------------------
     // todo
 
     @Override
@@ -60,10 +62,37 @@ public class DisputeServiceImpl implements DisputeService {
     }
 
     @Override
-    public OrderDto update(OrderDto orderDto) {
-
-
-        return null;
+    public DisputeOrder updateInfo(DisputeOrder newDispute) {
+        final DisputeOrder oldDispute = disputeDao.selectByDisputeId(newDispute.getDisputeOrderId());
+        // 同意時
+        if(newDispute.getDisputeStatus() == 2){
+            if(isEmpty(newDispute.getRefundAmount()) || !(isEmpty(newDispute.getRejectReason()))) {
+                newDispute.setMessage("修改失敗");
+                newDispute.setSuccessful(false);
+                System.out.println(newDispute.getRefundAmount()+", " +isEmpty(newDispute.getRefundAmount()) );
+                System.out.println(newDispute.getRejectReason() +", "+ isEmpty(newDispute.getRejectReason()));
+                System.err.println("錯誤: refundAmount 或 rejectReason 錯誤");
+                return newDispute;
+            }
+        }
+        if(newDispute.getDisputeStatus() == 3){
+            if(!(isEmpty(newDispute.getRefundAmount())) || isEmpty(newDispute.getRejectReason())){
+                newDispute.setMessage("修改失敗");
+                newDispute.setSuccessful(false);
+                System.err.println("錯誤: refundAmount 或 rejectReason 錯誤");
+                return newDispute;
+            }
+        }
+//        oldDispute.setOrderId(oldDispute.getOrderId());
+//        oldDispute.setCustomerId(oldDispute.getCustomerId());
+        oldDispute.setRefundAmount(newDispute.getRefundAmount());
+        oldDispute.setRejectReason(newDispute.getRejectReason());
+        oldDispute.setDisputeNotes(newDispute.getDisputeNotes());
+        oldDispute.setDisputeStatus(newDispute.getDisputeStatus());
+        disputeDao.update(newDispute);
+        newDispute.setMessage("修改成功");
+        newDispute.setSuccessful(true);
+        return newDispute;
     }
 
 

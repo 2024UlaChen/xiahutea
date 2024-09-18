@@ -5,10 +5,7 @@ import idv.tia201.g2.web.order.service.DisputeService;
 import idv.tia201.g2.web.order.vo.DisputeOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,19 +16,30 @@ public class DisputeController {
     @Autowired
     private DisputeService disputeService;
 
-    // 後台 爭議列表顯示
+    // FINISH
+    // 後台 爭議列表 顯示
     @GetMapping("manage")
     public List<DisputeOrder> manage(){
         return disputeService.findAll();
     }
 
-    //後台 爭議明細顯示
+    // 後台 爭議明細 顯示
     @GetMapping({"manage/{disputeOrderId}"})
     public OrderDto detail(@PathVariable Integer disputeOrderId){
         return disputeService.findByDisputeOrderId(disputeOrderId);
     }
 
-    // todo 修改資料
+    // ------------------------------------------------------
+    // todo
+    // 後台 爭議明細 修改
+    @PutMapping({"manage/{disputeOrderId}"})
+    public DisputeOrder save(
+            @PathVariable Integer disputeOrderId,
+            @RequestBody DisputeOrder reqDisputeOrder
+    ){
+        reqDisputeOrder.setDisputeOrderId(disputeOrderId);
+        return disputeService.updateInfo(reqDisputeOrder);
+    }
 
     // todo 新增資料
 

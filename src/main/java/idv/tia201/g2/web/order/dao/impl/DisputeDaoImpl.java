@@ -7,6 +7,7 @@ import jakarta.persistence.TypedQuery;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class DisputeDaoImpl implements DisputeDao {
@@ -14,6 +15,7 @@ public class DisputeDaoImpl implements DisputeDao {
     @PersistenceContext
     private Session session;
 
+    // FINISH
     // 後台 爭議列表
     @Override
     public List<DisputeOrder> selectAll() {
@@ -24,17 +26,25 @@ public class DisputeDaoImpl implements DisputeDao {
 
     // 後台 爭議明細
     @Override
-    public DisputeOrder selectByDisputeId(int disputeOrderId) {
+    public DisputeOrder selectByDisputeId(Integer disputeOrderId) {
         String hql = "from DisputeOrder where disputeOrderId= :disputeOrderId";
         TypedQuery<DisputeOrder> query = session.createQuery(hql, DisputeOrder.class)
                 .setParameter("disputeOrderId", disputeOrderId);
         return query.getSingleResult();
     }
 
+    @Override
+    public List<DisputeOrder> selectBycCustomerId(Integer customerId) {
+        String hql = "from DisputeOrder where customerId= :customerId";
+        TypedQuery<DisputeOrder> query = session.createQuery(hql, DisputeOrder.class)
+                .setParameter("customerId", customerId);
+        return query.getResultList();
+    }
+
     //--------------------------------------
     //todo
     @Override
-    public DisputeOrder selectByOrderId(int orderId) {
+    public DisputeOrder selectByOrderId(Integer orderId) {
         String hql = "FROM DisputeOrder WHERE orderId= :orderId";
         TypedQuery<DisputeOrder> query = session.createQuery(hql, DisputeOrder.class)
                 .setParameter("orderId", orderId);
