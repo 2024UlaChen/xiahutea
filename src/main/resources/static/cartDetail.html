@@ -256,11 +256,13 @@
                   <li>
                       <input type="radio" class="select-cellphone" name="select-contact">
                       <label for="option1" class="label-cellphone">手機</label>
+                      <span id="cellphone-error" style="color: red; display: none;">格式錯誤，請輸入正確台灣手機號碼</span>
                       <input type="text" class="input-cellphone" placeholder="EX:0912345678" maxlength="10" disabled>
                   </li>
                   <li>
                       <input type="radio" class="select-phone" name="select-contact">
                       <label for="option2" class="label-phone">市話</label>
+                      <span id="phone-zone-error" style="color: red; display: none;">請輸入有效的台灣區碼</span>
                       <div class="input-phone">
                           <input type="text" class="input-phone-zone" placeholder="區碼" maxlength="2" disabled>
                           <input type="text" class="input-phone-number" maxlength="7" disabled>

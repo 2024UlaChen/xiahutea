@@ -43,9 +43,9 @@ document.addEventListener("DOMContentLoaded",function(){
   let confirm_delete_el = document.getElementById("confirm-delete");
   let cancel_delete_el = document.getElementById("cancel-delete");
   //用全域變數用來裝cartItem(用來編輯)、currentItem(用來刪除)、loginMember(用來裝目前登入會員)
-    let currentCartItem = null;
-    let currentItem = null;
-    let loginMember = null;
+  let currentCartItem = null;
+  let currentItem = null;
+  let loginMember = null;
   //取貨方式
   let pick_up_el = document.getElementsByClassName('pick-up')[0];
   let pick_up_input_el = document.getElementsByClassName("pick-up-input")[0];
@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded",function(){
 
   //時間選擇
   // let picker_el = document.getElementsByClassName("pickuper")[0];
-    let date_input_el = document.getElementById('myDatepicker');
+  let date_input_el = document.getElementById('myDatepicker');
 
   //優惠使用
   // let coupon_number_el = document.getElementsByClassName("coupon-number")[0];
@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded",function(){
   //訂單彙總
   let product_amount_el = document.getElementsByClassName('product-amount')[0];
   let product_unit_el = document.getElementsByClassName('product-unit')[0];
-    let coupon_minus_number_el = document.getElementsByClassName('coupon-minus-number')[0];
+  let coupon_minus_number_el = document.getElementsByClassName('coupon-minus-number')[0];
   let membercard_minus_number_el = document.getElementsByClassName('membercard-minus-number')[0];
   let moneybag_minus_number_el = document.getElementsByClassName('moneybag-minus-number')[0];
 
@@ -84,7 +84,7 @@ document.addEventListener("DOMContentLoaded",function(){
   let PlatformfeeText=null;
   let PlatformAmount=null;
 
-    let total_amount_el = document.getElementsByClassName('total-amount')[0];
+  let total_amount_el = document.getElementsByClassName('total-amount')[0];
 
   //結帳流程-2
   //取貨人
@@ -92,9 +92,13 @@ document.addEventListener("DOMContentLoaded",function(){
   let btn_goto_next_page_el = document.getElementsByClassName("btn-goto-next-page")[0];
   let select_cellphone_el = document.getElementsByClassName("select-cellphone")[0];
   let input_cellphone_el = document.getElementsByClassName("input-cellphone")[0];
+  let cellphoneError_el = document.getElementById('cellphone-error');
   let select_phone_el = document.getElementsByClassName("select-phone")[0];
   let input_phone_zone_el = document.getElementsByClassName("input-phone-zone")[0];
   let input_phone_number_el = document.getElementsByClassName("input-phone-number")[0];
+  let phoneZoneError_el = document.getElementById('phone-zone-error');
+  // 台灣市話區碼列表 (部分常見區碼)
+  let validPhoneZones = ['02', '03', '04', '05', '06', '07', '08'];
   let text2store_el = document.getElementsByClassName("text2store")[0];
   //發票方式
   let select_paper_el = document.getElementsByClassName("select-paper")[0]; 
@@ -322,6 +326,7 @@ document.addEventListener("DOMContentLoaded",function(){
         input_phone_number_el.disabled = true;
         input_phone_zone_el.value = "";
         input_phone_number_el.value = "";
+        phoneZoneError_el.style.display = 'none';
         input_cellphone_el.focus();
       })
       input_cellphone_el.addEventListener("focus", function () {
@@ -332,11 +337,28 @@ document.addEventListener("DOMContentLoaded",function(){
           input_cellphone_el.placeholder = "EX:0912345678";
         }
       });
+      //檢查手機輸入格式
+      input_cellphone_el.addEventListener('input', function () {
+          let cellphoneInput = this.value;
+          // 台灣手機號碼格式檢核 (09 開頭，接 8 位數字)
+          let phoneRegex = /^09\d{8}$/;
+          if (phoneRegex.test(cellphoneInput)) {
+              // 符合格式，隱藏錯誤提示
+              cellphoneError_el.style.display = 'none';
+              input_cellphone_el.style.borderColor = '';
+          } else {
+              // 不符合格式，顯示錯誤提示
+              cellphoneError_el.style.display = 'inline';
+              // input_cellphone_el.style.borderColor = 'red';
+          }
+      });
 
       select_phone_el.addEventListener("click", function () {
         input_phone_zone_el.disabled = false;
         input_cellphone_el.disabled = true;
         input_cellphone_el.value = "";
+        cellphoneError_el.style.display = 'none';
+        input_cellphone_el.style.borderColor = '';
         input_phone_zone_el.focus();
       })
       input_phone_zone_el.addEventListener("focus", function () {
@@ -347,14 +369,28 @@ document.addEventListener("DOMContentLoaded",function(){
           input_phone_zone_el.placeholder = "區碼";
         }
       });
-      input_phone_zone_el.addEventListener("input", function () {
-        if (input_phone_zone_el.value.length === 2) {
-          setTimeout(function () {
-            input_phone_number_el.disabled = false;
-            input_phone_number_el.focus();
-          }, 10);
+      //檢查市話區碼
+      input_phone_zone_el.addEventListener('input', function () {
+        let phoneZoneInput = this.value;
+        // 檢核輸入的區碼是否有效
+        if (validPhoneZones.includes(phoneZoneInput)) {
+            // 符合區碼，隱藏錯誤提示
+            phoneZoneError_el.style.display = 'none';
+
+            // 如果輸入的區碼長度為2，解鎖市話號碼輸入框並自動將焦點設置到該框
+            if (phoneZoneInput.length === 2) {
+                setTimeout(function () {
+                    input_phone_number_el.disabled = false;
+                    input_phone_number_el.focus();
+                }, 10);
+            }
+        } else {
+            // 不符合區碼，顯示錯誤提示
+            phoneZoneError_el.style.display = 'inline';
+            // 禁用市話號碼輸入框
+            input_phone_number_el.disabled = true;
         }
-      })
+    });
 
       text2store_el.addEventListener("focus", function () {
         text2store_el.placeholder = "";
