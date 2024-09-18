@@ -11,6 +11,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class OrderMappingUtil {
+
+    // FINISH
     public OrderDto createOrderDto(Orders order, DisputeOrder disputeOrder, List<OrderDetail> orderDetails) {
         OrderDto orderDto = new OrderDto();
 
@@ -20,9 +22,11 @@ public class OrderMappingUtil {
         orderDto.setOrders(orderCopy);
 
         // 複製 DisputeOrder 屬性
-        DisputeOrder disputeOrderCopy = new DisputeOrder();
-        BeanUtils.copyProperties(disputeOrder, disputeOrderCopy);
-        orderDto.setDisputeOrder(disputeOrderCopy);
+        if (disputeOrder != null) {
+            DisputeOrder disputeOrderCopy = new DisputeOrder();
+            BeanUtils.copyProperties(disputeOrder, disputeOrderCopy);
+            orderDto.setDisputeOrder(disputeOrderCopy);
+        }
 
         // 複製 OrderDetail 屬性
         List<OrderDetail> orderDetailCopies = orderDetails.stream()
