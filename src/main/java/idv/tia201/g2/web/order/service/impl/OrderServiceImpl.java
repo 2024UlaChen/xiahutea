@@ -6,12 +6,18 @@ import idv.tia201.g2.web.order.dao.OrderDetailDao;
 import idv.tia201.g2.web.order.dto.OrderDto;
 import idv.tia201.g2.web.order.service.OrderService;
 import idv.tia201.g2.web.order.util.OrderMappingUtil;
+import idv.tia201.g2.web.order.vo.DisputeOrder;
 import idv.tia201.g2.web.order.vo.OrderDetail;
 import idv.tia201.g2.web.order.vo.Orders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import static org.springframework.util.ObjectUtils.isEmpty;
 
 @Service
@@ -31,9 +37,6 @@ public class OrderServiceImpl implements OrderService {
     private OrderMappingUtil orderMappingUtil;
 
 
-    private OrderDto orderDto ;
-
-
     // todo
     // 發票api
 
@@ -42,29 +45,11 @@ public class OrderServiceImpl implements OrderService {
     public List<Orders> findAll() {
         return orderDao.selectAll();
     }
+
     // 後台 訂單明細
     @Override
     public List<OrderDetail> findByOrderId(int orderId) {
         return orderDetailDao.selectByOrderId(orderId);
-    }
-
-//    public OrderDto findByOrderId(int orderId) {
-//        return orderMappingUtil.mapToOrderDto(
-//                orderDao.selectByOrderId(orderId),
-//                orderDetailDao.selectByOrderId(orderId),
-//                disputeDao.selectByOrderId(orderId)
-//        );
-//    }
-
-    // 前台 訂單列表
-    @Override
-    public List<Object[]> findByCustomerId(int customerId) {
-        return orderDao.selectBycCustomerId(customerId);
-    }
-
-    @Override
-    public OrderDto addOrder(OrderDto orderDto) {
-        return null;
     }
 
     @Override
@@ -81,8 +66,40 @@ public class OrderServiceImpl implements OrderService {
         newOrder.setSuccessful(true);
         return newOrder;
     }
+    //---------------------------------------------------------------
+// todo
 
+    // 前台 訂單列表
+    @Override
+    public List<OrderDto> findByCustomerId(int customerId) {
+        List<Orders> orders = orderDao.selectBycCustomerId(customerId);
+            return null;
+//        return orders.stream().map(order -> {
+//            Optional<DisputeOrder> disputeOrderOpt = disputeDao.selectByOrderId(order.getOrderId());
+//            List<OrderDetail> orderDetails = orderDetailDao.selectByOrderId(order.getOrderId());
+//
+//            DisputeOrder disputeOrder = disputeOrderOpt.orElse(null);
+//
+//            return orderMappingUtil.createOrderDto(order, disputeOrder, orderDetails);
+//        }).collect(Collectors.toList());
+    }
 
+    // 前台 訂單明細
+    @Override
+    public OrderDto findByMemberOrderId(int orderId){
+        Orders orders = orderDao.selectByOrderId(orderId);
+        if(orders == null){
+            return null;
+        }
+        DisputeOrder disputeOrder = disputeDao.selectByOrderId(orders.getOrderId());
+        List<OrderDetail> orderDetails = orderDetailDao.selectByOrderId(orderId);
+        return orderMappingUtil.createOrderDto(orders, disputeOrder, orderDetails);
+    }
+
+    @Override
+    public OrderDto addOrder(OrderDto orderDto) {
+        return null;
+    }
 
     // 前台操作邏輯
     @Override
@@ -148,30 +165,29 @@ public class OrderServiceImpl implements OrderService {
         return order;
     }
 
-    public Orders addStar(Orders order){
-        final Orders oOrder = orderDao.selectByOrderId(order.getOrderId());
-        final int ordersStar = order.getOrderScore();
-        final String orderFeedBack = order.getOrderFeedback();
+    public Orders addStar(Orders newOrder){
+        final Orders oldOrder = orderDao.selectByOrderId(newOrder.getOrderId());
+        final int ordersStar = newOrder.getOrderScore();
+        final String orderFeedBack = newOrder.getOrderFeedback();
 
         if(ordersStar == 0){
-            order.setMessage("未輸入評分");
-            order.setSuccessful(false);
-            return order;
+            newOrder.setMessage("未輸入評分");
+            newOrder.setSuccessful(false);
+            return newOrder;
         }
-        if((orderDao.selectByOrderId(order.getOrderId())).getOrderScore() != null ){
-            order.setMessage("不可重複評分");
-            order.setSuccessful(false);
-            return order;
+        if(!(isEmpty(oldOrder.getOrderScore()))){
+            newOrder.setMessage("不可重複評分");
+            newOrder.setSuccessful(false);
+            return newOrder;
         }
 
-        oOrder.setOrderScore(ordersStar);
-        oOrder.setOrderFeedback(orderFeedBack);
-        order.setMessage("評分完成");
-        order.setSuccessful(true);
-        return order;
+        oldOrder.setOrderScore(ordersStar);
+        oldOrder.setOrderFeedback(orderFeedBack);
+        orderDao.update(oldOrder);
+        newOrder.setMessage("評分完成");
+        newOrder.setSuccessful(true);
+        return newOrder;
     }
-
-
 
 
 }

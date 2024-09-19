@@ -96,10 +96,10 @@ public class Orders extends Core {
     @JsonFormat(pattern = "yyyy/MM/dd HH:mm", timezone = "GMT+8")
     private Timestamp receiverDatetime; // 預計取貨時間
 
-    @Column(name = "order_score", insertable = false, updatable = false)
+    @Column(name = "order_score")
     private Integer orderScore; // 訂單評分
 
-    @Column(name = "order_feedback", insertable = false, updatable = false)
+    @Column(name = "order_feedback")
     private String orderFeedback; // 訂單評分建議
 
     @Column(name = "order_note", updatable = false)
@@ -115,4 +115,12 @@ public class Orders extends Core {
     @JsonFormat(pattern = "yyyy/MM/dd HH:mm", timezone = "GMT+8")
     private Timestamp orderUpdateDatetime; // 訂單更新時間
 
+    @Override
+    public String toString() {
+        return "Orders{" +
+                "orderId=" + orderId +
+                ", orderScore=" + orderScore +
+                ", orderFeedback='" + orderFeedback + '\'' +
+                '}';
+    }
 }

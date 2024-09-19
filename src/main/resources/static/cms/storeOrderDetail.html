@@ -271,78 +271,10 @@
     </script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
+            // todo 權限判斷
+
             // 0. 顯示明細
             init();
-
-            //===========================================================================
-            // 1. btn 回上一頁
-            const btn_order_back = document.getElementById("btn_order_back");
-            btn_order_back.addEventListener("click", function () {
-                history.back();
-            });
-
-            //===========================================================================
-            // 2. btn 儲存
-            const btn_order_save = document.getElementsByClassName("btn_order_save")[0];
-            btn_order_save.addEventListener("click", function () {
-
-                // 2.1 打包資料
-                let order_id = document.getElementById("order_id");
-                let select_status = document.getElementById("select_status");
-                let order_data = {
-                    orderId: order_id.innerText,
-                    orderStatus: select_status.value
-                };
-
-                fetch(`/order/manage/${order_id.innerText}`, {
-                    method: "PUT",
-                    headers: {
-                        'Content-Type': 'application/json' // 設置內容類型為 JSON
-                    },
-                    body: JSON.stringify(order_data) // 將資料轉為 JSON 格式
-                }).then(res => res.json()).then(data => {
-                    if(data.successful){
-                        updateNewStatus(data.orderStatus);
-                        Swal.fire("更新成功", "", "success");
-
-                        // todo:
-                        // 2.1.2 如果訂單狀態為訂單完成，鎖定-儲存btn&狀態選單
-                        if (data.orderStatus === "4") {
-                            btn_order_save.setAttribute("disabled", "disabled");
-                            select_status.setAttribute("disabled", "disabled");
-                        }
-                    }else {
-                        Swal.fire("更新失敗", "", "error");
-                    }
-                }).catch((error) => {
-                    console.error("錯誤原因：", error);
-                });
-            });
-
-            function updateNewStatus(status) {
-                let select_html = `
-                        <label>
-                            <select id="select_status">
-                                <option value="1" ${status === 1 ? "selected" : ""}>訂單成立</option>
-                                <option value="2" ${status === 2 ? "selected" : ""}>準備完成</option>
-                                <option value="3" ${status === 3 ? "selected" : ""}>正在外送</option>
-                                <option value="4" ${status === 4 ? "selected" : ""}>訂單完成</option>
-                            </select>
-                        </label>
-                `;
-                document.getElementById("select_status_div").innerHTML = select_html;
-            }
-            document.getElementById("status_text").addEventListener('change', function() {
-
-                if (this.value === "4") {
-                    btn_order_save.setAttribute("disabled", "disabled");
-                    this.setAttribute("disabled", "disabled");
-                } else {
-                    btn_order_save.removeAttribute("disabled");
-                    this.removeAttribute("disabled");
-                }
-            });
-            // ------------------------------------------------------------------
 
             // 顯示 明細
             function init() {
@@ -350,7 +282,7 @@
                 if (orderId) {          // 確保 orderId 存在
                     fetch(`/order/manage/${orderId}`)
                           .then(response => response.json())
-                          .then(data => showText(data))
+                          .then(data => showDB(data))
                           .catch((error) => {
                               console.log("錯誤原因:" + error);
                           });
@@ -358,25 +290,27 @@
                     console.error("訂單號碼錯誤");
                 }
             }
-
             // 取得URL的查詢參數
             function getQueryParam(param) {
                 let urlParams = new URLSearchParams(window.location.search);
                 return urlParams.get(param);
             }
             // 找明細
-            function showText(data) {
+            function showDB(data) {
+                let status = data[0].orders.orderStatus;  // 取得訂單狀態值
+                let statusTextValue = statusText(status);  // 取得訂單狀態文字
+
                 let detailHtml = "";
-                detailHtml += `
+                detailHtml = `
                         <tr>
                             <td id="order_id">${data[0].orderId}</td>
-                            <td>${data[0].orders.customer.customerAccount}</td>
+                            <td>${data[0].orders.customer.customerId}</td>
                             <td>${data[0].orders.customer.nickname}</td>
                             <td>${data[0].orders.store.storeName}</td>
-                            <td id="status_text">${statusText(data[0].orders.orderStatus)}</td>
+                            <td id="status_text">${statusTextValue}</td>
                         </tr>
                 `;
-                document.getElementById("detail_tbody").innerHTML = detailHtml;
+                const detail_el = document.getElementById("detail_tbody");
 
                 let invoiceHtml ="";
                 invoiceHtml =`
@@ -403,7 +337,7 @@
                 receiverHtml =`
                         <tr>
                             <th>取貨方式</th>
-                            <td>${data[0].orders.receiverMethod}</td>
+                            <td>${receiverMethodText(data[0].orders.receiverMethod)}</td>
                         </tr>
                         <tr>
                             <th>取貨人姓名</th>
@@ -458,17 +392,17 @@
                             <tr>
                                 <td></td>
                                 <th colspan="3">錢包折抵</th>
-                                <td>- ${data[0].orders.customerMoneyDiscount}</td>
+                                <td>- ${nullMoney(data[0].orders.customerMoneyDiscount)}</td>
                             </tr>
                             <tr>
                                 <td></td>
                                 <th colspan="3">優惠券折抵</th>
-                                <td>- ${data[0].orders.couponDiscount}</td>
+                                <td>- ${nullMoney(data[0].orders.couponDiscount)}</td>
                             </tr>
                             <tr>
                                 <td></td>
                                 <th colspan="3">集點折抵</th>
-                                <td>- ${data[0].orders.loyaltyDiscount}</td>
+                                <td>- ${nullMoney(data[0].orders.loyaltyDiscount)}</td>
                             </tr>
                             <tr>
                                 <td></td>
@@ -496,28 +430,66 @@
                     `;
                 }
                 document.getElementById("product_tbody").innerHTML = productTbodyHtml;
-            }
+                //-----------------------------------------------------------------------
+                // 1.  設定下拉選單的值為訂單狀態
+                let select_status = document.getElementById("select_status");
+                select_status.value = status;
+                const btn_order_save = document.getElementsByClassName("btn_order_save")[0];
 
-            // todo 待確認 key & value
-            function statusText(statusNum) {
-                switch (statusNum) {
-                    case 1 : return "訂單成立";
-                    case 2 : return "準備完成";
-                    case 3 : return "正在外送";
-                    case 4 : return "訂單完成";
+                // 2. 如果訂單狀態為訂單完成，鎖定-儲存btn&狀態選單
+                if (detail_el) {
+                    detail_el.innerHTML = detailHtml;
+
+                    let status_text = document.getElementById("status_text");
+                    if (status_text.innerText === "訂單完成") {
+                        btn_order_save.setAttribute("disabled", "disabled");
+                        select_status.setAttribute("disabled", "disabled");
+                    }
                 }
+
+                // 3. btn 儲存
+                btn_order_save.addEventListener("click", function () {
+                    // 3.1 打包資料 傳送資料到後端
+                    let order_id = document.getElementById("order_id");
+                    let select_status = document.getElementById("select_status");
+                    let order_data = {
+                        orderId: order_id.innerText,
+                        orderStatus: select_status.value
+                    };
+                    fetch(`/order/manage/${order_id.innerText}`, {
+                        method: "PUT",
+                        headers: {
+                            'Content-Type': 'application/json' // 設置內容類型為 JSON
+                        },
+                        body: JSON.stringify(order_data) // 將資料轉為 JSON 格式
+                    }).then(res => res.json()).then(data => {
+                        if(data.successful){
+                            console.log(data.message);
+                            Swal.fire({
+                                title: '更新成功',
+                                text: '',
+                                icon: 'success',
+                                showConfirmButton: true  // 確認按鈕
+                            }).then(() => {
+                                location.reload();
+                            });
+                        }else {
+                            console.log(data.message);
+                            Swal.fire("更新失敗", "", "error");
+                        }
+                    }).catch((error) => {
+                        console.error("錯誤原因：", error);
+                    });
+                });
             }
+            //-----------------------------------------------------------------------
+            // todo 待確認 key & value
             function invoiceText(invoiceNum) {
                 switch (invoiceNum) {
                     case 1 : return "紙本發票-無統編";
                     case 2 : return "紙本發票-公司戶";
                     case 3 : return "電子發票-手機載具";
                     case 4 : return "電子發票-會員帳號";
-                }
-            }
-            function paymentMethodText(paymentMethodNum) {
-                switch (paymentMethodNum) {
-                    case 1 : return "信用卡";
                 }
             }
             function productSizeText(sizeNum){
@@ -527,6 +499,24 @@
                     default: return "";
                 }
             }
+            function receiverMethodText(receiverNum){
+                switch (receiverNum) {
+                    case 1 : return "自取";
+                    case 2 : return "外送";
+                }
+            }
+
+            function paymentMethodText() {
+                return "信用卡";
+            }
+            function statusText(statusNum) {
+                switch (statusNum) {
+                    case 1 : return "訂單成立";
+                    case 2 : return "準備完成";
+                    case 3 : return "正在外送";
+                    case 4 : return "訂單完成";
+                }
+            }
             function nullText(nullValue){
                 if(nullValue != null ){
                     return nullValue;
@@ -534,13 +524,19 @@
                     return "";
                 }
             }
-            function nullMoney(nullValue){
-                if(nullValue !== null && nullValue !== 0){
-                    return nullValue;
+            function nullMoney(moneyValue){
+                if(moneyValue === 0 ){
+                    return "" ;
                 }else{
-                    return "";
+                    return moneyValue;
                 }
             }
+            //-----------------------------------------------------------------------
+            // 4. btn 回上一頁
+            const btn_order_back = document.getElementById("btn_order_back");
+            btn_order_back.addEventListener("click", function () {
+                history.back();
+            });
         });
     </script>
 </body>

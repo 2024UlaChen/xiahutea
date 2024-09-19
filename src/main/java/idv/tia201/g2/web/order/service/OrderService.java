@@ -10,9 +10,8 @@ public interface OrderService {
     List<Orders> findAll();
     List<OrderDetail> findByOrderId(int orderId);
 
-//    OrderDto findByOrderId(int orderId);
-    List<Object[]> findByCustomerId(int customerId);
-
+    List<OrderDto> findByCustomerId(int customerId);
+    OrderDto findByMemberOrderId(int orderId);
     OrderDto addOrder(OrderDto orderDto);
 
 
