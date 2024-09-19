@@ -6,12 +6,12 @@ import idv.tia201.g2.web.order.vo.Orders;
 
 import java.util.List;
 
-public interface DisputeService {
-
-    DisputeOrder add(DisputeOrder disputeOrder);
-    OrderDto update(OrderDto orderDto);
+public interface DisputeService  {
 
     List<DisputeOrder> findAll();
-    OrderDto findByDisputeId(int disputeId);
+    OrderDto findByDisputeOrderId(int disputeOrderId);
+    OrderDto findByOrderId(int orderId);
+    DisputeOrder add(DisputeOrder disputeOrder);
+    DisputeOrder updateInfo(DisputeOrder disputeOrder);
 
 }
