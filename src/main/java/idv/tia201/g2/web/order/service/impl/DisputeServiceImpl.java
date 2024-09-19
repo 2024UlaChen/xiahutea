@@ -32,26 +32,9 @@ public class DisputeServiceImpl implements DisputeService {
     @Autowired
     private OrderMappingUtil orderMappingUtil;
 
-    // FINISH
-    // 後台 爭議列表
+    // -------- FINISH ---------------------------------
+    // 前台 爭議表格 顯示
     @Override
-    public List<DisputeOrder> findAll() {
-        return disputeDao.selectAll();
-    }
-
-    // 後台 爭議明細
-    @Override
-    public OrderDto findByDisputeOrderId(int disputeOrderId) {
-        DisputeOrder disputeOrder = disputeDao.selectByDisputeId(disputeOrderId);
-        if(disputeOrder == null) {
-            return null;
-        }
-        Orders order = orderDao.selectByOrderId(disputeOrder.getOrderId());
-        List<OrderDetail> orderDetails = orderDetailDao.selectByOrderId(disputeOrder.getOrderId());
-        return orderMappingUtil.createOrderDto(order, disputeOrder, orderDetails);
-    }
-
-    // 前台 爭議申請 顯示
     public OrderDto findByOrderId(int orderId) {
         Orders order = orderDao.selectByOrderId(orderId);
         List<OrderDetail> orderDetails = orderDetailDao.selectByOrderId(orderId);
@@ -62,7 +45,7 @@ public class DisputeServiceImpl implements DisputeService {
         return orderMappingUtil.createOrderDto(order, disputeOrder, orderDetails);
     }
 
-    // 前台 爭議申請 新增
+    // 前台 爭議表格 申請
     @Override
     public DisputeOrder add(DisputeOrder disputeOrder) {
         if(!(isEmpty(disputeOrder.getDisputeOrderId()))) {
@@ -90,10 +73,25 @@ public class DisputeServiceImpl implements DisputeService {
         return disputeOrder;
     }
 
-    //------------------------------------------------------
+    // 後台 爭議列表 顯示
+    @Override
+    public List<DisputeOrder> findAll() {
+        return disputeDao.selectAll();
+    }
 
+    // 後台 爭議明細 顯示
+    @Override
+    public OrderDto findByDisputeOrderId(int disputeOrderId) {
+        DisputeOrder disputeOrder = disputeDao.selectByDisputeId(disputeOrderId);
+        if(disputeOrder == null) {
+            return null;
+        }
+        Orders order = orderDao.selectByOrderId(disputeOrder.getOrderId());
+        List<OrderDetail> orderDetails = orderDetailDao.selectByOrderId(disputeOrder.getOrderId());
+        return orderMappingUtil.createOrderDto(order, disputeOrder, orderDetails);
+    }
 
-    // todo
+    // 後台 爭議明細 修改
     @Override
     public DisputeOrder updateInfo(DisputeOrder newDispute) {
         final DisputeOrder oldDispute = disputeDao.selectByDisputeId(newDispute.getDisputeOrderId());
@@ -127,4 +125,5 @@ public class DisputeServiceImpl implements DisputeService {
         newDispute.setSuccessful(true);
         return newDispute;
     }
+
 }

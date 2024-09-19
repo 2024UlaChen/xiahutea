@@ -24,7 +24,6 @@
   <link rel="stylesheet" href="assets/css/mobile-menu.css">
   <link rel="stylesheet" href="assets/fonts/flaticon/flaticon.css">
   <link rel="stylesheet" href="assets/css/style.css">
-  <!--    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">-->
   <!-- SweetAlert2 CSS樣式 -->
   <link rel="stylesheet" href="/cms/plugins/sweetalert2/sweetalert2.css">
 
@@ -41,58 +40,47 @@
           border-radius: 50%;
           color: #73B4BA;
       }
-
       .header-user-links li {
           display: inline-block;
       }
-
       .header-user-links i {
           border-radius: 50%;
           font-size: 20px;
           margin-left: 10px;
       }
-
       .query-bar a {
           margin-left: 10px;
           margin-right: 10px;
           border-radius: 50%;
       }
-
       .query-bar input {
           background-color: white;
           width: 80%;
       }
-
       #query-member {
           min-width: 200px;
           padding-left: 10px;
       }
-
       #query-member li {
           min-width: 100%;
       }
-
       #query-member img {
           width: 100%;
       }
-
       #query-member .account-list {
           margin-top: 10%;
       }
-
       .reset-margin {
           margin: 0;
           margin-top: 2%;
           background-color: #f5f5f5;
       }
-
       .member-aside {
           width: 30%;
           height: 100%;
           margin: 0 auto;
           /* background-color: #f8f8f8; */
       }
-
       .member-introduction {
           margin: 0 auto;
           margin-right: 30px;
@@ -102,12 +90,10 @@
           padding-left: 20px;
           background-color: white;
       }
-
       .member-introduction div {
           text-align: center;
           overflow: hidden;
       }
-
       .member-list {
           margin-right: 30px;
           margin-top: 50px;
@@ -117,36 +103,31 @@
           padding-left: 60px;
           background-color: white;
       }
-
       .member-list li {
           height: 60px;
           font-size: 18px;
           text-align: left;
           list-style-type: none;
       }
-
       .warn {
           display: inline;
           color: #ff5e7d;
       }
-
       .remind {
           color: #9b9b9b;
           font-size: 12px;
       }
-
       .userPhoto {
           margin: 0 auto;
           display: inline-block;
           width: 30%;
           border-radius: 50%;
       }
-
       .sex {
           font-size: 16px;
           display: block;
       }
-
+      /*----------------------*/
 
       /*訂單明細區塊*/
       /* 整個區塊 */
@@ -505,6 +486,7 @@
                 <!-- JS             -->
               </table>
             </div>
+
             <!-- 訂單評分燈箱 -->
             <div id="lightbox_star" class="none">
               <form>
@@ -552,8 +534,7 @@
 <script src="assets/js/jquery.scrollbar.min.js"></script>
 <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyC3nDHy1dARR-Pa_2jjPCjvsOR4bcILYsM'></script>
 <script src="assets/js/frontend-plugin.js"></script>
-<!--<script src="assets/js/newjs.js"></script>-->
-<script src="./js/general.js"></script>
+<script src="assets/js/newjs.js"></script>
 <!--star-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
 <!-- sweet alert  -->
@@ -563,6 +544,8 @@
     document.addEventListener("DOMContentLoaded", function () {
         // todo 判斷會員是否登入
         // TODO 待session
+        // todo logo
+
 
         // 0. 顯示明細
         init();
@@ -578,15 +561,13 @@
                     });
             }
         }
-
         // 取得URL的查詢參數
         function getQueryParam(param) {
             let urlParams = new URLSearchParams(window.location.search);
             return urlParams.get(param);
         }
 
-        // todo
-        // 待確認logo
+        // todo 待確認logo
         function showDB(data) {
             let storeInfoHtml;
             storeInfoHtml = `
@@ -690,7 +671,7 @@
                     if (receiver_date_2day < now_date) {
                         btn_dispute_apply.classList.add("-close");
                         btn_dispute_apply.setAttribute("disabled", "disabled");
-                        btn_dispute_apply.innerHTML = "已送爭議";
+                        btn_dispute_apply.innerHTML = "訂單完成";
                     }
                 }
 
@@ -768,7 +749,7 @@
                     if (data.orders.orderScore != null){
                         btn_order_star.classList.add("-close");
                         btn_order_star.setAttribute("disabled", "disabled");
-                        btn_order_star.innerHTML = "完成評分";
+                        btn_order_star.innerHTML = "評分完成";
                     }
                     // 2.1 燈箱操作 > 打開燈箱
                     let lightbox_el = document.getElementById("lightbox_star");
@@ -787,7 +768,6 @@
                         e.stopPropagation();
                     });
                 }
-
 
                 // 2.1.1 打開燈箱 > 評分星星點擊
                 let span_el;
@@ -871,9 +851,8 @@
                     location.href = `./orderList.html?customerId=1`;
                 });
             }
-
         }
-
+        //=========================================================================================
         // todo 待確認 key & value
         function statusText(statusNum) {
             switch (statusNum) {
@@ -927,9 +906,6 @@
                 return "";
             }
         }
-
-        //=========================================================================================
-
     });
 </script>
 </body>

@@ -122,7 +122,7 @@
             font-size: 16px;
             display: block;
         }
-
+        /*----------------------*/
 
         /* 爭議申請表   */
         div.content-area{
@@ -339,16 +339,13 @@
                 if (data.disputeOrder && data.disputeOrder.disputeOrderId != null) {
                     form_reason_el.classList.add("-close");
                     form_reason_el.setAttribute("disabled", "disabled");
-                    /// Swal.fire('已有爭議資料，不可重複申請', '', 'error');
-                    //
-
                     Swal.fire({
                         title: '已有爭議資料，不可重複申請',
                         text: '',
                         icon: 'error',
                         showConfirmButton: true  // 確認按鈕
                     }).then(() => {
-                        history.back();
+                        location.href = `./orderDetail.html?orderId=${orderId}`;
                     });
 
                 } else {
@@ -369,7 +366,6 @@
                             e.preventDefault();
 
                             // 2.2 送出資料至後端
-                            // todo: 待確認${orderId}
                             fetch(`/dispute/member/applyDispute/${orderId}`, {
                                 method: "POST",
                                 headers: {
