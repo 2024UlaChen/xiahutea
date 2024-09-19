@@ -4,6 +4,7 @@ let form = $("#form");
 let phoneError = $("#phoneError");
 let contactPhoneEle = $("#contactPhone")
 let formControlEle = $(".form-control")
+let urlStoreId = getParameter("storeId");
 
 // 從網址抓參數
 function getParameter(parameter){
@@ -14,8 +15,8 @@ function getParameter(parameter){
 
 // 從後端抓資料渲染到前端
 function init(){
-    let urlStoreId = getParameter("storeId");
-    fetch(`/registerstore/registerStoredetail?storeId=${urlStoreId}`)
+
+    fetch(`/registerstore/registerstoredetail?storeId=${urlStoreId}`)
         .then(res => res.json())
         .then(data => {
             $(storeIdEle).val(data.storeId);
@@ -113,5 +114,3 @@ $(storeStatusEle).change(function(e){
     }
 })
 
-
-//點擊寄信

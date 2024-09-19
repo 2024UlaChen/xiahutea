@@ -2,7 +2,6 @@ package idv.tia201.g2.web.user.controller;
 
 import idv.tia201.g2.core.pojo.Mail;
 import idv.tia201.g2.core.util.MailUtil;
-import idv.tia201.g2.web.store.service.MailService;
 import idv.tia201.g2.web.store.vo.Store;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +12,6 @@ import java.io.IOException;
 
 @Controller
 public class MailController {
-    @Autowired
-    private MailService mailService;
 
     @Autowired
     private MailUtil mailUtil;
