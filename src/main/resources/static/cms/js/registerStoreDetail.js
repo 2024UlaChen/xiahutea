@@ -84,8 +84,9 @@ $(form).submit(e => {
             return;
         }
         if(data.storeStatus === 1){
-            swal.fire("更新成功",data.storeName + "已成為正式店家", "success");
-            location.replace("./registerStore.html")
+            swal.fire("更新成功",data.storeName + "已成為正式店家", "success").then((result)=>{
+                location.replace("./registerStore.html")
+                });
         }else if (data.storeStatus === 0){
             swal.fire("更新成功!", data.storeName + "尚在申請中", "success");
         }else{
