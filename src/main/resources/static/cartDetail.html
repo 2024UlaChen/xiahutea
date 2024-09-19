@@ -72,7 +72,7 @@
               <h4>預計取貨時間</h4>
               <div class="recevie-time">
                   <!-- 日期/時間<input type="date" class="start_date"><input type="time" class="start_date"> -->
-                  <input id="myDatepicker" placeholder="點擊此處選擇時間">
+                  <input id="myDatepicker" placeholder="點擊此處選擇時間" >
               </div>
           </div>
           <!--會員卡&優惠券-->
@@ -277,7 +277,7 @@
               <h3>付款方式</h3>
               <ul class="payment-selection">
                   <li>
-                      <input type="radio" class="select-creditcard" name="pay-method">
+                      <input type="radio" class="select-creditcard" name="pay-method" checked>
                       <label for="option1" class="label-creditcard">信用卡</label>
                   </li>
 <!--                  <li>-->
@@ -297,7 +297,8 @@
                   <li>
                       <input type="radio" class="select-paper-uniform" name="select-invoice">
                       <label for="option2" class="label-uniform">紙本發票(含統一編號)</label>
-                      <input type="text" class="uniform-numbers" placeholder="請輸入統編" disabled>
+                      <span id="uniform-numbers-error" style="color: red; display: none;">請輸入有效的統編號碼</span>
+                      <input type="text" class="uniform-numbers" placeholder="請輸入統編" maxlength="8" disabled>
                   </li>
 
                   <li class="vehicle-detail">

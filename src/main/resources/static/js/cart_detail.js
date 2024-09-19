@@ -49,6 +49,7 @@ document.addEventListener("DOMContentLoaded",function(){
   //取貨方式
   let pick_up_el = document.getElementsByClassName('pick-up')[0];
   let pick_up_input_el = document.getElementsByClassName("pick-up-input")[0];
+  // let carry_out_radio_el = document.querySelector('.carry-out-radio');
   let recevie_time_el = document.getElementsByClassName('recevie-time')[0];
 
   //時間選擇
@@ -107,6 +108,7 @@ document.addEventListener("DOMContentLoaded",function(){
   let vehicle_number_el = document.getElementsByClassName("vehicle-number")[0];
   let select_paper_uniform_el = document.getElementsByClassName("select-paper-uniform")[0];
   let uniform_numbers_el = document.getElementsByClassName("uniform-numbers")[0];
+  let uniform_numbers_error_el = document.getElementById('uniform-numbers-error');
   //結帳流程-3
   let btn_backto_last_page2_el = document.getElementsByClassName("btn-backto-last-page2")[0];
   let btn_submit_order_el = document.getElementsByClassName("btn-submit-order")[0];
@@ -283,7 +285,71 @@ document.addEventListener("DOMContentLoaded",function(){
         e.stopPropagation();
       })
 
+      //進入下一頁、檢查欄位有無輸入
       btn_checkout_el.addEventListener("click", function (e) {
+        //檢查是否至少選一個取貨方式
+        //選取所有具有 name="delivery" 的 radio 按鈕
+        let deliveryOptions = document.querySelectorAll('input[name="delivery"]');
+        let isSelected = false;
+        deliveryOptions.forEach(option=> {
+            if (option.checked) {
+                isSelected = true;
+            }
+        })
+        if(!isSelected){
+            Swal.fire({
+                icon: 'error',
+                title: '未選擇配送方式',
+                text: '請選擇一個配送選項！',
+                confirmButtonText: '確定',
+            })
+            return;
+        }
+        //判斷是選了自取、外送(自填)、外送預設地址哪一個
+        let carry_out_radio_el = document.querySelector('.carry-out-radio');
+        let address_el = document.querySelector('.address');
+        let carryout_default_input_el = document.querySelector('.carryout-default-input');
+        if(pick_up_input_el.checked){
+            console.log("選定自取")
+        }else if(carry_out_radio_el.checked){
+            if(address_el.value===''){
+                Swal.fire({
+                    icon: 'error',
+                    title: '未填寫地址',
+                    text: '請填寫地址！',
+                    confirmButtonText: '確定',
+                })
+                return;
+            }else{
+                console.log("外送地址 : ",address_el.value)
+            }
+        }else if(carryout_default_input_el.checked){
+            let memberaddress = document.querySelectorAll('input[name="member-address"]');
+            let addressisSelected = false;
+            memberaddress.forEach(option=>{
+                if(option.checked){
+                    addressisSelected = true;
+                }
+            })
+            if(!addressisSelected){
+                Swal.fire({
+                    icon: 'error',
+                    title: '未選擇地址',
+                    text: '請選擇一個預設地址！',
+                    confirmButtonText: '確定',
+                })
+                return;
+            }
+            //獲得選取的子選項
+            let selectedRadio = document.querySelector('input[name="member-address"]:checked');
+            //獲得選取的子選項label
+            let selectedLabel = document.querySelector(`label[for="${selectedRadio.id}"]`);
+            console.log("選擇的預設地址",selectedLabel.textContent)
+        }
+
+
+
+        //保存了第一頁資訊切換到第二頁
         step1_el.classList.remove("active");
         step2_el.classList.add("active");
         if (step_content_el.style.display = "flex") {
@@ -312,6 +378,10 @@ document.addEventListener("DOMContentLoaded",function(){
           dateFormat: 'yyyy-MM-dd',
           timeFormat: 'HH:mm',
           firstDay: 1
+        },
+        onShow: function() {
+            // 禁止手動輸入
+            document.querySelector('#myDatepicker').setAttribute('readonly', true);
         },
         minDate: new Date(), // 設定不能選擇早於當前的日期
         timepicker: true, // 開啟時間選擇功能
@@ -352,7 +422,7 @@ document.addEventListener("DOMContentLoaded",function(){
               // input_cellphone_el.style.borderColor = 'red';
           }
       });
-
+      //市話
       select_phone_el.addEventListener("click", function () {
         input_phone_zone_el.disabled = false;
         input_cellphone_el.disabled = true;
@@ -376,9 +446,9 @@ document.addEventListener("DOMContentLoaded",function(){
         if (validPhoneZones.includes(phoneZoneInput)) {
             // 符合區碼，隱藏錯誤提示
             phoneZoneError_el.style.display = 'none';
-
             // 如果輸入的區碼長度為2，解鎖市話號碼輸入框並自動將焦點設置到該框
             if (phoneZoneInput.length === 2) {
+                //避免太快跳轉過去會將鍵盤輸入文字誤帶過去
                 setTimeout(function () {
                     input_phone_number_el.disabled = false;
                     input_phone_number_el.focus();
@@ -408,6 +478,7 @@ document.addEventListener("DOMContentLoaded",function(){
         checksava_vehicle_el.disabled = true;
         checksava_vehicle_el.checked = false;
         uniform_numbers_el.value="";
+        uniform_numbers_error_el.style.display="none";
       })
       select_vehicle_el.addEventListener("click", function () {
         checksava_vehicle_el.disabled = false;
@@ -415,6 +486,7 @@ document.addEventListener("DOMContentLoaded",function(){
         uniform_numbers_el.disabled= true;
         vehicle_number_el.focus();
         uniform_numbers_el.value="";
+        uniform_numbers_error_el.style.display="none";
       })
       select_paper_uniform_el.addEventListener("click",function (){
         uniform_numbers_el.disabled=false;
@@ -432,6 +504,14 @@ document.addEventListener("DOMContentLoaded",function(){
           uniform_numbers_el.placeholder = "請輸入統編";
         }
       });
+      uniform_numbers_el.addEventListener("input",function (){
+          let uniformNumberLength = this.value.length;
+         if(uniformNumberLength<8){
+             uniform_numbers_error_el.style.display="inline";
+         }else{
+             uniform_numbers_error_el.style.display="none";
+         }
+      })
       //頁面跳轉
       btn_backto_last_page_el.addEventListener("click", function (e) {
         step2_el.classList.remove("active");
@@ -741,7 +821,7 @@ document.addEventListener("DOMContentLoaded",function(){
                     carryout_default_input_el.addEventListener('click',function (){
                         suboptions.style.display="block";
                         address_el.disabled = true;
-                        address_el.textContent="";
+                        address_el.value="";
                     })
 
                     // 點擊自取、外送(自填)選項關閉外送地址選項區塊
