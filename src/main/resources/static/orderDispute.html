@@ -349,7 +349,7 @@
                         let order_id = document.getElementsByClassName("dispute_form_value")[0].value;
                         let form_reason_el = document.getElementsByClassName("dispute_form_reason")[0];
                         let dispute_data = {
-                            orderId: order_id,
+                            orderId: order_id.value,
                             customerId: data.orders.customer.customerId,
                             disputeReason: form_reason_el.value
                         }
@@ -360,7 +360,7 @@
 
                             // 2.2 送出資料至後端
                             // todo: 待確認${orderId}
-                            fetch("/dispute/member/applyDispute/{orderId}", {
+                            fetch(`/dispute/member/applyDispute/${orderId}`, {
                                 method: "POST",
                                 headers: {
                                     'Content-Type': 'application/json'

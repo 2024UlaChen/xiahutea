@@ -702,7 +702,7 @@
                 });
 
                 // 1.3 如果後端已有爭議資料 更改 鎖定爭議btn
-                if(data.disputeOrder.disputeOrderId){
+                if(data.disputeOrder && data.disputeOrder.disputeOrderId){
                     btn_dispute_apply.classList.add("-close");
                     btn_dispute_apply.setAttribute("disabled", "disabled");
                     btn_dispute_apply.innerHTML="已送爭議";
@@ -766,27 +766,30 @@
                 // 2. btn 訂單評分
                 // 2.0 判斷燈箱 btn狀態  disabled css樣式
                 const btn_order_star = store_info_el.querySelector(".btn_order_star");
-                if (data.orders.orderScore != null){
-                    btn_order_star.classList.add("-close");
-                    btn_order_star.setAttribute("disabled", "disabled");
-                    btn_order_star.innerHTML = "完成評分";
+                if(btn_order_star){
+                    if (data.orders.orderScore != null){
+                        btn_order_star.classList.add("-close");
+                        btn_order_star.setAttribute("disabled", "disabled");
+                        btn_order_star.innerHTML = "完成評分";
+                    }
+                    // 2.1 燈箱操作 > 打開燈箱
+                    let lightbox_el = document.getElementById("lightbox_star");
+                    btn_order_star.addEventListener("click", function () {
+                        lightbox_el.classList.remove("none");
+                    });
+                    // 2.2 燈箱操作 > 關閉燈箱
+                    const btn_star_close = document.getElementById("btn_star_close");
+                    btn_star_close.addEventListener("click", function () {
+                        lightbox_el.classList.add("none");
+                    });
+                    lightbox_el.addEventListener("click", function () {
+                        this.classList.add("none");
+                    });
+                    lightbox_el.querySelector("form").addEventListener("click", function (e) {
+                        e.stopPropagation();
+                    });
                 }
-                // 2.1 燈箱操作 > 打開燈箱
-                let lightbox_el = document.getElementById("lightbox_star");
-                btn_order_star.addEventListener("click", function () {
-                    lightbox_el.classList.remove("none");
-                });
-                // 2.2 燈箱操作 > 關閉燈箱
-                const btn_star_close = document.getElementById("btn_star_close");
-                btn_star_close.addEventListener("click", function () {
-                    lightbox_el.classList.add("none");
-                });
-                lightbox_el.addEventListener("click", function () {
-                    this.classList.add("none");
-                });
-                lightbox_el.querySelector("form").addEventListener("click", function (e) {
-                    e.stopPropagation();
-                });
+
 
                 // 2.1.1 打開燈箱 > 評分星星點擊
                 let span_el;
@@ -820,36 +823,51 @@
                         };
 
                         // todo: 待確認${orderId}
-                        fetch(`/order/member/star/${orderId}`, {
-                            method: "PUT",
-                            headers: {
-                                'Content-Type': 'application/json' // 設置內容類型為 JSON
-                            },
-                            body: JSON.stringify(star_data) // 將資料轉為 JSON 格式
-                        })
-                            .then(res => res.json())
-                            .then(data => {
-                                if (data.successful) {
-                                    console.log(data.message);
-                                    Swal.fire("已送出評分", "", "success");
-                                    btn_order_star.classList.add("-close");
-                                    btn_order_star.setAttribute("disabled", "disabled");
-                                    btn_order_star.innerHTML = "完成評分";
-                                    btn_star_close.click();
-                                }else {
-                                    console.log(data.message);
-                                    Swal.fire("評分失敗");
-                                    btn_star_close.click();
-                                }
-                            }).catch((error) => {
-                            console.error("錯誤原因2：", error);
-                        });
+                        let orderId = getQueryParam("orderId");
+                        if (orderId) {
+                            fetch(`/order/member/star/${orderId}`, {
+                                method: "PUT",
+                                headers: {
+                                    'Content-Type': 'application/json' // 設置內容類型為 JSON
+                                },
+                                body: JSON.stringify(star_data) // 將資料轉為 JSON 格式
+                            })
+                                .then(res => res.json())
+                                .then(data => {
+                                    if (data.successful) {
+                                        console.log(data.message);
+                                        Swal.fire({
+                                            title: '已送出評分',
+                                            text: '',
+                                            icon: 'success',
+                                            showConfirmButton: true  // 確認按鈕
+                                        }).then(() => {
+                                            btn_order_star.classList.add("-close");
+                                            btn_order_star.setAttribute("disabled", "disabled");
+                                            btn_order_star.innerHTML = "完成評分";
+                                            btn_star_close.click();
+                                            location.reload();
+                                        });
+                                    }else {
+                                        console.log(data.message);
+                                        Swal.fire("評分失敗");
+                                        btn_star_close.click();
+                                    }
+                                }).catch((error) => {
+                                console.error("錯誤原因2：", error);
+                            });
+                        }
                     } else {
                         Swal.fire("至少需完成評分", "", "error");
                     }
                 });
-
-
+                // 2.1.2.0 方法-檢查&回傳星星數
+                function getStar() {
+                    if (!span_el) {
+                        return 0;
+                    }
+                    return Number.parseInt(span_el.getAttribute("data-star"), 10);
+                }
             }
         }
 
@@ -906,20 +924,13 @@
                 return "";
             }
         }
-        // 2.1.2.0 方法-檢查&回傳星星數
-        function getStar() {
-            if (!span_el) {
-                return 0;
-            }
-            return Number.parseInt(span_el.getAttribute("data-star"), 10);
-        }
+
         //=========================================================================================
         // 3. btn 回上一頁
         const order_btn_back = document.getElementsByClassName("order_btn_back")[0];
         order_btn_back.addEventListener("click", function () {
             history.back();
         });
-        //=========================================================================================
     });
 </script>
 </body>
