@@ -2,6 +2,7 @@ package idv.tia201.g2.web.order.controller;
 
 import java.util.List;
 import idv.tia201.g2.core.pojo.Core;
+import idv.tia201.g2.web.order.dto.OrderDto;
 import idv.tia201.g2.web.order.service.OrderService;
 import idv.tia201.g2.web.order.vo.OrderDetail;
 import idv.tia201.g2.web.order.vo.Orders;
@@ -15,26 +16,22 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-
-    // 後台 顯示列表
+    // FINISH
+    // 後台 訂單列表 顯示
     @GetMapping("manage")
     public List<Orders> manage() {
         return orderService.findAll();
     }
 
-    // 後台 顯示明細
+    // 後台 訂單明細 顯示
     @GetMapping("manage/{orderId}")
     public List<OrderDetail> detail(@PathVariable Integer orderId) {
         return orderService.findByOrderId(orderId);
     }
 
-//    public OrderDto detail(@PathVariable Integer orderId) {
-//        return orderService.findByOrderId(orderId);
-//    }
-
-    // 後台 修改明細
+    // 後台 訂單明細 修改
     @PutMapping("manage/{orderId}")
-    public Orders update(
+    public Orders save(
             @PathVariable Integer orderId,
             @RequestBody Orders reqOrders
     ) {
@@ -42,18 +39,20 @@ public class OrderController {
         return orderService.updateStatus(reqOrders);
     }
 
+    // ------------------------------------------------------
     // --------------前台-----------------------------
-    // 前台 顯示列表
+    //todo
+
+    // 前台 訂單列表 顯示
     @GetMapping("member/{customerId}")
-    public List<Object[]> memberOrder(@PathVariable Integer customerId) {
+    public List<OrderDto> memberOrder(@PathVariable Integer customerId) {
         return orderService.findByCustomerId(customerId);
     }
 
-    // 前台 顯示明細
-    @GetMapping("/member/detail/{orderId}")
-    public Orders memberDetail(@PathVariable Integer orderId) {
-//        return orderService.findByOrderId(orderId);
-        return null;
+    // 前台 訂單明細 顯示
+    @GetMapping("member/detail/{orderId}")
+    public OrderDto memberDetail(@PathVariable Integer orderId) {
+        return orderService.findByMemberOrderId(orderId);
     }
 
 

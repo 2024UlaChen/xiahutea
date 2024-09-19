@@ -209,19 +209,21 @@
 </script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        // todo 連結到訂單明細
+        // todo 權限判斷
 
-        // 顯示列表函式
+
+        // 0. 顯示列表資料
+        init();
+        // 顯示 明細
         function init() {
             fetch('/order/manage')
-                  .then(response => response.json())
-                  .then(data => showText(data))
-                  .catch((error) => {
-                      console.log("錯誤原因：" + error);
-                  });
+                .then(response => response.json())
+                .then(data => showDB(data))
+                .catch((error) => {
+                    console.log("錯誤原因：" + error);
+                });
         }
-
-        function showText(data) {
+        function showDB(data) {
             let orderHtml = "";
             for (let i = 0; i < data.length; i++) {
                 orderHtml += `
@@ -237,7 +239,6 @@
             }
             document.getElementById("order_tbody").innerHTML = orderHtml;
         }
-
         function statusText(statusNum) {
             switch (statusNum) {
                 case 1 : return "訂單成立";
@@ -246,11 +247,7 @@
                 case 4 : return "訂單完成";
             }
         }
-
-        //------------------------------------------------------------------------------------
-        // 0. 顯示列表資料
-        init();
-
+        //----------------------------------------------------------
         // 1.查詢欄
         // 1.1 輸入查詢相關欄位，點查詢btn可篩選訂單
         let btn_select = document.getElementById("btn_select");
