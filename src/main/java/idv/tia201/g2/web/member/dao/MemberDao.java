@@ -39,4 +39,6 @@ public interface MemberDao {
 
     boolean createMemberAddress(MemberAddress memberAddress);
 
+    Integer updateMemberCarrierById(Integer memberId, String memberCarrier);
+
 }

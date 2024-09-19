@@ -159,4 +159,9 @@ public class MemberServiceImpl implements MemberService {
 //        String memberId = StringUtils.isEmpty(member.getCustomerId())?null:member.getCustomerId();
 //        return memberDao.findMemberByQueryParam()
     }
+
+    @Override
+    public Integer updateMemberCarrier(Member member) {
+        return memberDao.updateMemberCarrierById(member.getCustomerId(), member.getCustomerCarrier());
+    }
 }

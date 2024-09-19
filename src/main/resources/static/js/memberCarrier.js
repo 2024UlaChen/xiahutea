@@ -4,25 +4,11 @@ const carrierDeleteBtn = document.querySelector("#carrierDelete");
 const memberCarrierBarcode = document.querySelector("#memberCarrierBarcode");
 const memberCarrierText = document.querySelector("#memberCarrierText");
 
-
-// carrierSaveBtn.addEventListener("click", function () {
-//     carrierEditingCloseBtn.click();
-//     console.log("click");
-//     Swal.fire({
-//         position: "top",
-//         icon: "success",
-//         title: "Your work has been saved",
-//         showConfirmButton: false,
-//         timer: 1500
-//     });
-// })
-
-
 function getCarrier(memberId) {
     fetch(`member/carrier/` + memberId)
         .then(res => res.text())
         .then(data => {
-            data = "/123-456";
+            console.log(data.length);
             if (data.length !== 0) {
                 memberCarrierText.classList.remove("checkInValid");
                 carrierDeleteBtn.classList.remove("hidden")
@@ -33,19 +19,41 @@ function getCarrier(memberId) {
             } else {
                 memberCarrierText.classList.add("checkInValid");
                 memberCarrierText.innerText = "未設定";
-                carrierDeleteBtn.classList.add("hidden")
+                carrierDeleteBtn.classList.add("hidden");
+                memberCarrierBarcode.innerHTML = "";
             }
         });
-};
+}
+// TODO - 改抓memberID
+const memberId = 2;
 
 document.addEventListener("DOMContentLoaded", function () {
     // TODO - change member id
-    getCarrier(2);
+    getCarrier(memberId);
 
 });
 
-function updateCarrier() {
-
+function updateCarrier(newCarrierTxt, memberId, type) {
+    fetch(`member/carrier?type=` + encodeURIComponent(type), {
+        method: "POST",
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            customerCarrier: newCarrierTxt,
+            customerId: memberId,
+            type: type
+        }),
+    }).then(res => res.json()).then(data => {
+        console.log(data)
+        if (data.successful) {
+            Swal.fire("已更新載具", "", "success");
+            getCarrier(memberId);
+        } else {
+            Swal.fire({
+                icon: "error",
+                title: data.message,
+            });
+        }
+    })
 }
 
 // TODO - input font size
@@ -73,11 +81,24 @@ carrierEditBtn.addEventListener("click", function () {
         }
     }).then((result) => {
         if (result.isConfirmed) {
-            //TODO - update carrier
-            Swal.fire("已更新載具", "", "success");
+            updateCarrier(result.value, memberId, "update");
         }
     })
-
 })
 
 
+carrierDeleteBtn.addEventListener("click", function () {
+    Swal.fire({
+        title: "確定刪除載具?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#73B4BA",
+        cancelButtonColor: "#6c757d",
+        confirmButtonText: `<span class="sweetAlertFont">是，確定刪除</span>`,
+        cancelButtonText: `<span class="sweetAlertFont">否</span>`,
+    }).then((result) => {
+        if (result.isConfirmed) {
+            updateCarrier("", memberId, "delete");
+        }
+    });
+})

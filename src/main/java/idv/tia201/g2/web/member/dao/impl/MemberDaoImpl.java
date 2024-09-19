@@ -98,8 +98,18 @@ public class MemberDaoImpl implements MemberDao {
                 .setParameter("memberRemark", memberRemark)
                 .setParameter("memberId", memberId)
                 .executeUpdate();
-
     }
+
+    @Override
+    public Integer updateMemberCarrierById(Integer memberId, String memberCarrier) {
+        final String sql = "update CUSTOMER set customer_carrier = :memberCarrier   where  customer_id = :memberId ";
+        return session
+                .createNativeQuery(sql, Member.class)
+                .setParameter("memberCarrier", memberCarrier)
+                .setParameter("memberId", memberId)
+                .executeUpdate();
+    }
+
 
     @Override
     public boolean updateMemberAddress(MemberAddress memberAddress) {
