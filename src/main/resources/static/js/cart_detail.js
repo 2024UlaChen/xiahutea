@@ -326,6 +326,7 @@ document.addEventListener("DOMContentLoaded",function(){
         }else if(carryout_default_input_el.checked){
             let memberaddress = document.querySelectorAll('input[name="member-address"]');
             let addressisSelected = false;
+            //檢查是不是有選預設地址
             memberaddress.forEach(option=>{
                 if(option.checked){
                     addressisSelected = true;
@@ -340,14 +341,12 @@ document.addEventListener("DOMContentLoaded",function(){
                 })
                 return;
             }
-            //獲得選取的子選項
+            //正確選擇預設地址後，獲得選取的項目
             let selectedRadio = document.querySelector('input[name="member-address"]:checked');
             //獲得選取的子選項label
             let selectedLabel = document.querySelector(`label[for="${selectedRadio.id}"]`);
             console.log("選擇的預設地址",selectedLabel.textContent)
         }
-
-
 
         //保存了第一頁資訊切換到第二頁
         step1_el.classList.remove("active");
