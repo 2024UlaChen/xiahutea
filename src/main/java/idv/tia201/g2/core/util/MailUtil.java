@@ -1,6 +1,7 @@
 package idv.tia201.g2.core.util;
 
 import idv.tia201.g2.core.pojo.Mail;
+import idv.tia201.g2.web.store.vo.Store;
 import jakarta.mail.*;
 import jakarta.mail.internet.AddressException;
 import jakarta.mail.internet.InternetAddress;
@@ -56,18 +57,18 @@ public class MailUtil {
         return properties;
     }
 
-    public void sendAttachmentsMail(Mail mail) throws MessagingException, IOException {
+    public void sendAttachmentsMail(Store store, Mail mail) throws MessagingException, IOException {
         Session session = getSession();
         MimeMessage message = new MimeMessage(session);
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
         helper.setSubject(mail.getSubject());
-        helper.setText(buildContent("title"), true);
+        helper.setText(buildContent(store.getStoreName(), store.getPassword()), true);
         helper.setTo(mail.getRecipient());
         helper.setFrom(new InternetAddress(SENDER));
         Transport.send(message);
     }
 
-    public String buildContent(String title) throws IOException {
+    public String buildContent(String storeName, String password) throws IOException {
         //加载邮件html模板
         Resource resource = new ClassPathResource("static/templates/mailtemplate.ftl");
         StringBuffer buffer = new StringBuffer();
@@ -80,7 +81,7 @@ public class MailUtil {
                 buffer.append(line);
             }
         }
-        return MessageFormat.format(buffer.toString().replace("{", "'{'").replace("}", "'}'"), title);
+        return MessageFormat.format(buffer.toString(), storeName, password);
     }
 
 
