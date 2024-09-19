@@ -4,9 +4,7 @@ import idv.tia201.g2.web.order.dto.OrderDto;
 import idv.tia201.g2.web.order.service.DisputeService;
 import idv.tia201.g2.web.order.vo.DisputeOrder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -47,10 +45,7 @@ public class DisputeController {
         return disputeService.add(reqDisputeOrder);
     }
 
-    // ------------------------------------------------------
 
-
-    // todo
     // 後台 爭議明細 修改
     @PutMapping({"manage/{disputeOrderId}"})
     public DisputeOrder save(
@@ -61,6 +56,6 @@ public class DisputeController {
         return disputeService.updateInfo(reqDisputeOrder);
     }
 
-
+    // ------------------------------------------------------
 
 }

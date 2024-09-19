@@ -34,6 +34,7 @@ public class DisputeDaoImpl implements DisputeDao {
         return query.getSingleResult();
     }
 
+    // todo 前台訂單
     @Override
     public List<DisputeOrder> selectBycCustomerId(Integer customerId) {
         String hql = "from DisputeOrder where customerId= :customerId";
@@ -43,7 +44,7 @@ public class DisputeDaoImpl implements DisputeDao {
     }
 
     //--------------------------------------
-    //todo
+    // 前台 爭議申請 顯示
     @Override
     public DisputeOrder selectByOrderId(Integer orderId) {
         String hql = "FROM DisputeOrder WHERE orderId= :orderId";
@@ -56,12 +57,14 @@ public class DisputeDaoImpl implements DisputeDao {
         }
     }
 
+    // 前台 爭議申請 新增
     @Override
     public int insert(DisputeOrder disputeOrder) {
         session.persist(disputeOrder);
         return 1;
     }
 
+    // 後台 爭議明細 儲存
     @Override
     public int update(DisputeOrder disputeOrder) {
         session.merge(disputeOrder);

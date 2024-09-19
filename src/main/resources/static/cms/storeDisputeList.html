@@ -215,8 +215,9 @@
     </script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
+            // todo 權限判斷
 
-            // 0.顯示列表DB
+            // 0. 顯示列表DB
             init();
 
             function init() {
@@ -227,7 +228,6 @@
                           console.log("錯誤原因：" + error);
                       });
             }
-
             function showDB(data) {
                 let disputeHtml = "";
                 for(let i = 0; i < data.length; i++){
@@ -256,12 +256,12 @@
                 if(nullValue != null ){
                     return nullValue;
                 }else{
-                    return "待審核";
+                    return "-";
                 }
             }
 
             //----------------------------------------------------------------------------------
-            // 1.查詢欄
+            // 1. 查詢欄
             // 1.1 輸入查詢相關欄位，點查詢btn可篩選訂單
             let btn_select = document.getElementById("btn_select");
             btn_select.addEventListener("click", function () {
