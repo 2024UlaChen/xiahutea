@@ -5,7 +5,9 @@ import idv.tia201.g2.web.member.vo.Cart;
 import idv.tia201.g2.web.member.vo.Member;
 import idv.tia201.g2.web.member.vo.MemberAddress;
 import idv.tia201.g2.web.product.vo.Product;
+import idv.tia201.g2.web.store.vo.CustomerLoyaltyCard;
 import idv.tia201.g2.web.store.vo.Store;
+import org.checkerframework.checker.units.qual.C;
 
 import java.util.List;
 
@@ -19,6 +21,7 @@ public interface CartService {
     public List<Product> getProductsByIds(List<Integer> productIds);
     public Store getStoreById(Integer storeId);
     public Member findmemberById(Integer customerId);
-//    public List<MemberAddress> findAddressbyId(Integer customerId);
+    public List<MemberAddress> findAddressbyId(Integer customerId);
     public List<Coupon> findCouponsByCustomerId(Integer customerId);
+    public CustomerLoyaltyCard findMemberLoyalCardById(Integer customerId,Integer storeId);
 }
