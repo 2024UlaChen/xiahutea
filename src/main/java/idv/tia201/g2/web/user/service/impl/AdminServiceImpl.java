@@ -10,6 +10,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import static idv.tia201.g2.web.store.util.PasswordUtil.checkPassword;
+import static idv.tia201.g2.web.store.util.VatUtil.isValidTWBID;
+
 @Service
 public class AdminServiceImpl implements AdminService {
     @Autowired
@@ -25,29 +28,38 @@ public class AdminServiceImpl implements AdminService {
         String password = admin.getAdminPassword();
         TotalUserDTO totalUserDTO = new TotalUserDTO();
 
-//        如果 username 沒填
-        if (username.isEmpty()) {
-            totalUserDTO.setMessage("使用者名稱未輸入");
+//        如果 username 或 password 沒填
+        if (username.isEmpty() || password.isEmpty()) {
+            totalUserDTO.setMessage("請輸入用戶名稱及用戶密碼");
             totalUserDTO.setSuccessful(false);
             return totalUserDTO;
         }
-//        如果 password 沒填
-        if (password.isEmpty()) {
-            totalUserDTO.setMessage("密碼未輸入");
+
+        //檢驗帳號
+        if(!checkPassword(username)){
+            totalUserDTO.setMessage("使用者名稱或密碼錯誤");
             totalUserDTO.setSuccessful(false);
             return totalUserDTO;
         }
+
+        //檢驗密碼
+        if(!checkPassword(password)){
+            totalUserDTO.setMessage("使用者名稱或密碼錯誤");
+                totalUserDTO.setSuccessful(false);
+                return totalUserDTO;
+        }
+
 //        進入 DAO 利用 username & password 找 admin
         admin = adminDao.login(username, password);
+
 //        如果回傳 null 代表登入失敗，如果不是 null 代表 登入成功
         if (admin == null) {
-            totalUserDTO.setMessage("使用者名稱或密碼錯誤");
+            totalUserDTO.setMessage("使用者名稱或密碼錯誤3");
             totalUserDTO.setSuccessful(false);
             return totalUserDTO;
         }else {
             TotalUsers totalUser = totalUserDao.findByUserTypeIdAndUserId(userTypeId, admin.getAdministratorId());
             BeanUtils.copyProperties(totalUser, totalUserDTO);
-//            totalUserDTO.setTotalUserId(totalUser.getTotalUserId());
             totalUserDTO.setMessage("登入成功");
             totalUserDTO.setSuccessful(true);
             return totalUserDTO;
