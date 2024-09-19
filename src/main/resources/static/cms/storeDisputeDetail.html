@@ -227,128 +227,12 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
+            // todo 權限判斷
+            // todo 退款到錢包
+            // todo 頁數
 
             // 0. 顯示明細
             init();
-
-            //---------------------------------------------------------------------------
-            // 1. btn 回上一頁
-            const btn_dispute_back = document.getElementById("btn_dispute_back");
-            btn_dispute_back.addEventListener("click", function () {
-                history.back();
-            });
-            //--------------------------------------------------------------
-
-            // todo: 點擊儲存btn 後端需儲存內容
-            // 5. 更改內容後，點擊儲存btn 需儲存內容 並依狀態更改按鈕css
-            const btn_dispute_save = document.getElementById("demo1");
-            btn_dispute_save.addEventListener("click", function () {
-
-                let customer_id = document.getElementById("customer_id");
-                let order_id = document.getElementById("order_id");
-                let dispute_order_id = document.getElementById("dispute_order_id");
-                let dispute_money = document.getElementById("dispute_money");
-                let reject_reason = document.getElementsByClassName("input_text")[0];
-                let dispute_notes = document.getElementsByClassName("input_text")[1];
-                let dispute_status = document.getElementById("select_status");
-
-                // 5.1 點擊btn 檢查必填欄位
-                let check_valve = false;
-                if (dispute_status.value === '1') {
-                    check_valve = true;
-                } else if (dispute_status.value === '2' && dispute_money.value.trim() !== "") {
-                    check_valve = true;
-                } else if (dispute_status.value === '3' && reject_reason.value.trim() !== "") {
-                    check_valve = true;
-                } else {
-                    Swal.fire("請確認所有必填欄位已完成", "", "error");
-                    return;
-                }
-
-                // 5.2 如果符合5.1檢查條件，執行打包資料
-                if (check_valve) {
-                    let order_data = {
-                        disputeOrderId: dispute_order_id.innerText,
-                        refundAmount: dispute_money.value,
-                        rejectReason: reject_reason.value,
-                        disputeNotes: dispute_notes.value,
-                        disputeStatus: dispute_status.value,
-                        customerId: customer_id.value
-                    }
-
-                    fetch(`/dispute/manage/${dispute_order_id.innerText}`, {
-                        method: "PUT",
-                        headers: {
-                            'Content-Type': 'application/json' // 設置內容類型為 JSON
-                        },
-                        body: JSON.stringify(order_data) // 將資料轉為 JSON 格式
-                    }).then(res => res.json()).then(data => {
-                        if(data.successful){
-                            Swal.fire("更新成功", "", "success");
-                            // 5.4 如果爭議狀態為已同意/不同意，鎖定-儲存btn&狀態選單
-                            // if (dispute_status.value === '3' || dispute_status.value === '2') {
-                            //     btn_dispute_save.setAttribute("disabled", "disabled");
-                            //     dispute_status.setAttribute("disabled", "disabled");
-                            //     dispute_money.setAttribute("disabled", "disabled");
-                            //     reject_reason.setAttribute("disabled", "disabled");
-                            // }
-                        }else {
-                            Swal.fire("更新失敗", "", "error");
-                            console.error("錯誤原因1：", error);
-                        }
-                    }).catch((error) => {
-                        console.error("錯誤原因2：", error);
-                    });
-                }
-            });
-            //---------------------------------------------------------------------------
-            const dispute_status = document.getElementById("select_status");
-            console.log("123")
-            console.log(dispute_status)
-            // 2. select 判斷爭議狀態選單- 因狀態不同而顯示不同的輸入欄位
-            dispute_status.addEventListener("change", function () {
-
-                let dispute_money = document.getElementById("dispute_money");
-                let reject_reason = document.getElementsByClassName("input_text")[0];
-                console.log(dispute_status.value )
-                // 2.1 狀態為 同意時，不可輸入reject_reason，值需清空
-                if (dispute_status.value === 2) {
-                    dispute_money.removeAttribute("disabled");
-                    reject_reason.setAttribute("disabled", "disabled");
-                    reject_reason.value = "";
-                } else if (dispute_status.value === 3) {
-                    // 2.2 狀態為 不同意時，不可輸入dispute_money，值需清空
-                    dispute_money.setAttribute("disabled", "disabled");
-                    reject_reason.removeAttribute("disabled");
-                    dispute_money.value = "";
-                } else {
-                    // 2.3 狀態為 未處理 ，不可輸入dispute_money & reject_reason，值需清空
-                    dispute_money.setAttribute("disabled", "disabled");
-                    reject_reason.setAttribute("disabled", "disabled");
-                    dispute_money.value = "";
-                    reject_reason.value = "";
-                }
-            });
-
-            // 3. input 欄位 - dispute_money 判斷輸入金額範圍
-            dispute_money.addEventListener("blur", function () {
-                let payment_amount = parseInt(document.getElementById("payment_amount").innerText);
-                let order_free_amount = parseInt(document.getElementById("order_free_amount").innerText);
-                if (parseFloat(dispute_money.value) > payment_amount + order_free_amount || parseFloat(dispute_money.value) < 0 || dispute_money.value === "") {
-                    Swal.fire("退款金額輸入錯誤", "", "error");
-                    dispute_money.value = 0;
-                }
-            });
-
-            // 4. input 欄位 - reject_reason 判斷字數長度
-            reject_reason.addEventListener("blur", function () {
-                if (reject_reason.value.length < 1) {
-                    Swal.fire("請輸入不同意爭議原因", "", "error");
-                }
-            });
-            //===========================================================================
-
-
             //===========================================================================
             function init() {
                 let disputeOrderId = getQueryParam("disputeOrderId");
@@ -363,13 +247,11 @@
                     console.error("訂單號碼錯誤");
                 }
             }
-
             // 取得URL的查詢參數
             function getQueryParam(param) {
                 let urlParams = new URLSearchParams(window.location.search);
                 return urlParams.get(param);
             }
-
             // 找明細
             function showDB(data) {
                 let detailHtml = "";
@@ -393,7 +275,7 @@
                         </tr>
                         <tr>
                             <th>爭議原因</th>
-                            <td>${data.disputeOrder.disputeReason}</td>
+                            <td>${nullText(data.disputeOrder.disputeReason)}</td>
                         </tr>
                         <tr>
                             <th>處理狀態</th>
@@ -411,7 +293,7 @@
                             <th>退款金額<span class="red_star">*</span></th>
                             <td>
                                 <label class="input_lab">
-                                    <input id="dispute_money" type="text" value="${nullMoney(data.disputeOrder.refundAmount)}">
+                                    <input id="dispute_money" type="text" value="${nullText(data.disputeOrder.refundAmount)}">
                                 </label>
                             </td>
                         </tr>
@@ -419,7 +301,7 @@
                             <th>不同意原因<span class="red_star">*</span></th>
                             <td>
                                 <label class="input_lab">
-                                    <textarea class="input_text">${nullMoney(data.disputeOrder.rejectReason)}</textarea>
+                                    <textarea class="input_text" id="reject_reason">${nullText(data.disputeOrder.rejectReason)}</textarea>
                                 </label>
                             </td>
                         </tr>
@@ -427,16 +309,15 @@
                             <th>內部備註</th>
                             <td>
                                 <label class="input_lab">
-                                    <textarea class="input_text">${nullMoney(data.disputeOrder.disputeNotes)}</textarea>
+                                    <textarea class="input_text">${nullText(data.disputeOrder.disputeNotes)}</textarea>
                                 </label>
                             </td>
                         </tr>
                         <tr>
                             <th>更新日期</th>
-                            <td>${data.disputeOrder.updateDatetime}</td>
+                            <td>${nullText(data.disputeOrder.updateDatetime)}</td>
                         </tr>
                 `;
-
                 document.getElementById("dispute_tbody").innerHTML = disputeHtml;
 
                 let productTfootHtml = "";
@@ -452,27 +333,27 @@
                             <tr>
                                 <td></td>
                                 <th colspan="3">平台處理費</th>
-                                <td>${data.orders.processingFees}</td>
+                                <td id="processing_fees">${data.orders.processingFees}</td>
                             </tr>
                             <tr>
                                 <td></td>
                                 <th colspan="3">錢包折抵</th>
-                                <td>- ${data.orders.customerMoneyDiscount}</td>
+                                <td>- ${nullMoney(data.orders.customerMoneyDiscount)}</td>
                             </tr>
                             <tr>
                                 <td></td>
                                 <th colspan="3">優惠券折抵</th>
-                                <td>- ${data.orders.couponDiscount}</td>
+                                <td>- ${nullMoney(data.orders.couponDiscount)}</td>
                             </tr>
                             <tr>
                                 <td></td>
                                 <th colspan="3">集點折抵</th>
-                                <td>- ${data.orders.loyaltyDiscount}</td>
+                                <td>- ${nullMoney(data.orders.loyaltyDiscount)}</td>
                             </tr>
                             <tr>
                                 <td></td>
                                 <th colspan="3">付款金額</th>
-                                <td>${data.orders.paymentAmount}</td>
+                                <td id="payment_amount">${data.orders.paymentAmount}</td>
                             </tr>
                             <tr>
                                 <td></td>
@@ -496,9 +377,139 @@
                     `;
                 }
                 document.getElementById("product_tbody").innerHTML = productTbodyHtml;
+
+                //------------------------------------------------------------------------
+                let status_text = document.getElementById("status_text");
+                const btn_dispute_save = document.getElementById("demo1");
+                let dispute_money = document.getElementById("dispute_money");
+                let reject_reason = document.getElementById("reject_reason");
+
+                // 1. 設定下拉選單的值為訂單狀態
+                let status = data.disputeOrder.disputeStatus;  // 取得訂單狀態值
+                let select_status = document.getElementById("select_status");
+                select_status.value = status;
+
+                // 2. 如果爭議狀態為已同意/不同意，鎖定-儲存btn&狀態選單
+                if (status_text.innerText === '同意' || status_text.innerText === '不同意') {
+                    btn_dispute_save.setAttribute("disabled", "disabled");
+                    select_status.setAttribute("disabled", "disabled");
+                    dispute_money.setAttribute("disabled", "disabled");
+                    reject_reason.setAttribute("disabled", "disabled");
+                }
+
+                // 3. select 判斷爭議狀態選單- 因狀態不同而顯示不同的輸入欄位
+                select_status.addEventListener("change", function () {
+                    let dispute_money = document.getElementById("dispute_money");
+                    let reject_reason = document.getElementsByClassName("input_text")[0];
+
+                    // 3.1 狀態為 同意時，不可輸入reject_reason，值需清空
+                    if (select_status.value === "2") {
+                        dispute_money.removeAttribute("disabled");
+                        reject_reason.setAttribute("disabled", "disabled");
+                        reject_reason.value = "";
+                    } else if (select_status.value === "3") {
+                        // 3.2 狀態為 不同意時，不可輸入dispute_money，值需清空
+                        dispute_money.setAttribute("disabled", "disabled");
+                        reject_reason.removeAttribute("disabled");
+                        dispute_money.value = "";
+                    } else {
+                        // 3.3 狀態為 未處理 ，不可輸入dispute_money & reject_reason，值需清空
+                        dispute_money.setAttribute("disabled", "disabled");
+                        reject_reason.setAttribute("disabled", "disabled");
+                        dispute_money.value = "";
+                        reject_reason.value = "";
+                    }
+                });
+
+                // 4. input 欄位 - dispute_money 判斷輸入金額範圍
+                dispute_money.addEventListener("blur", function () {
+                    let payment_amount = parseInt(document.getElementById("payment_amount").value);
+                    let processing_fees = parseInt(document.getElementById("processing_fees").value);
+
+                    if (parseFloat(dispute_money.value) > payment_amount + processing_fees || parseFloat(dispute_money.value) < 0 || dispute_money.value === "") {
+                        Swal.fire("退款金額輸入錯誤", "", "error");
+                        dispute_money.value = 0;
+                    }
+                });
+
+                // 5. input 欄位 - reject_reason 判斷字數長度
+                reject_reason.addEventListener("blur", function () {
+                    if (reject_reason.value.length < 1) {
+                        Swal.fire("請輸入不同意爭議原因", "", "error");
+                    }
+                });
+
+                //-------------------------------------------------------------------------
+                // 6. 點擊儲存btn 需儲存內容
+                btn_dispute_save.addEventListener("click", function () {
+                    let order_id =document.getElementById("order_id");
+                    let customer_id = document.getElementById("customer_id");
+                    let dispute_order_id = document.getElementById("dispute_order_id");
+                    let dispute_notes = document.getElementsByClassName("input_text")[1];
+
+                    // 6.1 點擊btn 檢查必填欄位
+                    let check_valve = false;
+                    if (select_status.value === '1') {
+                        check_valve = true;
+                    } else if (select_status.value === '2' && dispute_money.value.trim() !== "") {
+                        check_valve = true;
+                    } else if (select_status.value === '3' && reject_reason.value.trim() !== "") {
+                        check_valve = true;
+                    } else {
+                        Swal.fire("請確認所有必填欄位已完成", "", "error");
+                        return;
+                    }
+                    // 6.2 如果符合5.1檢查條件，執行打包資料
+                    if (check_valve) {
+                        let dispute_data = {
+                            disputeOrderId: dispute_order_id.innerText,
+                            orderId: order_id.innerText,
+                            customerId: customer_id.innerText,
+                            disputeStatus: select_status.value,
+                            refundAmount: dispute_money.value,
+                            rejectReason: reject_reason.value,
+                            disputeNotes: dispute_notes.value
+                        }
+
+                        // 6.3 傳送資料到後端
+                        fetch(`/dispute/manage/${dispute_order_id.innerText}`, {
+                            method: "PUT",
+                            headers: {
+                                'Content-Type': 'application/json' // 設置內容類型為 JSON
+                            },
+                            body: JSON.stringify(dispute_data) // 將資料轉為 JSON 格式
+                        }).then(res => res.json()).then(data => {
+                            if(data.successful){
+                                console.log(data.message);
+                                Swal.fire({
+                                    title: '更新成功',
+                                    text: '',
+                                    icon: 'success',
+                                    showConfirmButton: true  // 確認按鈕
+                                }).then(() => {
+                                    location.reload();
+                                });
+                            }else {
+                                Swal.fire("更新失敗", "", "error");
+                                console.log(data.message);
+                            }
+                        }).catch((error) => {
+                            console.error("錯誤原因2：", error);
+                        });
+                    }
+                });
             }
+            //---------------------------------------------------------------------------
 
             // todo 待確認 key & value
+            function productSizeText(sizeNum){
+                switch (sizeNum) {
+                    case "1" : return "小杯";
+                    case "2" : return "大杯";
+                    default: return "";
+                }
+            }
+
             function statusText(statusNum) {
                 switch (statusNum) {
                     case 1 :
@@ -507,13 +518,6 @@
                         return "同意";
                     case 3 :
                         return "不同意";
-                }
-            }
-            function productSizeText(sizeNum){
-                switch (sizeNum) {
-                    case "1" : return "小杯";
-                    case "2" : return "大杯";
-                    default: return "";
                 }
             }
             function paymentMethodText() {
@@ -526,14 +530,19 @@
                     return "";
                 }
             }
-            function nullMoney(nullValue){
-                if(nullValue !== null && nullValue !== 0){
-                    return nullValue;
+            function nullMoney(moneyValue){
+                if(moneyValue === 0 ){
+                    return "" ;
                 }else{
-                    return "";
+                    return moneyValue;
                 }
             }
-
+            //---------------------------------------------------------------------------
+            // 7. btn 回上一頁
+            const btn_dispute_back = document.getElementById("btn_dispute_back");
+            btn_dispute_back.addEventListener("click", function () {
+                history.back();
+            });
         });
     </script>
 </body>

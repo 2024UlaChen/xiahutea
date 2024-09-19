@@ -14,7 +14,6 @@ import idv.tia201.g2.web.order.vo.Orders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import static org.springframework.util.ObjectUtils.isEmpty;
 
 @Service
@@ -49,7 +48,6 @@ public class DisputeServiceImpl implements DisputeService {
         }
         Orders order = orderDao.selectByOrderId(disputeOrder.getOrderId());
         List<OrderDetail> orderDetails = orderDetailDao.selectByOrderId(disputeOrder.getOrderId());
-
         return orderMappingUtil.createOrderDto(order, disputeOrder, orderDetails);
     }
 
@@ -99,38 +97,34 @@ public class DisputeServiceImpl implements DisputeService {
     @Override
     public DisputeOrder updateInfo(DisputeOrder newDispute) {
         final DisputeOrder oldDispute = disputeDao.selectByDisputeId(newDispute.getDisputeOrderId());
+        if(oldDispute.getDisputeStatus() == 2 || oldDispute.getDisputeStatus() == 3) {
+            newDispute.setMessage("修改失敗，爭議訂單已處理完成");
+            newDispute.setSuccessful(false);
+            return newDispute;
+        }
         // 同意時
         if(newDispute.getDisputeStatus() == 2){
             if(isEmpty(newDispute.getRefundAmount()) || !(isEmpty(newDispute.getRejectReason()))) {
-                newDispute.setMessage("修改失敗");
+                newDispute.setMessage("修改失敗，必填欄位需完成");
                 newDispute.setSuccessful(false);
-                System.out.println(newDispute.getRefundAmount()+", " +isEmpty(newDispute.getRefundAmount()) );
-                System.out.println(newDispute.getRejectReason() +", "+ isEmpty(newDispute.getRejectReason()));
-                System.err.println("錯誤: refundAmount 或 rejectReason 錯誤");
                 return newDispute;
             }
         }
         if(newDispute.getDisputeStatus() == 3){
             if(!(isEmpty(newDispute.getRefundAmount())) || isEmpty(newDispute.getRejectReason())){
-                newDispute.setMessage("修改失敗");
+                newDispute.setMessage("修改失敗，必填欄位需完成");
                 newDispute.setSuccessful(false);
-                System.err.println("錯誤: refundAmount 或 rejectReason 錯誤");
                 return newDispute;
             }
         }
-//        oldDispute.setOrderId(oldDispute.getOrderId());
-//        oldDispute.setCustomerId(oldDispute.getCustomerId());
         oldDispute.setRefundAmount(newDispute.getRefundAmount());
         oldDispute.setRejectReason(newDispute.getRejectReason());
         oldDispute.setDisputeNotes(newDispute.getDisputeNotes());
         oldDispute.setDisputeStatus(newDispute.getDisputeStatus());
-        disputeDao.update(newDispute);
+        oldDispute.setUpdateDatetime(new Timestamp(System.currentTimeMillis()));
+        disputeDao.update(oldDispute);
         newDispute.setMessage("修改成功");
         newDispute.setSuccessful(true);
         return newDispute;
     }
-
-
-
-
 }

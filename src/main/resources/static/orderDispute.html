@@ -262,46 +262,47 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function(){
+        // todo 判斷會員是否登入
+        // TODO 待session
+        // todo 送出後要連結回去明細 鎖定text
+
         // 0. 顯示申請表
         init();
 
         function init(){
-
             // let orderId = getQueryParam(param);
             // if (orderId) {
-            fetch(`/dispute/member/applyDispute/106`)
+            fetch(`/dispute/member/applyDispute/101`)
                   .then(res => res.json())
                   .then(data => showDB(data))
                   .catch((error) => {
                       console.log("錯誤原因:" + error);
                   });
         }
-
         // 取得URL的查詢參數
         function getQueryParam(param) {
             let urlParams = new URLSearchParams(window.location.search);
             return urlParams.get(param);
         }
-
         function showDB(data){
             let formHtml;
             formHtml=`
                 <div>
                     <label class="dispute_form_key">訂單編號</label>
                     <label class="dispute_form_value_label">
-                        <input class="dispute_form_value" type="text" name=”order_id” value="${data.orders.orderId}" disabled>
+                        <input class="dispute_form_value" type="text" name="order_id" value="${data.orders.orderId}" disabled>
                     </label>
                 </div>
                 <div>
                     <label class="dispute_form_key">會員姓名</label>
                     <label class="dispute_form_value_label">
-                        <input class="dispute_form_value" type="text" name=”dispute_user_name” value="${data.orders.customer.nickname}" disabled>
+                        <input class="dispute_form_value" type="text" name="dispute_user_name" value="${data.orders.customer.nickname}" disabled>
                     </label>
                 </div>
                 <div>
                     <label class="dispute_form_key">店家名稱</label>
                     <label class="dispute_form_value_label">
-                        <input class="dispute_form_value" type="text" name=”dispute_store_name” value="${data.orders.store.storeName}" disabled>
+                        <input class="dispute_form_value" type="text" name="dispute_store_name" value="${data.orders.store.storeName}" disabled>
                     </label>
                 </div>
                 <div>
@@ -333,65 +334,64 @@
 
                 // 1 判斷DB是否已有爭議資料
                 let form_reason_el = document.getElementsByClassName("dispute_form_reason")[0];
-                if(data.disputeOrder.disputeOrderId != null){
+                if(data.disputeOrder && data.disputeOrder.disputeOrderId != null){
                     form_reason_el.classList.add("-close");
                     form_reason_el.setAttribute("disabled", "disabled");
                     Swal.fire('已有爭議資料，不可重複申請','', 'error');
                     // history.back();
-                }
+                }else {
+                    // 2. btn 送出
+                    let btn_submit_el = document.getElementsByClassName("btn_submit")[0];
+                    btn_submit_el.addEventListener("click", function(e){
 
-                // 2. btn 送出
-                let btn_submit_el = document.getElementsByClassName("btn_submit")[0];
-                btn_submit_el.addEventListener("click", function(e){
+                        let order_id = document.getElementsByClassName("dispute_form_value")[0].value;
+                        let form_reason_el = document.getElementsByClassName("dispute_form_reason")[0];
+                        let dispute_data = {
+                            orderId: order_id,
+                            customerId: data.orders.customer.customerId,
+                            disputeReason: form_reason_el.value
+                        }
 
-                    let order_id = document.getElementsByClassName("dispute_form_value")[0].value;
-                    let form_reason_el = document.getElementsByClassName("dispute_form_reason")[0];
-                    let dispute_data = {
-                        orderId: order_id,
-                        customerId: data.orders.customer.customerId,
-                        disputeReason: form_reason_el.value
-                    }
+                        // 2.1 點擊後 檢查文字長度，
+                        if(form_reason_el.value.length > 0 ){
+                            e.preventDefault();
 
-                    // 2.1 點擊後 檢查文字長度，
-                    if(form_reason_el.value.length > 0 ){
-                        e.preventDefault();
-
-                        // 2.2 送出資料至後端
-                        // todo: 待確認${orderId}
-                        fetch("/dispute/member/applyDispute/106", {
-                            method: "POST",
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify(dispute_data) // 將資料轉為 JSON 格式
-                        })
-                            .then(res => res.json()).then(data => {
-                            if(data.successful){
-                                console.log(data.message);
-                                Swal.fire({
-                                    title: '已送出爭議申請',
-                                    text: '',
-                                    icon: 'success',
-                                    timer: 1500,  // 設置彈窗在1.5秒後自動關閉
-                                    showConfirmButton: false  // 隱藏確認按鈕
-                                }).then(() => {
-                                    // 彈窗關閉後跳轉到orderDetail.html
-                                   // location.href = "orderDetail.html?orderId=${orderId}";
-                                });
-                            }else {
-                                console.log(data.message);
+                            // 2.2 送出資料至後端
+                            // todo: 待確認${orderId}
+                            fetch("/dispute/member/applyDispute/101", {
+                                method: "POST",
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify(dispute_data) // 將資料轉為 JSON 格式
+                            })
+                                  .then(res => res.json()).then(data => {
+                                if(data.successful){
+                                    console.log(data.message);
+                                    Swal.fire({
+                                        title: '申請完成',
+                                        text: '',
+                                        icon: 'success',
+                                        showConfirmButton: true  // 隱藏確認按鈕
+                                    }).then(() => {
+                                        //todo
+                                        // 彈窗關閉後跳轉到orderDetail.html
+                                        location.href = "orderDetail.html?orderId=${orderId}";
+                                    });
+                                }else {
+                                    console.log(data.message);
+                                    Swal.fire('申請失敗','', 'error');
+                                }
+                            }).catch(error => {
+                                console.error("錯誤原因：", error);
                                 Swal.fire('申請失敗','', 'error');
-                            }
-                        }).catch(error => {
-                            console.error("錯誤原因：", error);
-                            Swal.fire('申請失敗','', 'error');
-                        });
-                    }else{
-                        e.preventDefault();
-                        Swal.fire('申請原因 請輸入內容','', 'error');
-                    }
-                });
-
+                            });
+                        }else{
+                            e.preventDefault();
+                            Swal.fire('申請原因 請輸入內容','', 'error');
+                        }
+                    });
+                }
                 //-------------------------------------------------------
                 // 3. btn 取消 > 回上一頁
                 let btn_back_el = document.getElementById("btn_back");
