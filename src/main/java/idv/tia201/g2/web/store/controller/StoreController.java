@@ -167,7 +167,9 @@ public class StoreController {
 
     @GetMapping("GetLoginType")
     public TotalUserDTO getLoginType(HttpSession session){
-        return storeService.GetTotalUserDTO((Integer) session.getAttribute("storeId"));
+        return (TotalUserDTO) session.getAttribute("totalUserDTO");
+
+
     }
 
 
