@@ -6,6 +6,9 @@ import idv.tia201.g2.web.store.model.StoreViewModel;
 import idv.tia201.g2.web.store.service.StoreService;
 import idv.tia201.g2.web.store.vo.Store;
 import idv.tia201.g2.web.store.vo.StoreCalendar;
+import idv.tia201.g2.web.user.dao.TotalUserDao;
+import idv.tia201.g2.web.user.dto.TotalUserDTO;
+import idv.tia201.g2.web.user.vo.TotalUsers;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -27,11 +30,13 @@ public class StoreServiceImpl implements StoreService {
 
     private final StoreDao storeDao;
     private final StoreCalendarRepository storeCalendarRepository;
+    private final TotalUserDao totalUserDao;
     //注入dao
     @Autowired
-    public StoreServiceImpl(StoreDao storeDao, StoreCalendarRepository storeCalendarRepository) {
+    public StoreServiceImpl(StoreDao storeDao, StoreCalendarRepository storeCalendarRepository,TotalUserDao totalUserDao) {
         this.storeDao = storeDao;
         this.storeCalendarRepository = storeCalendarRepository;
+        this.totalUserDao = totalUserDao;
     }
 
 
@@ -249,7 +254,18 @@ public class StoreServiceImpl implements StoreService {
         return storeCalendarRepository.findStoreByStoreId(Id);
     }
 
+    @Override
+    public TotalUserDTO GetTotalUserDTO(Integer StoreId) {
+        TotalUserDTO item = new TotalUserDTO();
+        Store store = findStoreById(StoreId);
+        TotalUsers totalUsers = totalUserDao.findByUserTypeIdAndUserId(1,StoreId);
+        item.setTotalUserId(totalUsers.getTotalUserId());
+        item.setUserTypeId(totalUsers.getUserTypeId());
+        item.setUserId(store.getStoreId());
+        item.setLogo(store.getLogo());
+        return item;
 
+    }
 
 
 }

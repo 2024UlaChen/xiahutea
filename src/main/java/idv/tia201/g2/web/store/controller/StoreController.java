@@ -5,6 +5,8 @@ import idv.tia201.g2.web.store.service.StoreService;
 
 import idv.tia201.g2.web.store.vo.Store;
 
+import idv.tia201.g2.web.user.dto.TotalUserDTO;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.client.RestTemplateAutoConfiguration;
@@ -59,15 +61,20 @@ public class StoreController {
     }
 
     @PostMapping("/login")
-    public Store Login( HttpSession session, @RequestBody Store store){
+    public Store Login(HttpServletRequest request, @RequestBody Store store){
         Store data = storeService.loginStore(store);
         if(data.isSuccessful() ){
+            if(request.getSession(false) != null){
+                request.changeSessionId();
+            }
+            final HttpSession session = request.getSession();
             //設置session
             session.setAttribute("storeId", data.getStoreId());
             session.setAttribute("storeName", data.getStoreName());
             session.setAttribute("storeLogo",data.getLogo());
-            session.setAttribute("loginStatus",true);
+            session.setAttribute("loggedin",true);
             session.setAttribute("loginType","store");
+           session.setAttribute("totalUserDTO",storeService.GetTotalUserDTO(data.getStoreId()));
 
 //            session.setMaxInactiveInterval(3600);//秒為單位  Tomcat預設 30分
         }
@@ -81,7 +88,7 @@ public class StoreController {
         session.removeAttribute("storeId");
         session.removeAttribute("storeName");
         session.removeAttribute("storeLogo");
-        session.removeAttribute("loginStatus");
+        session.removeAttribute("loggedin");
         session.removeAttribute("loginType");
 
     }
@@ -132,30 +139,35 @@ public class StoreController {
 
 
 
-
-
-    public boolean IsStoreLogin(@SessionAttribute("loginType") String loginData) {
-        //看看是否為商家
-        return loginData.equals("store");
-
+    public boolean IsStoreLogin(HttpSession session){
+        TotalUserDTO data = (TotalUserDTO) session.getAttribute("totalUserDTO");
+        return data.getUserId() == 1;
     }
-    public boolean IsLogin(@SessionAttribute("loginStatus") boolean status) {
+
+
+    public boolean IsLogin(@SessionAttribute("loggedin") boolean status) {
         return status;
     }
 
 
     public boolean checkStoreLogin(HttpSession session,Integer storeId){
         //登入中 是 商家登入 是 該商家
-        if(session.getAttribute("loginStatus") != null){
-            boolean status = (boolean) session.getAttribute("loginStatus");
+        if(session.getAttribute("loggedin") != null){
+            boolean status = (boolean) session.getAttribute("loggedin");
             String loginType = (String) session.getAttribute("loginType");
 
-            return IsLogin(status) && IsStoreLogin(loginType) && session.getAttribute("storeId").equals(storeId);
+            return IsLogin(status) && IsStoreLogin(session) && session.getAttribute("storeId").equals(storeId);
 
 
         }
         return false;
 
+    }
+
+
+    @GetMapping("GetLoginType")
+    public TotalUserDTO getLoginType(HttpSession session){
+        return storeService.GetTotalUserDTO((Integer) session.getAttribute("storeId"));
     }
 
 

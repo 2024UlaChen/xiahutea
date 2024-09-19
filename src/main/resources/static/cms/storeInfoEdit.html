@@ -127,7 +127,7 @@
                 type="text"
                 class="input-group form-control"
                 style="margin-right: 30px"
-                value="500"
+
                 id="deliverymoney"
               />
             </div>
@@ -288,6 +288,8 @@
 
         let contactphone = document.querySelector("#contactphone");
 
+        let IsStopAction = false;
+
 
         $.ajax({
           url: `/store/storeinfo/${sotreid.split("=")[1]}`,
@@ -362,8 +364,22 @@
             isdelivery = document.querySelector("#isdelivery").checked
               ? true
               : false;
-
             deliverymoney = document.querySelector("#deliverymoney").value;
+            console.log("瞧瞧");
+            console.log(deliverymoney);
+            //檢查如果有外送 必須要有外送金
+            if(isdelivery){
+              if(deliverymoney === ""){
+                Swal.fire({
+                  icon:"warning",
+                  text:"當提供外送服務，需要輸入外送門檻額度"
+                });
+                IsStopAction = true;
+              }
+
+            }
+
+
 
             distance = document.querySelector("#distance").value;
 
@@ -390,25 +406,35 @@
               contactPerson: contactperson,
               contactPhone: contactphone,
             };
-
-            $.ajax({
-              url: "/store/editstoreinfo",
-              method: "POST",
-              contentType: "application/json",
-              dataType: "JSON",
-              data: JSON.stringify(model),
-              success: function (data) {
-                console.log(JSON.stringify(model));
-                //接著處理照片
-                if(newLogoImg.files.length> 0){
-                  console.log("進到if內了");
-                  let formData = new FormData();
-                  formData.append('storeId',data.storeId);
-                  formData.append('img',newLogoImg.files[0]);
-                  fetch('/store/uploadLogo',{
-                    method:'POST',
-                    body:formData
-                  }).then(resp =>{
+            if(!IsStopAction){
+              $.ajax({
+                url: "/store/editstoreinfo",
+                method: "POST",
+                contentType: "application/json",
+                dataType: "JSON",
+                data: JSON.stringify(model),
+                success: function (data) {
+                  console.log(JSON.stringify(model));
+                  //接著處理照片
+                  if(newLogoImg.files.length> 0){
+                    console.log("進到if內了");
+                    let formData = new FormData();
+                    formData.append('storeId',data.storeId);
+                    formData.append('img',newLogoImg.files[0]);
+                    fetch('/store/uploadLogo',{
+                      method:'POST',
+                      body:formData
+                    }).then(resp =>{
+                      Swal.fire({
+                        icon: "success",
+                        title: "更新成功",
+                      }).then((res) => {
+                        if (res.isConfirmed) {
+                          location.reload();
+                        }
+                      });
+                    });
+                  }else {
                     Swal.fire({
                       icon: "success",
                       title: "更新成功",
@@ -417,27 +443,21 @@
                         location.reload();
                       }
                     });
-                  });
-                }else {
+                  }
+
+
+                },
+                err: function () {
                   Swal.fire({
-                    icon: "success",
-                    title: "更新成功",
-                  }).then((res) => {
-                    if (res.isConfirmed) {
-                      location.reload();
-                    }
+                    icon: "error",
+                    title: "更新失敗",
                   });
-                }
+                },
+              }); //編輯會員
+            }
+            IsStopAction = false;
 
 
-              },
-              err: function () {
-                Swal.fire({
-                  icon: "error",
-                  title: "更新失敗",
-                });
-              },
-            }); //編輯會員
           }); //監聽save 但不需要提交 所以阻擋預設行為
       }); //DOM END
 
