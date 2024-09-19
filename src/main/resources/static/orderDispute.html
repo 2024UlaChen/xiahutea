@@ -339,8 +339,18 @@
                 if (data.disputeOrder && data.disputeOrder.disputeOrderId != null) {
                     form_reason_el.classList.add("-close");
                     form_reason_el.setAttribute("disabled", "disabled");
-                    Swal.fire('已有爭議資料，不可重複申請', '', 'error');
-                    // history.back();
+                    /// Swal.fire('已有爭議資料，不可重複申請', '', 'error');
+                    //
+
+                    Swal.fire({
+                        title: '已有爭議資料，不可重複申請',
+                        text: '',
+                        icon: 'error',
+                        showConfirmButton: true  // 確認按鈕
+                    }).then(() => {
+                        history.back();
+                    });
+
                 } else {
                     // 2. btn 送出
                     let btn_submit_el = document.getElementsByClassName("btn_submit")[0];
@@ -374,19 +384,14 @@
                                         title: '申請完成',
                                         text: '',
                                         icon: 'success',
-                                        showConfirmButton: true  // 隱藏確認按鈕
+                                        showConfirmButton: true
                                     }).then(() => {
-                                        //todo
-                                        // 彈窗關閉後跳轉到orderDetail.html
-                                        // location.href = "orderDetail.html?orderId=${orderId}";
+                                        location.href = `./orderDetail.html?orderId=${orderId}`;
                                     });
                                 } else {
                                     console.log(data.message);
                                     Swal.fire('申請失敗', '', 'error');
                                 }
-                            }).catch(error => {
-                                console.error("錯誤原因：", error);
-                                Swal.fire('申請失敗', '', 'error');
                             });
                         } else {
                             e.preventDefault();
@@ -400,7 +405,7 @@
                 let btn_back_el = document.getElementById("btn_back");
                 btn_back_el.addEventListener("click", function(e){
                     e.preventDefault();
-                    history.back();
+                    location.href = `./orderDetail.html?orderId=${orderId}`;
                 });
             }
         }

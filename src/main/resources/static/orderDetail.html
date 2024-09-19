@@ -694,10 +694,8 @@
                     }
                 }
 
-                // todo: 待後端完成 check變數連結
                 // 1.2 爭議btn 可點擊時 link爭議申請表
                 btn_dispute_apply.addEventListener("click", function () {
-                    // console.log('爭議申請按鈕點擊');
                     location.href = `./orderDispute.html?orderId=${data.orders.orderId}`;
                 });
 
@@ -842,9 +840,6 @@
                                             icon: 'success',
                                             showConfirmButton: true  // 確認按鈕
                                         }).then(() => {
-                                            btn_order_star.classList.add("-close");
-                                            btn_order_star.setAttribute("disabled", "disabled");
-                                            btn_order_star.innerHTML = "完成評分";
                                             btn_star_close.click();
                                             location.reload();
                                         });
@@ -868,7 +863,15 @@
                     }
                     return Number.parseInt(span_el.getAttribute("data-star"), 10);
                 }
+
+                // todo 待更改 customerId
+                // 3. btn 回上一頁
+                const order_btn_back = document.getElementsByClassName("order_btn_back")[0];
+                order_btn_back.addEventListener("click", function () {
+                    location.href = `./orderList.html?customerId=1`;
+                });
             }
+
         }
 
         // todo 待確認 key & value
@@ -926,11 +929,7 @@
         }
 
         //=========================================================================================
-        // 3. btn 回上一頁
-        const order_btn_back = document.getElementsByClassName("order_btn_back")[0];
-        order_btn_back.addEventListener("click", function () {
-            history.back();
-        });
+
     });
 </script>
 </body>

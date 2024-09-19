@@ -351,7 +351,8 @@
 
         function showDB(data){
             let orderHtml = "";
-            for(let i = 0; i < data.length ; i++) {
+            // 訂單排序從新到舊
+            for(let i = data.length-1 ; i >= 0 ; i--) {
 
                 // 2.1.1 訂單狀態不同 更改不同顏色
                 let statusClass = "";
