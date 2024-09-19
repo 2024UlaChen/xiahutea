@@ -1,10 +1,16 @@
 package idv.tia201.g2.web.store.service.impl;
 
+import idv.tia201.g2.core.pojo.Core;
+import idv.tia201.g2.core.pojo.Mail;
+import idv.tia201.g2.core.util.MailUtil;
 import idv.tia201.g2.web.store.dao.StoreDao;
 import idv.tia201.g2.web.store.dto.RegisterStoreDTO;
 import idv.tia201.g2.web.store.service.RegisterStoreService;
 import idv.tia201.g2.web.store.util.StoreToRegisterStore;
 import idv.tia201.g2.web.store.vo.Store;
+import jakarta.mail.MessagingException;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -12,17 +18,22 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import static idv.tia201.g2.core.util.CopyUtil.copyPropertiesIgnoreNull;
 import static idv.tia201.g2.web.store.util.VatUtil.isValidTWBID;
 
 @Service
 public class RegisterStoreServiceImpl implements RegisterStoreService {
     @Autowired
     private StoreDao storeDao;
+
+    @Autowired
+    private MailUtil mailUtil;
 
     @Override
     public Store register(Store store) {
@@ -182,10 +193,24 @@ public class RegisterStoreServiceImpl implements RegisterStoreService {
 
 
         //依 userId 存資料
-        Store save = storeDao.save(newData);
+        Store store = storeDao.findByStoreId(newData.getStoreId());
+        copyPropertiesIgnoreNull(newData,store);
+        Store save = storeDao.save(store);
         save.setSuccessful(true);
         save.setMessage("更新成功");
-        save.setSuccessful(true);
         return save;
+    }
+
+    public void sendMail(Store newData) throws MessagingException, IOException {
+        String randomPassword = RandomStringUtils.randomAlphanumeric(9, 14);
+        newData.setPassword(randomPassword);
+        Store ostore = storeDao.findByStoreId(newData.getStoreId());
+        copyPropertiesIgnoreNull(newData,ostore);
+        storeDao.save(ostore);
+
+        Mail mail = new Mail();
+        mail.setRecipient(ostore.getEmail());
+        mail.setSubject("歡迎加入夏虎茶");
+        mailUtil.sendAttachmentsMail(ostore,mail);
     }
 }
