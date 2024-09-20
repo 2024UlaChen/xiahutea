@@ -13,7 +13,9 @@ document.addEventListener("DOMContentLoaded",function(){
   let customer_img_el = document.getElementsByClassName("customer-img")[0];
   let customer_name_el = document.getElementsByClassName("customer-name")[0];
   let customerId;
+  let loginMember;
   let storeId;
+  let nowstore;
 
   //訂單細項
   let item_detail_el = document.getElementsByClassName('item-detail')[0];
@@ -45,7 +47,7 @@ document.addEventListener("DOMContentLoaded",function(){
   //用全域變數用來裝cartItem(用來編輯)、currentItem(用來刪除)、loginMember(用來裝目前登入會員)
   let currentCartItem = null;
   let currentItem = null;
-  let loginMember = null;
+
   //取貨方式
   let pick_up_el = document.getElementsByClassName('pick-up')[0];
   let pick_up_input_el = document.getElementsByClassName("pick-up-input")[0];
@@ -53,7 +55,6 @@ document.addEventListener("DOMContentLoaded",function(){
   let recevie_time_el = document.getElementsByClassName('recevie-time')[0];
 
   //時間選擇
-  // let picker_el = document.getElementsByClassName("pickuper")[0];
   let date_input_el = document.getElementById('myDatepicker');
 
   //優惠使用
@@ -88,9 +89,13 @@ document.addEventListener("DOMContentLoaded",function(){
   let total_amount_el = document.getElementsByClassName('total-amount')[0];
 
   //結帳流程-2
+  //商品數目
+  let payable_unit_el = document.getElementsByClassName('payable-unit')[0];
+  let payable_price_el = document.getElementsByClassName('payable-price')[0];
   //取貨人
   let btn_backto_last_page_el = document.getElementsByClassName("btn-backto-last-page")[0];
   let btn_goto_next_page_el = document.getElementsByClassName("btn-goto-next-page")[0];
+  let pickuper_el = document.getElementsByClassName('pickuper')[0];
   let select_cellphone_el = document.getElementsByClassName("select-cellphone")[0];
   let input_cellphone_el = document.getElementsByClassName("input-cellphone")[0];
   let cellphoneError_el = document.getElementById('cellphone-error');
@@ -109,7 +114,22 @@ document.addEventListener("DOMContentLoaded",function(){
   let select_paper_uniform_el = document.getElementsByClassName("select-paper-uniform")[0];
   let uniform_numbers_el = document.getElementsByClassName("uniform-numbers")[0];
   let uniform_numbers_error_el = document.getElementById('uniform-numbers-error');
+
+
   //結帳流程-3
+  let store_el = document.getElementById('store');
+  let customer_el = document.getElementById('customer');
+  let phone_el = document.getElementById('phone');
+  let pickupMethod_el = document.getElementById('pickupMethod');
+  let final_address_el = document.getElementById('final-address');
+  let pickupTime_el = document.getElementById('pickupTime');
+  let paymentMethod_el = document.getElementById('paymentMethod');
+  let invoiceType_el = document.getElementById('invoiceType');
+  let final_amount_el = document.getElementById('final-amount');
+
+
+
+
   let btn_backto_last_page2_el = document.getElementsByClassName("btn-backto-last-page2")[0];
   let btn_submit_order_el = document.getElementsByClassName("btn-submit-order")[0];
   let btn_modal_close_el = document.getElementsByClassName("btn_modal_close")[0];
@@ -349,6 +369,8 @@ document.addEventListener("DOMContentLoaded",function(){
         }
 
         //保存了第一頁資訊切換到第二頁
+        payable_unit_el.textContent = product_unit_el.textContent;
+        payable_price_el.textContent = product_amount_el.textContent;
         step1_el.classList.remove("active");
         step2_el.classList.add("active");
         if (step_content_el.style.display = "flex") {
@@ -410,8 +432,8 @@ document.addEventListener("DOMContentLoaded",function(){
       input_cellphone_el.addEventListener('input', function () {
           let cellphoneInput = this.value;
           // 台灣手機號碼格式檢核 (09 開頭，接 8 位數字)
-          let phoneRegex = /^09\d{8}$/;
-          if (phoneRegex.test(cellphoneInput)) {
+          let cellphoneRegex = /^09\d{8}$/;
+          if (cellphoneRegex.test(cellphoneInput)) {
               // 符合格式，隱藏錯誤提示
               cellphoneError_el.style.display = 'none';
               input_cellphone_el.style.borderColor = '';
@@ -451,6 +473,7 @@ document.addEventListener("DOMContentLoaded",function(){
                 setTimeout(function () {
                     input_phone_number_el.disabled = false;
                     input_phone_number_el.focus();
+                    input_phone_number_el.value='';
                 }, 10);
             }
         } else {
@@ -458,6 +481,16 @@ document.addEventListener("DOMContentLoaded",function(){
             phoneZoneError_el.style.display = 'inline';
             // 禁用市話號碼輸入框
             input_phone_number_el.disabled = true;
+        }
+    });
+    input_phone_number_el.addEventListener('input', function () {
+        let phoneInput = this.value;
+        let phoneRegex = /^\d{7}$/;
+        if (phoneRegex.test(phoneInput)) {
+            // 符合格式，隱藏錯誤提示
+            phoneZoneError_el.style.display = 'none';
+        } else {
+            phoneZoneError_el.style.display = 'inline';
         }
     });
 
@@ -504,18 +537,24 @@ document.addEventListener("DOMContentLoaded",function(){
         }
       });
       uniform_numbers_el.addEventListener("input",function (){
-          let uniformNumberLength = this.value.length;
-         if(uniformNumberLength<8){
-             uniform_numbers_error_el.style.display="inline";
-         }else{
+         //  let uniformNumberLength = this.value.length;
+         // if(uniformNumberLength<8){
+         //     uniform_numbers_error_el.style.display="inline";
+         // }else{
+         //     uniform_numbers_error_el.style.display="none";
+         // }
+         //  console.log("now value: ",this.value)
+         if(vatCheck(this.value)){
              uniform_numbers_error_el.style.display="none";
+         }else{
+             uniform_numbers_error_el.style.display="inline";
          }
       })
       //頁面跳轉
       btn_backto_last_page_el.addEventListener("click", function (e) {
         step2_el.classList.remove("active");
         step1_el.classList.add("active");
-        if (step_content2_el.style.display = "flex") {
+        if (step_content2_el.style.display === "flex") {
           step_content2_el.style.display = "none";
           step_content_el.style.display = "flex";
           order_detail_container_el.scrollIntoView({
@@ -526,7 +565,97 @@ document.addEventListener("DOMContentLoaded",function(){
       })
 
       btn_goto_next_page_el.addEventListener("click", function (e) {
+        //檢查欄位是不是都正確填寫
+        //取貨人
+        if(pickuper_el.value ===''){
+            Swal.fire({
+                icon: 'error',
+                title: '未填寫取貨人姓名',
+                text: '請填寫取貨人姓名！',
+                confirmButtonText: '確定',
+            })
+            return;
+        }
+          //聯絡電話
+          let selectcontact = document.querySelectorAll('input[name="select-contact"]');
+          let contactisSelected = false;
+          //檢查是不是有選聯絡方式
+          selectcontact.forEach(option=>{
+              if(option.checked){
+                  contactisSelected = true;
+              }
+          })
+          if(!contactisSelected){
+              Swal.fire({
+                  icon: 'error',
+                  title: '未選擇連絡電話',
+                  text: '請選擇一個連絡方式！',
+                  confirmButtonText: '確定',
+              })
+              return;
+          }
+          //檢查手機
+        if(select_cellphone_el.checked){
+            if(input_cellphone_el.value===''||cellphoneError_el.style.display==='inline'){
+                Swal.fire({
+                    icon: 'error',
+                    title: '手機號碼錯誤',
+                    text: '請填寫正確手機號碼！',
+                    confirmButtonText: '確定',
+                })
+                return;
+            }
+        }
+          //檢查電話
+          if(select_phone_el.checked){
+              if(input_phone_zone_el.value ===''||
+                 input_phone_number_el.value ===''||
+                 phoneZoneError_el.style.display==='inline'){
+                  Swal.fire({
+                      icon: 'error',
+                      title: '市話號碼錯誤',
+                      text: '請填寫正確市話號碼！',
+                      confirmButtonText: '確定',
+                  })
+                  return;
+              }
+          }
+        //發票方式
+          let selectinvoice = document.querySelectorAll('input[name="select-invoice"]');
+          let invoiceisSelected = false;
+          //檢查是不是有選發票方式
+          selectinvoice.forEach(option=>{
+              if(option.checked){
+                  invoiceisSelected = true;
+              }
+          })
+          if(!invoiceisSelected){
+              Swal.fire({
+                  icon: 'error',
+                  title: '未選擇發票方式',
+                  text: '請選擇一個發票方式！',
+                  confirmButtonText: '確定',
+              })
+              return;
+          }
+        if(select_paper_el.checked){
+            //預計將金流方式設定為紙本發票
+        }
+        if(select_paper_uniform_el){
+            //預計將金流方式設定為紙本發票加統編
+            if(uniform_numbers_el.value ===''||uniform_numbers_error_el.style.display==='inline'){
+                Swal.fire({
+                    icon: 'error',
+                    title: '統編號碼錯誤',
+                    text: '請填寫正確統編號碼！',
+                    confirmButtonText: '確定',
+                })
+                return;
+            }
+        }
         step2_el.classList.remove("active");
+        store_el.textContent= nowstore.storeName;
+        customer_el.textContent = loginMember.nickname;
         step3_el.classList.add("active");
         if (step_content2_el.style.display = "flex") {
           step_content2_el.style.display = "none";
@@ -538,7 +667,7 @@ document.addEventListener("DOMContentLoaded",function(){
         e.stopPropagation()
       })
 
-      //********************************************第三頁按鈕事件*************************************
+      //********************************************第三頁*************************************
       btn_backto_last_page2_el.addEventListener("click", function (e) {
         step3_el.classList.remove("active");
         step2_el.classList.add("active");
@@ -668,6 +797,7 @@ document.addEventListener("DOMContentLoaded",function(){
                 throw new Error('找不到商店資料');
               }
               console.log('Store Details:', store);
+              nowstore = store;
               //判斷現在是不是營業時間及是否接單(測試時可先註解)
               //   if (!isinOpeningHours(store.openingHours, store.closingHours)
               //       || !store.isTakeOrders) {

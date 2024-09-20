@@ -243,9 +243,9 @@
       <!-- Step 2: Payment Method -->
       <div id="step-2" class="step-content2" style="display: none;">
           <div class="account-payable">
-              <div class="payable-unit">5份</div>
+              <div class="payable-unit"></div>
               應付金額
-              <div class="payable-price">$300</div>
+              <div class="payable-price"></div>
           </div>
           <!--取貨人資料-->
           <div class="pickup-detail">
@@ -262,7 +262,7 @@
                   <li>
                       <input type="radio" class="select-phone" name="select-contact">
                       <label for="option2" class="label-phone">市話</label>
-                      <span id="phone-zone-error" style="color: red; display: none;">請輸入有效的台灣區碼</span>
+                      <span id="phone-zone-error" style="color: red; display: none;">請輸入有效的市話號碼</span>
                       <div class="input-phone">
                           <input type="text" class="input-phone-zone" placeholder="區碼" maxlength="2" disabled>
                           <input type="text" class="input-phone-number" maxlength="7" disabled>
@@ -298,7 +298,7 @@
                       <input type="radio" class="select-paper-uniform" name="select-invoice">
                       <label for="option2" class="label-uniform">紙本發票(含統一編號)</label>
                       <span id="uniform-numbers-error" style="color: red; display: none;">請輸入有效的統編號碼</span>
-                      <input type="text" class="uniform-numbers" placeholder="請輸入統編" maxlength="8" disabled>
+                      <input type="text" class="uniform-numbers" placeholder="請輸入統編" maxlength="8" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 8)" disabled>
                   </li>
 
                   <li class="vehicle-detail">
@@ -328,11 +328,11 @@
                   <tbody id="order-body">
                   <tr>
                       <td>訂購門市</td>
-                      <td id="store">清新福全中山店</td>
+                      <td id="store"></td>
                   </tr>
                   <tr>
                       <td>取貨人</td>
-                      <td id="customer">RAY</td>
+                      <td id="customer"></td>
                   </tr>
                   <tr>
                       <td>聯絡電話</td>
@@ -344,7 +344,7 @@
                   </tr>
                   <tr>
                       <td>取貨地址</td>
-                      <td id="address">台北市松山區松江南京100號</td>
+                      <td id="final-address">台北市松山區松江南京100號</td>
                   </tr>
                   <tr>
                       <td>預計取貨時間</td>
@@ -360,7 +360,7 @@
                   </tr>
                   <tr>
                       <td>應付金額</td>
-                      <td id="amount">500</td>
+                      <td id="final-amount">500</td>
                   </tr>
                   </tbody>
               </table>
@@ -375,6 +375,7 @@
   <footer class="footer"></footer>
       <script src="assets/js/jquery-1.12.4.min.js"></script>
       <script src="js/general.js"></script>
+      <script src="js/dataCheck.js"></script>
 
       <script src="assets/js/jquery.plugin-countdown.min.js"></script>
       <script src="assets/js/jquery-countdown.min.js"></script>
