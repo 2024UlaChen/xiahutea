@@ -6,6 +6,7 @@ import idv.tia201.g2.core.util.MailUtil;
 import idv.tia201.g2.web.store.dao.StoreDao;
 import idv.tia201.g2.web.store.dto.RegisterStoreDTO;
 import idv.tia201.g2.web.store.service.RegisterStoreService;
+import idv.tia201.g2.web.store.util.PasswordUtil;
 import idv.tia201.g2.web.store.util.StoreToRegisterStore;
 import idv.tia201.g2.web.store.vo.Store;
 import jakarta.mail.MessagingException;
@@ -25,6 +26,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import static idv.tia201.g2.core.util.CopyUtil.copyPropertiesIgnoreNull;
+import static idv.tia201.g2.web.store.util.PasswordUtil.generateRandomString;
 import static idv.tia201.g2.web.store.util.VatUtil.isValidTWBID;
 
 @Service
@@ -202,7 +204,7 @@ public class RegisterStoreServiceImpl implements RegisterStoreService {
     }
 
     public void sendMail(Store newData) throws MessagingException, IOException {
-        String randomPassword = RandomStringUtils.randomAlphanumeric(9, 14);
+        String randomPassword = generateRandomString(9, 14);
         newData.setPassword(randomPassword);
         Store ostore = storeDao.findByStoreId(newData.getStoreId());
         copyPropertiesIgnoreNull(newData,ostore);
