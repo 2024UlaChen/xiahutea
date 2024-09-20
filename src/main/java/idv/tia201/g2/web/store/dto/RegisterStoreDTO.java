@@ -10,7 +10,7 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 public class RegisterStoreDTO extends Core {
     private Integer storeId;
-    //商家名稱 (應該檢查名稱 不能重複 db梅索道)
+    //商家名稱
     private String storeName;
 
     //註冊日
@@ -27,10 +27,10 @@ public class RegisterStoreDTO extends Core {
 
     private String contactPhone;//連絡電話
 
-    private Integer storeStatus;//帳號狀態: 審核中 0  使用中 1  停權中 2
+    private Integer storeStatus;//帳號狀態: 申請中 0  使用中 1  停權中 2 申請失敗 4
 
-    private String owner;
+    private String owner;//店家所有人
 
-    private String storeRemark;
+    private String storeRemark;//店家備註
 
 }
