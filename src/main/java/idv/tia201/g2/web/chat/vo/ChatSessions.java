@@ -13,17 +13,11 @@ import java.sql.Timestamp;
 public class ChatSessions {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "chat_session_id")
-    private Integer chatSessionsid;
-    @Column(name = "created_at")
+    private Integer chatSessionId;
     private Timestamp createdAt;
-    @Column(name = "last_activity")
     private Timestamp lastActivity;
-    @Column(name = "chat_status_id")
     private Integer chatStatusId;
-    @Column(name = "attender_id")
     private Long attenderId;
-    @Column(name = "administrator_id")
     private Long administratorId;
 
 }
