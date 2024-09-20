@@ -1291,6 +1291,8 @@ document.addEventListener("DOMContentLoaded",function(){
                 })
                 .then(coupons => {
                     console.log("coupons : ",coupons)
+                    let options = couponSelect_el.querySelectorAll('option:not([disabled])');
+                    options.forEach(option => option.remove());
                     coupons.forEach(coupon => {
                         let option = document.createElement('option');
                         option.value = coupon.couponId;
