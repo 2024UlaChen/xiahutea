@@ -126,10 +126,15 @@
           dataType: "JSON",
           async: false,
           success: function (data) {
+            if(!data.successful){
+              //登入失敗
+              location.href = "./backstageLogin.html";
+            }
             document.querySelector("#cardname").value = data.loyaltyCardName;
             document.querySelector("#rate").value = data.exchangeRate;
             if (data.validStatus) {
               //集點卡有效
+              document.querySelector("#passday").value = "激活中";
 
               document.querySelector("#cardstatus").setAttribute("checked", "");
             } else {
