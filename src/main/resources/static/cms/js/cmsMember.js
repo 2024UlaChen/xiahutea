@@ -16,13 +16,11 @@ function isCheckedSuccess(target) {
     target.previousElementSibling.textContent = "";
     target.previousElementSibling.classList.remove("checkInValid");
     target.classList.remove("inputCheckInValid");
-    return true;
 }
 
 function isCheckedFalse(target) {
     target.previousElementSibling.classList.add("checkInValid");
     target.classList.add("inputCheckInValid");
-    return false;
 }
 
 function phoneValid(phone) {

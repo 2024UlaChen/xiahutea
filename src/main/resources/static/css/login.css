@@ -1,9 +1,11 @@
-.body{
+.body {
     margin: 0 auto;
 }
-.main-content{
+
+.main-content {
     padding-bottom: 0;
 }
+
 .login {
     border-radius: 5px;
     margin: 0 auto;
@@ -20,71 +22,118 @@
     margin-bottom: 5%;
 }
 
-.loginBtn {
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    width: 100px;
-    height: 40px;
-    background-color: #73B4BA;
-    border: 1px solid #73B4BA;
-    font-size: 16px;
-    color: white;
-    border-radius: 5px;
-    margin-bottom: 2%;
-}
 
-.registerLink {
+#toggleLink {
     color: #73B4BA;
 }
 
-.registerLink:hover {
+#toggleLink:hover {
     font-weight: bold;
     color: #73B4BA;
     cursor: pointer;
 }
 
-.forgotPwd {
-    color: #6c757d;
-}
+/*.forgotPwd {*/
+/*    color: #6c757d;*/
+/*}*/
 
-.forgotPwd:hover {
-    color: #dc3545;
-    cursor: pointer;
-}
+/*.forgotPwd:hover {*/
+/*    color: #dc3545;*/
+/*    cursor: pointer;*/
+/*}*/
 
-.loginForm {
-    text-align: left;
-}
+/*.loginForm {*/
+/*    text-align: left;*/
+/*}*/
 
-.loginForm div {
-    margin: 0;
-    margin-left: 2%;
+/*.loginForm div {*/
+/*    margin: 0;*/
+/*    margin-left: 2%;*/
+/*    border-radius: 5px;*/
+/*}*/
+
+/*.userPhoneBlock, .passwordBlock {*/
+/*    display: flex;*/
+/*    border: 1px solid #b4b5b6;*/
+/*    justify-content: space-around;*/
+/*    align-items: center;*/
+/*}*/
+
+/*.userPhoneBlock i, .passwordBlock i {*/
+/*    padding-left: 2%;*/
+
+/*}*/
+
+/*.userPhoneBlock input, .passwordBlock input {*/
+/*    width: 75%;*/
+/*    border: none;*/
+/*    padding-left: 0;*/
+/*}*/
+
+/*.passwordError, .userPhoneError {*/
+/*    color: #dc3545;*/
+/*    font-size: 24px;*/
+/*    visibility: hidden;*/
+/*}*/
+
+/*.-on {*/
+/*    display: inline-block;*/
+/*    visibility: visible;*/
+/*}*/
+
+
+/*button setting*/
+.btn {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 40px;
+    font-size: 16px;
+    margin-right: 1%;
     border-radius: 5px;
 }
 
-.userPhoneBlock, .passwordBlock {
-    display: flex;
-    border: 1px solid #b4b5b6;
-    justify-content: space-around;
-    align-items: center;
-}
-.userPhoneBlock i, .passwordBlock i{
-    padding-left: 2%;
-
-}
-.userPhoneBlock input, .passwordBlock input{
-    width: 75%;
-    border: none;
-    padding-left: 0;
+.btnSave, .btnLogin {
+    background-color: #73B4BA;
+    border: 1px solid #73B4BA;
+    color: white;
 }
 
-.passwordError, .userPhoneError {
-    color: #dc3545;
-    font-size: 24px;
-    visibility: hidden;
+.btnLogin {
+    width: 100%;
 }
-.-on{
-    display: inline-block;
-    visibility: visible;
+
+.btnSave:hover, .btnLogin:hover {
+    background-color: white;
+    border: 1px solid #73B4BA;
+    color: #73B4BA;
 }
+
+.btnEdit {
+    background-color: #FAC792;
+    border: 1px solid #FAC792;
+    color: white;
+}
+
+.btnEdit:hover {
+    background-color: white;
+    border: 1px solid #FAC792;
+    color: #f38f27;
+}
+
+.btnCancel, .btnDownload, .btnQuery {
+    background-color: #6c757d;
+    border: 1px solid #6c757d;
+    color: white;
+}
+
+.btnCancel:hover, .btnDownload:hover, .btnQuery:hover {
+    background-color: white;
+    border: 1px solid #6c757d;
+    color: #6c757d;
+}
+
+.hidden {
+    display: none;
+}
+

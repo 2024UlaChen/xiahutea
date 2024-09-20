@@ -82,16 +82,10 @@
                                 <hr>
                                 <div class="teamo-contact-fom member-setting">
                                     <div>
-                                        <img class="userPhoto" src="assets/images/xiahutealogo.jpg"
+                                        <img class="userPhoto" src="assets/images/xiahutealogo.jpg" id="memberPhoto"
                                              alt="userPhoto">
                                     </div>
-                                    <div>
-                                        <span class="form-label"><span class="warn">*</span>真實姓名</span>
-                                        <span class="form-control-wrap your-name">
-                                                    <input title="your-name" type="text" name="your-name" size="40"
-                                                           class="form-control form-control-name">
-                                        </span>
-                                    </div>
+
                                     <div>
                                         <span class="form-label"><span class="warn">*</span>暱稱 </span>
                                         <span class="form-control-wrap your-email">
@@ -110,26 +104,19 @@
                                     </div>
                                     <div>
                                         <span class="form-label"> 性別 </span>
-                                        <div class="form-control-wrap sex">
-                                            <div>
-                                                <input type="radio" id="sexFemale" name="sex" value="female">
-                                                <label for="sexFemale">女 </label>
-                                            </div>
-                                            <div>
-                                                <input type="radio" id="sexMale" name="sex" value="male">
-                                                <label for="sexMale">男 </label>
-                                            </div>
-                                            <div>
-                                                <input type="radio" id="sexNoProvide" name="sex" value="noProvide">
-                                                <label for="sexNoProvide">不提供</label>
-                                            </div>
-                                        </div>
+                                        <select class="form-select-wrap col-sm-12"
+                                                aria-label="Default select example">
+                                            <option selected value="default" disabled>請選擇性別</option>
+                                            <option value="male">男性</option>
+                                            <option value="female">女性</option>
+                                            <option value="none">不提供</option>
+                                        </select>
                                     </div>
                                     <div>
-                                        <span class="form-label"> 生日 </span>
+                                        <label class="form-label" for="memberBirthday"> 生日 </label>
                                         <span class="form-control-wrap member-birthday">
-                                                    <input type="date" name="birthday" id="memberBirthday"
-                                                           class="form-control datepicker">
+                                            <input type="date" name="birthday" id="memberBirthday"
+                                                   class="form-control datepicker">
                                         </span>
                                     </div>
                                     <div>
