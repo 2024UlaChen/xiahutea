@@ -1,6 +1,5 @@
 package idv.tia201.g2.web.store.service.impl;
 
-import idv.tia201.g2.core.pojo.Core;
 import idv.tia201.g2.core.pojo.Mail;
 import idv.tia201.g2.core.util.MailUtil;
 import idv.tia201.g2.web.store.dao.StoreDao;
@@ -8,9 +7,9 @@ import idv.tia201.g2.web.store.dto.RegisterStoreDTO;
 import idv.tia201.g2.web.store.service.RegisterStoreService;
 import idv.tia201.g2.web.store.util.StoreToRegisterStore;
 import idv.tia201.g2.web.store.vo.Store;
+import idv.tia201.g2.web.user.dao.TotalUserDao;
+import idv.tia201.g2.web.user.vo.TotalUsers;
 import jakarta.mail.MessagingException;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,6 +24,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import static idv.tia201.g2.core.util.CopyUtil.copyPropertiesIgnoreNull;
+import static idv.tia201.g2.web.store.util.PasswordUtil.generateRandomString;
 import static idv.tia201.g2.web.store.util.VatUtil.isValidTWBID;
 
 @Service
@@ -34,6 +34,9 @@ public class RegisterStoreServiceImpl implements RegisterStoreService {
 
     @Autowired
     private MailUtil mailUtil;
+
+    @Autowired
+    private TotalUserDao totalUserDao;
 
     @Override
     public Store register(Store store) {
@@ -148,7 +151,7 @@ public class RegisterStoreServiceImpl implements RegisterStoreService {
         return StoreToRegisterStore.convertToRegisterStore(result);
     }
 
-    public Store editRegisterStore(Store newData){
+    public Store editRegisterStore(Store newData) throws MessagingException, IOException {
         //必填欄位
         if (newData.getContactPerson() == null || newData.getContactPerson().isEmpty()) {
             newData.setMessage("請輸入聯絡人資料");
@@ -175,6 +178,7 @@ public class RegisterStoreServiceImpl implements RegisterStoreService {
             return newData;
         }
 
+
         //電話驗證
         String phonePattern = "(\\d{2,3}-?|\\(\\d{2,3}\\))\\d{3,4}-?\\d{4}|09\\d{2}(\\d{6}|-\\d{3}-\\d{3})";
         boolean phoneMatcher = Pattern.matches(phonePattern, newData.getContactPhone());
@@ -191,26 +195,32 @@ public class RegisterStoreServiceImpl implements RegisterStoreService {
             return newData;
         }
 
+//        若狀態為「成為店家」 就要 產生密碼 & 發信 & 成為totalUser
+        if (newData.getStoreStatus() == 1) {
+            String randomPassword = generateRandomString(9, 14);
+            newData.setPassword(randomPassword);
+            sendMail(newData);
+            TotalUsers totalUser = new TotalUsers(null, 1, newData.getStoreId());
+            totalUserDao.save(totalUser);
+        }
 
         //依 userId 存資料
         Store store = storeDao.findByStoreId(newData.getStoreId());
         copyPropertiesIgnoreNull(newData,store);
         Store save = storeDao.save(store);
+
+
+
         save.setSuccessful(true);
         save.setMessage("更新成功");
         return save;
     }
 
     public void sendMail(Store newData) throws MessagingException, IOException {
-        String randomPassword = RandomStringUtils.randomAlphanumeric(9, 14);
-        newData.setPassword(randomPassword);
-        Store ostore = storeDao.findByStoreId(newData.getStoreId());
-        copyPropertiesIgnoreNull(newData,ostore);
-        storeDao.save(ostore);
-
         Mail mail = new Mail();
-        mail.setRecipient(ostore.getEmail());
+        mail.setRecipient(newData.getEmail());
         mail.setSubject("歡迎加入夏虎茶");
-        mailUtil.sendAttachmentsMail(ostore,mail);
+        mailUtil.sendAttachmentsMail(newData,mail);
     }
+
 }

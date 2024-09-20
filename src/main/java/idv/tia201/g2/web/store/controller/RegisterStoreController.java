@@ -56,11 +56,10 @@ public class RegisterStoreController {
     }
 
     @PostMapping("/edit")
-    public RegisterStoreDTO editRegisterStore(Store store) throws MessagingException, IOException {
+    public RegisterStoreDTO editRegisterStore(Store store) {
         try {
-            if (store.getStoreStatus() == 1) {
-                registerStoreService.sendMail(store);
-            }
+            Store save = registerStoreService.editRegisterStore(store);
+            return convertToRegisterStore(save);
         } catch (MessagingException e) {
             store.setPassword("");
             store.setSuccessful(false);
@@ -74,13 +73,7 @@ public class RegisterStoreController {
             store.setStoreStatus(0);
             return convertToRegisterStore(store);
         }
-//        進行編輯
-        Store save = registerStoreService.editRegisterStore(store);
-//        轉換類型
-        RegisterStoreDTO registerStoreDTO = convertToRegisterStore(save);
 
-//        若是申請成功，就進行發信
-        return registerStoreDTO;
     }
 
 
