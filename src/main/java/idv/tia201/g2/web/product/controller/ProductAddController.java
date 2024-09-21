@@ -4,11 +4,16 @@ package idv.tia201.g2.web.product.controller;
 
 import idv.tia201.g2.web.product.service.ProductService;
 import idv.tia201.g2.web.product.vo.Product;
+import idv.tia201.g2.web.product.vo.ProductCategory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
+import idv.tia201.g2.web.product.dto.ProductDTO;
 
-
+import java.io.IOException;
 import java.util.List;
 
 
@@ -40,10 +45,50 @@ public class ProductAddController {
     }
 
     // 新增產品
-    @PostMapping("/add/{storeId}")
-    public Product addProduct(@PathVariable Integer storeId, @RequestBody Product product) {
-        return productService.addProduct(storeId, product);
+    @PostMapping("/add")
+    public String addProduct(@ModelAttribute ProductDTO productDTO) {
+        Product product = new Product();
+        product.setProductName(productDTO.getProductName());
+        product.setProductPrice(productDTO.getProductPrice());
+        product.setProductStatus(productDTO.isProductStatus());
+        product.setProductStoreId(productDTO.getProductStoreId());
+        product.setProductCategoryId(productDTO.getProductCategoryId());
+
+        try {
+            // 將圖片轉換為 byte[] 並存入 product
+            byte[] productPicture = productDTO.getProductPictureFile().getBytes();
+            product.setProductPicture(productPicture);
+        } catch (IOException e) {
+            return "Failed to process product image";
+        }
+
+        // 設置其他產品屬性
+        product.setNormalIce(productDTO.isNormalIce());
+        product.setLessIce(productDTO.isLessIce());
+        product.setIceFree(productDTO.isIceFree());
+        product.setLightIce(productDTO.isLightIce());
+        product.setRoomTemperature(productDTO.isRoomTemperature());
+        product.setHot(productDTO.isHot());
+        product.setFullSugar(productDTO.isFullSugar());
+        product.setLessSugar(productDTO.isLessSugar());
+        product.setHalfSugar(productDTO.isHalfSugar());
+        product.setQuarterSugar(productDTO.isQuarterSugar());
+        product.setNoSugar(productDTO.isNoSugar());
+        product.setPearl(productDTO.isPearl());
+        product.setPudding(productDTO.isPudding());
+        product.setCoconutJelly(productDTO.isCoconutJelly());
+        product.setTaro(productDTO.isTaro());
+        product.setHerbalJelly(productDTO.isHerbalJelly());
+        product.setSize(productDTO.getSize());
+
+        // 保存產品
+        Product savedProduct = productService.addProduct(product);
+        if (savedProduct != null) {
+            return "Product added successfully";
+        }
+        return "Failed to add product";
     }
+
 
     // 編輯產品
     @PutMapping("/edit/{storeId}/{productId}")
@@ -61,7 +106,13 @@ public class ProductAddController {
         return productService.deleteProduct(productId);
     }
 
-
+    @GetMapping("/paginated")
+    public Page<Product> getProductsPaginated(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return productService.getProducts(pageable);
+    }
 
 
 //    @PostMapping("addUpdateProduct")

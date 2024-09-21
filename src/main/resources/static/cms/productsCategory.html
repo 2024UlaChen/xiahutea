@@ -51,6 +51,19 @@
             font-weight: bold;
         }
 
+        .editclose {
+            color: #aaa;
+            margin-left: auto;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .editclose:hover,
+        .editclose:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
         .close:hover,
         .close:focus {
             color: black;
@@ -146,15 +159,29 @@
             <section class="content">
 
                 <!-- Default box -->
-                <div style="margin-bottom: 10px;">
-
+                <div class="card-header">
                     <button type="button" class="btn btn-primary btn-add" id="add">新增分類</button>
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-default btn-sm" id="trash_btn">
-                            <i class="far fa-trash-alt"></i>
-                        </button>
+
+                    <div class="card-tools">
+                        <div class="input-group">
+
+                            <input type="search" id="searchInput" class="form-control" placeholder="搜尋商品分類">
+                            <div class="input-group-append">
+                                <div id="searchButton" class="btn btn-primary search btn_add">
+                                    <i class="fas fa-search"></i>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
+
+
+
                 </div>
+
+
+
+
 
                 <div id="myModal" class="modal">
 
@@ -180,8 +207,32 @@
                             </div>
                         </div>
                     </form>
+                </div>
 
+                <div id="editModal" class="modal">
 
+                    <!-- Modal content -->
+                    <form id="editCategoryForm">
+                        <div class="modal-content">
+                            <span class="editclose">&times;</span>
+                            <h2>編輯商品分類</h2>
+                            <input type="hidden" id="editCategoryId" name="categoryId">
+                            <input type="text" id="editstoreId" name="storeId" placeholder="請輸入店家" style="display: none">
+                            <label for="categoryName">分類名稱</label>
+                            <input type="text" id="editcategoryName" name="categoryName" placeholder="請輸入分類名稱">
+
+                            <label for="categorySort">排序</label>
+                            <input type="number" id="editcategorySort" name="categorySort" value="1" min="1" max="10">
+
+                            <p class="note">註：數字越小排序越前面</p>
+                            <p id="editresultMessage" style="color: red;"></p>
+
+                            <div class="buttons">
+                                <button class="ave" type="submit">儲存</button>
+
+                            </div>
+                        </div>
+                    </form>
                 </div>
 
 
@@ -194,10 +245,7 @@
                             <thead>
                                 <tr>
                                     <th style="width: 12%">
-                                        <div class="icheck-primary">
-                                            <input type="checkbox" class="checkall">
 
-                                        </div>
                                     </th>
 
                                     <th style="width: 25%">
@@ -223,7 +271,7 @@
                 </div>
                 <div>
                     <div>
-                        <div class="btn-group">
+                        <div class="btn-group pagination-control" id="paginationControls">
                             <button type="button" class="btn btn-default btn-sm">
                                 <i class="fas fa-chevron-left"></i>
                             </button>
@@ -263,207 +311,362 @@
     <script>
 <!--彈窗-->
 
+    const categoryadd=document.querySelector('#add');
+    const modal=document.querySelector('#myModal');
+    const closebtn=document.querySelector('.close');
+    const categoryform=document.querySelector('#categoryForm');
+    const resultMessage = document.querySelector('#resultMessage');
 
-const categoryadd=document.querySelector('#add');
-const modal=document.querySelector('#myModal');
-const closebtn=document.querySelector('.close');
-const categoryform=document.querySelector('#categoryForm');
-const resultMessage = document.querySelector('#resultMessage');
-
-
-
-    categoryadd.addEventListener('click', () => {
-    modal.style.display = 'block';
-});
+   categoryadd.addEventListener('click', () => {
+        modal.style.display = 'block';
+    });
 
 // Add event listener for closing the modal
 
-   closebtn.addEventListener('click', () => {
+    closebtn.addEventListener('click', () => {
         modal.style.display = 'none';
-});
+    });
 
 // Handle form submission for adding a new category
-categoryform.addEventListener('submit', async (event) => {
-    event.preventDefault();
+    categoryform.addEventListener('submit', async (event) => {
+        event.preventDefault();
 
-    const storeId = document.querySelector('#storeId').value.trim();
-    const categoryName = document.querySelector('#categoryName').value.trim();
-    const categorySort = document.querySelector('#categorySort').value.trim();
+        const storeId = document.querySelector('#storeId').value.trim();
+        const categoryName = document.querySelector('#categoryName').value.trim();
+        const categorySort = document.querySelector('#categorySort').value.trim();
 
-    if (!storeId || !categoryName || !categorySort) {
-        resultMessage.textContent = '所有字段都是必填的。';
-        return;
-    }
-
-    const validPattern = /^[a-zA-Z\u4e00-\u9fa5\s]+$/;
-
-    // 验证分类名称是否符合要求
-    if (!validPattern.test(categoryName)) {
-        resultMessage.textContent = '分類名稱只能包含英文和中文';
-        return;
-    }
-
-    const data = {
-        storeId: storeId, // Ensure storeId is defined
-        categoryName: categoryName, // Ensure categoryName is defined
-        categorySort: categorySort // Ensure categorySort is defined
-
-    }
-
-    try {
-        // 发送请求
-        const response = await fetch('/categories/add', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)  // 将数据转换为JSON格式
-        });
-
-        // 检查响应状态是否表示错误
-        if (!response.ok) {
-            throw new Error(`HTTP错误！状态: ${response.status}`);
+        if (!categoryName || !categorySort) {
+            resultMessage.textContent = '所有字段都是必填的。';
+            return;
         }
 
-        // 解析JSON响应
-        const result = await response.json();
+        const validPattern = /^[a-zA-Z\u4e00-\u9fa5\s]+$/;
 
+        // 验证分类名称是否符合要求
+        if (!validPattern.test(categoryName)) {
+            resultMessage.textContent = '分類名稱只能包含英文和中文';
+            return;
+        }
 
-        Swal.fire({
-            text: "商品分類新增成功!",
-            icon: "success"
-        });
-    } catch (error) {
+        const data = {
+            storeId: storeId, // Ensure storeId is defined
+            categoryName: categoryName, // Ensure categoryName is defined
+            categorySort: categorySort // Ensure categorySort is defined
 
-        Swal.fire({
-            icon: "error",
-            text: "分類新增錯誤",
-        });
-    }
-})
+        }
 
+        try {
+            // 发送请求
+            const response = await fetch('/categories/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)  // 将数据转换为JSON格式
+            });
 
-function loadCategories() {
-    fetch('/categories/all')
-        .then(response => {
+            // 检查响应状态是否表示错误
             if (!response.ok) {
                 throw new Error(`HTTP错误！状态: ${response.status}`);
             }
-            return response.json();
-        })
-        .then(categories => {
-            const categoryTableBody = document.querySelector('#categoryTable tbody');
-            categoryTableBody.innerHTML = ''; // 清空表格现有行
 
-            categories.forEach(category => {
-                const newRow = document.createElement('tr');
-                newRow.innerHTML = `
+            // 解析JSON响应
+            const result = await response.json();
+
+
+            Swal.fire({
+                text: "商品分類新增成功!",
+                icon: "success"
+            });
+        } catch (error) {
+
+            Swal.fire({
+                icon: "error",
+                text: "分類新增錯誤",
+            });
+        }
+    })
+
+
+    function loadCategories() {
+        fetch('/categories/all')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP错误！状态: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(categories => {
+                const categoryTableBody = document.querySelector('#categoryTable tbody');
+                categoryTableBody.innerHTML = ''; // 清空表格现有行
+
+                categories.forEach(category => {
+                    const newRow = document.createElement('tr');
+                    newRow.innerHTML = `
                     <td>
-                        <div class="icheck-primary">
-                            <input type="checkbox" value="" class="options">
-                        </div>
+
                     </td>
                     <td>${category.categoryName}</td>
                     <td>${category.categorySort}</td>
                     <td>
-                        <a class="btn btn-sm btn-edit update_btn" href="#">
+                        <a class="btn btn-sm btn-edit update_btn" href="#" data-id="${category.categoryId}">
                             <i class="fas fa-pencil-alt"></i>
                             編輯
                         </a>
-                        <a class="btn btn-danger btn-sm delete_btn" href="#">
+                        <a class="btn btn-danger btn-sm delete_btn" href="#" data-id="${category.categoryId}">
                             <i class="fas fa-trash"></i>
                             刪除
                         </a>
                     </td>
                 `;
-                categoryTableBody.appendChild(newRow);
+                    categoryTableBody.appendChild(newRow);
+                });
+            })
+            .catch(error => {
+                console.error('获取数据失败:', error);
             });
-        })
-        .catch(error => {
-            console.error('获取数据失败:', error);
-        });
-}
+    }
 
 // 在页面加载时调用
-document.addEventListener('DOMContentLoaded', loadCategories);
+    document.addEventListener('DOMContentLoaded', loadCategories);
 
 
-// //--點擊全選按--
-//     $("input.checkall").on("click", function () {
-//         $("input.options").prop("checked", $(this).prop("checked"))
-//     })
-//
-//     $("input.options").on("click", function () {
-//
-//         $("input.checkall").prop("checked", $("input.options").length == $("input.options:checked").length)
-//     })
 
-// //--按垃圾桶全部清空刪除--
-//     $("#trash_btn").click(function () {
-//         let r = confirm("確定是否全部清空?")
-//         if (r) {
-//             $('.options:checked').each(function () {
-//                 $(this).closest('tr').remove();
-//             });
-//
-//         }
-//     });
 // // --單筆刪除--
-document.getElementById("categoryTable").addEventListener('click', function(e) {
-    if (e.target && e.target.classList.contains('delete_btn')) {
-        var deleteBtn = e.target;
-        var categoryId = deleteBtn.getAttribute('data-id');
+    document.getElementById("categoryTable").addEventListener('click', function(e) {
+        if (e.target && e.target.classList.contains('delete_btn')) {
+            var deleteBtn = e.target;
+            var categoryId = deleteBtn.getAttribute('data-id');
 
-        if (confirm('確定要删除此分類嗎？')) {
-            // 使用 fetch 发送删除请求到后端
-            fetch('/categories/delete/' + categoryId, {
+            deleteCategory(categoryId);
+
+        }
+    });
+
+    function deleteCategory(categoryId) {
+        // 確認用戶是否要刪除
+        if (confirm("Are you sure you want to delete this category?")) {
+            // 使用 fetch 發送 DELETE 請求
+            fetch(`categories/delete/${categoryId}`, {
                 method: 'DELETE',
+            })
+                .then(response => {
+                    if (response.ok) {
+                        // 刪除成功，處理回應
+                        alert("Category deleted successfully.");
+                        // 可以選擇刷新頁面或移除被刪除的行
+                        document.getElementById(`category-row-${categoryId}`).remove();
+                    } else {
+                        // 處理錯誤
+                        alert("Failed to delete the category.");
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert("An error occurred while deleting the category.");
+                });
+        }
+    }
+
+
+// 在点击更新按钮时执行
+// 在点击更新按钮时执行
+    document.getElementById("categoryTable").addEventListener('click', function(e) {
+        if (e.target && e.target.classList.contains('update_btn')) {
+            const updateBtn = e.target;
+            const categoryId = updateBtn.getAttribute('data-id');
+            let editModal = document.getElementById('editModal');
+            let editClose = document.querySelector('span.editclose');
+
+
+            // 使用 fetch 从服务器获取类别数据
+            fetch(`/categories/${categoryId}`)
+                .then(response => {
+                    // 检查响应是否成功
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json(); // 将响应体解析为 JSON
+                })
+                .then(data => {
+                    // 填充表单字段
+
+                    document.getElementById('editcategoryName').value = data.categoryName;
+                    document.getElementById('editcategorySort').value = data.categorySort;
+                    document.getElementById('editModal').style.display = 'block';
+                    // 监听关闭按钮点击事件
+                    editClose.addEventListener('click', function () {
+                        editModal.style.display = 'none'; // 隐藏模态窗口
+                    });
+
+                })
+                .catch(error => console.error('Error fetching category data:', error));
+        }
+
+        document.getElementById('editCategoryForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // 防止表单默认提交行为
+
+            const updateBtn = e.target;
+            const categoryId = updateBtn.getAttribute('data-id');
+            const editcategoryName = document.getElementById('editcategoryName');
+            const editcategorySort = document.getElementById('editcategorySort');
+
+            if (!editcategoryName || !editcategorySort) {
+                editresultMessage.textContent = '所有字段都是必填的。';
+                return;
+            }
+
+            // 提交编辑数据
+
+            fetch(`/categories/update/${categoryId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    categoryName: editcategoryName.value,
+                    categorySort: editcategorySort.value
+                }),
             })
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
                     }
-                    return response.json();
+                    return response.json(); // 将响应体解析为 JSON
                 })
                 .then(data => {
-                    if (data.success) {
-                        // 删除表格中的这一行
-                        deleteBtn.closest('tr').remove();
-                        Swal.fire({
-                            text: "商品分類刪除成功!",
-                            icon: "success"
-                        });
-                    } else {
-                        Swal.fire({
-                            icon: "error",
-                            text: "分類新增錯誤",
-                        });
+                    // 更新成功后的处理
+                    console.log('Category updated successfully:', data);
+
+                    const row = document.querySelector(`tr[data-id="${categoryId}"]`);
+                    if (row) {
+                        row.children[1].textContent = data.categoryName; // 更新分类名称
+                        row.children[2].textContent = data.categorySort; // 更新分类排序
                     }
+                    // 隐藏模态窗口
+                    document.getElementById('editModal').style.display = 'none';
+                    // 这里可以添加刷新页面或更新界面逻辑
                 })
-                .catch(error => {
-                    alert('删除時發生错誤: ' + error.message);
-                });
-        }
+                .catch(error => console.error('Error updating category:', error));
+
+
+
+        })
+
+
+    });
+
+
+const paginationControls = document.getElementById('paginationControls');
+const searchButton = document.getElementById('searchButton');
+const searchInput = document.getElementById('searchInput');
+
+// 當搜尋按鈕被點擊時觸發的事件處理器
+searchButton.addEventListener('click', function() {
+    const categoryName = searchInput.value.trim();
+    if (categoryName) {
+        // 如果有搜尋字串，進行搜尋請求
+        searchfetchCategories(categoryName);
+    } else {
+        // 如果搜尋欄為空，返回第一頁所有分類
+        fetchCategories('', 0);
     }
 });
 
-// //--修改--
-//
-//     $('#categoryTable').on('click', '.update_btn', function (e) {
-//         window.location.href = "addProducts.html"
-//     });
-//
-//
-//
-//
+// 當搜尋框內容變化時觸發的事件處理器
+searchInput.addEventListener('input', function() {
+    const categoryName = searchInput.value.trim();
+    if (!categoryName) {
+        // 當輸入框清空時，回到第一頁
+        fetchCategories('', 0);
+    }
+});
 
+// 搜尋分類，根據名稱進行查詢
+function searchfetchCategories(query) {
+    const url = `/categories/findByName?categoryName=${encodeURIComponent(query)}`;
 
+    fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json(); // 解析 JSON 格式的響應體
+        })
+        .then(data => {
+            if (data.length === 0) {
+                console.log('未找到匹配的分類');
+            } else {
+                updateCategoryTable(data); // 更新表格顯示搜尋結果
+            }
+            paginationControls.innerHTML = ''; // 搜尋結果不顯示分頁
+        })
+        .catch(error => {
+            console.error('Fetch error:', error);
+        });
+}
 
+// 分頁功能，請求指定頁碼的數據，每頁顯示 10 筆
+function fetchCategories(query, page) {
+    const url = `/categories/paginated?page=${page}&size=10${query ? `&categoryName=${encodeURIComponent(query)}` : ''}`;
+
+    fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json(); // 解析 JSON 格式的響應體
+        })
+        .then(data => {
+            updateCategoryTable(data.content); // 更新表格數據
+            updatePaginationControls(data.totalPages, page); // 更新分頁按鈕
+        })
+        .catch(error => {
+            console.error('Fetch error:', error);
+        });
+}
+
+// 更新表格的示例函數
+function updateCategoryTable(categories) {
+    const categoryTableBody = document.querySelector('#categoryTable tbody');
+    categoryTableBody.innerHTML = ''; // 清空表格內容
+
+    categories.forEach(category => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td></td>
+            <td>${category.categoryName}</td>
+            <td>${category.categorySort}</td>
+            <td>
+                <a class="btn btn-sm btn-edit update_btn" href="#" data-id="${category.categoryId}">
+                    <i class="fas fa-pencil-alt"></i> 編輯
+                </a>
+                <a class="btn btn-danger btn-sm delete_btn" href="#" data-id="${category.categoryId}">
+                    <i class="fas fa-trash"></i> 刪除
+                </a>
+            </td>
+        `;
+        categoryTableBody.appendChild(row);
+    });
+}
+
+// 更新分頁控制的示例函數
+function updatePaginationControls(totalPages, currentPage) {
+    paginationControls.innerHTML = ''; // 清空分頁控制內容
+
+    for (let i = 0; i < totalPages; i++) {
+        const button = document.createElement('button');
+        button.textContent = i + 1;
+        button.disabled = i === currentPage; // 當前頁禁用按鈕
+        button.addEventListener('click', () => {
+            fetchCategories(searchInput.value.trim(), i); // 根據點擊頁碼加載新數據
+        });
+        paginationControls.appendChild(button);
+    }
+}
+
+// 初次載入所有分類，默認加載第 0 頁，每頁顯示 10 筆資料
+fetchCategories('', 0); // 默認加載第 0 頁
 
 
     </script>
-
-
-</body>
-
-</html>

@@ -34,10 +34,7 @@
         }
 
 
-        span.alert {
 
-         color:red
-       }
         .btn-info{
             background-color: #73B4BA;
             border-color: #73B4BA;
@@ -84,34 +81,34 @@
                         <div class="card card-primary  mx-auto">
 
                             <!-- form start -->
-                            <form>
+                            <form id="productForm" action="file/upload" method="post" enctype="multipart/form-data">
                                 <div class="card-body">
 
                                     <div class="form-group">
                                         <label for="productname">商品名稱</label> <span style="color: red">*</span>
-                                        <input type="text" class="form-control" id="productname" placeholder="請輸入商品名稱" name="productname">
-                                        <span class="productname-message" style="color: red"></span>
+                                        <input type="text" class="form-control" id="productname" placeholder="請輸入商品名稱" name="productName">
                                     </div>
+                                    <p class="message" style="color: red"></p>
                                     <div class="form-group">
                                         <label for="productprice">商品價格(請填台幣)</label><span style="color: red">*</span>
-                                        <input type="number" class="form-control" id="productprice" placeholder="65" name="productprice" min="1" max="999">
+                                        <input type="number" class="form-control" id="productprice" placeholder="65" name="productPrice" min="1" max="999">
                                         <span class="productprice-message" style="color: red"></span>
                                     </div>
 
                                         <div class="form-group">
                                             <label for="size">商品尺寸</label><span style="color: red">*</span>
                                             <select class="custom-select rounded-0" id="size" name="productsize">
-                                            <option value="0">S</option>
-                                            <option value="1">M</option>
-                                            <option value="2">L</option>
+                                            <option value="S">S</option>
+                                            <option value="M">M</option>
+                                            <option value="L">L</option>
                                         </select>
-                                            <span class="productsize-message" style="color:red;"></span>
+
                                     </div>
 
                                     <div class="form-group">
                                         <label for="status">商品狀態</label><span style="color: red">*</span>
                                         <span class="status-message" style="color: red"></span>
-                                        <select class="custom-select rounded-0" id="status">
+                                        <select class="custom-select rounded-0" id="status" name="productStatus">
                                             <option value="0">上架</option>
                                             <option value="1">下架</option>
                                         </select>
@@ -135,7 +132,7 @@
                                     <div class="form-group">
                                         <label>商品分類</label><span style="color: red">*</span>
                                         <span class="category-message" style="color: red"></span>
-                                        <select class="category">
+                                        <select class="category" name="productCategoryId">
                                             <option>option 1</option>
                                             <option>option 2</option>
                                             <option>option 3</option>
@@ -150,31 +147,31 @@
                                             <span for="name" class="category-message" style="color: red"></span>
 
                                             <div class="form-check">
-                                                <input type="checkbox" id="allice">
+                                                <input type="checkbox" id="allice" onclick="selectAllIce()">
                                                 <label class="form-check-label">全選</label>
                                             </div>
                                             <div class="form-check">
-                                                <input class="item" type="checkbox" name="normalice"
+                                                <input class="item" type="checkbox" name="normalIce"
                                                     value="1" checked>
                                                 <label class="form-check-label">正常冰</label>
                                             </div>
                                             <div class="form-check">
-                                                <input class="item" type="checkbox" name="lessice"
+                                                <input class="item" type="checkbox" name="lessIce"
                                                     value="1">
                                                 <label class="form-check-label">少冰</label>
                                             </div>
                                             <div class="form-check">
-                                                <input class="item" type="checkbox" name="lightice"
+                                                <input class="item" type="checkbox" name="lightIce"
                                                     value="1">
                                                 <label class="form-check-label">微冰</label>
                                             </div>
                                             <div class="form-check">
-                                                <input class="item" type="checkbox" name="icefree"
+                                                <input class="item" type="checkbox" name="iceFree"
                                                     value="1">
                                                 <label class="form-check-label">去冰</label>
                                             </div>
                                             <div class="form-check">
-                                                <input class="item" type="checkbox" name="roomtep"
+                                                <input class="item" type="checkbox" name="roomTeperature"
                                                     value="1">
                                                 <label class="form-check-label">常溫</label>
                                             </div>
@@ -195,26 +192,26 @@
                                                 <label class="form-check-label">全選</label>
                                             </div>
                                             <div class="form-check">
-                                                <input class="itemtwo" type="checkbox" name="fullsugar" value="1" checked>
+                                                <input class="itemtwo" type="checkbox" name="fullSugar" value="1" checked>
                                                 <label class="form-check-label">全糖</label>
                                             </div>
                                             <div class="form-check">
-                                                <input class="itemtwo" type="checkbox" name="lesssugar"
+                                                <input class="itemtwo" type="checkbox" name="lessSugar"
                                                     value="1">
                                                 <label class="form-check-label">少糖</label>
                                             </div>
                                             <div class="form-check">
-                                                <input class="itemtwo" type="checkbox" name="halfsugar"
+                                                <input class="itemtwo" type="checkbox" name="halfSugar"
                                                     value="1">
                                                 <label class="form-check-label">半糖</label>
                                             </div>
                                             <div class="form-check">
-                                                <input class="itemtwo" type="checkbox" name="quasugar"
+                                                <input class="itemtwo" type="checkbox" name="quarterSugar"
                                                     value="1">
                                                 <label class="form-check-label">微糖</label>
                                             </div>
                                             <div class="form-check">
-                                                <input class="itemtwo" type="checkbox" name="nosugar" value="1">
+                                                <input class="itemtwo" type="checkbox" name="noSugar" value="1">
                                                 <label class="form-check-label">無糖</label>
                                             </div>
                                         </div>
@@ -373,7 +370,6 @@
         const categorySelect = document.querySelector('.category');
         const categoryMessage = document.querySelector('.category-message');
 
-
         fetch('/categories/all')
             .then(response => {
                 if (response.ok) {
@@ -401,11 +397,13 @@
             })
             .catch(error => {
                 console.error('Error loading categories:', error);
-                categoryMessage.textContent = 'Error loading categories. Please try again.';
+                categoryMessage.textContent = '加載失敗';
             });
         // =========驗證===============
             document.querySelector('form').addEventListener('submit', function(event) {
             event.preventDefault(); // 防止表單提交，進行驗證
+
+
 
             // 取得各個表單元素的值
             let productName = document.getElementById('productname').value.trim();
@@ -417,6 +415,8 @@
 
             let iceOptions = document.querySelectorAll('.item');
             let sugarOptions = document.querySelectorAll('.itemtwo');
+            let message=document.querySelector('.message');
+
 
             // 清空錯誤消息
             clearMessages();
@@ -453,9 +453,8 @@
                 }
             })
                 // 假設 store id=1
-                const storeId = 1;
             // 發送fetch請求
-            fetch(`/products/add/${storeId}`, {
+            fetch(`/products/add/`, {
                 method: 'POST',
                 body: formData, // 發送FormData
 
@@ -474,90 +473,73 @@
                 });
         });
 
-        // 表單驗證邏輯
-        function validateForm(productName, productPrice, productSize, productStatus, productPic, category, iceOptions, sugarOptions) {
-            // 驗證商品名稱
-            if (productName === '' || productName.length > 50) {
-                showError('productname', '商品名稱不能為空且不能超過50個字符');
-                return false;
-            }
+        // // 表單驗證邏輯
+        // function validateForm(productName, productPrice, iceOptions, sugarOptions) {
+        //     // 驗證商品名稱
+        //     if (productName === '' || productName.length > 50) {
+        //         showError('productname', '商品名稱不能為空且不能超過50個字符');
+        //
+        //     }
+        //
+        //     // 驗證商品價格
+        //     if (!productPrice || productPrice <= 0 || productPrice > 999) {
+        //         showError('productprice', '商品價格必須介於1到999之間');
+        //         return false;
+        //     }
+        //
+        //     // 驗證商品圖片大小和格式
+        //     if (productPic) {
+        //         let fileSize = productPic.size / 1024 / 1024; // 文件大小（MB）
+        //         let fileType = productPic.type;
+        //         if (fileSize > 2) {
+        //             showError('productpic', '圖片大小不能超過2MB');
+        //             return false;
+        //         }
+        //         if (!['image/jpeg', 'image/png'].includes(fileType)) {
+        //             showError('productpic', '僅支持JPEG或PNG格式的圖片');
+        //             return false;
+        //         }
+        //     }
+        //
+        //     // 驗證冰塊調整
+        //     if (!checkCheckboxSelected(iceOptions)) {
+        //         showError('ice', '請至少選擇一種冰塊調整選項');
+        //         return false;
+        //     }
+        //
+        //     // 驗證甜度調整
+        //     if (!checkCheckboxSelected(sugarOptions)) {
+        //         showError('sugar', '請至少選擇一種甜度選項');
+        //         return false;
+        //     }
+        //
+        //     return true;
+        // }
+        //
+        // // 顯示錯誤消息
+        // function showError(fieldId, message) {
+        //     document.querySelector(`.${fieldId}-message`).textContent = message;
+        //     document.querySelector(`.${fieldId}-message`).style.color = 'red';
+        // }
+        //
+        // // 清空所有錯誤消息
+        // function clearMessages() {
+        //     let errorMessages = document.querySelectorAll('span');
+        //     errorMessages.forEach(function(message) {
+        //         message.textContent = '';
+        //     });
+        // }
+        //
+        // // 檢查至少選擇了一個checkbox
+        // function checkCheckboxSelected(checkboxes) {
+        //     for (let i = 0; i < checkboxes.length; i++) {
+        //         if (checkboxes[i].checked) {
+        //             return true;
+        //         }
+        //     }
+        //     return false;
+        // }
 
-            // 驗證商品價格
-            if (!productPrice || productPrice <= 0 || productPrice > 999) {
-                showError('productprice', '商品價格必須介於1到999之間');
-                return false;
-            }
-
-            // 驗證商品尺寸
-            if (productSize === '0') {
-                showError('productsize', '請選擇商品尺寸');
-                return false;
-            }
-
-            // 驗證商品狀態
-            if (productStatus === '') {
-                showError('status', '請選擇商品狀態');
-                return false;
-            }
-
-            // 驗證商品圖片大小和格式
-            if (productPic) {
-                let fileSize = productPic.size / 1024 / 1024; // 文件大小（MB）
-                let fileType = productPic.type;
-                if (fileSize > 2) {
-                    showError('productpic', '圖片大小不能超過2MB');
-                    return false;
-                }
-                if (!['image/jpeg', 'image/png'].includes(fileType)) {
-                    showError('productpic', '僅支持JPEG或PNG格式的圖片');
-                    return false;
-                }
-            }
-
-            // 驗證商品分類
-            if (category === '') {
-                showError('category', '請選擇商品分類');
-                return false;
-            }
-
-            // 驗證冰塊調整
-            if (!checkCheckboxSelected(iceOptions)) {
-                showError('ice', '請至少選擇一種冰塊調整選項');
-                return false;
-            }
-
-            // 驗證甜度調整
-            if (!checkCheckboxSelected(sugarOptions)) {
-                showError('sugar', '請至少選擇一種甜度選項');
-                return false;
-            }
-
-            return true;
-        }
-
-        // 顯示錯誤消息
-        function showError(fieldId, message) {
-            document.querySelector(`.${fieldId}-message`).textContent = message;
-            document.querySelector(`.${fieldId}-message`).style.color = 'red';
-        }
-
-        // 清空所有錯誤消息
-        function clearMessages() {
-            let errorMessages = document.querySelectorAll('span');
-            errorMessages.forEach(function(message) {
-                message.textContent = '';
-            });
-        }
-
-        // 檢查至少選擇了一個checkbox
-        function checkCheckboxSelected(checkboxes) {
-            for (let i = 0; i < checkboxes.length; i++) {
-                if (checkboxes[i].checked) {
-                    return true;
-                }
-            }
-            return false;
-        }
 
 
     </script>
