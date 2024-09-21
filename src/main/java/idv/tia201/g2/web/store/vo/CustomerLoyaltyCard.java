@@ -1,6 +1,7 @@
 package idv.tia201.g2.web.store.vo;
 
 
+import idv.tia201.g2.web.member.vo.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,7 +21,7 @@ public class CustomerLoyaltyCard {
     private Integer loyaltyCardId;
 
     @Column(name = "customer_id", nullable = false)
-    private Integer customerId;
+    private Integer memberId;
 
     @Column(name = "store_id", nullable = false)
     private Integer storeId;
@@ -32,10 +33,10 @@ public class CustomerLoyaltyCard {
     @JoinColumn(name = "store_id",insertable = false,updatable = false)
     private Store store;
 
-//    @ManyToOne
-//    @JoinColumn(name="customer_id",insertable = false,updatable = false)
-//    private Member member;
-    //Member實體 要建立一個 mappedBy = "member" 搭起雙向
+    @ManyToOne
+    @JoinColumn(name="customer_id",insertable = false,updatable = false)
+    private Member member;
+
     /*
     以下是Member實體
     @OneToMany(mappedBy = "member")
