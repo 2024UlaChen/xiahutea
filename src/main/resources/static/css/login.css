@@ -6,23 +6,57 @@
     padding-bottom: 0;
 }
 
-.login {
+
+.main {
     border-radius: 5px;
     margin: 0 auto;
     margin-top: 5%;
     margin-bottom: 5%;
     max-width: 400px;
     padding: 2%;
+    padding-bottom: 1%;
     background-color: white;
     text-align: center;
     box-shadow: 0 0 12px 0 rgba(2, 2, 2, 0.16);
 }
 
-.login div {
-    margin-bottom: 5%;
+.section div {
+    margin-bottom: 2%;
 }
 
+.loginForm, .registerForm {
+    text-align: left;
+    margin-bottom: 2%;
+}
 
+.loginForm div, .registerForm div {
+    margin-bottom: 1%;
+}
+
+.block {
+    display: flex;
+    align-items: center;
+    border: 1px solid #c8cacc;
+    border-radius: 5px;
+    padding-left: 5%;
+    padding-right: 1%;
+}
+
+.loginForm input, .registerForm input {
+    width: 100%;
+    border: 1px transparent solid;
+}
+
+.block:hover {
+    border: 1px #6c757d solid;
+
+}
+
+.loginForm span, .registerForm span {
+    font-size: 14px;
+}
+
+/*切換註冊和登入*/
 #toggleLink {
     color: #73B4BA;
 }
@@ -33,53 +67,32 @@
     cursor: pointer;
 }
 
-/*.forgotPwd {*/
-/*    color: #6c757d;*/
-/*}*/
 
-/*.forgotPwd:hover {*/
-/*    color: #dc3545;*/
-/*    cursor: pointer;*/
-/*}*/
+/*忘記密碼*/
+#forgetPwd {
+    color: #6c757d;
+}
 
-/*.loginForm {*/
-/*    text-align: left;*/
-/*}*/
+#forgetPwd:hover {
+    color: #dc3545;
+    cursor: pointer;
+}
 
-/*.loginForm div {*/
-/*    margin: 0;*/
-/*    margin-left: 2%;*/
-/*    border-radius: 5px;*/
-/*}*/
+/*條款*/
+.specialRule {
+    margin-top: 20%;
+}
 
-/*.userPhoneBlock, .passwordBlock {*/
-/*    display: flex;*/
-/*    border: 1px solid #b4b5b6;*/
-/*    justify-content: space-around;*/
-/*    align-items: center;*/
-/*}*/
+.specialRule a {
+    text-decoration: underline;
+    color: #6c757d;
+}
 
-/*.userPhoneBlock i, .passwordBlock i {*/
-/*    padding-left: 2%;*/
-
-/*}*/
-
-/*.userPhoneBlock input, .passwordBlock input {*/
-/*    width: 75%;*/
-/*    border: none;*/
-/*    padding-left: 0;*/
-/*}*/
-
-/*.passwordError, .userPhoneError {*/
-/*    color: #dc3545;*/
-/*    font-size: 24px;*/
-/*    visibility: hidden;*/
-/*}*/
-
-/*.-on {*/
-/*    display: inline-block;*/
-/*    visibility: visible;*/
-/*}*/
+.specialRule a:hover {
+    font-weight: bold;
+    text-decoration: underline;
+    color: #6c757d;
+}
 
 
 /*button setting*/
@@ -93,15 +106,18 @@
     border-radius: 5px;
 }
 
-.btnSave, .btnLogin {
+.btnSave, .btnLogin, .btnLogin:active:focus, .btnLogin:focus {
     background-color: #73B4BA;
     border: 1px solid #73B4BA;
     color: white;
+    outline: 1px solid #73B4BA;
+
 }
 
-.btnLogin {
+.btnLogin, .btnRegister, .btnError {
     width: 100%;
 }
+
 
 .btnSave:hover, .btnLogin:hover {
     background-color: white;
@@ -109,13 +125,14 @@
     color: #73B4BA;
 }
 
-.btnEdit {
+.btnEdit, .btnRegister, .btnRegister:active:focus, .btnRegister:focus {
     background-color: #FAC792;
     border: 1px solid #FAC792;
+    outline: 1px solid #FAC792;
     color: white;
 }
 
-.btnEdit:hover {
+.btnEdit:hover, .btnRegister:hover {
     background-color: white;
     border: 1px solid #FAC792;
     color: #f38f27;
@@ -133,7 +150,38 @@
     color: #6c757d;
 }
 
+.btnError {
+    background-color: #dc3545;
+    border: 1px solid #dc3545;
+    color: white;
+}
+
+.btnError:hover {
+    background-color: white;
+    border: 1px solid #dc3545;
+    color: #dc3545;
+}
+
 .hidden {
     display: none;
 }
 
+.off {
+    display: inline-block;
+    visibility: hidden;
+}
+
+
+/*valid*/
+.checkInValid {
+    border: 1px solid #dc3545;
+}
+
+.checkInValid:hover {
+    border: 2px solid #dc3545;
+}
+
+.checkInValidTxt {
+    color: #dc3545;
+    font-weight: bold;
+}

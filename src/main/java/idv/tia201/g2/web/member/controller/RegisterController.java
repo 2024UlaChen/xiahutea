@@ -8,6 +8,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServlet;
 
@@ -26,7 +27,7 @@ public class RegisterController extends HttpServlet {
             member.setSuccessful(false);
             return member;
         }
-        if (StringUtils.isEmpty(member.getCustomerPhone())){
+        if (StringUtils.isEmpty(member.getCustomerPhone())) {
             member.setMessage("register - cellphone can't be duplicate");
             member.setSuccessful(false);
             return member;
@@ -38,6 +39,12 @@ public class RegisterController extends HttpServlet {
         }
 //        System.out.println(memberService.register(member));
         return memberService.register(member);
+    }
+
+    @PostMapping("check")
+    public Boolean checkVerifyCode(@RequestParam String phone, @RequestParam String verifyCode) {
+
+        return true;
     }
 
 }
