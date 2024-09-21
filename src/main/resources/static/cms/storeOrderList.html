@@ -225,7 +225,7 @@
         }
         function showDB(data) {
             let orderHtml = "";
-            for (let i = 0; i < data.length; i++) {
+            for (let i = data.length-1; i >= 0; i--) {
                 orderHtml += `
                     <tr>
                         <td class="order_date_value">${data[i].orderCreateDatetime}</td>

@@ -2,6 +2,9 @@ package idv.tia201.g2.web.order.service.impl;
 
 import java.sql.Timestamp;
 import java.util.List;
+
+import idv.tia201.g2.web.member.dao.MemberDao;
+import idv.tia201.g2.web.member.vo.Member;
 import idv.tia201.g2.web.order.dao.DisputeDao;
 import idv.tia201.g2.web.order.dao.OrderDao;
 import idv.tia201.g2.web.order.dao.OrderDetailDao;
@@ -30,6 +33,9 @@ public class DisputeServiceImpl implements DisputeService {
     private OrderDetailDao orderDetailDao;
 
     @Autowired
+    private MemberDao memberDao;
+
+    @Autowired
     private OrderMappingUtil orderMappingUtil;
 
     // -------- FINISH ---------------------------------
@@ -48,6 +54,13 @@ public class DisputeServiceImpl implements DisputeService {
     // 前台 爭議表格 申請
     @Override
     public DisputeOrder add(DisputeOrder disputeOrder) {
+        int customerId = disputeOrder.getCustomerId(); // 取得 customerId
+        Member member = memberDao.findMemberById(customerId); // 查找會員
+        if(member == null) {
+            disputeOrder.setMessage("申請失敗，無此會員ID");
+            disputeOrder.setSuccessful(false);
+            return disputeOrder;
+        }
         if(!(isEmpty(disputeOrder.getDisputeOrderId()))) {
             disputeOrder.setMessage("申請失敗，已有爭議資料");
             disputeOrder.setSuccessful(false);

@@ -19,9 +19,8 @@ public class OrderController {
 
     // todo 前台 新增資料
     @PostMapping("member")
-    public Core addNewOrder(@RequestBody Orders orders) {
-//        return  orderService.addOrder(orders);
-        return null;
+    public OrderDto addNewOrder(@RequestBody OrderDto orderDto) {
+        return  orderService.addOrder(orderDto);
     }
 
     // -------- FINISH ---------------------------------
