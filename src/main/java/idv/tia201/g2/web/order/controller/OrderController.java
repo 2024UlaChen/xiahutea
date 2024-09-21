@@ -1,7 +1,6 @@
 package idv.tia201.g2.web.order.controller;
 
 import java.util.List;
-import idv.tia201.g2.core.pojo.Core;
 import idv.tia201.g2.web.order.dto.OrderDto;
 import idv.tia201.g2.web.order.service.OrderService;
 import idv.tia201.g2.web.order.vo.OrderDetail;

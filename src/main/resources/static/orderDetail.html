@@ -572,7 +572,7 @@
             let storeInfoHtml;
             storeInfoHtml = `
                  <div class="store_logo">
-                    <img class="store_logo_img" src=${data.orders.store.logo} alt="店家logo">
+                    <img class="store_logo_img" src="data:${data.orders.store.contentType};base64,${data.orders.store.logo}" alt="店家logo">
                 </div>
                 <div class="store_detail">
                     <div class="store_name">${data.orders.store.storeName}</div>
