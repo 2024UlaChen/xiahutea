@@ -151,10 +151,14 @@ public class StoreController {
 
 
     public boolean checkStoreLogin(HttpSession session,Integer storeId){
-        //登入中 是 商家登入 是 該商家
+        //登入中 是 商家登入 是 該商家 或是 管理員
         if(session.getAttribute("loggedin") != null){
+            if(getLoginType(session).getUserId()==3){
+                return true;
+            }
             boolean status = (boolean) session.getAttribute("loggedin");
             String loginType = (String) session.getAttribute("loginType");
+
 
             return IsLogin(status) && IsStoreLogin(session) && session.getAttribute("storeId").equals(storeId);
 

@@ -217,6 +217,7 @@
     <script src="dist/js/adminlte.min.js"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="dist/js/demo.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
       //查詢迄日必定大於起日
       document.addEventListener("DOMContentLoaded", function () {
@@ -227,25 +228,50 @@
           searchEndDay.setAttribute("min", searchStartDay.value);
         }); //監聽到日期被選擇
 
-        //ajax
+        console.log("AJAX 檢查登入狀況開始");
+
         $.ajax({
-          //url: "http://127.0.0.1:8080/store/home",
-          url: "/store/home",
+          url:"/store/GetLoginType",
           method: "GET",
-          dataType: "JSON",
+          //dataType: "JSON",
           async: false,
-          success: function (data) {
-            //console.log(data);
-            let str = "";
-            data.forEach((store) => {
-              let storeName = store.storeName;
-              let registerDay = store.registerDay.split("T")[0];
-              let vat = store.vat;
-              let contactPhone = store.contactPhone;
-              let storeStatus = store.storeStatus;
-              let status = storeStatus === 1 ? "checked" : "";
-              let storeId = store.storeId;
-              str = `
+          success:function (data){
+
+            console.log(data);
+            if(data==="" || data.userTypeId != 3){
+              Swal.fire({
+                title:"此頁面需要管理員權限，即將導向管理員登入頁面",
+                icon:"warning",
+                confirmButtonColor:"#3085d6",
+                confirmButtonText: "確認",
+              }).then(
+                      (res) => {
+                        if(res.isConfirmed){
+                          location.href ="./backstageLogin.html";
+                        }
+
+                      });
+            }
+            //檢查是否為管理員登入
+            else{
+              $.ajax({
+                //url: "http://127.0.0.1:8080/store/home",
+                url: "/store/home",
+                method: "GET",
+                dataType: "JSON",
+                async: false,
+                success: function (data) {
+                  //console.log(data);
+                  let str = "";
+                  data.forEach((store) => {
+                    let storeName = store.storeName;
+                    let registerDay = store.registerDay.split("T")[0];
+                    let vat = store.vat;
+                    let contactPhone = store.contactPhone;
+                    let storeStatus = store.storeStatus;
+                    let status = storeStatus === 1 ? "checked" : "";
+                    let storeId = store.storeId;
+                    str = `
 <td> # </td>
 <td>
   <a> ${storeName} </a>
@@ -253,7 +279,7 @@
   <small> 註冊日${registerDay} </small>
 </td>
 <td> ${vat} </td>
-<td class="project_progress"> 
+<td class="project_progress">
   ${contactPhone}
  </td>
 <td class="project-state form-switch">
@@ -265,19 +291,28 @@
 </tr>
               `;
 
-              document
-                .querySelector("#storelist")
-                .insertAdjacentHTML("afterbegin", str);
-            });
-            //console.log(str);
+                    document
+                            .querySelector("#storelist")
+                            .insertAdjacentHTML("afterbegin", str);
+                  });
+                  //console.log(str);
 
-            //success結束
-          },
-          err: function (data) {
-            console.log("失敗");
-            console.log(data);
-          },
-        });
+                  //success結束
+                },
+                err: function (data) {
+                  console.log("失敗");
+                  console.log(data);
+                },
+              });
+            }
+
+
+          },err:function (){
+            console.log("GG");
+          }
+        });//導向登入頁面確認
+        //ajax 取得商家列表
+
       }); //DOM end
     </script>
   </body>
