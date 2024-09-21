@@ -23,6 +23,7 @@ public class Product {
     @Column(name="product_status")
     private boolean productStatus;
     private Integer productStoreId;
+    @Lob
     @Column(name="product_picture")
     private byte[] productPicture;
     @Column(name="product_category_id")

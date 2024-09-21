@@ -3,9 +3,12 @@ package idv.tia201.g2.web.product.service.impl;
 import idv.tia201.g2.web.product.dao.ProductDao;
 import idv.tia201.g2.web.product.service.ProductService;
 import idv.tia201.g2.web.product.vo.Product;
+import idv.tia201.g2.web.product.vo.ProductCategory;
 import idv.tia201.g2.web.store.dao.StoreDao;
 import idv.tia201.g2.web.store.vo.Store;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,6 +35,12 @@ public class ProductServiceImpl implements ProductService {
         return productDao.findByProductCategoryIdAndProductNameContaining(categoryId, productName);
     }
 
+    @Override
+    public Page<Product> getProducts(Pageable pageable) {
+        return productDao.findAll(pageable);
+    }
+
+
     //獲取產品名字
     public List<Product> getProductsByProductName(String productName) {
         return productDao.findByProductNameContaining(productName);
@@ -40,20 +49,21 @@ public class ProductServiceImpl implements ProductService {
 
     //新增
     @Override
-    public Product addProduct(Integer storeId, Product product) {
-        Store store = storeDao.findById(storeId).orElse(null);
-        if (store != null) {
-            // 商品名稱字數限制檢查
-            if (product.getProductName() != null && product.getProductName().length() <= 30) {
-                product.setProductStoreId(storeId);
-                return productDao.save(product);
-            } else {
-                // 商品名稱超過限制，返回 null 或拋出異常
-                return null;
-            }
-        } else {
-            return null;
-        }
+    public Product addProduct(Product product) {
+//        Store store = storeDao.findById(storeId).orElse(null);
+//        if (store != null) {
+//            // 商品名稱字數限制檢查
+//            if (product.getProductName() != null && product.getProductName().length() <= 30) {
+//                product.setProductStoreId(storeId);
+//                return productDao.save(product);
+//            } else {
+//                // 商品名稱超過限制，返回 null 或拋出異常
+//                return null;
+//            }
+//        } else {
+//            return null;
+//        }
+        return productDao.save(product);
     }
 
     ;
@@ -113,13 +123,13 @@ public class ProductServiceImpl implements ProductService {
     //刪除
     @Override
     public boolean deleteProduct(Integer productId) {
-        if (productDao.existsById(productId)) {
+       if (productDao.existsById(productId)) {
             productDao.deleteById(productId);
             return true; // 表示删除成功
         } else {
-            //
-            return false; // 表示找不到紀錄
-        }
+
+           return false; // 表示找不到紀錄
+       }
 
     }
 }

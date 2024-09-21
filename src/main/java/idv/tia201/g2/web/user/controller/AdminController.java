@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/admin")
-public class AdminController {
+public class
+AdminController {
     private static final long serialVersionUID = 1L;
     @Autowired
     private AdminService adminService;
