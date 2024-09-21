@@ -14,7 +14,22 @@ public class DisputeController {
     @Autowired
     private DisputeService disputeService;
 
-    // FINISH
+    // -------- FINISH ---------------------------------
+    // 前台 爭議申請表 顯示
+    @GetMapping("member/applyDispute/{orderId}")
+    public OrderDto apply(@PathVariable Integer orderId){
+        return disputeService.findByOrderId(orderId);
+    }
+
+    // 前台 爭議申請表 新增
+    @PostMapping("member/applyDispute/{orderId}")
+    public DisputeOrder addDispute(
+            @PathVariable Integer orderId,
+            @RequestBody DisputeOrder reqDisputeOrder){
+        reqDisputeOrder.setOrderId(orderId);
+        return disputeService.add(reqDisputeOrder);
+    }
+
     // 後台 爭議列表 顯示
     @GetMapping("manage")
     public List<DisputeOrder> manage(){
@@ -27,25 +42,6 @@ public class DisputeController {
         return disputeService.findByDisputeOrderId(disputeOrderId);
     }
 
-    // 前台 爭議申請表 顯示
-    @GetMapping("member/applyDispute/{orderId}")
-    public OrderDto apply(
-            @PathVariable Integer orderId
-        ){
-        return disputeService.findByOrderId(orderId);
-    }
-
-
-    // 前台 爭議申請表 新增
-    @PostMapping("member/applyDispute/{orderId}")
-    public DisputeOrder addDispute(
-            @PathVariable Integer orderId,
-            @RequestBody DisputeOrder reqDisputeOrder){
-        reqDisputeOrder.setOrderId(orderId);
-        return disputeService.add(reqDisputeOrder);
-    }
-
-
     // 後台 爭議明細 修改
     @PutMapping({"manage/{disputeOrderId}"})
     public DisputeOrder save(
@@ -55,7 +51,5 @@ public class DisputeController {
         reqDisputeOrder.setDisputeOrderId(disputeOrderId);
         return disputeService.updateInfo(reqDisputeOrder);
     }
-
-    // ------------------------------------------------------
 
 }
