@@ -314,6 +314,7 @@
           dataType: "JSON",
           async: false,
           success: function (data) {
+
             console.log(data.successful);
             if(!data.successful){
               //登入失敗
@@ -321,12 +322,15 @@
             }
             fetch("/store/GetLoginType").then(data => data.json()).then(
                     res => {
-                      if(res.userTypeId === 1){
-                        //商家登入成功 處理側邊攔路徑
-                        console.log("店家登入成功中");
-                        document.querySelector("#storeInfoAsideLink").href= location.href;
+                      if(res.userTypeId !== 3){
+
                         document.querySelector('#storeListAsideLink').classList.add("d-none");
                       }
+                      console.log("貼標囉")
+
+                      document.querySelector("#storeInfoAsideLink").href= location.href;
+                      document.querySelector("#storeLoyaltyCardAsideLink").href=`storeInfoEditLoyaltyCard.html?storeid=${sotreid.split("=")[1]}`;
+                      document.querySelector("#storePasswordAsideLink").href=`storeInfoEditPassword.html?storeid=${sotreid.split("=")[1]}`;
                     }
             );
 

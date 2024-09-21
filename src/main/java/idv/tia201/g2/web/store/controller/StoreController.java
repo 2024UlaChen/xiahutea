@@ -153,7 +153,9 @@ public class StoreController {
     public boolean checkStoreLogin(HttpSession session,Integer storeId){
         //登入中 是 商家登入 是 該商家 或是 管理員
         if(session.getAttribute("loggedin") != null){
-            if(getLoginType(session).getUserId()==3){
+            var seesee = getLoginType(session).getUserId();
+
+            if(getLoginType(session).getUserTypeId()==3){
                 return true;
             }
             boolean status = (boolean) session.getAttribute("loggedin");

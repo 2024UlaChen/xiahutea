@@ -170,10 +170,15 @@ public class StoreServiceImpl implements StoreService {
     public Store editStoreLoyaltyCard(Store store) {
         Store oldDate = findStoreById(store.getStoreId());
         oldDate.setLoyaltyCardName(store.getLoyaltyCardName());
+
         oldDate.setExchangeRate(store.getExchangeRate());
         oldDate.setValidStatus(store.getValidStatus());
         if(store.getValidStatus()){
             oldDate.setExpiredDate(null);
+            //激活中 但未設定兌換比例 預設100元一點
+            if(oldDate.getExchangeRate() == null){
+                oldDate.setExchangeRate(100);
+            }
         }else{
             //當下時間加半年
             Timestamp now = new Timestamp(System.currentTimeMillis());

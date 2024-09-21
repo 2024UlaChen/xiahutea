@@ -48,7 +48,8 @@
                 id="rate"
                 type="number"
                 class="form-control"
-                value="500"
+                value=""
+                placeholder="預設100元一點"
               />
               <div class="form-text">輸入多少新台幣兌換一點</div>
             </div>
@@ -130,6 +131,17 @@
               //登入失敗
               location.href = "./backstageLogin.html";
             }
+            fetch("/store/GetLoginType").then(data => data.json()).then(
+                    res => {
+                      if(res.userTypeId !== 3){
+
+                        document.querySelector('#storeListAsideLink').classList.add("d-none");
+                      }
+                      document.querySelector("#storeInfoAsideLink").href= `storeInfo.html?storeid=${sotreid.split("=")[1]}`;
+                      document.querySelector("#storeLoyaltyCardAsideLink").href=`storeInfoEditLoyaltyCard.html?storeid=${sotreid.split("=")[1]}`;
+                      document.querySelector("#storePasswordAsideLink").href=`storeInfoEditPassword.html?storeid=${sotreid.split("=")[1]}`;
+                    }
+            );
             document.querySelector("#cardname").value = data.loyaltyCardName;
             document.querySelector("#rate").value = data.exchangeRate;
             if (data.validStatus) {
