@@ -1,6 +1,7 @@
 package idv.tia201.g2.web.store.controller;
 
 
+import idv.tia201.g2.web.store.model.StoreViewModel;
 import idv.tia201.g2.web.store.service.StoreService;
 
 import idv.tia201.g2.web.store.vo.Store;
@@ -15,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 
 //RestController是組合註解 他等於Controller 加上 ResponseBody 就是一個RestController
@@ -37,6 +39,7 @@ public class StoreController {
     @GetMapping("/home")
     public List<Store> Home(){
         List<Store> storeList =  storeService.findAll();
+//        List<Store> storeList =  storeService.GetStoreList(); 待確認帳號狀態
         return storeList;
     }
     @GetMapping("/storeinfo/{storeId}")
@@ -130,11 +133,32 @@ public class StoreController {
         return storeService.findLogoById(storeid);
     }
 
+    @GetMapping("/holidays/{storeid}")
+    public List<Date> getDays(@PathVariable Integer storeid){
+        return storeService.GetStoreHolidays(storeid);
+    }
+
     @PostMapping("/storerest")
     public List<Store> StoreList(@RequestBody String date) throws ParseException {
         //列出yyyy-MM-dd沒有休息的店家
         return storeService.getStoreListWorking(date);
     }
+    @PostMapping("/storeholiday")
+    public void SaveHoliday(@RequestBody StoreViewModel data)  {
+        storeService.addStoreHolidayByDate(data.getStoreId(),data.getHoliday());
+
+    }
+
+    @GetMapping("/updateStoreStatus/{storeId}")
+    public void EditStoreStatus(HttpSession session,@PathVariable Integer storeId){
+
+        if(checkAdminLogin(session)){
+            storeService.editStoreStatus(storeId);
+        }
+    }
+
+
+
 
 
 
@@ -147,6 +171,13 @@ public class StoreController {
 
     public boolean IsLogin(@SessionAttribute("loggedin") boolean status) {
         return status;
+    }
+
+    public boolean checkAdminLogin(HttpSession session){
+        if(session.getAttribute("loggedin") != null && getLoginType(session).getUserTypeId()==3){
+            return true;
+        }
+        return false;
     }
 
 
@@ -177,6 +208,8 @@ public class StoreController {
 
 
     }
+
+
 
 
 }

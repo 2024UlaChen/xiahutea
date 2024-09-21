@@ -107,10 +107,10 @@
               />
             </div>
             <div class="m-3">
-              <label class="form-label">臨時公休日</label>
+              <label class="form-label">公休日</label>
               <input
                 readonly
-                type="date"
+                type="text"
                 class="form-control"
                 value=""
                 id="rest"
@@ -333,6 +333,13 @@
                       document.querySelector("#storePasswordAsideLink").href=`storeInfoEditPassword.html?storeid=${sotreid.split("=")[1]}`;
                     }
             );
+            fetch(`/store/holidays/${sotreid.split("=")[1]}`).then(data => data.json()).then(
+                    res =>{
+                      res.forEach(function (day){
+                        document.querySelector("#rest").value += day+", "
+                      });
+                    }
+            )
 
 
 

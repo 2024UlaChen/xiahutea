@@ -275,6 +275,7 @@
                     let vat = store.vat;
                     let contactPhone = store.contactPhone;
                     let storeStatus = store.storeStatus;
+
                     let status = storeStatus === 1 ? "checked" : "";
                     let storeId = store.storeId;
                     str = `
@@ -289,7 +290,7 @@
   ${contactPhone}
  </td>
 <td class="project-state form-switch">
-  <input type="checkbox" ${status} data-toggle="toggle" data-size="sm" ">
+  <input type="checkbox" ${status} data-toggle="toggle" data-size="sm" class="storeStatuss" data-storeid="${storeId}">
 </td>
 <td class=" text-center">
     <a href="/cms/storeInfo.html?storeId=${storeId}" class="glow-on-hover storeInfoLink" type="button">View</a>
@@ -318,6 +319,18 @@
           }
         });//導向登入頁面確認
         //ajax 取得商家列表
+        //監聽是否點擊狀態
+
+        document.querySelectorAll('.project-state').forEach(function (element){
+          element.addEventListener("click",function (){
+            console.log(this);
+            console.log("sotreId=");
+            let storeVal = this.querySelector('.storeStatuss').dataset.storeid;
+            console.log(storeVal);
+            fetch(`/store/updateStoreStatus/${storeVal}`);
+          });
+        });
+
 
       }); //DOM end
     </script>

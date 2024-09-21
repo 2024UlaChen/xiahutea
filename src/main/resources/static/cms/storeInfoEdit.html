@@ -480,6 +480,25 @@
                 dataType: "JSON",
                 data: JSON.stringify(model),
                 success: function (data) {
+                  //處理公休日
+                  if(document.querySelector('#holiday').value !==""){
+                    console.log(document.querySelector('#holiday').value);
+                    let storeviewmodel = {
+                      storeId : id,
+                      holiday : document.querySelector('#holiday').value
+                    };
+                    $.ajax({
+                      url:"/store/storeholiday",
+                      method:"POST",
+                      contentType: "application/json",
+                      dataType: "JSON",
+                      data:JSON.stringify(storeviewmodel),
+                      success:function (){
+                        console.log('成');
+                      }
+                    });//提交公休
+
+                  }
                   console.log(JSON.stringify(model));
                   //接著處理照片
                   if(newLogoImg.files.length> 0){

@@ -104,6 +104,11 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
+    public List<Store> GetStoreList() {
+        return storeDao.findByStoreStatus();
+    }
+
+    @Override
     public List<Store> findAll(Pageable pageable) {
 
         return storeDao.findAll(pageable).getContent();
@@ -192,6 +197,18 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
+    public Store editStoreStatus(Integer storeId) {
+        Store data = findStoreById(storeId);
+        if(data.getStoreStatus() == 2){
+            data.setStoreStatus(3);
+        }
+        if(data.getStoreStatus() == 3){
+            data.setStoreStatus(2);
+        }
+        return storeDao.save(data);
+    }
+
+    @Override
     public byte[] findLogoById(Integer id) {
         Store store = findStoreById(id);
         return store.getLogo();
@@ -211,11 +228,12 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public void addStoreHolidayByDate(Store store, Date holiday) {
+    public void addStoreHolidayByDate(Integer storeId, Date holiday) {
         StoreCalendar data = new StoreCalendar();
 
 
-        data.setStoreId(store.getStoreId());
+        data.setStoreId(storeId);
+        data.setStoreHoliday(holiday);
         storeCalendarRepository.save(data);
 
     }
@@ -270,6 +288,11 @@ public class StoreServiceImpl implements StoreService {
         item.setLogo(store.getLogo());
         return item;
 
+    }
+
+    @Override
+    public List<Date> GetStoreHolidays(Integer StoreId) {
+        return storeCalendarRepository.findStoreCalendarsByStoreId(StoreId);
     }
 
 
