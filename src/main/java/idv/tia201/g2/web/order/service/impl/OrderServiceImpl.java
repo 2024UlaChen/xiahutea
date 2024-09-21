@@ -1,7 +1,6 @@
 package idv.tia201.g2.web.order.service.impl;
 
 import idv.tia201.g2.web.member.dao.MemberDao;
-import idv.tia201.g2.web.member.dao.impl.MemberDaoImpl;
 import idv.tia201.g2.web.member.vo.Member;
 import idv.tia201.g2.web.order.dao.DisputeDao;
 import idv.tia201.g2.web.order.dao.OrderDao;
@@ -20,6 +19,8 @@ import idv.tia201.g2.web.store.vo.Store;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -48,49 +49,50 @@ public class OrderServiceImpl implements OrderService {
     // todo
     // 發票api
 
-    // TODO
+    // -------- FINISH ---------------------------------
     // 前台 訂單新增
     @Override
-    public OrderDto addOrder(Orders newOrder, List<OrderDetail> orderDetails) {
+    public OrderDto addOrder(Orders order, List<OrderDetail> orderDetails) {
         OrderDto orderDto = new OrderDto();
 
-        int customerId = newOrder.getCustomerId();
+        //訂單檢查
+        int customerId = order.getCustomerId();
         Member member = memberDao.findMemberById(customerId);
         if(member == null) {
             orderDto.setMessage("無此會員ID");
             orderDto.setSuccessful(false);
             return orderDto;
         }
-        int storeId = newOrder.getStoreId();
+        int storeId = order.getStoreId();
         Store store = storeDao.findByStoreId(storeId);
         if(store == null) {
             orderDto.setMessage("無此商店ID");
             orderDto.setSuccessful(false);
             return orderDto;
         }
-        if(newOrder.getCouponDiscount() < 0 || newOrder.getLoyaltyDiscount() < 0 || newOrder.getCustomerMoneyDiscount() < 0){
+        if(order.getCouponDiscount() < 0 || order.getLoyaltyDiscount() < 0 || order.getCustomerMoneyDiscount() < 0){
             orderDto.setMessage("折抵金額錯誤");
             orderDto.setSuccessful(false);
             return orderDto;
         }
-        if(newOrder.getOrderProductQuantity() < 0 || newOrder.getProductAmount() < 0 ){
+        if(order.getOrderProductQuantity() < 0 || order.getProductAmount() < 0 ){
             orderDto.setMessage("商品數量或商品總金額錯誤");
             orderDto.setSuccessful(false);
             return orderDto;
         }
-        if(newOrder.getPaymentMethod() != 1 || isEmpty(newOrder.getPaymentAmount())){
+        if(order.getPaymentMethod() != 1 || isEmpty(order.getPaymentAmount())){
             orderDto.setMessage("付款方法或付款金額錯誤");
             orderDto.setSuccessful(false);
             return orderDto;
         }
-        if(newOrder.getInvoiceMethod() != 1 && newOrder.getInvoiceMethod() != 2 && newOrder.getInvoiceMethod() != 3){
+        if(order.getInvoiceMethod() != 1 && order.getInvoiceMethod() != 2 && order.getInvoiceMethod() != 3){
             orderDto.setMessage("發票方式錯誤");
             orderDto.setSuccessful(false);
             return orderDto;
         }
-        final String invoiceCarrier = newOrder.getInvoiceCarrier();
-        final String invoiceVat = newOrder.getInvoiceVat() + "";
-        if(newOrder.getInvoiceMethod() == 2){  // 載具
+        final String invoiceCarrier = order.getInvoiceCarrier();
+        final String invoiceVat = order.getInvoiceVat() + "";
+        if(order.getInvoiceMethod() == 2){  // 載具
             if(invoiceCarrier.charAt(0) != '/' || invoiceCarrier.trim().length() != 8){
                 orderDto.setMessage("載具輸入錯誤");
                 orderDto.setSuccessful(false);
@@ -108,24 +110,27 @@ public class OrderServiceImpl implements OrderService {
                 }
             }
         }
-        if (newOrder.getInvoiceMethod() == 3) {  // 統編
+        if (order.getInvoiceMethod() == 3) {  // 統編
             if(!(VatUtil.isValidTWBID(invoiceVat))){
                 orderDto.setMessage("統編輸入錯誤");
                 orderDto.setSuccessful(false);
                 return orderDto;
             }
         }
-        if( isEmpty(newOrder.getReceiverMethod()) || isEmpty(newOrder.getReceiverName()) || isEmpty(newOrder.getReceiverPhone()) || isEmpty(newOrder.getReceiverDatetime())){
+        if( isEmpty(order.getReceiverMethod()) || isEmpty(order.getReceiverName()) || isEmpty(order.getReceiverPhone()) || isEmpty(order.getReceiverDatetime())){
             orderDto.setMessage("未輸入取貨資訊");
             orderDto.setSuccessful(false);
             return orderDto;
         }
         // 訂單明細檢查
         for (OrderDetail orderDetail : orderDetails) {
-            // todo 檢查商品id
             int productId = orderDetail.getProductId();
-             //  Product product = productDao.findById(productId);
-
+            Product product = productDao.findByProductId(productId);
+            if(product == null){
+                orderDto.setMessage("商品編號錯誤");
+                orderDto.setSuccessful(false);
+                return orderDto;
+            }
             if(isEmpty(orderDetail.getProductSugar()) || isEmpty(orderDetail.getProductTemperature())){
                 orderDto.setMessage("未輸入甜度溫度");
                 orderDto.setSuccessful(false);
@@ -138,44 +143,20 @@ public class OrderServiceImpl implements OrderService {
             }
         }
 
-
-        newOrder.setOrderStatus(1);
-        newOrder.setCustomerId(customerId);
-        newOrder.setCustomerCouponsId(newOrder.getCustomerCouponsId());
-        newOrder.setCouponDiscount(newOrder.getCouponDiscount());
-        newOrder.setLoyaltyCardId(newOrder.getLoyaltyCardId());
-        newOrder.setLoyaltyDiscount(newOrder.getLoyaltyDiscount());
-        newOrder.setOrderProductQuantity(newOrder.getOrderProductQuantity());
-        newOrder.setPaymentAmount(newOrder.getPaymentAmount());
-        newOrder.setProcessingFees(10);
-        newOrder.setPaymentMethod(newOrder.getPaymentMethod());
-        newOrder.setPaymentAmount(newOrder.getPaymentAmount());
-        newOrder.setInvoiceMethod(newOrder.getInvoiceMethod());
-        newOrder.setInvoiceVat(newOrder.getInvoiceVat());
-        newOrder.setInvoiceCarrier(newOrder.getInvoiceCarrier());
-        newOrder.setReceiverMethod(newOrder.getReceiverMethod());
-        newOrder.setReceiverName(newOrder.getReceiverName());
-        newOrder.setReceiverPhone(newOrder.getReceiverPhone());
-        newOrder.setReceiverAddress(newOrder.getReceiverAddress());
-        newOrder.setReceiverDatetime(newOrder.getReceiverDatetime());
-        newOrder.setOrderNote(newOrder.getOrderNote());
-//        newOrder.setOrderCreateDatetime((System.currentTimeMillis()));
-        orderDao.insert(newOrder);
-
-
-
-
+        order.setOrderStatus(1);
+        order.setOrderCreateDatetime(new Timestamp(System.currentTimeMillis()));
+        orderDao.insert(order);
         for (OrderDetail orderDetail : orderDetails) {
+            orderDetail.setOrderId(order.getOrderId());
             orderDetailDao.insert(orderDetail);
         }
         orderDto.setMessage("訂單已成立");
         orderDto.setSuccessful(true);
-        orderDto.setOrders(newOrder);
+        orderDto.setOrders(order);
         orderDto.setOrderDetails(orderDetails);
         return orderDto;
     }
 
-    // -------- FINISH ---------------------------------
     // 前台 訂單列表 顯示
     @Override
     public List<OrderDto> findByCustomerId(int customerId) {

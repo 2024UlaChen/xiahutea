@@ -2,7 +2,6 @@ package idv.tia201.g2.web.order.service.impl;
 
 import java.sql.Timestamp;
 import java.util.List;
-
 import idv.tia201.g2.web.member.dao.MemberDao;
 import idv.tia201.g2.web.member.vo.Member;
 import idv.tia201.g2.web.order.dao.DisputeDao;
@@ -76,9 +75,7 @@ public class DisputeServiceImpl implements DisputeService {
             disputeOrder.setSuccessful(false);
             return disputeOrder;
         }
-        disputeOrder.setOrderId(disputeOrder.getOrderId());
         disputeOrder.setDisputeStatus(1);
-        disputeOrder.setDisputeReason(disputeOrder.getDisputeReason());
         disputeOrder.setApplyDatetime(new Timestamp(System.currentTimeMillis()));
         disputeDao.insert(disputeOrder);
         disputeOrder.setMessage("申請完成");
