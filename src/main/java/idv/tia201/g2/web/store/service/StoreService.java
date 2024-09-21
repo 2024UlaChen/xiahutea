@@ -2,6 +2,7 @@ package idv.tia201.g2.web.store.service;
 
 import idv.tia201.g2.web.store.model.StoreViewModel;
 import idv.tia201.g2.web.store.vo.Store;
+import idv.tia201.g2.web.user.dto.TotalUserDTO;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,7 +32,8 @@ public interface StoreService {
 
     void addStoreHolidayByDate(Store store, Date holiday);
 
-    List<Store> getStoreListNoWorking(String holiday) throws ParseException;
+    List<Store> getStoreListWorking(String holiday) throws ParseException;
     List<Store> getAllData();
     List<Store> getAllStoreById(Integer Id);
+    TotalUserDTO GetTotalUserDTO(Integer StoreId);
 }

@@ -18,14 +18,13 @@ AdminController {
     @Autowired
     private AdminService adminService;
 
-    HttpServletRequest request;
-
 //    @ResponseBody
     @PostMapping("/login")
     public TotalUserDTO adminlogin(Administrator admin, HttpServletRequest request) {
+//        若無資料
         if (admin == null) {
             TotalUserDTO totalUserDTO = new TotalUserDTO();
-            totalUserDTO.setMessage("無會員資訊");
+            totalUserDTO.setMessage("請輸入用戶名稱及用戶密碼");
             totalUserDTO.setSuccessful(false);
             return totalUserDTO;
         }
@@ -38,7 +37,6 @@ AdminController {
             final HttpSession session = request.getSession();
             session.setAttribute("loggedin", true);
             session.setAttribute("totalUserDTO", totalUserDTO);
-//            System.out.println(session.getAttribute("totalUserDTO"));
         }
         return totalUserDTO;
     }

@@ -48,8 +48,7 @@
       <div id="step-1" class="step-content" style="display: flex;">
           <a href="#" class="store-info">  <!--預計加入商家頁面跳轉-->
               <div class="checkout-content-img">
-                  <!--待修改正確圖檔-->
-                  <img src="assets/images/banner-home-6.jpg" alt="Store Logo" class="store-img">
+                  <img alt="Store Logo" class="store-img">
               </div>
               <div class="store-name"></div>
           </a>
@@ -58,7 +57,7 @@
               <div class="user-info">
                   <!--待修改為正確圖片-->
                   <img src="assets/images/product-item-5.jpg" alt="user_photo" class="customer-img">
-                  <p class="customer-name">RAY</p>
+                  <p class="customer-name"></p>
               </div>
           </div>
           <!--取貨方式-->
@@ -73,7 +72,7 @@
               <h4>預計取貨時間</h4>
               <div class="recevie-time">
                   <!-- 日期/時間<input type="date" class="start_date"><input type="time" class="start_date"> -->
-                  <input id="myDatepicker" placeholder="點擊此處選擇時間">
+                  <input id="myDatepicker" placeholder="點擊此處選擇時間" >
               </div>
           </div>
           <!--會員卡&優惠券-->
@@ -85,15 +84,20 @@
                       優惠券
                   </label>
               </div>
-              <div class="coupon-number-content">
-                  <input type="text" class="coupon-number" placeholder="請輸入優惠券序號" maxlength="50" disabled>
+              <div class="coupon-dropdown" >
+                  <select id="coupon-select" name="coupon" class="coupon-select"  disabled>
+                      <option disabled selected>請選擇優惠券</option>
+                  </select>
               </div>
+<!--              <div class="coupon-number-content">-->
+<!--                  <input type="text" class="coupon-number" placeholder="請輸入優惠券序號" maxlength="50" disabled>-->
+<!--              </div>-->
               <div class="select-membercard">
                   <input class="select-membercard-input" type="radio" name="discount">
                   <label class="select-membercard-label" for="select-membercard-label" style="padding-top: 10px">
                       會員卡
                   </label>
-                  <p class="membercard-count">(會員卡餘額:<span id="membercard-number">無法獲取餘額</span>點)</p>
+                  <p class="membercard-count" style="display: none">(會員卡餘額:<span id="membercard-number"></span>點)</p>
               </div>
               <div class="select-moneybag">
                   <div class="select-moneybag-detail">
@@ -101,38 +105,38 @@
                   <label class="select-moneybag-label" for="select-moneybag-label" style="padding-top: 10px">
                       會員錢包
                   </label>
-                      <input type="text" class="moneybag-discount-number" placeholder="請輸入折抵金額" disabled>
+                      <input type="number" class="moneybag-discount-number" placeholder="請輸入折抵金額" disabled>
                   </div>
-                  <p class="moneybag-count">(會員錢包餘額:<span id="moneybag-number">無法獲取餘額</span>)</p>
+                  <p class="moneybag-count" style="display: none">(會員錢包餘額:<span id="moneybag-number"></span>)</p>
               </div>
           </div>
           <!--訂單彙總-->
           <div class="amount-summary">
               <h4>訂單彙總</h4>
               <div class="summary-product-detail">
-                  <div class="product-unit">商品X3</div>
-                  <div class="product-amount">$150</div>
-              </div>
-              <div class="coupon-minus">
-                  <div class="coupon-minus-type">優惠券折抵金額</div>
-                  <div class="coupon-minus-number">$50</div>
-              </div>
-              <div class="membercard-minus">
-                  <div class="membercard-minus-type">會員卡折抵金額</div>
-                  <div class="membercard-minus-number">$50</div>
-              </div>
-              <div class="moneybag-minus">
-                  <div class="moneybag-minus-type">會員錢包折抵金額</div>
-                  <div class="moneybag-minus-number">$20</div>
+                  <div class="product-unit">商品X</div>
+                  <div class="product-amount">$0</div>
               </div>
               <div class="platform-fee">
                   <div class="platform-fee-title">平台費用</div>
                   <div class="platform-fee-number">$10</div>
               </div>
+              <div class="coupon-minus">
+                  <div class="coupon-minus-type">優惠券折抵金額</div>
+                  <div class="coupon-minus-number">$0</div>
+              </div>
+              <div class="membercard-minus">
+                  <div class="membercard-minus-type">會員卡折抵金額</div>
+                  <div class="membercard-minus-number">$0</div>
+              </div>
+              <div class="moneybag-minus">
+                  <div class="moneybag-minus-type">會員錢包折抵金額</div>
+                  <div class="moneybag-minus-number">$0</div>
+              </div>
               <hr>
               <div class="amount-result">
                   <h4>應付金額</h4>
-                  <p style="font-size: large;">$30</p>
+                  <p class="total-amount" style="font-size: large;"></p>
               </div>
           </div>
           <div class="btn-nextstep">
@@ -252,11 +256,13 @@
                   <li>
                       <input type="radio" class="select-cellphone" name="select-contact">
                       <label for="option1" class="label-cellphone">手機</label>
+                      <span id="cellphone-error" style="color: red; display: none;">格式錯誤，請輸入正確台灣手機號碼</span>
                       <input type="text" class="input-cellphone" placeholder="EX:0912345678" maxlength="10" disabled>
                   </li>
                   <li>
                       <input type="radio" class="select-phone" name="select-contact">
                       <label for="option2" class="label-phone">市話</label>
+                      <span id="phone-zone-error" style="color: red; display: none;">請輸入有效的台灣區碼</span>
                       <div class="input-phone">
                           <input type="text" class="input-phone-zone" placeholder="區碼" maxlength="2" disabled>
                           <input type="text" class="input-phone-number" maxlength="7" disabled>
@@ -271,7 +277,7 @@
               <h3>付款方式</h3>
               <ul class="payment-selection">
                   <li>
-                      <input type="radio" class="select-creditcard" name="pay-method">
+                      <input type="radio" class="select-creditcard" name="pay-method" checked>
                       <label for="option1" class="label-creditcard">信用卡</label>
                   </li>
 <!--                  <li>-->
@@ -291,7 +297,8 @@
                   <li>
                       <input type="radio" class="select-paper-uniform" name="select-invoice">
                       <label for="option2" class="label-uniform">紙本發票(含統一編號)</label>
-                      <input type="text" class="uniform-numbers" placeholder="請輸入統編" disabled>
+                      <span id="uniform-numbers-error" style="color: red; display: none;">請輸入有效的統編號碼</span>
+                      <input type="text" class="uniform-numbers" placeholder="請輸入統編" maxlength="8" disabled>
                   </li>
 
                   <li class="vehicle-detail">

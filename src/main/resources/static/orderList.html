@@ -330,73 +330,24 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function(){
+        // todo 判斷會員是否登入
+        // TODO 待session
 
         // 0.顯示列表
         init();
 
-        // 1.查詢欄
-        // 1.1 輸入訂單狀態 & 訂單日期，點查詢btn可篩選訂單
-        let btn_select = document.getElementById("select_btn");
-        btn_select.addEventListener("click", function (e) {
-
-            e.preventDefault();
-            let select_order_status_el = document.getElementsByClassName("select_status")[0];
-            let select_order_date1_el = document.getElementsByClassName("select_date")[0];
-            let select_order_date2_el = document.getElementsByClassName("select_date")[1];
-            let select_order_status = select_order_status_el.value || "";
-            let select_order_date1 = select_order_date1_el.value || "";
-            let select_order_date2 = select_order_date2_el.value || "";
-            let order_rows = document.querySelectorAll("ul.list-products li.product-item");
-
-            order_rows.forEach(row => {
-                // 檢查是否存在所有需要的元素
-                let order_status_el = row.getElementsByClassName("one_order_status_text")[0];
-                let order_date_el = row.getElementsByClassName("order_date_value")[0];
-
-                if (!order_status_el || !order_date_el) {
-                    return; // 跳過此列
-                }
-                // 取得訂單列表資料
-                let order_status = order_status_el.innerText;
-                let order_date = order_date_el.innerText;
-                let show_row = true;
-
-                // 篩選條件
-                if (select_order_status && order_status !== select_order_status) {
-                    show_row = false;
-                }
-
-                //todo: 待資料庫完成後，再處理時區問題
-                if (select_order_date1 && select_order_date2) {
-                    let order_date_obj = new Date(order_date);
-                    let date1 = new Date(select_order_date1);
-                    let date2 = new Date(select_order_date2);
-
-                    if (order_date_obj < date1 || order_date_obj > date2) {
-                        show_row = false;
-                    }
-                }
-               // 顯示或隱藏該列
-               row.style.display = show_row ? "" : "none";
-          });
-        });
-
-        // ==========================================================================
         // 2.訂單列表
         // 2.1 抓訂單資料 TODO 待session
         function init() {
             fetch(`/order/member/1`)
                   .then(response => response.json())
-                  .then(data =>{
-                        console.log(data);
-                        showText(data);}
-                  )
+                  .then(data =>{ showDB(data)})
                   .catch((error) => {
                       console.log("錯誤原因：" + error);
                   });
         }
 
-        function showText(data){
+        function showDB(data){
             let orderHtml = "";
             for(let i = 0; i < data.length ; i++) {
 
@@ -483,6 +434,54 @@
         //         //待後端完成 check變數連結
         //     });
         // }
+
+        // ==========================================================================
+        // 1.查詢欄
+        // 1.1 輸入訂單狀態 & 訂單日期，點查詢btn可篩選訂單
+        let btn_select = document.getElementById("select_btn");
+        btn_select.addEventListener("click", function (e) {
+
+            e.preventDefault();
+            let select_order_status_el = document.getElementsByClassName("select_status")[0];
+            let select_order_date1_el = document.getElementsByClassName("select_date")[0];
+            let select_order_date2_el = document.getElementsByClassName("select_date")[1];
+            let select_order_status = select_order_status_el.value || "";
+            let select_order_date1 = select_order_date1_el.value || "";
+            let select_order_date2 = select_order_date2_el.value || "";
+            let order_rows = document.querySelectorAll("ul.list-products li.product-item");
+
+            order_rows.forEach(row => {
+                // 檢查是否存在所有需要的元素
+                let order_status_el = row.getElementsByClassName("one_order_status_text")[0];
+                let order_date_el = row.getElementsByClassName("order_date_value")[0];
+
+                if (!order_status_el || !order_date_el) {
+                    return; // 跳過此列
+                }
+                // 取得訂單列表資料
+                let order_status = order_status_el.innerText;
+                let order_date = order_date_el.innerText;
+                let show_row = true;
+
+                // 篩選條件
+                if (select_order_status && order_status !== select_order_status) {
+                    show_row = false;
+                }
+
+                //todo: 待資料庫完成後，再處理時區問題
+                if (select_order_date1 && select_order_date2) {
+                    let order_date_obj = new Date(order_date);
+                    let date1 = new Date(select_order_date1);
+                    let date2 = new Date(select_order_date2);
+
+                    if (order_date_obj < date1 || order_date_obj > date2) {
+                        show_row = false;
+                    }
+                }
+               // 顯示或隱藏該列
+               row.style.display = show_row ? "" : "none";
+          });
+        });
     });
 </script>
 </body>

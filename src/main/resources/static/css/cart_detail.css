@@ -65,6 +65,10 @@
   width: 100%;
 }
 
+.customer-name{
+  margin-left: 20px;
+}
+
 .store-info {
   display: flex; /* 使用 Flexbox 佈局 */
   align-items: center; /* 垂直居中對齊 */
@@ -193,8 +197,8 @@
 }
 
 
-.pick-up, .carry-out {
-  /* display: flex; */
+.pick-up, .carry-out, .carry-out-default {
+  /* display: flex;   div標籤就有區塊一行效果 */
   margin-bottom: 5px; /* 讓選項之間有距離 */
  text-align: left;
 }
@@ -214,6 +218,12 @@
 .address::placeholder {
   color: #999;
 }
+
+/*外送預設地址 */
+.sub-options{
+  margin-left: 20px;
+}
+
 
 /*取貨時間 */
 .recevie-time{
@@ -238,8 +248,37 @@
   box-sizing: border-box;
   width: 45%;
 }
-.coupon-number::placeholder {
-  color: #999;
+.coupon-dropdown {
+  position: relative;
+  max-width: 75%;
+  margin: 5px 0;
+  background-color: #f9f9f9; /* 背景色 */
+  border-radius: 8px; /* 圓角 */
+}
+
+.coupon-select {
+  width: 100%; /* 全寬 */
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ddd; /* 邊框 */
+  border-radius: 5px;
+  background-color: #fff;
+  -webkit-appearance: none;
+  position: relative;
+  padding-right: 40px; /* 給右邊留空間給自定義箭頭 */
+  cursor: pointer;
+}
+
+/* 自定義箭頭 */
+.coupon-dropdown::after {
+  content: '\25BC'; /* Unicode for down arrow */
+  font-size: 20px; /* 箭頭大小 */
+  color: #333; /* 箭頭顏色 */
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%); /* 垂直居中 */
+  pointer-events: none; /* 讓箭頭不會被點擊 */
 }
 
 .coupon-use h4 {

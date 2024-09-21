@@ -192,26 +192,7 @@
                 id="contactPhone"
               />
             </div>
-            <div class="m-3">
-              <label class="form-label">銀行代碼</label>
-              <input
-                readonly
-                type="text"
-                class="form-control"
-                value="666"
-                id="bankCode"
-              />
-            </div>
-            <div class="m-3">
-              <label class="form-label">銀行帳號</label>
-              <input
-                readonly
-                type="text"
-                class="form-control"
-                value="1234567-7654321"
-                id="bankAccount"
-              />
-            </div>
+
             <div class="m-3">
               <label class="form-label">店家所有人</label>
               <input
@@ -254,20 +235,7 @@
               />
               <div class="form-text">集點卡關閉後半年後失效</div>
             </div>
-            <div class="m-3">
-              <div class="form-check form-check form-switch">
-                <input
-                  checked
-                  class="form-check-input"
-                  type="checkbox"
-                  disabled
-                  id="validStatus"
-                />
-                <label class="form-check-label" for="flexRadioDisabled">
-                  集點卡狀態
-                </label>
-              </div>
-            </div>
+
             <div class="m-3">
               <label class="form-check-label" for="flexRadioCheckedDisabled">
                 店家帳號狀態
@@ -278,8 +246,11 @@
                 aria-label=".form-select-sm example"
                 id="storeStatus"
               >
-                <option selected value="1">啟動</option>
-                <option value="2">停權</option>
+                <option value="0">審核中</option>
+                <option value="1">審核失敗</option>
+                <option value="2">使用中</option>
+                <option value="3">停權中</option>
+                <option value="4">申請失敗</option>
               </select>
 
             </div>
@@ -343,6 +314,26 @@
           dataType: "JSON",
           async: false,
           success: function (data) {
+            console.log(data.successful);
+            if(!data.successful){
+              //登入失敗
+              location.href = "./backstageLogin.html";
+            }
+            fetch("/store/GetLoginType").then(data => data.json()).then(
+                    res => {
+                      if(res.userTypeId === 1){
+                        //商家登入成功 處理側邊攔路徑
+                        console.log("店家登入成功中");
+                        document.querySelector("#storeInfoAsideLink").href= location.href;
+                        document.querySelector('#storeListAsideLink').classList.add("d-none");
+                      }
+                    }
+            );
+
+
+
+
+
             document.querySelector(
               "#storeLoyaltyCard"
             ).href = `storeInfoEditLoyaltyCard.html?sotreid=${
@@ -364,20 +355,30 @@
             document.querySelector("#openingHours").value = data.openingHours;
             document.querySelector("#closingHours").value = data.closingHours;
 
-            let isDelivery = data.isDelivery === true ? 1 : 0;
-            document.querySelector("#isDelivery").value = isDelivery;
 
-            document.querySelector("#deliveryDistance").value =
-              data.deliveryDistance;
+            if(data.isDelivery){
+              document.querySelector("#isDelivery").checked = true;
+            }
+            if(data.deliveryDistance === 0.0){
+              document.querySelector("#deliveryDistance").value = "暫不提供外送服務";
+            }else{
+              document.querySelector("#deliveryDistance").value =
+                      data.deliveryDistance;
 
-            document.querySelector("#isTakeOrder").value = data.isTakeOrders;
+            }
+
+
+
+
+            if(data.isTakeOrders){
+              document.querySelector("#isTakeOrder").checked = data.isTakeOrders;
+            }
             document.querySelector("#deliveryMoney").value = data.deliveryMoney;
 
             document.querySelector("#storeEmail").value = data.email;
             document.querySelector("#contactPerson").value = data.contactPerson;
             document.querySelector("#contactPhone").value = data.contactPhone;
-            document.querySelector("#bankCode").value = data.bankCode;
-            document.querySelector("#bankAccount").value = data.bankAccount;
+
             document.querySelector("#storeStatus").value = data.storeStatus;
             document.querySelector("#owner").value = data.owner;
             document.querySelector("#loyaltyCardName").value =
@@ -387,7 +388,7 @@
 
             document.querySelector("#expiredDate").value = data.expiredDate!=null?
               data.expiredDate.split("T")[0]:  "激活中";
-            document.querySelector("#validStatus").value = data.validStatus;
+
             const base64image = data.logo;
 
              document.querySelector('#storeImg').src = `data:image/png;base64,${base64image}`;
@@ -396,8 +397,16 @@
           },
           err: function (data) {
             console.log("失敗");
+            console.log(data);
+
           },
         });
+
+
+
+
+
+
       }); //DOM END
     </script>
   </body>

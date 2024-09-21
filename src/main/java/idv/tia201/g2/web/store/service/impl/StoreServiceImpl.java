@@ -6,6 +6,9 @@ import idv.tia201.g2.web.store.model.StoreViewModel;
 import idv.tia201.g2.web.store.service.StoreService;
 import idv.tia201.g2.web.store.vo.Store;
 import idv.tia201.g2.web.store.vo.StoreCalendar;
+import idv.tia201.g2.web.user.dao.TotalUserDao;
+import idv.tia201.g2.web.user.dto.TotalUserDTO;
+import idv.tia201.g2.web.user.vo.TotalUsers;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -27,19 +30,26 @@ public class StoreServiceImpl implements StoreService {
 
     private final StoreDao storeDao;
     private final StoreCalendarRepository storeCalendarRepository;
+    private final TotalUserDao totalUserDao;
     //注入dao
     @Autowired
-    public StoreServiceImpl(StoreDao storeDao, StoreCalendarRepository storeCalendarRepository) {
+    public StoreServiceImpl(StoreDao storeDao, StoreCalendarRepository storeCalendarRepository,TotalUserDao totalUserDao) {
         this.storeDao = storeDao;
         this.storeCalendarRepository = storeCalendarRepository;
+        this.totalUserDao = totalUserDao;
     }
 
 
     public List<StoreViewModel> GetStoreViewModels() {
 
         List<Store> list = findAll();
+
+
         List<StoreViewModel> storeViewModels = new ArrayList<>();
-        StoreViewModel storeViewModel = new StoreViewModel(); ;
+
+
+        StoreViewModel storeViewModel = new StoreViewModel();
+
         for(Store store : list) {
             BeanUtils.copyProperties(store, storeViewModel);
             storeViewModel.setStoreId(store.getStoreId());
@@ -48,7 +58,6 @@ public class StoreServiceImpl implements StoreService {
             storeViewModel.setVat(store.getVat());
             storeViewModel.setContactPhone(store.getContactPhone());
             storeViewModel.setStoreStatus(store.getStoreStatus());
-
             storeViewModels.add(storeViewModel);
         }
         return storeViewModels;
@@ -56,10 +65,17 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     public Store loginStore(Store userData) {
+
         if(userData.getVat() == null || userData.getPassword() ==null) {return null;}
         Store data = storeDao.findByVat(userData.getVat());
         if( data == null  ) {return null;}
-        return data.getPassword().equals(userData.getPassword())? data:null;
+        if(data.getPassword().equals(userData.getPassword())){
+            //密碼正確 登入成功
+            data.setMessage("登入成功");
+            data.setSuccessful(true);
+            return data;
+        }
+        return null;
     }
 
 
@@ -102,7 +118,10 @@ public class StoreServiceImpl implements StoreService {
     @Override
     public Store findStoreById(Integer id) {
         //避免空指標例外  不該觸發
-        return storeDao.findById(id).orElse(null);
+        Store data = storeDao.findById(id).orElse(null);
+        if(data == null) {return null;}
+        data.setSuccessful(true);
+        return data;
     }
 
     @Override
@@ -143,6 +162,7 @@ public class StoreServiceImpl implements StoreService {
         oldDate.setIsTakeOrders(store.getIsTakeOrders());
 
         oldDate.setEmail(store.getEmail());
+
         return storeDao.save(oldDate);
     }
 
@@ -196,14 +216,35 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public List<Store> getStoreListNoWorking(String dateStr) throws ParseException {
-        //取得休息店家
+    public List<Store> getStoreListWorking(String dateStr) throws ParseException {
+        //取得上班店家
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-
         Date date = formatter.parse(dateStr);
 
-        return storeCalendarRepository.findByStoreHoliday(date);
+        List<Store> AllStore = storeDao.findAll();
+        List<Store> NoWorkingList = storeCalendarRepository.findByStoreHoliday(date);
+        List<Integer> allIdList = new ArrayList<>();
+        for(Store store : AllStore) {
+            allIdList.add(store.getStoreId());
+        }
+
+        List<Integer> NoWorkingIdlist = new ArrayList<>();
+        for(Store store : NoWorkingList) {
+            Integer id = store.getStoreId();
+            if(!NoWorkingIdlist.contains(id)) {
+                NoWorkingIdlist.add(id);
+            }
+        }
+        allIdList.removeAll(NoWorkingIdlist); //取得上班店家Id清單
+        List<Store> WorkingList = new ArrayList<>();
+        for(Integer id : allIdList) {
+            WorkingList.add(findStoreById(id));
+        }
+
+
+
+        return WorkingList;
 
     }
     public List<Store> getAllData(){
@@ -211,6 +252,19 @@ public class StoreServiceImpl implements StoreService {
     }
     public List<Store> getAllStoreById(Integer Id){
         return storeCalendarRepository.findStoreByStoreId(Id);
+    }
+
+    @Override
+    public TotalUserDTO GetTotalUserDTO(Integer StoreId) {
+        TotalUserDTO item = new TotalUserDTO();
+        Store store = findStoreById(StoreId);
+        TotalUsers totalUsers = totalUserDao.findByUserTypeIdAndUserId(1,StoreId);
+        item.setTotalUserId(totalUsers.getTotalUserId());
+        item.setUserTypeId(totalUsers.getUserTypeId());
+        item.setUserId(store.getStoreId());
+        item.setLogo(store.getLogo());
+        return item;
+
     }
 
 

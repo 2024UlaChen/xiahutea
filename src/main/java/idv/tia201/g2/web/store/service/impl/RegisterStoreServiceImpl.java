@@ -1,9 +1,15 @@
 package idv.tia201.g2.web.store.service.impl;
 
+import idv.tia201.g2.core.pojo.Mail;
+import idv.tia201.g2.core.util.MailUtil;
 import idv.tia201.g2.web.store.dao.StoreDao;
 import idv.tia201.g2.web.store.dto.RegisterStoreDTO;
 import idv.tia201.g2.web.store.service.RegisterStoreService;
+import idv.tia201.g2.web.store.util.StoreToRegisterStore;
 import idv.tia201.g2.web.store.vo.Store;
+import idv.tia201.g2.web.user.dao.TotalUserDao;
+import idv.tia201.g2.web.user.vo.TotalUsers;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,17 +17,26 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import static idv.tia201.g2.core.util.CopyUtil.copyPropertiesIgnoreNull;
+import static idv.tia201.g2.web.store.util.PasswordUtil.generateRandomString;
 import static idv.tia201.g2.web.store.util.VatUtil.isValidTWBID;
 
 @Service
 public class RegisterStoreServiceImpl implements RegisterStoreService {
     @Autowired
     private StoreDao storeDao;
+
+    @Autowired
+    private MailUtil mailUtil;
+
+    @Autowired
+    private TotalUserDao totalUserDao;
 
     @Override
     public Store register(Store store) {
@@ -128,6 +143,84 @@ public class RegisterStoreServiceImpl implements RegisterStoreService {
         }
         return storeDao.findByStoreStatusInAndVatOrStoreNameContaining(storeStatus, store.getVat(), store.getStoreName(), pageable);
 
+    }
+
+    @Override
+    public RegisterStoreDTO searchRegisterStoreDetail(Store store) {
+        Store result = storeDao.findByStoreId(store.getStoreId());
+        return StoreToRegisterStore.convertToRegisterStore(result);
+    }
+
+    public Store editRegisterStore(Store newData) throws MessagingException, IOException {
+        //必填欄位
+        if (newData.getContactPerson() == null || newData.getContactPerson().isEmpty()) {
+            newData.setMessage("請輸入聯絡人資料");
+            return newData;
+        }
+        if (newData.getEmail() == null || newData.getEmail().isEmpty()) {
+            newData.setMessage("請輸入E-mail");
+            return newData;
+        }
+        if (newData.getContactPhone() == null || newData.getContactPhone().isEmpty()) {
+            newData.setMessage("請輸入聯絡人電話");
+            return newData;
+        }
+        if (newData.getStoreName() == null || newData.getStoreName().isEmpty()) {
+            newData.setMessage("請輸入店家名稱");
+            return newData;
+        }
+        if (newData.getStoreAddress() == null || newData.getStoreAddress().isEmpty()) {
+            newData.setMessage("請輸入店家地址");
+            return newData;
+        }
+        if (newData.getOwner() == null || newData.getOwner().isEmpty()) {
+            newData.setMessage("請輸入店家負責人");
+            return newData;
+        }
+
+
+        //電話驗證
+        String phonePattern = "(\\d{2,3}-?|\\(\\d{2,3}\\))\\d{3,4}-?\\d{4}|09\\d{2}(\\d{6}|-\\d{3}-\\d{3})";
+        boolean phoneMatcher = Pattern.matches(phonePattern, newData.getContactPhone());
+        if (!phoneMatcher) {
+            newData.setMessage("聯絡電話錯誤");
+            return newData;
+        }
+
+        //E-mail驗證
+        String emailPattern = "^(.+)@(.+)$";
+        boolean emailMatcher = Pattern.matches(emailPattern, newData.getEmail());
+        if (!emailMatcher) {
+            newData.setMessage("信箱錯誤");
+            return newData;
+        }
+
+//        若狀態為「成為店家」 就要 產生密碼 & 發信 & 成為totalUser
+        if (newData.getStoreStatus() == 1) {
+            String randomPassword = generateRandomString(9, 14);
+            newData.setPassword(randomPassword);
+            sendMail(newData);
+            TotalUsers totalUser = new TotalUsers(null, 1, newData.getStoreId());
+            totalUserDao.save(totalUser);
+        }
+
+        //依 userId 存資料
+        Store store = storeDao.findByStoreId(newData.getStoreId());
+        copyPropertiesIgnoreNull(newData,store);
+        Store save = storeDao.save(store);
+
+
+
+        save.setSuccessful(true);
+        save.setMessage("更新成功");
+        return save;
+    }
+
+    public void sendMail(Store newData) throws MessagingException, IOException {
+        Mail mail = new Mail();
+        mail.setRecipient(newData.getEmail());
+        mail.setSubject("歡迎加入夏虎茶");
+        mailUtil.sendAttachmentsMail(newData,mail);
     }
 
 }

@@ -34,3 +34,9 @@ function phoneCheck(phone) {
     let pattern = /(\d{2,3}-?|\(\d{2,3}\))\d{3,4}-?\d{4}|09\d{2}(\d{6}|-\d{3}-\d{3})/;
     return pattern.test(phone)
 }
+
+// 要有英文字母大寫小寫 & 要有數字 & 不能有空白 & 長度要超過8並且小於15字元
+function wordCheck(password){
+    let pattern = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d]{9,14}$/;
+    return pattern.test(password);
+}
