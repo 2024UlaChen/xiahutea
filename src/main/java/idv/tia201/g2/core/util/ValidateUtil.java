@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
-public  class ValidateUtil {
+public class ValidateUtil {
 
     //    carrier validate
     public static final String CARRIER_PATTERN = "^/[\\dA-Z0-9+-\\.]{7}$";
@@ -16,8 +16,14 @@ public  class ValidateUtil {
     public static boolean checkCarrier(String carrier) {
         return Pattern.matches(CARRIER_PATTERN, carrier);
     }
+
     public static boolean checkCellphone(String phone) {
         return Pattern.matches(CELLPHONE_PATTERN, phone);
     }
+
+    public static boolean checkMemberPwd(String memberPwd) {
+        return Pattern.matches(MEMBER_PWD_PATTERN, memberPwd);
+    }
+
 
 }
