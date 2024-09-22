@@ -190,13 +190,12 @@
                         <div class="modal-content">
                             <span class="close">&times;</span>
                             <h2>新增商品分類</h2>
-                            <label for="storeId">選擇店家</label>
-                            <input type="text" id="storeId" name="storeId" placeholder="請輸入店家">
+
                             <label for="categoryName">分類名稱</label>
                             <input type="text" id="categoryName" name="categoryName" placeholder="請輸入分類名稱">
 
                             <label for="categorySort">排序</label>
-                            <input type="number" id="categorySort" name="categorySort" value="1" min="1" max="10">
+                            <input type="number" id="categorySort" name="categorySort" value="1" min="1" max="15">
 
                             <p class="note">註：數字越小排序越前面</p>
                             <p id="resultMessage" style="color: red;"></p>
@@ -331,7 +330,7 @@
     categoryform.addEventListener('submit', async (event) => {
         event.preventDefault();
 
-        const storeId = document.querySelector('#storeId').value.trim();
+
         const categoryName = document.querySelector('#categoryName').value.trim();
         const categorySort = document.querySelector('#categorySort').value.trim();
 
@@ -349,7 +348,7 @@
         }
 
         const data = {
-            storeId: storeId, // Ensure storeId is defined
+            storeId: 1, // Ensure storeId is defined
             categoryName: categoryName, // Ensure categoryName is defined
             categorySort: categorySort // Ensure categorySort is defined
 
@@ -504,12 +503,15 @@
         }
 
         document.getElementById('editCategoryForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // 防止表单默认提交行为
+            event.preventDefault();
+
+          // 防止表单默认提交行为
 
             const updateBtn = e.target;
             const categoryId = updateBtn.getAttribute('data-id');
             const editcategoryName = document.getElementById('editcategoryName');
             const editcategorySort = document.getElementById('editcategorySort');
+            let editModal=document.getElementById('editModal');
 
             if (!editcategoryName || !editcategorySort) {
                 editresultMessage.textContent = '所有字段都是必填的。';
@@ -537,6 +539,13 @@
                 .then(data => {
                     // 更新成功后的处理
                     console.log('Category updated successfully:', data);
+                    editbtn.addEventListener("click",function (){
+                        editModal.style.display='none';
+                    })
+
+
+
+                    location.reload();
 
                     const row = document.querySelector(`tr[data-id="${categoryId}"]`);
                     if (row) {
@@ -544,7 +553,7 @@
                         row.children[2].textContent = data.categorySort; // 更新分类排序
                     }
                     // 隐藏模态窗口
-                    document.getElementById('editModal').style.display = 'none';
+
                     // 这里可以添加刷新页面或更新界面逻辑
                 })
                 .catch(error => console.error('Error updating category:', error));
@@ -552,6 +561,11 @@
 
 
         })
+
+
+
+
+
 
 
     });

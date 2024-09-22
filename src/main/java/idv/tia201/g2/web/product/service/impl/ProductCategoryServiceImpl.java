@@ -114,22 +114,5 @@ if (productCategory.getCategoryName() == null || productCategory.getCategoryName
         return productCategoryDao.findAll(pageable);
     }
 
-//    @Override
-//    public boolean deleteCategory(Integer categoryId) {
-//
-//        productService.deleteProductsByCategoryId(categoryId);
-//        //要check是否存在，存在就刪掉，不存在false
-//
-//       if (productCategoryDao.existsById(categoryId)) {
-//            productCategoryDao.deleteById(categoryId);
-//            return true; // 表示删除成功
-//        } else {
-//
-//         return false; // 表示找不到紀錄
-//       }
-//
-//    }
-//   批量刪除
-
 
 }
