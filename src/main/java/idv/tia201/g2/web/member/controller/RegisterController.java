@@ -1,20 +1,15 @@
 package idv.tia201.g2.web.member.controller;
 
 import idv.tia201.g2.web.member.service.MemberService;
+import idv.tia201.g2.web.member.service.impl.SendSmsService;
 import idv.tia201.g2.web.member.vo.Member;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServlet;
-
-@Controller
+@RestController
 @RequestMapping("member/register")
-public class RegisterController extends HttpServlet {
-    private static final long serialVersionUID = -6064618207897871301L;
+public class RegisterController {
+
     @Autowired
     private MemberService memberService;
 
@@ -26,18 +21,15 @@ public class RegisterController extends HttpServlet {
             member.setSuccessful(false);
             return member;
         }
-        if (StringUtils.isEmpty(member.getCustomerPhone())){
-            member.setMessage("register - cellphone can't be duplicate");
-            member.setSuccessful(false);
-            return member;
-        }
-        if (memberService.isExistMember(member)) {
-            member.setMessage("register - duplicate member data");
-            member.setSuccessful(false);
-            return member;
-        }
-//        System.out.println(memberService.register(member));
-        return memberService.register(member);
+        Member memberResult = memberService.register(member);
+        System.out.println(memberResult);
+        return memberResult;
+    }
+
+    @PostMapping("check")
+    public Boolean checkVerifyCode(@RequestParam String phone, @RequestParam String verifyCode) {
+
+        return true;
     }
 
 }

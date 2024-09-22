@@ -26,6 +26,7 @@
     <link rel="stylesheet" href="assets/fonts/flaticon/flaticon.css">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="css/general.css">
+    <link rel="stylesheet" href="css/memberGeneralSetting.css">
     <link rel="stylesheet" href="css/member.css">
 </head>
 
@@ -86,10 +87,10 @@
                                     <div>
                                         <span>載具條碼</span>
                                         <span id="memberCarrierText"></span>
-                                        <button data-toggle="modal" data-target="#carrierEditing">
+                                        <button id="carrierEdit">
                                             <i class="fa fa-pencil"></i>
                                         </button>
-                                        <button data-toggle="modal" data-target="#carrierDeleting">
+                                        <button id="carrierDelete">
                                             <i class="fa fa-trash"></i>
                                         </button>
                                     </div>
@@ -162,8 +163,8 @@
             </div>
         </div>
     </div>
-    <div class="footer"></div>
 </div>
+<div class="footer"></div>
 
 
 <script src="assets/js/jquery-1.12.4.min.js"></script>
@@ -187,9 +188,10 @@
 <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyC3nDHy1dARR-Pa_2jjPCjvsOR4bcILYsM'></script>
 <script src="assets/js/frontend-plugin.js"></script>
 <script src="js/general.js"></script>
-<script src="js/member.js"></script>
 <script src="https://cdn.jsdelivr.net/jsbarcode/3.3.20/JsBarcode.all.min.js"></script>
 <script src="cms/plugins/sweetalert2/sweetalert2.all.min.js"></script>
+<script src="js/memberGeneral.js"></script>
+<script src="js/memberCarrier.js"></script>
 
 </body>
 

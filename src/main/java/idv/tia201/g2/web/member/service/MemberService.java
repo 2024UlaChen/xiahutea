@@ -15,6 +15,8 @@ public interface MemberService {
     //    編輯
     Member editMember(Member member);
 
+    Integer updateMemberCarrier(Member member);
+
     Integer updateMemberByValidSatusAndCustomerRemark(Member member);
 
     //    編輯地址

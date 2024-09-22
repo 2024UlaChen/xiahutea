@@ -16,7 +16,37 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-    // FINISH
+
+    // todo 前台 新增資料
+    @PostMapping("member")
+    public OrderDto addNewOrder(@RequestBody OrderDto orderDto) {
+     //   return  orderService.addOrder(orderDto);
+        return null;
+    }
+
+    // -------- FINISH ---------------------------------
+    // 前台 訂單列表 顯示
+    @GetMapping("member/{customerId}")
+    public List<OrderDto> memberOrder(@PathVariable Integer customerId) {
+        return orderService.findByCustomerId(customerId);
+    }
+
+    // 前台 訂單明細 顯示
+    @GetMapping("member/detail/{orderId}")
+    public OrderDto memberDetail(@PathVariable Integer orderId) {
+        return orderService.findByMemberOrderId(orderId);
+    }
+
+    // 前台 訂單明細 新增評分
+    @PutMapping("member/star/{orderId}")
+    public Orders addNewStar(
+            @PathVariable Integer orderId,
+            @RequestBody Orders reqOrders
+    ) {
+        reqOrders.setOrderId(orderId);
+        return orderService.addStar(reqOrders);
+    }
+
     // 後台 訂單列表 顯示
     @GetMapping("manage")
     public List<Orders> manage() {
@@ -37,41 +67,6 @@ public class OrderController {
     ) {
         reqOrders.setOrderId(orderId);
         return orderService.updateStatus(reqOrders);
-    }
-
-    // ------------------------------------------------------
-    // --------------前台-----------------------------
-    //todo
-
-    // 前台 訂單列表 顯示
-    @GetMapping("member/{customerId}")
-    public List<OrderDto> memberOrder(@PathVariable Integer customerId) {
-        return orderService.findByCustomerId(customerId);
-    }
-
-    // 前台 訂單明細 顯示
-    @GetMapping("member/detail/{orderId}")
-    public OrderDto memberDetail(@PathVariable Integer orderId) {
-        return orderService.findByMemberOrderId(orderId);
-    }
-
-
-
-    // todo 前台 新增資料
-    @PostMapping("member")
-    public Core addNewOrder(@RequestBody Orders orders) {
-//        return  orderService.addOrder(orders);
-        return null;
-    }
-
-    // 新增評分
-    @PutMapping("member/star/{orderId}")
-    public Orders addNewStar(
-            @PathVariable Integer orderId,
-            @RequestBody Orders reqOrders
-    ) {
-        reqOrders.setOrderId(orderId);
-        return orderService.addStar(reqOrders);
     }
 
 }
