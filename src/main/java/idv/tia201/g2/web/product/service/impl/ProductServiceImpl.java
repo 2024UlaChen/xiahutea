@@ -1,6 +1,8 @@
 package idv.tia201.g2.web.product.service.impl;
 
+import idv.tia201.g2.web.product.dao.ProductCategoryDao;
 import idv.tia201.g2.web.product.dao.ProductDao;
+import idv.tia201.g2.web.product.dto.ProductDTO;
 import idv.tia201.g2.web.product.service.ProductService;
 import idv.tia201.g2.web.product.vo.Product;
 import idv.tia201.g2.web.product.vo.ProductCategory;
@@ -11,6 +13,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 
@@ -21,6 +28,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private StoreDao storeDao;
+
 
     //找出全部的產品
     @Override
@@ -48,23 +56,43 @@ public class ProductServiceImpl implements ProductService {
     }
 
     //新增
-    @Override
-    public Product addProduct(Product product) {
-//        Store store = storeDao.findById(storeId).orElse(null);
-//        if (store != null) {
-//            // 商品名稱字數限制檢查
-//            if (product.getProductName() != null && product.getProductName().length() <= 30) {
-//                product.setProductStoreId(storeId);
-//                return productDao.save(product);
-//            } else {
-//                // 商品名稱超過限制，返回 null 或拋出異常
-//                return null;
-//            }
-//        } else {
-//            return null;
-//        }
-        return productDao.save(product);
-    }
+    public boolean addProduct(ProductDTO productDTO) {
+        // 创建 Product 实体对象
+        Product product = new Product();
+        product.setProductName(productDTO.getProductName());
+        product.setProductPrice(productDTO.getProductPrice());
+        product.setSize(productDTO.getSize());
+        product.setProductStatus(productDTO.isProductStatus());
+        product.setProductStoreId(productDTO.getProductStoreId());
+        product.setProductCategoryId(productDTO.getProductCategoryId());
+        product.setProductStoreId(1);
+        product.setNormalIce(productDTO.isNormalIce());
+        product.setLessIce(productDTO.isLessIce());
+        product.setLightIce(productDTO.isLightIce());
+        product.setIceFree(productDTO.isIceFree());
+        product.setRoomTemperature(productDTO.isRoomTemperature());
+        product.setHot(productDTO.isHot());
+        product.setFullSugar(productDTO.isFullSugar());
+        product.setLessSugar(productDTO.isLessSugar());
+        product.setHalfSugar(productDTO.isHalfSugar());
+        product.setQuarterSugar(productDTO.isQuarterSugar());
+        product.setNoSugar(productDTO.isNoSugar());
+        product.setPearl(productDTO.isPearl());
+        product.setPudding(productDTO.isPudding());
+        product.setCoconutJelly(productDTO.isCoconutJelly());
+        product.setTaro(productDTO.isTaro());
+        product.setHerbalJelly(productDTO.isHerbalJelly());
+
+
+
+
+            productDao.save(product);
+
+
+        // 保存商品到数据库
+
+        return true;
+    };
 
     ;
 

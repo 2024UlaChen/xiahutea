@@ -15,6 +15,7 @@
     <!-- DataTables -->
     <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/sweetalert2@11/dist/sweetalert2.min.css">
     <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
     <style>
         img.preview {
@@ -81,22 +82,22 @@
                         <div class="card card-primary  mx-auto">
 
                             <!-- form start -->
-                            <form id="productForm" action="file/upload" method="post" enctype="multipart/form-data">
+                            <form id="productForm" enctype="multipart/form-data">
                                 <div class="card-body">
 
                                     <div class="form-group">
-                                        <label for="productname">商品名稱</label> <span style="color: red">*</span>
-                                        <input type="text" class="form-control" id="productname" placeholder="請輸入商品名稱" name="productName">
+                                        <label for="productName">商品名稱</label> <span style="color: red">*</span>
+                                        <input type="text" class="form-control" id="productName" placeholder="請輸入商品名稱" name="productName">
                                     </div>
-                                    <p class="message" style="color: red"></p>
+                                    <p class="productName-message" style="color: red"></p>
                                     <div class="form-group">
-                                        <label for="productprice">商品價格(請填台幣)</label><span style="color: red">*</span>
-                                        <input type="number" class="form-control" id="productprice" placeholder="65" name="productPrice" min="1" max="999">
-                                        <span class="productprice-message" style="color: red"></span>
+                                        <label for="productPrice">商品價格(請填台幣)</label><span style="color: red">*</span>
+                                        <input type="number" class="form-control" id="productPrice" placeholder="65" name="productPrice" min="1" max="999">
                                     </div>
+                                    <p class="productPrice-message" style="color: red"></p>
 
                                         <div class="form-group">
-                                            <label for="size">商品尺寸</label><span style="color: red">*</span>
+                                            <label for="size">商品尺寸</label>
                                             <select class="custom-select rounded-0" id="size" name="productsize">
                                             <option value="S">S</option>
                                             <option value="M">M</option>
@@ -106,7 +107,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="status">商品狀態</label><span style="color: red">*</span>
+                                        <label for="status">商品狀態</label>
                                         <span class="status-message" style="color: red"></span>
                                         <select class="custom-select rounded-0" id="status" name="productStatus">
                                             <option value="0">上架</option>
@@ -116,38 +117,37 @@
 
                                     <div class="form-group">
 
-                                        <label for="productpic">商品圖片</label>
-                                        <span class="productpic-message" style="color:red;"></span>
+                                        <label for="productPic">商品圖片</label>
+
                                         <div class="custom-file">
                                             <ul class="picture_list">
 
                                             </ul>
-                                            <input type="file" class="custom-file-input" id="productpic">
-                                            <label class="custom-file-label" for="productpic">選圖</label>
+                                            <input type="file" class="custom-file-input" id="productPic" multiple>
+                                            <label class="custom-file-label" for="productPic">選圖</label>
                                         </div>
 
                                     </div>
+                                    <p class="productPic-message" style="color:red;"></p>
 
 
                                     <div class="form-group">
-                                        <label>商品分類</label><span style="color: red">*</span>
+                                        <label>商品分類</label>
                                         <span class="category-message" style="color: red"></span>
                                         <select class="category" name="productCategoryId">
-                                            <option>option 1</option>
-                                            <option>option 2</option>
-                                            <option>option 3</option>
-                                            <option>option 4</option>
-                                            <option>option 5</option>
+
                                         </select>
                                     </div>
+                                    <p class="category-message" style="color: red"></p>
                                     <div class="row">
+                                        <span for="name" class="ice-message" style="color: red"></span>
                                         <div class="form-group col-4">
 
                                             <label class="form-check-label">冰塊調整</label><span style="color: red">*</span>
-                                            <span for="name" class="category-message" style="color: red"></span>
+
 
                                             <div class="form-check">
-                                                <input type="checkbox" id="allice" onclick="selectAllIce()">
+                                                <input type="checkbox" id="allice" >
                                                 <label class="form-check-label">全選</label>
                                             </div>
                                             <div class="form-check">
@@ -171,7 +171,7 @@
                                                 <label class="form-check-label">去冰</label>
                                             </div>
                                             <div class="form-check">
-                                                <input class="item" type="checkbox" name="roomTeperature"
+                                                <input class="item" type="checkbox" name="roomTemperature"
                                                     value="1">
                                                 <label class="form-check-label">常溫</label>
                                             </div>
@@ -182,10 +182,10 @@
 
                                         </div>
 
-
+                                        <span class="sugar-message" style="color: red"></span>
                                         <div class="form-group col-4">
                                             <label fclass="form-check-label">甜度調整</label><span style="color: red">*</span>
-                                            <span class="category-message" style="color: red"></span>
+
 
                                             <div class="form-check">
                                                 <input type="checkbox" id="allsugar" name="category">
@@ -230,7 +230,7 @@
                                                 <label class="form-check-label">布丁</label>
                                             </div>
                                             <div class="form-check">
-                                                <input class="itemthree" type="checkbox" name="coconut_jelly" value="1">
+                                                <input class="itemthree" type="checkbox" name="coconutJelly" value="1">
                                                 <label class="form-check-label">椰果</label>
                                             </div>
                                             <div class="form-check">
@@ -238,7 +238,7 @@
                                                 <label class="form-check-label">芋圓</label>
                                             </div>
                                             <div class="form-check">
-                                                <input class="itemthree" type="checkbox" name="herbal_jelly" value="1">
+                                                <input class="itemthree" type="checkbox" name="herbalJelly" value="1">
                                                 <label class="form-check-label">仙草凍</label>
                                             </div>
                                         </div>
@@ -279,27 +279,29 @@
   <script src="plugins/jquery-validation/additional-methods.min.js"></script>
   <script src="dist/js/adminlte.js"></script>
   <script src="dist/js/demo.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/validate.js/0.13.1/validate.min.js"></script>
+  <script src="https://unpkg.com/sweetalert2@11"></script>
 
 
 
   <script>
         <!--顯示商品圖-->
-        var the_file = document.getElementById("productpic");
+        var the_file = document.getElementById("productPic");
         the_file.addEventListener("change", function () {
             let ul_el = document.getElementsByClassName("picture_list")[0];
-            ul_el.innerHTML = ""
+            ul_el.innerHTML = ""; // 清空現有的圖片列表
 
-            let that = this;
-            for (let i = 0; i < this.files.length; i++) {
-                let reader = new FileReader(); reader.readAsDataURL(this.files[i]);
-                reader.addEventListener("load", function () { // console.log(reader.result); // this 是input標籤 let li_str="" ;
+            let files = this.files;
+            for (let i = 0; i < files.length; i++) {
+                let reader = new FileReader();
+                reader.readAsDataURL(files[i]);
+
+                reader.addEventListener("load", function () {
                     let li_str = '';
                     li_str += '<li>';
-                    li_str += '<img src="' + reader.result + '" class="preview">';
+                    li_str += '<img src="' + reader.result + '" class="preview" style="max-width: 350px; max-height: 350px; margin: 5px;">';
                     li_str += '</li>';
                     ul_el.insertAdjacentHTML("beforeend", li_str);
-                })
+                });
             }
         })
        // 冰的全選
@@ -390,7 +392,7 @@
 
                 categories.forEach(category => {
                     const option = document.createElement('option');
-                    option.value = category.id;
+                    option.value = category.categoryId;
                     option.text = category.categoryName;
                     categorySelect.appendChild(option);
                 });
@@ -400,146 +402,136 @@
                 categoryMessage.textContent = '加載失敗';
             });
         // =========驗證===============
-            document.querySelector('form').addEventListener('submit', function(event) {
-            event.preventDefault(); // 防止表單提交，進行驗證
+            document.getElementById('productForm').addEventListener('submit', function(event) {
 
 
 
-            // 取得各個表單元素的值
-            let productName = document.getElementById('productname').value.trim();
-            let productPrice = document.getElementById('productprice').value;
-            let productSize = document.getElementById('size').value;
-            let productStatus = document.getElementById('status').value;
-            let productPic = document.getElementById('productpic').files[0];
-            let category = document.querySelector('.category').value;
+                    event.preventDefault();
+                    let productName = document.getElementById('productName').value.trim();
+                    let productPrice = document.getElementById('productPrice').value;
+                    let size = document.getElementById('size').value;
+                    let productStatus = document.getElementById('status').value;
+                    let productPic = document.getElementById('productPic').files[0];
+                    let category = document.querySelector('.category').value;
+                    let messagename=document.querySelector('.productName-message');
+                    let messageprice=document.querySelector('.productPrice-message');
+                    let messagecategory=document.querySelector('.category-message');
 
-            let iceOptions = document.querySelectorAll('.item');
-            let sugarOptions = document.querySelectorAll('.itemtwo');
-            let message=document.querySelector('.message');
+
+                   let isnormalIce=document.querySelector('input[name="normalIce"]').checked;
+                    let islessIce=document.querySelector('input[name="lessIce"]').checked;
+                     let islightIce=document.querySelector('input[name="lightIce"]').checked;
+                     let isiceFree=document.querySelector('input[name="iceFree"]').checked;
+                     let isroomTemperature=document.querySelector('input[name="roomTemperature"]').checked;
+                     let ishot=document.querySelector('input[name="hot"]').checked;
+
+                     let isfullSugar=document.querySelector('input[name="fullSugar"]').checked;
+                    let islessSugar=document.querySelector('input[name="lessSugar"]').checked;
+                    let ishalfSugar=document.querySelector('input[name="halfSugar"]').checked;
+                    let isquarterSugar=document.querySelector('input[name="quarterSugar"]').checked;
+                    let isnoSugar=document.querySelector('input[name="noSugar"]').checked;
 
 
-            // 清空錯誤消息
-            clearMessages();
+                    let pearl=document.querySelector('input[name="pearl"]').checked;
+                    let pudding=document.querySelector('input[name="pudding"]').checked;
+                    let coconutJelly= document.querySelector('input[name="coconutJelly"]').checked;
+                    let taro=document.querySelector('input[name="taro"]').checked;
+                    let herbalJelly=document.querySelector('input[name="herbalJelly"]').checked;
 
-            // 驗證邏輯，若有錯誤則返回
-            if (!validateForm(productName, productPrice, productSize, productStatus, productPic, category, iceOptions, sugarOptions)) {
-                return false;
-            }
 
-            // 準備要發送的數據
-            let formData = new FormData();
-            formData.append('productName', productName);
-            formData.append('productPrice', productPrice);
-            formData.append('productSize', productSize);
-            formData.append('productStatus', productStatus);
-            formData.append('category', category);
 
-            // 添加商品圖片
-            if (productPic) {
-                formData.append('productPic', productPic);
-            }
 
-            // 添加冰塊調整選項
-            iceOptions.forEach(option => {
-                if (option.checked) {
-                    formData.append('iceOptions', option.name);
+                if (!productName) {
+                   messagename.textContent='商品名稱不為空'
+                    return false;
                 }
-            });
 
-            // 添加甜度調整選項
-            sugarOptions.forEach(option => {
-                if (option.checked) {
-                    formData.append('sugarOptions', option.name);
+                if (!productPrice || isNaN(productPrice) || parseFloat(productPrice) <= 0) {
+                    messageprice.textContent='請輸入有效的金額'
+                    return false;
                 }
-            })
-                // 假設 store id=1
-            // 發送fetch請求
-            fetch(`/products/add/`, {
-                method: 'POST',
-                body: formData, // 發送FormData
 
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert('商品新增成功！');
-                    } else {
-                        alert('商品新增失敗: ' + data.message);
+                if (!category) {
+                    messagecategory.textContent='請選擇分類'
+                    return false;
+                }
+                let v = {};
+
+                let pictureInput = document.getElementById('productPic');
+                let pictureInputFiles = '';
+                if (pictureInput.files.length > 0) {
+
+                    pictureInputFiles = pictureInput.files[0];
+                }
+
+
+
+
+
+                // 收集甜度調整
+                let sugarOptions = {
+                    fullSugar: document.querySelector('input[name="fullSugar"]').checked,
+                    lessSugar: document.querySelector('input[name="lessSugar"]').checked,
+                    halfSugar: document.querySelector('input[name="halfSugar"]').checked,
+                    quarterSugar: document.querySelector('input[name="quarterSugar"]').checked,
+                    noSugar: document.querySelector('input[name="noSugar"]').checked
+                };
+                productStatus= (productStatus=0 ? false : true);
+                v = {
+                    "productName": productName,
+                    "productPrice": productPrice,
+                    "productStatus": productStatus,
+                    "productCategoryId": Number.parseInt(category),
+                    "size": size,
+                    "productPicture": pictureInputFiles,
+                    "normalIce": isnormalIce,
+                    "lessIce" : islessIce,
+                    "lightIce" : islightIce,
+                    "iceFree": isiceFree,
+                    "roomTemperature": isroomTemperature,
+                    "hot" : ishot,
+                    "fullSugar":isfullSugar,
+                    "lessSugar" : islessSugar,
+                    "halfSugar" : ishalfSugar,
+                    "quarterSugar" : isquarterSugar,
+                    "noSugar" :isnoSugar,
+                    "pearl" : pearl,
+                    "pudding" : pudding,
+                    "coconutJelly": coconutJelly,
+                    "taro":taro,
+                    "herbalJelly":herbalJelly
+                };
+                const Data = JSON.stringify(v);
+                // 使用 fetch 發送 POST 請求
+                fetch('/products/add', { // 確認路徑
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: Data
+                }).then(response => {
+                    if (!response.ok) {
+                        throw new Error('网络响应不正常');
                     }
+                    return response;
                 })
-                .catch(error => {
-                    console.error('發送請求時出錯:', error);
-                    alert('商品新增時發生錯誤');
-                });
-        });
+                    .then(data => {
+                        console.log('成功: ', data.status);
+                    })
+                    .catch((error) => {
+                        console.error('错误: ', error);
+                    });
 
-        // // 表單驗證邏輯
-        // function validateForm(productName, productPrice, iceOptions, sugarOptions) {
-        //     // 驗證商品名稱
-        //     if (productName === '' || productName.length > 50) {
-        //         showError('productname', '商品名稱不能為空且不能超過50個字符');
-        //
-        //     }
-        //
-        //     // 驗證商品價格
-        //     if (!productPrice || productPrice <= 0 || productPrice > 999) {
-        //         showError('productprice', '商品價格必須介於1到999之間');
-        //         return false;
-        //     }
-        //
-        //     // 驗證商品圖片大小和格式
-        //     if (productPic) {
-        //         let fileSize = productPic.size / 1024 / 1024; // 文件大小（MB）
-        //         let fileType = productPic.type;
-        //         if (fileSize > 2) {
-        //             showError('productpic', '圖片大小不能超過2MB');
-        //             return false;
-        //         }
-        //         if (!['image/jpeg', 'image/png'].includes(fileType)) {
-        //             showError('productpic', '僅支持JPEG或PNG格式的圖片');
-        //             return false;
-        //         }
-        //     }
-        //
-        //     // 驗證冰塊調整
-        //     if (!checkCheckboxSelected(iceOptions)) {
-        //         showError('ice', '請至少選擇一種冰塊調整選項');
-        //         return false;
-        //     }
-        //
-        //     // 驗證甜度調整
-        //     if (!checkCheckboxSelected(sugarOptions)) {
-        //         showError('sugar', '請至少選擇一種甜度選項');
-        //         return false;
-        //     }
-        //
-        //     return true;
-        // }
-        //
-        // // 顯示錯誤消息
-        // function showError(fieldId, message) {
-        //     document.querySelector(`.${fieldId}-message`).textContent = message;
-        //     document.querySelector(`.${fieldId}-message`).style.color = 'red';
-        // }
-        //
-        // // 清空所有錯誤消息
-        // function clearMessages() {
-        //     let errorMessages = document.querySelectorAll('span');
-        //     errorMessages.forEach(function(message) {
-        //         message.textContent = '';
-        //     });
-        // }
-        //
-        // // 檢查至少選擇了一個checkbox
-        // function checkCheckboxSelected(checkboxes) {
-        //     for (let i = 0; i < checkboxes.length; i++) {
-        //         if (checkboxes[i].checked) {
-        //             return true;
-        //         }
-        //     }
-        //     return false;
-        // }
 
+
+
+
+
+
+            })
+
+
+        /** 新增商品的方法 到後端 */
 
 
     </script>
