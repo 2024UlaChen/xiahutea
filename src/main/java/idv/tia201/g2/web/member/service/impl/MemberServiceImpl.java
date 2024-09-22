@@ -1,5 +1,6 @@
 package idv.tia201.g2.web.member.service.impl;
 
+import idv.tia201.g2.core.util.EncrypSHA;
 import idv.tia201.g2.web.member.dao.MemberAddrDao;
 import idv.tia201.g2.web.member.dao.MemberDao;
 import idv.tia201.g2.web.member.service.MemberService;
@@ -11,6 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,37 +24,68 @@ public class MemberServiceImpl implements MemberService {
 
     @Autowired
     MemberDao memberDao;
+
     @Autowired
     MemberAddrDao memberAddrDao;
 
+    public EncrypSHA encrypSHA;
+    public static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
     @Override
     public Member register(Member member) {
-        if (StringUtils.isEmpty(member.getCustomerPhone())) {
+        String phone = member.getCustomerPhone();
+        String pwd = member.getCustomerPassword();
+        String memberName = member.getNickname();
+//        TODO - 正則檢核
+//        檢核欄位資料不可為空
+        if (!StringUtils.hasText(phone)) {
             member.setMessage("手機未輸入");
             member.setSuccessful(false);
             return member;
         }
-        if (StringUtils.isEmpty(member.getCustomerPassword())) {
+        if (!StringUtils.hasText(pwd)) {
             member.setMessage("密碼未輸入");
             member.setSuccessful(false);
             return member;
         }
-        return memberDao.findMemberById(member.getCustomerId());
+        if (!StringUtils.hasText(memberName)) {
+            member.setMessage("姓名未輸入");
+            member.setSuccessful(false);
+            return member;
+        }
+//        確認是否已存在member
+        if (isExistMember(member)) {
+            member.setMessage("手機已註冊過");
+            member.setSuccessful(false);
+            return member;
+        } else {
+//        密碼加密
+            String encodePwd = encrypSHA.SHAEncrypt(pwd);
+            member.setCustomerPassword(encodePwd);
+//            member.setCustomerPassword(pwd);
+
+            LocalDate date = LocalDate.now();
+            member.setCreateDate(Date.valueOf(date));
+            member.setUpdateDate(Date.valueOf(date));
+
+//            TODO - ADD VERIFY CODE
+            return memberDao.createMember(member);
+        }
     }
 
     @Override
     public Member login(Member member) {
         //todo follow - need to revise
-        final String phone = member.getCustomerPhone();
-        final String password = member.getCustomerPassword();
+        String phone = member.getCustomerPhone();
+        String password = member.getCustomerPassword();
 
-        if (phone == null) {
+        if (StringUtils.hasText(phone)) {
             member.setMessage("電話未輸入");
             member.setSuccessful(false);
             return member;
         }
 
-        if (password == null) {
+        if (StringUtils.hasText(password)) {
             member.setMessage("密碼未輸入");
             member.setSuccessful(false);
             return member;
@@ -96,11 +131,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Boolean isExistMember(Member member) {
-        if (ObjectUtils.isEmpty(memberDao.findMemberByPhone(member.getCustomerPhone()))) {
-            return false;
-        } else {
-            return true;
-        }
+        return !ObjectUtils.isEmpty(memberDao.findMemberByPhone(member.getCustomerPhone()));
     }
 
     @Override
