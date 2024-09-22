@@ -7,6 +7,8 @@ import idv.tia201.g2.web.member.dao.MemberDao;
 import idv.tia201.g2.web.member.service.MemberService;
 import idv.tia201.g2.web.member.vo.Member;
 import idv.tia201.g2.web.member.vo.MemberAddress;
+import idv.tia201.g2.web.user.dao.TotalUserDao;
+import idv.tia201.g2.web.user.vo.TotalUsers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +29,9 @@ public class MemberServiceImpl implements MemberService {
 
     @Autowired
     MemberAddrDao memberAddrDao;
+
+    @Autowired
+    TotalUserDao totalUserDao;
 
     @Autowired
     private SendSmsService sendSmsService;
@@ -220,6 +225,9 @@ public class MemberServiceImpl implements MemberService {
         Member queryMember = memberDao.findMemberById(memberId);
         String correctVerifyCode = queryMember.getVerifyCode();
         if (correctVerifyCode.equals(member.getVerifyCode())) {
+//            TODO NEED TO CHECK TOTAL USER INSERT
+            TotalUsers totalUser = new TotalUsers(null, 0, queryMember.getCustomerId());
+            totalUserDao.save(totalUser);
             memberDao.updateMemberInfo(queryMember.getCustomerId(),false,queryMember.getCustomerRemark());
             return true;
         } else {
