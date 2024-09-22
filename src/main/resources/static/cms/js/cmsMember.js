@@ -103,7 +103,9 @@ queryBtn.addEventListener("click", function () {
 
     }
 })
-
+function nullToEmpty(data) {
+    return (data == null) ? "" : data;
+}
 
 function getCmsMemberList() {
     let queryMemberList = "";
@@ -122,7 +124,7 @@ function getCmsMemberList() {
                         <span>${item.customerId}</span>
                     </td>
                     <td>
-                        <span>${item.customerEmail}</span>
+                        <span>${nullToEmpty(item.customerEmail)}</span>
                     </td>
                     <td>
                         <span>${item.customerPhone}</span>

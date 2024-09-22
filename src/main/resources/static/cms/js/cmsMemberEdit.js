@@ -42,10 +42,15 @@ addrCollapseBtn.addEventListener("click", function () {
     collapseIcon.classList.toggle("fa-plus");
 })
 
+function nullToEmpty(data) {
+    return (data == null) ? "" : data;
+}
+
 function loadCmsMemberInfo() {
     let sessionDetail = JSON.parse(sessionStorage.getItem("cmsMemberDetail"));
-    cmsMemberBirthdayTxt.value = sessionDetail.birthday.replaceAll("/", "-");
-    CmsMemberCreateDateTxt.value = sessionDetail.createDate.replaceAll("/", "-");
+    console.log(sessionDetail);
+    cmsMemberBirthdayTxt.value = nullToEmpty(sessionDetail.birthday).replaceAll("/", "-");
+    CmsMemberCreateDateTxt.value = nullToEmpty(sessionDetail.createDate).replaceAll("/", "-");
     cmsMemberCarrierTxt.value = sessionDetail.customerCarrier;
     cmsMemberEmailTxt.value = sessionDetail.customerEmail;
     cmsMemberMoney.value = sessionDetail.customerMoney;
@@ -103,14 +108,14 @@ function updateMemberInfo() {
         })
             .then(response => response.json())
             .then(data => {
-                if(data.successful){
+                if (data.successful) {
                     fetch(`manage/${memberId}`)
                         .then(res => res.json())
                         .then(data => {
                             sessionStorage.removeItem("cmsMemberDetail");
                             sessionStorage.setItem("cmsMemberDetail", JSON.stringify(data));
                         })
-                }else{
+                } else {
                     //TODO
 
                 }

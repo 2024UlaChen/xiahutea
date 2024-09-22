@@ -63,7 +63,6 @@ function isCheckedFalse(target) {
 function phoneValid(phone) {
     memberPhoneInput.addEventListener("input", function () {
         let phoneValue = phone.value;
-        console.log(phoneValue);
         if (phoneValue.length === 0) {
             phoneTipTxt.innerText = defaultPhoneTip;
             isCheckedSuccessOrDefult(this);
@@ -85,13 +84,13 @@ function phoneValid(phone) {
             }
         }
     })
+    return phoneRegex.test(phone.value) && phone.value.length === 10;
 }
 
 // password check
 function pwdValid(pwd, tip) {
     pwd.addEventListener("input", function () {
         let pwdValue = pwd.value;
-        console.log(pwdValue);
         if (pwdValue.length === 0) {
             tip.innerText = defaultPwdTip;
             isCheckedSuccessOrDefult(pwd);
@@ -119,11 +118,18 @@ function pwdValid(pwd, tip) {
             }
         }
     })
+    return (pwdRegex.test(pwd.value) && pwd.value.length <= 16 && pwd.value.length >= 6);
 }
 
 //pwd & rePwd check
-function checkPwd(pwd, rePwd, rePwdTipTxt) {
-
+function checkPwdMatch(pwd, rePwd, rePwdTipTxt) {
+    if (pwd.value !== rePwd.value) {
+        rePwdTipTxt.textContent = "新密碼與再次輸入不同";
+        return false;
+    } else {
+        rePwdTipTxt.textContent = defaultPwdTip;
+        return true;
+    }
 }
 
 // 忘記密碼
@@ -143,21 +149,62 @@ pwdValid(pwdInput, pwdTipTxt);
 pwdValid(rePwdInput, rePwdTipTxt);
 
 function checkIsEmpty(...args) {
-    args.forEach((item, index) => {
-        console.log(item.value);
+    let result = false;
+    args.forEach((item) => {
+        if (item.value.trim().length === 0) {
+            result = true;
+            return result;
+        }
     })
+    return result;
 }
 
 //LOGIN
 btnLogin.addEventListener("click", function () {
-    if (checkIsEmpty(memberPhoneInput, pwdInput)) {
-        Swal.fire("請輸入手機與密碼", "", "error");
+    if ((checkIsEmpty(memberPhoneInput, pwdInput))) {
+        Swal.fire("請輸入手機 & 密碼 ", "", "error");
+    } else if (!(phoneValid(memberPhoneInput) && pwdValid(pwdInput, pwdTipTxt))) {
+        Swal.fire("手機與密碼有誤，請重新確認", "", "error");
+    } else {
+        fetch(`member/login`, {
+            method: "POST",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                customerPhone: memberPhoneInput.value.trim(),
+                customerPassword: pwdInput.value.trim()
+            }),
+        }).then(res => res.json()).then(data => {
+            if (data.successful) {
+                sessionStorage.setItem("cmsMemberDetail", JSON.stringify(data));
+                location.href = "../homePage.html";
+            } else {
+                Swal.fire(data.message, "", "error");
+            }
+        });
     }
 })
 
 //REGISTER
 btnRegister.addEventListener("click", function () {
-    if (pwdInput.value.length === 0 || pwdInput.value.length === 0) {
-        Swal.fire("請輸入手機與密碼", "", "error");
+    if ((checkIsEmpty(memberNameInput, memberPhoneInput, pwdInput, rePwdInput))) {
+        Swal.fire("請輸入手機 & 密碼 & 姓名", "", "error");
+    } else if (!(phoneValid(memberPhoneInput) && pwdValid(pwdInput, pwdTipTxt) && pwdValid(rePwdInput, rePwdTipTxt))) {
+        Swal.fire("手機與密碼有誤，請重新確認", "", "error");
+    } else if (!checkPwdMatch(pwdInput, rePwdInput, rePwdTipTxt)) {
+        Swal.fire("新密碼與再次輸入不同", "", "error");
+    } else {
+        fetch(`member/register`, {
+            method: "POST",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                customerPhone: memberPhoneInput.value.trim(),
+                customerPassword: pwdInput.value.trim(),
+                nickname:memberNameInput.value.trim()
+            }),
+        }).then(res => res.json()).then(data => {
+            console.log(data);
+            console.log(data.successful);
+        })
     }
 })
+
