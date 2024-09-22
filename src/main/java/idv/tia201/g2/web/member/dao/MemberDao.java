@@ -35,7 +35,7 @@ public interface MemberDao {
     Integer deleteByMemberAddressId(Integer memberId);
 
     //create
-    boolean createMember(Member member);
+    Member createMember(Member member);
 
     boolean createMemberAddress(MemberAddress memberAddress);
 

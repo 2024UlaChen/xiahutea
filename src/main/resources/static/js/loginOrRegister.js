@@ -122,9 +122,13 @@ function pwdValid(pwd, tip) {
 }
 
 //pwd & rePwd check
-function checkPwd(pwd, rePwd, rePwdTipTxt) {
+function checkPwdMatch(pwd, rePwd, rePwdTipTxt) {
     if (pwd.value !== rePwd.value) {
-
+        rePwdTipTxt.textContent = "新密碼與再次輸入不同";
+        return false;
+    } else {
+        rePwdTipTxt.textContent = defaultPwdTip;
+        return true;
     }
 }
 
@@ -162,9 +166,18 @@ btnLogin.addEventListener("click", function () {
     } else if (!(phoneValid(memberPhoneInput) && pwdValid(pwdInput, pwdTipTxt))) {
         Swal.fire("手機與密碼有誤，請重新確認", "", "error");
     } else {
-
+        fetch(`member/login`, {
+            method: "POST",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                customerPhone: memberPhoneInput.value.trim(),
+                customerPassword:pwdInput.value.trim()
+            }),
+        }).then(res => res.json()).then(data => {
+            console.log(data);
+            console.log(data.successful);
+        });
     }
-
 })
 
 //REGISTER
@@ -173,8 +186,29 @@ btnRegister.addEventListener("click", function () {
         Swal.fire("請輸入手機 & 密碼 & 姓名", "", "error");
     } else if (!(phoneValid(memberPhoneInput) && pwdValid(pwdInput, pwdTipTxt) && pwdValid(rePwdInput, rePwdTipTxt))) {
         Swal.fire("手機與密碼有誤，請重新確認", "", "error");
-    } else if (!checkPwd(pwdInput, rePwdInput, rePwdTipTxt)) {
+    } else if (!checkPwdMatch(pwdInput, rePwdInput, rePwdTipTxt)) {
         Swal.fire("新密碼與再次輸入不同", "", "error");
+    } else {
+        fetch(`member/carrier?type=` + encodeURIComponent(type), {
+            method: "POST",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                customerCarrier: newCarrierTxt,
+                customerId: memberId,
+                type: type
+            }),
+        }).then(res => res.json()).then(data => {
+            console.log(data)
+            if (data.successful) {
+                Swal.fire("已更新載具", "", "success");
+                getCarrier(memberId);
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: data.message,
+                });
+            }
+        })
     }
 })
 

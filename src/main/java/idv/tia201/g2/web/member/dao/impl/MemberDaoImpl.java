@@ -31,7 +31,7 @@ public class MemberDaoImpl implements MemberDao {
         return session
                 .createNativeQuery(sql, Member.class)
                 .setParameter("phone", phone)
-                .getResultList().get(0);
+                .uniqueResult();
     }
 
     @Override
@@ -125,9 +125,9 @@ public class MemberDaoImpl implements MemberDao {
     }
 
     @Override
-    public boolean createMember(Member member) {
+    public Member createMember(Member member) {
         session.persist(member);
-        return true;
+        return member;
     }
 
     @Override
