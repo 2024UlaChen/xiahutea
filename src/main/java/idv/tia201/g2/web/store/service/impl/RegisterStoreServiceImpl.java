@@ -24,8 +24,8 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import static idv.tia201.g2.core.util.CopyUtil.copyPropertiesIgnoreNull;
+import static idv.tia201.g2.core.util.ValidateUtil.isValidTWBID;
 import static idv.tia201.g2.web.store.util.PasswordUtil.generateRandomString;
-import static idv.tia201.g2.web.store.util.VatUtil.isValidTWBID;
 
 @Service
 public class RegisterStoreServiceImpl implements RegisterStoreService {

@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import static idv.tia201.g2.web.store.util.PasswordUtil.checkPassword;
-import static idv.tia201.g2.web.store.util.VatUtil.isValidTWBID;
 
 @Service
 public class AdminServiceImpl implements AdminService {
