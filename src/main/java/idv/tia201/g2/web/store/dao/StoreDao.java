@@ -4,6 +4,7 @@ import idv.tia201.g2.web.store.vo.Store;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -13,12 +14,18 @@ public interface StoreDao extends JpaRepository<Store, Integer> {
     Store findByStoreId(Integer storeId);
     //模糊查詢店名  並且大小寫不敏感
     List<Store> findByStoreNameContainingIgnoreCase(String name);
+    @Query("FROM Store s WHERE s.storeStatus = 1 OR s.storeStatus = 2")
+    List<Store> findByStoreStatus();
+
     //區域模糊查詢
     List<Store> findByStoreAddressContaining(String address);
     //根據區域 和店名 模糊查詢
     List<Store> findByStoreNameContainingOrStoreAddressContaining(String name, String address);
     //登入用
     Store findByVat(String vat);
+
+
+
 
     // 依店家狀態搜尋(可複選)
     Page<Store> findByStoreStatusIn(List<Integer> statuses, Pageable pageable);

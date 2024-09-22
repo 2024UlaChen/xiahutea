@@ -42,7 +42,7 @@
                 type="text"
                 class="form-control"
                 id="vat"
-                value="12345678"
+
               />
             </div>
 
@@ -52,7 +52,7 @@
                 readonly
                 type="text"
                 class="form-control"
-                value="五十花"
+
                 id="sotreName"
               />
             </div>
@@ -62,7 +62,7 @@
                 readonly
                 type="date"
                 class="form-control"
-                value="2024-07-17"
+
                 id="register"
               />
             </div>
@@ -72,7 +72,7 @@
                 readonly
                 type="text"
                 class="form-control"
-                value="台中101大樓"
+
                 id="storeAddress"
               />
             </div>
@@ -82,7 +82,7 @@
                 readonly
                 type="text"
                 class="form-control"
-                value="0123456789"
+
                 id="storePhone"
               />
             </div>
@@ -92,7 +92,7 @@
                 readonly
                 type="time"
                 class="form-control"
-                value="10:00"
+
                 id="openingHours"
               />
             </div>
@@ -102,17 +102,17 @@
                 readonly
                 type="time"
                 class="form-control"
-                value="22:00"
+
                 id="closingHours"
               />
             </div>
             <div class="m-3">
-              <label class="form-label">臨時公休日</label>
+              <label class="form-label">公休日</label>
               <input
                 readonly
-                type="date"
+                type="text"
                 class="form-control"
-                value=""
+
                 id="rest"
               />
             </div>
@@ -169,7 +169,7 @@
                 type="email"
                 class="form-control"
                 id="storeEmail"
-                value="name@example.com"
+
               />
             </div>
             <div class="m-3">
@@ -178,7 +178,7 @@
                 disabled
                 type="text"
                 class="form-control"
-                value="李登輝"
+
                 id="contactPerson"
               />
             </div>
@@ -188,7 +188,7 @@
                 disabled
                 type="text"
                 class="form-control"
-                value="911"
+
                 id="contactPhone"
               />
             </div>
@@ -199,7 +199,7 @@
                 readonly
                 type="text"
                 class="form-control"
-                value="阿扁"
+
                 id="owner"
               />
             </div>
@@ -209,7 +209,7 @@
                 disabled
                 type="text"
                 class="form-control"
-                value="五十花集點卡"
+
                 id="loyaltyCardName"
               />
             </div>
@@ -219,7 +219,7 @@
                 disabled
                 type="text"
                 class="form-control"
-                value="500"
+
                 id="exchangeRate"
               />
               <div class="form-text">輸入多少新台幣兌換一點</div>
@@ -247,9 +247,9 @@
                 id="storeStatus"
               >
                 <option value="0">審核中</option>
-                <option value="1">審核失敗</option>
-                <option value="2">使用中</option>
-                <option value="3">停權中</option>
+                <option value="1">使用中</option>
+                <option value="2">停權中</option>
+
                 <option value="4">申請失敗</option>
               </select>
 
@@ -274,6 +274,7 @@
               <div class="col-3"></div>
             </div>
           </form>
+          <input type="hidden" id="userTypeId">
         </div>
       </div>
       <!-- Content Wrapper. Contains page content -->
@@ -308,27 +309,72 @@
         //取得storeid
         let sotreid = location.search.split("?")[1];
 
+
         $.ajax({
           url: `/store/storeinfo/${sotreid.split("=")[1]}`,
           method: "GET",
           dataType: "JSON",
           async: false,
           success: function (data) {
+
             console.log(data.successful);
             if(!data.successful){
               //登入失敗
               location.href = "./backstageLogin.html";
             }
-            fetch("/store/GetLoginType").then(data => data.json()).then(
+
+
+            fetch("/store/GetLoginType").then(resp => resp.json()).then(
                     res => {
-                      if(res.userTypeId === 1){
-                        //商家登入成功 處理側邊攔路徑
-                        console.log("店家登入成功中");
-                        document.querySelector("#storeInfoAsideLink").href= location.href;
+
+                      console.log(res);
+                      document.querySelector('#userTypeId').value= res.userTypeId;
+
+                      if(res.userTypeId !== 3){
+
                         document.querySelector('#storeListAsideLink').classList.add("d-none");
                       }
+
+
+
+                      document.querySelector("#storeInfoAsideLink").href= location.href;
+                      document.querySelector("#storeLoyaltyCardAsideLink").href=`storeInfoEditLoyaltyCard.html?storeid=${sotreid.split("=")[1]}`;
+                      document.querySelector("#storePasswordAsideLink").href=`storeInfoEditPassword.html?storeid=${sotreid.split("=")[1]}`;
+
                     }
             );
+            fetch(`/store/holidays/${sotreid.split("=")[1]}`).then(data => data.json()).then(
+                    res =>{
+                      res.forEach(function (day){
+                        document.querySelector("#rest").value += day+", "
+                      });
+                    }
+            )
+            setTimeout(() => {
+
+              //確認是否帳號違停權
+              if(data.storeStatus === 2){
+
+                if(document.querySelector('#userTypeId').value === 3){
+                  Swal.fire({text:"此商家已被停權"});
+                }
+                else{
+                  Swal.fire({
+                    text:"帳號停權，請聯絡管理員",
+                    icon:"warning",
+                    confirmButtonColor: "#3085d6",
+                    confirmButtonText: "確認"
+                  }).then(res=>{
+                    if(res.isConfirmed){
+                      // location.href = "./backstageLogin.html";
+                    }
+                  });
+                }
+
+              }
+            }, 1000);
+
+
 
 
 

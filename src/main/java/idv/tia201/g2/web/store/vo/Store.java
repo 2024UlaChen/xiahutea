@@ -101,7 +101,7 @@ public class Store extends Core {
     private String bankAccount;
 
     @Column(name = "store_status", nullable = false)
-    private Integer storeStatus;//帳號狀態: 審核中 0  審核失敗 1 使用中 2  停權中 3
+    private Integer storeStatus;//帳號狀態: 審核中 0  使用中 1 停權中 2   審核失敗 4
 
     @Column(name = "password", length = 255)
     private String password;

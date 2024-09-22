@@ -1,6 +1,7 @@
 package idv.tia201.g2.web.store.controller;
 
 
+import idv.tia201.g2.web.store.model.StoreViewModel;
 import idv.tia201.g2.web.store.service.StoreService;
 
 import idv.tia201.g2.web.store.vo.Store;
@@ -15,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 
 //RestController是組合註解 他等於Controller 加上 ResponseBody 就是一個RestController
@@ -36,7 +38,8 @@ public class StoreController {
     }
     @GetMapping("/home")
     public List<Store> Home(){
-        List<Store> storeList =  storeService.findAll();
+//        List<Store> storeList =  storeService.findAll();
+        List<Store> storeList =  storeService.GetStoreList();
         return storeList;
     }
     @GetMapping("/storeinfo/{storeId}")
@@ -85,11 +88,16 @@ public class StoreController {
     @GetMapping("/logout")
     public void Logout(HttpSession session){
         //登出
+        session.removeAttribute("totalUserDTO");
+
+
         session.removeAttribute("storeId");
         session.removeAttribute("storeName");
         session.removeAttribute("storeLogo");
         session.removeAttribute("loggedin");
         session.removeAttribute("loginType");
+        session.invalidate();
+
 
     }
 
@@ -130,18 +138,39 @@ public class StoreController {
         return storeService.findLogoById(storeid);
     }
 
+    @GetMapping("/holidays/{storeid}")
+    public List<Date> getDays(@PathVariable Integer storeid){
+        return storeService.GetStoreHolidays(storeid);
+    }
+
     @PostMapping("/storerest")
     public List<Store> StoreList(@RequestBody String date) throws ParseException {
         //列出yyyy-MM-dd沒有休息的店家
         return storeService.getStoreListWorking(date);
     }
+    @PostMapping("/storeholiday")
+    public void SaveHoliday(@RequestBody StoreViewModel data)  {
+        storeService.addStoreHolidayByDate(data.getStoreId(),data.getHoliday());
+
+    }
+
+    @GetMapping("/updateStoreStatus/{storeId}")
+    public void EditStoreStatus(HttpSession session,@PathVariable Integer storeId){
+
+        if(checkAdminLogin(session)){
+            storeService.editStoreStatus(storeId);
+        }
+    }
+
+
+
 
 
 
 
     public boolean IsStoreLogin(HttpSession session){
         TotalUserDTO data = (TotalUserDTO) session.getAttribute("totalUserDTO");
-        return data.getUserId() == 1;
+        return data.getUserTypeId() == 1;
     }
 
 
@@ -149,12 +178,25 @@ public class StoreController {
         return status;
     }
 
+    public boolean checkAdminLogin(HttpSession session){
+        if(session.getAttribute("loggedin") != null && getLoginType(session).getUserTypeId()==3){
+            return true;
+        }
+        return false;
+    }
+
 
     public boolean checkStoreLogin(HttpSession session,Integer storeId){
-        //登入中 是 商家登入 是 該商家
+        //登入中 是 商家登入 是 該商家 或是 管理員
         if(session.getAttribute("loggedin") != null){
+            var seesee = getLoginType(session).getUserId();
+
+            if(getLoginType(session).getUserTypeId()==3){
+                return true;
+            }
             boolean status = (boolean) session.getAttribute("loggedin");
             String loginType = (String) session.getAttribute("loginType");
+            
 
             return IsLogin(status) && IsStoreLogin(session) && session.getAttribute("storeId").equals(storeId);
 
@@ -171,6 +213,8 @@ public class StoreController {
 
 
     }
+
+
 
 
 }

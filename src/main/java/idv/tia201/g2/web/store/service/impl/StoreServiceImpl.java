@@ -104,6 +104,11 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
+    public List<Store> GetStoreList() {
+        return storeDao.findByStoreStatus();
+    }
+
+    @Override
     public List<Store> findAll(Pageable pageable) {
 
         return storeDao.findAll(pageable).getContent();
@@ -170,10 +175,15 @@ public class StoreServiceImpl implements StoreService {
     public Store editStoreLoyaltyCard(Store store) {
         Store oldDate = findStoreById(store.getStoreId());
         oldDate.setLoyaltyCardName(store.getLoyaltyCardName());
+
         oldDate.setExchangeRate(store.getExchangeRate());
         oldDate.setValidStatus(store.getValidStatus());
         if(store.getValidStatus()){
             oldDate.setExpiredDate(null);
+            //激活中 但未設定兌換比例 預設100元一點
+            if(oldDate.getExchangeRate() == null){
+                oldDate.setExchangeRate(100);
+            }
         }else{
             //當下時間加半年
             Timestamp now = new Timestamp(System.currentTimeMillis());
@@ -184,6 +194,20 @@ public class StoreServiceImpl implements StoreService {
             oldDate.setExpiredDate(now);
         }
         return storeDao.save(oldDate);
+    }
+
+    @Override
+    public Store editStoreStatus(Integer storeId) {
+        Store data = findStoreById(storeId);
+        if(data.getStoreStatus() == 1){
+            data.setStoreStatus(2);
+            return storeDao.save(data);
+        }
+        if(data.getStoreStatus() == 2){
+            data.setStoreStatus(1);
+            return storeDao.save(data);
+        }
+        return null;
     }
 
     @Override
@@ -206,11 +230,12 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public void addStoreHolidayByDate(Store store, Date holiday) {
+    public void addStoreHolidayByDate(Integer storeId, Date holiday) {
         StoreCalendar data = new StoreCalendar();
 
 
-        data.setStoreId(store.getStoreId());
+        data.setStoreId(storeId);
+        data.setStoreHoliday(holiday);
         storeCalendarRepository.save(data);
 
     }
@@ -265,6 +290,11 @@ public class StoreServiceImpl implements StoreService {
         item.setLogo(store.getLogo());
         return item;
 
+    }
+
+    @Override
+    public List<Date> GetStoreHolidays(Integer StoreId) {
+        return storeCalendarRepository.findStoreCalendarsByStoreId(StoreId);
     }
 
 

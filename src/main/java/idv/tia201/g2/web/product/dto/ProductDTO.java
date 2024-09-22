@@ -7,8 +7,11 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Map;
+
 @Data
-@Builder
+
 
 public class ProductDTO {
 
@@ -18,6 +21,7 @@ public class ProductDTO {
         private Integer productStoreId;
         private Integer productCategoryId;
         private MultipartFile productPictureFile;
+        private String size;
         private boolean normalIce;
         private boolean lessIce;
         private boolean iceFree;
@@ -34,9 +38,11 @@ public class ProductDTO {
         private boolean coconutJelly;
         private boolean taro;
         private boolean herbalJelly;
-        private String size;
 
         // Getters and Setters
+
+
+
     }
 
 
