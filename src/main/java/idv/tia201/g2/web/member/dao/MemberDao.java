@@ -35,10 +35,13 @@ public interface MemberDao {
     Integer deleteByMemberAddressId(Integer memberId);
 
     //create
-    Member createMember(Member member);
+    void createMember(Member member);
 
     boolean createMemberAddress(MemberAddress memberAddress);
 
     Integer updateMemberCarrierById(Integer memberId, String memberCarrier);
+
+    Integer updateVerifyCodeById(Integer memberId, String verifyCode);
+
 
 }
