@@ -1,5 +1,6 @@
 package idv.tia201.g2.web.member.controller;
 
+import idv.tia201.g2.core.pojo.Core;
 import idv.tia201.g2.web.member.service.MemberService;
 import idv.tia201.g2.web.member.service.impl.SendSmsService;
 import idv.tia201.g2.web.member.vo.Member;
@@ -14,7 +15,8 @@ public class RegisterController {
     private MemberService memberService;
 
     @PostMapping
-    public Member register(@RequestBody Member member) {
+    public Core register(@RequestBody Member member) {
+        Core core = new Core();
         if (member == null) {
             member = new Member();
             member.setMessage("register - no member data");
@@ -23,13 +25,26 @@ public class RegisterController {
         }
         Member memberResult = memberService.register(member);
         System.out.println(memberResult);
+
         return memberResult;
     }
 
     @PostMapping("check")
-    public Boolean checkVerifyCode(@RequestParam String phone, @RequestParam String verifyCode) {
-
-        return true;
+    public Core checkVerifyCode(@RequestBody Member member) {
+        Core core = new Core();
+        if (member == null) {
+            core.setSuccessful(false);
+            core.setMessage("input data error");
+            return core;
+        }
+        if (memberService.isCorrectVerifyCode(member)) {
+            core.setSuccessful(false);
+            core.setMessage("verify code is correct");
+        } else {
+            core.setSuccessful(false);
+            core.setMessage("verify code is incorrect");
+        }
+        return core;
     }
 
 }
