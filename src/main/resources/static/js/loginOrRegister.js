@@ -175,7 +175,7 @@ btnLogin.addEventListener("click", function () {
             }),
         }).then(res => res.json()).then(data => {
             if (data.successful) {
-                sessionStorage.setItem("cmsMemberDetail", JSON.stringify(data));
+                sessionStorage.setItem("memberData", JSON.stringify(data));
                 location.href = "../homePage.html";
             } else {
                 Swal.fire(data.message, "", "error");
