@@ -33,8 +33,6 @@ public class MemberServiceImpl implements MemberService {
 
     public EncrypSHA encrypSHA;
 
-    public static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
     @Override
     public Member register(Member member) {
         String phone = member.getCustomerPhone();
