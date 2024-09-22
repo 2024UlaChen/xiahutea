@@ -12,23 +12,26 @@ public class SendSmsService {
     //     Find your Account Sid and Token at twilio.com/console
     @Value("${XiaHuTea.sms.user}")
     public String ACCOUNT_SID;
+
     @Value("${XiaHuTea.sms.token}")
     public String AUTH_TOKEN;
-    public static final String messageHeader = "XiaHuTea verify code is : ";
 
+    public static final String MESSAGE_HEADER = "XiaHuTea verify code is : ";
 
-    public void sendSMS(String phoneNumber, Integer memberId) {
+    public String sendSMS(String phoneNumber) {
         Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
         StringBuilder sb = new StringBuilder();
-        sb.append(messageHeader);
-        sb.append(randomToken());
-        System.out.println(memberId);
+        String token = randomToken();
+        sb.append(MESSAGE_HEADER);
+        sb.append(token);
         System.out.println(sb.toString());
         Message message = Message.creator(
                         new com.twilio.type.PhoneNumber(phoneNumber),
                         new com.twilio.type.PhoneNumber("+14695759239"), sb.toString())
                 .create();
+        System.out.println(message.getSid());
         System.out.println(message);
+        return token;
     }
 
     public String randomToken() {

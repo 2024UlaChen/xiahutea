@@ -1,6 +1,7 @@
 package idv.tia201.g2.web.member.service.impl;
 
 import idv.tia201.g2.core.util.EncrypSHA;
+import idv.tia201.g2.core.util.ValidateUtil;
 import idv.tia201.g2.web.member.dao.MemberAddrDao;
 import idv.tia201.g2.web.member.dao.MemberDao;
 import idv.tia201.g2.web.member.service.MemberService;
@@ -40,8 +41,8 @@ public class MemberServiceImpl implements MemberService {
         String memberName = member.getNickname();
         //todo need to revise + Matcher
 //        檢核欄位資料不可為空
-        if (!StringUtils.hasText(phone)) {
-            member.setMessage("手機未輸入");
+        if (!StringUtils.hasText(phone) || ValidateUtil.checkCellphone(phone)) {
+            member.setMessage("手機未輸入或格式錯誤");
             member.setSuccessful(false);
             return member;
         }
@@ -69,7 +70,8 @@ public class MemberServiceImpl implements MemberService {
             member.setUpdateDate(Date.valueOf(date));
 
 //            TODO - ADD VERIFY CODE  + updateDb
-//            sendSmsService.sendSMS(phone,);
+            String verifyCode = sendSmsService.sendSMS(phone);
+            member.setVerifyCode(verifyCode);
 
             return memberDao.createMember(member);
         }
@@ -200,4 +202,16 @@ public class MemberServiceImpl implements MemberService {
     public Integer updateMemberCarrier(Member member) {
         return memberDao.updateMemberCarrierById(member.getCustomerId(), member.getCustomerCarrier());
     }
+
+    @Override
+    public Boolean isCorrectVerifyCode(Member member) {
+//        TODO
+        Integer memberId = member.getCustomerId();
+        if (memberId != null) {
+            return false;
+        }
+        String correctVerifyCode = memberDao.findMemberById(memberId).getVerifyCode();
+        return correctVerifyCode.equals(member.getVerifyCode());
+    }
+
 }
