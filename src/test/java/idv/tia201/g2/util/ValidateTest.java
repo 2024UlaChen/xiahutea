@@ -8,10 +8,19 @@ import java.util.List;
 
 public class ValidateTest {
     @Test
-    public void test() {
-        List<String> carreierList = Arrays.asList("/123-456", "/-------", "/+++++++", "/.......", "/AAAAAAA", "/1222222", "aaa", "/12345678");
+    public void testCellphone() {
         List<String> cellphoneList = Arrays.asList("0123456789", "0912345678", "09123456789", "091234567a");
+        for (String cellphone : cellphoneList) {
+            if (!ValidateUtil.checkCellphone(cellphone)) {
+                System.out.println(ValidateUtil.checkCellphone(cellphone));
+                System.out.println(cellphone);
+            }
+        }
+    }
 
+    @Test
+    public void testCarrier() {
+        List<String> carreierList = Arrays.asList("/123-456", "/-------", "/+++++++", "/.......", "/AAAAAAA", "/1222222", "aaa", "/12345678");
         for (String carrier : carreierList) {
             if (!ValidateUtil.checkCarrier(carrier)) {
                 System.out.println(ValidateUtil.checkCarrier(carrier));
@@ -19,5 +28,4 @@ public class ValidateTest {
             }
         }
     }
-
 }
