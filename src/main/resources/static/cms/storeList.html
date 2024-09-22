@@ -233,12 +233,12 @@
         $.ajax({
           url:"/store/GetLoginType",
           method: "GET",
-          //dataType: "JSON",
+
           async: false,
           success:function (data){
 
             console.log(data);
-            if(data==="" || data.userTypeId != 3){
+            if(data==="" || data.userTypeId !== 3){
               Swal.fire({
                 title:"此頁面需要管理員權限，即將導向管理員登入頁面",
                 icon:"warning",
@@ -247,6 +247,7 @@
               }).then(
                       (res) => {
                         if(res.isConfirmed){
+
                           location.href ="./backstageLogin.html";
                         }
 

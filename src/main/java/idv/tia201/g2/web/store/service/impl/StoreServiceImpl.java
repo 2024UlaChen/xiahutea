@@ -199,13 +199,15 @@ public class StoreServiceImpl implements StoreService {
     @Override
     public Store editStoreStatus(Integer storeId) {
         Store data = findStoreById(storeId);
-        if(data.getStoreStatus() == 2){
-            data.setStoreStatus(3);
-        }
-        if(data.getStoreStatus() == 3){
+        if(data.getStoreStatus() == 1){
             data.setStoreStatus(2);
+            return storeDao.save(data);
         }
-        return storeDao.save(data);
+        if(data.getStoreStatus() == 2){
+            data.setStoreStatus(1);
+            return storeDao.save(data);
+        }
+        return null;
     }
 
     @Override

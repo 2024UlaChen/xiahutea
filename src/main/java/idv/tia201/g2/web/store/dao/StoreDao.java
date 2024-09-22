@@ -14,7 +14,7 @@ public interface StoreDao extends JpaRepository<Store, Integer> {
     Store findByStoreId(Integer storeId);
     //模糊查詢店名  並且大小寫不敏感
     List<Store> findByStoreNameContainingIgnoreCase(String name);
-    @Query("FROM Store s WHERE s.storeStatus = 2 OR s.storeStatus = 3")
+    @Query("FROM Store s WHERE s.storeStatus = 1 OR s.storeStatus = 2")
     List<Store> findByStoreStatus();
 
     //區域模糊查詢

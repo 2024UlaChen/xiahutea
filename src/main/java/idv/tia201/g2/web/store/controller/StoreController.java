@@ -38,8 +38,8 @@ public class StoreController {
     }
     @GetMapping("/home")
     public List<Store> Home(){
-        List<Store> storeList =  storeService.findAll();
-//        List<Store> storeList =  storeService.GetStoreList(); 待確認帳號狀態
+//        List<Store> storeList =  storeService.findAll();
+        List<Store> storeList =  storeService.GetStoreList();
         return storeList;
     }
     @GetMapping("/storeinfo/{storeId}")
@@ -88,11 +88,16 @@ public class StoreController {
     @GetMapping("/logout")
     public void Logout(HttpSession session){
         //登出
+        session.removeAttribute("totalUserDTO");
+
+
         session.removeAttribute("storeId");
         session.removeAttribute("storeName");
         session.removeAttribute("storeLogo");
         session.removeAttribute("loggedin");
         session.removeAttribute("loginType");
+        session.invalidate();
+
 
     }
 
@@ -165,7 +170,7 @@ public class StoreController {
 
     public boolean IsStoreLogin(HttpSession session){
         TotalUserDTO data = (TotalUserDTO) session.getAttribute("totalUserDTO");
-        return data.getUserId() == 1;
+        return data.getUserTypeId() == 1;
     }
 
 
@@ -191,7 +196,7 @@ public class StoreController {
             }
             boolean status = (boolean) session.getAttribute("loggedin");
             String loginType = (String) session.getAttribute("loginType");
-
+            
 
             return IsLogin(status) && IsStoreLogin(session) && session.getAttribute("storeId").equals(storeId);
 
