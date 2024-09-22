@@ -28,7 +28,11 @@ public class MemberServiceImpl implements MemberService {
     @Autowired
     MemberAddrDao memberAddrDao;
 
+    @Autowired
+    private SendSmsService sendSmsService;
+
     public EncrypSHA encrypSHA;
+
     public static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
     @Override
@@ -68,7 +72,9 @@ public class MemberServiceImpl implements MemberService {
             member.setCreateDate(Date.valueOf(date));
             member.setUpdateDate(Date.valueOf(date));
 
-//            TODO - ADD VERIFY CODE
+//            TODO - ADD VERIFY CODE  + updateDb
+//            sendSmsService.sendSMS(phone,);
+
             return memberDao.createMember(member);
         }
     }

@@ -1,6 +1,7 @@
 package idv.tia201.g2.web.member.controller;
 
 import idv.tia201.g2.web.member.service.MemberService;
+import idv.tia201.g2.web.member.service.impl.SendSmsService;
 import idv.tia201.g2.web.member.vo.Member;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
