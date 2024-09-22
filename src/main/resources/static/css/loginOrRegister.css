@@ -1,0 +1,203 @@
+.body {
+    margin: 0 auto;
+}
+
+.main-content {
+    padding-bottom: 0;
+}
+
+
+.main {
+    border-radius: 5px;
+    margin: 0 auto;
+    margin-top: 5%;
+    margin-bottom: 5%;
+    max-width: 400px;
+    padding: 2%;
+    padding-bottom: 1%;
+    background-color: white;
+    text-align: center;
+    box-shadow: 0 0 12px 0 rgba(2, 2, 2, 0.16);
+}
+
+.section div {
+    margin-bottom: 2%;
+}
+
+.loginForm, .registerForm {
+    text-align: left;
+    margin-bottom: 2%;
+}
+
+.loginForm div, .registerForm div {
+    margin-bottom: 1%;
+}
+
+.block {
+    display: flex;
+    align-items: center;
+    border: 1px solid #c8cacc;
+    border-radius: 5px;
+    padding-left: 5%;
+    padding-right: 1%;
+}
+
+.loginForm input, .registerForm input {
+    width: 100%;
+    border: 1px transparent solid;
+}
+
+.block:hover {
+    border: 1px #6c757d solid;
+
+}
+
+.loginForm span, .registerForm span {
+    font-size: 14px;
+}
+
+/*切換註冊和登入*/
+#toggleLink {
+    color: #73B4BA;
+}
+
+#toggleLink:hover {
+    font-weight: bold;
+    color: #73B4BA;
+    cursor: pointer;
+}
+
+
+/*忘記密碼*/
+#forgetPwd {
+    color: #6c757d;
+}
+
+#forgetPwd:hover {
+    color: #dc3545;
+    cursor: pointer;
+}
+
+/*條款*/
+.specialRule {
+    margin-top: 20%;
+}
+
+.specialRule a {
+    text-decoration: underline;
+    color: #6c757d;
+}
+
+.specialRule a:hover {
+    font-weight: bold;
+    text-decoration: underline;
+    color: #6c757d;
+}
+
+/*forgetPwd*/
+.forgetPwd div{
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+.forgetPwd div input {
+    width: 100%;
+    border: 1px transparent solid;
+}
+.forgetPwd  span{
+    display: block;
+    text-align: left;
+    horiz-align: left;
+    font-size: 14px;
+
+}
+
+/*button setting*/
+.btn {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 40px;
+    font-size: 16px;
+    margin-right: 1%;
+    border-radius: 5px;
+}
+
+.btnSave, .btnLogin, .btnLogin:active:focus, .btnLogin:focus ,.btnSave:active:focus, .btnSave:focus {
+    background-color: #73B4BA;
+    border: 1px solid #73B4BA;
+    color: white;
+    outline: 1px solid #73B4BA;
+
+}
+
+.btnLogin, .btnRegister, .btnError {
+    width: 100%;
+}
+
+
+.btnSave:hover, .btnLogin:hover {
+    background-color: white;
+    border: 1px solid #73B4BA;
+    color: #73B4BA;
+}
+
+.btnEdit, .btnRegister, .btnRegister:active:focus, .btnRegister:focus {
+    background-color: #FAC792;
+    border: 1px solid #FAC792;
+    outline: 1px solid #FAC792;
+    color: white;
+}
+
+.btnEdit:hover, .btnRegister:hover {
+    background-color: white;
+    border: 1px solid #FAC792;
+    color: #f38f27;
+}
+
+.btnCancel, .btnDownload, .btnQuery ,.btnQuery:active:focus, .btnQuery:focus {
+    background-color: #6c757d;
+    border: 1px solid #6c757d;
+    color: white;
+}
+
+.btnCancel:hover, .btnDownload:hover, .btnQuery:hover {
+    background-color: white;
+    border: 1px solid #6c757d;
+    color: #6c757d;
+}
+
+.btnError {
+    background-color: #dc3545;
+    border: 1px solid #dc3545;
+    color: white;
+}
+
+.btnError:hover {
+    background-color: white;
+    border: 1px solid #dc3545;
+    color: #dc3545;
+}
+
+.hidden {
+    display: none;
+}
+
+.off {
+    display: inline-block;
+    visibility: hidden;
+}
+
+
+/*valid*/
+.checkInValid {
+    border: 1px solid #dc3545;
+}
+
+.checkInValid:hover {
+    border: 2px solid #dc3545;
+}
+
+.checkInValidTxt {
+    color: #dc3545;
+    font-weight: bold;
+}

@@ -14,30 +14,20 @@ public class OrderDetailDaoImpl implements OrderDetailDao {
     @PersistenceContext
     private Session session;
 
-    // FINISH
-    // 後台訂單明細
+    // todo
+    @Override
+    public int insert(OrderDetail orderDetail) {
+        session.merge(orderDetail);
+        return 1;
+    }
+
+    // ------- FINISH ---------------------------
+    // 前台 訂單明細 顯示
     @Override
     public List<OrderDetail> selectByOrderId(int orderId) {
         String hql = "FROM OrderDetail WHERE orderId= :orderId";
         TypedQuery<OrderDetail> query = session.createQuery(hql, OrderDetail.class)
                 .setParameter("orderId", orderId);
         return query.getResultList();
-    }
-
-    // todo
-    @Override
-    public List<OrderDetail> selectCustomerId(int customerId) {
-        String hql = "FROM OrderDetail WHERE customerId= :customerId";
-        TypedQuery<OrderDetail> query = session.createQuery(hql, OrderDetail.class)
-                .setParameter("customerId", customerId);
-        return query.getResultList();
-    }
-
-    //---------------------------------------------
-    // TODO
-    @Override
-    public int insert(OrderDetail orderDetail) {
-        session.merge(orderDetail);
-        return 1;
     }
 }

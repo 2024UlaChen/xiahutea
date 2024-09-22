@@ -24,7 +24,6 @@
   <link rel="stylesheet" href="assets/css/mobile-menu.css">
   <link rel="stylesheet" href="assets/fonts/flaticon/flaticon.css">
   <link rel="stylesheet" href="assets/css/style.css">
-  <!--    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">-->
   <!-- SweetAlert2 CSS樣式 -->
   <link rel="stylesheet" href="/cms/plugins/sweetalert2/sweetalert2.css">
 
@@ -41,58 +40,47 @@
           border-radius: 50%;
           color: #73B4BA;
       }
-
       .header-user-links li {
           display: inline-block;
       }
-
       .header-user-links i {
           border-radius: 50%;
           font-size: 20px;
           margin-left: 10px;
       }
-
       .query-bar a {
           margin-left: 10px;
           margin-right: 10px;
           border-radius: 50%;
       }
-
       .query-bar input {
           background-color: white;
           width: 80%;
       }
-
       #query-member {
           min-width: 200px;
           padding-left: 10px;
       }
-
       #query-member li {
           min-width: 100%;
       }
-
       #query-member img {
           width: 100%;
       }
-
       #query-member .account-list {
           margin-top: 10%;
       }
-
       .reset-margin {
           margin: 0;
           margin-top: 2%;
           background-color: #f5f5f5;
       }
-
       .member-aside {
           width: 30%;
           height: 100%;
           margin: 0 auto;
           /* background-color: #f8f8f8; */
       }
-
       .member-introduction {
           margin: 0 auto;
           margin-right: 30px;
@@ -102,12 +90,10 @@
           padding-left: 20px;
           background-color: white;
       }
-
       .member-introduction div {
           text-align: center;
           overflow: hidden;
       }
-
       .member-list {
           margin-right: 30px;
           margin-top: 50px;
@@ -117,36 +103,31 @@
           padding-left: 60px;
           background-color: white;
       }
-
       .member-list li {
           height: 60px;
           font-size: 18px;
           text-align: left;
           list-style-type: none;
       }
-
       .warn {
           display: inline;
           color: #ff5e7d;
       }
-
       .remind {
           color: #9b9b9b;
           font-size: 12px;
       }
-
       .userPhoto {
           margin: 0 auto;
           display: inline-block;
           width: 30%;
           border-radius: 50%;
       }
-
       .sex {
           font-size: 16px;
           display: block;
       }
-
+      /*----------------------*/
 
       /*訂單明細區塊*/
       /* 整個區塊 */
@@ -500,12 +481,12 @@
             <div id="store_info">
               <!--  JS              -->
             </div>
-
             <div class="order_info">
               <table class="order_info_tb">
-                <!-- JS                               -->
+                <!-- JS             -->
               </table>
             </div>
+
             <!-- 訂單評分燈箱 -->
             <div id="lightbox_star" class="none">
               <form>
@@ -553,8 +534,7 @@
 <script src="assets/js/jquery.scrollbar.min.js"></script>
 <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyC3nDHy1dARR-Pa_2jjPCjvsOR4bcILYsM'></script>
 <script src="assets/js/frontend-plugin.js"></script>
-<!--<script src="assets/js/newjs.js"></script>-->
-<script src="./js/general.js"></script>
+<script src="assets/js/newjs.js"></script>
 <!--star-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
 <!-- sweet alert  -->
@@ -568,34 +548,29 @@
         // 0. 顯示明細
         init();
 
-        // todo 待session完成後再更改orderId
         function init() {
-            // let orderId = getQueryParam(param);
-            // if (orderId) {
-            fetch(`/order/member/detail/20`)
-              .then(response => response.json())
-              .then(data => showDB(data))
-              .catch((error) => {
-                  console.log("錯誤原因:" + error);
-              });
-            // } else {
-            //     console.error("訂單號碼錯誤");
-            // }
+            let orderId = getQueryParam("orderId");
+            if (orderId) {
+                fetch(`/order/member/detail/${orderId}`)
+                    .then(resp => resp.json())
+                    .then(data => showDB(data))
+                    .catch((error) => {
+                        console.log("錯誤原因:" + error);
+                    });
+            }
         }
-
         // 取得URL的查詢參數
         function getQueryParam(param) {
             let urlParams = new URLSearchParams(window.location.search);
             return urlParams.get(param);
         }
 
-        // todo
-        // 待確認logo
+        // todo 待確認logo
         function showDB(data) {
             let storeInfoHtml;
             storeInfoHtml = `
                  <div class="store_logo">
-                    <img class="store_logo_img" src=${data.orders.store.logo} alt="店家logo">
+                    <img class="store_logo_img" src="data:${data.orders.store.contentType};base64,${data.orders.store.logo}" alt="店家logo">
                 </div>
                 <div class="store_detail">
                     <div class="store_name">${data.orders.store.storeName}</div>
@@ -612,7 +587,6 @@
             `;
             const store_info_el = document.getElementById("store_info");
 
-            //-------------------------------------------------------------------
             let orderInfoHtml;
             orderInfoHtml = `
                 <tbody>
@@ -667,6 +641,7 @@
                 </tbody>
         `;
             document.getElementsByClassName("order_info_tb")[0].innerHTML = orderInfoHtml;
+            //-------------------------------------------------------------------
 
             if (store_info_el) {
                 store_info_el.innerHTML = storeInfoHtml;
@@ -694,19 +669,17 @@
                     if (receiver_date_2day < now_date) {
                         btn_dispute_apply.classList.add("-close");
                         btn_dispute_apply.setAttribute("disabled", "disabled");
-                        btn_dispute_apply.innerHTML = "已送爭議";
+                        btn_dispute_apply.innerHTML = "訂單完成";
                     }
                 }
 
-                // todo: 待後端完成 check變數連結
                 // 1.2 爭議btn 可點擊時 link爭議申請表
                 btn_dispute_apply.addEventListener("click", function () {
-                    // console.log('爭議申請按鈕點擊');
-                    location.href = "./orderDispute.html?orderId=${odrerId}";
+                    location.href = `./orderDispute.html?orderId=${data.orders.orderId}`;
                 });
 
                 // 1.3 如果後端已有爭議資料 更改 鎖定爭議btn
-                if(data.disputeOrder.disputeOrderId){
+                if(data.disputeOrder && data.disputeOrder.disputeOrderId){
                     btn_dispute_apply.classList.add("-close");
                     btn_dispute_apply.setAttribute("disabled", "disabled");
                     btn_dispute_apply.innerHTML="已送爭議";
@@ -735,7 +708,7 @@
             for (let i = 0; i < detailList.length; i++) {
                 productHtml += `
                 <ul class="product_ul">
-                    <div class="product_name">${detailList[i].product.productName}  ( ${productSizeText(detailList[i].product.size)} )</div>
+                    <div class="product_name">${detailList[i].product.productName}  ( ${detailList[i].product.size} )</div>
                     <span>${detailList[i].productSugar} / ${detailList[i].productTemperature} / ${detailList[i].productAddMaterials} / $ ${detailList[i].productPrice} / ${detailList[i].productQuantity} 項</span>
                 </ul>
             `;
@@ -770,27 +743,29 @@
                 // 2. btn 訂單評分
                 // 2.0 判斷燈箱 btn狀態  disabled css樣式
                 const btn_order_star = store_info_el.querySelector(".btn_order_star");
-                if (data.orders.orderScore != null){
-                    btn_order_star.classList.add("-close");
-                    btn_order_star.setAttribute("disabled", "disabled");
-                    btn_order_star.innerHTML = "完成評分";
+                if(btn_order_star){
+                    if (data.orders.orderScore != null){
+                        btn_order_star.classList.add("-close");
+                        btn_order_star.setAttribute("disabled", "disabled");
+                        btn_order_star.innerHTML = "評分完成";
+                    }
+                    // 2.1 燈箱操作 > 打開燈箱
+                    let lightbox_el = document.getElementById("lightbox_star");
+                    btn_order_star.addEventListener("click", function () {
+                        lightbox_el.classList.remove("none");
+                    });
+                    // 2.2 燈箱操作 > 關閉燈箱
+                    const btn_star_close = document.getElementById("btn_star_close");
+                    btn_star_close.addEventListener("click", function () {
+                        lightbox_el.classList.add("none");
+                    });
+                    lightbox_el.addEventListener("click", function () {
+                        this.classList.add("none");
+                    });
+                    lightbox_el.querySelector("form").addEventListener("click", function (e) {
+                        e.stopPropagation();
+                    });
                 }
-                // 2.1 燈箱操作 > 打開燈箱
-                let lightbox_el = document.getElementById("lightbox_star");
-                btn_order_star.addEventListener("click", function () {
-                    lightbox_el.classList.remove("none");
-                });
-                // 2.2 燈箱操作 > 關閉燈箱
-                const btn_star_close = document.getElementById("btn_star_close");
-                btn_star_close.addEventListener("click", function () {
-                    lightbox_el.classList.add("none");
-                });
-                lightbox_el.addEventListener("click", function () {
-                    this.classList.add("none");
-                });
-                lightbox_el.querySelector("form").addEventListener("click", function (e) {
-                    e.stopPropagation();
-                });
 
                 // 2.1.1 打開燈箱 > 評分星星點擊
                 let span_el;
@@ -824,35 +799,41 @@
                         };
 
                         // todo: 待確認${orderId}
-                        fetch(`/order/member/star/20`, {
-                            method: "PUT",
-                            headers: {
-                                'Content-Type': 'application/json' // 設置內容類型為 JSON
-                            },
-                            body: JSON.stringify(star_data) // 將資料轉為 JSON 格式
-                        })
-                            .then(res => res.json())
-                            .then(data => {
-                                if (data.successful) {
-                                    console.log(data.message);
-                                    Swal.fire("已送出評分", "", "success");
-                                    btn_order_star.classList.add("-close");
-                                    btn_order_star.setAttribute("disabled", "disabled");
-                                    btn_order_star.innerHTML = "完成評分";
-                                    btn_star_close.click();
-                                }else {
-                                    console.log(data.message);
-                                    Swal.fire("評分失敗");
-                                    btn_star_close.click();
-                                }
-                            }).catch((error) => {
-                            console.error("錯誤原因2：", error);
-                        });
+                        let orderId = getQueryParam("orderId");
+                        if (orderId) {
+                            fetch(`/order/member/star/${orderId}`, {
+                                method: "PUT",
+                                headers: {
+                                    'Content-Type': 'application/json' // 設置內容類型為 JSON
+                                },
+                                body: JSON.stringify(star_data) // 將資料轉為 JSON 格式
+                            })
+                                .then(res => res.json())
+                                .then(data => {
+                                    if (data.successful) {
+                                        console.log(data.message);
+                                        Swal.fire({
+                                            title: '已送出評分',
+                                            text: '',
+                                            icon: 'success',
+                                            showConfirmButton: true  // 確認按鈕
+                                        }).then(() => {
+                                            btn_star_close.click();
+                                            location.reload();
+                                        });
+                                    }else {
+                                        console.log(data.message);
+                                        Swal.fire("評分失敗");
+                                        btn_star_close.click();
+                                    }
+                                }).catch((error) => {
+                                console.error("錯誤原因2：", error);
+                            });
+                        }
                     } else {
                         Swal.fire("至少需完成評分", "", "error");
                     }
                 });
-
                 // 2.1.2.0 方法-檢查&回傳星星數
                 function getStar() {
                     if (!span_el) {
@@ -860,9 +841,16 @@
                     }
                     return Number.parseInt(span_el.getAttribute("data-star"), 10);
                 }
+
+                // todo 待更改 customerId
+                // 3. btn 回上一頁
+                const order_btn_back = document.getElementsByClassName("order_btn_back")[0];
+                order_btn_back.addEventListener("click", function () {
+                    location.href = `./orderList.html?customerId=1`;
+                });
             }
         }
-
+        //=========================================================================================
         // todo 待確認 key & value
         function statusText(statusNum) {
             switch (statusNum) {
@@ -874,16 +862,6 @@
                     return "正在外送";
                 case 4 :
                     return "訂單完成";
-            }
-        }
-        function productSizeText(sizeNum) {
-            switch (sizeNum) {
-                case "1" :
-                    return "小杯";
-                case "2" :
-                    return "大杯";
-                default:
-                    return "";
             }
         }
         function paymentMethodText() {
@@ -916,14 +894,6 @@
                 return "";
             }
         }
-
-        //=========================================================================================
-        // 3. btn 回上一頁
-        const order_btn_back = document.getElementsByClassName("order_btn_back")[0];
-        order_btn_back.addEventListener("click", function () {
-            history.back();
-        });
-        //=========================================================================================
     });
 </script>
 </body>

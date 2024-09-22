@@ -2,6 +2,8 @@ package idv.tia201.g2.web.order.service.impl;
 
 import java.sql.Timestamp;
 import java.util.List;
+import idv.tia201.g2.web.member.dao.MemberDao;
+import idv.tia201.g2.web.member.vo.Member;
 import idv.tia201.g2.web.order.dao.DisputeDao;
 import idv.tia201.g2.web.order.dao.OrderDao;
 import idv.tia201.g2.web.order.dao.OrderDetailDao;
@@ -30,28 +32,15 @@ public class DisputeServiceImpl implements DisputeService {
     private OrderDetailDao orderDetailDao;
 
     @Autowired
+    private MemberDao memberDao;
+
+    @Autowired
     private OrderMappingUtil orderMappingUtil;
 
-    // FINISH
-    // 後台 爭議列表
+    // todo 退款錢包
+    // -------- FINISH ---------------------------------
+    // 前台 爭議表格 顯示
     @Override
-    public List<DisputeOrder> findAll() {
-        return disputeDao.selectAll();
-    }
-
-    // 後台 爭議明細
-    @Override
-    public OrderDto findByDisputeOrderId(int disputeOrderId) {
-        DisputeOrder disputeOrder = disputeDao.selectByDisputeId(disputeOrderId);
-        if(disputeOrder == null) {
-            return null;
-        }
-        Orders order = orderDao.selectByOrderId(disputeOrder.getOrderId());
-        List<OrderDetail> orderDetails = orderDetailDao.selectByOrderId(disputeOrder.getOrderId());
-        return orderMappingUtil.createOrderDto(order, disputeOrder, orderDetails);
-    }
-
-    // 前台 爭議申請 顯示
     public OrderDto findByOrderId(int orderId) {
         Orders order = orderDao.selectByOrderId(orderId);
         List<OrderDetail> orderDetails = orderDetailDao.selectByOrderId(orderId);
@@ -62,9 +51,15 @@ public class DisputeServiceImpl implements DisputeService {
         return orderMappingUtil.createOrderDto(order, disputeOrder, orderDetails);
     }
 
-    // 前台 爭議申請 新增
+    // 前台 爭議表格 申請
     @Override
     public DisputeOrder add(DisputeOrder disputeOrder) {
+        Member member = memberDao.findMemberById(disputeOrder.getCustomerId()); // 查找會員
+        if(member == null) {
+            disputeOrder.setMessage("申請失敗，無此會員ID");
+            disputeOrder.setSuccessful(false);
+            return disputeOrder;
+        }
         if(!(isEmpty(disputeOrder.getDisputeOrderId()))) {
             disputeOrder.setMessage("申請失敗，已有爭議資料");
             disputeOrder.setSuccessful(false);
@@ -80,9 +75,7 @@ public class DisputeServiceImpl implements DisputeService {
             disputeOrder.setSuccessful(false);
             return disputeOrder;
         }
-        disputeOrder.setOrderId(disputeOrder.getOrderId());
         disputeOrder.setDisputeStatus(1);
-        disputeOrder.setDisputeReason(disputeOrder.getDisputeReason());
         disputeOrder.setApplyDatetime(new Timestamp(System.currentTimeMillis()));
         disputeDao.insert(disputeOrder);
         disputeOrder.setMessage("申請完成");
@@ -90,10 +83,25 @@ public class DisputeServiceImpl implements DisputeService {
         return disputeOrder;
     }
 
-    //------------------------------------------------------
+    // 後台 爭議列表 顯示
+    @Override
+    public List<DisputeOrder> findAll() {
+        return disputeDao.selectAll();
+    }
 
+    // 後台 爭議明細 顯示
+    @Override
+    public OrderDto findByDisputeOrderId(int disputeOrderId) {
+        DisputeOrder disputeOrder = disputeDao.selectByDisputeId(disputeOrderId);
+        if(disputeOrder == null) {
+            return null;
+        }
+        Orders order = orderDao.selectByOrderId(disputeOrder.getOrderId());
+        List<OrderDetail> orderDetails = orderDetailDao.selectByOrderId(disputeOrder.getOrderId());
+        return orderMappingUtil.createOrderDto(order, disputeOrder, orderDetails);
+    }
 
-    // todo
+    // 後台 爭議明細 修改
     @Override
     public DisputeOrder updateInfo(DisputeOrder newDispute) {
         final DisputeOrder oldDispute = disputeDao.selectByDisputeId(newDispute.getDisputeOrderId());
@@ -123,8 +131,24 @@ public class DisputeServiceImpl implements DisputeService {
         oldDispute.setDisputeStatus(newDispute.getDisputeStatus());
         oldDispute.setUpdateDatetime(new Timestamp(System.currentTimeMillis()));
         disputeDao.update(oldDispute);
+
+        // 爭議同意： 退款至會員錢包
+        if(newDispute.getDisputeStatus() == 2){
+            Member member = memberDao.findMemberById(oldDispute.getCustomerId()); // 查找會員
+            if(member == null) {
+                newDispute.setMessage("申請失敗，無此會員ID");
+                newDispute.setSuccessful(false);
+                return newDispute;
+            }
+            // todo
+            // 增加 退款金額
+            //memberDao.updateMemberInfo(member);
+
+        }
+
         newDispute.setMessage("修改成功");
         newDispute.setSuccessful(true);
         return newDispute;
     }
+
 }

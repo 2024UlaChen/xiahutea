@@ -38,6 +38,9 @@ public class Member extends Core {
     @Column(name = "update_date")
     private Date updateDate;
 
+    @Column(name = "verify_code")
+    private String verifyCode;
+
     @Column(name = "valid_status", insertable = false)
     private Boolean validStatus;
 
@@ -76,6 +79,7 @@ public class Member extends Core {
                 ", nickname='" + nickname + '\'' +
                 ", createDate=" + createDate +
                 ", updateDate=" + updateDate +
+                ", verifyCode=" + verifyCode +
                 ", validStatus=" + validStatus +
                 ", customerEmail='" + customerEmail + '\'' +
                 ", customerPhone='" + customerPhone + '\'' +

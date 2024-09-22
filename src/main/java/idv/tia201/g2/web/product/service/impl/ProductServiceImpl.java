@@ -1,13 +1,23 @@
 package idv.tia201.g2.web.product.service.impl;
 
+import idv.tia201.g2.web.product.dao.ProductCategoryDao;
 import idv.tia201.g2.web.product.dao.ProductDao;
+import idv.tia201.g2.web.product.dto.ProductDTO;
 import idv.tia201.g2.web.product.service.ProductService;
 import idv.tia201.g2.web.product.vo.Product;
+import idv.tia201.g2.web.product.vo.ProductCategory;
 import idv.tia201.g2.web.store.dao.StoreDao;
 import idv.tia201.g2.web.store.vo.Store;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 
@@ -18,6 +28,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private StoreDao storeDao;
+
 
     //找出全部的產品
     @Override
@@ -32,6 +43,12 @@ public class ProductServiceImpl implements ProductService {
         return productDao.findByProductCategoryIdAndProductNameContaining(categoryId, productName);
     }
 
+    @Override
+    public Page<Product> getProducts(Pageable pageable) {
+        return productDao.findAll(pageable);
+    }
+
+
     //獲取產品名字
     public List<Product> getProductsByProductName(String productName) {
         return productDao.findByProductNameContaining(productName);
@@ -39,22 +56,43 @@ public class ProductServiceImpl implements ProductService {
     }
 
     //新增
-    @Override
-    public Product addProduct(Integer storeId, Product product) {
-        Store store = storeDao.findById(storeId).orElse(null);
-        if (store != null) {
-            // 商品名稱字數限制檢查
-            if (product.getProductName() != null && product.getProductName().length() <= 30) {
-                product.setProductStoreId(storeId);
-                return productDao.save(product);
-            } else {
-                // 商品名稱超過限制，返回 null 或拋出異常
-                return null;
-            }
-        } else {
-            return null;
-        }
-    }
+    public boolean addProduct(ProductDTO productDTO) {
+        // 创建 Product 实体对象
+        Product product = new Product();
+        product.setProductName(productDTO.getProductName());
+        product.setProductPrice(productDTO.getProductPrice());
+        product.setSize(productDTO.getSize());
+        product.setProductStatus(productDTO.isProductStatus());
+        product.setProductStoreId(productDTO.getProductStoreId());
+        product.setProductCategoryId(productDTO.getProductCategoryId());
+        product.setProductStoreId(1);
+        product.setNormalIce(productDTO.isNormalIce());
+        product.setLessIce(productDTO.isLessIce());
+        product.setLightIce(productDTO.isLightIce());
+        product.setIceFree(productDTO.isIceFree());
+        product.setRoomTemperature(productDTO.isRoomTemperature());
+        product.setHot(productDTO.isHot());
+        product.setFullSugar(productDTO.isFullSugar());
+        product.setLessSugar(productDTO.isLessSugar());
+        product.setHalfSugar(productDTO.isHalfSugar());
+        product.setQuarterSugar(productDTO.isQuarterSugar());
+        product.setNoSugar(productDTO.isNoSugar());
+        product.setPearl(productDTO.isPearl());
+        product.setPudding(productDTO.isPudding());
+        product.setCoconutJelly(productDTO.isCoconutJelly());
+        product.setTaro(productDTO.isTaro());
+        product.setHerbalJelly(productDTO.isHerbalJelly());
+
+
+
+
+            productDao.save(product);
+
+
+        // 保存商品到数据库
+
+        return true;
+    };
 
     ;
 
@@ -113,13 +151,13 @@ public class ProductServiceImpl implements ProductService {
     //刪除
     @Override
     public boolean deleteProduct(Integer productId) {
-        if (productDao.existsById(productId)) {
+       if (productDao.existsById(productId)) {
             productDao.deleteById(productId);
             return true; // 表示删除成功
         } else {
-            //
-            return false; // 表示找不到紀錄
-        }
+
+           return false; // 表示找不到紀錄
+       }
 
     }
 }
