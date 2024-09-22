@@ -544,8 +544,6 @@
     document.addEventListener("DOMContentLoaded", function () {
         // todo 判斷會員是否登入
         // TODO 待session
-        // todo logo
-
 
         // 0. 顯示明細
         init();
@@ -572,7 +570,7 @@
             let storeInfoHtml;
             storeInfoHtml = `
                  <div class="store_logo">
-                    <img class="store_logo_img" src=${data.orders.store.logo} alt="店家logo">
+                    <img class="store_logo_img" src="data:${data.orders.store.contentType};base64,${data.orders.store.logo}" alt="店家logo">
                 </div>
                 <div class="store_detail">
                     <div class="store_name">${data.orders.store.storeName}</div>
@@ -710,7 +708,7 @@
             for (let i = 0; i < detailList.length; i++) {
                 productHtml += `
                 <ul class="product_ul">
-                    <div class="product_name">${detailList[i].product.productName}  ( ${productSizeText(detailList[i].product.size)} )</div>
+                    <div class="product_name">${detailList[i].product.productName}  ( ${detailList[i].product.size} )</div>
                     <span>${detailList[i].productSugar} / ${detailList[i].productTemperature} / ${detailList[i].productAddMaterials} / $ ${detailList[i].productPrice} / ${detailList[i].productQuantity} 項</span>
                 </ul>
             `;
@@ -864,16 +862,6 @@
                     return "正在外送";
                 case 4 :
                     return "訂單完成";
-            }
-        }
-        function productSizeText(sizeNum) {
-            switch (sizeNum) {
-                case "1" :
-                    return "小杯";
-                case "2" :
-                    return "大杯";
-                default:
-                    return "";
             }
         }
         function paymentMethodText() {
