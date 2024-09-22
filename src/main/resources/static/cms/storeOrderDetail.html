@@ -320,7 +320,7 @@
                         </tr>
                         <tr>
                             <th>處理費發票號碼</th>
-                            <td>${data[0].orders.invoiceNo}</td>
+                            <td>${nullText(data[0].orders.invoiceNo)}</td>
                         </tr>
                         <tr>
                             <th>發票統編</th>
@@ -421,7 +421,7 @@
                 for (let i = 0; i < data.length; i++) {
                     productTbodyHtml +=`
                         <tr>
-                            <td>${data[i].product.productName} / ${productSizeText(data[i].product.size)}</td>
+                            <td>${data[i].product.productName} / ${data[i].product.size}</td>
                             <td>${data[i].productSugar} / ${data[i].productTemperature}</td>
                             <td>${nullText(data[i].productAddMaterials)}</td>
                             <td>${data[i].productQuantity}</td>
@@ -492,20 +492,13 @@
                     case 4 : return "電子發票-會員帳號";
                 }
             }
-            function productSizeText(sizeNum){
-                switch (sizeNum) {
-                    case "1" : return "小杯";
-                    case "2" : return "大杯";
-                    default: return "";
-                }
-            }
+
             function receiverMethodText(receiverNum){
                 switch (receiverNum) {
                     case 1 : return "自取";
                     case 2 : return "外送";
                 }
             }
-
             function paymentMethodText() {
                 return "信用卡";
             }

@@ -140,9 +140,9 @@
                                         <label>
                                             <select id="select_status">
                                                 <option value="" selected>請選擇</option>
-                                                <option value="未處理">未處理</option>
-                                                <option value="同意">同意</option>
-                                                <option value="不同意">不同意</option>
+                                                <option value="申請爭議">申請爭議</option>
+                                                <option value="同意爭議">同意爭議</option>
+                                                <option value="取消爭議">取消爭議</option>
                                             </select>
                                         </label>
                                         <button id="btn_select" class="btn btn-block btn-default">查詢</button>
@@ -247,9 +247,9 @@
             }
             function statusText(statusNum) {
                 switch (statusNum) {
-                    case 1 : return "未處理";
-                    case 2 : return "同意";
-                    case 3 : return "不同意";
+                    case 1 : return "申請爭議";
+                    case 2 : return "同意爭議";
+                    case 3 : return "取消爭議";
                 }
             }
             function nullText(nullValue){
