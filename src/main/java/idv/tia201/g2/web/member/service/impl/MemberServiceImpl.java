@@ -40,7 +40,7 @@ public class MemberServiceImpl implements MemberService {
         String phone = member.getCustomerPhone();
         String pwd = member.getCustomerPassword();
         String memberName = member.getNickname();
-//        TODO - 正則檢核
+        //todo need to revise + Matcher
 //        檢核欄位資料不可為空
         if (!StringUtils.hasText(phone)) {
             member.setMessage("手機未輸入");
@@ -66,8 +66,6 @@ public class MemberServiceImpl implements MemberService {
 //        密碼加密
             String encodePwd = encrypSHA.SHAEncrypt(pwd);
             member.setCustomerPassword(encodePwd);
-//            member.setCustomerPassword(pwd);
-
             LocalDate date = LocalDate.now();
             member.setCreateDate(Date.valueOf(date));
             member.setUpdateDate(Date.valueOf(date));
@@ -81,23 +79,26 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Member login(Member member) {
-        //todo follow - need to revise
+        //todo need to revise + Matcher
         String phone = member.getCustomerPhone();
         String password = member.getCustomerPassword();
 
-        if (StringUtils.hasText(phone)) {
+        if (!StringUtils.hasText(phone)) {
             member.setMessage("電話未輸入");
             member.setSuccessful(false);
             return member;
         }
 
-        if (StringUtils.hasText(password)) {
+        if (!StringUtils.hasText(password)) {
             member.setMessage("密碼未輸入");
             member.setSuccessful(false);
             return member;
         }
-
-        member = memberDao.findMemberForLogin(phone, password);
+        String encodePwd = encrypSHA.SHAEncrypt(password);
+        member.setCustomerPassword(encodePwd);
+        System.out.println(password);
+        System.out.println(encodePwd);
+        member = memberDao.findMemberForLogin(phone, encodePwd);
         if (member == null) {
             member = new Member();
             member.setMessage("使用者電話或密碼錯誤");

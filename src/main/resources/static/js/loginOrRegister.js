@@ -171,11 +171,15 @@ btnLogin.addEventListener("click", function () {
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
                 customerPhone: memberPhoneInput.value.trim(),
-                customerPassword:pwdInput.value.trim()
+                customerPassword: pwdInput.value.trim()
             }),
         }).then(res => res.json()).then(data => {
-            console.log(data);
-            console.log(data.successful);
+            if (data.successful) {
+                sessionStorage.setItem("cmsMemberDetail", JSON.stringify(data));
+                location.href = "../homePage.html";
+            } else {
+                Swal.fire(data.message, "", "error");
+            }
         });
     }
 })
@@ -189,25 +193,17 @@ btnRegister.addEventListener("click", function () {
     } else if (!checkPwdMatch(pwdInput, rePwdInput, rePwdTipTxt)) {
         Swal.fire("新密碼與再次輸入不同", "", "error");
     } else {
-        fetch(`member/carrier?type=` + encodeURIComponent(type), {
+        fetch(`member/register`, {
             method: "POST",
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
-                customerCarrier: newCarrierTxt,
-                customerId: memberId,
-                type: type
+                customerPhone: memberPhoneInput.value.trim(),
+                customerPassword: pwdInput.value.trim(),
+                nickname:memberNameInput.value.trim()
             }),
         }).then(res => res.json()).then(data => {
-            console.log(data)
-            if (data.successful) {
-                Swal.fire("已更新載具", "", "success");
-                getCarrier(memberId);
-            } else {
-                Swal.fire({
-                    icon: "error",
-                    title: data.message,
-                });
-            }
+            console.log(data);
+            console.log(data.successful);
         })
     }
 })

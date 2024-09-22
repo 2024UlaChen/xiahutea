@@ -23,21 +23,10 @@ public class LoginController  {
             member.setSuccessful(false);
             return member;
         }
-        System.out.println(1);
-        Member result = memberService.login(member);
         HttpSession httpSession = request.getSession();
-        System.out.println(httpSession.getId());
+//        System.out.println(httpSession.getId());
         request.changeSessionId();
-        System.out.println(httpSession.getId());
-//        if (request.getSession(false) != null) {
-//
-//        }
-//        System.out.println(session.getId());
-//        System.out.println(model.getAttribute("Id"));
-//        member.setCustomerPhone(phone);
-//        member.setCustomerPassword(password);
-//        member = memberService.login(member);
-
-        return member;
+//        System.out.println(httpSession.getId());
+        return memberService.login(member);
     }
 }

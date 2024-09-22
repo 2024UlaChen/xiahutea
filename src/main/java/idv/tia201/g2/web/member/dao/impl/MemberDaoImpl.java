@@ -45,13 +45,12 @@ public class MemberDaoImpl implements MemberDao {
 
     @Override
     public Member findMemberForLogin(String phone, String password) {
-        //todo follow - need to revise
         final String sql = "select * from CUSTOMER where CUSTOMER_PHONE = :phone and CUSTOMER_PASSWORD = :password";
         return session
                 .createNativeQuery(sql, Member.class)
                 .setParameter("phone", phone)
                 .setParameter("password", password)
-                .getResultList().get(0);
+                .uniqueResult();
     }
 
     @Override

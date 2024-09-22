@@ -94,6 +94,22 @@
     color: #6c757d;
 }
 
+/*forgetPwd*/
+.forgetPwd div{
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+.forgetPwd div input {
+    width: 100%;
+    border: 1px transparent solid;
+}
+.forgetPwd  span{
+    display: block;
+    text-align: left;
+    horiz-align: left;
+    font-size: 14px;
+
+}
 
 /*button setting*/
 .btn {

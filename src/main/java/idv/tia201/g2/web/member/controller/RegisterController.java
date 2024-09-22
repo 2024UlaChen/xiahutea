@@ -22,6 +22,7 @@ public class RegisterController {
             return member;
         }
         Member memberResult = memberService.register(member);
+        System.out.println(memberResult);
         return memberResult;
     }
 
