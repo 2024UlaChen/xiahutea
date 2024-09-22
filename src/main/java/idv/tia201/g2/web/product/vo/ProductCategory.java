@@ -25,7 +25,7 @@ public class ProductCategory {
     private Integer categoryId; // 商品分類流水號
     @Column (name = "product_store_id")
     private Integer productStoreId;// 店家編號
-    @Column (name = "product_category_status")
+    @Column(name = "product_category_status")
     private boolean categoryStatus;
     @Column(name = "product_category")
     private String categoryName;    // 商品分類名稱
