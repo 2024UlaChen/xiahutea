@@ -42,10 +42,15 @@ addrCollapseBtn.addEventListener("click", function () {
     collapseIcon.classList.toggle("fa-plus");
 })
 
+function nullToEmpty(data) {
+    return (data == null) ? "" : data;
+}
+
 function loadCmsMemberInfo() {
-    let sessionDetail = JSON.parse(sessionStorage.getItem("memberDetail"));
-    cmsMemberBirthdayTxt.value = sessionDetail.birthday.replaceAll("/", "-");
-    CmsMemberCreateDateTxt.value = sessionDetail.createDate.replaceAll("/", "-");
+    let sessionDetail = JSON.parse(sessionStorage.getItem("cmsMemberDetail"));
+    console.log(sessionDetail);
+    cmsMemberBirthdayTxt.value = nullToEmpty(sessionDetail.birthday).replaceAll("/", "-");
+    CmsMemberCreateDateTxt.value = nullToEmpty(sessionDetail.createDate).replaceAll("/", "-");
     cmsMemberCarrierTxt.value = sessionDetail.customerCarrier;
     cmsMemberEmailTxt.value = sessionDetail.customerEmail;
     cmsMemberMoney.value = sessionDetail.customerMoney;
@@ -78,14 +83,14 @@ cancelBtn.addEventListener("click", function () {
         cancelButtonText: "否"
     }).then((result) => {
         if (result.isConfirmed) {
-            sessionStorage.removeItem("memberDetail");
+            sessionStorage.removeItem("cmsMemberDetail");
             location.href = "./memberManage.html"
         }
     });
 });
 
 function updateMemberInfo() {
-    let changeSessionDetail = JSON.parse(sessionStorage.getItem("memberDetail"));
+    let changeSessionDetail = JSON.parse(sessionStorage.getItem("cmsMemberDetail"));
     const memberId = changeSessionDetail.customerId;
     if (changeSessionDetail.customerRemark === cmsMemberRemarkTxt.value && changeSessionDetail.validStatus === cmsMemberIsValidTxt.checked) {
         Swal.fire("與目前設定無差異", "", "error");
@@ -103,18 +108,19 @@ function updateMemberInfo() {
         })
             .then(response => response.json())
             .then(data => {
-                if(data.successful){
+                if (data.successful) {
                     fetch(`manage/${memberId}`)
                         .then(res => res.json())
                         .then(data => {
-                            sessionStorage.removeItem("memberDetail");
-                            sessionStorage.setItem("memberDetail", JSON.stringify(data));
+                            sessionStorage.removeItem("cmsMemberDetail");
+                            sessionStorage.setItem("cmsMemberDetail", JSON.stringify(data));
                         })
-                }else{
+                } else {
+                    //TODO
 
                 }
-                // sessionStorage.removeItem("memberDetail");
-                // sessionStorage.setItem("memberDetail", JSON.stringify(data));
+                // sessionStorage.removeItem("cmsMemberDetail");
+                // sessionStorage.setItem("cmsMemberDetail", JSON.stringify(data));
                 // loadCmsMemberInfo();
             })
         Swal.fire("已儲存!", "", "success");

@@ -1,133 +1,3 @@
-/*member for default element*/
-.teamo-contact-fom .form-label, .form-control {
-    font-size: 16px;
-}
-
-input[type="submit"] {
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    height: 40px;
-    background-color: #73B4BA;
-    border: 1px solid #73B4BA;
-    font-size: 16px;
-    color: white;
-    margin-bottom: 2%;
-    border-radius: 5px;
-}
-
-select {
-    padding: 7px 20px;
-}
-
-input[type="text"],
-input[type="number"],
-input[type="search"],
-input[type="email"],
-input[type="password"],
-input[type="tel"],
-input[type="url"],
-textarea,
-button,
-select, .form-control {
-    border-radius: 5px;
-    border: 1px solid #eeeeee;
-}
-
-.product-item .button:hover,
-input[type="text"]:focus,
-input[type="number"]:focus,
-input[type="search"]:focus,
-input[type="email"]:focus,
-input[type="password"]:focus,
-input[type="tel"]:focus,
-input[type="url"]:focus,
-textarea:focus,
-button:focus,
-select:focus,
-.form-control:focus {
-    border: 1px solid #6c757d !important;
-}
-
-/*member for special element*/
-
-.reset-margin {
-    margin: 0;
-    margin-top: 2%;
-    background-color: transparent;
-}
-
-.memberPageName {
-    font-size: 20px;
-    font-weight: bold;
-    color: black;
-    text-align: center;
-    line-height: 24px;
-}
-
-.member-aside {
-    height: 100%;
-    margin: 0 auto;
-    /*background-color: #f8f8f8;*/
-}
-
-.member-introduction {
-    margin: 0 auto;
-    margin-right: 30px;
-    padding-top: 55px;
-    padding-right: 20px;
-    padding-bottom: 45px;
-    padding-left: 20px;
-    background-color: white;
-}
-
-.member-introduction div {
-    text-align: center;
-    overflow: hidden;
-}
-
-
-.member-list {
-    margin-right: 30px;
-    margin-top: 50px;
-    padding: 0;
-    /*padding-left: 60px;*/
-    background-color: white;
-}
-
-.member-list li {
-    padding: 2%;
-    height: 60px;
-    font-size: 18px;
-    text-align: left;
-    list-style-type: none;
-    border-left: solid 5px white;
-}
-
-.member-list .member-list-active {
-    border-left: solid 5px #73B4BA;
-    color: #73B4BA;
-}
-
-/*.member-list li:hover, .member-list li a:hover {*/
-/*    color: #FAC792;*/
-/*}*/
-
-/*.member-list li:hover {*/
-/*    background-color: #F8F9FA;*/
-/*    border-left: solid 5px #FAC792;*/
-/*}*/
-
-.member-list a {
-    display: inline-block;
-    width: 100%;
-    height: 100%;
-}
-
-.member-list a span {
-    display: flex;
-    vertical-align: middle;
-}
 
 .warn {
     display: inline;
@@ -139,13 +9,6 @@ select:focus,
     font-size: 12px;
 }
 
-.userPhoto {
-    margin: 0 auto;
-    display: flex;
-    width: 30%;
-    border-radius: 50%;
-    text-align: center;
-}
 
 .sex {
     font-size: 16px;
@@ -177,41 +40,50 @@ select:focus,
 }
 
 /*Carrier*/
+/*for sweet alert change*/
+.sweetAlertFont {
+    font-size: 16px;
+    font-weight: bold;
+}
+.checkInValid {
+    color: #dc3545;
+    font-weight: bold;
+}
+/*carrier normal setting*/
 
-.memberCarrier > div {
+.memberCarrier div {
     display: flex;
     justify-content: center;
     margin-top: 1%;
 }
 
-.memberCarrier > div span {
+.memberCarrier div span {
     display: flex;
     align-items: center;
     margin-right: 2%;
 }
 
-.memberCarrier div > button {
-    margin-left: 2%;
+.memberCarrier div button {
     background-color: white;
     border: transparent 1px solid;
 
 }
 
-.memberCarrier div button > i {
+.memberCarrier div button i {
     font-size: 150%;
     vertical-align: center;
     color: #73B4BA;
 
 }
 
-.memberCarrier div > button:hover, .memberCarrier div button > i:hover {
+.memberCarrier div button:hover, .memberCarrier div button i:hover {
     cursor: pointer;
     background-color: #F5F5F5;
     color: #FAC792;
     border-radius: 20px;
 }
 
-.memberCarrier div > button:focus {
+.memberCarrier div button:focus {
     border: transparent 1px solid !important;
 }
 

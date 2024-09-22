@@ -27,4 +27,7 @@
         @Query("SELECT s FROM Store s JOIN StoreCalendar sc ON s.storeId = sc.storeId WHERE s.storeId = :sotreId")
         List<Store> findStoreByStoreId(@Param("sotreId") Integer storeId);
 
+        @Query("SELECT sc.storeHoliday FROM StoreCalendar sc WHERE sc.storeId = :sotreId")
+        List<Date> findStoreCalendarsByStoreId(@Param("sotreId") Integer storeId);
+
     }

@@ -23,11 +23,12 @@ public class Product {
     @Column(name="product_status")
     private boolean productStatus;
     private Integer productStoreId;
+   
     @Column(name="product_picture")
     private byte[] productPicture;
     @Column(name="product_category_id")
     private Integer productCategoryId;
-    @Column(name="normal_ice")
+    @Column(name = "normalIce")
     private boolean normalIce;
     @Column(name="less_ice")
     private boolean lessIce;
