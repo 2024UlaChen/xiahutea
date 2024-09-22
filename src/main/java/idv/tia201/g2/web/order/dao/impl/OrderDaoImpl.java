@@ -14,14 +14,14 @@ public class OrderDaoImpl implements OrderDao {
     @PersistenceContext
     private Session session;
 
-    // todo
+    // ------- FINISH ---------------------------
+    // 前台 訂單新增
     @Override
     public int insert(Orders orders) {
         session.persist(orders);
         return 1;
     }
 
-    // ------- FINISH ---------------------------
     // 前台 訂單列表 顯示
     @Override
     public List<Orders> selectBycCustomerId(int customerId) {
