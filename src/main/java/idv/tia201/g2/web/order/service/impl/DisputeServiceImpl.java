@@ -2,7 +2,6 @@ package idv.tia201.g2.web.order.service.impl;
 
 import java.sql.Timestamp;
 import java.util.List;
-
 import idv.tia201.g2.web.member.dao.MemberDao;
 import idv.tia201.g2.web.member.vo.Member;
 import idv.tia201.g2.web.order.dao.DisputeDao;
@@ -38,6 +37,7 @@ public class DisputeServiceImpl implements DisputeService {
     @Autowired
     private OrderMappingUtil orderMappingUtil;
 
+    // todo 退款錢包
     // -------- FINISH ---------------------------------
     // 前台 爭議表格 顯示
     @Override
@@ -54,8 +54,7 @@ public class DisputeServiceImpl implements DisputeService {
     // 前台 爭議表格 申請
     @Override
     public DisputeOrder add(DisputeOrder disputeOrder) {
-        int customerId = disputeOrder.getCustomerId(); // 取得 customerId
-        Member member = memberDao.findMemberById(customerId); // 查找會員
+        Member member = memberDao.findMemberById(disputeOrder.getCustomerId()); // 查找會員
         if(member == null) {
             disputeOrder.setMessage("申請失敗，無此會員ID");
             disputeOrder.setSuccessful(false);
@@ -76,9 +75,7 @@ public class DisputeServiceImpl implements DisputeService {
             disputeOrder.setSuccessful(false);
             return disputeOrder;
         }
-        disputeOrder.setOrderId(disputeOrder.getOrderId());
         disputeOrder.setDisputeStatus(1);
-        disputeOrder.setDisputeReason(disputeOrder.getDisputeReason());
         disputeOrder.setApplyDatetime(new Timestamp(System.currentTimeMillis()));
         disputeDao.insert(disputeOrder);
         disputeOrder.setMessage("申請完成");
@@ -134,6 +131,21 @@ public class DisputeServiceImpl implements DisputeService {
         oldDispute.setDisputeStatus(newDispute.getDisputeStatus());
         oldDispute.setUpdateDatetime(new Timestamp(System.currentTimeMillis()));
         disputeDao.update(oldDispute);
+
+        // 爭議同意： 退款至會員錢包
+        if(newDispute.getDisputeStatus() == 2){
+            Member member = memberDao.findMemberById(oldDispute.getCustomerId()); // 查找會員
+            if(member == null) {
+                newDispute.setMessage("申請失敗，無此會員ID");
+                newDispute.setSuccessful(false);
+                return newDispute;
+            }
+            // todo
+            // 增加 退款金額
+            //memberDao.updateMemberInfo(member);
+
+        }
+
         newDispute.setMessage("修改成功");
         newDispute.setSuccessful(true);
         return newDispute;
