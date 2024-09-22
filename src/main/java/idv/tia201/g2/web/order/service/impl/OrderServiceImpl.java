@@ -125,22 +125,23 @@ public class OrderServiceImpl implements OrderService {
         // 訂單明細檢查
         for (OrderDetail orderDetail : orderDetails) {
             int productId = orderDetail.getProductId();
-            Product product = productDao.findByProductId(productId);
-            if(product == null){
-                orderDto.setMessage("商品編號錯誤");
-                orderDto.setSuccessful(false);
-                return orderDto;
-            }
-            if(isEmpty(orderDetail.getProductSugar()) || isEmpty(orderDetail.getProductTemperature())){
-                orderDto.setMessage("未輸入甜度溫度");
-                orderDto.setSuccessful(false);
-                return orderDto;
-            }
-            if(orderDetail.getProductQuantity() < 0 || orderDetail.getProductPrice() < 0){
-                orderDto.setMessage("商品數量或商品金額錯誤");
-                orderDto.setSuccessful(false);
-                return orderDto;
-            }
+            // todo 待productdao改好再取消註解
+//            Product product = productDao.findByProductId(productId);
+//            if(product == null){
+//                orderDto.setMessage("商品編號錯誤");
+//                orderDto.setSuccessful(false);
+//                return orderDto;
+//            }
+//            if(isEmpty(orderDetail.getProductSugar()) || isEmpty(orderDetail.getProductTemperature())){
+//                orderDto.setMessage("未輸入甜度溫度");
+//                orderDto.setSuccessful(false);
+//                return orderDto;
+//            }
+//            if(orderDetail.getProductQuantity() < 0 || orderDetail.getProductPrice() < 0){
+//                orderDto.setMessage("商品數量或商品金額錯誤");
+//                orderDto.setSuccessful(false);
+//                return orderDto;
+//            }
         }
 
         order.setOrderStatus(1);
