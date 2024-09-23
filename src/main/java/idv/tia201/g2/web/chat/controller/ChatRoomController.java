@@ -2,7 +2,7 @@ package idv.tia201.g2.web.chat.controller;
 
 import idv.tia201.g2.web.chat.dto.ChatRoom;
 import idv.tia201.g2.web.chat.service.ChatRoomService;
-import idv.tia201.g2.web.user.dto.TotalUserDTO;
+import idv.tia201.g2.web.user.vo.TotalUsers;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +20,7 @@ public class ChatRoomController {
 
     @GetMapping()
     public Set<ChatRoom> getChatRoomData (HttpSession session){
-        TotalUserDTO user = (TotalUserDTO)session.getAttribute("totalUserDTO");
+        TotalUsers user = (TotalUsers) session.getAttribute("TotalUsers");
         Set<ChatRoom> chatRoomData = chatRoomService.getChatRoom(user);
         return chatRoomData;
     }
