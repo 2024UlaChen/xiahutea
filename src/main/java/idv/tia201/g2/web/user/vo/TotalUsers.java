@@ -14,12 +14,12 @@ public class TotalUsers extends Core {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "total_user_id")
     private Long totalUserId;
-    @Column(name = "users_type_id")
     private Integer userTypeId;     // 0:消費者 、 1:店家 、 3:管理員
-    @Column(name = "user_id")
     private Integer userId;
+    private String username;
+    private byte[] userImage;
+
 
 }
 

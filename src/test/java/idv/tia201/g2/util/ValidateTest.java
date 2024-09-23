@@ -28,4 +28,15 @@ public class ValidateTest {
             }
         }
     }
+    @Test
+    public void testMemberPwd() {
+        List<String> pwdList = Arrays.asList("aaaaaaa", "AAAAAAA", "111111", "aaaaaaaaaaaaaaaaa", "AAAAAAAAAAAAAAAAA", "111111111111111",
+                "Aa1", "Aa1Aaa","Aa1AAAAa1AAA11111");
+        for (String pwd : pwdList) {
+            if (ValidateUtil.checkMemberPwd(pwd)) {
+                System.out.println(ValidateUtil.checkMemberPwd(pwd));
+                System.out.println(pwd);
+            }
+        }
+    }
 }

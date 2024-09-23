@@ -11,7 +11,6 @@ import idv.tia201.g2.web.order.vo.Orders;
 public interface OrderService {
 
     OrderDto addOrder(Orders order, List<OrderDetail> orderDetail);
-
     Orders addStar(Orders order);
     Orders updateStatus(Orders order);
 

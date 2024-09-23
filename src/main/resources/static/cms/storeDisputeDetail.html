@@ -282,9 +282,9 @@
                             <td>
                                 <label class="input_lab">
                                     <select id="select_status">
-                                        <option value="1" selected>未處理</option>
-                                        <option value="2">同意</option>
-                                        <option value="3">不同意</option>
+                                        <option value="1" selected>申請爭議</option>
+                                        <option value="2">同意爭議</option>
+                                        <option value="3">取消爭議</option>
                                     </select>
                                 </label>
                             </td>
@@ -368,7 +368,7 @@
                 for (let i = 0; i < orderDetailsList.length; i++) {
                     productTbodyHtml += `
                         <tr>
-                            <td>${orderDetailsList[i].product.productName} / ${productSizeText(orderDetailsList[i].product.size)}</td>
+                            <td>${orderDetailsList[i].product.productName} / ${orderDetailsList[i].product.size}</td>
                             <td>${orderDetailsList[i].productSugar} / ${orderDetailsList[i].productTemperature}</td>
                             <td>${nullText(orderDetailsList[i].productAddMaterials)}</td>
                             <td>${orderDetailsList[i].productQuantity}</td>
@@ -390,7 +390,7 @@
                 select_status.value = status;
 
                 // 2. 如果爭議狀態為已同意/不同意，鎖定-儲存btn&狀態選單
-                if (status_text.innerText === '同意' || status_text.innerText === '不同意') {
+                if (status_text.innerText === '同意爭議' || status_text.innerText === '取消爭議') {
                     btn_dispute_save.setAttribute("disabled", "disabled");
                     select_status.setAttribute("disabled", "disabled");
                     dispute_money.setAttribute("disabled", "disabled");
@@ -500,24 +500,14 @@
                 });
             }
             //---------------------------------------------------------------------------
-
-            // todo 待確認 key & value
-            function productSizeText(sizeNum){
-                switch (sizeNum) {
-                    case "1" : return "小杯";
-                    case "2" : return "大杯";
-                    default: return "";
-                }
-            }
-
             function statusText(statusNum) {
                 switch (statusNum) {
                     case 1 :
-                        return "未處理";
+                        return "申請爭議";
                     case 2 :
-                        return "同意";
+                        return "同意爭議";
                     case 3 :
-                        return "不同意";
+                        return "取消爭議";
                 }
             }
             function paymentMethodText() {

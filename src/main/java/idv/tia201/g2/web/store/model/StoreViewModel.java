@@ -96,5 +96,9 @@ public class StoreViewModel {
 
     private Boolean validStatus;//集點卡狀態
 
+    private Timestamp searcherStart;
+
+    private Timestamp searcherEnd;
+
 
 }
