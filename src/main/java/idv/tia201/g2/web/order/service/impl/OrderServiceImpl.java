@@ -1,5 +1,6 @@
 package idv.tia201.g2.web.order.service.impl;
 
+import idv.tia201.g2.core.util.ValidateUtil;
 import idv.tia201.g2.web.member.dao.MemberDao;
 import idv.tia201.g2.web.member.vo.Member;
 import idv.tia201.g2.web.order.dao.DisputeDao;
@@ -17,7 +18,6 @@ import idv.tia201.g2.web.store.vo.Store;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -109,7 +109,7 @@ public class OrderServiceImpl implements OrderService {
             }
         }
         if (order.getInvoiceMethod() == 3) {  // 統編
-            if(!(VatUtil.isValidTWBID(invoiceVat))){
+            if(!(ValidateUtil.isValidTWBID(invoiceVat))){
                 orderDto.setMessage("統編輸入錯誤");
                 orderDto.setSuccessful(false);
                 return orderDto;
