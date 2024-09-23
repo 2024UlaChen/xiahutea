@@ -140,7 +140,7 @@ public class DisputeServiceImpl implements DisputeService {
                 newDispute.setSuccessful(false);
                 return newDispute;
             }
-            // todo
+            // todo 退款至會員錢包
             // 增加 退款金額
             //memberDao.updateMemberInfo(member);
 
