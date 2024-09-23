@@ -9,9 +9,13 @@ import idv.tia201.g2.web.store.vo.StoreCalendar;
 import idv.tia201.g2.web.user.dao.TotalUserDao;
 import idv.tia201.g2.web.user.dto.TotalUserDTO;
 import idv.tia201.g2.web.user.vo.TotalUsers;
+import org.aspectj.apache.bcel.generic.RET;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -280,21 +284,73 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public TotalUserDTO GetTotalUserDTO(Integer StoreId) {
-        TotalUserDTO item = new TotalUserDTO();
-        Store store = findStoreById(StoreId);
-        TotalUsers totalUsers = totalUserDao.findByUserTypeIdAndUserId(1,StoreId);
-        item.setTotalUserId(totalUsers.getTotalUserId());
-        item.setUserTypeId(totalUsers.getUserTypeId());
-        item.setUserId(store.getStoreId());
-        item.setLogo(store.getLogo());
-        return item;
+    public TotalUsers GetTotalUser(Integer StoreId) {
+
+
+        TotalUsers totalUsers = totalUserDao.findByUserTypeIdAndUserId(1,StoreId); //因為1是商家
+
+        return totalUsers;
 
     }
 
     @Override
     public List<Date> GetStoreHolidays(Integer StoreId) {
         return storeCalendarRepository.findStoreCalendarsByStoreId(StoreId);
+    }
+
+    @Override
+    public Page<Store> searchStore(StoreViewModel store, Integer page) {
+        //分頁與排序
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "registerDay"));
+        //回傳的列表
+        List<Store> storeList = new ArrayList<>();
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+        if(store.getStoreName()==null && store.getVat() == null && store.getSearcherStart() == null && store.getSearcherEnd() == null){
+            //四大皆空 只會顯示 已申請和停權
+            return storeDao.findByStoreStatus(pageable);
+
+        } else if (store.getStoreName() == null && store.getVat() == null  ) {
+
+            if(store.getSearcherEnd() == null){
+                
+                return storeDao.findByRegisterDayBetween(store.getSearcherStart(),now,pageable);
+
+            } else if (store.getSearcherStart() == null) {
+                
+                return storeDao.findByRegisterDayBetween(now,store.getSearcherEnd(),pageable);
+            }
+
+            return storeDao.findByRegisterDayBetween(store.getSearcherStart(),store.getSearcherEnd(),pageable);
+        } else if (store.getStoreName() == null) {
+            if(store.getSearcherStart() == null && store.getSearcherEnd() == null){
+                return storeDao.findByVatContaining(store.getVat(),pageable);
+            } else if (store.getSearcherEnd() == null){
+
+                return storeDao.findByVatContainingAndRegisterDayBetween(store.getVat(),store.getSearcherStart(),now,pageable);
+
+            } else if (store.getSearcherStart() == null) {
+
+                return storeDao.findByVatContainingAndRegisterDayBetween(store.getVat(),now,store.getSearcherEnd(),pageable);
+            }
+            return storeDao.findByVatContainingAndRegisterDayBetween(store.getVat(),store.getSearcherStart(),store.getSearcherEnd(),pageable);
+
+
+        } else if (store.getVat() == null) {
+            if(store.getSearcherStart() == null && store.getSearcherEnd() == null){
+                return storeDao.findByStoreNameContainingIgnoreCase(store.getStoreName(),pageable);
+            } else if (store.getSearcherEnd() == null){
+
+                return storeDao.findByStoreNameContainingIgnoreCaseAndRegisterDayBetween(store.getStoreName(),store.getSearcherStart(),now,pageable);
+
+            } else if (store.getSearcherStart() == null) {
+
+                return storeDao.findByStoreNameContainingIgnoreCaseAndRegisterDayBetween(store.getStoreName(),now,store.getSearcherEnd(),pageable);
+            }
+            return storeDao.findByStoreNameContainingIgnoreCaseAndRegisterDayBetween(store.getStoreName(),store.getSearcherStart(),store.getSearcherEnd(),pageable);
+
+        }
+        return storeDao.findByStoreNameContainingIgnoreCaseAndVatContainingAndRegisterDayBetween(store.getStoreName(),store.getVat(),store.getSearcherStart(),store.getSearcherEnd(),pageable);
+
     }
 
 
