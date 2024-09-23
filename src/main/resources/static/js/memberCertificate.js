@@ -1,5 +1,5 @@
 const defaultVerifyCodeTip = "請輸入手機驗證";
-const verifyCodeRegex = /^(?=.*[A-Z])(?=.*\d)[A-Z0-9]{6}$/;
+const verifyCodeRegex = /^[A-Z0-9]{6}$/;
 
 // element
 const memberVerifyCodeTip = document.querySelector("#memberVerifyCodeTip");
@@ -45,7 +45,10 @@ function verifyCodeValid(code) {
             if (memberVerifyCodeValue.indexOf(" ") !== -1) {
                 memberVerifyCodeTip.innerText = "不可包含空白字元";
                 isCheckedFalse(code);
-            }else{
+            } else if (memberVerifyCodeValue.length !== 6) {
+                memberVerifyCodeTip.innerText = "長度須為六碼";
+                isCheckedFalse(code);
+            } else {
                 memberVerifyCodeTip.innerText = "格式錯誤";
                 isCheckedFalse(code);
             }
@@ -60,47 +63,54 @@ verifyCodeValid(memberVerifyCode);
 checkVerifyCodeBtn.addEventListener("click", function () {
     if (!verifyCodeRegex.test(memberVerifyCode.value)) {
         Swal.fire("驗證碼格式錯誤，請重新輸入", "", "error");
+    } else {
+        let sessionDetail = JSON.parse(sessionStorage.getItem("memberData"));
+        console.log(sessionDetail);
+        fetch(`member/register/check`, {
+            method: "POST",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                customerId: sessionDetail.customerId,
+                verifyCode: memberVerifyCode.value.trim()
+                // verifyCode: "A12345"
+            }),
+        }).then(res => res.json()).then(data => {
+            console.log(data);
+            if (data.successful) {
+                Swal.fire({
+                    icon: "success",
+                    title: "註冊成功",
+                    showConfirmButton: false,
+                    timer: 1500
+                }).then(()=>{
+                    location.href = "../homePage.html";
+                })
+            } else {
+                Swal.fire("驗證碼失敗，請重新輸入", "", "error");
+            }
+        });
     }
-    // else {
-    //     fetch(`member/login`, {
-    //         method: "POST",
-    //         headers: {'Content-Type': 'application/json'},
-    //         body: JSON.stringify({
-    //             customerPhone: memberPhoneInput.value.trim(),
-    //             customerPassword: pwdInput.value.trim()
-    //         }),
-    //     }).then(res => res.json()).then(data => {
-    //         if (data.successful) {
-    //             sessionStorage.setItem("cmsMemberDetail", JSON.stringify(data));
-    //             location.href = "../homePage.html";
-    //         } else {
-    //             Swal.fire(data.message, "", "error");
-    //         }
-    //     });
-    // }
 })
 
 //reGetVerifyCode
 reGetVerifyCodeBtn.addEventListener("click", function () {
-    if ((checkIsEmpty(memberNameInput, memberPhoneInput, pwdInput, rePwdInput))) {
-        Swal.fire("請輸入手機 & 密碼 & 姓名", "", "error");
-    } else if (!(phoneValid(memberPhoneInput) && pwdValid(pwdInput, pwdTipTxt) && pwdValid(rePwdInput, rePwdTipTxt))) {
-        Swal.fire("手機與密碼有誤，請重新確認", "", "error");
-    } else if (!checkPwdMatch(pwdInput, rePwdInput, rePwdTipTxt)) {
-        Swal.fire("新密碼與再次輸入不同", "", "error");
-    } else {
-        fetch(`member/register`, {
-            method: "POST",
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                customerPhone: memberPhoneInput.value.trim(),
-                customerPassword: pwdInput.value.trim(),
-                nickname: memberNameInput.value.trim()
-            }),
-        }).then(res => res.json()).then(data => {
-            console.log(data);
-            console.log(data.successful);
-        })
-    }
+    memberVerifyCode.value = "";
+    let sessionDetail = JSON.parse(sessionStorage.getItem("memberData"));
+    console.log(sessionDetail);
+    fetch(`member/register/update`, {
+        method: "POST",
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            customerId: sessionDetail.customerId,
+        }),
+    }).then(res => res.json()).then(data => {
+        console.log(data);
+        if (data.successful) {
+            Swal.fire("已重新發送驗證碼");
+        } else {
+            Swal.fire("重新發送驗證碼失敗，請聯絡客服", "", "error");
+        }
+    })
+
 })
 

@@ -199,11 +199,15 @@ btnRegister.addEventListener("click", function () {
             body: JSON.stringify({
                 customerPhone: memberPhoneInput.value.trim(),
                 customerPassword: pwdInput.value.trim(),
-                nickname:memberNameInput.value.trim()
+                nickname: memberNameInput.value.trim()
             }),
         }).then(res => res.json()).then(data => {
-            console.log(data);
-            console.log(data.successful);
+            if (data.successful) {
+                sessionStorage.setItem("memberData", JSON.stringify(data.data));
+                location.href = "../memberCertificate.html";
+            } else {
+                Swal.fire("註冊失敗", "", "error");
+            }
         })
     }
 })

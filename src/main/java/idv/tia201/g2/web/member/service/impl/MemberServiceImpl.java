@@ -14,7 +14,6 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import java.sql.Date;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,22 +31,20 @@ public class MemberServiceImpl implements MemberService {
     @Autowired
     private SendSmsService sendSmsService;
 
-    public EncrypSHA encrypSHA;
 
     @Override
     public Member register(Member member) {
         String phone = member.getCustomerPhone();
         String pwd = member.getCustomerPassword();
         String memberName = member.getNickname();
-        //todo need to revise + Matcher
-//        檢核欄位資料不可為空
-        if (!StringUtils.hasText(phone) || ValidateUtil.checkCellphone(phone)) {
+//        檢核欄位資料
+        if (!StringUtils.hasText(phone) || !ValidateUtil.checkCellphone(phone)) {
             member.setMessage("手機未輸入或格式錯誤");
             member.setSuccessful(false);
             return member;
         }
-        if (!StringUtils.hasText(pwd)) {
-            member.setMessage("密碼未輸入");
+        if (!StringUtils.hasText(pwd) || !ValidateUtil.checkMemberPwd(pwd)) {
+            member.setMessage("密碼未輸入或格式錯誤");
             member.setSuccessful(false);
             return member;
         }
@@ -63,19 +60,30 @@ public class MemberServiceImpl implements MemberService {
             return member;
         } else {
 //        密碼加密
-            String encodePwd = encrypSHA.SHAEncrypt(pwd);
+            String encodePwd = EncrypSHA.SHAEncrypt(pwd);
             member.setCustomerPassword(encodePwd);
             LocalDate date = LocalDate.now();
             member.setCreateDate(Date.valueOf(date));
             member.setUpdateDate(Date.valueOf(date));
-
-//            TODO - ADD VERIFY CODE  + updateDb
-            String verifyCode = sendSmsService.sendSMS(phone);
+//            String verifyCode = sendSmsService.sendSMS(phone);
+            String verifyCode = "AAA123";
             member.setVerifyCode(verifyCode);
-
-            return memberDao.createMember(member);
+            memberDao.createMember(member);
+            return memberDao.findMemberByPhone(phone);
         }
     }
+
+    @Override
+    public Boolean updateVerifyCode(Member member) {
+        if (member.getCustomerId() == null) {
+            return false;
+        }
+//            String verifyCode = sendSmsService.sendSMS(phone);
+        String verifyCode = "B12345";
+        memberDao.updateVerifyCodeById(member.getCustomerId(), verifyCode);
+        return true;
+    }
+
 
     @Override
     public Member login(Member member) {
@@ -83,25 +91,25 @@ public class MemberServiceImpl implements MemberService {
         String phone = member.getCustomerPhone();
         String password = member.getCustomerPassword();
 
-        if (!StringUtils.hasText(phone)) {
-            member.setMessage("電話未輸入");
+        if (!StringUtils.hasText(phone) || !ValidateUtil.checkCellphone(phone)) {
+            member.setMessage("手機未輸入或格式錯誤");
             member.setSuccessful(false);
             return member;
         }
 
-        if (!StringUtils.hasText(password)) {
-            member.setMessage("密碼未輸入");
+        if (!StringUtils.hasText(password) || !ValidateUtil.checkMemberPwd(password)) {
+            member.setMessage("密碼未輸入或格式錯誤");
             member.setSuccessful(false);
             return member;
         }
-        String encodePwd = encrypSHA.SHAEncrypt(password);
+        String encodePwd = EncrypSHA.SHAEncrypt(password);
         member.setCustomerPassword(encodePwd);
         System.out.println(password);
         System.out.println(encodePwd);
         member = memberDao.findMemberForLogin(phone, encodePwd);
         if (member == null) {
             member = new Member();
-            member.setMessage("使用者電話或密碼錯誤");
+            member.setMessage("使用者手機或密碼錯誤");
             member.setSuccessful(false);
             return member;
         }
@@ -181,11 +189,11 @@ public class MemberServiceImpl implements MemberService {
 //        TODO REVISE
         if (!ObjectUtils.isEmpty(member.getValidStatus())) {
             return findMemberByValidStatus(member.getValidStatus());
-        } else if (!StringUtils.isEmpty(member.getNickname())) {
+        } else if (StringUtils.hasText(member.getNickname())) {
             return memberDao.findMemberByNickname(member.getNickname());
         } else {
             List<Member> memberResultList = new ArrayList<>();
-            if (!StringUtils.isEmpty(member.getCustomerPhone())) {
+            if (StringUtils.hasText(member.getCustomerPhone())) {
                 memberResultList.add(memberDao.findMemberByPhone(member.getCustomerPhone()));
             }
 
@@ -205,13 +213,17 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Boolean isCorrectVerifyCode(Member member) {
-//        TODO
         Integer memberId = member.getCustomerId();
-        if (memberId != null) {
+        if (memberId == null) {
             return false;
         }
-        String correctVerifyCode = memberDao.findMemberById(memberId).getVerifyCode();
-        return correctVerifyCode.equals(member.getVerifyCode());
+        Member queryMember = memberDao.findMemberById(memberId);
+        String correctVerifyCode = queryMember.getVerifyCode();
+        if (correctVerifyCode.equals(member.getVerifyCode())) {
+            memberDao.updateMemberInfo(queryMember.getCustomerId(),false,queryMember.getCustomerRemark());
+            return true;
+        } else {
+            return false;
+        }
     }
-
 }
