@@ -36,6 +36,8 @@ public class MemberServiceImpl implements MemberService {
     @Autowired
     private SendSmsService sendSmsService;
 
+    Integer userType = 0;
+
 
     @Override
     public Member register(Member member) {
@@ -226,7 +228,8 @@ public class MemberServiceImpl implements MemberService {
         String correctVerifyCode = queryMember.getVerifyCode();
         if (correctVerifyCode.equals(member.getVerifyCode())) {
 //            TODO NEED TO CHECK TOTAL USER INSERT
-            TotalUsers totalUser = new TotalUsers(null, 0, queryMember.getCustomerId());
+            TotalUsers totalUser = new TotalUsers(null, userType, queryMember.getCustomerId(),queryMember.getNickname(),queryMember.getCustomerImg());
+
             totalUserDao.save(totalUser);
             memberDao.updateMemberInfo(queryMember.getCustomerId(),false,queryMember.getCustomerRemark());
             return true;
