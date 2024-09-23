@@ -24,7 +24,6 @@
     <link rel="stylesheet" href="assets/css/mobile-menu.css">
     <link rel="stylesheet" href="assets/fonts/flaticon/flaticon.css">
     <link rel="stylesheet" href="assets/css/style.css">
-<!--    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">-->
 
     <style>
         /* background-color: #f5f5f5; */
@@ -121,7 +120,7 @@
             font-size: 16px;
             display: block;
         }
-
+        /*----------------------*/
 
         /* main區塊 */
         .left-sidebar .content-area{
@@ -170,7 +169,7 @@
             border-radius: 5px;
         }
 
-        /* 訂單卡*/
+        /* 訂單區塊*/
         .product-item .product-inner {
             border-radius: 20px;
         }
@@ -210,7 +209,7 @@
             font-size: 18px;
             font-weight: bold;
         }
-        div.order_time>span{
+        div.order_time>span, .dispute_text{
             color: black;
             font-size: 12px;
             line-height: 2;
@@ -251,11 +250,7 @@
 
         /* 爭議狀態 */
         div.dispute_status_div.-off{
-            display: none;
-        }
-
-        ul.order_list_ul{
-            display:  inline;
+            display: block;
         }
 
     </style>
@@ -325,17 +320,142 @@
 <script src="assets/js/jquery.scrollbar.min.js"></script>
 <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyC3nDHy1dARR-Pa_2jjPCjvsOR4bcILYsM'></script>
 <script src="assets/js/frontend-plugin.js"></script>
-<!--<script src="assets/js/newjs.js"></script>-->
 <script src="./js/general.js"></script>
 
 <script>
     document.addEventListener("DOMContentLoaded", function(){
+        // todo 判斷會員是否登入
+        // TODO 待session
 
         // 0.顯示列表
         init();
 
-        // 1.查詢欄
-        // 1.1 輸入訂單狀態 & 訂單日期，點查詢btn可篩選訂單
+        function init() {
+            // http://localhost:8080/orderList.html?customerId=2
+            let customerId = getQueryParam("customerId");
+            if (customerId) {
+                fetch(`/order/member/${customerId}`)
+                      .then(response => response.json())
+                      .then(data =>{ showDB(data)})
+                      .catch((error) => {
+                          console.log("錯誤原因：" + error);
+                      });
+            }
+        }
+        // 取得URL的查詢參數
+        function getQueryParam(param) {
+            let urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        // 1. 訂單列表
+        function showDB(data){
+            let orderHtml = "";
+            // 1. 訂單排序從新到舊
+            for(let i = data.length-1; i >= 0 ; i--) {
+
+                // 1.1.1 訂單狀態不同 更改不同顏色
+                let statusClass = "";
+                switch (statusText(data[i].orders.orderStatus)) {
+                    case "訂單成立":
+                    case "正在外送":
+                    case "準備完成":
+                        statusClass = "incomplete";  // 橘色
+                        break;
+                    case "訂單完成":
+                        statusClass = "complete";  // 藍色
+                        break;
+                }
+
+                // 1.1.2 點擊可進入訂單明細
+                // 1.1.3 有爭議訂單時，則顯示爭議狀態文字
+               const disputeClass = data[i].disputeOrder && data[i].disputeOrder.disputeStatus ? "" : "-off";
+
+                let dataDisputeStatus =  data[i].disputeOrder ? data[i].disputeOrder.disputeStatus : null;
+                let disputeTextHtml = "";
+                if( dataDisputeStatus === 1 ){
+                    disputeTextHtml = `
+                            <div class="dispute_text" id="dispute_status">爭議狀態： ${disputeStatusText(dataDisputeStatus)}</div>
+                    `;
+                }else if( dataDisputeStatus === 2){
+                    disputeTextHtml = `
+                        <span class="dispute_text" id="dispute_status">爭議狀態： ${disputeStatusText(dataDisputeStatus)}</span>
+                        <span class="dispute_text"> / 退款金額：${data[i].disputeOrder.refundAmount}元 </span>
+                    `;
+                }else if(dataDisputeStatus === 3){
+                    disputeTextHtml =`
+                        <span class="dispute_text" id="dispute_status">爭議狀態： ${disputeStatusText(dataDisputeStatus)}</span>
+                        <span class="dispute_text"> / 原因：${data[i].disputeOrder.rejectReason} </span>
+                    `;
+                }
+
+                orderHtml += `
+                <li class="product-item  col-lg-4 col-md-6 col-sm-6 col-xs-6 col-ts-12 style-1">
+                    <a href="./orderDetail.html?orderId=${data[i].orders.orderId}">
+                        <div class="product-inner equal-element">
+                            <div class="product-thumb">
+                                <div class="thumb-inner" >
+                                    <div>
+                                        <div class="one_order_status ${statusClass}">
+                                            <span class="one_order_status_text">${statusText(data[i].orders.orderStatus)}</span>
+                                        </div>
+                                        <div class="one_order_list">
+                                            <div class="one_order_list_circle">
+                                                <img class="store_logo" src="data:${data[i].orders.store.contentType};base64,${data[i].orders.store.logo}"alt="店家logo">
+                                            </div>
+                                            <div class="one_order_store_name">
+                                                <span>${data[i].orders.store.storeName}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="product-info">
+                                <div class="group-info">
+                                    <div class="order_id">
+                                        <span>${data[i].orders.orderId}</span>
+                                    </div>
+                                    <div class="order_detail">
+                                        <span>${data[i].orders.orderProductQuantity} 項商品</span>
+                                    </div>
+                                    <div class="order_price">
+                                        <span>共 ${data[i].orders.productAmount} 元</span>
+                                    </div>
+                                    <div class="order_time">
+                                        <span class="order_date_value">${data[i].orders.orderCreateDatetime}</span>
+                                    </div>
+                                    <div class="order_time dispute_status_div  ${disputeClass}">
+                                         ${disputeTextHtml || ''}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+            `;
+                document.getElementsByClassName("order_list_ul")[0].innerHTML = orderHtml;
+            }
+        }
+
+        function statusText(statusNum) {
+            switch (statusNum) {
+                case 1 : return "訂單成立";
+                case 2 : return "準備完成";
+                case 3 : return "正在外送";
+                case 4 : return "訂單完成";
+            }
+        }
+        function disputeStatusText(statusNum) {
+            switch (statusNum) {
+                case 1 : return "申請爭議";
+                case 2 : return "同意爭議";
+                case 3 : return "取消爭議";
+            }
+        }
+
+        // ==========================================================================
+        // 2.查詢欄
+        // 2.1 輸入訂單狀態 & 訂單日期，點查詢btn可篩選訂單
         let btn_select = document.getElementById("select_btn");
         btn_select.addEventListener("click", function (e) {
 
@@ -366,11 +486,13 @@
                     show_row = false;
                 }
 
-                //todo: 待資料庫完成後，再處理時區問題
                 if (select_order_date1 && select_order_date2) {
                     let order_date_obj = new Date(order_date);
                     let date1 = new Date(select_order_date1);
                     let date2 = new Date(select_order_date2);
+                    // 設定 date1 和 date2 的時間範圍
+                    date1.setHours(0, 0, 0, 0); // 9/22 00:00
+                    date2.setHours(23, 59, 59, 999); // 9/22 23:59
 
                     if (order_date_obj < date1 || order_date_obj > date2) {
                         show_row = false;
@@ -380,109 +502,6 @@
                row.style.display = show_row ? "" : "none";
           });
         });
-
-        // ==========================================================================
-        // 2.訂單列表
-        // 2.1 抓訂單資料 TODO 待session
-        function init() {
-            fetch(`/order/member/1`)
-                  .then(response => response.json())
-                  .then(data =>{
-                        console.log(data);
-                        showText(data);}
-                  )
-                  .catch((error) => {
-                      console.log("錯誤原因：" + error);
-                  });
-        }
-
-        function showText(data){
-            let orderHtml = "";
-            for(let i = 0; i < data.length ; i++) {
-
-                // 2.1.3 訂單狀態不同 更改不同顏色
-                let statusClass = "";
-                switch (statusText(data[i].orderStatus)) {
-                    case "訂單成立":
-                    case "正在外送":
-                    case "準備完成":
-                        statusClass = "incomplete";  // 橘色
-                        break;
-                    case "訂單完成":
-                        statusClass = "complete";  // 藍色
-                        break;
-                }
-                // 2.1.2 有爭議訂單時，則顯示爭議狀態文字
-                const disputeClass = data[i].disputeStatus ? "" : "-off";
-                // todo 待更新 disputeOrder
-                orderHtml += `
-                <li class="product-item  col-lg-4 col-md-6 col-sm-6 col-xs-6 col-ts-12 style-1">
-                    <div class="product-inner equal-element">
-                        <div class="product-thumb">
-                            <div class="thumb-inner" >
-                                <a href="orderDetail.html?orderId=${data[i].orderId}">
-                                    <div>
-                                        <div class="one_order_status  ${statusClass}" >
-                                            <span class="one_order_status_text">${statusText(data[i].orderStatus)}</span>
-                                        </div>
-                                        <div class="one_order_list">
-                                            <div class="one_order_list_circle">
-                                                <img class="store_logo" src=${data[i].Logo} alt="店家logo">
-                                            </div>
-                                            <div class="one_order_store_name">
-                                                <span>${data[i].storeName}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="product-info">
-                            <div class="group-info">
-                                <div class="order_id">
-                                    <span>${data[i].orderId}</span>
-                                </div>
-                                <div class="order_detail">
-                                    <span>${data[i].orderProductQuantity} 項商品</span>
-                                </div>
-                                <div class="order_price">
-                                    <span>共 ${data[i].productAmount} 元</span>
-                                </div>
-                                <div class="order_time">
-                                    <span class="order_date_value">${data[i].orderCreateDatetime}</span>
-                                </div>
-                                <div class="order_time dispute_status_div ${disputeClass}">
-                                  <span class="dispute_status_sp  ${disputeClass}">爭議狀態： ${data[i].disputeStatus}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-            `;
-                document.getElementsByClassName("order_list_ul")[0].innerHTML = orderHtml;
-            }
-        }
-
-        function statusText(statusNum) {
-            switch (statusNum) {
-                case 1 : return "訂單成立";
-                case 2 : return "準備完成";
-                case 3 : return "正在外送";
-                case 4 : return "訂單完成";
-            }
-        }
-
-
-        // 2.3 點擊訂單卡片 link訂單明細
-        // todo: 待後端完成 check 變數
-        // let order_arr = document.querySelectorAll("div.product-inner");
-        // for(i = 0; i < order_arr.length; i++ ){
-        //     let order_item = document.getElementsByClassName("product-inner")[i];
-        //     order_item.addEventListener("click", function(){
-        //         location.href = "./orderDetail.html?orderId=${orderId}";
-        //         //待後端完成 check變數連結
-        //     });
-        // }
     });
 </script>
 </body>

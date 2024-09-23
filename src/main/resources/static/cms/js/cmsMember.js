@@ -16,13 +16,11 @@ function isCheckedSuccess(target) {
     target.previousElementSibling.textContent = "";
     target.previousElementSibling.classList.remove("checkInValid");
     target.classList.remove("inputCheckInValid");
-    return true;
 }
 
 function isCheckedFalse(target) {
     target.previousElementSibling.classList.add("checkInValid");
     target.classList.add("inputCheckInValid");
-    return false;
 }
 
 function phoneValid(phone) {
@@ -105,7 +103,9 @@ queryBtn.addEventListener("click", function () {
 
     }
 })
-
+function nullToEmpty(data) {
+    return (data == null) ? "" : data;
+}
 
 function getCmsMemberList() {
     let queryMemberList = "";
@@ -124,7 +124,7 @@ function getCmsMemberList() {
                         <span>${item.customerId}</span>
                     </td>
                     <td>
-                        <span>${item.customerEmail}</span>
+                        <span>${nullToEmpty(item.customerEmail)}</span>
                     </td>
                     <td>
                         <span>${item.customerPhone}</span>

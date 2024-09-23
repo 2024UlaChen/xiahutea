@@ -127,7 +127,7 @@
                 type="text"
                 class="input-group form-control"
                 style="margin-right: 30px"
-                value="500"
+
                 id="deliverymoney"
               />
             </div>
@@ -288,6 +288,8 @@
 
         let contactphone = document.querySelector("#contactphone");
 
+        let IsStopAction = false;
+
 
         $.ajax({
           url: `/store/storeinfo/${sotreid.split("=")[1]}`,
@@ -295,7 +297,33 @@
           dataType: "json",
           async: false,
           success: function (data) {
-            console.log(data);
+            if(!data.successful){
+              //登入失敗
+              location.href = "./backstageLogin.html";
+            }
+
+            fetch("/store/GetLoginType").then(data => data.json()).then(
+                    res => {
+                      if(res.userTypeId !== 3){
+
+                        document.querySelector('#storeListAsideLink').classList.add("d-none");
+                      }
+
+
+                      document.querySelector("#storeInfoAsideLink").href= `storeInfo.html?storeid=${sotreid.split("=")[1]}`;
+                      document.querySelector("#storeLoyaltyCardAsideLink").href=`storeInfoEditLoyaltyCard.html?storeid=${sotreid.split("=")[1]}`;
+                      document.querySelector("#storePasswordAsideLink").href=`storeInfoEditPassword.html?storeid=${sotreid.split("=")[1]}`;
+
+                    }
+            );
+            //確認是否帳號違停權
+            if(data.storeStatus === 2 ){
+              Swal.fire({
+                text:"帳號停權，請聯絡管理員",
+                icon:"warning"
+              });
+              return;
+            }
             vat.value = data.vat;
             storename.value = data.storeName;
             registerday.value = data.registerDay.split("T")[0];
@@ -342,14 +370,39 @@
             e.preventDefault();
             //商phone
             storephone = document.querySelector("#storephone").value;
+            if(storephone ===""){
+              IsStopAction = true;
+              Swal.fire({
+                text: "請輸入商家電話",
+                icon:"warning"
+              });
+              return;
+            }
 
             openingtime = document.querySelector("#openingtime").value;
+            if(openingtime ===""){
+              IsStopAction = true;
+              Swal.fire({
+                text: "請輸入開店時間",
+                icon:"warning"
+              });
+              return;
+            }
             console.log(openingtime);
             console.log(openingtime + ":00");
 
             closingtime = document.querySelector("#closingtime").value;
+            if(closingtime ===""){
+              IsStopAction = true;
+              Swal.fire({
+                text: "請輸入關店時間",
+                icon:"warning"
+              });
+              return;
+            }
 
             holiday = document.querySelector("#holiday").value;
+
 
             istakeorders = document.querySelector("#istakeorders").checked
               ? true
@@ -358,17 +411,56 @@
             isdelivery = document.querySelector("#isdelivery").checked
               ? true
               : false;
-
             deliverymoney = document.querySelector("#deliverymoney").value;
+            console.log("瞧瞧");
+            console.log(deliverymoney);
+            //檢查如果有外送 必須要有外送金
+            if(isdelivery){
+              if(deliverymoney === ""){
+                Swal.fire({
+                  icon:"warning",
+                  text:"當提供外送服務，需要輸入外送門檻額度"
+                });
+                IsStopAction = true;
+              }
+
+            }
+
+
 
             distance = document.querySelector("#distance").value;
 
 
             mail = document.querySelector("#mail").value;
+            if(mail ===""){
+              IsStopAction = true;
+              Swal.fire({
+                text: "信箱不能為空",
+                icon:"warning"
+              });
+              return;
+            }
+
 
             contactperson = document.querySelector("#contactperson").value;
+            if(contactperson ===""){
+              IsStopAction = true;
+              Swal.fire({
+                text: "聯絡人不能為空",
+                icon:"warning"
+              });
+              return;
+            }
 
             contactphone = document.querySelector("#contactphone").value;
+            if(contactphone ===""){
+              IsStopAction = true;
+              Swal.fire({
+                text: "聯絡人電話不能為空",
+                icon:"warning"
+              });
+              return;
+            }
 
             let id = sotreid.split("=")[1];
             let model = {
@@ -386,25 +478,57 @@
               contactPerson: contactperson,
               contactPhone: contactphone,
             };
+            //檢查
 
-            $.ajax({
-              url: "/store/editstoreinfo",
-              method: "POST",
-              contentType: "application/json",
-              dataType: "JSON",
-              data: JSON.stringify(model),
-              success: function (data) {
-                console.log(JSON.stringify(model));
-                //接著處理照片
-                if(newLogoImg.files.length> 0){
-                  console.log("進到if內了");
-                  let formData = new FormData();
-                  formData.append('storeId',data.storeId);
-                  formData.append('img',newLogoImg.files[0]);
-                  fetch('/store/uploadLogo',{
-                    method:'POST',
-                    body:formData
-                  }).then(resp =>{
+
+            if(!IsStopAction){
+              $.ajax({
+                url: "/store/editstoreinfo",
+                method: "POST",
+                contentType: "application/json",
+                dataType: "JSON",
+                data: JSON.stringify(model),
+                success: function (data) {
+                  //處理公休日
+                  if(document.querySelector('#holiday').value !==""){
+                    console.log(document.querySelector('#holiday').value);
+                    let storeviewmodel = {
+                      storeId : id,
+                      holiday : document.querySelector('#holiday').value
+                    };
+                    $.ajax({
+                      url:"/store/storeholiday",
+                      method:"POST",
+                      contentType: "application/json",
+                      dataType: "JSON",
+                      data:JSON.stringify(storeviewmodel),
+                      success:function (){
+                        console.log('成');
+                      }
+                    });//提交公休
+
+                  }
+                  console.log(JSON.stringify(model));
+                  //接著處理照片
+                  if(newLogoImg.files.length> 0){
+                    console.log("進到if內了");
+                    let formData = new FormData();
+                    formData.append('storeId',data.storeId);
+                    formData.append('img',newLogoImg.files[0]);
+                    fetch('/store/uploadLogo',{
+                      method:'POST',
+                      body:formData
+                    }).then(resp =>{
+                      Swal.fire({
+                        icon: "success",
+                        title: "更新成功",
+                      }).then((res) => {
+                        if (res.isConfirmed) {
+                          location.reload();
+                        }
+                      });
+                    });
+                  }else {
                     Swal.fire({
                       icon: "success",
                       title: "更新成功",
@@ -413,27 +537,21 @@
                         location.reload();
                       }
                     });
-                  });
-                }else {
+                  }
+
+
+                },
+                err: function () {
                   Swal.fire({
-                    icon: "success",
-                    title: "更新成功",
-                  }).then((res) => {
-                    if (res.isConfirmed) {
-                      location.reload();
-                    }
+                    icon: "error",
+                    title: "更新失敗",
                   });
-                }
+                },
+              }); //編輯會員
+            }
+            IsStopAction = false;
 
 
-              },
-              err: function () {
-                Swal.fire({
-                  icon: "error",
-                  title: "更新失敗",
-                });
-              },
-            }); //編輯會員
           }); //監聽save 但不需要提交 所以阻擋預設行為
       }); //DOM END
 

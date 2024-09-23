@@ -48,7 +48,8 @@
                 id="rate"
                 type="number"
                 class="form-control"
-                value="500"
+                value=""
+                placeholder="預設100元一點"
               />
               <div class="form-text">輸入多少新台幣兌換一點</div>
             </div>
@@ -126,10 +127,36 @@
           dataType: "JSON",
           async: false,
           success: function (data) {
+
+            if(!data.successful){
+              //登入失敗
+              location.href = "./backstageLogin.html";
+            }
+            fetch("/store/GetLoginType").then(resp => resp.json()).then(
+                    res => {
+                      if(res.userTypeId !== 3){
+
+                        document.querySelector('#storeListAsideLink').classList.add("d-none");
+                      }
+                      document.querySelector("#storeInfoAsideLink").href= `storeInfo.html?storeid=${sotreid.split("=")[1]}`;
+                      document.querySelector("#storeLoyaltyCardAsideLink").href=`storeInfoEditLoyaltyCard.html?storeid=${sotreid.split("=")[1]}`;
+                      document.querySelector("#storePasswordAsideLink").href=`storeInfoEditPassword.html?storeid=${sotreid.split("=")[1]}`;
+
+                    }
+            );
+            //確認是否帳號違停權
+            if(data.storeStatus === 2 ){
+              Swal.fire({
+                text:"帳號停權，請聯絡管理員",
+                icon:"warning"
+              });
+              return;
+            }
             document.querySelector("#cardname").value = data.loyaltyCardName;
             document.querySelector("#rate").value = data.exchangeRate;
             if (data.validStatus) {
               //集點卡有效
+              document.querySelector("#passday").value = "激活中";
 
               document.querySelector("#cardstatus").setAttribute("checked", "");
             } else {

@@ -11,27 +11,8 @@
   <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="dist/css/adminlte.min.css">
+  <link rel="stylesheet" href="css/registerStoreDetail.css">
 
-  <style>
-    @media print {
-      * {
-        -webkit-print-color-adjust: exact !important;
-      }
-      .noBreak {
-        break-inside: avoid;
-      }
-      .noPrint {
-        display: none;
-      }
-      .content-wrapper{
-        background-color: white;
-      }
-      div.card.card-warning{
-        border: silver solid 1px;
-        box-shadow: 0 0 1px rgba(0, 0, 0, .125), 0 1px 3px rgba(0, 0, 0, .2);
-      }
-    }
-  </style>
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -60,91 +41,92 @@
       <section class="content ">
         <div class="container-fluid col-sm-8">
           <div class="row">
-
             <!-- general form elements disabled -->
             <div class="card card-warning">
               <div class="card-header" style="background-color: #73B4BA">
                 <div class="row">
-
                   <div class="col-sm-2 d-flex align-items-center">
                     <h3 class="card-title">註冊資訊</h3>
                   </div>
-                  <div class="col-sm-8">
+                  <div class="col-sm-9">
                   </div>
-                  <div class="col-sm-1">
+                  <div class="col-sm-1" noPrint>
                     <button class="btn btn-outline-dark" id="print">列印</button>
                   </div>
-                  <div class="col-sm-1">
-                    <button class="btn btn-outline-dark" id="sendmail">發信</button>
-                  </div>
-
                 </div>
 
               </div>
 
               <!-- /.card-header -->
-              <form>
+              <form id="form" action="#" class="teamo-contact-fom">
                 <div class="card-body">
                   <div class="row">
                     <div class="col-sm-12">
                       <div class="form-group">
+                        <label>店家編號</label>
+                        <input type="text" id="storeId" name="storeId" class="form-control" disabled required>
+                      </div>
+                    </div>
+                    <div class="col-sm-12">
+                      <div class="form-group">
                         <label>店家名稱</label>
-                        <input type="text" id="storeName" class="form-control" id="storeName" disabled>
+                        <input type="text" id="storeName" name="storeName" class="form-control" disabled required>
                       </div>
                     </div>
                     <div class="col-sm-12">
                       <div class="form-group">
                         <label>門市地址</label>
-                        <input type="text" id="storeAddress" class="form-control" id="storeAddress" disabled>
+                        <input type="text" id="storeAddress" name="storeAddress" class="form-control" disabled required>
                       </div>
                     </div>
                     <div class="col-sm-12">
                       <div class="form-group">
                         <label>統一編號</label>
-                        <input type="text" id="vat" class="form-control" disabled>
+                        <input type="text" id="vat" name="vat" class="form-control" disabled >
                       </div>
                     </div>
                     <div class="col-sm-12">
                       <div class="form-group">
                         <label>聯絡人</label>
-                        <input type="text" id="contactPerson" class="form-control" disabled>
+                        <input type="text" id="contactPerson" name="contactPerson" class="form-control" disabled required>
                       </div>
                     </div>
                     <div class="col-sm-12">
                       <div class="form-group">
                         <label>連絡電話</label>
-                        <input type="text" id="contactPhone" class="form-control" disabled>
+                        <label id="phoneError"></label>
+                        <input type="text" id="contactPhone" name="contactPhone" class="form-control" disabled required>
                       </div>
                     </div>
                     <div class="col-sm-12">
                       <div class="form-group">
                         <label>E-mail</label>
-                        <input type="text" id="email" class="form-control" disabled>
+                        <input type="email" id="email" name="email" class="form-control" disabled required>
                       </div>
                     </div>
                     <div class="col-sm-12">
                       <div class="form-group">
                         <label>店家負責人</label>
-                        <input type="text" id="owner" class="form-control" disabled>
+                        <input type="text" id="owner" name="owner" class="form-control" disabled required>
                       </div>
                     </div>
                     <div class="col-sm-12">
                       <div class="form-group">
-                        <label>備註</label>
-                        <textarea class="form-control" id="storeRemark" disabled
-                                  style="resize:none;width:100% ; overflow-x:visible;overflow-y:visible;"></textarea>
+                        <label style="height:auto">備註</label>
+                        <textarea class="form-control" id="storeRemark" name="storeRemark" disabled
+                                  style="resize:none;height:150PX; width:100%; overflow-x:visible;overflow-y:visible;"></textarea>
                       </div>
                     </div>
                   </div>
-                  <div class="row">
-                    <div class="col-sm-12">
+                  <div class="row" id="divStoreStatus">
+                    <div class="col-sm-12 ">
                       <!-- select -->
                       <div class="form-group">
                         <label>狀態</label>
-                        <select class="form-control" id="storeStatus">
+                        <select class="form-control" name="storeStatus" id="storeStatus">
                           <option value="0">申請中</option>
                           <option value="1">申請成功</option>
-                          <option value="4">申請失敗</option>
+                          <option value="4">拒絕申請</option>
                         </select>
                       </div>
                     </div>
@@ -167,7 +149,7 @@
       <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
-    <div class="storefooter" noPrint></div>
+    <div class="storefooter" ></div>
   </div>
   <!-- ./wrapper -->
 
@@ -176,20 +158,17 @@
   <script src="js/storegeneral.js"></script>
   <!-- Bootstrap 4 -->
   <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="plugins/sweetalert2/sweetalert2.all.js"></script>
+  <!-- Page specific script -->
+  <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
   <!-- AdminLTE App -->
   <script src="dist/js/adminlte.min.js"></script>
   <!-- AdminLTE for demo purposes -->
   <script src="dist/js/demo.js"></script>
-  <!-- Page specific script -->
-  <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
+  <script src="../js/dataCheck.js"></script>
   <script src="./js/registerStoreDetail.js"></script>
 
 
-<!--  <script>-->
-<!--    $(function () {-->
-<!--      bsCustomFileInput.init();-->
-<!--    });-->
-<!--  </script>-->
 
 
 </body>

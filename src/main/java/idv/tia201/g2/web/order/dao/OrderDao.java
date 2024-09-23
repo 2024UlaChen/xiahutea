@@ -1,16 +1,15 @@
 package idv.tia201.g2.web.order.dao;
 
-import idv.tia201.g2.web.order.vo.Orders;
-
 import java.util.List;
+import idv.tia201.g2.web.order.vo.Orders;
 
 public interface OrderDao {
 
     int insert(Orders orders);
     int update(Orders orders);
 
-    Orders selectByOrderId(int orderId);
-    List<Object[]> selectBycCustomerId(int customerId);
     List<Orders> selectAll();
+    Orders selectByOrderId(int orderId);
+    List<Orders> selectBycCustomerId(int customerId);
 
 }

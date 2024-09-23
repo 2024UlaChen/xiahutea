@@ -12,6 +12,10 @@ document.addEventListener("DOMContentLoaded",function(){
   let store_name_el = document.getElementsByClassName("store-name")[0];
   let customer_img_el = document.getElementsByClassName("customer-img")[0];
   let customer_name_el = document.getElementsByClassName("customer-name")[0];
+  let customerId;
+  let loginMember;
+  let storeId;
+  let nowstore;
 
   //訂單細項
   let item_detail_el = document.getElementsByClassName('item-detail')[0];
@@ -41,17 +45,17 @@ document.addEventListener("DOMContentLoaded",function(){
   let confirm_delete_el = document.getElementById("confirm-delete");
   let cancel_delete_el = document.getElementById("cancel-delete");
   //用全域變數用來裝cartItem(用來編輯)、currentItem(用來刪除)、loginMember(用來裝目前登入會員)
-    let currentCartItem = null;
-    let currentItem = null;
-    let loginMember = null;
+  let currentCartItem = null;
+  let currentItem = null;
 
   //取貨方式
   let pick_up_el = document.getElementsByClassName('pick-up')[0];
   let pick_up_input_el = document.getElementsByClassName("pick-up-input")[0];
+  // let carry_out_radio_el = document.querySelector('.carry-out-radio');
+  let recevie_time_el = document.getElementsByClassName('recevie-time')[0];
 
   //時間選擇
-  // let picker_el = document.getElementsByClassName("pickuper")[0];
-    let date_input_el = document.getElementById('myDatepicker');
+  let date_input_el = document.getElementById('myDatepicker');
 
   //優惠使用
   // let coupon_number_el = document.getElementsByClassName("coupon-number")[0];
@@ -61,16 +65,46 @@ document.addEventListener("DOMContentLoaded",function(){
   let moneybag_discount_number_el = document.getElementsByClassName("moneybag-discount-number")[0];
   let couponDropdown_el = document.getElementsByClassName('coupon-dropdown')[0];
   let couponSelect_el = document.getElementById('coupon-select');
+  let membercard_count_el = document.getElementsByClassName('membercard-count')[0];
+  let membercard_number_el = document.getElementById('membercard-number');
+  let moneybag_count_el = document.getElementsByClassName('moneybag-count')[0]
+  let moneybag_number_el = document.getElementById('moneybag-number') ;
+  let errorMsg_el = document.getElementById('error-msg');
+
+  //訂單彙總
+  let product_amount_el = document.getElementsByClassName('product-amount')[0];
+  let product_unit_el = document.getElementsByClassName('product-unit')[0];
   let coupon_minus_number_el = document.getElementsByClassName('coupon-minus-number')[0];
+  let membercard_minus_number_el = document.getElementsByClassName('membercard-minus-number')[0];
+  let moneybag_minus_number_el = document.getElementsByClassName('moneybag-minus-number')[0];
+
+  let platform_fee_number_el = document.getElementsByClassName('platform-fee-number')[0];
+  let CouponAmountText=null;
+  let CouponAmount=null;
+  let MoneyBagAmountText=null;
+  let MoneyBagAmount=null;
+  let PlatformfeeText=null;
+  let PlatformAmount=null;
+
+  let total_amount_el = document.getElementsByClassName('total-amount')[0];
+
   //結帳流程-2
+  //商品數目
+  let payable_unit_el = document.getElementsByClassName('payable-unit')[0];
+  let payable_price_el = document.getElementsByClassName('payable-price')[0];
   //取貨人
   let btn_backto_last_page_el = document.getElementsByClassName("btn-backto-last-page")[0];
   let btn_goto_next_page_el = document.getElementsByClassName("btn-goto-next-page")[0];
+  let pickuper_el = document.getElementsByClassName('pickuper')[0];
   let select_cellphone_el = document.getElementsByClassName("select-cellphone")[0];
   let input_cellphone_el = document.getElementsByClassName("input-cellphone")[0];
+  let cellphoneError_el = document.getElementById('cellphone-error');
   let select_phone_el = document.getElementsByClassName("select-phone")[0];
   let input_phone_zone_el = document.getElementsByClassName("input-phone-zone")[0];
   let input_phone_number_el = document.getElementsByClassName("input-phone-number")[0];
+  let phoneZoneError_el = document.getElementById('phone-zone-error');
+  // 台灣市話區碼列表 (部分常見區碼)
+  let validPhoneZones = ['02', '03', '04', '05', '06', '07', '08'];
   let text2store_el = document.getElementsByClassName("text2store")[0];
   //發票方式
   let select_paper_el = document.getElementsByClassName("select-paper")[0]; 
@@ -79,7 +113,23 @@ document.addEventListener("DOMContentLoaded",function(){
   let vehicle_number_el = document.getElementsByClassName("vehicle-number")[0];
   let select_paper_uniform_el = document.getElementsByClassName("select-paper-uniform")[0];
   let uniform_numbers_el = document.getElementsByClassName("uniform-numbers")[0];
+  let uniform_numbers_error_el = document.getElementById('uniform-numbers-error');
+
+
   //結帳流程-3
+  let store_el = document.getElementById('store');
+  let customer_el = document.getElementById('customer');
+  let phone_el = document.getElementById('phone');
+  let pickupMethod_el = document.getElementById('pickupMethod');
+  let final_address_el = document.getElementById('final-address');
+  let pickupTime_el = document.getElementById('pickupTime');
+  let paymentMethod_el = document.getElementById('paymentMethod');
+  let invoiceType_el = document.getElementById('invoiceType');
+  let final_amount_el = document.getElementById('final-amount');
+
+
+
+
   let btn_backto_last_page2_el = document.getElementsByClassName("btn-backto-last-page2")[0];
   let btn_submit_order_el = document.getElementsByClassName("btn-submit-order")[0];
   let btn_modal_close_el = document.getElementsByClassName("btn_modal_close")[0];
@@ -89,7 +139,7 @@ document.addEventListener("DOMContentLoaded",function(){
   const customer = sessionStorage.getItem('customer');
   if(customer){
       let customerData = JSON.parse(customer);
-      let customerId = customerData.customerId;
+      customerId = customerData.customerId;
       fetch(`/cart/checkoutlist/${customerId}`)
           .then(response=>{
               if (!response.ok) {
@@ -121,7 +171,6 @@ document.addEventListener("DOMContentLoaded",function(){
               });
           })
     }
-
 
   //獲得localstorage資料(購物車)
   const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
@@ -177,10 +226,17 @@ document.addEventListener("DOMContentLoaded",function(){
       // picker_el.addEventListener("blur", function () {
       //   picker_el.classList.remove("focus-border");
       // });
+      //外送選項
 
       //優惠使用(優惠券、會員卡、會員錢包)
+      //獲得使用者優惠券選項
       select_coupon_input_el.addEventListener("click", function () {
           couponSelect_el.disabled=false;
+          membercard_count_el.style.display = "none";
+          moneybag_count_el.style.display= "none";
+          moneybag_discount_number_el.value ='';
+          membercard_minus_number_el.textContent = '$0';
+          moneybag_minus_number_el.textContent = '$0';
           getcoupons(loginMember.customerId);
       })
 
@@ -189,22 +245,41 @@ document.addEventListener("DOMContentLoaded",function(){
           let selectedOption = couponSelect_el.options[couponSelect_el.selectedIndex];
           let discount = selectedOption.getAttribute('data-discount');
           coupon_minus_number_el.textContent = `$${discount}`;
+          // Calculatetotal(); 移到document點擊
       })
 
-      //TODO 加入點擊事件get會員卡點數 點選會員卡，
+      //加入點擊事件get會員卡點數
       select_membercard_input_el.addEventListener("click",function (){
-          //清除優惠券欄位
+          // GetMemberCardPoint(customerId,storeId);
+          membercard_count_el.style.display = "flex";
+          moneybag_count_el.style.display= "none";
+          moneybag_discount_number_el.value ='';
+          //清除優惠券欄位及會員卡優惠
           couponSelect_el.innerHTML = '<option disabled selected >請選擇優惠券</option>';
-          coupon_minus_number_el.textContent = '$0';
           couponSelect_el.disabled=true;
+          coupon_minus_number_el.textContent = '$0';
+          moneybag_minus_number_el.textContent = '$0';
+
       })
       //TODO 加入點擊事件get會員錢包餘額
-
       select_moneybag_input_el.addEventListener("click",function (){
+          moneybag_count_el.style.display = "flex";
+          if(loginMember.customerMoney!=null){
+              moneybag_number_el.textContent = loginMember.customerMoney;
+              moneybag_discount_number_el.disabled =false;
+              moneybag_discount_number_el.focus();
+              moneybag_discount_number_el.max=loginMember.customerMoney;
+          }else{
+              moneybag_count_el.textContent = '無資料....'
+          }
+          membercard_count_el.style.display = "none";
+          //清除優惠券及會員卡優惠
+          couponSelect_el.innerHTML = '<option disabled selected >請選擇優惠券</option>';
           couponSelect_el.disabled=true;
-        moneybag_discount_number_el.disabled =false;
-        moneybag_discount_number_el.focus();
+          coupon_minus_number_el.textContent = '$0';
+          membercard_minus_number_el.textContent = '$0';
       })
+      //會員錢包輸入框事件
       moneybag_discount_number_el.addEventListener("focus", function () {
         moneybag_discount_number_el.placeholder = "";
       });
@@ -213,6 +288,16 @@ document.addEventListener("DOMContentLoaded",function(){
           moneybag_discount_number_el.placeholder = "請輸入折抵金額";
         }
       });
+      moneybag_discount_number_el.addEventListener('input',function (){
+          if (moneybag_discount_number_el.value > loginMember.customerMoney) {
+              moneybag_discount_number_el.value = loginMember.customerMoney; // 如果輸入值大於錢包餘額，自動設為最大值
+          }
+          if (moneybag_discount_number_el.value < 1) {
+              moneybag_discount_number_el.value = 1; // 如果輸入值小於1，自動設為1
+          }
+          moneybag_minus_number_el.textContent=`$${moneybag_discount_number_el.value}`;
+          Calculatetotal();
+      })
 
       //頁面跳轉
       btn_addtopurchase_el.addEventListener("click", function (e) {
@@ -220,7 +305,72 @@ document.addEventListener("DOMContentLoaded",function(){
         e.stopPropagation();
       })
 
+      //進入下一頁、檢查欄位有無輸入
       btn_checkout_el.addEventListener("click", function (e) {
+        //檢查是否至少選一個取貨方式
+        //選取所有具有 name="delivery" 的 radio 按鈕
+        let deliveryOptions = document.querySelectorAll('input[name="delivery"]');
+        let isSelected = false;
+        deliveryOptions.forEach(option=> {
+            if (option.checked) {
+                isSelected = true;
+            }
+        })
+        if(!isSelected){
+            Swal.fire({
+                icon: 'error',
+                title: '未選擇配送方式',
+                text: '請選擇一個配送選項！',
+                confirmButtonText: '確定',
+            })
+            return;
+        }
+        //判斷是選了自取、外送(自填)、外送預設地址哪一個
+        let carry_out_radio_el = document.querySelector('.carry-out-radio');
+        let address_el = document.querySelector('.address');
+        let carryout_default_input_el = document.querySelector('.carryout-default-input');
+        if(pick_up_input_el.checked){
+            console.log("選定自取")
+        }else if(carry_out_radio_el.checked){
+            if(address_el.value===''){
+                Swal.fire({
+                    icon: 'error',
+                    title: '未填寫地址',
+                    text: '請填寫地址！',
+                    confirmButtonText: '確定',
+                })
+                return;
+            }else{
+                console.log("外送地址 : ",address_el.value)
+            }
+        }else if(carryout_default_input_el.checked){
+            let memberaddress = document.querySelectorAll('input[name="member-address"]');
+            let addressisSelected = false;
+            //檢查是不是有選預設地址
+            memberaddress.forEach(option=>{
+                if(option.checked){
+                    addressisSelected = true;
+                }
+            })
+            if(!addressisSelected){
+                Swal.fire({
+                    icon: 'error',
+                    title: '未選擇地址',
+                    text: '請選擇一個預設地址！',
+                    confirmButtonText: '確定',
+                })
+                return;
+            }
+            //正確選擇預設地址後，獲得選取的項目
+            let selectedRadio = document.querySelector('input[name="member-address"]:checked');
+            //獲得選取的子選項label
+            let selectedLabel = document.querySelector(`label[for="${selectedRadio.id}"]`);
+            console.log("選擇的預設地址",selectedLabel.textContent)
+        }
+
+        //保存了第一頁資訊切換到第二頁
+        payable_unit_el.textContent = product_unit_el.textContent;
+        payable_price_el.textContent = product_amount_el.textContent;
         step1_el.classList.remove("active");
         step2_el.classList.add("active");
         if (step_content_el.style.display = "flex") {
@@ -233,6 +383,8 @@ document.addEventListener("DOMContentLoaded",function(){
         }
         e.stopPropagation();
       })
+      //計算總額
+      document.addEventListener('click',Calculatetotal)
 //********************************************日期時間選擇器*************************************
     // 取得當前日期和時間
     new AirDatepicker('#myDatepicker', {
@@ -248,6 +400,10 @@ document.addEventListener("DOMContentLoaded",function(){
           timeFormat: 'HH:mm',
           firstDay: 1
         },
+        onShow: function() {
+            // 禁止手動輸入
+            document.querySelector('#myDatepicker').setAttribute('readonly', true);
+        },
         minDate: new Date(), // 設定不能選擇早於當前的日期
         timepicker: true, // 開啟時間選擇功能
         minutesStep: 1 // 設定分鐘選擇間隔
@@ -261,6 +417,7 @@ document.addEventListener("DOMContentLoaded",function(){
         input_phone_number_el.disabled = true;
         input_phone_zone_el.value = "";
         input_phone_number_el.value = "";
+        phoneZoneError_el.style.display = 'none';
         input_cellphone_el.focus();
       })
       input_cellphone_el.addEventListener("focus", function () {
@@ -271,11 +428,28 @@ document.addEventListener("DOMContentLoaded",function(){
           input_cellphone_el.placeholder = "EX:0912345678";
         }
       });
-
+      //檢查手機輸入格式
+      input_cellphone_el.addEventListener('input', function () {
+          let cellphoneInput = this.value;
+          // 台灣手機號碼格式檢核 (09 開頭，接 8 位數字)
+          let cellphoneRegex = /^09\d{8}$/;
+          if (cellphoneRegex.test(cellphoneInput)) {
+              // 符合格式，隱藏錯誤提示
+              cellphoneError_el.style.display = 'none';
+              input_cellphone_el.style.borderColor = '';
+          } else {
+              // 不符合格式，顯示錯誤提示
+              cellphoneError_el.style.display = 'inline';
+              // input_cellphone_el.style.borderColor = 'red';
+          }
+      });
+      //市話
       select_phone_el.addEventListener("click", function () {
         input_phone_zone_el.disabled = false;
         input_cellphone_el.disabled = true;
         input_cellphone_el.value = "";
+        cellphoneError_el.style.display = 'none';
+        input_cellphone_el.style.borderColor = '';
         input_phone_zone_el.focus();
       })
       input_phone_zone_el.addEventListener("focus", function () {
@@ -286,14 +460,39 @@ document.addEventListener("DOMContentLoaded",function(){
           input_phone_zone_el.placeholder = "區碼";
         }
       });
-      input_phone_zone_el.addEventListener("input", function () {
-        if (input_phone_zone_el.value.length === 2) {
-          setTimeout(function () {
-            input_phone_number_el.disabled = false;
-            input_phone_number_el.focus();
-          }, 10);
+      //檢查市話區碼
+      input_phone_zone_el.addEventListener('input', function () {
+        let phoneZoneInput = this.value;
+        // 檢核輸入的區碼是否有效
+        if (validPhoneZones.includes(phoneZoneInput)) {
+            // 符合區碼，隱藏錯誤提示
+            phoneZoneError_el.style.display = 'none';
+            // 如果輸入的區碼長度為2，解鎖市話號碼輸入框並自動將焦點設置到該框
+            if (phoneZoneInput.length === 2) {
+                //避免太快跳轉過去會將鍵盤輸入文字誤帶過去
+                setTimeout(function () {
+                    input_phone_number_el.disabled = false;
+                    input_phone_number_el.focus();
+                    input_phone_number_el.value='';
+                }, 10);
+            }
+        } else {
+            // 不符合區碼，顯示錯誤提示
+            phoneZoneError_el.style.display = 'inline';
+            // 禁用市話號碼輸入框
+            input_phone_number_el.disabled = true;
         }
-      })
+    });
+    input_phone_number_el.addEventListener('input', function () {
+        let phoneInput = this.value;
+        let phoneRegex = /^\d{7}$/;
+        if (phoneRegex.test(phoneInput)) {
+            // 符合格式，隱藏錯誤提示
+            phoneZoneError_el.style.display = 'none';
+        } else {
+            phoneZoneError_el.style.display = 'inline';
+        }
+    });
 
       text2store_el.addEventListener("focus", function () {
         text2store_el.placeholder = "";
@@ -311,6 +510,7 @@ document.addEventListener("DOMContentLoaded",function(){
         checksava_vehicle_el.disabled = true;
         checksava_vehicle_el.checked = false;
         uniform_numbers_el.value="";
+        uniform_numbers_error_el.style.display="none";
       })
       select_vehicle_el.addEventListener("click", function () {
         checksava_vehicle_el.disabled = false;
@@ -318,6 +518,7 @@ document.addEventListener("DOMContentLoaded",function(){
         uniform_numbers_el.disabled= true;
         vehicle_number_el.focus();
         uniform_numbers_el.value="";
+        uniform_numbers_error_el.style.display="none";
       })
       select_paper_uniform_el.addEventListener("click",function (){
         uniform_numbers_el.disabled=false;
@@ -335,11 +536,25 @@ document.addEventListener("DOMContentLoaded",function(){
           uniform_numbers_el.placeholder = "請輸入統編";
         }
       });
+      uniform_numbers_el.addEventListener("input",function (){
+         //  let uniformNumberLength = this.value.length;
+         // if(uniformNumberLength<8){
+         //     uniform_numbers_error_el.style.display="inline";
+         // }else{
+         //     uniform_numbers_error_el.style.display="none";
+         // }
+         //  console.log("now value: ",this.value)
+         if(vatCheck(this.value)){
+             uniform_numbers_error_el.style.display="none";
+         }else{
+             uniform_numbers_error_el.style.display="inline";
+         }
+      })
       //頁面跳轉
       btn_backto_last_page_el.addEventListener("click", function (e) {
         step2_el.classList.remove("active");
         step1_el.classList.add("active");
-        if (step_content2_el.style.display = "flex") {
+        if (step_content2_el.style.display === "flex") {
           step_content2_el.style.display = "none";
           step_content_el.style.display = "flex";
           order_detail_container_el.scrollIntoView({
@@ -350,7 +565,97 @@ document.addEventListener("DOMContentLoaded",function(){
       })
 
       btn_goto_next_page_el.addEventListener("click", function (e) {
+        //檢查欄位是不是都正確填寫
+        //取貨人
+        if(pickuper_el.value ===''){
+            Swal.fire({
+                icon: 'error',
+                title: '未填寫取貨人姓名',
+                text: '請填寫取貨人姓名！',
+                confirmButtonText: '確定',
+            })
+            return;
+        }
+          //聯絡電話
+          let selectcontact = document.querySelectorAll('input[name="select-contact"]');
+          let contactisSelected = false;
+          //檢查是不是有選聯絡方式
+          selectcontact.forEach(option=>{
+              if(option.checked){
+                  contactisSelected = true;
+              }
+          })
+          if(!contactisSelected){
+              Swal.fire({
+                  icon: 'error',
+                  title: '未選擇連絡電話',
+                  text: '請選擇一個連絡方式！',
+                  confirmButtonText: '確定',
+              })
+              return;
+          }
+          //檢查手機
+        if(select_cellphone_el.checked){
+            if(input_cellphone_el.value===''||cellphoneError_el.style.display==='inline'){
+                Swal.fire({
+                    icon: 'error',
+                    title: '手機號碼錯誤',
+                    text: '請填寫正確手機號碼！',
+                    confirmButtonText: '確定',
+                })
+                return;
+            }
+        }
+          //檢查電話
+          if(select_phone_el.checked){
+              if(input_phone_zone_el.value ===''||
+                 input_phone_number_el.value ===''||
+                 phoneZoneError_el.style.display==='inline'){
+                  Swal.fire({
+                      icon: 'error',
+                      title: '市話號碼錯誤',
+                      text: '請填寫正確市話號碼！',
+                      confirmButtonText: '確定',
+                  })
+                  return;
+              }
+          }
+        //發票方式
+          let selectinvoice = document.querySelectorAll('input[name="select-invoice"]');
+          let invoiceisSelected = false;
+          //檢查是不是有選發票方式
+          selectinvoice.forEach(option=>{
+              if(option.checked){
+                  invoiceisSelected = true;
+              }
+          })
+          if(!invoiceisSelected){
+              Swal.fire({
+                  icon: 'error',
+                  title: '未選擇發票方式',
+                  text: '請選擇一個發票方式！',
+                  confirmButtonText: '確定',
+              })
+              return;
+          }
+        if(select_paper_el.checked){
+            //預計將金流方式設定為紙本發票
+        }
+        if(select_paper_uniform_el){
+            //預計將金流方式設定為紙本發票加統編
+            if(uniform_numbers_el.value ===''||uniform_numbers_error_el.style.display==='inline'){
+                Swal.fire({
+                    icon: 'error',
+                    title: '統編號碼錯誤',
+                    text: '請填寫正確統編號碼！',
+                    confirmButtonText: '確定',
+                })
+                return;
+            }
+        }
         step2_el.classList.remove("active");
+        store_el.textContent= nowstore.storeName;
+        customer_el.textContent = loginMember.nickname;
         step3_el.classList.add("active");
         if (step_content2_el.style.display = "flex") {
           step_content2_el.style.display = "none";
@@ -362,7 +667,7 @@ document.addEventListener("DOMContentLoaded",function(){
         e.stopPropagation()
       })
 
-      //********************************************第三頁按鈕事件*************************************
+      //********************************************第三頁*************************************
       btn_backto_last_page2_el.addEventListener("click", function (e) {
         step3_el.classList.remove("active");
         step2_el.classList.add("active");
@@ -452,7 +757,7 @@ document.addEventListener("DOMContentLoaded",function(){
             }
             console.log('Products:', products);
             // 检查商品資料中是否包含商店ID
-            const storeId = products[0].productStoreId;
+              storeId = products[0].productStoreId;
             if (!storeId) {
               throw new Error('商品缺乏商店編號');
             }
@@ -492,7 +797,8 @@ document.addEventListener("DOMContentLoaded",function(){
                 throw new Error('找不到商店資料');
               }
               console.log('Store Details:', store);
-              //判斷現在是不是營業時間及是否接單
+              nowstore = store;
+              //判斷現在是不是營業時間及是否接單(測試時可先註解)
               //   if (!isinOpeningHours(store.openingHours, store.closingHours)
               //       || !store.isTakeOrders) {
               //       Swal.fire({
@@ -569,22 +875,10 @@ document.addEventListener("DOMContentLoaded",function(){
     //findproductbyid->findstorebyid->updateDeliveryOptions
     function updateDeliveryOptions(isDelivery){
       if (isDelivery){
-        //獲得用戶常用地址
-
-        //外送(常用地址)
-        // const carryoutdefalut = document.createElement('div');
-        // carryoutdefalut.className ='carry-out-default';
-        // carryoutdefalut.innerHTML=`
-        //     <input class="carry-out-default-radio" type="radio" name="delivery" id="carry-out-default">
-        //     <label class="carry-out-default-label" for="carry-out-default" style="padding-top: 10px">外送(常用地址)</label>
-        //     <div class="common-address-options" style="display: none;">
-        //     </div>
-        //
-        //     `;
-        //外送(自填地址)
-        const carryoutdiv = document.createElement('div');
-        carryoutdiv.className = 'carry-out';
-        carryoutdiv.innerHTML=`
+          //外送(自填地址)
+          const carryoutdiv = document.createElement('div');
+          carryoutdiv.className = 'carry-out';
+          carryoutdiv.innerHTML=`
           <div class="carry-out-selection">
               <input class="carry-out-radio" type="radio" name="delivery" id="carry-out">
               <label class="carry-out-label" for="carry-out" style="padding-top: 10px">外送(自填地址)</label>
@@ -593,25 +887,87 @@ document.addEventListener("DOMContentLoaded",function(){
                <input type="text" class="address" placeholder="請輸入地址" maxlength="255" disabled>
            </div>
             `;
-        pick_up_el.insertAdjacentElement('afterend', carryoutdiv);
-        //設定標籤&綁定事件
-        let carry_out_radio_el = document.getElementsByClassName("carry-out-radio")[0];
-        let address_el = document.getElementsByClassName("address")[0];
-        carry_out_radio_el.addEventListener("click", function () {
-          address_el.disabled = false;
-          address_el.focus();
-        })
-        address_el.addEventListener("focus", function () {
-          // 清空 placeholder
-          address_el.placeholder = "";
-        });
-        // 當輸入框失去焦點時
-        address_el.addEventListener("blur", function () {
-          // 如果輸入框為空，恢復 placeholder
-          if (address_el.value === "") {
-            address_el.placeholder = "請輸入地址";
-          }
-        });
+          pick_up_el.insertAdjacentElement('afterend', carryoutdiv);
+          //抓取標籤以便運用
+          let carry_out_radio_el = document.getElementsByClassName("carry-out-radio")[0];
+          let address_el = document.getElementsByClassName("address")[0];
+
+          carry_out_radio_el.addEventListener("click", function () {
+              address_el.disabled = false;
+              address_el.focus();
+          })
+          address_el.addEventListener("focus", function () {
+              // 清空 placeholder
+              address_el.placeholder = "";
+          });
+          // 當輸入框失去焦點時
+          address_el.addEventListener("blur", function () {
+              // 如果輸入框為空，恢復 placeholder
+              if (address_el.value === "") {
+                  address_el.placeholder = "請輸入地址";
+              }
+          });
+        //獲得用戶常用地址,若有則生成選項
+        fetch(`/cart/checkoutlist/Memberaddress/${customerId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(address=> {
+                if (address && address.length > 0) {
+                    // 資料存在，處理地址資料
+                    console.log('User Address:', address);
+                    //先建立外送(預設地址)選項
+                    const carryoutdefalut = document.createElement('div');
+                    carryoutdefalut.className ='carry-out-default';
+                    carryoutdefalut.innerHTML+=`
+                         <input class="carryout-default-input" type="radio" name="delivery">
+                         <label class="carryout-default-label" for="pick-up-label" style="padding-top: 10px">
+                         外送(預設地址)
+                         </label>
+                    `;
+                    carryoutdiv.insertAdjacentElement('afterend', carryoutdefalut);
+                    //建立外送(預設地址) 地址選項區塊
+                    const suboptions = document.createElement('div')
+                    suboptions.style.display="none";
+                    suboptions.className = 'sub-options';
+                    carryoutdefalut.appendChild(suboptions);
+                    let sub_options_el = document.getElementsByClassName('sub-options')[0];
+                    //在地址選項區塊生成每個子選項一個div區塊
+                    address.forEach(data=>{
+                        const addressItem = document.createElement('div');
+                        addressItem.innerHTML = `
+                            <input type="radio" name="member-address" id="address-${data.customerAddressId}">
+                            <label for="address-${data.customerAddressId}">${data.customerAddress}</label>
+                            `;
+                        sub_options_el.appendChild(addressItem);  // 將每組 input 和 label 添加到 sub-options 中
+                        })
+
+                    //點擊外送(預設地址)展開子選項
+                    let carryout_default_input_el = document.getElementsByClassName('carryout-default-input')[0];
+                    carryout_default_input_el.addEventListener('click',function (){
+                        suboptions.style.display="block";
+                        address_el.disabled = true;
+                        address_el.value="";
+                    })
+
+                    // 點擊自取、外送(自填)選項關閉外送地址選項區塊
+                    pick_up_input_el.addEventListener("click", function () {
+                        suboptions.style.display = "none";  // 隱藏外送地址選項
+                    })
+                    carry_out_radio_el.addEventListener("click", function () {
+                        suboptions.style.display = "none";
+                        address_el.textContent="";
+                    })
+                    } else {
+                    console.log('No address data found.');
+                }
+            })
+            .catch(error => console.error('Error loading coupons:', error));
+
+        //針對預設地址選項以外的情形綁定事件
         //點擊自取選項關閉地址輸入框
         pick_up_input_el.addEventListener("click", function () {
           address_el.disabled = true;
@@ -619,10 +975,7 @@ document.addEventListener("DOMContentLoaded",function(){
         })
       }
     }
-    //用customerID獲得常用地址
-    // function getAddressbyId(customer){
-    //
-    // }
+
     //F07 用Localstotage中的購物車商品和返回的商品資訊生成商品明細
     //sortCartItems->findproductbyid->renderproductdetail
     function renderproductdetail(groupedItems, products){
@@ -712,13 +1065,13 @@ document.addEventListener("DOMContentLoaded",function(){
                   delete_detail_el.innerHTML = `
                     刪除 <span class="highlight">${productName}</span> ?
                     `;
-              })
-           }
+                })
+            }
         })
+        //渲染完商品項目後，初步計算總額
+        Calculatetotal();
       }
-
-
-    //F08 燈箱:編輯事件處理
+    //F08 燈箱:編輯事件處理(在按下確認更新時觸發)
     function handlelightbox(){
           //先檢查全域變數是否存在cartItem
         if (!currentCartItem) return;
@@ -928,9 +1281,18 @@ document.addEventListener("DOMContentLoaded",function(){
         //F14 獲得的優惠券動態生成選項
         function getcoupons(customerId){
             fetch(`/cart/getCoupon/${customerId}`)
-                .then(response => response.json())
+                .then(response=>{
+                    if (!response.ok) {
+                        return response.json().then(errorData => {
+                            throw new Error(errorData.message);
+                        });
+                    }
+                    return response.json();
+                })
                 .then(coupons => {
                     console.log("coupons : ",coupons)
+                    let options = couponSelect_el.querySelectorAll('option:not([disabled])');
+                    options.forEach(option => option.remove());
                     coupons.forEach(coupon => {
                         let option = document.createElement('option');
                         option.value = coupon.couponId;
@@ -941,8 +1303,74 @@ document.addEventListener("DOMContentLoaded",function(){
                 })
                 .catch(error => console.error('Error loading coupons:', error));
         }
+        //F15 獲得會員卡餘額及相關事件綁定
+        function GetMemberCardPoint(customerId, storeId){
+            fetch(`/cart/checkoutlist/getMemberCard/${customerId}/${storeId}`)
+                .then(response=>{
+                    if (!response.ok) {
+                        return response.json().then(errorData => {
+                            throw new Error(errorData.message);
+                        });
+                    }
+                    return response.json();
+                })
+                .then(data=>{
+                    console.log("會員卡積分:", data.points);
+                    membercard_number_el.textContent=data.points;
+                })
+                .catch(error=>{
+                    console.error('Error loading coupons:', error);
+                })
+        }
         //F20 計算訂單金額
+        function Calculatetotal(){
+            let totalAmount = 0;
+            let totalquanity = 0;
+            // 抓所有的商品明細項目，根據 data-type 屬性來取得價格和數量
+            document.querySelectorAll('.item-content')
+                .forEach(itemContent => {
+                // 找到該商品的價格元素和數量元素
+                let priceEl = itemContent.querySelector('div[data-type="price"]');
+                let quantityEl = itemContent.querySelector('div[data-type="quantity"]');
+                // 從元素中提取價格和數量
+                let priceText = priceEl.textContent.trim();
+                let quantityText = quantityEl.textContent.trim();
+                // 去掉價格的符號和數量的文字，並轉換為數值型態
+                let price = parseFloat(priceText.replace('$', '').replace('/', ''));
+                let quantity = parseInt(quantityText.replace(' 杯', ''));
+                // 累加每個商品的總額及數量
+                totalquanity += quantity;
+                totalAmount += price * quantity;
+            });
+            //商品總數與折扣前總價
+            product_unit_el.textContent=`商品X${totalquanity}`;
+            product_amount_el.textContent =`$${totalAmount}`;
+            //加平台費用
+            PlatformfeeText = platform_fee_number_el.textContent.trim();
+            PlatformAmount = parseFloat(PlatformfeeText.replace('$', ''));
+            totalAmount += PlatformAmount;
+            //優惠券折抵
+            CouponAmountText = coupon_minus_number_el.textContent.trim();
+            CouponAmount = parseFloat(CouponAmountText.replace('$', ''));
+            totalAmount -= CouponAmount;
+            if(totalAmount<0){
+                //使用的優惠券折扣金額大於訂單總額就將總額變為0元，優惠券不退還
+                totalAmount =0;
+            }
 
+            //會員錢包折抵
+            MoneyBagAmountText = moneybag_minus_number_el.textContent.trim();
+            MoneyBagAmount = parseFloat(MoneyBagAmountText.replace('$', ''));
+            totalAmount -= MoneyBagAmount;
+            if(totalAmount<0){
+                //若使用的會員餘額多過於總金額就把數字加回去，再修正為訂單總額的會員點數使用
+                totalAmount += MoneyBagAmount;
+                moneybag_discount_number_el.value = totalAmount;
+                moneybag_minus_number_el.textContent=`$${totalAmount}`;
+                totalAmount =0;
+            }
+            total_amount_el.textContent = `$${totalAmount}`;
+        }
 
 
     // 獲取尺寸的輔助函數

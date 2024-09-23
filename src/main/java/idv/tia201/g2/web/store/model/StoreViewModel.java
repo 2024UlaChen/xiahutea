@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -29,6 +30,7 @@ public class StoreViewModel {
 
     private List<Timestamp> holidays;
     //休假日
+    private Date holiday;
 
     private Time closingHours;//關店時間
     //是否提供外送

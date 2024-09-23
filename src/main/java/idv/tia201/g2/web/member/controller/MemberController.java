@@ -1,15 +1,14 @@
 package idv.tia201.g2.web.member.controller;
 
-
-import idv.tia201.g2.core.service.AddrService;
-import idv.tia201.g2.core.vo.AddressDetailVo;
+import idv.tia201.g2.core.pojo.Core;
+import idv.tia201.g2.core.util.ValidateUtil;
 import idv.tia201.g2.web.member.service.MemberService;
 import idv.tia201.g2.web.member.vo.Member;
 import idv.tia201.g2.web.member.vo.MemberAddress;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -18,8 +17,6 @@ public class MemberController {
     @Autowired
     private MemberService memberService;
 
-    @Autowired
-    private AddrService addrService;
 
     @GetMapping("address/{memberId}")
     public List<MemberAddress> getMemberAddress(@PathVariable Integer memberId) {
@@ -32,14 +29,26 @@ public class MemberController {
         return member.getCustomerCarrier();
     }
 
-    @GetMapping("address")
-    public List<AddressDetailVo> getDefaultAddressList(){
-        try {
-            List<AddressDetailVo> addressDetailVoList = addrService.getAddrFromJson();
-            System.out.println(addressDetailVoList);
-            return addressDetailVoList;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+    @PostMapping("carrier")
+    public Core updateMemberCarrier(@RequestBody Member member, @RequestParam(value = "type") String type) {
+        Core core = new Core();
+        String memberCarrier = member.getCustomerCarrier();
+
+        if (type.equals("update")) {
+            if (!StringUtils.hasText(memberCarrier) || !ValidateUtil.checkCarrier(memberCarrier)) {
+                core.setMessage("carrier is wrong, plz check ");
+                core.setSuccessful(false);
+                return core;
+            }
         }
+        Integer updateResult = memberService.updateMemberCarrier(member);
+        if (updateResult != 0) {
+            core.setSuccessful(true);
+            core.setMessage("update carrier successful");
+        } else {
+            core.setMessage("update carrier fail");
+            core.setSuccessful(false);
+        }
+        return core;
     }
 }

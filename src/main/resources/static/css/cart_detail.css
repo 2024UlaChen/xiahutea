@@ -197,8 +197,8 @@
 }
 
 
-.pick-up, .carry-out {
-  /* display: flex; */
+.pick-up, .carry-out, .carry-out-default {
+  /* display: flex;   div標籤就有區塊一行效果 */
   margin-bottom: 5px; /* 讓選項之間有距離 */
  text-align: left;
 }
@@ -218,6 +218,12 @@
 .address::placeholder {
   color: #999;
 }
+
+/*外送預設地址 */
+.sub-options{
+  margin-left: 20px;
+}
+
 
 /*取貨時間 */
 .recevie-time{
@@ -274,10 +280,6 @@
   transform: translateY(-50%); /* 垂直居中 */
   pointer-events: none; /* 讓箭頭不會被點擊 */
 }
-
-/*.coupon-number::placeholder {*/
-/*  color: #999;*/
-/*}*/
 
 .coupon-use h4 {
   text-align: left; /* 標題靠左對齊 */

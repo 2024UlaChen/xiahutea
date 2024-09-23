@@ -26,7 +26,7 @@
     <link rel="stylesheet" href="assets/fonts/flaticon/flaticon.css">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="css/general.css">
-    <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="css/loginOrRegister.css">
 </head>
 
 <body>
@@ -35,35 +35,60 @@
     <div class="page-main-content">
         <div class="container">
             <div class="row">
-                <div class="login">
-                    <h5>歡迎使用夏虎茶！線上訂餐系統</h5>
-                    <div>
+                <div class="main">
+                    <header>
+                        <h5>歡迎使用夏虎茶！線上訂餐系統</h5>
                         <div>
-                            <span>沒有帳號？ <a class="registerLink">立即註冊</a></span>
+                            <span>沒有帳號？</span> <a class="logging" id="toggleLink">立即註冊</a>
                         </div>
+                    </header>
+                    <section>
                         <div class="loginForm">
-                            <div class="userPhoneBlock">
-                                <i class="fa fa-phone"></i>
-                                <input title="userPhone" type="tel" placeholder="手機號碼" maxlength="10" >
-                                <span class="userPhoneError">
-                                    <i class="fa fa-exclamation-circle"></i>
-                                </span>
+                            <div>
+                                <div class="block">
+                                    <i class="fa fa-phone"></i>
+                                    <input title="userPhone" type="tel" placeholder="手機號碼" maxlength="10"
+                                           id="memberPhone">
+                                </div>
+                                <span id="PhoneTip"></span>
                             </div>
-                            <span class="userPhoneTip">123</span>
-                            <div class="passwordBlock">
-                                <i class="fa fa-key"></i>
-                                <input title="password" type="password" placeholder="密碼">
-                                <span class="passwordError -on">
-                                    <i class="fa fa-exclamation-circle"></i>
-                                </span>
+                            <div>
+                                <div class="block">
+                                    <i class="fa fa-key"></i>
+                                    <input title="password" type="password" placeholder="密碼" id="pwd" maxlength="16">
+                                </div>
+                                <span id="pwdTip"></span>
                             </div>
-                            <span class="passwordTip -on">123</span>
                         </div>
-                        <button class="loginBtn">Login</button>
+                        <div class="registerForm hidden">
+                            <div>
+                                <div class="block">
+                                    <i class="fa fa-key"></i>
+                                    <input title="password" type="password" placeholder="密碼" id="rePwd" maxlength="16">
+                                </div>
+                                <span id="rePwdTip"></span>
+                            </div>
+                            <div>
+                                <div class="block">
+                                    <i class="fa fa-user-circle" aria-hidden="true"></i>
+                                    <input title="username" type="text" placeholder="姓名" id="memberName">
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btnLogin ">登入</button>
+                        <button class="btn btnRegister hidden ">註冊</button>
+
                         <div class="lost_password">
-                            <a href="#" class="forgotPwd">忘記密碼</a>
+                            <a id="forgetPwd">忘記密碼</a>
                         </div>
-                    </div>
+                    </section>
+                    <footer class="specialRule">
+                        登入即代表您同意
+                        <a href="#"> 使用者條款 </a>
+                        和
+                        <a href="#"> 隱私權條款 </a>
+
+                    </footer>
                 </div>
             </div>
         </div>
@@ -92,7 +117,11 @@
 <script src="assets/js/jquery.scrollbar.min.js"></script>
 <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyC3nDHy1dARR-Pa_2jjPCjvsOR4bcILYsM'></script>
 <script src="assets/js/frontend-plugin.js"></script>
+<script src="cms/plugins/sweetalert2/sweetalert2.all.min.js"></script>
+
 <script src="js/general.js"></script>
+<script src="js/loginOrRegister.js"></script>
+
 </body>
 
 

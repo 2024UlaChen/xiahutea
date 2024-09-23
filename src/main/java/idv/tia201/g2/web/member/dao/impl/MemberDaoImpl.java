@@ -31,7 +31,7 @@ public class MemberDaoImpl implements MemberDao {
         return session
                 .createNativeQuery(sql, Member.class)
                 .setParameter("phone", phone)
-                .getResultList().get(0);
+                .uniqueResult();
     }
 
     @Override
@@ -45,13 +45,12 @@ public class MemberDaoImpl implements MemberDao {
 
     @Override
     public Member findMemberForLogin(String phone, String password) {
-        //todo follow - need to revise
         final String sql = "select * from CUSTOMER where CUSTOMER_PHONE = :phone and CUSTOMER_PASSWORD = :password";
         return session
                 .createNativeQuery(sql, Member.class)
                 .setParameter("phone", phone)
                 .setParameter("password", password)
-                .getResultList().get(0);
+                .uniqueResult();
     }
 
     @Override
@@ -98,8 +97,18 @@ public class MemberDaoImpl implements MemberDao {
                 .setParameter("memberRemark", memberRemark)
                 .setParameter("memberId", memberId)
                 .executeUpdate();
-
     }
+
+    @Override
+    public Integer updateMemberCarrierById(Integer memberId, String memberCarrier) {
+        final String sql = "update CUSTOMER set customer_carrier = :memberCarrier   where  customer_id = :memberId ";
+        return session
+                .createNativeQuery(sql, Member.class)
+                .setParameter("memberCarrier", memberCarrier)
+                .setParameter("memberId", memberId)
+                .executeUpdate();
+    }
+
 
     @Override
     public boolean updateMemberAddress(MemberAddress memberAddress) {
@@ -115,9 +124,8 @@ public class MemberDaoImpl implements MemberDao {
     }
 
     @Override
-    public boolean createMember(Member member) {
+    public void createMember(Member member) {
         session.persist(member);
-        return true;
     }
 
     @Override
@@ -126,4 +134,14 @@ public class MemberDaoImpl implements MemberDao {
         return true;
     }
 
+
+    @Override
+    public Integer updateVerifyCodeById(Integer memberId, String verifyCode) {
+        final String sql = "update CUSTOMER set verify_code = :verifyCode   where  customer_id = :memberId ";
+        return session
+                .createNativeQuery(sql, Member.class)
+                .setParameter("verifyCode", verifyCode)
+                .setParameter("memberId", memberId)
+                .executeUpdate();
+    }
 }

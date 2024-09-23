@@ -15,6 +15,8 @@ public interface MemberService {
     //    編輯
     Member editMember(Member member);
 
+    Integer updateMemberCarrier(Member member);
+
     Integer updateMemberByValidSatusAndCustomerRemark(Member member);
 
     //    編輯地址
@@ -32,6 +34,11 @@ public interface MemberService {
 
     //取得單一會員資料
     Member findMemberById(Integer memberId);
+
+    //判斷verifyCode是否相同
+    Boolean isCorrectVerifyCode(Member member);
+
+    Boolean updateVerifyCode(Member member);
 
     //    列出所有會員地址
     List<MemberAddress> findAddressByMemberId(Integer memberId);

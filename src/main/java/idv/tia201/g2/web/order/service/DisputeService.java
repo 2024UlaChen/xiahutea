@@ -1,17 +1,16 @@
 package idv.tia201.g2.web.order.service;
 
+import java.util.List;
 import idv.tia201.g2.web.order.dto.OrderDto;
 import idv.tia201.g2.web.order.vo.DisputeOrder;
-import idv.tia201.g2.web.order.vo.Orders;
 
-import java.util.List;
-
-public interface DisputeService {
+public interface DisputeService  {
 
     DisputeOrder add(DisputeOrder disputeOrder);
-    OrderDto update(OrderDto orderDto);
+    DisputeOrder updateInfo(DisputeOrder disputeOrder);
 
     List<DisputeOrder> findAll();
-    OrderDto findByDisputeId(int disputeId);
+    OrderDto findByOrderId(int orderId);
+    OrderDto findByDisputeOrderId(int disputeOrderId);
 
 }

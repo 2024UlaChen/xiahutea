@@ -122,7 +122,7 @@
             font-size: 16px;
             display: block;
         }
-
+        /*----------------------*/
 
         /* 爭議申請表   */
         div.content-area{
@@ -175,6 +175,10 @@
             font-weight: normal;
             border-radius: 5px;
         }
+        .dispute_form_reason.-close {
+            background-color: rgba(209, 209, 209, 0.22);
+            border: 1px solid #cccccc;
+        }
         .red_star{
             color: red;
         }
@@ -213,9 +217,6 @@
             border-radius: 5px;
         }
 
-
-
-
     </style>
 </head>
 
@@ -227,46 +228,7 @@
         <div class="content-area">
             <div class="dispute_title">訂單爭議申請</div>
             <form class="dispute_form" action="#" >
-                <div>
-                    <label class="dispute_form_key">訂單編號</label>
-                    <label class="dispute_form_value_label">
-                        <input class="dispute_form_value" type="text" name=”order_id” value="2407200001" disabled>
-                    </label>
-                </div>
-                <div>
-                    <label class="dispute_form_key">會員姓名</label>
-                    <label class="dispute_form_value_label">
-                        <input class="dispute_form_value" type="text" name=”dispute_user_name” value="sandy" disabled>
-                    </label>
-                </div>
-                <div>
-                    <label class="dispute_form_key">店家名稱</label>
-                    <label class="dispute_form_value_label">
-                        <input class="dispute_form_value" type="text" name=”dispute_store_name” value="五十嵐汐止店" disabled>
-                    </label>
-                </div>
-                <div>
-                    <label class="dispute_form_key">商品總數</label>
-                    <label class="dispute_form_value_label">
-                        <input class="dispute_form_value" type="text" name="dispute_product_tatal" value="3" disabled>
-                    </label>
-                </div>
-                <div>
-                    <label class="dispute_form_key">付款金額</label>
-                    <label class="dispute_form_value_label">
-                        <input class="dispute_form_value" type="text" name="dispute_paymoney" value="170" disabled>
-                    </label>
-                </div>
-                <div>
-                    <label class="dispute_form_key">申請原因<span class="red_star"> *</span></label><br>
-                    <label class="dispute_form_value_label">
-                        <textarea class="dispute_form_reason" name="dispute_reason" rows="2"></textarea>
-                    </label>
-                </div>
-                <div class="button-container">
-                    <button class="btn_dispute_apply btn_submit" id="demo1" type="button">送出</button>
-                    <button class="btn_dispute_apply" id="btn_back" type="button">取消</button>
-                </div>
+            <!--  JS              -->
             </form>
         </div>
     </div>
@@ -300,59 +262,148 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function(){
+        // todo 判斷會員是否登入
+        // TODO 待session
 
-        let btn_back_el = document.getElementById("btn_back");
-        let btn_submit_el = document.getElementsByClassName("btn_submit")[0];
-        let order_id = document.getElementsByClassName("dispute_form_value")[0].value;
-        let dispute_user_name = document.getElementsByClassName("dispute_form_value")[1].value;
-        let form_reason_el = document.getElementsByClassName("dispute_form_reason")[0];
+        // 0. 顯示申請表
+        init();
 
-        // 1. btn 取消 > 回上一頁
-        btn_back_el.addEventListener("click", function(e){
-            e.preventDefault();
-            history.back();
-        });
+        function init(){
+            let orderId = getQueryParam("orderId");
+            if (orderId) {
+            fetch(`/dispute/member/applyDispute/${orderId}`)
+                  .then(resp => resp.json())
+                  .then(data => showDB(data))
+                  .catch((error) => {
+                      console.log("錯誤原因:" + error);
+                  });
+        }
 
-        // 2. btn 送出
-        btn_submit_el.addEventListener("click", function(e){
-            console.log("123")
-            // 2.1 點擊後 檢查文字長度，送出資料至後端
-            if(form_reason_el.value.length > 0 ){
-                e.preventDefault();
+        // 取得URL的查詢參數
+        function getQueryParam(param) {
+            let urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
 
-                // 2.1.1 打包資料
-                let dispute_data = new FormData();
-                dispute_data.append("order_id", order_id);
-                dispute_data.append("dispute_user_name", dispute_user_name);
-                dispute_data.append("dispute_reason", form_reason_el.value);
+        function showDB(data){
+            let formHtml;
+            formHtml=`
+                <div>
+                    <label class="dispute_form_key">訂單編號</label>
+                    <label class="dispute_form_value_label">
+                        <input class="dispute_form_value" type="text" name="order_id" value="${data.orders.orderId}" disabled>
+                    </label>
+                </div>
+                <div>
+                    <label class="dispute_form_key">會員姓名</label>
+                    <label class="dispute_form_value_label">
+                        <input class="dispute_form_value" type="text" name="dispute_user_name" value="${data.orders.customer.nickname}" disabled>
+                    </label>
+                </div>
+                <div>
+                    <label class="dispute_form_key">店家名稱</label>
+                    <label class="dispute_form_value_label">
+                        <input class="dispute_form_value" type="text" name="dispute_store_name" value="${data.orders.store.storeName}" disabled>
+                    </label>
+                </div>
+                <div>
+                    <label class="dispute_form_key">商品總數</label>
+                    <label class="dispute_form_value_label">
+                        <input class="dispute_form_value" type="text" name="dispute_product_tatal" value="${data.orders.orderProductQuantity}" disabled>
+                    </label>
+                </div>
+                <div>
+                    <label class="dispute_form_key">付款金額</label>
+                    <label class="dispute_form_value_label">
+                        <input class="dispute_form_value" type="text" name="dispute_paymoney" value="${data.orders.paymentAmount}" disabled>
+                    </label>
+                </div>
+                <div>
+                    <label class="dispute_form_key">申請原因<span class="red_star"> *</span></label><br>
+                    <label class="dispute_form_value_label">
+                        <textarea class="dispute_form_reason" name="dispute_reason" rows="2"></textarea>
+                    </label>
+                </div>
+                <div class="button-container">
+                    <button class="btn_dispute_apply btn_submit" id="demo1" type="button">送出</button>
+                    <button class="btn_dispute_apply" id="btn_back" type="button">取消</button>
+                </div>
+            `;
+            const form_el = document.getElementsByClassName("dispute_form")[0];
+            if(form_el) {
+                form_el.innerHTML = formHtml;
 
-                // todo: 要更改url
-                fetch("https://jsonplaceholder.typicode.com/posts", {
-                    method: "POST",
-                    body: dispute_data
-                }).then(res => res.json()).then(data => {
-                    // todo: 送出資料至後端
-
-
+                // 1 判斷DB是否已有爭議資料
+                let form_reason_el = document.getElementsByClassName("dispute_form_reason")[0];
+                if (data.disputeOrder && data.disputeOrder.disputeOrderId != null) {
+                    form_reason_el.classList.add("-close");
+                    form_reason_el.setAttribute("disabled", "disabled");
                     Swal.fire({
-                        title: '已送出爭議申請',
+                        title: '已有爭議資料，不可重複申請',
                         text: '',
-                        icon: 'success',
-                        timer: 1500,  // 設置彈窗在1.5秒後自動關閉
-                        showConfirmButton: false  // 隱藏確認按鈕
+                        icon: 'error',
+                        showConfirmButton: true  // 確認按鈕
                     }).then(() => {
-                        // 彈窗關閉後跳轉到orderDetail.html
-                        location.href = "orderDetail.html";
+                        location.href = `./orderDetail.html?orderId=${orderId}`;
                     });
-                }).catch(error => {
-                    console.error("發生錯誤：", error);
-                    Swal.fire('提交時發生錯誤，請稍後再試。','', 'error');
-                });
-            }else{
-                e.preventDefault();
-                Swal.fire('申請原因 請輸入內容','', 'error');
+
+                } else {
+                    // 2. btn 送出
+                    let btn_submit_el = document.getElementsByClassName("btn_submit")[0];
+                    btn_submit_el.addEventListener("click", function (e) {
+
+                        let order_id = document.getElementsByClassName("dispute_form_value")[0].value;
+                        let form_reason_el = document.getElementsByClassName("dispute_form_reason")[0];
+                        let dispute_data = {
+                            orderId: order_id.value,
+                            customerId: data.orders.customer.customerId,
+                            disputeReason: form_reason_el.value
+                        }
+
+                        // 2.1 點擊後 檢查文字長度，
+                        if (form_reason_el.value.length > 0) {
+                            e.preventDefault();
+
+                            // 2.2 送出資料至後端
+                            fetch(`/dispute/member/applyDispute/${orderId}`, {
+                                method: "POST",
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify(dispute_data) // 將資料轉為 JSON 格式
+                            })
+                                  .then(resp => resp.json()).then(data => {
+                                if (data.successful) {
+                                    console.log(data.message);
+                                    Swal.fire({
+                                        title: '申請完成',
+                                        text: '',
+                                        icon: 'success',
+                                        showConfirmButton: true
+                                    }).then(() => {
+                                        location.href = `./orderDetail.html?orderId=${orderId}`;
+                                    });
+                                } else {
+                                    console.log(data.message);
+                                    Swal.fire('申請失敗', '', 'error');
+                                }
+                            });
+                        } else {
+                            e.preventDefault();
+                            Swal.fire('申請原因 請輸入內容', '', 'error');
+                        }
+                    });
+                }
             }
-        });
+                //-------------------------------------------------------
+                // 3. btn 取消 > 回上一頁
+                let btn_back_el = document.getElementById("btn_back");
+                btn_back_el.addEventListener("click", function(e){
+                    e.preventDefault();
+                    location.href = `./orderDetail.html?orderId=${orderId}`;
+                });
+            }
+        }
     });
 </script>
 </body>

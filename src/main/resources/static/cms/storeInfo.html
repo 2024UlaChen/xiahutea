@@ -42,7 +42,7 @@
                 type="text"
                 class="form-control"
                 id="vat"
-                value="12345678"
+
               />
             </div>
 
@@ -52,7 +52,7 @@
                 readonly
                 type="text"
                 class="form-control"
-                value="五十花"
+
                 id="sotreName"
               />
             </div>
@@ -62,7 +62,7 @@
                 readonly
                 type="date"
                 class="form-control"
-                value="2024-07-17"
+
                 id="register"
               />
             </div>
@@ -72,7 +72,7 @@
                 readonly
                 type="text"
                 class="form-control"
-                value="台中101大樓"
+
                 id="storeAddress"
               />
             </div>
@@ -82,7 +82,7 @@
                 readonly
                 type="text"
                 class="form-control"
-                value="0123456789"
+
                 id="storePhone"
               />
             </div>
@@ -92,7 +92,7 @@
                 readonly
                 type="time"
                 class="form-control"
-                value="10:00"
+
                 id="openingHours"
               />
             </div>
@@ -102,17 +102,17 @@
                 readonly
                 type="time"
                 class="form-control"
-                value="22:00"
+
                 id="closingHours"
               />
             </div>
             <div class="m-3">
-              <label class="form-label">臨時公休日</label>
+              <label class="form-label">公休日</label>
               <input
                 readonly
-                type="date"
+                type="text"
                 class="form-control"
-                value=""
+
                 id="rest"
               />
             </div>
@@ -169,7 +169,7 @@
                 type="email"
                 class="form-control"
                 id="storeEmail"
-                value="name@example.com"
+
               />
             </div>
             <div class="m-3">
@@ -178,7 +178,7 @@
                 disabled
                 type="text"
                 class="form-control"
-                value="李登輝"
+
                 id="contactPerson"
               />
             </div>
@@ -188,37 +188,18 @@
                 disabled
                 type="text"
                 class="form-control"
-                value="911"
+
                 id="contactPhone"
               />
             </div>
-            <div class="m-3">
-              <label class="form-label">銀行代碼</label>
-              <input
-                readonly
-                type="text"
-                class="form-control"
-                value="666"
-                id="bankCode"
-              />
-            </div>
-            <div class="m-3">
-              <label class="form-label">銀行帳號</label>
-              <input
-                readonly
-                type="text"
-                class="form-control"
-                value="1234567-7654321"
-                id="bankAccount"
-              />
-            </div>
+
             <div class="m-3">
               <label class="form-label">店家所有人</label>
               <input
                 readonly
                 type="text"
                 class="form-control"
-                value="阿扁"
+
                 id="owner"
               />
             </div>
@@ -228,7 +209,7 @@
                 disabled
                 type="text"
                 class="form-control"
-                value="五十花集點卡"
+
                 id="loyaltyCardName"
               />
             </div>
@@ -238,7 +219,7 @@
                 disabled
                 type="text"
                 class="form-control"
-                value="500"
+
                 id="exchangeRate"
               />
               <div class="form-text">輸入多少新台幣兌換一點</div>
@@ -254,20 +235,7 @@
               />
               <div class="form-text">集點卡關閉後半年後失效</div>
             </div>
-            <div class="m-3">
-              <div class="form-check form-check form-switch">
-                <input
-                  checked
-                  class="form-check-input"
-                  type="checkbox"
-                  disabled
-                  id="validStatus"
-                />
-                <label class="form-check-label" for="flexRadioDisabled">
-                  集點卡狀態
-                </label>
-              </div>
-            </div>
+
             <div class="m-3">
               <label class="form-check-label" for="flexRadioCheckedDisabled">
                 店家帳號狀態
@@ -278,8 +246,11 @@
                 aria-label=".form-select-sm example"
                 id="storeStatus"
               >
-                <option selected value="1">啟動</option>
-                <option value="2">停權</option>
+                <option value="0">審核中</option>
+                <option value="1">使用中</option>
+                <option value="2">停權中</option>
+
+                <option value="4">申請失敗</option>
               </select>
 
             </div>
@@ -303,6 +274,7 @@
               <div class="col-3"></div>
             </div>
           </form>
+          <input type="hidden" id="userTypeId">
         </div>
       </div>
       <!-- Content Wrapper. Contains page content -->
@@ -337,12 +309,77 @@
         //取得storeid
         let sotreid = location.search.split("?")[1];
 
+
         $.ajax({
           url: `/store/storeinfo/${sotreid.split("=")[1]}`,
           method: "GET",
           dataType: "JSON",
           async: false,
           success: function (data) {
+
+            console.log(data.successful);
+            if(!data.successful){
+              //登入失敗
+              location.href = "./backstageLogin.html";
+            }
+
+
+            fetch("/store/GetLoginType").then(resp => resp.json()).then(
+                    res => {
+
+                      console.log(res);
+                      document.querySelector('#userTypeId').value= res.userTypeId;
+
+                      if(res.userTypeId !== 3){
+
+                        document.querySelector('#storeListAsideLink').classList.add("d-none");
+                      }
+
+
+
+                      document.querySelector("#storeInfoAsideLink").href= location.href;
+                      document.querySelector("#storeLoyaltyCardAsideLink").href=`storeInfoEditLoyaltyCard.html?storeid=${sotreid.split("=")[1]}`;
+                      document.querySelector("#storePasswordAsideLink").href=`storeInfoEditPassword.html?storeid=${sotreid.split("=")[1]}`;
+
+                    }
+            );
+            fetch(`/store/holidays/${sotreid.split("=")[1]}`).then(data => data.json()).then(
+                    res =>{
+                      res.forEach(function (day){
+                        document.querySelector("#rest").value += day+", "
+                      });
+                    }
+            )
+            setTimeout(() => {
+
+              //確認是否帳號違停權
+              if(data.storeStatus === 2){
+
+                if(document.querySelector('#userTypeId').value === 3){
+                  Swal.fire({text:"此商家已被停權"});
+                }
+                else{
+                  Swal.fire({
+                    text:"帳號停權，請聯絡管理員",
+                    icon:"warning",
+                    confirmButtonColor: "#3085d6",
+                    confirmButtonText: "確認"
+                  }).then(res=>{
+                    if(res.isConfirmed){
+                      // location.href = "./backstageLogin.html";
+                    }
+                  });
+                }
+
+              }
+            }, 1000);
+
+
+
+
+
+
+
             document.querySelector(
               "#storeLoyaltyCard"
             ).href = `storeInfoEditLoyaltyCard.html?sotreid=${
@@ -364,20 +401,30 @@
             document.querySelector("#openingHours").value = data.openingHours;
             document.querySelector("#closingHours").value = data.closingHours;
 
-            let isDelivery = data.isDelivery === true ? 1 : 0;
-            document.querySelector("#isDelivery").value = isDelivery;
 
-            document.querySelector("#deliveryDistance").value =
-              data.deliveryDistance;
+            if(data.isDelivery){
+              document.querySelector("#isDelivery").checked = true;
+            }
+            if(data.deliveryDistance === 0.0){
+              document.querySelector("#deliveryDistance").value = "暫不提供外送服務";
+            }else{
+              document.querySelector("#deliveryDistance").value =
+                      data.deliveryDistance;
 
-            document.querySelector("#isTakeOrder").value = data.isTakeOrders;
+            }
+
+
+
+
+            if(data.isTakeOrders){
+              document.querySelector("#isTakeOrder").checked = data.isTakeOrders;
+            }
             document.querySelector("#deliveryMoney").value = data.deliveryMoney;
 
             document.querySelector("#storeEmail").value = data.email;
             document.querySelector("#contactPerson").value = data.contactPerson;
             document.querySelector("#contactPhone").value = data.contactPhone;
-            document.querySelector("#bankCode").value = data.bankCode;
-            document.querySelector("#bankAccount").value = data.bankAccount;
+
             document.querySelector("#storeStatus").value = data.storeStatus;
             document.querySelector("#owner").value = data.owner;
             document.querySelector("#loyaltyCardName").value =
@@ -387,7 +434,7 @@
 
             document.querySelector("#expiredDate").value = data.expiredDate!=null?
               data.expiredDate.split("T")[0]:  "激活中";
-            document.querySelector("#validStatus").value = data.validStatus;
+
             const base64image = data.logo;
 
              document.querySelector('#storeImg').src = `data:image/png;base64,${base64image}`;
@@ -396,8 +443,16 @@
           },
           err: function (data) {
             console.log("失敗");
+            console.log(data);
+
           },
         });
+
+
+
+
+
+
       }); //DOM END
     </script>
   </body>

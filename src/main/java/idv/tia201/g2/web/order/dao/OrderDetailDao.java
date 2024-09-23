@@ -1,8 +1,7 @@
 package idv.tia201.g2.web.order.dao;
 
-import idv.tia201.g2.web.order.vo.OrderDetail;
-
 import java.util.List;
+import idv.tia201.g2.web.order.vo.OrderDetail;
 
 public interface OrderDetailDao {
 

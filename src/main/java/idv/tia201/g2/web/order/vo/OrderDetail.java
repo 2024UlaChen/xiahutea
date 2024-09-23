@@ -5,9 +5,6 @@ import idv.tia201.g2.web.product.vo.Product;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.math.BigDecimal;
-import java.util.List;
-
 @Entity
 @Builder
 @Getter

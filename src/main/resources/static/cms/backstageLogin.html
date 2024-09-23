@@ -66,7 +66,7 @@
                 <div class="row ">
                     <div class="col-8 ">
                         <div class="icheck-primary">
-                            <input type="checkbox" id="remember" class="align-middle">
+                            <input type="checkbox" id="remember" class="align-middle" checked>
                             <label for="remember" class="align-middle">
                                 Remember Me
                             </label>
@@ -153,23 +153,25 @@
                 $(resultEl).text("使用者名稱或密碼錯誤");
                 return;
             }
-            // fetch("/store/login", {
-            //     method: "POST",
-            //     headers: {
-            //         'Content-Type': 'application/json'
-            //     },
-            //     body: JSON.stringify({
-            //         storeName: username,
-            //         password: password
-            //     })
-            // }).then(res => res.json()).then(store => {
-            //     if (store.successful) {
-            //         location = "./storeIndex.html"
-            //     } else {
-            //         let message = admin.message
-            //         $(resultEl).text(message);
-            //     }
-            // })
+            fetch("/store/login", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    vat: username,
+                    password: password
+                })
+            }).then(res => res.json()).then(store => {
+                if (store.successful) {
+                     location = `./storeInfo.html?storeId=${store.storeId}`;
+
+
+                } else {
+                    let message = admin.message
+                    $(resultEl).text(message);
+                }
+            })
         }
 
         if(rememberMe){
