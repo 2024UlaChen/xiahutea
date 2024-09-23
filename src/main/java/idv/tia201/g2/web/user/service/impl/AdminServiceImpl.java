@@ -21,31 +21,31 @@ public class AdminServiceImpl implements AdminService {
 
     private Integer userTypeId = 3;
 
-    public TotalUserDTO login(Administrator admin) {
+    public TotalUsers login(Administrator admin) {
 //        取得會員資料
         String username = admin.getAdminUsername();
         String password = admin.getAdminPassword();
-        TotalUserDTO totalUserDTO = new TotalUserDTO();
+        TotalUsers totalUser = new TotalUsers();
 
 //        如果 username 或 password 沒填
         if (username.isEmpty() || password.isEmpty()) {
-            totalUserDTO.setMessage("請輸入用戶名稱及用戶密碼");
-            totalUserDTO.setSuccessful(false);
-            return totalUserDTO;
+            totalUser.setMessage("請輸入用戶名稱及用戶密碼");
+            totalUser.setSuccessful(false);
+            return totalUser;
         }
 
         //檢驗帳號
         if(!checkPassword(username)){
-            totalUserDTO.setMessage("使用者名稱或密碼錯誤");
-            totalUserDTO.setSuccessful(false);
-            return totalUserDTO;
+            totalUser.setMessage("使用者名稱或密碼錯誤");
+            totalUser.setSuccessful(false);
+            return totalUser;
         }
 
         //檢驗密碼
         if(!checkPassword(password)){
-            totalUserDTO.setMessage("使用者名稱或密碼錯誤");
-                totalUserDTO.setSuccessful(false);
-                return totalUserDTO;
+            totalUser.setMessage("使用者名稱或密碼錯誤");
+            totalUser.setSuccessful(false);
+            return totalUser;
         }
 
 //        進入 DAO 利用 username & password 找 admin
@@ -53,15 +53,16 @@ public class AdminServiceImpl implements AdminService {
 
 //        如果回傳 null 代表登入失敗，如果不是 null 代表 登入成功
         if (admin == null) {
-            totalUserDTO.setMessage("使用者名稱或密碼錯誤3");
-            totalUserDTO.setSuccessful(false);
-            return totalUserDTO;
+            totalUser.setMessage("使用者名稱或密碼錯誤");
+            totalUser.setSuccessful(false);
+            return totalUser;
         }else {
-            TotalUsers totalUser = totalUserDao.findByUserTypeIdAndUserId(userTypeId, admin.getAdministratorId());
-            BeanUtils.copyProperties(totalUser, totalUserDTO);
-            totalUserDTO.setMessage("登入成功");
-            totalUserDTO.setSuccessful(true);
-            return totalUserDTO;
+            TotalUsers LoginTotalUser = totalUserDao.findByUserTypeIdAndUserId(userTypeId, admin.getAdministratorId());
+            BeanUtils.copyProperties(LoginTotalUser, totalUser);
+            totalUser.setUsername(admin.getAdminUsername());
+            totalUser.setMessage("登入成功");
+            totalUser.setSuccessful(true);
+            return totalUser;
         }
     }
 }

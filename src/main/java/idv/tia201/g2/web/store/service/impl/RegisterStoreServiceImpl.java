@@ -38,6 +38,8 @@ public class RegisterStoreServiceImpl implements RegisterStoreService {
     @Autowired
     private TotalUserDao totalUserDao;
 
+    Integer userType = 1;
+
     @Override
     public Store register(Store store) {
         //必填欄位
@@ -200,7 +202,7 @@ public class RegisterStoreServiceImpl implements RegisterStoreService {
             String randomPassword = generateRandomString(9, 14);
             newData.setPassword(randomPassword);
             sendMail(newData);
-            TotalUsers totalUser = new TotalUsers(null, 1, newData.getStoreId());
+            TotalUsers totalUser = new TotalUsers(null, userType, newData.getStoreId(),newData.getStoreName(),newData.getLogo());
             totalUserDao.save(totalUser);
         }
 
