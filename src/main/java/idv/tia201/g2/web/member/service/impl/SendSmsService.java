@@ -19,6 +19,8 @@ public class SendSmsService {
     public static final String MESSAGE_HEADER = "XiaHuTea verify code is : ";
 
     public String sendSMS(String phoneNumber) {
+        String formatPhone = "+886" + phoneNumber.substring(1);
+
         Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
         StringBuilder sb = new StringBuilder();
         String token = randomToken();
@@ -26,7 +28,7 @@ public class SendSmsService {
         sb.append(token);
         System.out.println(sb.toString());
         Message message = Message.creator(
-                        new com.twilio.type.PhoneNumber(phoneNumber),
+                        new com.twilio.type.PhoneNumber(formatPhone),
                         new com.twilio.type.PhoneNumber("+14695759239"), sb.toString())
                 .create();
         System.out.println(message.getSid());
@@ -46,6 +48,10 @@ public class SendSmsService {
     }
 
     public static void main(String[] args) {
+        SendSmsService sendSmsService = new SendSmsService();
+        for(int i=0;i<10;i++){
+            System.out.println(sendSmsService.randomToken());
+        }
     }
 
 }

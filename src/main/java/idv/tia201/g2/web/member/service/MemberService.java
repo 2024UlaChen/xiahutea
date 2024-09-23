@@ -38,6 +38,8 @@ public interface MemberService {
     //判斷verifyCode是否相同
     Boolean isCorrectVerifyCode(Member member);
 
+    Boolean updateVerifyCode(Member member);
+
     //    列出所有會員地址
     List<MemberAddress> findAddressByMemberId(Integer memberId);
 

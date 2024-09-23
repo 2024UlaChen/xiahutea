@@ -124,9 +124,8 @@ public class MemberDaoImpl implements MemberDao {
     }
 
     @Override
-    public Member createMember(Member member) {
+    public void createMember(Member member) {
         session.persist(member);
-        return member;
     }
 
     @Override
@@ -135,4 +134,14 @@ public class MemberDaoImpl implements MemberDao {
         return true;
     }
 
+
+    @Override
+    public Integer updateVerifyCodeById(Integer memberId, String verifyCode) {
+        final String sql = "update CUSTOMER set verify_code = :verifyCode   where  customer_id = :memberId ";
+        return session
+                .createNativeQuery(sql, Member.class)
+                .setParameter("verifyCode", verifyCode)
+                .setParameter("memberId", memberId)
+                .executeUpdate();
+    }
 }
