@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 public class ValidateUtil {
 
     //    carrier validate
-    public static final String CARRIER_PATTERN = "^/[\\dA-Z0-9+-\\.]{7}$";
+    public static final String CARRIER_PATTERN = "^/[A-Z0-9+-\\.]{7}$";
 
     public static final String CELLPHONE_PATTERN = "^09[0-9]{8}$";
 
