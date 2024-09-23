@@ -13,7 +13,7 @@ public interface ProductService {
     List<Product> getAllProducts();
     List<Product> getProductsByProductName(String productName);
     public boolean addProduct(ProductDTO productDTO);
-    public Product editProduct(Integer storeId, Integer productId, Product updatedProduct);
+    public boolean updateProduct(ProductDTO productDTO);
     public boolean deleteProduct(Integer productId);
     List<Product> searchProducts(Integer categoryId, String productName);
     Page<Product> getProducts(Pageable pageable);
