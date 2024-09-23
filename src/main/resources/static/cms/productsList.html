@@ -135,8 +135,12 @@
                                                     商品尺寸
                                                 </th>
                                                 <th style="width: 10%">
-                                                    狀態
+                                                    商品狀態
                                                 </th>
+                                                <th style="width: 9%">
+                                                    功能
+                                                </th>
+
 
                                             </tr>
                                         </thead>
@@ -232,11 +236,7 @@
                                                         </i>
                                                         編輯
                                                     </a>
-                                                    <a class="btn btn-danger btn-sm" href="#" id="delete_btn">
-                                                        <i class="fas fa-trash">
-                                                        </i>
-                                                        刪除
-                                                    </a>
+
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -364,16 +364,12 @@ function loadProducts() {
                                        <span class="badge badge-success on-shelf">上架</span>
                                         </td>
                                        <td class="project-actions text-right">
-                                        <a class="btn btn-edit btn-sm update_btn" href="#" data-id="${product.productId}">
+                                        <a class="btn btn-edit btn-sm update_btn" href="addProducts.html?id=${product.productId}" data-id="${product.productId}">
                                          <i class="fas fa-pencil-alt">
                                               </i>
                                                  編輯
                                               </a>
-                                                <a class="btn btn-danger btn-sm delete_btn" href="#" data-id="${product.productId}">
-                                                 <i class="fas fa-trash">
-                                                 </i>
-                                                   刪除
-                                                 </a>
+
                                               </td>
                                             </tr>
                 `;
@@ -445,9 +441,6 @@ fetch('/categories/all')
         // Clear existing options
         categoryOptions.innerHTML = '';
 
-
-
-        // Append each category option
         categories.forEach(category => {
             const option = document.createElement('option');
             option.value = category.categoryId;
@@ -458,6 +451,10 @@ fetch('/categories/all')
     .catch(error => {
         console.error('Error loading categories:', error);
     });
+
+
+
+
 
 
 </script>

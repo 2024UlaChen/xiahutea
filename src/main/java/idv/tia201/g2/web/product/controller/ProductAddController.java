@@ -74,16 +74,24 @@ public class ProductAddController {
         }
     }
 
+    @PutMapping("/update")
+    public ResponseEntity<String> updateProduct(@RequestBody ProductDTO productDTO) {
+        try {
+            // 调用 Service 层进行处理
+            boolean success = productService.updateProduct(productDTO);
 
-    // 編輯產品
-    @PutMapping("/edit/{productId}")
-    public Product editProduct(
-            @PathVariable Integer storeId,
-            @PathVariable Integer productId,
-            @RequestBody Product updatedProduct) {
-        return productService.editProduct(storeId, productId, updatedProduct);
+            if (success) {
+                return ResponseEntity.ok("商品更新成功!");
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("商品更新失败!");
+            }
+        } catch (Exception e) {
+            // 捕捉并记录异常，返回500错误
+            // 使用日志记录异常
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("服务器错误: " + e.getMessage());
+        }
     }
-
     // 刪除產品
     @DeleteMapping("/delete/{productId}")
     public boolean deleteProduct(@PathVariable Integer productId) {
