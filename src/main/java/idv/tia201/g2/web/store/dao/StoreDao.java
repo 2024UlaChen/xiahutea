@@ -43,6 +43,7 @@ public interface StoreDao extends JpaRepository<Store, Integer> {
     @Query("FROM Store s WHERE s.storeStatus = 1 OR s.storeStatus = 2")
     Page<Store> findByStoreStatus(Pageable pageable);
 
+
     Page<Store> findByRegisterDayBetween(Timestamp startDate, Timestamp endDate, Pageable pageable);
     Page<Store> findByStoreNameContainingIgnoreCaseAndVatContainingAndRegisterDayBetween(String storeName,String vat,Timestamp startDate, Timestamp endDate, Pageable pageable);
     Page<Store> findByVatContainingAndRegisterDayBetween(String vat,Timestamp startDate, Timestamp endDate, Pageable pageable);
