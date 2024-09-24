@@ -92,62 +92,52 @@ public class ProductServiceImpl implements ProductService {
         // 保存商品到数据库
 
         return true;
-    };
-
-    ;
-
-    @Override
-    public Product editProduct(Integer storeId, Integer productId, Product updatedProduct) {
-        // 根據 storeId 直接查詢店家
-        Store store = storeDao.findById(storeId).orElse(null);
-        if (store == null) {
-            // 店家不存在，返回 null
-            return null;
-        }
-
-        // 根據 productId 直接查詢商品
-        Product existingProduct = productDao.findById(productId).orElse(null);
-        if (existingProduct == null) {
-            // 商品不存在，返回 null
-            return null;
-        }
-
-        // 檢查商品名稱是否為空，防止無商品名稱送出表單
-        if (updatedProduct.getProductName() == null || updatedProduct.getProductName().trim().isEmpty()) {
-            // 商品名稱為空，返回 null
-            return null;
-        }
-
-        // 更新商品資訊
-        existingProduct.setProductName(updatedProduct.getProductName());
-        existingProduct.setProductPrice(updatedProduct.getProductPrice());
-        existingProduct.setProductStatus(updatedProduct.isProductStatus());
-        existingProduct.setProductPicture(updatedProduct.getProductPicture());
-        existingProduct.setProductCategoryId(updatedProduct.getProductCategoryId());
-
-        // 其他屬性也可以根據需要更新
-        existingProduct.setNormalIce(updatedProduct.isNormalIce());
-        existingProduct.setLessIce(updatedProduct.isLessIce());
-        existingProduct.setIceFree(updatedProduct.isIceFree());
-        existingProduct.setLightIce(updatedProduct.isLightIce());
-        existingProduct.setRoomTemperature(updatedProduct.isRoomTemperature());
-        existingProduct.setHot(updatedProduct.isHot());
-        existingProduct.setFullSugar(updatedProduct.isFullSugar());
-        existingProduct.setLessSugar(updatedProduct.isLessSugar());
-        existingProduct.setHalfSugar(updatedProduct.isHalfSugar());
-        existingProduct.setQuarterSugar(updatedProduct.isQuarterSugar());
-        existingProduct.setNoSugar(updatedProduct.isNoSugar());
-        existingProduct.setPearl(updatedProduct.isPearl());
-        existingProduct.setPudding(updatedProduct.isPudding());
-        existingProduct.setCoconutJelly(updatedProduct.isCoconutJelly());
-        existingProduct.setTaro(updatedProduct.isTaro());
-        existingProduct.setHerbalJelly(updatedProduct.isHerbalJelly());
-        existingProduct.setSize(updatedProduct.getSize());
-
-        // 保存更新後的商品
-        return productDao.save(existingProduct);
     }
 
+    public boolean updateProduct(ProductDTO productDTO) {
+        try {
+            // 查找现有产品
+            Product existingProduct = productDao.findById(productDTO.getProductId()).orElse(null);
+
+            if (existingProduct == null) {
+                // 如果产品不存在，返回失败
+                return false;
+            }
+
+            // 更新产品的属性
+            existingProduct.setProductName(productDTO.getProductName());
+            existingProduct.setProductPrice(productDTO.getProductPrice());
+            existingProduct.setSize(productDTO.getSize());
+            existingProduct.setProductStatus(productDTO.isProductStatus());
+            existingProduct.setProductStoreId(productDTO.getProductStoreId());
+            existingProduct.setProductCategoryId(productDTO.getProductCategoryId());
+            existingProduct.setNormalIce(productDTO.isNormalIce());
+            existingProduct.setLessIce(productDTO.isLessIce());
+            existingProduct.setLightIce(productDTO.isLightIce());
+            existingProduct.setIceFree(productDTO.isIceFree());
+            existingProduct.setRoomTemperature(productDTO.isRoomTemperature());
+            existingProduct.setHot(productDTO.isHot());
+            existingProduct.setFullSugar(productDTO.isFullSugar());
+            existingProduct.setLessSugar(productDTO.isLessSugar());
+            existingProduct.setHalfSugar(productDTO.isHalfSugar());
+            existingProduct.setQuarterSugar(productDTO.isQuarterSugar());
+            existingProduct.setNoSugar(productDTO.isNoSugar());
+            existingProduct.setPearl(productDTO.isPearl());
+            existingProduct.setPudding(productDTO.isPudding());
+            existingProduct.setCoconutJelly(productDTO.isCoconutJelly());
+            existingProduct.setTaro(productDTO.isTaro());
+            existingProduct.setHerbalJelly(productDTO.isHerbalJelly());
+
+            // 保存更新后的产品
+            productDao.save(existingProduct);
+
+            return true;
+        } catch (Exception e) {
+            // 捕捉并记录异常
+            e.printStackTrace();
+            return false;
+        }
+    }
     //刪除
     @Override
     public boolean deleteProduct(Integer productId) {

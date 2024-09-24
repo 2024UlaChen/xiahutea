@@ -1,20 +1,24 @@
 package idv.tia201.g2.web.store.controller;
 
 
+import idv.tia201.g2.core.pojo.Core;
 import idv.tia201.g2.web.store.model.StoreViewModel;
 import idv.tia201.g2.web.store.service.StoreService;
 
 import idv.tia201.g2.web.store.vo.Store;
 
 import idv.tia201.g2.web.user.dto.TotalUserDTO;
+import idv.tia201.g2.web.user.vo.TotalUsers;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.client.RestTemplateAutoConfiguration;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
@@ -38,9 +42,28 @@ public class StoreController {
     }
     @GetMapping("/home")
     public List<Store> Home(){
-//        List<Store> storeList =  storeService.findAll();
+
         List<Store> storeList =  storeService.GetStoreList();
         return storeList;
+    }
+    @GetMapping("/search")
+    public Page<Store> searchStores(
+            @RequestParam(required = false) String storeName,
+            @RequestParam(required = false) String vat,
+            @RequestParam(required = false) Integer status,
+            @RequestParam(required = false) Timestamp searcherStart,
+            @RequestParam(required = false) Timestamp searcherEnd,
+            @RequestParam(defaultValue = "0") Integer page) {
+        StoreViewModel item = new StoreViewModel();
+        item.setStoreName(storeName);
+        item.setVat(vat);
+        item.setSearcherStart(searcherStart);
+        item.setSearcherEnd(searcherEnd);
+        item.setStoreStatus(status);
+        return storeService.searchStore(item,page);
+
+
+
     }
     @GetMapping("/storeinfo/{storeId}")
     public Store StoreInfo(HttpSession session,@PathVariable Integer storeId){
@@ -77,7 +100,8 @@ public class StoreController {
             session.setAttribute("storeLogo",data.getLogo());
             session.setAttribute("loggedin",true);
             session.setAttribute("loginType","store");
-           session.setAttribute("totalUserDTO",storeService.GetTotalUserDTO(data.getStoreId()));
+
+           session.setAttribute("totalUser",storeService.GetTotalUser(data.getStoreId()));
 
 //            session.setMaxInactiveInterval(3600);//秒為單位  Tomcat預設 30分
         }
@@ -88,7 +112,7 @@ public class StoreController {
     @GetMapping("/logout")
     public void Logout(HttpSession session){
         //登出
-        session.removeAttribute("totalUserDTO");
+        session.removeAttribute("totalUser");
 
 
         session.removeAttribute("storeId");
@@ -169,7 +193,7 @@ public class StoreController {
 
 
     public boolean IsStoreLogin(HttpSession session){
-        TotalUserDTO data = (TotalUserDTO) session.getAttribute("totalUserDTO");
+        TotalUsers data = (TotalUsers) session.getAttribute("totalUser");
         return data.getUserTypeId() == 1;
     }
 
@@ -189,7 +213,7 @@ public class StoreController {
     public boolean checkStoreLogin(HttpSession session,Integer storeId){
         //登入中 是 商家登入 是 該商家 或是 管理員
         if(session.getAttribute("loggedin") != null){
-            var seesee = getLoginType(session).getUserId();
+
 
             if(getLoginType(session).getUserTypeId()==3){
                 return true;
@@ -208,8 +232,9 @@ public class StoreController {
 
 
     @GetMapping("GetLoginType")
-    public TotalUserDTO getLoginType(HttpSession session){
-        return (TotalUserDTO) session.getAttribute("totalUserDTO");
+    public TotalUsers getLoginType(HttpSession session){
+
+        return (TotalUsers) session.getAttribute("totalUser");
 
 
     }

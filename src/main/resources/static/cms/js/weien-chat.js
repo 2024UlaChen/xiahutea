@@ -252,10 +252,23 @@ export const actionHandlers = {
         console.log(`聊天室編號: ${chatId}  目標提醒設定: ${state}`);
     },
     getUID: async () => {
-        console.log('請改寫這個方法, 取得登入用戶的id');
-        return '';
+        let totalUserId;
+        fetch("/TotalUsersController")
+            .then(res => res.json())
+            .then( totalUser => {
+                totalUserId = totalUser.totalUserId;
+            })
+        return 'totalUserId';
     },
     getChatRoomsData: async () => {
+        let chatRoomData;
+        fetch("/chatRoomData")
+            .then(res => res.json())
+            .then( data => {
+                chatRoomData = data;
+            })
+        return 'chatRoomData';
+
         console.log(`請改寫這個方法, 回傳值為物件陣列, 格式如下: 
         [
             {
