@@ -9,7 +9,9 @@ import idv.tia201.g2.web.user.vo.TotalUsers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -55,16 +57,17 @@ public class ChatRoomServiceimpl implements ChatRoomService {
 
             chatRoom.setLastMessageAt(chatSession.getLastActivity());
 
-            Set<TotalUsers> participants = new HashSet<>();
+            List<TotalUsers> participants = new ArrayList<>();
             participants.add(user);
-            if (userType == adminType) {
-                TotalUsers attender = totalUserDao.findBytotalUserId(chatSession.getAttenderId());
+            if (userType.equals(adminType)) {
+                TotalUsers attender = totalUserDao.findByTotalUserId(chatSession.getAttenderId());
                 participants.add(attender);
             } else {
-                TotalUsers admin = totalUserDao.findBytotalUserId(chatSession.getAdministratorId());
+                TotalUsers admin = totalUserDao.findByTotalUserId(chatSession.getAdministratorId());
                 participants.add(admin);
             }
             chatRoom.setParticipants(participants);
+            chatRoomData.add(chatRoom);
         }
         return chatRoomData;
     }

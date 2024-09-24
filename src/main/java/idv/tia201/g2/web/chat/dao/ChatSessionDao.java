@@ -20,7 +20,7 @@ public interface ChatSessionDao extends JpaRepository<ChatSessions, Integer> {
             "from Messages m " +
             "JOIN ChatSessions c " +
             "ON m.chatSessionId = c.chatSessionId " +
-            "where c.lastActivity = m.sentAt")
+            "where c.lastActivity = m.sentAt and m.chatSessionId = :chatId")
     String findLastMessageByChatId(Integer chatId);
 
 
