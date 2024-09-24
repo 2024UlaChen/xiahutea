@@ -137,10 +137,11 @@ public class MemberDaoImpl implements MemberDao {
 
     @Override
     public Integer updateVerifyCodeById(Integer memberId, String verifyCode) {
-        final String sql = "update CUSTOMER set verify_code = :verifyCode   where  customer_id = :memberId ";
+        final String sql = "update CUSTOMER set verify_code = :verifyCode  , valid_status= :validStatus   where  customer_id = :memberId ";
         return session
                 .createNativeQuery(sql, Member.class)
                 .setParameter("verifyCode", verifyCode)
+                .setParameter("validStatus", true)
                 .setParameter("memberId", memberId)
                 .executeUpdate();
     }

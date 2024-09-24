@@ -32,15 +32,16 @@ public class RegisterController {
         return core;
     }
 
-    @PostMapping("check")
-    public Core checkVerifyCode(@RequestBody Member member) {
+    @PostMapping("check/{type}")
+    public Core checkVerifyCode(@RequestBody Member member, @PathVariable String type) {
+        //check verify code is match db or not
         Core core = new Core();
         if (member == null) {
             core.setSuccessful(false);
             core.setMessage("input data error");
             return core;
         }
-        if (memberService.isCorrectVerifyCode(member)) {
+        if (memberService.isCorrectVerifyCode(member, type)) {
             core.setSuccessful(true);
             core.setMessage("verify code is correct");
         } else {
@@ -52,6 +53,7 @@ public class RegisterController {
 
     @PostMapping("update")
     public Core getNewVerifyCode(@RequestBody Member member) {
+        //    重新取得verifyCode
         Core core = new Core();
         if (member == null) {
             core.setSuccessful(false);

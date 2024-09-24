@@ -142,6 +142,16 @@ function verifyCodeValid(code) {
     return verifyCodeRegex.test(code.value) && code.value.length === 6;
 }
 
+function checkIsEmpty(...args) {
+    let result = false;
+    args.forEach((item) => {
+        if (item.value.trim().length === 0) {
+            result = true;
+            return result;
+        }
+    })
+    return result;
+}
 
 phoneValid(forgetPwdPhoneInput);
 pwdValid(resetPwdInput, resetPwdTip);
@@ -159,16 +169,71 @@ document.addEventListener("DOMContentLoaded", function () {
 //RESET PWD
 
 resetPwdBtn.addEventListener("click", function () {
-    if (!phoneValid(forgetPwdPhoneInput)) {
-        Swal.fire("請確認手機是否正確", "", "error");
+    if (forgetPwdPhoneInput.value.length === 0) {
+        Swal.fire("手機不可為空", "", "error");
+    } else if (!phoneValid(forgetPwdPhoneInput)) {
+        Swal.fire("確認手機格式是否正確", "", "error");
     } else {
-        titleTxt.innerText = "重設密碼";
-        resetPwdForm.classList.remove("hidden");
-        reGetVerifyCodeBtn.classList.remove("hidden");
-        // TODO USE NODE COUNT TO CHECK first click or second clink
-        // TODO use phone to get memberId=>check token => reset pwd
+        if (resetPwdForm.classList.contains("hidden")) {
+            fetch(`member/register/update`, {
+                method: "POST",
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    customerPhone: forgetPwdPhoneInput.value
+                }),
+            }).then(res => res.json()).then(data => {
+                if (data.successful) {
+                    Swal.fire({
+                        title: "已重新發送驗證碼",
+                        timer: 1500
+                    }).then(() => {
+                        titleTxt.innerText = "重設密碼";
+                        resetPwdForm.classList.remove("hidden");
+                        reGetVerifyCodeBtn.classList.remove("hidden");
+                    })
+                } else {
+                    Swal.fire("請確認是否有註冊手機", "", "error");
+                }
+            });
+        } else {
+            // TODO use phone to get memberId=>check token => reset pwd
+            if (checkIsEmpty(forgetPwdPhoneInput, resetPwdInput, resetRePwdInput, resetVerifyCodeInput)) {
+                Swal.fire("任一資料不可為空，請再確認", "", "error");
+            } else if (!checkPwdMatch(resetPwdInput, resetRePwdInput, resetRePwdTip)) {
+                Swal.fire("新密碼與再次輸入不同，請再確認", "", "error");
+            } else if (!phoneValid(forgetPwdPhoneInput) || !pwdValid(resetPwdInput, resetPwdTip) ||
+                !pwdValid(resetRePwdInput, resetRePwdTip) || !verifyCodeValid(resetVerifyCodeInput)) {
+                Swal.fire("確認資料格式是否正確", "", "error");
+            } else {
+                fetch(`member/register/check/FORGETPWD`, {
+                    method: "POST",
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        customerPhone: forgetPwdPhoneInput.value,
+                        customerPassword: resetPwdInput.value.trim(),
+                        verifyCode: resetVerifyCodeInput.value.trim()
+                    }),
+                }).then(res => res.json()).then(data => {
+                    console.log(data);
+                    if (data.successful) {
+                        Swal.fire({
+                            icon: "success",
+                            title: "更新密碼成功",
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then(() => {
+                            location.href = "../login.html";
+                        })
+                    } else {
+                        Swal.fire("驗證失敗，請重新輸入", "", "error");
+                        resetVerifyCodeInput.value = "";
+                    }
+                });
+            }
+        }
     }
 })
+
 
 //RE GET VERIFY CODE
 reGetVerifyCodeBtn.addEventListener("click", function () {
@@ -176,6 +241,7 @@ reGetVerifyCodeBtn.addEventListener("click", function () {
     // TODO use phone to get memberId and reset verify code
     let sessionDetail = JSON.parse(sessionStorage.getItem("memberData"));
     console.log(sessionDetail);
+    // TODO UPDATE PHONE CHECK NO MAPPED PHONE
     fetch(`member/register/update`, {
         method: "POST",
         headers: {'Content-Type': 'application/json'},

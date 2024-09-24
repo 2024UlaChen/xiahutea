@@ -80,21 +80,10 @@ public class MemberServiceImpl implements MemberService {
         }
     }
 
-    @Override
-    public Boolean updateVerifyCode(Member member) {
-        if (member.getCustomerId() == null) {
-            return false;
-        }
-//            String verifyCode = sendSmsService.sendSMS(phone);
-        String verifyCode = "B12345";
-        memberDao.updateVerifyCodeById(member.getCustomerId(), verifyCode);
-        return true;
-    }
-
 
     @Override
     public Member login(Member member) {
-        //todo need to revise + Matcher
+        //todo need to revise
         String phone = member.getCustomerPhone();
         String password = member.getCustomerPassword();
 
@@ -219,19 +208,56 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Boolean isCorrectVerifyCode(Member member) {
-        Integer memberId = member.getCustomerId();
-        if (memberId == null) {
+    public Boolean updateVerifyCode(Member member) {
+        String phone = member.getCustomerPhone();
+        if (member.getCustomerId() == null && !StringUtils.hasText(phone)) {
             return false;
+        }
+        if (member.getCustomerId() == null && StringUtils.hasText(phone)) {
+            member = memberDao.findMemberByPhone(phone);
+            if (member == null) {
+                return false;
+            }
+        }
+//        String verifyCode = sendSmsService.sendSMS(phone);
+        String verifyCode = "B12345";
+
+        memberDao.updateVerifyCodeById(member.getCustomerId(), verifyCode);
+        return true;
+    }
+
+    @Override
+    public Boolean isCorrectVerifyCode(Member member, String type) {
+        Integer memberId = member.getCustomerId();
+        String phone = member.getCustomerPhone();
+        if (memberId == null && !StringUtils.hasText(phone)) {
+            return false;
+        }
+        if (memberId == null && StringUtils.hasText(phone)) {
+            Member memberResult = memberDao.findMemberByPhone(phone);
+            if (memberResult == null) {
+                return false;
+            } else {
+                memberId = memberResult.getCustomerId();
+            }
         }
         Member queryMember = memberDao.findMemberById(memberId);
         String correctVerifyCode = queryMember.getVerifyCode();
         if (correctVerifyCode.equals(member.getVerifyCode())) {
-//            TODO NEED TO CHECK TOTAL USER INSERT
-            TotalUsers totalUser = new TotalUsers(null, userType, queryMember.getCustomerId(),queryMember.getNickname(),queryMember.getCustomerImg());
+//            if register => insert total user; if not equal register mean no need to insert totalUser
+            if ("REGISTER".equals(type)) {
+                TotalUsers totalUser = new TotalUsers(null, userType, queryMember.getCustomerId(), queryMember.getNickname(), queryMember.getCustomerImg());
+                totalUserDao.save(totalUser);
+                memberDao.updateMemberInfo(queryMember.getCustomerId(), false, queryMember.getCustomerRemark());
 
-            totalUserDao.save(totalUser);
-            memberDao.updateMemberInfo(queryMember.getCustomerId(),false,queryMember.getCustomerRemark());
+            } else {
+                String encodePwd = EncrypSHA.SHAEncrypt(member.getCustomerPassword());
+                queryMember.setCustomerPassword(encodePwd);
+                queryMember.setValidStatus(false);
+
+                memberDao.updateMemberInfo(queryMember);
+            }
+
             return true;
         } else {
             return false;
