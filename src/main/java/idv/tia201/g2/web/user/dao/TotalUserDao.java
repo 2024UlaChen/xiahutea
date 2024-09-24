@@ -9,5 +9,5 @@ public interface TotalUserDao extends JpaRepository<TotalUsers,Integer> {
 
     TotalUsers findByUserTypeIdAndUserId(Integer userTypeId,Integer userId);
 
-    TotalUsers findBytotalUserId(Long totalUserId);
+    TotalUsers findByTotalUserId(Long totalUserId);
 }
