@@ -53,7 +53,6 @@ document.addEventListener("DOMContentLoaded",function(){
   let pick_up_input_el = document.getElementsByClassName("pick-up-input")[0];
   // let carry_out_radio_el = document.querySelector('.carry-out-radio');
   let recevie_time_el = document.getElementsByClassName('recevie-time')[0];
-
   //時間選擇
   let date_input_el = document.getElementById('myDatepicker');
 
@@ -227,7 +226,12 @@ document.addEventListener("DOMContentLoaded",function(){
       // picker_el.addEventListener("blur", function () {
       //   picker_el.classList.remove("focus-border");
       // });
-      //外送選項
+      //自取選項
+      pick_up_input_el.addEventListener('click',function (){
+          pickupMethod_el.textContent ="自取";
+          console.log("address :  ",nowstore.storeAddress)
+          final_address_el.textContent = nowstore.storeAddress;
+      })
 
       //優惠使用(優惠券、會員卡、會員錢包)
       //獲得使用者優惠券選項
@@ -362,12 +366,21 @@ document.addEventListener("DOMContentLoaded",function(){
                 })
                 return;
             }
-            //正確選擇預設地址後，獲得選取的項目
-            let selectedRadio = document.querySelector('input[name="member-address"]:checked');
-            //獲得選取的子選項label
-            let selectedLabel = document.querySelector(`label[for="${selectedRadio.id}"]`);
-            console.log("選擇的預設地址",selectedLabel.textContent)
+            // //正確選擇預設地址後，獲得選取的項目
+            // let selectedRadio = document.querySelector('input[name="member-address"]:checked');
+            // //獲得選取的子選項label
+            // let selectedLabel = document.querySelector(`label[for="${selectedRadio.id}"]`);
+            // console.log("選擇的預設地址",selectedLabel.textContent)
         }
+        //檢查選取取貨時間
+          if(date_input_el.value ==='') {
+              Swal.fire({
+                  icon: 'error',
+                  title: '錯誤',
+                  text: '請選擇取貨時間'
+              });
+              return;
+          }
 
         //保存了第一頁資訊切換到第二頁
         payable_unit_el.textContent = product_unit_el.textContent;
@@ -441,7 +454,6 @@ document.addEventListener("DOMContentLoaded",function(){
           } else {
               // 不符合格式，顯示錯誤提示
               cellphoneError_el.style.display = 'inline';
-              // input_cellphone_el.style.borderColor = 'red';
           }
       });
       //市話
@@ -508,16 +520,17 @@ document.addEventListener("DOMContentLoaded",function(){
       select_paper_el.addEventListener("click", function () {
         vehicle_number_el.disabled = true;
         uniform_numbers_el.disabled= true;
-        checksava_vehicle_el.disabled = true;
-        checksava_vehicle_el.checked = false;
+        // checksava_vehicle_el.disabled = true;
+        // checksava_vehicle_el.checked = false;
         uniform_numbers_el.value="";
         uniform_numbers_error_el.style.display="none";
         vehicle_number_el.value="";
         vehicle_number_error.style.display = 'none';
       })
       select_vehicle_el.addEventListener("click", function () {
-        checksava_vehicle_el.disabled = false;
+        // checksava_vehicle_el.disabled = false;
         vehicle_number_el.disabled = false;
+        vehicle_number_el.value = loginMember.customerCarrier;
         uniform_numbers_el.disabled= true;
         vehicle_number_el.focus();
         uniform_numbers_el.value="";
@@ -526,8 +539,8 @@ document.addEventListener("DOMContentLoaded",function(){
       select_paper_uniform_el.addEventListener("click",function (){
         uniform_numbers_el.disabled=false;
         vehicle_number_el.disabled = true;
-        checksava_vehicle_el.disabled = true;
-        checksava_vehicle_el.checked = false;
+        // checksava_vehicle_el.disabled = true;
+        // checksava_vehicle_el.checked = false;
         uniform_numbers_el.focus();
         vehicle_number_el.value="";
         vehicle_number_error.style.display = 'none';
@@ -542,13 +555,6 @@ document.addEventListener("DOMContentLoaded",function(){
       });
       //統編驗證
       uniform_numbers_el.addEventListener("input",function (){
-         //  let uniformNumberLength = this.value.length;
-         // if(uniformNumberLength<8){
-         //     uniform_numbers_error_el.style.display="inline";
-         // }else{
-         //     uniform_numbers_error_el.style.display="none";
-         // }
-         //  console.log("now value: ",this.value)
          if(vatCheck(this.value)){
              uniform_numbers_error_el.style.display="none";
          }else{
@@ -653,7 +659,7 @@ document.addEventListener("DOMContentLoaded",function(){
               return;
           }
         if(select_paper_el.checked){
-            //預計將金流方式設定為紙本發票
+            //預計將金流方式設定為電子發票
         }
         if(select_paper_uniform_el.checked){
             //預計將金流方式設定為紙本發票加統編
@@ -662,6 +668,18 @@ document.addEventListener("DOMContentLoaded",function(){
                     icon: 'error',
                     title: '統編號碼錯誤',
                     text: '請填寫正確統編號碼！',
+                    confirmButtonText: '確定',
+                })
+                return;
+            }
+        }
+        //驗證載具
+        if(select_vehicle_el.checked){
+            if(vehicle_number_el.value ==='' ||vehicle_number_error.style.display==='inline'){
+                Swal.fire({
+                    icon: 'error',
+                    title: '載具號碼錯誤',
+                    text: '請填寫載具！',
                     confirmButtonText: '確定',
                 })
                 return;
@@ -681,9 +699,33 @@ document.addEventListener("DOMContentLoaded",function(){
             phone_el.textContent = input_phone_zone_el.value + input_phone_number_el.value;
         }
         //取貨方式
-        if(pick_up_input_el.checked){
-            pickupMethod_el.textContent ="自取";
+        if(pickupMethod_el.textContent ==="外送"){
+            let select_carry_out = document.querySelector('.carry-out-radio');
+            let select_address = document.querySelector('.address');
+            let select_carry_out_default = document.querySelector('.carryout-default-input');
+            let selected_address = document.querySelector('input[name="member-address"]:checked');
+            if(select_carry_out && select_carry_out.checked && select_address.value !==''){
+                final_address_el.textContent = select_address.value
+            }else if(select_carry_out_default && select_carry_out_default.checked){
+                let label_address = document.querySelector(`label[for="${selected_address.id}"]`);
+                final_address_el.textContent = label_address.textContent;
+            }else {
+                final_address_el.textContent = "未選擇地址";
+            }
         }
+        //取貨時間
+        pickupTime_el.textContent = date_input_el.value;
+        //開立發票方式
+        if(select_paper_el.checked){
+            invoiceType_el.textContent = "電子發票"
+        }else if(select_paper_uniform_el.checked){
+            invoiceType_el.textContent = "電子發票(含統一編號)"
+        }else if(select_vehicle_el.checked){
+            invoiceType_el.textContent = "手機載具"
+        }
+        //應付金額
+        final_amount_el.textContent = total_amount_el.textContent;
+
         step3_el.classList.add("active");
         if (step_content2_el.style.display = "flex") {
           step_content2_el.style.display = "none";
@@ -923,6 +965,7 @@ document.addEventListener("DOMContentLoaded",function(){
           carry_out_radio_el.addEventListener("click", function () {
               address_el.disabled = false;
               address_el.focus();
+              pickupMethod_el.textContent ="外送";
           })
           address_el.addEventListener("focus", function () {
               // 清空 placeholder
@@ -979,6 +1022,7 @@ document.addEventListener("DOMContentLoaded",function(){
                         suboptions.style.display="block";
                         address_el.disabled = true;
                         address_el.value="";
+                        pickupMethod_el.textContent ="外送";
                     })
 
                     // 點擊自取、外送(自填)選項關閉外送地址選項區塊
@@ -1253,59 +1297,59 @@ document.addEventListener("DOMContentLoaded",function(){
         }
 
         //F10表單填送:處理商品運送方式及取貨時間
-        function checkreceivemethod(){
-        //抓到目前自取或外送選擇
-        const pickUpInput = document.querySelector('input[name="delivery"]:checked');
-        //確認至少有選擇一個
-        if (!pickUpInput) {
-            Swal.fire({
-                icon: 'warning',
-                title: '請選擇取貨方式',
-                text: '請選擇自取或外送。',
-                confirmButtonText: '確定'
-            });
-            return;
-        }
-        //根據選項填充文字
-        let receivingMethod = '';
-        if (pickUpInput.classList.contains('pick-up-input')) {
-            receivingMethod = '自取';
-        } else if (pickUpInput.classList.contains('carry-out-radio')) {
-            receivingMethod = '外送';
-        }
-        //如果選擇了外送，必須檢查地址是否已填寫
-            let addressDetail = '';
-            if (receivingMethod === '外送') {
-                addressDetail = document.querySelector('.carry-out-address .address').value;
-                if (!addressDetail.trim()) {
-                    // 如果地址沒有填寫，顯示提示訊息
-                    Swal.fire({
-                        icon: 'warning',
-                        title: '請輸入地址',
-                        text: '選擇外送時，請輸入地址。',
-                        confirmButtonText: '確定'
-                    });
-                    return; // 結束，不進行下一步
-                }
-            }
-            //判斷有無填寫取貨時間
-            if(!date_input_el.value) {
-                // 使用 SweetAlert 顯示錯誤訊息
-                Swal.fire({
-                    icon: 'error',
-                    title: '錯誤',
-                    text: '請選擇取貨時間'
-                });
-                return;
-            }
-            // 將選擇的取貨方式和地址（如果有）取貨時間儲存到 localStorage
-            const reciverMethodInfo = {
-                method: receivingMethod,
-                address: addressDetail,
-                receivertime:date_input_el.value
-            };
-            localStorage.setItem('reciverMethodInfo', JSON.stringify(reciverMethodInfo));
-        }
+        // function checkreceivemethod(){
+        // //抓到目前自取或外送選擇
+        // const pickUpInput = document.querySelector('input[name="delivery"]:checked');
+        // //確認至少有選擇一個
+        // if (!pickUpInput) {
+        //     Swal.fire({
+        //         icon: 'warning',
+        //         title: '請選擇取貨方式',
+        //         text: '請選擇自取或外送。',
+        //         confirmButtonText: '確定'
+        //     });
+        //     return;
+        // }
+        // //根據選項填充文字
+        // let receivingMethod = '';
+        // if (pickUpInput.classList.contains('pick-up-input')) {
+        //     receivingMethod = '自取';
+        // } else if (pickUpInput.classList.contains('carry-out-radio')) {
+        //     receivingMethod = '外送';
+        // }
+        // //如果選擇了外送，必須檢查地址是否已填寫
+        //     let addressDetail = '';
+        //     if (receivingMethod === '外送') {
+        //         addressDetail = document.querySelector('.carry-out-address .address').value;
+        //         if (!addressDetail.trim()) {
+        //             // 如果地址沒有填寫，顯示提示訊息
+        //             Swal.fire({
+        //                 icon: 'warning',
+        //                 title: '請輸入地址',
+        //                 text: '選擇外送時，請輸入地址。',
+        //                 confirmButtonText: '確定'
+        //             });
+        //             return; // 結束，不進行下一步
+        //         }
+        //     }
+        //     //判斷有無填寫取貨時間
+        //     if(date_input_el.value ==='') {
+        //         // 使用 SweetAlert 顯示錯誤訊息
+        //         Swal.fire({
+        //             icon: 'error',
+        //             title: '錯誤',
+        //             text: '請選擇取貨時間'
+        //         });
+        //         return;
+        //     }
+        //     // 將選擇的取貨方式和地址（如果有）取貨時間儲存到 localStorage
+        //     // const reciverMethodInfo = {
+        //     //     method: receivingMethod,
+        //     //     address: addressDetail,
+        //     //     receivertime:date_input_el.value
+        //     // };
+        //     // localStorage.setItem('reciverMethodInfo', JSON.stringify(reciverMethodInfo));
+        // }
         //F14 獲得的優惠券動態生成選項
         function getcoupons(customerId){
             fetch(`/cart/getCoupon/${customerId}`)
