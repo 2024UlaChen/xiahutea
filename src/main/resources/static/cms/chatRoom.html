@@ -56,11 +56,22 @@
 
     // 使用前須覆寫actionHandlers中必要的方法
     // 詳細可以去 weien-chat.js 中的 actionHandlers查看
-    actionHandlers.getChatRoomsData = () => {
-        return chatRoomData;
+    actionHandlers.getChatRoomsData = async () => {
+        return await fetch("/chatroomdata")
+            .then(res => res.json())
+            .then(data =>{
+                console.log(data);
+                return data;
+            })
     }
 
     actionHandlers.getChatMessagesData = async (chatId) => {
+
+        return await fetch(`/chatmessagesdata/${chatId}`)
+            .then(res => res.json())
+            .then(ChatMessagesData =>{
+                return ChatMessagesData;
+            })
         // console.log('這裡是外部定義的getChatMessagesData chatId : ' + chatId);
         // 利用chatId去取得資料
         // 目前是傳入假資料
@@ -79,9 +90,15 @@
         return messages;
     }
 
-    actionHandlers.getUID = async () => {
+    actionHandlers.getUID = () => {
+
+        fetch("/totalusers")
+            .then(res => res.json())
+            .then(data =>{
+                return data.totalUserId;
+            })
         // 傳入totalID
-        return 'user2';
+        // return 'user2';
     }
 
     const chat = new WeienChat();
@@ -94,101 +111,101 @@
     });
 
     // 假資料
-    const chatRoomData = [
-        {
-            chatId: 1,
-            //chatName: 'Alice', //可不傳遞, 未設定時的顯示規則: 參與者兩人時顯示另一個人的名稱   大於兩人時顯示'會話群組 (人數)'
-            // unreadMessages: 3,
-            lastMessage: 'See you soon!',
-            lastMessageAt: '2024-07-05T17:55:00Z',
-            // photo: '/img/avatar1.jpg',
-            participants: [
-                {
-                    userId: 'user1',
-                    name: 'Alice',
-                    type: 'member',
-                    avatar: '/img/avatar1.jpg',
-                    // lastReadingAt: '2024-06-29T12:35:00Z',
-                    // online: true,  //目前無作用  未來考慮增加
-                },
-                {
-                    userId: 'user2',
-                    name: 'WeiEN',
-                    type: 'member',
-                    avatar: '/img/avatar1.jpg',
-                    // lastReadingAt: '2024-06-29T12:05:00Z',
-                    // online: true,  //目前無作用  未來考慮增加
-                },
-            ], // 參與者列表 可大於2個人
-            // notifySettings: 'on', // 'on', 'off' , 不傳遞(或非上述兩個值)則不顯示
-            // pinned: true,
-            // _lastActivity: 'new Data()' (程式額外添加的欄位, 用於偵測更新時間)
-        },
-        {
-            chatId: 2,
-            // chatName: 'Bob',
-            lastMessageAt: '2024-06-28',
-            lastMessage: 'Got it!',
-            unreadMessages: 1,
-            photo: '/img/avatar2.jpg',
-            pinned: true,
-            participants: [
-                {
-                    userId: 'user1',
-                    name: 'Alice',
-                    type: 'member',
-                    avatar: '/img/avatar1.jpg',
-                    lastReadingAt: '2024-06-29T12:35:00Z',
-                    // online: true,  //目前無作用  未來考慮增加
-                },
-                {
-                    userId: 'user2',
-                    name: 'WeiEN',
-                    type: 'member',
-                    avatar: '/img/avatar3.jpg',
-                    lastReadingAt: '2024-06-29T12:05:00Z',
-                    // online: true,  //目前無作用  未來考慮增加
-                },
-                {
-                    userId: 'user3',
-                    name: 'Bob',
-                    type: 'member',
-                    avatar: '/img/avatar2.jpg',
-                    lastReadingAt: '2024-06-29T12:05:00Z',
-                    // online: true,  //目前無作用  未來考慮增加
-                },
-            ], // 參與者列表 可大於2個人
-            notifySettings: 'off', // 'on', 'off' , 不傳遞(或非上述兩個值)則不顯示
-        },
-        {
-            chatId: 3,
-            chatName: 'Charlie',
-            lastMessageAt: '2024-06-28',
-            lastMessage: 'Let’s meet tomorrow.',
-            unreadMessages: 0,
-            photo: '/img/avatar3.jpg',
-            pinned: false,
-            participants: [
-                {
-                    userId: 'user1',
-                    name: 'Charlie',
-                    type: 'member',
-                    avatar: '/img/avatar3.jpg',
-                    lastReadingAt: '2024-06-29T12:35:00Z',
-                    // online: true,  //目前無作用  未來考慮增加
-                },
-                {
-                    userId: 'user2',
-                    name: 'WeiEN',
-                    type: 'member',
-                    avatar: '/img/avatar1.jpg',
-                    lastReadingAt: '2024-06-29T12:05:00Z',
-                    // online: true,  //目前無作用  未來考慮增加
-                },
-            ], // 參與者列表 可大於2個人
-            notifySettings: 'off', // 'on', 'off' , 不傳遞(或非上述兩個值)則不顯示
-        },
-    ];
+    // const chatRoomData = [
+    //     {
+    //         chatId: 1,
+    //         //chatName: 'Alice', //可不傳遞, 未設定時的顯示規則: 參與者兩人時顯示另一個人的名稱   大於兩人時顯示'會話群組 (人數)'
+    //         // unreadMessages: 3,
+    //         lastMessage: 'See you soon!',
+    //         lastMessageAt: '2024-07-05T17:55:00Z',
+    //         // photo: '/img/avatar1.jpg',
+    //         participants: [
+    //             {
+    //                 userId: 'user1',
+    //                 name: 'Alice',
+    //                 type: 'member',
+    //                 avatar: '/img/avatar1.jpg',
+    //                 // lastReadingAt: '2024-06-29T12:35:00Z',
+    //                 // online: true,  //目前無作用  未來考慮增加
+    //             },
+    //             {
+    //                 userId: 'user2',
+    //                 name: 'WeiEN',
+    //                 type: 'member',
+    //                 avatar: '/img/avatar1.jpg',
+    //                 // lastReadingAt: '2024-06-29T12:05:00Z',
+    //                 // online: true,  //目前無作用  未來考慮增加
+    //             },
+    //         ], // 參與者列表 可大於2個人
+    //         // notifySettings: 'on', // 'on', 'off' , 不傳遞(或非上述兩個值)則不顯示
+    //         // pinned: true,
+    //         // _lastActivity: 'new Data()' (程式額外添加的欄位, 用於偵測更新時間)
+    //     },
+    //     {
+    //         chatId: 2,
+    //         // chatName: 'Bob',
+    //         lastMessageAt: '2024-06-28',
+    //         lastMessage: 'Got it!',
+    //         unreadMessages: 1,
+    //         photo: '/img/avatar2.jpg',
+    //         pinned: true,
+    //         participants: [
+    //             {
+    //                 userId: 'user1',
+    //                 name: 'Alice',
+    //                 type: 'member',
+    //                 avatar: '/img/avatar1.jpg',
+    //                 lastReadingAt: '2024-06-29T12:35:00Z',
+    //                 // online: true,  //目前無作用  未來考慮增加
+    //             },
+    //             {
+    //                 userId: 'user2',
+    //                 name: 'WeiEN',
+    //                 type: 'member',
+    //                 avatar: '/img/avatar3.jpg',
+    //                 lastReadingAt: '2024-06-29T12:05:00Z',
+    //                 // online: true,  //目前無作用  未來考慮增加
+    //             },
+    //             {
+    //                 userId: 'user3',
+    //                 name: 'Bob',
+    //                 type: 'member',
+    //                 avatar: '/img/avatar2.jpg',
+    //                 lastReadingAt: '2024-06-29T12:05:00Z',
+    //                 // online: true,  //目前無作用  未來考慮增加
+    //             },
+    //         ], // 參與者列表 可大於2個人
+    //         notifySettings: 'off', // 'on', 'off' , 不傳遞(或非上述兩個值)則不顯示
+    //     },
+    //     {
+    //         chatId: 3,
+    //         chatName: 'Charlie',
+    //         lastMessageAt: '2024-06-28',
+    //         lastMessage: 'Let’s meet tomorrow.',
+    //         unreadMessages: 0,
+    //         photo: '/img/avatar3.jpg',
+    //         pinned: false,
+    //         participants: [
+    //             {
+    //                 userId: 'user1',
+    //                 name: 'Charlie',
+    //                 type: 'member',
+    //                 avatar: '/img/avatar3.jpg',
+    //                 lastReadingAt: '2024-06-29T12:35:00Z',
+    //                 // online: true,  //目前無作用  未來考慮增加
+    //             },
+    //             {
+    //                 userId: 'user2',
+    //                 name: 'WeiEN',
+    //                 type: 'member',
+    //                 avatar: '/img/avatar1.jpg',
+    //                 lastReadingAt: '2024-06-29T12:05:00Z',
+    //                 // online: true,  //目前無作用  未來考慮增加
+    //             },
+    //         ], // 參與者列表 可大於2個人
+    //         notifySettings: 'off', // 'on', 'off' , 不傳遞(或非上述兩個值)則不顯示
+    //     },
+    // ];
 
     const messages2 = [
         {
