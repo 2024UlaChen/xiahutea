@@ -80,6 +80,8 @@ document.addEventListener("DOMContentLoaded",function(){
   let platform_fee_number_el = document.getElementsByClassName('platform-fee-number')[0];
   let CouponAmountText=null;
   let CouponAmount=null;
+  let MemberCardAmountText=null;
+  let MemberCardAmount=null;
   let MoneyBagAmountText=null;
   let MoneyBagAmount=null;
   let PlatformfeeText=null;
@@ -255,7 +257,7 @@ document.addEventListener("DOMContentLoaded",function(){
 
       //加入點擊事件get會員卡點數
       select_membercard_input_el.addEventListener("click",function (){
-          // GetMemberCardPoint(customerId,storeId);
+          GetMemberCardPoint(storeId,customerId);
           membercard_count_el.style.display = "flex";
           moneybag_count_el.style.display= "none";
           moneybag_discount_number_el.value ='';
@@ -264,16 +266,19 @@ document.addEventListener("DOMContentLoaded",function(){
           couponSelect_el.disabled=true;
           coupon_minus_number_el.textContent = '$0';
           moneybag_minus_number_el.textContent = '$0';
-
       })
-      //TODO 加入點擊事件get會員錢包餘額
+      //加入點擊事件get會員錢包餘額
       select_moneybag_input_el.addEventListener("click",function (){
           moneybag_count_el.style.display = "flex";
           if(loginMember.customerMoney!=null){
-              moneybag_number_el.textContent = loginMember.customerMoney;
-              moneybag_discount_number_el.disabled =false;
-              moneybag_discount_number_el.focus();
-              moneybag_discount_number_el.max=loginMember.customerMoney;
+              if(loginMember.customerMoney === 0){
+                  moneybag_count_el.textContent = `會員錢包餘額為 ${loginMember.customerMoney}元，無法扣除`
+              }else{
+                  moneybag_count_el.textContent = `會員錢包餘額為 ${loginMember.customerMoney}元`
+                  moneybag_discount_number_el.disabled =false;
+                  moneybag_discount_number_el.focus();
+                  moneybag_discount_number_el.max=loginMember.customerMoney;
+              }
           }else{
               moneybag_count_el.textContent = '無資料....'
           }
@@ -1292,9 +1297,9 @@ document.addEventListener("DOMContentLoaded",function(){
             localStorage.setItem('cartItems', JSON.stringify(cartData));
         }
         //訂單彙總項目更新
-        function updateDetail(){
-
-        }
+        // function updateDetail(){
+        //
+        // }
 
         //F10表單填送:處理商品運送方式及取貨時間
         // function checkreceivemethod(){
@@ -1376,8 +1381,8 @@ document.addEventListener("DOMContentLoaded",function(){
                 .catch(error => console.error('Error loading coupons:', error));
         }
         //F15 獲得會員卡餘額及相關事件綁定
-        function GetMemberCardPoint(customerId, storeId){
-            fetch(`/cart/checkoutlist/getMemberCard/${customerId}/${storeId}`)
+        function GetMemberCardPoint(storeId,customerId){
+            fetch(`/cart/checkoutlist/getMemberCard/${storeId}/${customerId}`)
                 .then(response=>{
                     if (!response.ok) {
                         return response.json().then(errorData => {
@@ -1388,12 +1393,20 @@ document.addEventListener("DOMContentLoaded",function(){
                 })
                 .then(data=>{
                     console.log("會員卡積分:", data.points);
-                    membercard_number_el.textContent=data.points;
+                    if(data.points<10){
+                        membercard_count_el.textContent=`會員點數為${data.points} 點，會員點數不足`;
+                        membercard_minus_number_el.textContent = "$0";
+                    }else{
+                        membercard_count_el.textContent=`會員點數為${data.points} 點，10點可折抵50元`;
+                        membercard_minus_number_el.textContent = "$50";
+                    }
+                    Calculatetotal();
+                    // membercard_number_el.textContent=data.points;
                 })
                 .catch(error=>{
                     console.error('Error loading coupons:', error);
                 })
-        }
+            }
         //F20 計算訂單金額
         function Calculatetotal(){
             let totalAmount = 0;
@@ -1427,6 +1440,14 @@ document.addEventListener("DOMContentLoaded",function(){
             totalAmount -= CouponAmount;
             if(totalAmount<0){
                 //使用的優惠券折扣金額大於訂單總額就將總額變為0元，優惠券不退還
+                totalAmount =0;
+            }
+            //會員卡折抵
+            MemberCardAmountText = membercard_minus_number_el.textContent.trim();
+            MemberCardAmount = parseFloat(MemberCardAmountText.replace('$', ''));
+            totalAmount -= MemberCardAmount;
+            if(totalAmount<0){
+                //使用的會員卡折扣金額大於訂單總額就將總額變為0元，會員點數一樣扣除
                 totalAmount =0;
             }
 
