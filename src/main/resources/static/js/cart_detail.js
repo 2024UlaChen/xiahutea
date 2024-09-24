@@ -103,6 +103,7 @@ document.addEventListener("DOMContentLoaded",function(){
   let input_phone_zone_el = document.getElementsByClassName("input-phone-zone")[0];
   let input_phone_number_el = document.getElementsByClassName("input-phone-number")[0];
   let phoneZoneError_el = document.getElementById('phone-zone-error');
+  let vehicle_number_error = document.getElementById('vehicle-number-error');
   // 台灣市話區碼列表 (部分常見區碼)
   let validPhoneZones = ['02', '03', '04', '05', '06', '07', '08'];
   let text2store_el = document.getElementsByClassName("text2store")[0];
@@ -511,6 +512,8 @@ document.addEventListener("DOMContentLoaded",function(){
         checksava_vehicle_el.checked = false;
         uniform_numbers_el.value="";
         uniform_numbers_error_el.style.display="none";
+        vehicle_number_el.value="";
+        vehicle_number_error.style.display = 'none';
       })
       select_vehicle_el.addEventListener("click", function () {
         checksava_vehicle_el.disabled = false;
@@ -527,6 +530,7 @@ document.addEventListener("DOMContentLoaded",function(){
         checksava_vehicle_el.checked = false;
         uniform_numbers_el.focus();
         vehicle_number_el.value="";
+        vehicle_number_error.style.display = 'none';
       })
       uniform_numbers_el.addEventListener("focus", function () {
         uniform_numbers_el.placeholder = "";
@@ -553,12 +557,11 @@ document.addEventListener("DOMContentLoaded",function(){
       })
       //載具驗證
       vehicle_number_el.addEventListener('input',function (){
-          // 定義正則表達式
           let carrierPattern = /^\/[A-Z0-9+\-\.]{7}$/;
           if(carrierPattern.test(this.value)){
-
+              vehicle_number_error.style.display = 'none';
           }else{
-
+              vehicle_number_error.style.display = 'inline';
           }
       })
       //頁面跳轉
@@ -665,8 +668,22 @@ document.addEventListener("DOMContentLoaded",function(){
             }
         }
         step2_el.classList.remove("active");
+        //*****************************訂單明細*********************************
+        //店家
         store_el.textContent= nowstore.storeName;
-        customer_el.textContent = loginMember.nickname;
+        //取貨人
+        customer_el.textContent = pickuper_el.value;
+        //連絡電話
+        if(select_cellphone_el.checked && input_cellphone_el.value !==''){
+            phone_el.textContent = input_cellphone_el.value;
+        }else if(select_phone_el.checked && input_phone_zone_el.value !=='' &&
+                 input_phone_number_el.value !==''){
+            phone_el.textContent = input_phone_zone_el.value + input_phone_number_el.value;
+        }
+        //取貨方式
+        if(pick_up_input_el.checked){
+            pickupMethod_el.textContent ="自取";
+        }
         step3_el.classList.add("active");
         if (step_content2_el.style.display = "flex") {
           step_content2_el.style.display = "none";

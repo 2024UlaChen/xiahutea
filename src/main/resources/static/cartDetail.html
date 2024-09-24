@@ -304,9 +304,10 @@
                   <li class="vehicle-detail">
                       <input type="radio" class="select-vehicle" name="select-invoice">
                       <label for="option3" class="label-vehicle">手機載具</label>
+                      <span id="vehicle-number-error" style="color: red; display: none;">請輸入有效的載具號碼</span>
                       <input type="checkbox" class="checksava-vehicle" disabled>
                       <label for="save-default">儲存為預設</label>
-                      <input type="text" class="vehicle-number" disabled>
+                      <input type="text" class="vehicle-number" maxlength="8" disabled>
                   </li>
               </ul>
           </div>
@@ -336,19 +337,19 @@
                   </tr>
                   <tr>
                       <td>聯絡電話</td>
-                      <td id="phone">0912345678</td>
+                      <td id="phone"></td>
                   </tr>
                   <tr>
                       <td>取貨方式</td>
-                      <td id="pickupMethod">外送</td>
+                      <td id="pickupMethod"></td>
                   </tr>
                   <tr>
                       <td>取貨地址</td>
-                      <td id="final-address">台北市松山區松江南京100號</td>
+                      <td id="final-address"></td>
                   </tr>
                   <tr>
                       <td>預計取貨時間</td>
-                      <td id="pickupTime">12:00-12:15</td>
+                      <td id="pickupTime"></td>
                   </tr>
                   <tr>
                       <td>付款方式</td>
@@ -356,11 +357,11 @@
                   </tr>
                   <tr>
                       <td>開立發票方式</td>
-                      <td id="invoiceType">會員載具</td>
+                      <td id="invoiceType"></td>
                   </tr>
                   <tr>
                       <td>應付金額</td>
-                      <td id="final-amount">500</td>
+                      <td id="final-amount"></td>
                   </tr>
                   </tbody>
               </table>
