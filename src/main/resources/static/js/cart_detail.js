@@ -536,6 +536,7 @@ document.addEventListener("DOMContentLoaded",function(){
           uniform_numbers_el.placeholder = "請輸入統編";
         }
       });
+      //統編驗證
       uniform_numbers_el.addEventListener("input",function (){
          //  let uniformNumberLength = this.value.length;
          // if(uniformNumberLength<8){
@@ -549,6 +550,16 @@ document.addEventListener("DOMContentLoaded",function(){
          }else{
              uniform_numbers_error_el.style.display="inline";
          }
+      })
+      //載具驗證
+      vehicle_number_el.addEventListener('input',function (){
+          // 定義正則表達式
+          let carrierPattern = /^\/[A-Z0-9+\-\.]{7}$/;
+          if(carrierPattern.test(this.value)){
+
+          }else{
+
+          }
       })
       //頁面跳轉
       btn_backto_last_page_el.addEventListener("click", function (e) {
@@ -641,7 +652,7 @@ document.addEventListener("DOMContentLoaded",function(){
         if(select_paper_el.checked){
             //預計將金流方式設定為紙本發票
         }
-        if(select_paper_uniform_el){
+        if(select_paper_uniform_el.checked){
             //預計將金流方式設定為紙本發票加統編
             if(uniform_numbers_el.value ===''||uniform_numbers_error_el.style.display==='inline'){
                 Swal.fire({
