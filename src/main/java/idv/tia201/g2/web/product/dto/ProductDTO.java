@@ -14,7 +14,7 @@ import java.util.Map;
 
 
 public class ProductDTO {
-
+        private Integer productId;
         private String productName;
         private Integer productPrice;
         private boolean productStatus;
