@@ -1,6 +1,7 @@
 package idv.tia201.g2.web.store.controller;
 
 
+import idv.tia201.g2.core.pojo.Core;
 import idv.tia201.g2.web.store.model.StoreViewModel;
 import idv.tia201.g2.web.store.service.StoreService;
 
@@ -12,10 +13,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.client.RestTemplateAutoConfiguration;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
@@ -39,9 +42,28 @@ public class StoreController {
     }
     @GetMapping("/home")
     public List<Store> Home(){
-//        List<Store> storeList =  storeService.findAll();
+
         List<Store> storeList =  storeService.GetStoreList();
         return storeList;
+    }
+    @GetMapping("/search")
+    public Page<Store> searchStores(
+            @RequestParam(required = false) String storeName,
+            @RequestParam(required = false) String vat,
+            @RequestParam(required = false) Integer status,
+            @RequestParam(required = false) Timestamp searcherStart,
+            @RequestParam(required = false) Timestamp searcherEnd,
+            @RequestParam(defaultValue = "0") Integer page) {
+        StoreViewModel item = new StoreViewModel();
+        item.setStoreName(storeName);
+        item.setVat(vat);
+        item.setSearcherStart(searcherStart);
+        item.setSearcherEnd(searcherEnd);
+        item.setStoreStatus(status);
+        return storeService.searchStore(item,page);
+
+
+
     }
     @GetMapping("/storeinfo/{storeId}")
     public Store StoreInfo(HttpSession session,@PathVariable Integer storeId){
