@@ -142,7 +142,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Boolean isExistMember(Member member) {
-        return !ObjectUtils.isEmpty(memberDao.findMemberByPhone(member.getCustomerPhone()));
+        return memberDao.findMemberByPhone(member.getCustomerPhone()) != null;
     }
 
     @Override

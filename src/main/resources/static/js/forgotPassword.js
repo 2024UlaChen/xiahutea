@@ -239,21 +239,25 @@ resetPwdBtn.addEventListener("click", function () {
 reGetVerifyCodeBtn.addEventListener("click", function () {
     resetVerifyCodeInput.value = "";
     // TODO use phone to get memberId and reset verify code
-    let sessionDetail = JSON.parse(sessionStorage.getItem("memberData"));
-    console.log(sessionDetail);
-    // TODO UPDATE PHONE CHECK NO MAPPED PHONE
     fetch(`member/register/update`, {
         method: "POST",
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
-            customerId: sessionDetail.customerId,
+            customerPhone: forgetPwdPhoneInput.value
         }),
     }).then(res => res.json()).then(data => {
-        console.log(data);
         if (data.successful) {
-            Swal.fire("已重新發送驗證碼");
+            Swal.fire({
+                title: "已重新發送驗證碼",
+                timer: 1500
+            }).then(() => {
+                titleTxt.innerText = "重設密碼";
+                resetPwdForm.classList.remove("hidden");
+                reGetVerifyCodeBtn.classList.remove("hidden");
+            })
         } else {
-            Swal.fire("重新發送驗證碼失敗，請聯絡客服", "", "error");
+            Swal.fire("請確認是否有註冊手機", "", "error");
         }
-    })
+    });
+
 })

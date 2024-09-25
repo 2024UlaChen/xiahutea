@@ -203,10 +203,13 @@ btnRegister.addEventListener("click", function () {
             }),
         }).then(res => res.json()).then(data => {
             if (data.successful) {
+                console.log(1);
                 sessionStorage.setItem("memberData", JSON.stringify(data.data));
                 location.href = "../memberCertificate.html";
             } else {
-                Swal.fire("註冊失敗", "", "error");
+                console.log(data.message);
+
+                Swal.fire(data.message == null ? "" : data.message, "", "error");
             }
         })
     }

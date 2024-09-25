@@ -25,6 +25,12 @@ public class RegisterController {
             return core;
         }
         Member memberResult = memberService.register(member);
+        if(!memberResult.isSuccessful()){
+            core.setMessage(memberResult.getMessage());
+            core.setSuccessful(false);
+            return core;
+        }
+//        TODO CHECK WHY IS NULL
         Map<String, Integer> map = new HashMap<String, Integer>();
         map.put("customerId", memberResult.getCustomerId());
         core.setData(map);
