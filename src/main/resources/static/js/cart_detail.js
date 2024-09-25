@@ -68,7 +68,9 @@ document.addEventListener("DOMContentLoaded",function(){
   let membercard_number_el = document.getElementById('membercard-number');
   let moneybag_count_el = document.getElementsByClassName('moneybag-count')[0]
   let moneybag_number_el = document.getElementById('moneybag-number') ;
-  let errorMsg_el = document.getElementById('error-msg');
+  let couponSelected = false;
+  let memberCardSelected = false;
+  let moneyBagSelected = false;
 
   //訂單彙總
   let product_amount_el = document.getElementsByClassName('product-amount')[0];
@@ -128,7 +130,8 @@ document.addEventListener("DOMContentLoaded",function(){
   let paymentMethod_el = document.getElementById('paymentMethod');
   let invoiceType_el = document.getElementById('invoiceType');
   let final_amount_el = document.getElementById('final-amount');
-
+  let remark_el = document.getElementById('remark')
+  let charLimit = 60;  // 設定字數限制
 
 
 
@@ -238,13 +241,34 @@ document.addEventListener("DOMContentLoaded",function(){
       //優惠使用(優惠券、會員卡、會員錢包)
       //獲得使用者優惠券選項
       select_coupon_input_el.addEventListener("click", function () {
-          couponSelect_el.disabled=false;
-          membercard_count_el.style.display = "none";
-          moneybag_count_el.style.display= "none";
-          moneybag_discount_number_el.value ='';
-          membercard_minus_number_el.textContent = '$0';
-          moneybag_minus_number_el.textContent = '$0';
-          getcoupons(loginMember.customerId);
+          if (couponSelected) {
+              // 取消選擇優惠券
+              couponSelect_el.disabled = true;
+              couponSelect_el.innerHTML = '<option disabled selected >請選擇優惠券</option>';
+              coupon_minus_number_el.textContent = '$0';
+              couponSelected = false; // 重設狀態
+              select_coupon_input_el.checked=false;
+          } else {
+              // 選擇優惠券
+              couponSelect_el.disabled = false;
+              membercard_count_el.style.display = "none";
+              moneybag_count_el.style.display = "none";
+              moneybag_discount_number_el.value = '';
+              membercard_minus_number_el.textContent = '$0';
+              moneybag_minus_number_el.textContent = '$0';
+              getcoupons(loginMember.customerId);
+              // 更新狀態
+              couponSelected = true;
+              memberCardSelected = false;
+              moneyBagSelected = false;
+          }
+          // couponSelect_el.disabled=false;
+          // membercard_count_el.style.display = "none";
+          // moneybag_count_el.style.display= "none";
+          // moneybag_discount_number_el.value ='';
+          // membercard_minus_number_el.textContent = '$0';
+          // moneybag_minus_number_el.textContent = '$0';
+          // getcoupons(loginMember.customerId);
       })
 
       //點選優惠券時動態更新結帳明細折抵金額
@@ -252,42 +276,93 @@ document.addEventListener("DOMContentLoaded",function(){
           let selectedOption = couponSelect_el.options[couponSelect_el.selectedIndex];
           let discount = selectedOption.getAttribute('data-discount');
           coupon_minus_number_el.textContent = `$${discount}`;
-          // Calculatetotal(); 移到document點擊
       })
 
       //加入點擊事件get會員卡點數
       select_membercard_input_el.addEventListener("click",function (){
-          GetMemberCardPoint(storeId,customerId);
-          membercard_count_el.style.display = "flex";
-          moneybag_count_el.style.display= "none";
-          moneybag_discount_number_el.value ='';
-          //清除優惠券欄位及會員卡優惠
-          couponSelect_el.innerHTML = '<option disabled selected >請選擇優惠券</option>';
-          couponSelect_el.disabled=true;
-          coupon_minus_number_el.textContent = '$0';
-          moneybag_minus_number_el.textContent = '$0';
+          if (memberCardSelected) {
+              // 取消會員卡
+              membercard_count_el.style.display = "none";
+              membercard_minus_number_el.textContent = '$0';
+              memberCardSelected = false;
+          } else {
+              // 使用會員卡
+              GetMemberCardPoint(storeId, customerId);
+              membercard_count_el.style.display = "flex";
+              moneybag_count_el.style.display = "none";
+              moneybag_discount_number_el.value = '';
+              couponSelect_el.innerHTML = '<option disabled selected >請選擇優惠券</option>';
+              couponSelect_el.disabled = true;
+              coupon_minus_number_el.textContent = '$0';
+              membercard_minus_number_el.textContent = '$0';
+              memberCardSelected = true;
+              couponSelected = false;
+              moneyBagSelected = false;
+          }
+          // GetMemberCardPoint(storeId,customerId);
+          // membercard_count_el.style.display = "flex";
+          // moneybag_count_el.style.display= "none";
+          // moneybag_discount_number_el.value ='';
+          // //清除優惠券欄位及會員卡優惠
+          // couponSelect_el.innerHTML = '<option disabled selected >請選擇優惠券</option>';
+          // couponSelect_el.disabled=true;
+          // coupon_minus_number_el.textContent = '$0';
+          // moneybag_minus_number_el.textContent = '$0';
       })
       //加入點擊事件get會員錢包餘額
       select_moneybag_input_el.addEventListener("click",function (){
-          moneybag_count_el.style.display = "flex";
-          if(loginMember.customerMoney!=null){
-              if(loginMember.customerMoney === 0){
-                  moneybag_count_el.textContent = `會員錢包餘額為 ${loginMember.customerMoney}元，無法扣除`
-              }else{
-                  moneybag_count_el.textContent = `會員錢包餘額為 ${loginMember.customerMoney}元`
-                  moneybag_discount_number_el.disabled =false;
-                  moneybag_discount_number_el.focus();
-                  moneybag_discount_number_el.max=loginMember.customerMoney;
+          if (moneyBagSelected) {
+              // 取消會員錢包
+              moneybag_count_el.style.display = "none";
+              moneybag_minus_number_el.textContent = '$0';
+              moneyBagSelected = false;
+          } else {
+              // 使用會員錢包
+              moneybag_count_el.style.display = "flex";
+              if (loginMember.customerMoney != null) {
+                  if (loginMember.customerMoney === 0) {
+                      moneybag_count_el.textContent = `會員錢包餘額為 ${loginMember.customerMoney}元，無法扣除`;
+                      couponSelected = false;
+                      memberCardSelected = false;
+                      moneyBagSelected = true;
+                  } else {
+                      moneybag_count_el.textContent = `會員錢包餘額為 ${loginMember.customerMoney}元`;
+                      moneybag_discount_number_el.disabled = false;
+                      moneybag_discount_number_el.focus();
+                      moneybag_discount_number_el.max = loginMember.customerMoney;
+                      couponSelected = false;
+                      memberCardSelected = false;
+                      moneyBagSelected = true;
+                  }
+              } else {
+                  moneybag_count_el.textContent = '無資料....';
               }
-          }else{
-              moneybag_count_el.textContent = '無資料....'
+              membercard_count_el.style.display = "none";
+              couponSelect_el.innerHTML = '<option disabled selected >請選擇優惠券</option>';
+              couponSelect_el.disabled = true;
+              coupon_minus_number_el.textContent = '$0';
+              membercard_minus_number_el.textContent = '$0';
+              moneyBagSelected = true;
           }
-          membercard_count_el.style.display = "none";
-          //清除優惠券及會員卡優惠
-          couponSelect_el.innerHTML = '<option disabled selected >請選擇優惠券</option>';
-          couponSelect_el.disabled=true;
-          coupon_minus_number_el.textContent = '$0';
-          membercard_minus_number_el.textContent = '$0';
+          // moneybag_count_el.style.display = "flex";
+          // if(loginMember.customerMoney!=null){
+          //     if(loginMember.customerMoney === 0){
+          //         moneybag_count_el.textContent = `會員錢包餘額為 ${loginMember.customerMoney}元，無法扣除`
+          //     }else{
+          //         moneybag_count_el.textContent = `會員錢包餘額為 ${loginMember.customerMoney}元`
+          //         moneybag_discount_number_el.disabled =false;
+          //         moneybag_discount_number_el.focus();
+          //         moneybag_discount_number_el.max=loginMember.customerMoney;
+          //     }
+          // }else{
+          //     moneybag_count_el.textContent = '無資料....'
+          // }
+          // membercard_count_el.style.display = "none";
+          // //清除優惠券及會員卡優惠
+          // couponSelect_el.innerHTML = '<option disabled selected >請選擇優惠券</option>';
+          // couponSelect_el.disabled=true;
+          // coupon_minus_number_el.textContent = '$0';
+          // membercard_minus_number_el.textContent = '$0';
       })
       //會員錢包輸入框事件
       moneybag_discount_number_el.addEventListener("focus", function () {
@@ -730,6 +805,12 @@ document.addEventListener("DOMContentLoaded",function(){
         }
         //應付金額
         final_amount_el.textContent = total_amount_el.textContent;
+        //備註
+        if(text2store_el.value.length>charLimit){
+            remark_el.textContent = text2store_el.value.substring(0, charLimit) + '...';  // 限制字數顯示
+        } else {
+            remark_el.textContent = text2store_el.value;  // 不超過限制時顯示完整內容
+        }
 
         step3_el.classList.add("active");
         if (step_content2_el.style.display = "flex") {
@@ -743,6 +824,14 @@ document.addEventListener("DOMContentLoaded",function(){
       })
 
       //********************************************第三頁*************************************
+      // 當點擊 td 時展開/收起
+        remark_el.addEventListener('click', function() {
+            if (remark_el.textContent.endsWith('...')) {
+                remark_el.textContent = text2store_el.value;  // 展開完整內容
+            } else {
+                remark_el.textContent = text2store_el.value.substring(0, charLimit) + '...';  // 回到限制字數的內容
+            }
+        });
       btn_backto_last_page2_el.addEventListener("click", function (e) {
         step3_el.classList.remove("active");
         step2_el.classList.add("active");
@@ -753,7 +842,6 @@ document.addEventListener("DOMContentLoaded",function(){
             behavior: "smooth" // 使用平滑滾動效果
           });
         }
-        e.stopPropagation()
       })
     //********************************************function區****************************************
     //GET 請求：進入購物結帳頁面取得使用者
