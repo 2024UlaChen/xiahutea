@@ -483,16 +483,13 @@
                 });
             }
             //-----------------------------------------------------------------------
-            // todo 待確認 key & value
             function invoiceText(invoiceNum) {
                 switch (invoiceNum) {
-                    case 1 : return "紙本發票-無統編";
-                    case 2 : return "紙本發票-公司戶";
-                    case 3 : return "電子發票-手機載具";
-                    case 4 : return "電子發票-會員帳號";
+                    case 1 : return "電子發票-手機載具";
+                    case 2 : return "電子發票-綠界會員";
+                    case 3 : return "電子發票-統一發票";
                 }
             }
-
             function receiverMethodText(receiverNum){
                 switch (receiverNum) {
                     case 1 : return "自取";

@@ -45,9 +45,6 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private OrderMappingUtil orderMappingUtil;
 
-    // todo
-    // 發票api
-
     // -------- FINISH ---------------------------------
     // 前台 訂單新增
     @Override
@@ -91,7 +88,7 @@ public class OrderServiceImpl implements OrderService {
         }
         final String invoiceCarrier = order.getInvoiceCarrier();
         final String invoiceVat = order.getInvoiceVat() + "";
-        if(order.getInvoiceMethod() == 2){  // 載具
+        if(order.getInvoiceMethod() == 1){  // 載具
             if(invoiceCarrier.charAt(0) != '/' || invoiceCarrier.trim().length() != 8){
                 orderDto.setMessage("載具輸入錯誤");
                 orderDto.setSuccessful(false);
@@ -141,6 +138,11 @@ public class OrderServiceImpl implements OrderService {
                 return orderDto;
             }
         }
+        // todo 會員折抵點數
+        member.setCustomerMoney(member.getCustomerMoney() - order.getCustomerMoneyDiscount());
+        // memberDao.updateMemberInfo(member);
+        // todo 集點卡 優惠券
+        
 
         order.setOrderStatus(1);
         order.setOrderCreateDatetime(new Timestamp(System.currentTimeMillis()));
