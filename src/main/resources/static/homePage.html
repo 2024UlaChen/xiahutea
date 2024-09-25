@@ -297,7 +297,7 @@
       </div>
       <!-- 商家卡片呈現 -->
 
-      <div class="row justify-content-center">
+      <div class="row justify-content-center" id="store-body">
         <figure class="col-3 figure my-5 Heart">
           <img
             src="https://images.deliveryhero.io/image/fd-tw/tw-logos/cm2me-logo.jpg"
@@ -601,31 +601,7 @@
     
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
-    <!-- <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-      crossorigin="anonymous"
-    ></script> -->
-    <!-- <script src="./assets/js/bootstrap.min.js"></script> -->
-    <!-- Bootstrap CSS -->
 
-    <!-- jQuery (必要時) -->
-    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
-
-    <!-- Bootstrap JS -->
-    <!-- <script src="./js/cheatsheet.js"></script> -->
-<!-- 
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-      crossorigin="anonymous"
-      data-bs-no-jquery="true"
-    ></script> -->
-    
-    <!-- <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.min.js" integrity="sha384-lpyLfhYuitXl2zRZ5Bn2fqnhNAKOAaM/0Kr9laMspuaMiZfGmfwRNFh8HlMy49eQ" crossorigin="anonymous"></script>
-    <script src="./assets/js/slick.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
 <script src="assets/js/jquery-1.12.4.min.js"></script>
 <script src="assets/js/jquery.plugin-countdown.min.js"></script>
@@ -732,6 +708,10 @@
 //監聽商家
 let allSotre = document.querySelectorAll('.Heart');
 //
+    //產生store-body
+    getStoreList("/xiaHuTea/home","");
+
+    //產生store-body
 
   }); //end dom
 
@@ -916,6 +896,90 @@ let allSotre = document.querySelectorAll('.Heart');
         document
           .querySelector("#localLog")
           .addEventListener("click", getDistance);
+      }
+    </script>
+    <script>
+      function getStoreList(url,data){
+
+        $.ajax({
+          dataType: "json",
+          url: url,
+          data: data,
+          success: function (data){
+            console.log(data);
+            $('#store-body').empty(); //清空
+
+            data.forEach(function (row){
+              const base64Img = row.logo;
+              let imgid = "img"+row.storeId;
+              console.log(imgid);
+              let str =`<figure class="col-3 figure my-5 Heart">
+          <img
+            src=""
+            alt=""
+            class="rounded KunIndexSotreImg"
+            id="${imgid}"
+          />
+          <div class="row">
+            <figcaption
+              class="figure-caption col-6 IndexImgNameFontSize drinkAddress"
+              data-address="{row.storeAddress}"
+
+            >
+            <i class="fa-regular fa-heart" style="color: red;"></i> ${row.storeName}
+            </figcaption>
+            <figcaption class="figure-caption col">
+              <i class="fa-2x fa-solid fa-truck"></i>
+            </figcaption>
+            <figcaption class="figure-caption col-12 footer2">
+              <i class="KunStar fa-solid fa-star"></i
+              ><span class="KunRank">4.8</span
+              >&nbsp;‧&nbsp;11:00~22:00&nbsp;‧<span class="sotreDistance"
+                >??公里</span
+              >
+            </figcaption>
+          </div>
+        </figure>`;
+              document.querySelector('#store-body').insertAdjacentHTML("afterbegin",str);
+
+
+              storeImage = document.querySelector(`#${imgid}`);
+
+              let imgFormat;
+              if(base64Img !=null){
+                console.log(base64Img.substring(0,20));
+                if (base64Img.startsWith("iVBORw0KGgo")) {
+                  imgFormat = "png"; // PNG 圖片的 base64 開頭
+                } else if (base64Img.startsWith("/9j/")) {
+                  imgFormat = "jpeg"; // JPEG 圖片的 base64 開頭
+                }else if (base64Img.startsWith("R0lGODlh")) {
+                  imgFormat = "gif"; // JPEG 圖片的 base64 開頭
+                }else if (base64Img.startsWith("Qk0")) {
+                  imgFormat = "bmp"; // JPEG 圖片的 base64 開頭
+                }else if (base64Img.startsWith("UklGR")) {
+                  imgFormat = "webp"; // JPEG 圖片的 base64 開頭
+                }else if (base64Img.startsWith("PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmci")) {
+                  imgFormat = "svg+xml"; // JPEG 圖片的 base64 開頭
+                }
+                else {
+                  console.error("不支持的圖片格式");
+                }
+              }
+
+
+              if (imgFormat) {
+                // 確保有對應的 img 元素
+                storeImage.src = `data:image/${imgFormat};base64,${base64Img}`;
+              }
+
+
+
+
+
+
+            });
+          }
+        });
       }
     </script>
     <script
