@@ -1,6 +1,6 @@
 package idv.tia201.g2.web.order.controller;
 
-import idv.tia201.g2.web.order.service.impl.InvoiceService;
+import idv.tia201.g2.web.order.service.InvoiceService;
 import idv.tia201.g2.web.order.vo.Orders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

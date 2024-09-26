@@ -142,7 +142,7 @@ public class OrderServiceImpl implements OrderService {
         member.setCustomerMoney(member.getCustomerMoney() - order.getCustomerMoneyDiscount());
         // memberDao.updateMemberInfo(member);
         // todo 集點卡 優惠券
-        
+
 
         order.setOrderStatus(1);
         order.setOrderCreateDatetime(new Timestamp(System.currentTimeMillis()));

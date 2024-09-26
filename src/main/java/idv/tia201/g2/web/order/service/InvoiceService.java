@@ -1,6 +1,5 @@
-package idv.tia201.g2.web.order.service.impl;
+package idv.tia201.g2.web.order.service;
 
-import idv.tia201.g2.web.order.vo.OrderDetail;
 import idv.tia201.g2.web.order.vo.Orders;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
