@@ -1,5 +1,6 @@
 package idv.tia201.g2.web.user.controller;
 
+import idv.tia201.g2.web.user.dto.TotalUserDTO;
 import idv.tia201.g2.web.user.service.TotalUsersService;
 import idv.tia201.g2.web.user.vo.TotalUsers;
 import jakarta.servlet.http.HttpSession;
@@ -16,9 +17,9 @@ public class TotalUsersController {
     TotalUsersService totalUsersService;
 
     @GetMapping
-    public TotalUsers getTotalUser(HttpSession session){
-        System.out.println((TotalUsers) session.getAttribute("totalUser"));
-        return (TotalUsers) session.getAttribute("totalUser");
+    public TotalUserDTO getTotalUser(HttpSession session){
+        TotalUserDTO user = (TotalUserDTO) session.getAttribute("totalUserDTO");
+        return user;
 
 
 
