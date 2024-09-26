@@ -2,11 +2,16 @@ package idv.tia201.g2.web.order.service.impl;
 
 import idv.tia201.g2.core.util.ValidateUtil;
 import idv.tia201.g2.web.member.dao.MemberDao;
+import idv.tia201.g2.web.member.dao.MemberLoyaltyCardRepository;
+import idv.tia201.g2.web.member.service.MemberLoyaltyCardService;
+import idv.tia201.g2.web.member.service.MemberService;
 import idv.tia201.g2.web.member.vo.Member;
 import idv.tia201.g2.web.order.dao.DisputeDao;
 import idv.tia201.g2.web.order.dao.OrderDao;
 import idv.tia201.g2.web.order.dao.OrderDetailDao;
+import idv.tia201.g2.web.order.dto.NotificationDto;
 import idv.tia201.g2.web.order.dto.OrderDto;
+import idv.tia201.g2.web.order.service.NotificationService;
 import idv.tia201.g2.web.order.service.OrderService;
 import idv.tia201.g2.web.order.util.OrderMappingUtil;
 import idv.tia201.g2.web.order.vo.DisputeOrder;
@@ -15,6 +20,7 @@ import idv.tia201.g2.web.order.vo.Orders;
 import idv.tia201.g2.web.product.dao.ProductDao;
 import idv.tia201.g2.web.product.vo.Product;
 import idv.tia201.g2.web.store.dao.StoreDao;
+import idv.tia201.g2.web.store.vo.CustomerLoyaltyCard;
 import idv.tia201.g2.web.store.vo.Store;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,12 +47,17 @@ public class OrderServiceImpl implements OrderService {
     private StoreDao storeDao;
     @Autowired
     private ProductDao productDao;
+    @Autowired
+    private MemberLoyaltyCardRepository memberLoyaltyCardRepository;
 
     @Autowired
     private OrderMappingUtil orderMappingUtil;
-
-    // todo
-    // 發票api
+    @Autowired
+    private MemberService memberService;
+    @Autowired
+    private MemberLoyaltyCardService memberLoyaltyCardService;
+    @Autowired
+    private NotificationService notificationService;
 
     // -------- FINISH ---------------------------------
     // 前台 訂單新增
@@ -69,6 +80,21 @@ public class OrderServiceImpl implements OrderService {
             orderDto.setSuccessful(false);
             return orderDto;
         }
+
+        Integer loyaltyCardId = order.getLoyaltyCardId();
+        if (loyaltyCardId != null) {
+            CustomerLoyaltyCard customerLoyaltyCard = memberLoyaltyCardRepository.findByLoyaltyCardId(loyaltyCardId);
+            if (customerLoyaltyCard == null) {
+                orderDto.setMessage("無此集點卡");
+                orderDto.setSuccessful(false);
+                return orderDto;
+            }
+            // 會員使用集點卡
+            memberLoyaltyCardService.UpdatePoints(loyaltyCardId, order.getLoyaltyDiscount());
+        }
+        // todo 優惠券
+
+
         if(order.getCouponDiscount() < 0 || order.getLoyaltyDiscount() < 0 || order.getCustomerMoneyDiscount() < 0){
             orderDto.setMessage("折抵金額錯誤");
             orderDto.setSuccessful(false);
@@ -91,8 +117,8 @@ public class OrderServiceImpl implements OrderService {
         }
         final String invoiceCarrier = order.getInvoiceCarrier();
         final String invoiceVat = order.getInvoiceVat() + "";
-        if(order.getInvoiceMethod() == 2){  // 載具
-            if(invoiceCarrier.charAt(0) != '/' || invoiceCarrier.trim().length() != 8){
+        if(order.getInvoiceMethod() == 1){  // 載具
+            if(isEmpty(invoiceCarrier) || invoiceCarrier.charAt(0) != '/' || invoiceCarrier.trim().length() != 8){
                 orderDto.setMessage("載具輸入錯誤");
                 orderDto.setSuccessful(false);
                 return orderDto;
@@ -141,6 +167,10 @@ public class OrderServiceImpl implements OrderService {
                 return orderDto;
             }
         }
+        // 會員使用點數
+        memberService.updateMemberMoneyById(customerId, - order.getCustomerMoneyDiscount());
+        // todo 優惠券
+
 
         order.setOrderStatus(1);
         order.setOrderCreateDatetime(new Timestamp(System.currentTimeMillis()));
@@ -153,6 +183,10 @@ public class OrderServiceImpl implements OrderService {
         orderDto.setSuccessful(true);
         orderDto.setOrders(order);
         orderDto.setOrderDetails(orderDetails);
+
+        // 建立通知的內容
+        NotificationDto notificationDto = new NotificationDto(order.getOrderId(), order.getOrderCreateDatetime());
+        notificationService.notifyNewOrder(notificationDto);
         return orderDto;
     }
 
