@@ -80,14 +80,20 @@ public class OrderServiceImpl implements OrderService {
             orderDto.setSuccessful(false);
             return orderDto;
         }
-        int loyaltyCardId = order.getLoyaltyCardId();
-        CustomerLoyaltyCard customerLoyaltyCard = memberLoyaltyCardRepository.findByLoyaltyCardId(loyaltyCardId);
-        if(customerLoyaltyCard == null) {
-            orderDto.setMessage("無此集點卡");
-            orderDto.setSuccessful(false);
-            return orderDto;
+
+        Integer loyaltyCardId = order.getLoyaltyCardId();
+        if (loyaltyCardId != null) {
+            CustomerLoyaltyCard customerLoyaltyCard = memberLoyaltyCardRepository.findByLoyaltyCardId(loyaltyCardId);
+            if (customerLoyaltyCard == null) {
+                orderDto.setMessage("無此集點卡");
+                orderDto.setSuccessful(false);
+                return orderDto;
+            }
+            // 會員使用集點卡
+            memberLoyaltyCardService.UpdatePoints(loyaltyCardId, order.getLoyaltyDiscount());
         }
         // todo 優惠券
+
 
         if(order.getCouponDiscount() < 0 || order.getLoyaltyDiscount() < 0 || order.getCustomerMoneyDiscount() < 0){
             orderDto.setMessage("折抵金額錯誤");
@@ -163,8 +169,6 @@ public class OrderServiceImpl implements OrderService {
         }
         // 會員使用點數
         memberService.updateMemberMoneyById(customerId, - order.getCustomerMoneyDiscount());
-        // 會員使用集點卡
-        memberLoyaltyCardService.UpdatePoints(loyaltyCardId, order.getLoyaltyDiscount());
         // todo 優惠券
 
 
