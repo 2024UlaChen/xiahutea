@@ -1,7 +1,6 @@
 package idv.tia201.g2.web.member.service.impl;
 
 import idv.tia201.g2.web.member.dao.MemberLoyaltyCardRepository;
-import idv.tia201.g2.web.member.dao.MemberRepository;
 import idv.tia201.g2.web.member.service.MemberLoyaltyCardService;
 import idv.tia201.g2.web.store.vo.CustomerLoyaltyCard;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,7 @@ import org.springframework.stereotype.Service;
 public class MemberLoyaltyCardServiceImpl implements MemberLoyaltyCardService {
 
 
-    private final MemberLoyaltyCardRepository memberLoyaltyCardRepository;
+    private MemberLoyaltyCardRepository memberLoyaltyCardRepository;
     @Autowired
     public MemberLoyaltyCardServiceImpl(MemberLoyaltyCardRepository memberLoyaltyCardRepository) {
         this.memberLoyaltyCardRepository = memberLoyaltyCardRepository;
@@ -34,7 +33,7 @@ public class MemberLoyaltyCardServiceImpl implements MemberLoyaltyCardService {
     @Override
     public boolean AddCustomerLoyaltyCard(CustomerLoyaltyCard customerLoyaltyCard) {
         //確認是否是新增
-        CustomerLoyaltyCard data = memberLoyaltyCardRepository.findByCustomerIdAAndStoreId(customerLoyaltyCard.getMemberId(),customerLoyaltyCard.getStoreId());
+        CustomerLoyaltyCard data = memberLoyaltyCardRepository.findByStoreIdAndMemberId(customerLoyaltyCard.getStoreId(), customerLoyaltyCard.getMemberId());
         if (data != null) {return false;}
         memberLoyaltyCardRepository.save(customerLoyaltyCard);
         return true;
