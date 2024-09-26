@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class ImgDto {
     private byte[] src;
-    private String alt = "alt";
+    private String alt;
 }
