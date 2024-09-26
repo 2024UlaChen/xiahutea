@@ -1,6 +1,6 @@
 package idv.tia201.g2.web.chat.service.impl;
 
-import idv.tia201.g2.web.chat.dao.MessageDao;
+import idv.tia201.g2.web.chat.dao.MessageChatSessionRepository;
 import idv.tia201.g2.web.chat.dto.ImgDto;
 import idv.tia201.g2.web.chat.dto.MessageDto;
 import idv.tia201.g2.web.chat.service.MessageService;
@@ -15,7 +15,7 @@ import java.util.List;
 public class MessageServiceImpl implements MessageService {
 
     @Autowired
-    MessageDao messageDao;
+    MessageChatSessionRepository messageChatSessionRepository;
 
     @Override
     public MessageDto MessagesToMessageDto(Messages m) {
@@ -23,9 +23,13 @@ public class MessageServiceImpl implements MessageService {
         messageDto.setMessageId(m.getMessageId());
         messageDto.setChatSessionId(m.getChatSessionId());
         messageDto.setContent(m.getMessageContent());
-        ImgDto imgDto = new ImgDto();
-        imgDto.setSrc(m.getAttach());
-        messageDto.setImg(imgDto);
+        byte[] attach = m.getAttach();
+        if(attach != null && attach.length >0){
+            ImgDto imgDto = new ImgDto();
+            imgDto.setSrc(attach);
+            messageDto.setImg(imgDto);
+        }
+
         messageDto.setSenderId(m.getSenderId());
         messageDto.setTimestamp(m.getSentAt());
         return messageDto;
@@ -33,7 +37,7 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public List<MessageDto> getChatMessagesData(Integer chatId) {
-        List<Messages> messageByChatId = messageDao.findByChatSessionId(chatId);
+        List<Messages> messageByChatId = messageChatSessionRepository.findByChatSessionId(chatId);
         List<MessageDto> ChatMessagesData = new ArrayList<>();
         for (Messages m : messageByChatId) {
             MessageDto messageDto = MessagesToMessageDto(m);
