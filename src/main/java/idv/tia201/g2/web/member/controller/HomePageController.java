@@ -7,16 +7,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 @RestController
 @RequestMapping("xiaHuTea")
-public class homePageController {
+public class HomePageController {
     private StoreService storeService;
     @Autowired
-    public homePageController(StoreService storeService) {
+    public HomePageController(StoreService storeService) {
         this.storeService = storeService;
     }
 
