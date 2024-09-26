@@ -2,6 +2,7 @@ package idv.tia201.g2.web.product.controller;
 
 
 import idv.tia201.g2.web.product.dao.ProductCategoryDao;
+import idv.tia201.g2.web.product.dto.ProductCategoryDTO;
 import idv.tia201.g2.web.product.service.ProductCategoryService;
 
 import idv.tia201.g2.web.product.vo.ProductCategory;
@@ -10,8 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -54,19 +59,24 @@ public class ProductCategoryController {
    }
 
    // 添加新分类
-   @PostMapping("/add")
-   public ProductCategory addCategory(@RequestBody ProductCategory productCategory) {
-      return productCategoryService.addproductCategory(productCategory);
+   @PostMapping("/save")
+   public String saveCategory(@RequestBody ProductCategoryDTO categoryDTO) {
+
+
+      productCategoryService.saveCategory(categoryDTO);
+
+      return "加入成功";
    }
 
-   // 更新分类
    @PutMapping("/update/{categoryId}")
-   public String updateCategory(@PathVariable Integer categoryId, @RequestBody ProductCategory updatedProductCategory) {
-      ProductCategory updatedCategory = productCategoryService.update(categoryId,updatedProductCategory);
+   public ResponseEntity<String> updateCategory(@PathVariable Integer categoryId, @RequestBody ProductCategoryDTO updatedProductCategoryDTO) {
+
+      ProductCategory updatedCategory = productCategoryService.update(categoryId, updatedProductCategoryDTO);
+
       if (updatedCategory != null) {
-         return "分類修改成功！";
+         return ResponseEntity.ok("分类修改成功！");
       } else {
-         return "修改失敗，可能分類排序不唯一或分類不存在。";
+         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("修改失败，可能分类排序不唯一或分类不存在。");
       }
    }
 
