@@ -263,4 +263,15 @@ public class MemberServiceImpl implements MemberService {
             return false;
         }
     }
+
+    @Override
+    public Boolean updateMemberMoneyById(Integer memberId, Integer memberMoney) {
+        if (memberId == null || memberMoney == null) {
+            return false;
+        } else {
+            Integer result = memberDao.updateMemberMoney(memberId, memberMoney);
+            return result != 0;
+        }
+    }
+
 }

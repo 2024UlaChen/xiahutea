@@ -52,5 +52,6 @@ public interface MemberService {
     //    刪地址
     Boolean deleteByMemberAddressId(Integer customerAddressId);
 
+    Boolean updateMemberMoneyById(Integer memberId , Integer memberMoney);
 
 }

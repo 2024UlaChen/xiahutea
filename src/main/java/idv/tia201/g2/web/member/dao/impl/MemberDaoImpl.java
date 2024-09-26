@@ -109,6 +109,15 @@ public class MemberDaoImpl implements MemberDao {
                 .executeUpdate();
     }
 
+    @Override
+    public Integer updateMemberMoney(Integer memberId, Integer memberMoney){
+        final String sql = "update CUSTOMER set customer_money =  customer_money + :memberMoney   where  customer_id = :memberId ";
+        return session
+                .createNativeQuery(sql, Member.class)
+                .setParameter("memberMoney", memberMoney)
+                .setParameter("memberId", memberId)
+                .executeUpdate();
+    }
 
     @Override
     public boolean updateMemberAddress(MemberAddress memberAddress) {
