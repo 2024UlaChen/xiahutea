@@ -2,6 +2,7 @@ package idv.tia201.g2.web.order.service.impl;
 
 import idv.tia201.g2.core.util.ValidateUtil;
 import idv.tia201.g2.web.member.dao.MemberDao;
+import idv.tia201.g2.web.member.service.MemberService;
 import idv.tia201.g2.web.member.vo.Member;
 import idv.tia201.g2.web.order.dao.DisputeDao;
 import idv.tia201.g2.web.order.dao.OrderDao;
@@ -46,6 +47,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private OrderMappingUtil orderMappingUtil;
+    @Autowired
+    private MemberService memberService;
+
     @Autowired
     private NotificationService notificationService;
 
@@ -142,9 +146,10 @@ public class OrderServiceImpl implements OrderService {
                 return orderDto;
             }
         }
-        // todo 會員折抵點數
-        member.setCustomerMoney(member.getCustomerMoney() - order.getCustomerMoneyDiscount());
-        // memberDao.updateMemberInfo(member);
+        // 會員使用點數
+        int newMemberMoney = member.getCustomerMoney() - order.getCustomerMoneyDiscount();
+        memberService.updateMemberMoneyById(member.getCustomerId(), newMemberMoney);
+
         // todo 集點卡 優惠券
 
 
