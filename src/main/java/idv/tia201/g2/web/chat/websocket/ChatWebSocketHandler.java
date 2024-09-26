@@ -1,7 +1,7 @@
 package idv.tia201.g2.web.chat.websocket;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import idv.tia201.g2.web.chat.dao.ChatSessionDao;
+import idv.tia201.g2.web.chat.dao.ChatSessionRepository;
 import idv.tia201.g2.web.chat.vo.Messages;
 import idv.tia201.g2.web.user.vo.TotalUsers;
 import jakarta.servlet.http.HttpSession;
@@ -27,7 +27,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     private static final Logger logger = LogManager.getLogger(ChatWebSocketHandler.class);
 
     @Autowired
-    private ChatSessionDao chatSessionDao;
+    private ChatSessionRepository chatSessionRepository;
 
 
     @Override
@@ -53,9 +53,9 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
         TotalUsers user = (TotalUsers) this.httpSession.getAttribute("totalUserDTO");
         //管理員視角
         if (user.getUserTypeId() == 3) {
-            recipientsId = chatSessionDao.findAttenderIdByChatSessionId(messages.getChatSessionId());
+            recipientsId = chatSessionRepository.findAttenderIdByChatSessionId(messages.getChatSessionId());
         } else {
-            recipientsId = chatSessionDao.findAdministratorIdByChatSessionId(messages.getChatSessionId());
+            recipientsId = chatSessionRepository.findAdministratorIdByChatSessionId(messages.getChatSessionId());
         }
 
         SESSIONS_MAP.get(recipientsId).sendMessage(text);

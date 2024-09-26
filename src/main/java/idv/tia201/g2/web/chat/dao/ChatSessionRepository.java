@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Set;
 
 @Repository
-public interface ChatSessionDao extends JpaRepository<ChatSessions, Integer> {
+public interface ChatSessionRepository extends JpaRepository<ChatSessions, Integer>, ChatSessionOperation {
 
     Set<ChatSessions> findByAdministratorId(Long administratorId);
 
@@ -20,9 +20,8 @@ public interface ChatSessionDao extends JpaRepository<ChatSessions, Integer> {
             "from Messages m " +
             "JOIN ChatSessions c " +
             "ON m.chatSessionId = c.chatSessionId " +
-            "where c.lastActivity = m.sentAt")
+            "where c.lastActivity = m.sentAt and m.chatSessionId = :chatId")
     String findLastMessageByChatId(Integer chatId);
-
 
     Set<ChatSessions> findByAttenderId(Long AttenderId);
 }
