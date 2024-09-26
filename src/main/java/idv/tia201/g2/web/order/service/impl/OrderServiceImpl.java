@@ -6,7 +6,9 @@ import idv.tia201.g2.web.member.vo.Member;
 import idv.tia201.g2.web.order.dao.DisputeDao;
 import idv.tia201.g2.web.order.dao.OrderDao;
 import idv.tia201.g2.web.order.dao.OrderDetailDao;
+import idv.tia201.g2.web.order.dto.NotificationDto;
 import idv.tia201.g2.web.order.dto.OrderDto;
+import idv.tia201.g2.web.order.service.NotificationService;
 import idv.tia201.g2.web.order.service.OrderService;
 import idv.tia201.g2.web.order.util.OrderMappingUtil;
 import idv.tia201.g2.web.order.vo.DisputeOrder;
@@ -44,6 +46,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private OrderMappingUtil orderMappingUtil;
+    @Autowired
+    private NotificationService notificationService;
 
     // -------- FINISH ---------------------------------
     // 前台 訂單新增
@@ -155,6 +159,10 @@ public class OrderServiceImpl implements OrderService {
         orderDto.setSuccessful(true);
         orderDto.setOrders(order);
         orderDto.setOrderDetails(orderDetails);
+
+        // 建立通知的內容
+        NotificationDto notificationDto = new NotificationDto(order.getOrderId(), order.getOrderCreateDatetime());
+        notificationService.notifyNewOrder(notificationDto);
         return orderDto;
     }
 
