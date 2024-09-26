@@ -42,7 +42,7 @@
     padding-right: 1%;
 }
 
-.loginForm input, .registerForm input {
+.loginForm input, .registerForm input, #resetPwdForm input {
     width: 100%;
     border: 1px transparent solid;
 }
@@ -94,22 +94,42 @@
     color: #6c757d;
 }
 
-/*forgetPwd*/
-.forgetPwd div{
+/*certificate forgetPwd*/
+.forgetPwd div {
     margin-top: 2%;
     margin-bottom: 2%;
 }
+
 .forgetPwd div input {
     width: 100%;
     border: 1px transparent solid;
 }
-.forgetPwd  span{
+
+.forgetPwd span {
     display: block;
     text-align: left;
     horiz-align: left;
     font-size: 14px;
-
 }
+
+/*forgetPwd Page*/
+#forgetPwdPhone {
+    width: 100%;
+    border: 1px transparent solid;
+}
+
+#forgetPwdPhoneTip, #resetPwdForm span {
+    display: block;
+    text-align: left;
+    horiz-align: left;
+    font-size: 14px;
+    margin-bottom: 2%;
+}
+
+#resetPwdBtn {
+    width: inherit;
+}
+
 
 /*button setting*/
 .btn {
@@ -122,7 +142,7 @@
     border-radius: 5px;
 }
 
-.btnSave, .btnLogin, .btnLogin:active:focus, .btnLogin:focus ,.btnSave:active:focus, .btnSave:focus {
+.btnSave, .btnLogin, .btnLogin:active:focus, .btnLogin:focus, .btnSave:active:focus, .btnSave:focus {
     background-color: #73B4BA;
     border: 1px solid #73B4BA;
     color: white;
@@ -154,9 +174,10 @@
     color: #f38f27;
 }
 
-.btnCancel, .btnDownload, .btnQuery ,.btnQuery:active:focus, .btnQuery:focus {
+.btnCancel, .btnDownload, .btnQuery, .btnQuery:active:focus, .btnQuery:focus {
     background-color: #6c757d;
     border: 1px solid #6c757d;
+    outline: 1px solid #6c757d;
     color: white;
 }
 
@@ -166,9 +187,10 @@
     color: #6c757d;
 }
 
-.btnError {
+.btnError, .btnError:active:focus, .btnError:focus {
     background-color: #dc3545;
     border: 1px solid #dc3545;
+    outline: 1px solid #dc3545;
     color: white;
 }
 

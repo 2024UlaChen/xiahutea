@@ -96,5 +96,12 @@ public class StoreViewModel {
 
     private Boolean validStatus;//集點卡狀態
 
+    private Timestamp searcherStart;
+
+    private Timestamp searcherEnd;
+
+    private Integer totalPages;  //多少分頁
+    private Integer currentPage; //當前分頁
+
 
 }
