@@ -787,10 +787,24 @@ input.uniform-numbers{
   text-align: left;
 }
 
-.order-detail-content tbody td {
-  padding: 15px; /* 內邊距 */
+.order-detail-content tbody td:first-child {
+  padding: 15px;
   border-bottom: 1px solid #ddd; /* 底部邊框 */
+  width: 30%; /* 設定一個固定的百分比 */
+  white-space: nowrap; /* 防止過度換行 */
 }
+
+.order-detail-content tbody td:last-child {
+  padding: 15px;
+  border-bottom: 1px solid #ddd; /* 底部邊框 */
+  word-break: break-all; /* 強制換行 */
+  white-space: normal; /* 避免無限在同一行顯示 */
+}
+
+#remark{
+  cursor: pointer;
+}
+
 
 /* 頁尾按鈕 */
 .btn-backto-last-page2{

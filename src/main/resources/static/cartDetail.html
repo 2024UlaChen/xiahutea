@@ -97,7 +97,7 @@
                   <label class="select-membercard-label" for="select-membercard-label" style="padding-top: 10px">
                       會員卡
                   </label>
-                  <p class="membercard-count" style="display: none">(會員卡餘額:<span id="membercard-number"></span>點)</p>
+                  <p class="membercard-count" style="display: none"></p>
               </div>
               <div class="select-moneybag">
                   <div class="select-moneybag-detail">
@@ -107,7 +107,7 @@
                   </label>
                       <input type="number" class="moneybag-discount-number" placeholder="請輸入折抵金額" disabled>
                   </div>
-                  <p class="moneybag-count" style="display: none">(會員錢包餘額:<span id="moneybag-number"></span>)</p>
+                  <p class="moneybag-count" style="display: none"></p>
               </div>
           </div>
           <!--訂單彙總-->
@@ -250,7 +250,7 @@
           <!--取貨人資料-->
           <div class="pickup-detail">
               <h3>取貨人姓名</h3>
-              <input type="text" class="pickuper" required>
+              <input type="text" class="pickuper" maxlength="60" required>
               <h3>聯絡電話</h3>
               <ul class="contact-selection">
                   <li>
@@ -292,11 +292,11 @@
               <ul class="invoice-type-selection">
                   <li>
                       <input type="radio" class="select-paper" name="select-invoice">
-                      <label for="option1" class="label-creditcard">紙本發票</label>
+                      <label for="option1" class="label-creditcard">電子發票</label>
                   </li>
                   <li>
                       <input type="radio" class="select-paper-uniform" name="select-invoice">
-                      <label for="option2" class="label-uniform">紙本發票(含統一編號)</label>
+                      <label for="option2" class="label-uniform">電子發票(含統一編號)</label>
                       <span id="uniform-numbers-error" style="color: red; display: none;">請輸入有效的統編號碼</span>
                       <input type="text" class="uniform-numbers" placeholder="請輸入統編" maxlength="8" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 8)" disabled>
                   </li>
@@ -304,9 +304,10 @@
                   <li class="vehicle-detail">
                       <input type="radio" class="select-vehicle" name="select-invoice">
                       <label for="option3" class="label-vehicle">手機載具</label>
-                      <input type="checkbox" class="checksava-vehicle" disabled>
-                      <label for="save-default">儲存為預設</label>
-                      <input type="text" class="vehicle-number" disabled>
+                      <span id="vehicle-number-error" style="color: red; display: none;">請輸入有效的載具號碼</span>
+<!--                      <input type="checkbox" class="checksava-vehicle" disabled>-->
+<!--                      <label for="save-default">儲存為預設</label>-->
+                      <input type="text" class="vehicle-number" maxlength="8" disabled>
                   </li>
               </ul>
           </div>
@@ -336,19 +337,19 @@
                   </tr>
                   <tr>
                       <td>聯絡電話</td>
-                      <td id="phone">0912345678</td>
+                      <td id="phone"></td>
                   </tr>
                   <tr>
                       <td>取貨方式</td>
-                      <td id="pickupMethod">外送</td>
+                      <td id="pickupMethod"></td>
                   </tr>
                   <tr>
                       <td>取貨地址</td>
-                      <td id="final-address">台北市松山區松江南京100號</td>
+                      <td id="final-address"></td>
                   </tr>
                   <tr>
                       <td>預計取貨時間</td>
-                      <td id="pickupTime">12:00-12:15</td>
+                      <td id="pickupTime"></td>
                   </tr>
                   <tr>
                       <td>付款方式</td>
@@ -356,11 +357,15 @@
                   </tr>
                   <tr>
                       <td>開立發票方式</td>
-                      <td id="invoiceType">會員載具</td>
+                      <td id="invoiceType"></td>
                   </tr>
                   <tr>
                       <td>應付金額</td>
-                      <td id="final-amount">500</td>
+                      <td id="final-amount"></td>
+                  </tr>
+                  <tr>
+                      <td>備註</td>
+                      <td id="remark"></td>
                   </tr>
                   </tbody>
               </table>

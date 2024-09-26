@@ -7,7 +7,6 @@ import idv.tia201.g2.web.store.service.StoreService;
 
 import idv.tia201.g2.web.store.vo.Store;
 
-import idv.tia201.g2.web.user.dto.TotalUserDTO;
 import idv.tia201.g2.web.user.vo.TotalUsers;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -17,9 +16,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
-
 import java.sql.Timestamp;
+
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -51,9 +51,20 @@ public class StoreController {
             @RequestParam(required = false) String storeName,
             @RequestParam(required = false) String vat,
             @RequestParam(required = false) Integer status,
-            @RequestParam(required = false) Timestamp searcherStart,
-            @RequestParam(required = false) Timestamp searcherEnd,
-            @RequestParam(defaultValue = "0") Integer page) {
+            @RequestParam(required = false) String searcherStartStr,
+            @RequestParam(required = false) String searcherEndStr,
+            @RequestParam(defaultValue = "0") Integer page) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Timestamp searcherStart = null;
+        Timestamp searcherEnd = null;
+        if(searcherStartStr != null ){
+            Date searcherStartDate = sdf.parse(searcherStartStr);
+            searcherStart = new Timestamp(searcherStartDate.getTime());
+        }
+        if(searcherEndStr != null ){
+            Date searcherEndDate = sdf.parse(searcherEndStr);
+            searcherEnd = new Timestamp(searcherEndDate.getTime());
+        }
         StoreViewModel item = new StoreViewModel();
         item.setStoreName(storeName);
         item.setVat(vat);

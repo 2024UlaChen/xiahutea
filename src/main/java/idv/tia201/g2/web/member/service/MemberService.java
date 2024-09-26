@@ -36,7 +36,7 @@ public interface MemberService {
     Member findMemberById(Integer memberId);
 
     //判斷verifyCode是否相同
-    Boolean isCorrectVerifyCode(Member member);
+    Boolean isCorrectVerifyCode(Member member, String type);
 
     Boolean updateVerifyCode(Member member);
 
@@ -52,5 +52,6 @@ public interface MemberService {
     //    刪地址
     Boolean deleteByMemberAddressId(Integer customerAddressId);
 
+    Boolean updateMemberMoneyById(Integer memberId , Integer memberMoney);
 
 }

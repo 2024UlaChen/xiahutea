@@ -320,7 +320,7 @@ public class StoreServiceImpl implements StoreService {
         Timestamp now = new Timestamp(System.currentTimeMillis());
         if(store.getStoreName()==null && store.getVat() == null && store.getSearcherStart() == null && store.getSearcherEnd() == null){
             //四大皆空 只會顯示 已申請和停權
-            return storeDao.findByStoreStatus(pageable);
+            return storeDao.findByStoreStatusIn(statuslist,pageable);
 
         } else if (store.getStoreName() == null && store.getVat() == null  ) {
 
