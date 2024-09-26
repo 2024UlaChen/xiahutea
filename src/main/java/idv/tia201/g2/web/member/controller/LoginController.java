@@ -18,11 +18,12 @@ public class LoginController  {
 
     @PostMapping
     public Member Login(@RequestBody Member member, HttpServletRequest request) {
-        if (member == null || StringUtils.isEmpty(member.getCustomerPhone()) || StringUtils.isEmpty(member.getCustomerPassword())) {
+        if (member == null || !StringUtils.hasText(member.getCustomerPhone()) || !StringUtils.hasText(member.getCustomerPassword())) {
             member.setMessage("input data wrong");
             member.setSuccessful(false);
             return member;
         }
+//        TODO - update session id
         HttpSession httpSession = request.getSession();
 //        System.out.println(httpSession.getId());
         request.changeSessionId();

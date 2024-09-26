@@ -75,7 +75,7 @@ carrierEditBtn.addEventListener("click", function () {
             maxlength: "8"
         },
         inputValidator: (value) => {
-            if (!value.match("^\/[0-9A-Z]{3}-[0-9A-Z]{3}$")) {
+            if (!value.match("^\/[A-Z0-9+-\\.]{7}$")) {
                 return `<span class="sweetAlertFont checkInValid">載具格式錯誤，請確認</span>`;
             }
         }

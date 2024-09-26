@@ -284,12 +284,17 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public TotalUsers GetTotalUser(Integer StoreId) {
+    public TotalUserDTO GetTotalUser(Integer StoreId) {
 
-
+        Store store = findStoreById(StoreId);
         TotalUsers totalUsers = totalUserDao.findByUserTypeIdAndUserId(1,StoreId); //因為1是商家
+        TotalUserDTO res = new TotalUserDTO();
+        res.setTotalUserId(totalUsers.getTotalUserId());
+        res.setUserId(store.getStoreId());
+        res.setUserTypeId(1);//因為商家
+        res.setLogo(store.getLogo());
 
-        return totalUsers;
+        return res;
 
     }
 
@@ -302,55 +307,75 @@ public class StoreServiceImpl implements StoreService {
     public Page<Store> searchStore(StoreViewModel store, Integer page) {
         //分頁與排序
         Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "registerDay"));
+        //帳號狀態 10 表示 停權或 使用  1使用 2停權
+        List<Integer> statuslist = new ArrayList<>();
+        Integer statusOptionsVal = store.getStoreStatus();
+        if( statusOptionsVal == 10){
+            statuslist.add(1);
+            statuslist.add(2);
+        } else if (statusOptionsVal == 1) {
+            statuslist.add(1);
+        }else {
+            statuslist.add(2);
+        }
+
+
         //回傳的列表
         List<Store> storeList = new ArrayList<>();
         Timestamp now = new Timestamp(System.currentTimeMillis());
         if(store.getStoreName()==null && store.getVat() == null && store.getSearcherStart() == null && store.getSearcherEnd() == null){
             //四大皆空 只會顯示 已申請和停權
-            return storeDao.findByStoreStatus(pageable);
+            return storeDao.findByStoreStatusIn(statuslist,pageable);
 
         } else if (store.getStoreName() == null && store.getVat() == null  ) {
 
             if(store.getSearcherEnd() == null){
                 
-                return storeDao.findByRegisterDayBetween(store.getSearcherStart(),now,pageable);
+                return storeDao.findByRegisterDayBetweenAndStoreStatusIn(store.getSearcherStart(),now,statuslist,pageable);
 
             } else if (store.getSearcherStart() == null) {
                 
-                return storeDao.findByRegisterDayBetween(now,store.getSearcherEnd(),pageable);
+                return storeDao.findByRegisterDayBetweenAndStoreStatusIn(now,store.getSearcherEnd(),statuslist,pageable);
             }
 
-            return storeDao.findByRegisterDayBetween(store.getSearcherStart(),store.getSearcherEnd(),pageable);
+            return storeDao.findByRegisterDayBetweenAndStoreStatusIn(store.getSearcherStart(),store.getSearcherEnd(),statuslist,pageable);
         } else if (store.getStoreName() == null) {
             if(store.getSearcherStart() == null && store.getSearcherEnd() == null){
-                return storeDao.findByVatContaining(store.getVat(),pageable);
+                return storeDao.findByVatContainingAndStoreStatusIn(store.getVat(),statuslist,pageable);
             } else if (store.getSearcherEnd() == null){
 
-                return storeDao.findByVatContainingAndRegisterDayBetween(store.getVat(),store.getSearcherStart(),now,pageable);
+                return storeDao.findByVatContainingAndRegisterDayBetweenAndStoreStatusIn(store.getVat(),store.getSearcherStart(),now,statuslist,pageable);
 
             } else if (store.getSearcherStart() == null) {
 
-                return storeDao.findByVatContainingAndRegisterDayBetween(store.getVat(),now,store.getSearcherEnd(),pageable);
+                return storeDao.findByVatContainingAndRegisterDayBetweenAndStoreStatusIn(store.getVat(),now,store.getSearcherEnd(),statuslist,pageable);
             }
-            return storeDao.findByVatContainingAndRegisterDayBetween(store.getVat(),store.getSearcherStart(),store.getSearcherEnd(),pageable);
+            return storeDao.findByVatContainingAndRegisterDayBetweenAndStoreStatusIn(store.getVat(),store.getSearcherStart(),store.getSearcherEnd(),statuslist,pageable);
 
 
         } else if (store.getVat() == null) {
             if(store.getSearcherStart() == null && store.getSearcherEnd() == null){
-                return storeDao.findByStoreNameContainingIgnoreCase(store.getStoreName(),pageable);
+                return storeDao.findByStoreNameContainingAndStoreStatusIn(store.getStoreName(),statuslist,pageable);
             } else if (store.getSearcherEnd() == null){
 
-                return storeDao.findByStoreNameContainingIgnoreCaseAndRegisterDayBetween(store.getStoreName(),store.getSearcherStart(),now,pageable);
+                return storeDao.findByStoreNameContainingAndRegisterDayBetweenAndStoreStatusIn(store.getStoreName(),store.getSearcherStart(),now,statuslist,pageable);
 
             } else if (store.getSearcherStart() == null) {
 
-                return storeDao.findByStoreNameContainingIgnoreCaseAndRegisterDayBetween(store.getStoreName(),now,store.getSearcherEnd(),pageable);
+                return storeDao.findByStoreNameContainingAndRegisterDayBetweenAndStoreStatusIn(store.getStoreName(),now,store.getSearcherEnd(),statuslist,pageable);
             }
-            return storeDao.findByStoreNameContainingIgnoreCaseAndRegisterDayBetween(store.getStoreName(),store.getSearcherStart(),store.getSearcherEnd(),pageable);
+            return storeDao.findByStoreNameContainingAndRegisterDayBetweenAndStoreStatusIn(store.getStoreName(),store.getSearcherStart(),store.getSearcherEnd(),statuslist,pageable);
 
+        } else if (store.getSearcherEnd() == null && store.getSearcherStart() == null ) {
+            return storeDao.findByStoreNameContainingIgnoreCaseAndVatContainingAndStoreStatusIn(store.getStoreName(),store.getVat(),statuslist,pageable);
         }
-        return storeDao.findByStoreNameContainingIgnoreCaseAndVatContainingAndRegisterDayBetween(store.getStoreName(),store.getVat(),store.getSearcherStart(),store.getSearcherEnd(),pageable);
+        return storeDao.findByStoreNameContainingAndVatContainingAndRegisterDayBetweenAndStoreStatusIn(store.getStoreName(),store.getVat(),store.getSearcherStart(),store.getSearcherEnd(),statuslist,pageable);
 
+    }
+
+    @Override
+    public List<Store> getStoreListForHome(Date today) throws ParseException {
+        return storeCalendarRepository.findByStoreHolidayAndStoreStatus(today);
     }
 
 

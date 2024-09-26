@@ -100,5 +100,8 @@ public class StoreViewModel {
 
     private Timestamp searcherEnd;
 
+    private Integer totalPages;  //多少分頁
+    private Integer currentPage; //當前分頁
+
 
 }

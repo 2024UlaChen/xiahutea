@@ -53,7 +53,6 @@ document.addEventListener("DOMContentLoaded",function(){
   let pick_up_input_el = document.getElementsByClassName("pick-up-input")[0];
   // let carry_out_radio_el = document.querySelector('.carry-out-radio');
   let recevie_time_el = document.getElementsByClassName('recevie-time')[0];
-
   //時間選擇
   let date_input_el = document.getElementById('myDatepicker');
 
@@ -69,7 +68,9 @@ document.addEventListener("DOMContentLoaded",function(){
   let membercard_number_el = document.getElementById('membercard-number');
   let moneybag_count_el = document.getElementsByClassName('moneybag-count')[0]
   let moneybag_number_el = document.getElementById('moneybag-number') ;
-  let errorMsg_el = document.getElementById('error-msg');
+  let couponSelected = false;
+  let memberCardSelected = false;
+  let moneyBagSelected = false;
 
   //訂單彙總
   let product_amount_el = document.getElementsByClassName('product-amount')[0];
@@ -77,10 +78,13 @@ document.addEventListener("DOMContentLoaded",function(){
   let coupon_minus_number_el = document.getElementsByClassName('coupon-minus-number')[0];
   let membercard_minus_number_el = document.getElementsByClassName('membercard-minus-number')[0];
   let moneybag_minus_number_el = document.getElementsByClassName('moneybag-minus-number')[0];
+  let last_totalAmount;
 
   let platform_fee_number_el = document.getElementsByClassName('platform-fee-number')[0];
   let CouponAmountText=null;
   let CouponAmount=null;
+  let MemberCardAmountText=null;
+  let MemberCardAmount=null;
   let MoneyBagAmountText=null;
   let MoneyBagAmount=null;
   let PlatformfeeText=null;
@@ -103,6 +107,7 @@ document.addEventListener("DOMContentLoaded",function(){
   let input_phone_zone_el = document.getElementsByClassName("input-phone-zone")[0];
   let input_phone_number_el = document.getElementsByClassName("input-phone-number")[0];
   let phoneZoneError_el = document.getElementById('phone-zone-error');
+  let vehicle_number_error = document.getElementById('vehicle-number-error');
   // 台灣市話區碼列表 (部分常見區碼)
   let validPhoneZones = ['02', '03', '04', '05', '06', '07', '08'];
   let text2store_el = document.getElementsByClassName("text2store")[0];
@@ -126,7 +131,8 @@ document.addEventListener("DOMContentLoaded",function(){
   let paymentMethod_el = document.getElementById('paymentMethod');
   let invoiceType_el = document.getElementById('invoiceType');
   let final_amount_el = document.getElementById('final-amount');
-
+  let remark_el = document.getElementById('remark')
+  let charLimit = 60;  // 設定字數限制
 
 
 
@@ -226,18 +232,44 @@ document.addEventListener("DOMContentLoaded",function(){
       // picker_el.addEventListener("blur", function () {
       //   picker_el.classList.remove("focus-border");
       // });
-      //外送選項
+      //自取選項
+      pick_up_input_el.addEventListener('click',function (){
+          pickupMethod_el.textContent ="自取";
+          console.log("address :  ",nowstore.storeAddress)
+          final_address_el.textContent = nowstore.storeAddress;
+      })
 
       //優惠使用(優惠券、會員卡、會員錢包)
       //獲得使用者優惠券選項
       select_coupon_input_el.addEventListener("click", function () {
-          couponSelect_el.disabled=false;
-          membercard_count_el.style.display = "none";
-          moneybag_count_el.style.display= "none";
-          moneybag_discount_number_el.value ='';
-          membercard_minus_number_el.textContent = '$0';
-          moneybag_minus_number_el.textContent = '$0';
-          getcoupons(loginMember.customerId);
+          if (couponSelected) {
+              // 取消選擇優惠券
+              couponSelect_el.disabled = true;
+              couponSelect_el.innerHTML = '<option disabled selected >請選擇優惠券</option>';
+              coupon_minus_number_el.textContent = '$0';
+              couponSelected = false;
+              select_coupon_input_el.checked=false;
+          } else {
+              // 選擇優惠券
+              couponSelect_el.disabled = false;
+              membercard_count_el.style.display = "none";
+              moneybag_count_el.style.display = "none";
+              moneybag_discount_number_el.value = '';
+              membercard_minus_number_el.textContent = '$0';
+              moneybag_minus_number_el.textContent = '$0';
+              getcoupons(loginMember.customerId);
+              // 更新狀態
+              couponSelected = true;
+              memberCardSelected = false;
+              moneyBagSelected = false;
+          }
+          // couponSelect_el.disabled=false;
+          // membercard_count_el.style.display = "none";
+          // moneybag_count_el.style.display= "none";
+          // moneybag_discount_number_el.value ='';
+          // membercard_minus_number_el.textContent = '$0';
+          // moneybag_minus_number_el.textContent = '$0';
+          // getcoupons(loginMember.customerId);
       })
 
       //點選優惠券時動態更新結帳明細折抵金額
@@ -245,39 +277,93 @@ document.addEventListener("DOMContentLoaded",function(){
           let selectedOption = couponSelect_el.options[couponSelect_el.selectedIndex];
           let discount = selectedOption.getAttribute('data-discount');
           coupon_minus_number_el.textContent = `$${discount}`;
-          // Calculatetotal(); 移到document點擊
       })
 
       //加入點擊事件get會員卡點數
       select_membercard_input_el.addEventListener("click",function (){
-          // GetMemberCardPoint(customerId,storeId);
-          membercard_count_el.style.display = "flex";
-          moneybag_count_el.style.display= "none";
-          moneybag_discount_number_el.value ='';
-          //清除優惠券欄位及會員卡優惠
-          couponSelect_el.innerHTML = '<option disabled selected >請選擇優惠券</option>';
-          couponSelect_el.disabled=true;
-          coupon_minus_number_el.textContent = '$0';
-          moneybag_minus_number_el.textContent = '$0';
-
-      })
-      //TODO 加入點擊事件get會員錢包餘額
-      select_moneybag_input_el.addEventListener("click",function (){
-          moneybag_count_el.style.display = "flex";
-          if(loginMember.customerMoney!=null){
-              moneybag_number_el.textContent = loginMember.customerMoney;
-              moneybag_discount_number_el.disabled =false;
-              moneybag_discount_number_el.focus();
-              moneybag_discount_number_el.max=loginMember.customerMoney;
-          }else{
-              moneybag_count_el.textContent = '無資料....'
+          if (memberCardSelected) {
+              // 取消會員卡
+              membercard_count_el.style.display = "none";
+              membercard_minus_number_el.textContent = '$0';
+              memberCardSelected = false;
+          } else {
+              // 使用會員卡
+              GetMemberCardPoint(storeId, customerId);
+              membercard_count_el.style.display = "flex";
+              moneybag_count_el.style.display = "none";
+              moneybag_discount_number_el.value = '';
+              couponSelect_el.innerHTML = '<option disabled selected >請選擇優惠券</option>';
+              couponSelect_el.disabled = true;
+              coupon_minus_number_el.textContent = '$0';
+              membercard_minus_number_el.textContent = '$0';
+              memberCardSelected = true;
+              couponSelected = false;
+              moneyBagSelected = false;
           }
-          membercard_count_el.style.display = "none";
-          //清除優惠券及會員卡優惠
-          couponSelect_el.innerHTML = '<option disabled selected >請選擇優惠券</option>';
-          couponSelect_el.disabled=true;
-          coupon_minus_number_el.textContent = '$0';
-          membercard_minus_number_el.textContent = '$0';
+          // GetMemberCardPoint(storeId,customerId);
+          // membercard_count_el.style.display = "flex";
+          // moneybag_count_el.style.display= "none";
+          // moneybag_discount_number_el.value ='';
+          // //清除優惠券欄位及會員卡優惠
+          // couponSelect_el.innerHTML = '<option disabled selected >請選擇優惠券</option>';
+          // couponSelect_el.disabled=true;
+          // coupon_minus_number_el.textContent = '$0';
+          // moneybag_minus_number_el.textContent = '$0';
+      })
+      //加入點擊事件get會員錢包餘額
+      select_moneybag_input_el.addEventListener("click",function (){
+          if (moneyBagSelected) {
+              // 取消會員錢包
+              moneybag_count_el.style.display = "none";
+              moneybag_minus_number_el.textContent = '$0';
+              moneyBagSelected = false;
+          } else {
+              // 使用會員錢包
+              moneybag_count_el.style.display = "flex";
+              if (loginMember.customerMoney != null) {
+                  if (loginMember.customerMoney === 0) {
+                      moneybag_count_el.textContent = `會員錢包餘額為 ${loginMember.customerMoney}元，無法扣除`;
+                      couponSelected = false;
+                      memberCardSelected = false;
+                      moneyBagSelected = true;
+                  } else {
+                      moneybag_count_el.textContent = `會員錢包餘額為 ${loginMember.customerMoney}元`;
+                      moneybag_discount_number_el.disabled = false;
+                      moneybag_discount_number_el.focus();
+                      moneybag_discount_number_el.max = loginMember.customerMoney;
+                      couponSelected = false;
+                      memberCardSelected = false;
+                      moneyBagSelected = true;
+                  }
+              } else {
+                  moneybag_count_el.textContent = '無資料....';
+              }
+              membercard_count_el.style.display = "none";
+              couponSelect_el.innerHTML = '<option disabled selected >請選擇優惠券</option>';
+              couponSelect_el.disabled = true;
+              coupon_minus_number_el.textContent = '$0';
+              membercard_minus_number_el.textContent = '$0';
+              moneyBagSelected = true;
+          }
+          // moneybag_count_el.style.display = "flex";
+          // if(loginMember.customerMoney!=null){
+          //     if(loginMember.customerMoney === 0){
+          //         moneybag_count_el.textContent = `會員錢包餘額為 ${loginMember.customerMoney}元，無法扣除`
+          //     }else{
+          //         moneybag_count_el.textContent = `會員錢包餘額為 ${loginMember.customerMoney}元`
+          //         moneybag_discount_number_el.disabled =false;
+          //         moneybag_discount_number_el.focus();
+          //         moneybag_discount_number_el.max=loginMember.customerMoney;
+          //     }
+          // }else{
+          //     moneybag_count_el.textContent = '無資料....'
+          // }
+          // membercard_count_el.style.display = "none";
+          // //清除優惠券及會員卡優惠
+          // couponSelect_el.innerHTML = '<option disabled selected >請選擇優惠券</option>';
+          // couponSelect_el.disabled=true;
+          // coupon_minus_number_el.textContent = '$0';
+          // membercard_minus_number_el.textContent = '$0';
       })
       //會員錢包輸入框事件
       moneybag_discount_number_el.addEventListener("focus", function () {
@@ -361,12 +447,21 @@ document.addEventListener("DOMContentLoaded",function(){
                 })
                 return;
             }
-            //正確選擇預設地址後，獲得選取的項目
-            let selectedRadio = document.querySelector('input[name="member-address"]:checked');
-            //獲得選取的子選項label
-            let selectedLabel = document.querySelector(`label[for="${selectedRadio.id}"]`);
-            console.log("選擇的預設地址",selectedLabel.textContent)
+            // //正確選擇預設地址後，獲得選取的項目
+            // let selectedRadio = document.querySelector('input[name="member-address"]:checked');
+            // //獲得選取的子選項label
+            // let selectedLabel = document.querySelector(`label[for="${selectedRadio.id}"]`);
+            // console.log("選擇的預設地址",selectedLabel.textContent)
         }
+        //檢查選取取貨時間
+          if(date_input_el.value ==='') {
+              Swal.fire({
+                  icon: 'error',
+                  title: '錯誤',
+                  text: '請選擇取貨時間'
+              });
+              return;
+          }
 
         //保存了第一頁資訊切換到第二頁
         payable_unit_el.textContent = product_unit_el.textContent;
@@ -440,7 +535,6 @@ document.addEventListener("DOMContentLoaded",function(){
           } else {
               // 不符合格式，顯示錯誤提示
               cellphoneError_el.style.display = 'inline';
-              // input_cellphone_el.style.borderColor = 'red';
           }
       });
       //市話
@@ -507,14 +601,17 @@ document.addEventListener("DOMContentLoaded",function(){
       select_paper_el.addEventListener("click", function () {
         vehicle_number_el.disabled = true;
         uniform_numbers_el.disabled= true;
-        checksava_vehicle_el.disabled = true;
-        checksava_vehicle_el.checked = false;
+        // checksava_vehicle_el.disabled = true;
+        // checksava_vehicle_el.checked = false;
         uniform_numbers_el.value="";
         uniform_numbers_error_el.style.display="none";
+        vehicle_number_el.value="";
+        vehicle_number_error.style.display = 'none';
       })
       select_vehicle_el.addEventListener("click", function () {
-        checksava_vehicle_el.disabled = false;
+        // checksava_vehicle_el.disabled = false;
         vehicle_number_el.disabled = false;
+        vehicle_number_el.value = loginMember.customerCarrier;
         uniform_numbers_el.disabled= true;
         vehicle_number_el.focus();
         uniform_numbers_el.value="";
@@ -523,10 +620,11 @@ document.addEventListener("DOMContentLoaded",function(){
       select_paper_uniform_el.addEventListener("click",function (){
         uniform_numbers_el.disabled=false;
         vehicle_number_el.disabled = true;
-        checksava_vehicle_el.disabled = true;
-        checksava_vehicle_el.checked = false;
+        // checksava_vehicle_el.disabled = true;
+        // checksava_vehicle_el.checked = false;
         uniform_numbers_el.focus();
         vehicle_number_el.value="";
+        vehicle_number_error.style.display = 'none';
       })
       uniform_numbers_el.addEventListener("focus", function () {
         uniform_numbers_el.placeholder = "";
@@ -536,19 +634,22 @@ document.addEventListener("DOMContentLoaded",function(){
           uniform_numbers_el.placeholder = "請輸入統編";
         }
       });
+      //統編驗證
       uniform_numbers_el.addEventListener("input",function (){
-         //  let uniformNumberLength = this.value.length;
-         // if(uniformNumberLength<8){
-         //     uniform_numbers_error_el.style.display="inline";
-         // }else{
-         //     uniform_numbers_error_el.style.display="none";
-         // }
-         //  console.log("now value: ",this.value)
          if(vatCheck(this.value)){
              uniform_numbers_error_el.style.display="none";
          }else{
              uniform_numbers_error_el.style.display="inline";
          }
+      })
+      //載具驗證
+      vehicle_number_el.addEventListener('input',function (){
+          let carrierPattern = /^\/[A-Z0-9+\-\.]{7}$/;
+          if(carrierPattern.test(this.value)){
+              vehicle_number_error.style.display = 'none';
+          }else{
+              vehicle_number_error.style.display = 'inline';
+          }
       })
       //頁面跳轉
       btn_backto_last_page_el.addEventListener("click", function (e) {
@@ -639,9 +740,9 @@ document.addEventListener("DOMContentLoaded",function(){
               return;
           }
         if(select_paper_el.checked){
-            //預計將金流方式設定為紙本發票
+            //預計將金流方式設定為電子發票
         }
-        if(select_paper_uniform_el){
+        if(select_paper_uniform_el.checked){
             //預計將金流方式設定為紙本發票加統編
             if(uniform_numbers_el.value ===''||uniform_numbers_error_el.style.display==='inline'){
                 Swal.fire({
@@ -653,9 +754,65 @@ document.addEventListener("DOMContentLoaded",function(){
                 return;
             }
         }
+        //驗證載具
+        if(select_vehicle_el.checked){
+            if(vehicle_number_el.value ==='' ||vehicle_number_error.style.display==='inline'){
+                Swal.fire({
+                    icon: 'error',
+                    title: '載具號碼錯誤',
+                    text: '請填寫載具！',
+                    confirmButtonText: '確定',
+                })
+                return;
+            }
+        }
         step2_el.classList.remove("active");
+        //*****************************訂單明細*********************************
+        //店家
         store_el.textContent= nowstore.storeName;
-        customer_el.textContent = loginMember.nickname;
+        //取貨人
+        customer_el.textContent = pickuper_el.value;
+        //連絡電話
+        if(select_cellphone_el.checked && input_cellphone_el.value !==''){
+            phone_el.textContent = input_cellphone_el.value;
+        }else if(select_phone_el.checked && input_phone_zone_el.value !=='' &&
+                 input_phone_number_el.value !==''){
+            phone_el.textContent = input_phone_zone_el.value + input_phone_number_el.value;
+        }
+        //取貨方式
+        if(pickupMethod_el.textContent ==="外送"){
+            let select_carry_out = document.querySelector('.carry-out-radio');
+            let select_address = document.querySelector('.address');
+            let select_carry_out_default = document.querySelector('.carryout-default-input');
+            let selected_address = document.querySelector('input[name="member-address"]:checked');
+            if(select_carry_out && select_carry_out.checked && select_address.value !==''){
+                final_address_el.textContent = select_address.value
+            }else if(select_carry_out_default && select_carry_out_default.checked){
+                let label_address = document.querySelector(`label[for="${selected_address.id}"]`);
+                final_address_el.textContent = label_address.textContent;
+            }else {
+                final_address_el.textContent = "未選擇地址";
+            }
+        }
+        //取貨時間
+        pickupTime_el.textContent = date_input_el.value;
+        //開立發票方式
+        if(select_paper_el.checked){
+            invoiceType_el.textContent = "電子發票"
+        }else if(select_paper_uniform_el.checked){
+            invoiceType_el.textContent = "電子發票(含統一編號)"
+        }else if(select_vehicle_el.checked){
+            invoiceType_el.textContent = "手機載具"
+        }
+        //應付金額
+        final_amount_el.textContent = total_amount_el.textContent;
+        //備註
+        if(text2store_el.value.length>charLimit){
+            remark_el.textContent = text2store_el.value.substring(0, charLimit) + '...';  // 限制字數顯示
+        } else {
+            remark_el.textContent = text2store_el.value;  // 不超過限制時顯示完整內容
+        }
+
         step3_el.classList.add("active");
         if (step_content2_el.style.display = "flex") {
           step_content2_el.style.display = "none";
@@ -668,6 +825,14 @@ document.addEventListener("DOMContentLoaded",function(){
       })
 
       //********************************************第三頁*************************************
+      // 當點擊 td 時展開/收起
+        remark_el.addEventListener('click', function() {
+            if (remark_el.textContent.endsWith('...')) {
+                remark_el.textContent = text2store_el.value;  // 展開完整內容
+            } else {
+                remark_el.textContent = text2store_el.value.substring(0, charLimit) + '...';  // 回到限制字數的內容
+            }
+        });
       btn_backto_last_page2_el.addEventListener("click", function (e) {
         step3_el.classList.remove("active");
         step2_el.classList.add("active");
@@ -678,9 +843,68 @@ document.addEventListener("DOMContentLoaded",function(){
             behavior: "smooth" // 使用平滑滾動效果
           });
         }
-        e.stopPropagation()
       })
-    //********************************************function區****************************************
+
+      //訂單轉綠界金流
+      btn_submit_order_el.addEventListener('click',function (){
+          const params = new URLSearchParams();
+          // params.append('MerchantTradeNo', 'xiahutea0001'); // 訂單編號 (唯一的)
+          //交易時間
+          let currentDate = new Date();
+          let formattedDate = currentDate.getFullYear() + '/' +
+              ('0' + (currentDate.getMonth() + 1)).slice(-2) + '/' +
+              ('0' + currentDate.getDate()).slice(-2) + ' ' +
+              ('0' + currentDate.getHours()).slice(-2) + ':' +
+              ('0' + currentDate.getMinutes()).slice(-2) + ':' +
+              ('0' + currentDate.getSeconds()).slice(-2);
+          params.append('MerchantTradeDate', formattedDate);
+          // params.append('PaymentType', 'aio'); // 交易類型
+          params.append('TotalAmount', last_totalAmount); // 交易金額
+          params.append('TradeDesc', 'test order'); // 交易描述
+
+          // 商品名稱
+          let productNames = document.querySelectorAll('.product-name');
+          let productNameString = '';
+          let uniqueNames = new Set();
+          // 遍歷所有商品名稱，並檢查是否重複
+          productNames.forEach((productNameElement, index) => {
+              const productName = productNameElement.textContent.trim();
+              // 只有當名稱不在 Set 中時才加入
+              if (!uniqueNames.has(productName)) {
+                  uniqueNames.add(productName);
+                  productNameString += productName;
+                  if (index < productNames.length - 1) {
+                      productNameString += '#'; // 使用 # 作為商品名稱分隔符號
+                  }
+              }
+          });
+          // 移除結尾的多餘的分隔符號
+          if (productNameString.endsWith('#')) {
+              productNameString = productNameString.slice(0, -1);
+          }
+          params.append('ItemName', productNameString);
+
+          // params.append('ChoosePayment', 'Credit'); // 選擇的付款方式
+
+          fetch('/payment/createorder', {
+              method: 'POST',
+              headers:{
+                  'Content-Type': 'application/x-www-form-urlencoded'
+              },
+              // body:params.toString()
+          }).then(response => response.json())
+              .then(data => {
+                  if (data.paymentUrl) {
+                      // 導向綠界支付頁面
+                      window.location.href = data.paymentUrl;
+                  } else {
+                      console.error('獲取支付連結失敗');
+                  }
+              }).catch(error => {
+              console.error('發生錯誤:', error);
+          });
+      })
+    //******** ************************************function區****************************************
     //GET 請求：進入購物結帳頁面取得使用者
 
     //POST 請求：儲存購物車資料
@@ -895,6 +1119,7 @@ document.addEventListener("DOMContentLoaded",function(){
           carry_out_radio_el.addEventListener("click", function () {
               address_el.disabled = false;
               address_el.focus();
+              pickupMethod_el.textContent ="外送";
           })
           address_el.addEventListener("focus", function () {
               // 清空 placeholder
@@ -951,6 +1176,7 @@ document.addEventListener("DOMContentLoaded",function(){
                         suboptions.style.display="block";
                         address_el.disabled = true;
                         address_el.value="";
+                        pickupMethod_el.textContent ="外送";
                     })
 
                     // 點擊自取、外送(自填)選項關閉外送地址選項區塊
@@ -1220,64 +1446,64 @@ document.addEventListener("DOMContentLoaded",function(){
             localStorage.setItem('cartItems', JSON.stringify(cartData));
         }
         //訂單彙總項目更新
-        function updateDetail(){
-
-        }
+        // function updateDetail(){
+        //
+        // }
 
         //F10表單填送:處理商品運送方式及取貨時間
-        function checkreceivemethod(){
-        //抓到目前自取或外送選擇
-        const pickUpInput = document.querySelector('input[name="delivery"]:checked');
-        //確認至少有選擇一個
-        if (!pickUpInput) {
-            Swal.fire({
-                icon: 'warning',
-                title: '請選擇取貨方式',
-                text: '請選擇自取或外送。',
-                confirmButtonText: '確定'
-            });
-            return;
-        }
-        //根據選項填充文字
-        let receivingMethod = '';
-        if (pickUpInput.classList.contains('pick-up-input')) {
-            receivingMethod = '自取';
-        } else if (pickUpInput.classList.contains('carry-out-radio')) {
-            receivingMethod = '外送';
-        }
-        //如果選擇了外送，必須檢查地址是否已填寫
-            let addressDetail = '';
-            if (receivingMethod === '外送') {
-                addressDetail = document.querySelector('.carry-out-address .address').value;
-                if (!addressDetail.trim()) {
-                    // 如果地址沒有填寫，顯示提示訊息
-                    Swal.fire({
-                        icon: 'warning',
-                        title: '請輸入地址',
-                        text: '選擇外送時，請輸入地址。',
-                        confirmButtonText: '確定'
-                    });
-                    return; // 結束，不進行下一步
-                }
-            }
-            //判斷有無填寫取貨時間
-            if(!date_input_el.value) {
-                // 使用 SweetAlert 顯示錯誤訊息
-                Swal.fire({
-                    icon: 'error',
-                    title: '錯誤',
-                    text: '請選擇取貨時間'
-                });
-                return;
-            }
-            // 將選擇的取貨方式和地址（如果有）取貨時間儲存到 localStorage
-            const reciverMethodInfo = {
-                method: receivingMethod,
-                address: addressDetail,
-                receivertime:date_input_el.value
-            };
-            localStorage.setItem('reciverMethodInfo', JSON.stringify(reciverMethodInfo));
-        }
+        // function checkreceivemethod(){
+        // //抓到目前自取或外送選擇
+        // const pickUpInput = document.querySelector('input[name="delivery"]:checked');
+        // //確認至少有選擇一個
+        // if (!pickUpInput) {
+        //     Swal.fire({
+        //         icon: 'warning',
+        //         title: '請選擇取貨方式',
+        //         text: '請選擇自取或外送。',
+        //         confirmButtonText: '確定'
+        //     });
+        //     return;
+        // }
+        // //根據選項填充文字
+        // let receivingMethod = '';
+        // if (pickUpInput.classList.contains('pick-up-input')) {
+        //     receivingMethod = '自取';
+        // } else if (pickUpInput.classList.contains('carry-out-radio')) {
+        //     receivingMethod = '外送';
+        // }
+        // //如果選擇了外送，必須檢查地址是否已填寫
+        //     let addressDetail = '';
+        //     if (receivingMethod === '外送') {
+        //         addressDetail = document.querySelector('.carry-out-address .address').value;
+        //         if (!addressDetail.trim()) {
+        //             // 如果地址沒有填寫，顯示提示訊息
+        //             Swal.fire({
+        //                 icon: 'warning',
+        //                 title: '請輸入地址',
+        //                 text: '選擇外送時，請輸入地址。',
+        //                 confirmButtonText: '確定'
+        //             });
+        //             return; // 結束，不進行下一步
+        //         }
+        //     }
+        //     //判斷有無填寫取貨時間
+        //     if(date_input_el.value ==='') {
+        //         // 使用 SweetAlert 顯示錯誤訊息
+        //         Swal.fire({
+        //             icon: 'error',
+        //             title: '錯誤',
+        //             text: '請選擇取貨時間'
+        //         });
+        //         return;
+        //     }
+        //     // 將選擇的取貨方式和地址（如果有）取貨時間儲存到 localStorage
+        //     // const reciverMethodInfo = {
+        //     //     method: receivingMethod,
+        //     //     address: addressDetail,
+        //     //     receivertime:date_input_el.value
+        //     // };
+        //     // localStorage.setItem('reciverMethodInfo', JSON.stringify(reciverMethodInfo));
+        // }
         //F14 獲得的優惠券動態生成選項
         function getcoupons(customerId){
             fetch(`/cart/getCoupon/${customerId}`)
@@ -1304,8 +1530,8 @@ document.addEventListener("DOMContentLoaded",function(){
                 .catch(error => console.error('Error loading coupons:', error));
         }
         //F15 獲得會員卡餘額及相關事件綁定
-        function GetMemberCardPoint(customerId, storeId){
-            fetch(`/cart/checkoutlist/getMemberCard/${customerId}/${storeId}`)
+        function GetMemberCardPoint(storeId,customerId){
+            fetch(`/cart/checkoutlist/getMemberCard/${storeId}/${customerId}`)
                 .then(response=>{
                     if (!response.ok) {
                         return response.json().then(errorData => {
@@ -1316,12 +1542,20 @@ document.addEventListener("DOMContentLoaded",function(){
                 })
                 .then(data=>{
                     console.log("會員卡積分:", data.points);
-                    membercard_number_el.textContent=data.points;
+                    if(data.points<10){
+                        membercard_count_el.textContent=`會員點數為${data.points} 點，會員點數不足`;
+                        membercard_minus_number_el.textContent = "$0";
+                    }else{
+                        membercard_count_el.textContent=`會員點數為${data.points} 點，10點可折抵50元`;
+                        membercard_minus_number_el.textContent = "$50";
+                    }
+                    Calculatetotal();
+                    // membercard_number_el.textContent=data.points;
                 })
                 .catch(error=>{
                     console.error('Error loading coupons:', error);
                 })
-        }
+            }
         //F20 計算訂單金額
         function Calculatetotal(){
             let totalAmount = 0;
@@ -1357,6 +1591,14 @@ document.addEventListener("DOMContentLoaded",function(){
                 //使用的優惠券折扣金額大於訂單總額就將總額變為0元，優惠券不退還
                 totalAmount =0;
             }
+            //會員卡折抵
+            MemberCardAmountText = membercard_minus_number_el.textContent.trim();
+            MemberCardAmount = parseFloat(MemberCardAmountText.replace('$', ''));
+            totalAmount -= MemberCardAmount;
+            if(totalAmount<0){
+                //使用的會員卡折扣金額大於訂單總額就將總額變為0元，會員點數一樣扣除
+                totalAmount =0;
+            }
 
             //會員錢包折抵
             MoneyBagAmountText = moneybag_minus_number_el.textContent.trim();
@@ -1369,6 +1611,8 @@ document.addEventListener("DOMContentLoaded",function(){
                 moneybag_minus_number_el.textContent=`$${totalAmount}`;
                 totalAmount =0;
             }
+            //存總金額到變數
+            last_totalAmount = totalAmount;
             total_amount_el.textContent = `$${totalAmount}`;
         }
 

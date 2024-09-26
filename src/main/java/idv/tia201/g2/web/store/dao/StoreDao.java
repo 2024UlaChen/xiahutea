@@ -43,6 +43,7 @@ public interface StoreDao extends JpaRepository<Store, Integer> {
     @Query("FROM Store s WHERE s.storeStatus = 1 OR s.storeStatus = 2")
     Page<Store> findByStoreStatus(Pageable pageable);
 
+
     Page<Store> findByRegisterDayBetween(Timestamp startDate, Timestamp endDate, Pageable pageable);
     Page<Store> findByStoreNameContainingIgnoreCaseAndVatContainingAndRegisterDayBetween(String storeName,String vat,Timestamp startDate, Timestamp endDate, Pageable pageable);
     Page<Store> findByVatContainingAndRegisterDayBetween(String vat,Timestamp startDate, Timestamp endDate, Pageable pageable);
@@ -51,7 +52,23 @@ public interface StoreDao extends JpaRepository<Store, Integer> {
     Page<Store> findByStoreStatusInAndVatOrStoreNameContaining(
             List<Integer> storeStatus, String vat, String storeName, Pageable pageable);
     Page<Store> findByVatContaining(String vat, Pageable pageable);
-    Page<Store> findByStoreNameContainingIgnoreCase(String name, Pageable pageable);
-    Page<Store> findByStoreNameContainingIgnoreCaseAndVatContaining(String storeName, String vat, Pageable pageable);
+    Page<Store> findByStoreNameContaining(String name, Pageable pageable);
+    Page<Store> findByStoreNameContainingAndVatContaining(String storeName, String vat, Pageable pageable);
     Page<Store> findByStoreStatus(Integer storeStatus, Pageable pageable);
+
+    //依照註冊時間區間 以及帳號狀態
+    Page<Store> findByRegisterDayBetweenAndStoreStatusIn(Timestamp startDate, Timestamp endDate,List<Integer> statuslist, Pageable pageable);
+    //依照註冊name,vat 註冊時間 以及帳號狀態
+    Page<Store> findByStoreNameContainingAndVatContainingAndRegisterDayBetweenAndStoreStatusIn(String storeName,String vat,Timestamp startDate, Timestamp endDate,List<Integer> statuslist, Pageable pageable);
+    //依照註冊vat 註冊時間 以及帳號狀態
+    Page<Store> findByVatContainingAndRegisterDayBetweenAndStoreStatusIn(String vat,Timestamp startDate, Timestamp endDate,List<Integer> statuslist ,Pageable pageable);
+    //依照註冊name 註冊時間 以及帳號狀態
+    Page<Store> findByStoreNameContainingAndRegisterDayBetweenAndStoreStatusIn(String storeName,Timestamp startDate, Timestamp endDate,List<Integer> statuslist ,Pageable pageable);
+    //依照 vat  以及帳號狀態
+    Page<Store> findByVatContainingAndStoreStatusIn(String vat,List<Integer> statuslist, Pageable pageable);
+    //依照 name 以及 帳號狀態
+    Page<Store> findByStoreNameContainingAndStoreStatusIn(String name,List<Integer> statuslist, Pageable pageable);
+    // name vat status
+    Page<Store> findByStoreNameContainingIgnoreCaseAndVatContainingAndStoreStatusIn(String name,String vat,List<Integer> statuslist, Pageable pageable);
+
 }

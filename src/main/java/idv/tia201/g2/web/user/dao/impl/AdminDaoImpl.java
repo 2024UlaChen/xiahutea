@@ -22,8 +22,6 @@ public class AdminDaoImpl implements AdminDao {
         TypedQuery<Administrator> query = em.createQuery(jpql, Administrator.class)
                 .setParameter("username", username)
                 .setParameter("password", password);
-//        getSingleResult() 可能因為查無資料所以拋出異常
-//        uniqueResult() 不受 Spring Data JPA 支援
         List<Administrator> resultList = query.getResultList();
 //        如果取得空陣列代表查無會員資料
         if (resultList.isEmpty()){

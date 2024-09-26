@@ -7,6 +7,8 @@ import idv.tia201.g2.web.member.dao.MemberDao;
 import idv.tia201.g2.web.member.service.MemberService;
 import idv.tia201.g2.web.member.vo.Member;
 import idv.tia201.g2.web.member.vo.MemberAddress;
+import idv.tia201.g2.web.user.dao.TotalUserDao;
+import idv.tia201.g2.web.user.vo.TotalUsers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,7 +31,12 @@ public class MemberServiceImpl implements MemberService {
     MemberAddrDao memberAddrDao;
 
     @Autowired
+    TotalUserDao totalUserDao;
+
+    @Autowired
     private SendSmsService sendSmsService;
+
+    Integer userType = 0;
 
 
     @Override
@@ -73,21 +80,10 @@ public class MemberServiceImpl implements MemberService {
         }
     }
 
-    @Override
-    public Boolean updateVerifyCode(Member member) {
-        if (member.getCustomerId() == null) {
-            return false;
-        }
-//            String verifyCode = sendSmsService.sendSMS(phone);
-        String verifyCode = "B12345";
-        memberDao.updateVerifyCodeById(member.getCustomerId(), verifyCode);
-        return true;
-    }
-
 
     @Override
     public Member login(Member member) {
-        //todo need to revise + Matcher
+        //todo need to revise
         String phone = member.getCustomerPhone();
         String password = member.getCustomerPassword();
 
@@ -146,7 +142,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Boolean isExistMember(Member member) {
-        return !ObjectUtils.isEmpty(memberDao.findMemberByPhone(member.getCustomerPhone()));
+        return memberDao.findMemberByPhone(member.getCustomerPhone()) != null;
     }
 
     @Override
@@ -212,18 +208,70 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Boolean isCorrectVerifyCode(Member member) {
-        Integer memberId = member.getCustomerId();
-        if (memberId == null) {
+    public Boolean updateVerifyCode(Member member) {
+        String phone = member.getCustomerPhone();
+        if (member.getCustomerId() == null && !StringUtils.hasText(phone)) {
             return false;
+        }
+        if (member.getCustomerId() == null && StringUtils.hasText(phone)) {
+            member = memberDao.findMemberByPhone(phone);
+            if (member == null) {
+                return false;
+            }
+        }
+//        String verifyCode = sendSmsService.sendSMS(phone);
+        String verifyCode = "B12345";
+
+        memberDao.updateVerifyCodeById(member.getCustomerId(), verifyCode);
+        return true;
+    }
+
+    @Override
+    public Boolean isCorrectVerifyCode(Member member, String type) {
+        Integer memberId = member.getCustomerId();
+        String phone = member.getCustomerPhone();
+        if (memberId == null && !StringUtils.hasText(phone)) {
+            return false;
+        }
+        if (memberId == null && StringUtils.hasText(phone)) {
+            Member memberResult = memberDao.findMemberByPhone(phone);
+            if (memberResult == null) {
+                return false;
+            } else {
+                memberId = memberResult.getCustomerId();
+            }
         }
         Member queryMember = memberDao.findMemberById(memberId);
         String correctVerifyCode = queryMember.getVerifyCode();
         if (correctVerifyCode.equals(member.getVerifyCode())) {
-            memberDao.updateMemberInfo(queryMember.getCustomerId(),false,queryMember.getCustomerRemark());
+//            if register => insert total user; if not equal register mean no need to insert totalUser
+            if ("REGISTER".equals(type)) {
+                TotalUsers totalUser = new TotalUsers(null, userType, queryMember.getCustomerId());
+                totalUserDao.save(totalUser);
+                memberDao.updateMemberInfo(queryMember.getCustomerId(), false, queryMember.getCustomerRemark());
+
+            } else {
+                String encodePwd = EncrypSHA.SHAEncrypt(member.getCustomerPassword());
+                queryMember.setCustomerPassword(encodePwd);
+                queryMember.setValidStatus(false);
+
+                memberDao.updateMemberInfo(queryMember);
+            }
+
             return true;
         } else {
             return false;
         }
     }
+
+    @Override
+    public Boolean updateMemberMoneyById(Integer memberId, Integer memberMoney) {
+        if (memberId == null || memberMoney == null) {
+            return false;
+        } else {
+            Integer result = memberDao.updateMemberMoney(memberId, memberMoney);
+            return result != 0;
+        }
+    }
+
 }

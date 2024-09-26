@@ -66,13 +66,12 @@ checkVerifyCodeBtn.addEventListener("click", function () {
     } else {
         let sessionDetail = JSON.parse(sessionStorage.getItem("memberData"));
         console.log(sessionDetail);
-        fetch(`member/register/check`, {
+        fetch(`member/register/check/REGISTER`, {
             method: "POST",
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
                 customerId: sessionDetail.customerId,
                 verifyCode: memberVerifyCode.value.trim()
-                // verifyCode: "A12345"
             }),
         }).then(res => res.json()).then(data => {
             console.log(data);
@@ -82,7 +81,7 @@ checkVerifyCodeBtn.addEventListener("click", function () {
                     title: "註冊成功",
                     showConfirmButton: false,
                     timer: 1500
-                }).then(()=>{
+                }).then(() => {
                     location.href = "../homePage.html";
                 })
             } else {
