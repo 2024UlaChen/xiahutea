@@ -284,12 +284,17 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public TotalUsers GetTotalUser(Integer StoreId) {
+    public TotalUserDTO GetTotalUser(Integer StoreId) {
 
-
+        Store store = findStoreById(StoreId);
         TotalUsers totalUsers = totalUserDao.findByUserTypeIdAndUserId(1,StoreId); //因為1是商家
+        TotalUserDTO res = new TotalUserDTO();
+        res.setTotalUserId(totalUsers.getTotalUserId());
+        res.setUserId(store.getStoreId());
+        res.setUserTypeId(1);//因為商家
+        res.setLogo(store.getLogo());
 
-        return totalUsers;
+        return res;
 
     }
 

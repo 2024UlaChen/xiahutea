@@ -39,7 +39,7 @@ public interface StoreService {
     List<Store> getStoreListWorking(String holiday) throws ParseException;
     List<Store> getAllData();
     List<Store> getAllStoreById(Integer Id);
-    TotalUsers GetTotalUser(Integer StoreId);
+    TotalUserDTO GetTotalUser(Integer StoreId);
     List<Date> GetStoreHolidays(Integer StoreId);
 
     Page<Store> searchStore(StoreViewModel store, Integer page);
