@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface MessageDao extends JpaRepository<Messages, Integer> {
+public interface MessageChatSessionRepository extends JpaRepository<Messages, Integer> {
     List<Messages> findByChatSessionId(Integer chatId);
 }
