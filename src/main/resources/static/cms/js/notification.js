@@ -86,14 +86,14 @@ document.addEventListener("DOMContentLoaded", function() {
     showNotification(data);
 
     // Uncomment below to enable WebSocket connection
-    // function connect() {
-    //     let socket = new SockJS('/websocket-endpoint');
-    //     stompClient = Stomp.over(socket);
-    //     stompClient.connect({}, () => {
-    //         stompClient.subscribe('/store/notifications', function (resp) {
-    //             showNotification(JSON.parse(resp.body));
-    //         });
-    //     });
-    // }
-    // window.onload = connect;
+    function connect() {
+        let socket = new SockJS('/websocket-endpoint');
+        stompClient = Stomp.over(socket);
+        stompClient.connect({}, () => {
+            stompClient.subscribe('/store/notifications', function (resp) {
+                showNotification(JSON.parse(resp.body));
+            });
+        });
+    }
+    window.onload = connect;
 });
