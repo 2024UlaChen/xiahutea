@@ -14,9 +14,4 @@ public class NotificationService {
     public void notifyNewOrder(NotificationDto message) {
         messagingTemplate.convertAndSend("/store/notifications", message);
     }
-
-//    public void notifyDisputeFinish(NotificationDto message){
-//        messagingTemplate.convertAndSend("/store/notifications", message);
-//    }
-
 }

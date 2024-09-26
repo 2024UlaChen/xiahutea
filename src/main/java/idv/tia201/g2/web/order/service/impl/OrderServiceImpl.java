@@ -97,7 +97,7 @@ public class OrderServiceImpl implements OrderService {
         final String invoiceCarrier = order.getInvoiceCarrier();
         final String invoiceVat = order.getInvoiceVat() + "";
         if(order.getInvoiceMethod() == 1){  // 載具
-            if(invoiceCarrier.charAt(0) != '/' || invoiceCarrier.trim().length() != 8){
+            if(isEmpty(invoiceCarrier) || invoiceCarrier.charAt(0) != '/' || invoiceCarrier.trim().length() != 8){
                 orderDto.setMessage("載具輸入錯誤");
                 orderDto.setSuccessful(false);
                 return orderDto;
@@ -151,6 +151,10 @@ public class OrderServiceImpl implements OrderService {
         memberService.updateMemberMoneyById(member.getCustomerId(), newMemberMoney);
 
         // todo 集點卡 優惠券
+        // 會員使用集點卡
+        int newCard = order.getLoyaltyDiscount();
+
+
 
 
         order.setOrderStatus(1);

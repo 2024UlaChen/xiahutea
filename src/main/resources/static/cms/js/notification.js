@@ -2,98 +2,49 @@ document.addEventListener("DOMContentLoaded", function() {
     let stompClient = null;
     const url = `${location.pathname.substring(0, location.pathname.indexOf('/', 1) + 1)}websocket-endpoint`;
 
+    let socket = new SockJS("/websocket-endpoint");
+    stompClient = Stomp.over(socket);
+    stompClient.connect({}, () => {
+        stompClient.subscribe('/store/notifications', function (resp) {
+            showNotification(JSON.parse(resp.body));
+        });
+    });
 
-
-    const data = [
-        { orderId: 101, date: '2024/09/26 11:50' },
-        { orderId: 102, date: '2024/09/26 11:50' },
-        { orderId: 105, date: '2024/09/26 11:50' },
-        { orderId: 108, date: '2024/09/26 11:50' }
-    ];
-
+    let notificationCount = 0; // 計算未讀通知數量
 
     function showNotification(data) {
+        notificationCount++;
+
         // Header alert
         let alertHtml = `
-            <a class="nav-link" id="notificationAlert" data-toggle="dropdown" href="#">
-                <i class="far fa-bell"></i>
-                <span class="badge badge-warning navbar-badge">${data.length}</span>
-            </a>
-            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" id="notification">
-            </div>
+            <span class="badge badge-warning navbar-badge">${notificationCount}</span>
         `;
-        document.getElementById("notificationArea").innerHTML = alertHtml;
+        // 找到通知鈴鐺元素
+        let bellIcon = document.querySelector(".fa-bell");
 
-        // 通知列表
-        let notificationHtml = "";
-        for(let i = 0; i < data.length; i++){
-            notificationHtml += `
-                <div class="dropdown-divider"></div>
-                <a href="./storeOrderDetail.html?orderId=${data[i].orderId}" class="dropdown-item">
-                    <i class="fas fa-envelope mr-2"></i> 新訂單 ${data[i].orderId}，請安排出單 
-                    <span class="float-right text-muted text-sm">${data[i].date}</span>
-                </a>
-            `;
+        // 檢查是否已經有 badge 元素存在，如果有則更新內容，否則插入新元素
+        let existingBadge = bellIcon.nextElementSibling;
+        if (existingBadge && existingBadge.classList.contains("badge")) {
+            existingBadge.innerHTML = notificationCount;
+        } else {
+            bellIcon.insertAdjacentHTML('afterend', alertHtml);
         }
-        document.getElementById("notification").innerHTML = notificationHtml;
 
-        // 鈴鐺數字
-        let alertNum = document.getElementsByClassName("badge")[0];
+        // 訂單通知內容
+        let notificationHtml = "";
+        notificationHtml += `
+            <div class="dropdown-divider"></div>
+            <a href="./storeOrderDetail.html?orderId=${data.orderId}" class="dropdown-item">
+                <i class="fas fa-envelope mr-2"></i> 新訂單 ${data.orderId}，請安排出單 
+                <span class="float-right text-muted text-sm">${new Date(data.orderCreateDatetime).toLocaleString()}</span>
+            </a>
+        `;
+        document.getElementById("notification").innerHTML += notificationHtml; // 使用 += 以便於添加新通知
+
+        // 點了鈴鐺後 清空通知數量
         let notificationAlert = document.getElementById("notificationAlert");
         notificationAlert.addEventListener("click", function (){
-            // 點了鈴鐺 清空數據數組
-            // data.splice(0, data.length);
-            data.length = 0;
-            alertNum.innerText = 0;
-            alertNum.classList.add("-off");
-            updateNotification();
-        });
-
-
-        checkAlertNum();
-        function checkAlertNum() {
-            if (parseInt(alertNum.innerText) === 0) {
-                alertNum.classList.add("-off");
-            } else {
-                alertNum.classList.remove("-off");
-            }
-        }
-
-
-        function updateNotification() {
-            let notificationBadge = document.querySelector("#notificationAlert .navbar-badge");
-            if (notificationBadge) {
-                notificationBadge.textContent = data.length;
-            } else {
-                let alertHtml = `
-                    <a class="nav-link" id="notificationAlert" data-toggle="dropdown" href="#">
-                        <i class="far fa-bell"></i>
-                        <span class="badge badge-warning navbar-badge">${data.length}</span>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" id="notification">
-                    </div>
-                `;
-                document.getElementById("notificationArea").innerHTML = alertHtml;
-            }
-        }
-    }
-
-
-    function addNewNotification(newNotification) {
-        data.push(newNotification);
-        showNotification(data);
-    }
-    showNotification(data);
-
-    // Uncomment below to enable WebSocket connection
-    function connect() {
-        let socket = new SockJS('/websocket-endpoint');
-        stompClient = Stomp.over(socket);
-        stompClient.connect({}, () => {
-            stompClient.subscribe('/store/notifications', function (resp) {
-                showNotification(JSON.parse(resp.body));
-            });
+            bellIcon.nextElementSibling.innerHTML = "";
         });
     }
-    window.onload = connect;
 });
