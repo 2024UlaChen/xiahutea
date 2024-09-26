@@ -147,8 +147,7 @@ public class OrderServiceImpl implements OrderService {
             }
         }
         // 會員使用點數
-        int newMemberMoney = member.getCustomerMoney() - order.getCustomerMoneyDiscount();
-        memberService.updateMemberMoneyById(member.getCustomerId(), newMemberMoney);
+        memberService.updateMemberMoneyById(member.getCustomerId(), - order.getCustomerMoneyDiscount());
 
         // todo 集點卡 優惠券
         // 會員使用集點卡

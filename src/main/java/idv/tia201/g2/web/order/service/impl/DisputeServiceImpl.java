@@ -144,8 +144,7 @@ public class DisputeServiceImpl implements DisputeService {
                 return newDispute;
             }
             // 增加 退款金額
-            int newMemberMoney = member.getCustomerMoney() + newDispute.getRefundAmount();
-            memberService.updateMemberMoneyById(member.getCustomerId(), newMemberMoney);
+            memberService.updateMemberMoneyById(member.getCustomerId(), newDispute.getRefundAmount());
         }
         newDispute.setMessage("修改成功");
         newDispute.setSuccessful(true);

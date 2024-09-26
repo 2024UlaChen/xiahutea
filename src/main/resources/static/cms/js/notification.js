@@ -1,5 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
     let stompClient = null;
+
+    // todo 待設定權限
     const url = `${location.pathname.substring(0, location.pathname.indexOf('/', 1) + 1)}websocket-endpoint`;
 
     let socket = new SockJS("/websocket-endpoint");
