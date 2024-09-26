@@ -292,17 +292,7 @@
           }
         });//導向登入頁面確認
         //ajax 取得商家列表
-        //監聽是否點擊狀態
 
-        document.querySelectorAll('.project-state').forEach(function (element){
-          element.addEventListener("click",function (){
-            console.log(this);
-            console.log("sotreId=");
-            let storeVal = this.querySelector('.storeStatuss').dataset.storeid;
-            console.log(storeVal);
-            fetch(`/store/updateStoreStatus/${storeVal}`);
-          });
-        });
 
         //監聽是否典籍search
         document.querySelector('#searchBtn').addEventListener("click",function (){
@@ -458,11 +448,30 @@
             } //如果頁數存在
           },300);
 
+          let count = 1;
+          while(!document.contains(document.querySelector(".project-state")) && count < 10000){
+            count++;
+
+          }
+          ListenStatusUpdate(); //註冊監聽 狀態
+
 
         }//response結束
 
 
       }); //search ajax
+    }
+
+    function ListenStatusUpdate(){
+      document.querySelectorAll('.project-state').forEach(function (element){
+        element.addEventListener("click",function (){
+          console.log(this);
+          console.log("sotreId=");
+          let storeVal = this.querySelector('.storeStatuss').dataset.storeid;
+          console.log(storeVal);
+          fetch(`/store/updateStoreStatus/${storeVal}`);
+        });
+      });
     }
   </script>
   </body>

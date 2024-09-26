@@ -43,5 +43,6 @@ public interface StoreService {
     List<Date> GetStoreHolidays(Integer StoreId);
 
     Page<Store> searchStore(StoreViewModel store, Integer page);
+    List<Store> getStoreListForHome(Date today) throws ParseException;
 
 }
