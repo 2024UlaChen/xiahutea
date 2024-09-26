@@ -202,7 +202,7 @@ public class RegisterStoreServiceImpl implements RegisterStoreService {
             String randomPassword = generateRandomString(9, 14);
             newData.setPassword(randomPassword);
             sendMail(newData);
-            TotalUsers totalUser = new TotalUsers(null, userType, newData.getStoreId(),newData.getStoreName(),newData.getLogo());
+            TotalUsers totalUser = new TotalUsers(null, userType, newData.getStoreId());
             totalUserDao.save(totalUser);
         }
 

@@ -1,5 +1,6 @@
 package idv.tia201.g2.web.user.controller;
 
+import idv.tia201.g2.web.user.dto.TotalUserDTO;
 import idv.tia201.g2.web.user.service.AdminService;
 import idv.tia201.g2.web.user.vo.Administrator;
 import idv.tia201.g2.web.user.vo.TotalUsers;
@@ -20,25 +21,25 @@ AdminController {
 
 //    @ResponseBody
     @PostMapping("/login")
-    public TotalUsers adminlogin(Administrator admin, HttpServletRequest request) {
+    public TotalUserDTO adminlogin(Administrator admin, HttpServletRequest request) {
 //        若無資料
         if (admin == null) {
-            TotalUsers totalUser = new TotalUsers();
-            totalUser.setMessage("請輸入用戶名稱及用戶密碼");
-            totalUser.setSuccessful(false);
-            return totalUser;
+            TotalUserDTO totalUserDTO = new TotalUserDTO();
+            totalUserDTO.setMessage("請輸入用戶名稱及用戶密碼");
+            totalUserDTO.setSuccessful(false);
+            return totalUserDTO;
         }
 
-        TotalUsers totalUser = adminService.login(admin);
-        if (totalUser.isSuccessful()) {
+        TotalUserDTO totalUserDTO = adminService.login(admin);
+        if (totalUserDTO.isSuccessful()) {
             if (request.getSession(false) != null) {
                 request.changeSessionId();
             }
             final HttpSession session = request.getSession();
             session.setAttribute("loggedin", true);
-            session.setAttribute("totalUser", totalUser);
+            session.setAttribute("totalUserDTO", totalUserDTO);
         }
-        return totalUser;
+        return totalUserDTO;
     }
 
 }

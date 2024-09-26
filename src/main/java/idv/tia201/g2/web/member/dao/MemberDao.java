@@ -30,6 +30,7 @@ public interface MemberDao {
     Integer updateMemberInfo(Integer memberId, Boolean status, String memberRemark);
 
     boolean updateMemberAddress(MemberAddress memberAddress);
+    Integer updateMemberMoney(Integer memberId, Integer memberMoney);
 
     //delete
     Integer deleteByMemberAddressId(Integer memberId);
