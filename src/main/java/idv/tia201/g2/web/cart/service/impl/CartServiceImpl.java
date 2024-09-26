@@ -7,6 +7,7 @@ import idv.tia201.g2.web.coupon.vo.Coupon;
 import idv.tia201.g2.web.coupon.vo.CustomerCoupons;
 import idv.tia201.g2.web.member.dao.MemberAddrDao;
 import idv.tia201.g2.web.member.dao.MemberDao;
+import idv.tia201.g2.web.member.dao.MemberLoyaltyCardRepository;
 import idv.tia201.g2.web.member.vo.MemberAddress;
 import idv.tia201.g2.web.product.dao.ProductDao;
 import idv.tia201.g2.web.store.dao.StoreDao;
@@ -41,6 +42,8 @@ public class CartServiceImpl implements CartService {
 //    private CustomerDao customerDao;
     @Autowired
     private MemberAddrDao memberAddrDao;
+    @Autowired
+    private MemberLoyaltyCardRepository memberLoyaltyCarddao;
 
     //抓取會員資料
     @Override
@@ -71,8 +74,8 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public CustomerLoyaltyCard findMemberLoyalCardById(Integer customerId, Integer storeId) {
-        return null;
+    public CustomerLoyaltyCard findMemberLoyalCardById(Integer storeId, Integer customerId ) {
+       return memberLoyaltyCarddao.findByStoreIdAndMemberId(storeId,customerId);
     }
 
     @Override
