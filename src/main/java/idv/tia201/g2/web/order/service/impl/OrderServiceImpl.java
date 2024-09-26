@@ -2,6 +2,8 @@ package idv.tia201.g2.web.order.service.impl;
 
 import idv.tia201.g2.core.util.ValidateUtil;
 import idv.tia201.g2.web.member.dao.MemberDao;
+import idv.tia201.g2.web.member.dao.MemberLoyaltyCardRepository;
+import idv.tia201.g2.web.member.service.MemberLoyaltyCardService;
 import idv.tia201.g2.web.member.service.MemberService;
 import idv.tia201.g2.web.member.vo.Member;
 import idv.tia201.g2.web.order.dao.DisputeDao;
@@ -18,6 +20,7 @@ import idv.tia201.g2.web.order.vo.Orders;
 import idv.tia201.g2.web.product.dao.ProductDao;
 import idv.tia201.g2.web.product.vo.Product;
 import idv.tia201.g2.web.store.dao.StoreDao;
+import idv.tia201.g2.web.store.vo.CustomerLoyaltyCard;
 import idv.tia201.g2.web.store.vo.Store;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,12 +47,15 @@ public class OrderServiceImpl implements OrderService {
     private StoreDao storeDao;
     @Autowired
     private ProductDao productDao;
+    @Autowired
+    private MemberLoyaltyCardRepository memberLoyaltyCardRepository;
 
     @Autowired
     private OrderMappingUtil orderMappingUtil;
     @Autowired
     private MemberService memberService;
-
+    @Autowired
+    private MemberLoyaltyCardService memberLoyaltyCardService;
     @Autowired
     private NotificationService notificationService;
 
@@ -74,6 +80,15 @@ public class OrderServiceImpl implements OrderService {
             orderDto.setSuccessful(false);
             return orderDto;
         }
+        int loyaltyCardId = order.getLoyaltyCardId();
+        CustomerLoyaltyCard customerLoyaltyCard = memberLoyaltyCardRepository.findByLoyaltyCardId(loyaltyCardId);
+        if(customerLoyaltyCard == null) {
+            orderDto.setMessage("無此集點卡");
+            orderDto.setSuccessful(false);
+            return orderDto;
+        }
+        // todo 優惠券
+
         if(order.getCouponDiscount() < 0 || order.getLoyaltyDiscount() < 0 || order.getCustomerMoneyDiscount() < 0){
             orderDto.setMessage("折抵金額錯誤");
             orderDto.setSuccessful(false);
@@ -147,13 +162,10 @@ public class OrderServiceImpl implements OrderService {
             }
         }
         // 會員使用點數
-        memberService.updateMemberMoneyById(member.getCustomerId(), - order.getCustomerMoneyDiscount());
-
-        // todo 集點卡 優惠券
+        memberService.updateMemberMoneyById(customerId, - order.getCustomerMoneyDiscount());
         // 會員使用集點卡
-        int newCard = order.getLoyaltyDiscount();
-
-
+        memberLoyaltyCardService.UpdatePoints(loyaltyCardId, order.getLoyaltyDiscount());
+        // todo 優惠券
 
 
         order.setOrderStatus(1);

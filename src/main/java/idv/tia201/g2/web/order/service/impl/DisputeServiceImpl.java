@@ -150,5 +150,4 @@ public class DisputeServiceImpl implements DisputeService {
         newDispute.setSuccessful(true);
         return newDispute;
     }
-
 }
