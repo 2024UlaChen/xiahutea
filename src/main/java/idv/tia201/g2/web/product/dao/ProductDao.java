@@ -20,10 +20,10 @@ public interface ProductDao extends JpaRepository<Product,Integer>  {
 //   用id去找分類底下的productm用來顯示productmenu
     List<Product> findByProductCategoryId(Integer categoryId);
  //用產品分類及商品名稱去做查詢，搜尋欄
-    List<Product> findByProductCategoryIdAndProductNameContaining(Integer productCategoryId, String productName);
-   //分頁處理
+    //分頁處理
     Page<Product> findAll(Pageable pageable);
     Product findByProductId(Integer productId);
+    List<Product> findByProductCategoryIdAndProductNameContaining(Integer productCategoryId, String productName);
 
 
 }
