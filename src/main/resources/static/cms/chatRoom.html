@@ -54,6 +54,10 @@
 <script type="module">
     import { actionHandlers, WeienChat } from './js/weien-chat.js'
     let userTypeId;
+    // const url
+    //     =  `ws://${location.host}${location.pathname.substring(0, location.pathname.lastIndexOf('/') + 1)}chat`;
+    const url
+        =  `ws://localhost:8080/cms/chat`;
 
     // 使用前須覆寫actionHandlers中必要的方法
     // 詳細可以去 weien-chat.js 中的 actionHandlers查看
@@ -61,7 +65,6 @@
         return await fetch("/chatroomdata")
             .then(res => res.json())
             .then(data =>{
-                console.log(data);
                 return data;
             })
     }
@@ -95,21 +98,50 @@
 
         return await fetch("/totalusers")
             .then(res => res.json())
-            .then(data =>{
+            .then(data => {
                 userTypeId = data.userTypeId;
+                console.log("getUID" + userTypeId);
                 return data.totalUserId;
             })
     }
 
+    actionHandlers.sendMessage = (message) => {
+        if (webSocket) {
+            webSocket.send(JSON.stringify({
+                chatId: message.chatId,
+                action: 'send-message',
+                content: JSON.stringify(message)
+            }));
+        }
+    }
+
+    const handleSendMessage = e => {
+        let message = e.data;
+        console.log(e);
+        // Sender 前端頁面
+        let activeChatId = chat.getActiveChatId();      //獲取這個聊天室的id
+        chat.updateChatListInfo(activeChatId,message);  //更新聊天室側邊欄聊天室列表
+        chat.appendMessage ;                             //將這筆訊息加到該聊天室最底部
+
+    }
+
     const chat = new WeienChat();
+
+    let webSocket;
 
     document.addEventListener('DOMContentLoaded', async () => {
         // 加載完成以後啟動
         await chat.init();
+        console.log("init" + userTypeId);
         if (userTypeId !== 3){
             chat.state.value.showMode = 'mobile'
         }
         chat.state.value.activeChatId = 1;
+        webSocket = new WebSocket(url);
+
+
+        webSocket.addEventListener('message', handleSendMessage);
+
     });
 
 </script>
