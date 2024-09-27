@@ -13,10 +13,11 @@ public interface ProductService {
     List<Product> getAllProducts();
     List<Product> getProductsByProductName(String productName);
     public boolean addProduct(ProductDTO productDTO);
-    public boolean updateProduct(ProductDTO productDTO);
+    public boolean updateProduct(Integer productId,ProductDTO productDTO);
     public boolean deleteProduct(Integer productId);
-    List<Product> searchProducts(Integer categoryId, String productName);
+    ProductDTO getProductById(Integer productId);
     Page<Product> getProducts(Pageable pageable);
+    List<Product> searchProducts(Integer productCategoryId, String productName);
 
 }
 

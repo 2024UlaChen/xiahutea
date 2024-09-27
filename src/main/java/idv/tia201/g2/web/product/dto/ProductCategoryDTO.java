@@ -8,7 +8,7 @@ public class ProductCategoryDTO {
 
     private String categoryName;
     private Integer categorySort;
-    private boolean status;  // 使用 boolean 來表示啟用或停用
-    private Integer storeId;
+    private Boolean categoryStatus;  // 使用 boolean 來表示啟用或停用
+    private Integer productStoreId;
 
 }

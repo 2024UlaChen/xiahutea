@@ -848,41 +848,28 @@ document.addEventListener("DOMContentLoaded",function(){
       //訂單轉綠界金流
       btn_submit_order_el.addEventListener('click',function (){
           const params = new URLSearchParams();
-          // params.append('MerchantTradeNo', 'xiahutea0001'); // 訂單編號 (唯一的)
-          //交易時間
-          let currentDate = new Date();
-          let formattedDate = currentDate.getFullYear() + '/' +
-              ('0' + (currentDate.getMonth() + 1)).slice(-2) + '/' +
-              ('0' + currentDate.getDate()).slice(-2) + ' ' +
-              ('0' + currentDate.getHours()).slice(-2) + ':' +
-              ('0' + currentDate.getMinutes()).slice(-2) + ':' +
-              ('0' + currentDate.getSeconds()).slice(-2);
-          params.append('MerchantTradeDate', formattedDate);
-          // params.append('PaymentType', 'aio'); // 交易類型
           params.append('TotalAmount', last_totalAmount); // 交易金額
-          params.append('TradeDesc', 'test order'); // 交易描述
-
           // 商品名稱
-          let productNames = document.querySelectorAll('.product-name');
-          let productNameString = '';
-          let uniqueNames = new Set();
-          // 遍歷所有商品名稱，並檢查是否重複
-          productNames.forEach((productNameElement, index) => {
-              const productName = productNameElement.textContent.trim();
-              // 只有當名稱不在 Set 中時才加入
-              if (!uniqueNames.has(productName)) {
-                  uniqueNames.add(productName);
-                  productNameString += productName;
-                  if (index < productNames.length - 1) {
-                      productNameString += '#'; // 使用 # 作為商品名稱分隔符號
-                  }
-              }
-          });
-          // 移除結尾的多餘的分隔符號
-          if (productNameString.endsWith('#')) {
-              productNameString = productNameString.slice(0, -1);
-          }
-          params.append('ItemName', productNameString);
+          // let productNames = document.querySelectorAll('.product-name');
+          // let productNameString = '';
+          // let uniqueNames = new Set();
+          // // 遍歷所有商品名稱，並檢查是否重複
+          // productNames.forEach((productNameElement, index) => {
+          //     const productName = productNameElement.textContent.trim();
+          //     // 只有當名稱不在 Set 中時才加入
+          //     if (!uniqueNames.has(productName)) {
+          //         uniqueNames.add(productName);
+          //         productNameString += productName;
+          //         if (index < productNames.length - 1) {
+          //             productNameString += '#'; // 使用 # 作為商品名稱分隔符號
+          //         }
+          //     }
+          // });
+          // // 移除結尾的多餘的分隔符號
+          // if (productNameString.endsWith('#')) {
+          //     productNameString = productNameString.slice(0, -1);
+          // }
+          // params.append('ItemName', productNameString);
 
           // params.append('ChoosePayment', 'Credit'); // 選擇的付款方式
 
@@ -891,44 +878,24 @@ document.addEventListener("DOMContentLoaded",function(){
               headers:{
                   'Content-Type': 'application/x-www-form-urlencoded'
               },
-              // body:params.toString()
-          }).then(response => response.json())
-              .then(data => {
-                  if (data.paymentUrl) {
-                      // 導向綠界支付頁面
-                      window.location.href = data.paymentUrl;
-                  } else {
-                      console.error('獲取支付連結失敗');
-                  }
+              body: params.toString()
+          }).then(response => response.text()) // 因為後端返回的是 HTML 表單，所以需要使用 .text()
+              .then(htmlForm => {
+                  // 創建一個空的 div 並將 HTML 表單插入
+                  const formContainer = document.createElement('div');
+                  formContainer.innerHTML = htmlForm;
+
+                  // 將表單插入到當前頁面中
+                  document.body.appendChild(formContainer);
+
+                  // 自動提交表單
+                  const form = formContainer.querySelector('form');
+                  form.submit(); // 自動提交支付表單，跳轉到綠界
               }).catch(error => {
               console.error('發生錯誤:', error);
           });
       })
     //******** ************************************function區****************************************
-    //GET 請求：進入購物結帳頁面取得使用者
-
-    //POST 請求：儲存購物車資料
-    // function saveallproduct(){
-    //   if (cartItems.length === 0) {
-    //     alert('Your cart is empty');
-    //     // window.location.href = '/home'; // 跳转到你想要的页面
-    //     return;
-    //   }
-    //   fetch('/cart/checkoutlist/saveItems', {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json'
-    //     },
-    //     body: JSON.stringify(cartItems)
-    //   })
-    //       .then(response => response.text())
-    //       .then(data => {
-    //         console.log('Success:', data);
-    //       })
-    //       .catch((error) => {
-    //         console.error('Error:', error);
-    //       });
-    // }
   //F01 localstorage購物車資料分類
   function sortCartItems(cartItems){
     const groupedItems = [];
