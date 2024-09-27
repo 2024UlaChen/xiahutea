@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 
 <head>
     <meta charset="utf-8">
@@ -84,7 +84,7 @@
                             <!-- form start -->
                             <form id="productForm" enctype="multipart/form-data">
                                 <div class="card-body">
-
+                                    <input type="hidden" id="productId" name="productId">
                                     <div class="form-group">
                                         <label for="productName">商品名稱</label> <span style="color: red">*</span>
                                         <input type="text" class="form-control" id="productName" placeholder="請輸入商品名稱" name="productName">
@@ -110,8 +110,8 @@
                                         <label for="status">商品狀態</label>
                                         <span class="status-message" style="color: red"></span>
                                         <select class="custom-select rounded-0" id="status" name="productStatus">
-                                            <option value="0">上架</option>
-                                            <option value="1">下架</option>
+                                            <option value="1" th:selected="${productStatus} ? 'selected' : ''">上架</option>
+                                            <option value="0" th:selected="${!productStatus} ? 'selected' : ''">下架</option>
                                         </select>
                                     </div>
 
@@ -369,7 +369,7 @@
             })
         })
         // =========獲取商品分類選項====
-        const categorySelect = document.querySelector('.category');
+        var categorySelect = document.querySelector('.category');
         const categoryMessage = document.querySelector('.category-message');
 
         fetch('/categories/all')
@@ -407,36 +407,36 @@
 
 
                     event.preventDefault();
-                    let productName = document.getElementById('productName').value.trim();
-                    let productPrice = document.getElementById('productPrice').value;
-                    let size = document.getElementById('size').value;
-                    let productStatus = document.getElementById('status').value;
-                    let productPic = document.getElementById('productPic').files[0];
-                    let category = document.querySelector('.category').value;
-                    let messagename=document.querySelector('.productName-message');
-                    let messageprice=document.querySelector('.productPrice-message');
-                    let messagecategory=document.querySelector('.category-message');
+                    var productName = document.getElementById('productName').value.trim();
+                    var productPrice = document.getElementById('productPrice').value;
+                    var size = document.getElementById('size').value;
+                    var productStatus = document.getElementById('status').value;
+                    var productPic = document.getElementById('productPic').files[0];
+                    var category = document.querySelector('.category').value;
+                    var messagename=document.querySelector('.productName-message');
+                    var messageprice=document.querySelector('.productPrice-message');
+                    var messagecategory=document.querySelector('.category-message');
 
 
-                   let isnormalIce=document.querySelector('input[name="normalIce"]').checked;
-                    let islessIce=document.querySelector('input[name="lessIce"]').checked;
-                     let islightIce=document.querySelector('input[name="lightIce"]').checked;
-                     let isiceFree=document.querySelector('input[name="iceFree"]').checked;
-                     let isroomTemperature=document.querySelector('input[name="roomTemperature"]').checked;
-                     let ishot=document.querySelector('input[name="hot"]').checked;
+                   var isnormalIce=document.querySelector('input[name="normalIce"]').checked;
+                   var islessIce=document.querySelector('input[name="lessIce"]').checked;
+                   var islightIce=document.querySelector('input[name="lightIce"]').checked;
+                   var isiceFree=document.querySelector('input[name="iceFree"]').checked;
+                   var isroomTemperature=document.querySelector('input[name="roomTemperature"]').checked;
+                    var ishot=document.querySelector('input[name="hot"]').checked;
 
-                     let isfullSugar=document.querySelector('input[name="fullSugar"]').checked;
-                    let islessSugar=document.querySelector('input[name="lessSugar"]').checked;
-                    let ishalfSugar=document.querySelector('input[name="halfSugar"]').checked;
-                    let isquarterSugar=document.querySelector('input[name="quarterSugar"]').checked;
-                    let isnoSugar=document.querySelector('input[name="noSugar"]').checked;
+                    var isfullSugar=document.querySelector('input[name="fullSugar"]').checked;
+                    var islessSugar=document.querySelector('input[name="lessSugar"]').checked;
+                    var ishalfSugar=document.querySelector('input[name="halfSugar"]').checked;
+                    var isquarterSugar=document.querySelector('input[name="quarterSugar"]').checked;
+                    var isnoSugar=document.querySelector('input[name="noSugar"]').checked;
 
 
-                    let pearl=document.querySelector('input[name="pearl"]').checked;
-                    let pudding=document.querySelector('input[name="pudding"]').checked;
-                    let coconutJelly= document.querySelector('input[name="coconutJelly"]').checked;
-                    let taro=document.querySelector('input[name="taro"]').checked;
-                    let herbalJelly=document.querySelector('input[name="herbalJelly"]').checked;
+                    var pearl=document.querySelector('input[name="pearl"]').checked;
+                    var pudding=document.querySelector('input[name="pudding"]').checked;
+                    var coconutJelly= document.querySelector('input[name="coconutJelly"]').checked;
+                    var taro=document.querySelector('input[name="taro"]').checked;
+                    var herbalJelly=document.querySelector('input[name="herbalJelly"]').checked;
 
 
 
@@ -465,17 +465,6 @@
                 }
 
 
-
-
-
-                // 收集甜度調整
-                let sugarOptions = {
-                    fullSugar: document.querySelector('input[name="fullSugar"]').checked,
-                    lessSugar: document.querySelector('input[name="lessSugar"]').checked,
-                    halfSugar: document.querySelector('input[name="halfSugar"]').checked,
-                    quarterSugar: document.querySelector('input[name="quarterSugar"]').checked,
-                    noSugar: document.querySelector('input[name="noSugar"]').checked
-                };
                 productStatus= (productStatus=0 ? false : true);
                 v = {
                     "productName": productName,
@@ -533,8 +522,148 @@
 
         /** 新增商品的方法 到後端 */
 
+            // 获取 URL 参数中的 productId
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get('productId');
+        let statusSelect = document.getElementById('status');
+        let btninfo=document.querySelector('.btn-info');
+        btninfo.textContent='編輯商品';
 
-    </script>
+
+
+        if (productId) {
+            // 使用 fetch 从服务器获取产品数据
+            fetch(`/products/${productId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP错误！状态: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(product => {
+                    // 填充表单字段
+                    document.getElementById('productId').value = product.productId;
+                    document.getElementById('productName').value = product.productName;
+                    document.getElementById('productPrice').value = product.productPrice;
+                    document.getElementById('size').value = product.size;
+                    statusSelect.value = product.productStatus ? "1" : "0";
+                    fetch('/categories/all')
+                        .then(response => {
+                            if (response.ok) {
+                                return response.json();
+                            } else {
+                                throw new Error('分類加載失敗');
+                            }
+                        })
+                        .then(categories => {
+
+                            categorySelect.innerHTML = '';
+
+
+                            categories.forEach(category => {
+                                const option = document.createElement('option');
+                                option.value = category.categoryId;
+                                option.text = category.categoryName;
+                                // 检查该分类是否为当前产品的分类
+                                if (category.categoryId === product.productCategoryId) {
+                                    option.selected = true;
+                                }
+                                categorySelect.appendChild(option);
+                            });
+                        })
+                        .catch(error => {
+                            console.error('Error loading categories:', error);
+                            categoryMessage.textContent = '加載失敗';
+                        });
+
+                    // 冰塊
+                    document.querySelector('input[name="normalIce"]').checked = product.normalIce;
+                    document.querySelector('input[name="lessIce"]').checked = product.lessIce;
+                    document.querySelector('input[name="lightIce"]').checked = product.lightIce;
+                    document.querySelector('input[name="iceFree"]').checked = product.iceFree;
+                    document.querySelector('input[name="roomTemperature"]').checked = product.roomTemperature;
+                    document.querySelector('input[name="hot"]').checked = product.hot;
+
+                    // 甜度
+                    document.querySelector('input[name="fullSugar"]').checked = product.fullSugar;
+                    document.querySelector('input[name="lessSugar"]').checked = product.lessSugar;
+                    document.querySelector('input[name="halfSugar"]').checked = product.halfSugar;
+                    document.querySelector('input[name="quarterSugar"]').checked = product.quarterSugar;
+                    document.querySelector('input[name="noSugar"]').checked = product.noSugar;
+
+                    // 加料
+                    document.querySelector('input[name="pearl"]').checked = product.pearl;
+                    document.querySelector('input[name="pudding"]').checked = product.pudding;
+                    document.querySelector('input[name="coconutJelly"]').checked = product.coconutJelly;
+                    document.querySelector('input[name="taro"]').checked = product.taro;
+                    document.querySelector('input[name="herbalJelly"]').checked = product.herbalJelly;
+
+                })
+                .catch(error => {
+                    console.error('获取产品数据失败:', error);
+                });
+        } else {
+            console.error('未提供 productId 参数');
+        }
+
+        document.getElementById('productForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // 阻止表单默认提交行为
+
+            const productData = {
+                productId:Number(document.getElementById('productId').value),
+                productName: document.getElementById('productName').value,
+                productPrice: Number(document.getElementById('productPrice').value),
+                size: document.getElementById('size').value,
+                productStatus: document.getElementById('status').value === "0" ? false : true,
+                productPictureFile:document.getElementById('productPic').files[0],
+                productStoreId: 1,
+                productCategoryId: Number(document.querySelector('.category').value),
+                normalIce: document.querySelector('input[name="normalIce"]').checked,
+                lessIce: document.querySelector('input[name="lessIce"]').checked,
+                lightIce: document.querySelector('input[name="lightIce"]').checked,
+                iceFree: document.querySelector('input[name="iceFree"]').checked,
+                roomTemperature: document.querySelector('input[name="roomTemperature"]').checked,
+                hot: document.querySelector('input[name="hot"]').checked,
+                fullSugar: document.querySelector('input[name="fullSugar"]').checked,
+                lessSugar: document.querySelector('input[name="lessSugar"]').checked,
+                halfSugar: document.querySelector('input[name="halfSugar"]').checked,
+                quarterSugar: document.querySelector('input[name="quarterSugar"]').checked,
+                noSugar: document.querySelector('input[name="noSugar"]').checked,
+                pearl: document.querySelector('input[name="pearl"]').checked,
+                pudding: document.querySelector('input[name="pudding"]').checked,
+                coconutJelly: document.querySelector('input[name="coconutJelly"]').checked,
+                taro: document.querySelector('input[name="taro"]').checked,
+                herbalJelly: document.querySelector('input[name="herbalJelly"]').checked
+            };
+
+            // 发起 PUT 请求更新商品
+            fetch(`/products/update/${productId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(productData) // 发送 JSON 格式的商品数据
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP 错误! 状态: ${response.status}`);
+                    }
+                    return response.text(); // 获取服务器返回的文本响应
+                })
+                .then(data => {
+                    console.log('商品更新成功:', data);
+                    alert('商品更新成功!');
+                    // 可以在这里进行页面跳转或其他操作
+                })
+                .catch(error => {
+                    console.error('更新商品失败:', error);
+                    alert('更新商品失败!');
+                });
+        });
+
+
+
+  </script>
 
 
 
