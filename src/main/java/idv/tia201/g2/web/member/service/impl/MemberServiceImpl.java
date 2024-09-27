@@ -9,6 +9,8 @@ import idv.tia201.g2.web.member.vo.Member;
 import idv.tia201.g2.web.member.vo.MemberAddress;
 import idv.tia201.g2.web.user.dao.TotalUserDao;
 import idv.tia201.g2.web.user.vo.TotalUsers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +25,8 @@ import java.util.List;
 @Service
 @Transactional
 public class MemberServiceImpl implements MemberService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MemberServiceImpl.class);
 
     @Autowired
     MemberDao memberDao;
@@ -72,14 +76,18 @@ public class MemberServiceImpl implements MemberService {
             LocalDate date = LocalDate.now();
             member.setCreateDate(Date.valueOf(date));
             member.setUpdateDate(Date.valueOf(date));
+//            發送驗證簡訊
 //            String verifyCode = sendSmsService.sendSMS(phone);
             String verifyCode = "AAA123";
             member.setVerifyCode(verifyCode);
+            LOGGER.info("register data: {}", member);
             memberDao.createMember(member);
-            return memberDao.findMemberByPhone(phone);
+            member = memberDao.findMemberByPhone(phone);
+            member.setSuccessful(true);
+            member.setMessage("註冊成功");
+            return member;
         }
     }
-
 
     @Override
     public Member login(Member member) {
