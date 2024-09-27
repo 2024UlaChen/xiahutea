@@ -1,50 +1,57 @@
-//package idv.tia201.g2.web.cart.controller;
+package idv.tia201.g2.web.cart.controller;
+
+import ecpay.payment.integration.ecpayOperator.EcpayFunction;
+import idv.tia201.g2.web.cart.service.EcPayService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.Map;
+
+@Controller
+public class EcPayController {
+
+    @Autowired
+    EcPayService ecPayService;
+
+    @PostMapping("/payment/createorder")
+    public ResponseEntity<String> createOrder(@RequestParam("TotalAmount") Integer totalAmount) {
+        // 生成綠界支付表單
+        String aioCheckOutALLForm = ecPayService.ecpayCheckout(totalAmount);
+        // 返回支付表單
+        return ResponseEntity.ok(aioCheckOutALLForm);
+    }
+
+    @PostMapping("/result")
+    public String handlePaymentResult(@RequestParam Map<String, String> allParams) {
+
+        // 列印所有參數，確認收到的資料
+        allParams.forEach((key, value) -> System.out.println(key + ": " + value));
+
+        // 根據 RtnCode 判斷交易結果
+        String rtnCode = allParams.get("RtnCode");
+        if ("1".equals(rtnCode)) {
+            return "redirect:/paysuccess.html";
+        } else {
+            return "redirect:/payfail.html";
+        }
+//        System.out.println("MerchantID:"+MerchantID);
+//        System.out.println("MerchantTradeNo:"+MerchantTradeNo);
+//        System.out.println("PaymentDate:"+PaymentDate);
+//        // 根據 RtnCode 判斷交易結果
+//        String message;
+//        if ("1".equals(RtnCode)) { // 通常 "1" 代表成功
+////            message = "交易成功！訂單編號："; // 這裡可以添加訂單編號
+//            return "redirect:/paysuccess.html";
+//        } else {
+////            message = "交易失敗！原因："; // 可以添加失敗原因
+//            return "redirect:/payfail.html";
+//        }
 //
-//
-//import idv.tia201.g2.web.cart.service.EcPayService;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.web.bind.annotation.PostMapping;
-//import org.springframework.web.bind.annotation.RequestMapping;
-//import org.springframework.web.bind.annotation.RestController;
-//
-//@RestController
-//@RequestMapping("/payment")
-//public class EcPayController {
-//    @Autowired
-//    EcPayService ecPayService;
-//
-//    @PostMapping("/createorder")
-//    public String createOrder(){
-//        String aioCheckOutALLForm = ecPayService.ecpayCheckout();
-//        return aioCheckOutALLForm;
-//    }
-//
-//
-////    @PostMapping("/return")
-////    public String handleECPayReturn(@RequestParam Map<String, String> paymentResult) {
-////        // 步驟 1：檢查 CheckMacValue 是否正確，確保資料未被篡改
-////        Hashtable<String, String> params = new Hashtable<>(paymentResult);
-////        boolean isValid = aio.compareCheckMacValue(params);
-////        if (isValid) {
-////            // 步驟 2：檢查交易狀態
-////            String rtnCode = paymentResult.get("RtnCode");
-////            if ("1".equals(rtnCode)) { // 綠界的 RtnCode 為 1 表示交易成功
-////                // 步驟 3：更新訂單狀態，例如將該訂單標記為已付款
-////                String merchantTradeNo = paymentResult.get("MerchantTradeNo");
-////                String tradeNo = paymentResult.get("TradeNo"); // 綠界的交易編號
-////
-////                // TODO: 更新資料庫中的訂單狀態，將該訂單標記為已付款
-////
-////                // 步驟 4：回應綠界系統，通知接收成功
-////                return "1|OK";
-////            } else {
-////                // TODO: 處理付款失敗的情況
-////                return "0|FAIL";
-////            }
-////        } else {
-////            // 如果 CheckMacValue 檢查失敗，代表資料可能被篡改
-////            return "0|FAIL";
-////        }
-////    }
-//
-//}
+//        // 將結果添加到模型中
+////        model.addAttribute("message", message);
+    }
+}

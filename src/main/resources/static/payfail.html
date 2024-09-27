@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>支付失敗</title>
+</head>
+    body{
+        text-align: center;
+    }
+<body>
+<h1>支付失敗!請再試一次!</h1>
+
+<p>8秒後跳轉回首頁....</p>
+
+</body>
+<script>
+    setTimeout(function() {
+        window.location.href = "/homePage.html";  // 這裡設置跳轉的URL，例如首頁的路徑
+    }, 8000);
+</script>
+</html>
