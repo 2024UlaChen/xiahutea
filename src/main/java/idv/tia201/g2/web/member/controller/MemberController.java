@@ -5,6 +5,8 @@ import idv.tia201.g2.core.util.ValidateUtil;
 import idv.tia201.g2.web.member.service.MemberService;
 import idv.tia201.g2.web.member.vo.Member;
 import idv.tia201.g2.web.member.vo.MemberAddress;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +16,8 @@ import java.util.List;
 @RestController
 @RequestMapping("member")
 public class MemberController {
+    private static final Logger LOGGER = LoggerFactory.getLogger(MemberController.class);
+
     @Autowired
     private MemberService memberService;
 
