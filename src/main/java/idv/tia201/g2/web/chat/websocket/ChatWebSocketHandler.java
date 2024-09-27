@@ -2,7 +2,8 @@ package idv.tia201.g2.web.chat.websocket;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import idv.tia201.g2.web.chat.dao.ChatSessionRepository;
-import idv.tia201.g2.web.chat.vo.Messages;
+import idv.tia201.g2.web.chat.dto.MessageDto;
+import idv.tia201.g2.web.user.dto.TotalUserDTO;
 import idv.tia201.g2.web.user.vo.TotalUsers;
 import jakarta.servlet.http.HttpSession;
 import org.apache.logging.log4j.LogManager;
@@ -20,6 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class ChatWebSocketHandler extends TextWebSocketHandler {
     //依 chatSessionId
+
     private static final Map<Long, WebSocketSession> SESSIONS_MAP = new ConcurrentHashMap<>();
 
     private HttpSession httpSession;
@@ -34,44 +36,46 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         //將 user & session 進行保存
         this.httpSession = (HttpSession) session.getAttributes().get("HTTP_SESSION");
-        TotalUsers user = (TotalUsers) httpSession.getAttribute("totalUserDTO");
-        SESSIONS_MAP.put(user.getTotalUserId(), session);
+        System.out.println(httpSession);
+        TotalUserDTO user = (TotalUserDTO) httpSession.getAttribute("totalUserDTO");
+        Long totalUserId = user.getTotalUserId();
+        System.out.println(totalUserId);
+
+        SESSIONS_MAP.put(totalUserId, session);
     }
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage text) throws Exception {
-        // 1. 將 message 轉成 messages
+        // 1. 將 text 轉成 messageDto
         //將訊息轉換成 json
         String json = text.getPayload();
         //於將 JSON 字串與 Java 對象進行轉換
         ObjectMapper objectMapper = new ObjectMapper();
         //將 JSON 字串 json 轉換為 TotalUsers 類型的 Java 對象。
-        Messages messages = objectMapper.readValue(json, Messages.class);
+        MessageDto messageDto = objectMapper.readValue(json, MessageDto.class);
 
         // 2. 從 messages 獲取 接收方的訊息
         Long recipientsId;
-        TotalUsers user = (TotalUsers) this.httpSession.getAttribute("totalUserDTO");
+        TotalUserDTO user = (TotalUserDTO) this.httpSession.getAttribute("totalUserDTO");
         //管理員視角
         if (user.getUserTypeId() == 3) {
-            recipientsId = chatSessionRepository.findAttenderIdByChatSessionId(messages.getChatSessionId());
+            recipientsId = chatSessionRepository.findAttenderIdByChatSessionId(messageDto.getChatSessionId());
+            //其他視角
         } else {
-            recipientsId = chatSessionRepository.findAdministratorIdByChatSessionId(messages.getChatSessionId());
+            recipientsId = chatSessionRepository.findAdministratorIdByChatSessionId(messageDto.getChatSessionId());
         }
 
-        SESSIONS_MAP.get(recipientsId).sendMessage(text);
-
-//        for (WebSocketSession connectedSession : connectedSessionSet) {
-//            if (connectedSession.isOpen()) {
-//                connectedSession.sendMessage(message);
-//            } else {
-//                connectedSessionSet.remove(connectedSession);
-//            }
-//        }
+        // 3. 接收方有連線，就傳遞訊息，否則移除 Map
+        if (SESSIONS_MAP.get(recipientsId).isOpen()) {
+            SESSIONS_MAP.get(recipientsId).sendMessage(text);
+        } else {
+            SESSIONS_MAP.remove(SESSIONS_MAP.get(recipientsId));
+        }
     }
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-        TotalUsers user = (TotalUsers) this.httpSession.getAttribute("totalUserDTO");
+        TotalUserDTO user = (TotalUserDTO) this.httpSession.getAttribute("totalUserDTO");
         SESSIONS_MAP.remove(user);
     }
 
