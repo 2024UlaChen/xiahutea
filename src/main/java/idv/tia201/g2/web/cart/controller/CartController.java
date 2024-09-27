@@ -10,12 +10,11 @@ import idv.tia201.g2.web.store.vo.Store;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServlet;
 import java.util.List;
 
 @RestController
 @RequestMapping("cart")
-public class CartController extends HttpServlet {
+public class CartController  {
 
     private final CartService cartService;
 
