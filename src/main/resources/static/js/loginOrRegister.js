@@ -139,6 +139,7 @@ forgetPwdLink.addEventListener("click", function () {
 
 //DOMLOAD
 document.addEventListener("DOMContentLoaded", function () {
+    sessionStorage.clear();
     phoneTipTxt.innerText = defaultPhoneTip;
     pwdTipTxt.innerText = defaultPwdTip;
     rePwdTipTxt.innerText = defaultPwdTip;
@@ -174,15 +175,15 @@ btnLogin.addEventListener("click", function () {
                 customerPassword: pwdInput.value.trim()
             }),
         }).then(res => res.json()).then(data => {
+            console.log(data)
             if (data.successful) {
                 Swal.fire({
                     icon: "success",
-                    title: "登入成功",
+                    title: data.message,
                     showConfirmButton: false,
                     timer: 1500
                 }).then(() => {
                     sessionStorage.setItem("memberData", JSON.stringify(data));
-
                     location.replace("../homePage.html");
                 })
             } else {

@@ -29,7 +29,7 @@ public class LoginController {
 
         Core core = new Core();
         if (member == null || !StringUtils.hasText(member.getCustomerPhone()) || !StringUtils.hasText(member.getCustomerPassword())) {
-            core.setMessage("input data wrong");
+            core.setMessage("input wrong data");
             core.setSuccessful(false);
             return core;
         }
@@ -39,13 +39,20 @@ public class LoginController {
         request.changeSessionId();
 //        System.out.println(httpSession.getId());
         member = memberService.login(member);
+
+        if(!member.isSuccessful()){
+            core.setSuccessful(false);
+            core.setMessage(member.getMessage());
+            return core;
+        }
+
         Map<String, Object> memberData = new HashMap<String, Object>();
         memberData.put("customerId", member.getCustomerId());
         memberData.put("customerImg", member.getCustomerImg());
 
         core.setData(memberData);
         core.setSuccessful(true);
-//        System.out.println(core);
+        core.setMessage("登入成功");
         return core;
     }
 }
