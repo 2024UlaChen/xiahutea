@@ -38,14 +38,16 @@ public class ProductServiceImpl implements ProductService {
     }
 
     //用分類id以及商品名稱查找
-    @Override
-    public List<Product> searchProducts(Integer categoryId, String productName) {
-        return productDao.findByProductCategoryIdAndProductNameContaining(categoryId, productName);
-    }
+
 
     @Override
     public Page<Product> getProducts(Pageable pageable) {
         return productDao.findAll(pageable);
+    }
+
+    @Override
+    public List<Product> searchProducts(Integer productCategoryId, String productName) {
+        return productDao.findByProductCategoryIdAndProductNameContaining(productCategoryId, productName);
     }
 
 
@@ -54,6 +56,7 @@ public class ProductServiceImpl implements ProductService {
         return productDao.findByProductNameContaining(productName);
 
     }
+
 
     //新增
     public boolean addProduct(ProductDTO productDTO) {
@@ -84,9 +87,7 @@ public class ProductServiceImpl implements ProductService {
         product.setHerbalJelly(productDTO.isHerbalJelly());
 
 
-
-
-            productDao.save(product);
+        productDao.save(product);
 
 
         // 保存商品到数据库
@@ -94,10 +95,10 @@ public class ProductServiceImpl implements ProductService {
         return true;
     }
 
-    public boolean updateProduct(ProductDTO productDTO) {
+    public boolean updateProduct(Integer productId, ProductDTO productDTO) {
         try {
             // 查找现有产品
-            Product existingProduct = productDao.findById(productDTO.getProductId()).orElse(null);
+            Product existingProduct = productDao.findByProductId(productId);
 
             if (existingProduct == null) {
                 // 如果产品不存在，返回失败
@@ -138,16 +139,56 @@ public class ProductServiceImpl implements ProductService {
             return false;
         }
     }
+
     //刪除
     @Override
     public boolean deleteProduct(Integer productId) {
-       if (productDao.existsById(productId)) {
+        if (productDao.existsById(productId)) {
             productDao.deleteById(productId);
             return true; // 表示删除成功
         } else {
 
-           return false; // 表示找不到紀錄
-       }
+            return false; // 表示找不到紀錄
+        }
 
+    }
+
+    @Override
+    public ProductDTO getProductById(Integer productId) {
+        Product product = productDao.findByProductId(productId);
+        if (product != null) {
+            return convertToProductDTO(product); // 假设有一个转换方法
+        }
+        return null;
+    }
+
+
+    private ProductDTO convertToProductDTO(Product product) {
+        // 转换 Product 实体为 ProductDTO
+        ProductDTO dto = new ProductDTO();
+        dto.setProductId(product.getProductId());
+        dto.setProductName(product.getProductName());
+        dto.setProductPrice(product.getProductPrice());
+        dto.setProductStatus(product.isProductStatus());
+        dto.setProductStoreId(product.getProductStoreId());
+        dto.setProductCategoryId(product.getProductCategoryId());
+        dto.setSize(product.getSize());
+        dto.setNormalIce(product.isNormalIce());
+        dto.setLessIce(product.isLessIce());
+        dto.setIceFree(product.isIceFree());
+        dto.setLightIce(product.isLightIce());
+        dto.setRoomTemperature(product.isRoomTemperature());
+        dto.setHot(product.isHot());
+        dto.setFullSugar(product.isFullSugar());
+        dto.setLessSugar(product.isLessSugar());
+        dto.setHalfSugar(product.isHalfSugar());
+        dto.setQuarterSugar(product.isQuarterSugar());
+        dto.setNoSugar(product.isNoSugar());
+        dto.setPearl(product.isPearl());
+        dto.setPudding(product.isPudding());
+        dto.setCoconutJelly(product.isCoconutJelly());
+        dto.setTaro(product.isTaro());
+        dto.setHerbalJelly(product.isHerbalJelly());
+        return dto;
     }
 }
