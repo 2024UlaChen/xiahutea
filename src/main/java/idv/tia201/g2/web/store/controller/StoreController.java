@@ -7,6 +7,7 @@ import idv.tia201.g2.web.store.service.StoreService;
 
 import idv.tia201.g2.web.store.vo.Store;
 
+import idv.tia201.g2.web.user.dto.TotalUserDTO;
 import idv.tia201.g2.web.user.vo.TotalUsers;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -112,7 +113,7 @@ public class StoreController {
             session.setAttribute("loggedin",true);
             session.setAttribute("loginType","store");
 
-           session.setAttribute("totalUser",storeService.GetTotalUser(data.getStoreId()));
+           session.setAttribute("totalUserDTO",storeService.GetTotalUser(data.getStoreId()));
 
 //            session.setMaxInactiveInterval(3600);//秒為單位  Tomcat預設 30分
         }
@@ -123,7 +124,7 @@ public class StoreController {
     @GetMapping("/logout")
     public void Logout(HttpSession session){
         //登出
-        session.removeAttribute("totalUser");
+        session.removeAttribute("totalUserDTO");
 
 
         session.removeAttribute("storeId");
@@ -204,7 +205,7 @@ public class StoreController {
 
 
     public boolean IsStoreLogin(HttpSession session){
-        TotalUsers data = (TotalUsers) session.getAttribute("totalUser");
+        TotalUserDTO data = (TotalUserDTO) session.getAttribute("totalUserDTO");
         return data.getUserTypeId() == 1;
     }
 
@@ -243,9 +244,10 @@ public class StoreController {
 
 
     @GetMapping("GetLoginType")
-    public TotalUsers getLoginType(HttpSession session){
+    public TotalUserDTO getLoginType(HttpSession session){
+        var looklokk =(TotalUserDTO) session.getAttribute("totalUserDTO");
 
-        return (TotalUsers) session.getAttribute("totalUser");
+        return (TotalUserDTO) session.getAttribute("totalUserDTO");
 
 
     }

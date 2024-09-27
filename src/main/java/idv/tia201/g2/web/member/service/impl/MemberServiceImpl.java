@@ -246,7 +246,7 @@ public class MemberServiceImpl implements MemberService {
         if (correctVerifyCode.equals(member.getVerifyCode())) {
 //            if register => insert total user; if not equal register mean no need to insert totalUser
             if ("REGISTER".equals(type)) {
-                TotalUsers totalUser = new TotalUsers(null, userType, queryMember.getCustomerId(), queryMember.getNickname(), queryMember.getCustomerImg());
+                TotalUsers totalUser = new TotalUsers(null, userType, queryMember.getCustomerId());
                 totalUserDao.save(totalUser);
                 memberDao.updateMemberInfo(queryMember.getCustomerId(), false, queryMember.getCustomerRemark());
 
