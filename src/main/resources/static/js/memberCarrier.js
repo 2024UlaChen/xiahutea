@@ -4,6 +4,17 @@ const carrierDeleteBtn = document.querySelector("#carrierDelete");
 const memberCarrierBarcode = document.querySelector("#memberCarrierBarcode");
 const memberCarrierText = document.querySelector("#memberCarrierText");
 
+// TODO - 改抓memberID
+// const memberId = 2;
+function getMemberId(){
+    const sessionDetail = JSON.parse(sessionStorage.getItem("memberData"));
+    return parseInt(sessionDetail.data.customerId);
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    getCarrier(getMemberId());
+});
+
 function getCarrier(memberId) {
     fetch(`member/carrier/` + memberId)
         .then(res => res.text())
@@ -24,15 +35,6 @@ function getCarrier(memberId) {
             }
         });
 }
-// TODO - 改抓memberID
-const memberId = 2;
-
-document.addEventListener("DOMContentLoaded", function () {
-    // TODO - change member id
-    getCarrier(memberId);
-
-});
-
 function updateCarrier(newCarrierTxt, memberId, type) {
     fetch(`member/carrier?type=` + encodeURIComponent(type), {
         method: "POST",
@@ -46,7 +48,7 @@ function updateCarrier(newCarrierTxt, memberId, type) {
         console.log(data)
         if (data.successful) {
             Swal.fire("已更新載具", "", "success");
-            getCarrier(memberId);
+            getCarrier(getMemberId());
         } else {
             Swal.fire({
                 icon: "error",
@@ -63,7 +65,7 @@ carrierEditBtn.addEventListener("click", function () {
         title: "請輸入載具條碼，輸入確認後會自動產生條碼",
         input: "text",
         inputValue: inputValueTxt,
-        inputPlaceholder: "/123-456",
+        inputPlaceholder: "/1234567",
         showCancelButton: true,
         width: 350,
         confirmButtonText: `<span class="sweetAlertFont">更新載具</span>`,
@@ -81,7 +83,7 @@ carrierEditBtn.addEventListener("click", function () {
         }
     }).then((result) => {
         if (result.isConfirmed) {
-            updateCarrier(result.value, memberId, "update");
+            updateCarrier(result.value, getMemberId(), "update");
         }
     })
 })
@@ -98,7 +100,7 @@ carrierDeleteBtn.addEventListener("click", function () {
         cancelButtonText: `<span class="sweetAlertFont">否</span>`,
     }).then((result) => {
         if (result.isConfirmed) {
-            updateCarrier("", memberId, "delete");
+            updateCarrier("", getMemberId(), "delete");
         }
     });
 })
