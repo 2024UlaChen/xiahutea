@@ -210,6 +210,7 @@ document.addEventListener("DOMContentLoaded", function () {
             formData.append('imageUpload', adfile);  // 文件
         } else if (base64img_el.value) {
             formData.append('base64Image', base64img_el.value);  // 使用 Base64 圖片
+            console.log("Base64圖片已附加: ", base64img_el.value);
         }
 
         // formData.append('imageUpload', adfile);  // 文件

@@ -26,6 +26,7 @@ public class AdsEditController {
     public Advertise save(@RequestParam("title") String title,
                           @RequestParam("description") String description,
                           @RequestParam(value = "imageUpload", required = false) MultipartFile file,
+                          @RequestParam(value = "base64Image", required = false) String base64Image,
                           @RequestParam("homeDisplay") boolean homeDisplay,
                           @RequestParam("isActive") boolean isActive,
                           @RequestParam("startTime") String startTime,
@@ -51,15 +52,30 @@ public class AdsEditController {
 //        }
 
         // 處理文件上傳
-        if (!file.isEmpty()) {
+        if (file != null && !file.isEmpty()) {
             try {
-                ad.setImgUrl(file.getBytes());  // 將圖片存入 Advertise 物件
+                ad.setImgUrl(file.getBytes());
             } catch (IOException e) {
                 e.printStackTrace();
                 ad.setMessage("圖片處理失敗");
                 ad.setSuccessful(false);
                 return ad;
             }
+        } else if (base64Image != null && !base64Image.isEmpty()) {
+            try {
+                // 解碼 Base64 圖片並將其存入 Advertise 物件
+                byte[] decodedBytes = Base64.getDecoder().decode(base64Image);
+                ad.setImgUrl(decodedBytes);
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+                ad.setMessage("Base64 圖片處理失敗");
+                ad.setSuccessful(false);
+                return ad;
+            }
+        } else {
+            ad.setMessage("必須提供圖片");
+            ad.setSuccessful(false);
+            return ad;
         }
 //        System.out.println("Advertise Details:");
 //        System.out.println("Title: " + ad.getTitle());
