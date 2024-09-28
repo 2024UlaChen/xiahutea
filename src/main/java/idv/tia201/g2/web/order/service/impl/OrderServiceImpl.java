@@ -1,6 +1,8 @@
 package idv.tia201.g2.web.order.service.impl;
 
 import idv.tia201.g2.core.util.ValidateUtil;
+import idv.tia201.g2.web.coupon.dao.CustomerCoupon;
+import idv.tia201.g2.web.coupon.vo.CustomerCoupons;
 import idv.tia201.g2.web.member.dao.MemberDao;
 import idv.tia201.g2.web.member.dao.MemberLoyaltyCardRepository;
 import idv.tia201.g2.web.member.service.MemberLoyaltyCardService;
@@ -49,6 +51,8 @@ public class OrderServiceImpl implements OrderService {
     private ProductDao productDao;
     @Autowired
     private MemberLoyaltyCardRepository memberLoyaltyCardRepository;
+    @Autowired
+    private CustomerCoupon customerCouponDao;
 
     @Autowired
     private OrderMappingUtil orderMappingUtil;
@@ -80,7 +84,7 @@ public class OrderServiceImpl implements OrderService {
             orderDto.setSuccessful(false);
             return orderDto;
         }
-
+        // 會員使用集點卡
         Integer loyaltyCardId = order.getLoyaltyCardId();
         if (loyaltyCardId != null) {
             CustomerLoyaltyCard customerLoyaltyCard = memberLoyaltyCardRepository.findByLoyaltyCardId(loyaltyCardId);
@@ -89,11 +93,20 @@ public class OrderServiceImpl implements OrderService {
                 orderDto.setSuccessful(false);
                 return orderDto;
             }
-            // 會員使用集點卡
             memberLoyaltyCardService.UpdatePoints(loyaltyCardId, order.getLoyaltyDiscount());
         }
         // todo 優惠券
-
+//        int customerCouponsId = order.getCustomerCouponsId();
+//        if (!isEmpty(customerCouponsId)) {
+//            CustomerCoupons customerCoupon = customerCouponDao.findByCustomerIdAndCouponId(customerId, customerCouponsId);
+//            if (customerCoupon == null) {
+//                orderDto.setMessage("無此優惠券");
+//                orderDto.setSuccessful(false);
+//                return orderDto;
+//            }
+//            customerCoupon.setCouponQuantity(customerCoupon.getCouponQuantity() - 1);
+//            customerCouponDao.save(customerCoupon);
+//        }
 
         if(order.getCouponDiscount() < 0 || order.getLoyaltyDiscount() < 0 || order.getCustomerMoneyDiscount() < 0){
             orderDto.setMessage("折抵金額錯誤");
@@ -169,9 +182,6 @@ public class OrderServiceImpl implements OrderService {
         }
         // 會員使用點數
         memberService.updateMemberMoneyById(customerId, - order.getCustomerMoneyDiscount());
-        // todo 優惠券
-
-
         order.setOrderStatus(1);
         order.setOrderCreateDatetime(new Timestamp(System.currentTimeMillis()));
         orderDao.insert(order);
