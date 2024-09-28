@@ -27,6 +27,20 @@ public class MemberController {
         return memberService.findAddressByMemberId(memberId);
     }
 
+    @PostMapping("address")
+    public Core getMemberAddress(@RequestBody MemberAddress memberAddress) {
+        Core core = new Core();
+        if (memberAddress == null) {
+            core.setMessage("no data , plz check");
+            core.setSuccessful(false);
+            return core;
+        }
+        core.setMessage("get address");
+        core.setSuccessful(true);
+        core.setData(memberService.findAddressByMemberId(memberAddress.getCustomerId()));
+        return core;
+    }
+
     @GetMapping("carrier/{memberId}")
     public String getMemberCarrier(@PathVariable Integer memberId) {
         Member member = memberService.findMemberById(memberId);

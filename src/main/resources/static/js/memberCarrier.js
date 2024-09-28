@@ -6,7 +6,7 @@ const memberCarrierText = document.querySelector("#memberCarrierText");
 
 // TODO - 改抓memberID
 // const memberId = 2;
-function getMemberId(){
+function getMemberId() {
     const sessionDetail = JSON.parse(sessionStorage.getItem("memberData"));
     return parseInt(sessionDetail.data.customerId);
 }
@@ -35,6 +35,7 @@ function getCarrier(memberId) {
             }
         });
 }
+
 function updateCarrier(newCarrierTxt, memberId, type) {
     fetch(`member/carrier?type=` + encodeURIComponent(type), {
         method: "POST",
