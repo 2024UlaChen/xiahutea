@@ -14,53 +14,87 @@ function getAddress(memberId) {
     }).then(res => res.json())
         .then(data => {
             $.each(data.data, function (index, item) {
-                console.log(index);
-                console.log(item.customerAddress);
-                console.log(item.customerId);
-
                 let addrNum = item.customerAddressId;
                 addrList += `
                             <li data-addressID="${addrNum}">
                                 <i class="fa fa-map-marker" aria-hidden="true"></i>
                                 <span>${item.customerAddress}</span>
                                 <button class="editAddr" data-address-edit="${addrNum}">
-                                    <i class="fa fa-pencil"></i>
+                                    <i class="fa fa-pencil editAddr"></i>
                                 </button>
                                 <button class="delAddr" data-address-delete="${addrNum}">
-                                    <i class="fa fa-trash"></i>
+                                    <i class="fa fa-trash delAddr"></i>
                                 </button>
                             </li>
                 `;
             });
-            console.log(addrList);
-            // cmsAddrList.innerHTML = addrList;
+            addrList += `<hr>`
+            // console.log(addrList);
+            memberAddressUl.innerHTML = addrList;
             // cmsAddrList.classList.add("hidden");
         })
 }
 
+async function editAddr() {
+    const {value: fruit} = await Swal.fire({
+        title: "Select field validation",
+        input: "select",
+        inputOptions: {
+            Fruits: {
+                apples: "Apples",
+                bananas: "Bananas",
+                grapes: "Grapes",
+                oranges: "Oranges"
+            },
+            Vegetables: {
+                potato: "Potato",
+                broccoli: "Broccoli",
+                carrot: "Carrot"
+            },
+            icecream: "Ice cream"
+        },
+        inputPlaceholder: "Select a fruit",
+        showCancelButton: true,
+        inputValidator: (value) => {
+            return new Promise((resolve) => {
+                if (value === "oranges") {
+                    resolve();
+                } else {
+                    resolve("You need to select oranges :)");
+                }
+            });
+        }
+    });
+    if (fruit) {
+        Swal.fire(`You selected: ${fruit}`);
+    }
+}
+
+
 document.addEventListener("DOMContentLoaded", function () {
     if (sessionDetail === null || sessionDetail.data.customerId === null || sessionDetail.data.customerId === undefined) {
-
     } else {
         getAddress(sessionDetail.data.customerId);
     }
 })
 
 
-document.addEventListener("click",function(e){
-    if (e.target.classList.contains("editAddr")) {
+document.addEventListener("click", function (e) {
+    let parentBtn = e.target.closest("button");
+
+    if (e.target.classList.contains("editAddr") ) {
+        // data-address-edit="${addrNum}
+        editAddr();
+    } else if (e.target.classList.contains("delAddr") ) {
+        console.log(2);
+
         e.target.closest("tr").querySelectorAll("td").forEach(item => {
             if (item.dataset.memberid !== undefined) {
                 getCmsMemberInfoById(item.dataset.memberid);
             }
         })
-    }
-    if (e.target.classList.contains("delAddr")) {
-        e.target.closest("tr").querySelectorAll("td").forEach(item => {
-            if (item.dataset.memberid !== undefined) {
-                getCmsMemberInfoById(item.dataset.memberid);
-            }
-        })
+    }else{
+        e.stopPropagation();
     }
 
 })

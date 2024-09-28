@@ -141,14 +141,6 @@ select:focus,
 
 
 /*valid*/
-.checkInValid {
-    border: 1px solid #dc3545;
-}
-
-.checkInValid:hover {
-    border: 2px solid #dc3545;
-}
-
 .checkInValidTxt {
     color: #dc3545;
     font-weight: bold;
