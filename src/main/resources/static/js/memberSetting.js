@@ -12,15 +12,14 @@ const settingBtn = document.querySelector("#settingBtn");
 
 
 function isCheckedSuccessOrDefult(target) {
-    let targetDiv = target.closest(".block");
+    let targetDiv = target.closest(".settingBlock");
     let targetTxt = targetDiv.closest("div").nextElementSibling;
     targetDiv.classList.remove("checkInValid");
     targetTxt.classList.remove("checkInValidTxt");
 }
 
 function isCheckedFalse(target) {
-    console.log(target)
-    let targetDiv = target.closest(".block");
+    let targetDiv = target.closest(".settingBlock");
     let targetTxt = targetDiv.closest("div").nextElementSibling;
     targetDiv.classList.add("checkInValid");
     targetTxt.classList.add("checkInValidTxt");
@@ -41,7 +40,7 @@ function pwdValid(pwd, tip) {
         } else {
             if (pwdValue.indexOf(" ") !== -1) {
                 tip.innerText = "不可包含空白字元";
-                isCheckedFalse(this);
+                isCheckedFalse(pwd);
             } else if (pwdValue.length < 6) {
                 tip.innerText = "密碼長度需大於6位";
                 isCheckedFalse(pwd);
@@ -83,7 +82,6 @@ function checkIsEmpty(...args) {
     return result;
 }
 
-
 pwdValid(oldPwdInput, oldPwdTip);
 pwdValid(newPwdInput, newPwdTip);
 pwdValid(NewCheckPwdInput, newCheckPwdTip);
@@ -94,16 +92,48 @@ document.addEventListener("DOMContentLoaded", function () {
     newPwdTip.innerText = defaultPwdTip;
     newCheckPwdTip.innerText = defaultPwdTip;
 })
-
+console.log(JSON.parse(sessionStorage.getItem("memberData")).data.customerId);
 settingBtn.addEventListener("click", function () {
-    if (checkIsEmpty(oldPwdInput.value, newPwdInput, value, NewCheckPwdInput.value)) {
+    if (checkIsEmpty(oldPwdInput, newPwdInput, NewCheckPwdInput)) {
         Swal.fire("任一資料不可為空，請再確認", "", "error");
     } else if (!checkPwdMatch(newPwdInput, NewCheckPwdInput, newCheckPwdTip)) {
         Swal.fire("新密碼與再次輸入不同，請再確認", "", "error");
     } else if (!pwdValid(oldPwdInput, oldPwdTip) || !pwdValid(newPwdInput, newPwdTip) ||
         !pwdValid(NewCheckPwdInput, newCheckPwdTip)) {
         Swal.fire("確認資料格式是否正確", "", "error");
-    }else{
-        console.log(123);
+    } else {
+        let sessionDetail = JSON.parse(sessionStorage.getItem("memberData"));
+        fetch(`member/setting/check`, {
+            method: "POST",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                customerId: sessionDetail.data.customerId,
+                customerPassword: oldPwdInput.value.trim()
+            }),
+        }).then(res => res.json()).then(data => {
+            if (data.successful) {
+                // todo - jwt
+                fetch(`member/setting/update`, {
+                    method: "POST",
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        customerId: sessionDetail.data.customerId,
+                        customerPassword: newPwdInput.value.trim()
+                    }),
+                }).then(res => res.json()).then(data => {
+                    if (data.successful) {
+                        // todo - jwt
+                        Swal.fire("已更新密碼", "", "success");
+                        oldPwdInput.value = "";
+                        newPwdInput.value = "";
+                        NewCheckPwdInput.value = "";
+                    } else {
+                        Swal.fire("set Type Error", "", "error");
+                    }
+                })
+            } else {
+                Swal.fire("Type Error", "", "error");
+            }
+        })
     }
 })

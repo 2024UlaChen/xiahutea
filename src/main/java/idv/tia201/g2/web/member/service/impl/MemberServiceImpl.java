@@ -108,8 +108,6 @@ public class MemberServiceImpl implements MemberService {
         }
         String encodePwd = EncrypSHA.SHAEncrypt(password);
         member.setCustomerPassword(encodePwd);
-        System.out.println(password);
-        System.out.println(encodePwd);
         member = memberDao.findMemberForLogin(phone, encodePwd);
         if (member == null) {
             member = new Member();
@@ -257,15 +255,12 @@ public class MemberServiceImpl implements MemberService {
                 TotalUsers totalUser = new TotalUsers(null, userType, queryMember.getCustomerId());
                 totalUserDao.save(totalUser);
                 memberDao.updateMemberInfo(queryMember.getCustomerId(), false, queryMember.getCustomerRemark());
-
             } else {
                 String encodePwd = EncrypSHA.SHAEncrypt(member.getCustomerPassword());
                 queryMember.setCustomerPassword(encodePwd);
                 queryMember.setValidStatus(false);
-
                 memberDao.updateMemberInfo(queryMember);
             }
-
             return true;
         } else {
             return false;
@@ -282,4 +277,18 @@ public class MemberServiceImpl implements MemberService {
         }
     }
 
+    @Override
+    public Boolean checkMemberPwd(Integer memberId, String oldPwd) {
+        String originalPwd = memberDao.findMemberById(memberId).getCustomerPassword();
+        String encodePwd = EncrypSHA.SHAEncrypt(oldPwd);
+        return encodePwd.equals(originalPwd);
+    }
+
+    @Override
+    public void updateMemberPwd(Integer memberId, String newPwd) {
+        String encodePwd = EncrypSHA.SHAEncrypt(newPwd);
+        Member member = memberDao.findMemberById(memberId);
+        member.setCustomerPassword(encodePwd);
+        memberDao.updateMemberInfo(member);
+    }
 }

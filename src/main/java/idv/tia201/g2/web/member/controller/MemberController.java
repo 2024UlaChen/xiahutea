@@ -55,4 +55,38 @@ public class MemberController {
         }
         return core;
     }
+
+    @PostMapping("setting/check")
+    public Core checkMemberPwd(@RequestBody Member member) {
+        Core core = new Core();
+        if (member == null || !StringUtils.hasText(member.getCustomerPassword())) {
+            core.setSuccessful(false);
+            core.setMessage("original pwd is wrong , plz check!");
+            return core;
+        } else {
+            if (!memberService.checkMemberPwd(member.getCustomerId(), member.getCustomerPassword())) {
+                core.setMessage("密碼錯誤");
+                core.setSuccessful(false);
+                return core;
+            }
+            core.setMessage("pwd check successful");
+            core.setSuccessful(true);
+            return core;
+        }
+    }
+
+    @PostMapping("setting/update")
+    public Core updateMemberPwd(@RequestBody Member member) {
+        Core core = new Core();
+        if (member == null || !StringUtils.hasText(member.getCustomerPassword())) {
+            core.setSuccessful(false);
+            core.setMessage("original pwd is wrong , plz check!");
+            return core;
+        } else {
+            memberService.updateMemberPwd(member.getCustomerId(), member.getCustomerPassword());
+            core.setMessage("更新成功");
+            core.setSuccessful(true);
+            return core;
+        }
+    }
 }
