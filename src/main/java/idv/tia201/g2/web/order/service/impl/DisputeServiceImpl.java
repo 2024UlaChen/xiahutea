@@ -3,6 +3,7 @@ package idv.tia201.g2.web.order.service.impl;
 import java.sql.Timestamp;
 import java.util.List;
 import idv.tia201.g2.web.member.dao.MemberDao;
+import idv.tia201.g2.web.member.service.MemberService;
 import idv.tia201.g2.web.member.vo.Member;
 import idv.tia201.g2.web.order.dao.DisputeDao;
 import idv.tia201.g2.web.order.dao.OrderDao;
@@ -36,6 +37,8 @@ public class DisputeServiceImpl implements DisputeService {
 
     @Autowired
     private OrderMappingUtil orderMappingUtil;
+    @Autowired
+    private MemberService memberService;
 
     // todo 退款錢包
     // -------- FINISH ---------------------------------
@@ -140,15 +143,11 @@ public class DisputeServiceImpl implements DisputeService {
                 newDispute.setSuccessful(false);
                 return newDispute;
             }
-            // todo
             // 增加 退款金額
-            //memberDao.updateMemberInfo(member);
-
+            memberService.updateMemberMoneyById(member.getCustomerId(), newDispute.getRefundAmount());
         }
-
         newDispute.setMessage("修改成功");
         newDispute.setSuccessful(true);
         return newDispute;
     }
-
 }

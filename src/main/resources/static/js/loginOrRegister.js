@@ -122,7 +122,7 @@ function pwdValid(pwd, tip) {
 }
 
 //pwd & rePwd check
-function checkPwdMatch(pwd, rePwd, rePwdTipTxt) {
+function isPwdMatch(pwd, rePwd, rePwdTipTxt) {
     if (pwd.value !== rePwd.value) {
         rePwdTipTxt.textContent = "新密碼與再次輸入不同";
         return false;
@@ -139,6 +139,7 @@ forgetPwdLink.addEventListener("click", function () {
 
 //DOMLOAD
 document.addEventListener("DOMContentLoaded", function () {
+    sessionStorage.clear();
     phoneTipTxt.innerText = defaultPhoneTip;
     pwdTipTxt.innerText = defaultPwdTip;
     rePwdTipTxt.innerText = defaultPwdTip;
@@ -174,9 +175,17 @@ btnLogin.addEventListener("click", function () {
                 customerPassword: pwdInput.value.trim()
             }),
         }).then(res => res.json()).then(data => {
+            console.log(data)
             if (data.successful) {
-                sessionStorage.setItem("memberData", JSON.stringify(data));
-                location.href = "../homePage.html";
+                Swal.fire({
+                    icon: "success",
+                    title: data.message,
+                    showConfirmButton: false,
+                    timer: 1500
+                }).then(() => {
+                    sessionStorage.setItem("memberData", JSON.stringify(data));
+                    location.replace("../homePage.html");
+                })
             } else {
                 Swal.fire(data.message, "", "error");
             }
@@ -190,7 +199,7 @@ btnRegister.addEventListener("click", function () {
         Swal.fire("請輸入手機 & 密碼 & 姓名", "", "error");
     } else if (!(phoneValid(memberPhoneInput) && pwdValid(pwdInput, pwdTipTxt) && pwdValid(rePwdInput, rePwdTipTxt))) {
         Swal.fire("手機與密碼有誤，請重新確認", "", "error");
-    } else if (!checkPwdMatch(pwdInput, rePwdInput, rePwdTipTxt)) {
+    } else if (!isPwdMatch(pwdInput, rePwdInput, rePwdTipTxt)) {
         Swal.fire("新密碼與再次輸入不同", "", "error");
     } else {
         fetch(`member/register`, {
@@ -203,10 +212,11 @@ btnRegister.addEventListener("click", function () {
             }),
         }).then(res => res.json()).then(data => {
             if (data.successful) {
+                // todo - jwt
                 sessionStorage.setItem("memberData", JSON.stringify(data.data));
-                location.href = "../memberCertificate.html";
+                location.replace("../memberCertificate.html");
             } else {
-                Swal.fire("註冊失敗", "", "error");
+                Swal.fire(data.message == null ? "註冊失敗" : data.message, "", "error");
             }
         })
     }

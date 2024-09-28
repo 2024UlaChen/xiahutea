@@ -65,25 +65,22 @@ checkVerifyCodeBtn.addEventListener("click", function () {
         Swal.fire("驗證碼格式錯誤，請重新輸入", "", "error");
     } else {
         let sessionDetail = JSON.parse(sessionStorage.getItem("memberData"));
-        console.log(sessionDetail);
-        fetch(`member/register/check`, {
+        fetch(`member/register/check/REGISTER`, {
             method: "POST",
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
                 customerId: sessionDetail.customerId,
                 verifyCode: memberVerifyCode.value.trim()
-                // verifyCode: "A12345"
             }),
         }).then(res => res.json()).then(data => {
-            console.log(data);
             if (data.successful) {
                 Swal.fire({
                     icon: "success",
                     title: "註冊成功",
                     showConfirmButton: false,
                     timer: 1500
-                }).then(()=>{
-                    location.href = "../homePage.html";
+                }).then(() => {
+                    location.replace("../homePage.html");
                 })
             } else {
                 Swal.fire("驗證碼失敗，請重新輸入", "", "error");
@@ -96,7 +93,6 @@ checkVerifyCodeBtn.addEventListener("click", function () {
 reGetVerifyCodeBtn.addEventListener("click", function () {
     memberVerifyCode.value = "";
     let sessionDetail = JSON.parse(sessionStorage.getItem("memberData"));
-    console.log(sessionDetail);
     fetch(`member/register/update`, {
         method: "POST",
         headers: {'Content-Type': 'application/json'},

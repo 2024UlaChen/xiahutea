@@ -8,7 +8,7 @@ import java.util.List;
 public interface MemberDao {
     List<Member> findAllMember();
 
-    Member findMemberById(int memberId);
+    Member findMemberById(Integer memberId);
 
     Member findMemberByPhone(String phone);
 
@@ -25,11 +25,12 @@ public interface MemberDao {
     List<MemberAddress> findMemberAddressByMemberId(String memberId);
 
     //update
-    boolean updateMemberInfo(Member member);
+    Boolean updateMemberInfo(Member member);
 
     Integer updateMemberInfo(Integer memberId, Boolean status, String memberRemark);
 
-    boolean updateMemberAddress(MemberAddress memberAddress);
+    Boolean updateMemberAddress(MemberAddress memberAddress);
+    Integer updateMemberMoney(Integer memberId, Integer memberMoney);
 
     //delete
     Integer deleteByMemberAddressId(Integer memberId);
@@ -37,7 +38,7 @@ public interface MemberDao {
     //create
     void createMember(Member member);
 
-    boolean createMemberAddress(MemberAddress memberAddress);
+    Boolean createMemberAddress(MemberAddress memberAddress);
 
     Integer updateMemberCarrierById(Integer memberId, String memberCarrier);
 

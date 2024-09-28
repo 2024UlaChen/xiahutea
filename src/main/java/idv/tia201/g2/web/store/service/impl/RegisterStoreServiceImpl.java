@@ -24,8 +24,8 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import static idv.tia201.g2.core.util.CopyUtil.copyPropertiesIgnoreNull;
+import static idv.tia201.g2.core.util.ValidateUtil.isValidTWBID;
 import static idv.tia201.g2.web.store.util.PasswordUtil.generateRandomString;
-import static idv.tia201.g2.web.store.util.VatUtil.isValidTWBID;
 
 @Service
 public class RegisterStoreServiceImpl implements RegisterStoreService {
@@ -37,6 +37,8 @@ public class RegisterStoreServiceImpl implements RegisterStoreService {
 
     @Autowired
     private TotalUserDao totalUserDao;
+
+    Integer userType = 1;
 
     @Override
     public Store register(Store store) {
@@ -200,7 +202,7 @@ public class RegisterStoreServiceImpl implements RegisterStoreService {
             String randomPassword = generateRandomString(9, 14);
             newData.setPassword(randomPassword);
             sendMail(newData);
-            TotalUsers totalUser = new TotalUsers(null, 1, newData.getStoreId());
+            TotalUsers totalUser = new TotalUsers(null, userType, newData.getStoreId());
             totalUserDao.save(totalUser);
         }
 

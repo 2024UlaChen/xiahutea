@@ -10,7 +10,8 @@ import org.springframework.web.socket.server.support.HttpSessionHandshakeInterce
 
 @Configuration
 @EnableWebSocket
-public class WebSocketConfig implements WebSocketConfigurer {
+@EnableWebSocketMessageBroker
+public class WebSocketConfig implements WebSocketConfigurer, WebSocketMessageBrokerConfigurer {
 
     @Bean
     public WebSocketHandler webSocketHandler() {
@@ -21,5 +22,18 @@ public class WebSocketConfig implements WebSocketConfigurer {
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry.addHandler(webSocketHandler(), "/chat")
                 .addInterceptors(new HttpSessionHandshakeInterceptor());  // 使用內建的攔截器
+    }
+    //-----------------------------------------------------------------------
+
+    // Notification
+    @Override
+    public void registerStompEndpoints(StompEndpointRegistry registry) {
+        registry.addEndpoint("/websocket-endpoint") // ←註冊端⼝
+                .withSockJS(); // ←啟⽤SockJS⽀援
+    }
+    @Override
+    public void configureMessageBroker(MessageBrokerRegistry registry) {
+        registry.setApplicationDestinationPrefixes("/msg") // ←訊息控制器的網址前綴字
+                .enableSimpleBroker("/store/notifications"); // ←註冊訊息交換器
     }
 }

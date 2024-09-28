@@ -3,6 +3,8 @@ package idv.tia201.g2.web.store.service;
 import idv.tia201.g2.web.store.model.StoreViewModel;
 import idv.tia201.g2.web.store.vo.Store;
 import idv.tia201.g2.web.user.dto.TotalUserDTO;
+import idv.tia201.g2.web.user.vo.TotalUsers;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -37,8 +39,10 @@ public interface StoreService {
     List<Store> getStoreListWorking(String holiday) throws ParseException;
     List<Store> getAllData();
     List<Store> getAllStoreById(Integer Id);
-    TotalUserDTO GetTotalUserDTO(Integer StoreId);
+    TotalUserDTO GetTotalUser(Integer StoreId);
     List<Date> GetStoreHolidays(Integer StoreId);
 
+    Page<Store> searchStore(StoreViewModel store, Integer page);
+    List<Store> getStoreListForHome(Date today) throws ParseException;
 
 }

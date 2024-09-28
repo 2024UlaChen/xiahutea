@@ -101,9 +101,9 @@
                                             <option>奶茶類</option>
                                             <option>奶茶類</option>
                                         </select>
-                                        <input type="search" class="form-control" placeholder="搜尋商品名稱">
+                                        <input type="search" class="form-control" placeholder="搜尋商品名稱" id="productNameInput" >
                                         <div class="input-group-append">
-                                            <div class="btn btn-primary search btn_add">
+                                            <div class="btn btn-primary search btn_add" id="searchBtn">
                                                 <i class="fas fa-search"></i>
                                             </div>
                                         </div>
@@ -135,8 +135,12 @@
                                                     商品尺寸
                                                 </th>
                                                 <th style="width: 10%">
-                                                    狀態
+                                                    商品狀態
                                                 </th>
+                                                <th style="width: 9%">
+                                                    功能
+                                                </th>
+
 
                                             </tr>
                                         </thead>
@@ -232,11 +236,7 @@
                                                         </i>
                                                         編輯
                                                     </a>
-                                                    <a class="btn btn-danger btn-sm" href="#" id="delete_btn">
-                                                        <i class="fas fa-trash">
-                                                        </i>
-                                                        刪除
-                                                    </a>
+
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -246,20 +246,31 @@
 
                             </div>
                             <!-- /.card -->
-                            <p id="page-info"></p>
+                            <div class="btn-group pagination-control" id="paginationControls">
+                                <!-- /.card -->
+                                <p id="page-info"></p>
                                 <nav aria-label="Page navigation example">
                                     <ul class="pagination justify-content-end">
-                                        <li class="page-item disabled">
+                                        <li class="page-item">
                                             <a class="page-link" href="#" tabindex="-1" aria-disabled="true" id="prev">Previous</a>
                                         </li>
-                                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                        <!-- 分页按钮会在这里动态插入 -->
+                                        <li class="page-item">
+                                            <a class="page-link" href="#">1</a>
+                                        </li>
+                                        <li class="page-item">
+                                            <a class="page-link" href="#">2</a>
+                                        </li>
+                                        <li class="page-item">
+                                            <a class="page-link" href="#">3</a>
+                                        </li>
                                         <li class="page-item">
                                             <a class="page-link" href="#" id="next">Next</a>
                                         </li>
                                     </ul>
                                 </nav>
+                            </div>
+
 
 
 
@@ -299,23 +310,9 @@
 //     alert("rrr")
 // })
 
-
-   //單筆移除
-    $('#myTable').on('click', '#delete_btn', function () {
-
-        $(this).closest("tr").remove();
-    })
-
-    // 跳轉新增商品
-    $('#add').on('click',function (){
+  $('#add').on('click',function (){
       window.location.href="addProducts.html"
     })
-
-   $('#myTable').on('click','#update_btn', function () {
-       window.location.href="addProducts.html"
-
-
-   })
 
 function getCategoryNameById(categoryId) {
     return fetch(`/categories/${categoryId}`)
@@ -364,16 +361,12 @@ function loadProducts() {
                                        <span class="badge badge-success on-shelf">上架</span>
                                         </td>
                                        <td class="project-actions text-right">
-                                        <a class="btn btn-edit btn-sm update_btn" href="#" data-id="${product.productId}">
+                                        <a class="btn btn-edit btn-sm update_btn" href="addProducts.html?productId=${product.productId}" data-id="${product.productId}">
                                          <i class="fas fa-pencil-alt">
                                               </i>
                                                  編輯
                                               </a>
-                                                <a class="btn btn-danger btn-sm delete_btn" href="#" data-id="${product.productId}">
-                                                 <i class="fas fa-trash">
-                                                 </i>
-                                                   刪除
-                                                 </a>
+
                                               </td>
                                             </tr>
                 `;
@@ -391,44 +384,6 @@ function loadProducts() {
 // 在页面加载时调用
 document.addEventListener('DOMContentLoaded', loadProducts);
 
-// // --單筆刪除--
-document.getElementById("myTable").addEventListener('click', function(e) {
-    if (e.target && e.target.classList.contains('delete_btn')) {
-        var deleteBtn = e.target;
-        var productId = deleteBtn.getAttribute('data-id');
-
-        deleteProduct(productId);
-
-    }
-});
-
-function deleteProduct(productId) {
-    // 確認用戶是否要刪除
-    if (confirm("你確定要刪除此產品嗎?")) {
-        // 使用 fetch 發送 DELETE 請求
-        fetch(`products/delete/${productId}`, {
-            method: 'DELETE',
-        })
-            .then(response => {
-                if (response.ok) {
-                    // 刪除成功，處理回應
-                    alert("Category deleted successfully.");
-                    // 可以選擇刷新頁面或移除被刪除的行
-                    document.getElementById(`product-row-${productId}`).remove();
-                } else {
-                    // 處理錯誤
-                    alert("Failed to delete the category.");
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert("An error occurred while deleting the category.");
-            });
-    }
-}
-
-
-
 // 獲取分類信息
 // =========獲取商品分類選項====
 let categoryOptions = document.querySelector('.productcategory');
@@ -445,9 +400,6 @@ fetch('/categories/all')
         // Clear existing options
         categoryOptions.innerHTML = '';
 
-
-
-        // Append each category option
         categories.forEach(category => {
             const option = document.createElement('option');
             option.value = category.categoryId;
@@ -457,7 +409,265 @@ fetch('/categories/all')
     })
     .catch(error => {
         console.error('Error loading categories:', error);
+
+
     });
+// ==============================================
+// var searchBtn =document.getElementById('searchBtn');
+// var productSearch=document.getElementById('productNameInput');
+//
+//
+//
+// searchBtn.addEventListener("click",function () {
+//     var productCategoryId = document.querySelector('.productcategory').value;
+//     var productName = document.getElementById('productNameInput').value.trim();
+//
+//     // 发起 fetch 请求到后台
+//     fetch(`/products/search?productCategoryId=${encodeURIComponent(productCategoryId)}&productName=${encodeURIComponent(productName)}`)
+//         .then(response => {
+//             if (!response.ok) {
+//                 throw new Error(`HTTP 错误! 状态: ${response.status}`);
+//             }
+//             return response.json(); // 解析 JSON 响应
+//         })
+//         .then(data => {
+//             if (data.length === 0) {
+//                 console.log('未找到匹配的商品');
+//             } else {
+//                 updateProductTable(data); // 更新表格顯示搜尋結果
+//             }
+//         })
+//         .catch(error => {
+//             console.error('搜索失败:', error);
+//             alert('搜索失败，请重试!');
+//         });
+// });
+//
+//
+//
+//
+//
+//
+//
+// function updateProductTable(products) {
+//     const productTableBody = document.querySelector('#myTable tbody');
+//     productTableBody.innerHTML = ''; // 清空表格内容
+//
+//     // 创建一个包含所有异步操作的数组
+//     const promises = products.map(product =>
+//         getCategoryNameById(product.productCategoryId).then(categoryName => {
+//             const newRow = document.createElement('tr');
+//             newRow.innerHTML = `
+//                 <td>${product.productId}</td>
+//                 <td>${categoryName}</td>
+//                 <td>${product.productName}</td>
+//                 <td>$${product.productPrice}</td>
+//                 <td>${product.size}</td>
+//                 <td>
+//                     <span class="badge badge-success ${product.productStatus ? 'on-shelf' : 'off-shelf'}">
+//                         ${product.productStatus ? '上架' : '下架'}
+//                     </span>
+//                 </td>
+//                 <td class="project-actions text-right">
+//                     <a class="btn btn-edit btn-sm update_btn" href="addProducts.html?productId=${product.productId}" data-id="${product.productId}">
+//                         <i class="fas fa-pencil-alt"></i> 编辑
+//                     </a>
+//                 </td>
+//             `;
+//             productTableBody.appendChild(newRow);
+//         })
+//     );
+//
+//     // 等待所有异步操作完成后再更新表格
+//     Promise.all(promises).then(() => {
+//         console.log('所有产品行已更新');
+//     }).catch(error => {
+//         console.error('更新产品表格时出错:', error);
+//     });
+// }
+
+
+
+
+var searchBtn = document.getElementById('searchBtn');
+var productSearch = document.getElementById('productNameInput');
+
+searchBtn.addEventListener("click", function() {
+    var productCategoryId = document.querySelector('.productcategory').value;
+    var productName = document.getElementById('productNameInput').value.trim();
+
+    if (productName) {
+        searchfetchProducts(productCategoryId, productName);
+    } else {
+        fetchProducts(productCategoryId, '', 0); // 调用时提供 categoryId
+    }
+});
+
+productSearch.addEventListener("input", function() {
+    var productName = document.getElementById('productNameInput').value.trim();
+    if (!productName) {
+        fetchProducts('', '', 0); // 清空查询条件，显示所有产品
+    }
+});
+
+function searchfetchProducts(queryId, queryName) {
+    const url = `/products/search?productCategoryId=${encodeURIComponent(queryId)}&productName=${encodeURIComponent(queryName)}`;
+
+    fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json(); // 解析 JSON 格式的响应体
+        })
+        .then(data => {
+            if (data.length === 0) {
+                console.log('未找到匹配的商品');
+            } else {
+                updateProductTable(data);
+            }
+            paginationControls.innerHTML = ''; // 搜索结果不显示分页
+        })
+        .catch(error => {
+            console.error('Fetch error:', error);
+        });
+}
+
+function fetchProducts(productCategoryId, productName, page) {
+    const url = `/products/paginated?page=${page}&size=10` +
+        `${productCategoryId ? `&categoryId=${encodeURIComponent(productCategoryId)}` : ''}` +
+        `${productName ? `&productName=${encodeURIComponent(productName)}` : ''}`;
+
+    fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json(); // 解析 JSON 格式的响应体
+        })
+        .then(data => {
+            updateProductTable(data.content); // 更新表格数据
+            updatePageControls(data.totalPages, page); // 更新分页控件
+        })
+        .catch(error => {
+            console.error('Fetch error:', error);
+        });
+}
+
+function updateProductTable(products) {
+    const productTableBody = document.querySelector('#myTable tbody');
+    productTableBody.innerHTML = ''; // 清空表格内容
+
+    // 创建一个包含所有异步操作的数组
+    const promises = products.map(product =>
+        getCategoryNameById(product.productCategoryId).then(categoryName => {
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td>${product.productId}</td>
+                <td>${categoryName}</td>
+                <td>${product.productName}</td>
+                <td>$${product.productPrice}</td>
+                <td>${product.size}</td>
+                <td>
+                    <span class="badge badge-success ${product.productStatus ? 'on-shelf' : 'off-shelf'}">
+                        ${product.productStatus ? '上架' : '下架'}
+                    </span>
+                </td>
+                <td class="project-actions text-right">
+                    <a class="btn btn-edit btn-sm update_btn" href="addProducts.html?productId=${product.productId}" data-id="${product.productId}">
+                        <i class="fas fa-pencil-alt"></i> 编辑
+                    </a>
+                </td>
+            `;
+            productTableBody.appendChild(newRow);
+        })
+    );
+
+    // 等待所有异步操作完成后再更新表格
+    Promise.all(promises).then(() => {
+        console.log('所有产品行已更新');
+    }).catch(error => {
+        console.error('更新产品表格时出错:', error);
+    });
+}
+
+function updatePageControls(totalPages, currentPage) {
+    const paginationControls = document.getElementById('paginationControls');
+    paginationControls.innerHTML = ''; // 清空现有分页控件
+
+    // 创建分页导航
+    const nav = document.createElement('nav');
+    nav.setAttribute('aria-label', 'Page navigation example');
+
+    // 创建 ul 元素用于分页
+    const ul = document.createElement('ul');
+    ul.className = 'pagination justify-content-end';
+
+    // 上一页按钮
+    const prevLi = document.createElement('li');
+    prevLi.className = 'page-item ' + (currentPage === 0 ? 'disabled' : '');
+    const prevLink = document.createElement('a');
+    prevLink.className = 'page-link';
+    prevLink.href = '#';
+    prevLink.setAttribute('tabindex', '-1');
+    prevLink.setAttribute('aria-disabled', 'true');
+    prevLink.id = 'prev';
+    prevLink.textContent = 'Previous';
+    if (currentPage > 0) {
+        prevLink.addEventListener('click', () => {
+            fetchProducts(productSearch.value.trim(), currentPage - 1); // 加载上一页
+        });
+    }
+    prevLi.appendChild(prevLink);
+    ul.appendChild(prevLi);
+
+    // 页码按钮
+    for (let i = 0; i < totalPages; i++) {
+        const li = document.createElement('li');
+        li.className = 'page-item ' + (i === currentPage ? 'active' : '');
+        const link = document.createElement('a');
+        link.className = 'page-link';
+        link.href = '#';
+        link.textContent = i + 1;
+        link.addEventListener('click', () => {
+            fetchProducts(productSearch.value.trim(), i); // 加载第 i 页
+        });
+        li.appendChild(link);
+        ul.appendChild(li);
+    }
+
+    // 下一页按钮
+    const nextLi = document.createElement('li');
+    nextLi.className = 'page-item ' + (currentPage === totalPages - 1 ? 'disabled' : '');
+    const nextLink = document.createElement('a');
+    nextLink.className = 'page-link';
+    nextLink.href = '#';
+    nextLink.id = 'next';
+    nextLink.textContent = 'Next';
+    if (currentPage < totalPages - 1) {
+        nextLink.addEventListener('click', () => {
+            fetchProducts(productSearch.value.trim(), currentPage + 1); // 加载下一页
+        });
+    }
+    nextLi.appendChild(nextLink);
+    ul.appendChild(nextLi);
+
+    nav.appendChild(ul);
+    paginationControls.appendChild(nav);
+}
+
+// 初次加载所有产品，默认加载第 0 页，每页显示 10 条数据
+fetchProducts('', '', 0);
+
+
+
+
+
+
+
+
+
+
 
 
 </script>

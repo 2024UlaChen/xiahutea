@@ -88,30 +88,36 @@
                                     帳號管理
                                 </div>
                                 <hr>
-                                <div class="teamo-contact-fom member-setting">
+                                <div class="teamo-contact-fom memberSetting">
                                     <div>
                                         <span class="form-label"><span class="warn">＊</span>舊密碼</span>
-                                        <span class="form-control-wrap your-name">
-                                            <input title="oldPassword" type="text" name="your-name" size="40"
-                                                   class="form-control form-control-name " data-password="1">
-                                        </span>
+                                        <div class="settingBlock">
+                                            <i class="fa fa-key"></i>
+                                            <input title="password" type="password" placeholder="舊密碼" id="oldPwd"
+                                                   maxlength="16">
+                                        </div>
+                                        <span id="oldPwdTip"></span>
                                     </div>
                                     <div>
                                         <span class="form-label"><span class="warn">＊</span>新密碼</span>
-                                        <span class="form-control-wrap your-name">
-                                            <input title="newPassword" type="text" name="your-name" size="40"
-                                                   class="form-control form-control-name" data-password="2">
-                                        </span>
+                                        <div class="settingBlock">
+                                            <i class="fa fa-key"></i>
+                                            <input title="password" type="password" placeholder="新密碼" id="newPwd"
+                                                   maxlength="16">
+                                        </div>
+                                        <span id="newPwdTip"></span>
                                     </div>
                                     <div>
                                         <span class="form-label"><span class="warn">＊</span>再次輸入新密碼</span>
-                                        <span class="form-control-wrap your-name">
-                                            <input title="checkNewPassword" type="text" name="your-name" size="40"
-                                                   class="form-control form-control-name" data-password="3">
-                                        </span>
+                                        <div class="settingBlock">
+                                            <i class="fa fa-key"></i>
+                                            <input title="password" type="password" placeholder="再次輸入密碼"
+                                                   id="NewCheckPwd" maxlength="16">
+                                        </div>
+                                        <span id="newCheckPwdTip"></span>
                                     </div>
                                     <div class="dataSave">
-                                        <button>修改密碼</button>
+                                        <button id="settingBtn">修改密碼</button>
                                     </div>
                                 </div>
                             </div>
@@ -146,8 +152,13 @@
 <script src="assets/js/jquery.scrollbar.min.js"></script>
 <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyC3nDHy1dARR-Pa_2jjPCjvsOR4bcILYsM'></script>
 <script src="assets/js/frontend-plugin.js"></script>
+<script src="cms/plugins/sweetalert2/sweetalert2.all.min.js"></script>
+
+
 <script src="js/general.js"></script>
 <script src="js/memberGeneral.js"></script>
+<script src="js/memberSetting.js"></script>
+
 </body>
 
 

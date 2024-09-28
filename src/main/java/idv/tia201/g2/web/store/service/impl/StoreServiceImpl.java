@@ -9,9 +9,13 @@ import idv.tia201.g2.web.store.vo.StoreCalendar;
 import idv.tia201.g2.web.user.dao.TotalUserDao;
 import idv.tia201.g2.web.user.dto.TotalUserDTO;
 import idv.tia201.g2.web.user.vo.TotalUsers;
+import org.aspectj.apache.bcel.generic.RET;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -117,7 +121,7 @@ public class StoreServiceImpl implements StoreService {
     @Override
     public List<Store> findStoreByName(String name) {
         //模糊查詢並且大小寫不敏感
-        return storeDao.findByStoreNameContainingIgnoreCase(name);
+        return storeDao.findByStoreNameContainingIgnoreCaseAndStoreStatus(name,1);
     }
 
     @Override
@@ -280,21 +284,98 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public TotalUserDTO GetTotalUserDTO(Integer StoreId) {
-        TotalUserDTO item = new TotalUserDTO();
+    public TotalUserDTO GetTotalUser(Integer StoreId) {
+
         Store store = findStoreById(StoreId);
-        TotalUsers totalUsers = totalUserDao.findByUserTypeIdAndUserId(1,StoreId);
-        item.setTotalUserId(totalUsers.getTotalUserId());
-        item.setUserTypeId(totalUsers.getUserTypeId());
-        item.setUserId(store.getStoreId());
-        item.setLogo(store.getLogo());
-        return item;
+        TotalUsers totalUsers = totalUserDao.findByUserTypeIdAndUserId(1,StoreId); //因為1是商家
+        TotalUserDTO res = new TotalUserDTO();
+        res.setTotalUserId(totalUsers.getTotalUserId());
+        res.setUserId(store.getStoreId());
+        res.setUserTypeId(1);//因為商家
+        res.setLogo(store.getLogo());
+
+        return res;
 
     }
 
     @Override
     public List<Date> GetStoreHolidays(Integer StoreId) {
         return storeCalendarRepository.findStoreCalendarsByStoreId(StoreId);
+    }
+
+    @Override
+    public Page<Store> searchStore(StoreViewModel store, Integer page) {
+        //分頁與排序
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "registerDay"));
+        //帳號狀態 10 表示 停權或 使用  1使用 2停權
+        List<Integer> statuslist = new ArrayList<>();
+        Integer statusOptionsVal = store.getStoreStatus();
+        if( statusOptionsVal == 10){
+            statuslist.add(1);
+            statuslist.add(2);
+        } else if (statusOptionsVal == 1) {
+            statuslist.add(1);
+        }else {
+            statuslist.add(2);
+        }
+
+
+        //回傳的列表
+        List<Store> storeList = new ArrayList<>();
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+        if(store.getStoreName()==null && store.getVat() == null && store.getSearcherStart() == null && store.getSearcherEnd() == null){
+            //四大皆空 只會顯示 已申請和停權
+            return storeDao.findByStoreStatusIn(statuslist,pageable);
+
+        } else if (store.getStoreName() == null && store.getVat() == null  ) {
+
+            if(store.getSearcherEnd() == null){
+                
+                return storeDao.findByRegisterDayBetweenAndStoreStatusIn(store.getSearcherStart(),now,statuslist,pageable);
+
+            } else if (store.getSearcherStart() == null) {
+                
+                return storeDao.findByRegisterDayBetweenAndStoreStatusIn(now,store.getSearcherEnd(),statuslist,pageable);
+            }
+
+            return storeDao.findByRegisterDayBetweenAndStoreStatusIn(store.getSearcherStart(),store.getSearcherEnd(),statuslist,pageable);
+        } else if (store.getStoreName() == null) {
+            if(store.getSearcherStart() == null && store.getSearcherEnd() == null){
+                return storeDao.findByVatContainingAndStoreStatusIn(store.getVat(),statuslist,pageable);
+            } else if (store.getSearcherEnd() == null){
+
+                return storeDao.findByVatContainingAndRegisterDayBetweenAndStoreStatusIn(store.getVat(),store.getSearcherStart(),now,statuslist,pageable);
+
+            } else if (store.getSearcherStart() == null) {
+
+                return storeDao.findByVatContainingAndRegisterDayBetweenAndStoreStatusIn(store.getVat(),now,store.getSearcherEnd(),statuslist,pageable);
+            }
+            return storeDao.findByVatContainingAndRegisterDayBetweenAndStoreStatusIn(store.getVat(),store.getSearcherStart(),store.getSearcherEnd(),statuslist,pageable);
+
+
+        } else if (store.getVat() == null) {
+            if(store.getSearcherStart() == null && store.getSearcherEnd() == null){
+                return storeDao.findByStoreNameContainingAndStoreStatusIn(store.getStoreName(),statuslist,pageable);
+            } else if (store.getSearcherEnd() == null){
+
+                return storeDao.findByStoreNameContainingAndRegisterDayBetweenAndStoreStatusIn(store.getStoreName(),store.getSearcherStart(),now,statuslist,pageable);
+
+            } else if (store.getSearcherStart() == null) {
+
+                return storeDao.findByStoreNameContainingAndRegisterDayBetweenAndStoreStatusIn(store.getStoreName(),now,store.getSearcherEnd(),statuslist,pageable);
+            }
+            return storeDao.findByStoreNameContainingAndRegisterDayBetweenAndStoreStatusIn(store.getStoreName(),store.getSearcherStart(),store.getSearcherEnd(),statuslist,pageable);
+
+        } else if (store.getSearcherEnd() == null && store.getSearcherStart() == null ) {
+            return storeDao.findByStoreNameContainingIgnoreCaseAndVatContainingAndStoreStatusIn(store.getStoreName(),store.getVat(),statuslist,pageable);
+        }
+        return storeDao.findByStoreNameContainingAndVatContainingAndRegisterDayBetweenAndStoreStatusIn(store.getStoreName(),store.getVat(),store.getSearcherStart(),store.getSearcherEnd(),statuslist,pageable);
+
+    }
+
+    @Override
+    public List<Store> getStoreListForHome(Date today) throws ParseException {
+        return storeCalendarRepository.findByStoreHolidayAndStoreStatus(today);
     }
 
 

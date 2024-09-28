@@ -1,3 +1,10 @@
+<style>
+    <!-- alert   -->
+    .badge.-off{
+        display: none;
+    }
+</style>
+
 <nav class="main-header navbar navbar-expand navbar-white navbar-light">
   <!-- Left navbar links -->
   <ul class="navbar-nav">
@@ -37,32 +44,17 @@
     </li>
 
     <!-- Notifications Dropdown Menu -->
-    <li class="nav-item dropdown">
-      <a class="nav-link" data-toggle="dropdown" href="#">
+    <li class="nav-item dropdown" id="notificationArea">
+      <a class="nav-link" id="notificationAlert" data-toggle="dropdown" href="#">
         <i class="far fa-bell"></i>
-        <span class="badge badge-warning navbar-badge">15</span>
+        <!--    JS    -->
       </a>
-      <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-        <span class="dropdown-item dropdown-header">15 Notifications</span>
-        <div class="dropdown-divider"></div>
-        <a href="#" class="dropdown-item">
-          <i class="fas fa-envelope mr-2"></i> 4 new messages
-          <span class="float-right text-muted text-sm">3 mins</span>
-        </a>
-        <div class="dropdown-divider"></div>
-        <a href="#" class="dropdown-item">
-          <i class="fas fa-users mr-2"></i> 8 friend requests
-          <span class="float-right text-muted text-sm">12 hours</span>
-        </a>
-        <div class="dropdown-divider"></div>
-        <a href="#" class="dropdown-item">
-          <i class="fas fa-file mr-2"></i> 3 new reports
-          <span class="float-right text-muted text-sm">2 days</span>
-        </a>
-        <div class="dropdown-divider"></div>
-        <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
+      <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" id="notification">
+        <!--  JS -->
       </div>
+
     </li>
+
     <li class="nav-item">
       <a class="nav-link" data-widget="fullscreen" href="#" role="button">
         <i class="fas fa-expand-arrows-alt"></i>
@@ -70,4 +62,6 @@
     </li>
   </ul>
 </nav>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<script src="../cms/js/notification.js"></script>

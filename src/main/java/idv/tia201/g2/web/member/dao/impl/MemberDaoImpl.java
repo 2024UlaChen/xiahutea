@@ -21,7 +21,7 @@ public class MemberDaoImpl implements MemberDao {
     }
 
     @Override
-    public Member findMemberById(int memberId) {
+    public Member findMemberById(Integer memberId) {
         return session.get(Member.class, memberId);
     }
 
@@ -82,7 +82,7 @@ public class MemberDaoImpl implements MemberDao {
     }
 
     @Override
-    public boolean updateMemberInfo(Member member) {
+    public Boolean updateMemberInfo(Member member) {
         session.merge(member);
         return true;
     }
@@ -109,9 +109,18 @@ public class MemberDaoImpl implements MemberDao {
                 .executeUpdate();
     }
 
+    @Override
+    public Integer updateMemberMoney(Integer memberId, Integer memberMoney){
+        final String sql = "update CUSTOMER set customer_money =  customer_money + :memberMoney   where  customer_id = :memberId ";
+        return session
+                .createNativeQuery(sql, Member.class)
+                .setParameter("memberMoney", memberMoney)
+                .setParameter("memberId", memberId)
+                .executeUpdate();
+    }
 
     @Override
-    public boolean updateMemberAddress(MemberAddress memberAddress) {
+    public Boolean updateMemberAddress(MemberAddress memberAddress) {
         session.merge(memberAddress);
         return true;
     }
@@ -129,7 +138,7 @@ public class MemberDaoImpl implements MemberDao {
     }
 
     @Override
-    public boolean createMemberAddress(MemberAddress memberAddress) {
+    public Boolean createMemberAddress(MemberAddress memberAddress) {
         session.persist(memberAddress);
         return true;
     }
@@ -137,10 +146,11 @@ public class MemberDaoImpl implements MemberDao {
 
     @Override
     public Integer updateVerifyCodeById(Integer memberId, String verifyCode) {
-        final String sql = "update CUSTOMER set verify_code = :verifyCode   where  customer_id = :memberId ";
+        final String sql = "update CUSTOMER set verify_code = :verifyCode  , valid_status= :validStatus   where  customer_id = :memberId ";
         return session
                 .createNativeQuery(sql, Member.class)
                 .setParameter("verifyCode", verifyCode)
+                .setParameter("validStatus", true)
                 .setParameter("memberId", memberId)
                 .executeUpdate();
     }

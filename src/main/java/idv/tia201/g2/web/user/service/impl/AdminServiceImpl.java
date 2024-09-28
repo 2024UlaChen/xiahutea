@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import static idv.tia201.g2.web.store.util.PasswordUtil.checkPassword;
-import static idv.tia201.g2.web.store.util.VatUtil.isValidTWBID;
 
 @Service
 public class AdminServiceImpl implements AdminService {
@@ -25,8 +24,8 @@ public class AdminServiceImpl implements AdminService {
     public TotalUserDTO login(Administrator admin) {
 //        取得會員資料
         String username = admin.getAdminUsername();
-        String password = admin.getAdminPassword();
         TotalUserDTO totalUserDTO = new TotalUserDTO();
+        String password = admin.getAdminPassword();
 
 //        如果 username 或 password 沒填
         if (username.isEmpty() || password.isEmpty()) {
@@ -45,8 +44,8 @@ public class AdminServiceImpl implements AdminService {
         //檢驗密碼
         if(!checkPassword(password)){
             totalUserDTO.setMessage("使用者名稱或密碼錯誤");
-                totalUserDTO.setSuccessful(false);
-                return totalUserDTO;
+            totalUserDTO.setSuccessful(false);
+            return totalUserDTO;
         }
 
 //        進入 DAO 利用 username & password 找 admin
@@ -54,12 +53,12 @@ public class AdminServiceImpl implements AdminService {
 
 //        如果回傳 null 代表登入失敗，如果不是 null 代表 登入成功
         if (admin == null) {
-            totalUserDTO.setMessage("使用者名稱或密碼錯誤3");
+            totalUserDTO.setMessage("使用者名稱或密碼錯誤");
             totalUserDTO.setSuccessful(false);
             return totalUserDTO;
         }else {
-            TotalUsers totalUser = totalUserDao.findByUserTypeIdAndUserId(userTypeId, admin.getAdministratorId());
-            BeanUtils.copyProperties(totalUser, totalUserDTO);
+            TotalUsers LoginTotalUser = totalUserDao.findByUserTypeIdAndUserId(userTypeId, admin.getAdministratorId());
+            BeanUtils.copyProperties(LoginTotalUser, totalUserDTO);
             totalUserDTO.setMessage("登入成功");
             totalUserDTO.setSuccessful(true);
             return totalUserDTO;

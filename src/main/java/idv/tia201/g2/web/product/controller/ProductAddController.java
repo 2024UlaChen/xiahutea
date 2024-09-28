@@ -40,11 +40,8 @@ public class ProductAddController {
     @Autowired
     private  StoreService storeService;
 
-    //查詢分類id以及商品名稱
-    @GetMapping("/search")
-    public List<Product> searchProducts(@RequestParam Integer categoryId, @RequestParam String productName) {
-        return productService.searchProducts(categoryId, productName);
-    }
+
+
 
     // 查找所有產品
     @GetMapping("/all")
@@ -58,12 +55,41 @@ public class ProductAddController {
         return productService.getProductsByProductName(productName);
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<List<Product>> searchProducts(
+            @RequestParam Integer productCategoryId,
+            @RequestParam String productName
+    ) {
+        try {
+            List<Product> products = productService.searchProducts(productCategoryId, productName);
+            // 返回200 OK状态及查询结果
+            return ResponseEntity.ok(products);
+        } catch (Exception e) {
+            // 返回500 Internal Server Error状态及错误信息
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+
+    @GetMapping("/{productId}")
+    public ResponseEntity<ProductDTO> getProduct(@PathVariable Integer productId) {
+        try {
+            ProductDTO productDTO = productService.getProductById(productId);
+            if (productDTO != null) {
+                return ResponseEntity.ok(productDTO);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+
 
     @PostMapping("/add")
     public ResponseEntity<String> addProduct(@RequestBody ProductDTO productDTO) {
         // 获取店铺ID
-
-
         // 调用 Service 层进行处理
         boolean success = productService.addProduct(productDTO);
 
@@ -74,16 +100,21 @@ public class ProductAddController {
         }
     }
 
+    @PutMapping("/update/{productId}")
+    public ResponseEntity<String> updateProduct(@PathVariable Integer productId,@RequestBody ProductDTO productDTO) {
+        try {
+            boolean success = productService.updateProduct(productId, productDTO);
 
-    // 編輯產品
-    @PutMapping("/edit/{productId}")
-    public Product editProduct(
-            @PathVariable Integer storeId,
-            @PathVariable Integer productId,
-            @RequestBody Product updatedProduct) {
-        return productService.editProduct(storeId, productId, updatedProduct);
+            if (success) {
+                return ResponseEntity.ok("商品更新成功!");
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("商品更新失败!");
+            }
+        } catch (Exception e) {
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("服务器错误: " + e.getMessage());
+        }
     }
-
     // 刪除產品
     @DeleteMapping("/delete/{productId}")
     public boolean deleteProduct(@PathVariable Integer productId) {
@@ -98,6 +129,8 @@ public class ProductAddController {
         Pageable pageable = PageRequest.of(page, size);
         return productService.getProducts(pageable);
     }
+
+
 }
 
 
