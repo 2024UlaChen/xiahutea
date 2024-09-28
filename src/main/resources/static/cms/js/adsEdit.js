@@ -11,13 +11,40 @@ document.addEventListener("DOMContentLoaded", function () {
     let check_active_el = document.getElementById("check-active")
     let ads_form_el = document.getElementById('ads-form')
     let ads_ids_el = document.getElementById('ads-ids')
+    let base64img_el = document.getElementById('base64Image')
     let ishomedisplay;
     let isActive;
+    let userid;
+    let roletypeid;
 
     // 取得 URL 中的 adId 參數
     let urlParams = new URLSearchParams(window.location.search);
     let adId = urlParams.get('adId');
     console.log("adid:",adId)
+    //********************************取得使用者類型及ID*************************
+    fetch(`/advertise/manage/getrole`, {
+    })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(errorData => {
+                    throw new Error(errorData.message);
+                });
+            }
+            return response.json();
+        })
+        .then(totaluser => {
+            if (totaluser == null) {
+                Swal.fire({
+                    title: '查無此使用者資料',
+                    text: '查無此使用者資料 ID=',
+                    icon: 'error'
+                });
+                return;
+            }
+            console.log('user Details:', totaluser);
+            userid = totaluser.userId;
+            roletypeid =totaluser.userTypeId;
+        })
     //********************************確認是否為修改跳轉頁面**********************
     if (adId) {
         // 發送 GET 請求獲取優惠券資料
@@ -60,6 +87,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     img.classList.add('previewImage');
                     preview_container_el.innerHTML = ''; // 清空之前的預覽
                     preview_container_el.appendChild(img); // 將新圖片添加到預覽容器中
+                    base64img_el.value = data.imgUrl;
                 }
             })
             .catch(error => {
@@ -152,13 +180,16 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
         if(file_input_el.files.length ===0){
+            if (!base64img_el.value){
             Swal.fire({
                 title: '錯誤',
                 text: '請選擇圖片',
                 icon: 'error'
             });
             return;
+            }
         }
+
 
         if(check_homedisplay_el.checked){
             ishomedisplay = 1
@@ -171,8 +202,17 @@ document.addEventListener("DOMContentLoaded", function () {
             isActive = 0
         }
 
+
         let formData = new FormData();
-        formData.append('imageUpload', adfile);  // 文件
+
+        // 選擇圖片上傳或使用 Base64 圖片
+        if (file_input_el.files.length > 0) {
+            formData.append('imageUpload', adfile);  // 文件
+        } else if (base64img_el.value) {
+            formData.append('base64Image', base64img_el.value);  // 使用 Base64 圖片
+        }
+
+        // formData.append('imageUpload', adfile);  // 文件
         formData.append('adsId', ads_ids_el.value);  // 其他表單字段
         formData.append('title', title_el.value);
         formData.append('description', description_el.value);
@@ -180,8 +220,9 @@ document.addEventListener("DOMContentLoaded", function () {
         formData.append('isActive', isActive);
         formData.append('startTime', formatToBackendFormat(start_date_el.value));
         formData.append('endTime', formatToBackendFormat(end_date_el.value));
-        formData.append('adsTotalUserid',"1"); //先用假的
-        formData.append('roleTypeId',"1");
+        formData.append('adsTotalUserid',userid); //先用假的
+        formData.append('roleTypeId',roletypeid);
+        console.log("formDate",formData)
 
         fetch('/advertise/save',{
             method:'POST',
