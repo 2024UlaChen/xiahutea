@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,8 +21,7 @@ public class ChatRoomServiceimpl implements ChatRoomService {
     @Autowired
     private ChatSessionRepository chatSessionDao;
 
-    @Autowired
-    private TotalUserDao totalUserDao;
+    public final static long ADMINTOTALUSERID = 1;
 
     @Override
     public List<ChatRoom> getChatRoom(TotalUserDTO user) {
@@ -39,6 +39,15 @@ public class ChatRoomServiceimpl implements ChatRoomService {
         chatSessions.setLastActivity(message.getSentAt());
         //存回去
         return chatSessionDao.save(chatSessions);
+    }
+
+    public ChatSessions addChatRoom(TotalUserDTO totalUserDTO) {
+        ChatSessions chatSession = new ChatSessions();
+        chatSession.setAttenderId(totalUserDTO.getTotalUserId());
+        chatSession.setAdministratorId(ADMINTOTALUSERID);
+        Timestamp createdAt = new Timestamp(System.currentTimeMillis());
+        chatSession.setCreatedAt(createdAt);
+        return chatSessionDao.save(chatSession);
     }
 }
 

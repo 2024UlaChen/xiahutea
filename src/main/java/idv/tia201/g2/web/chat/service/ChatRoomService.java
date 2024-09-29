@@ -10,5 +10,7 @@ import java.util.List;
 public interface ChatRoomService {
     List<ChatRoom> getChatRoom(TotalUserDTO user);
 
-    public ChatSessions updateLastActivity(Messages message);
+    ChatSessions updateLastActivity(Messages message);
+
+    ChatSessions addChatRoom ( TotalUserDTO totalUserDTO );
 }
