@@ -27,7 +27,6 @@ public class ChatRoomController {
     @GetMapping()
     public List<ChatRoom> getChatRoomData (HttpSession session){
         TotalUserDTO user = (TotalUserDTO) session.getAttribute("totalUserDTO");
-        System.out.println(user);
         List<ChatRoom> chatRoomData = chatRoomService.getChatRoom(user);
         return chatRoomData;
     }
