@@ -2,12 +2,18 @@ package idv.tia201.g2.web.chat.websocket;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import idv.tia201.g2.web.chat.dao.ChatSessionRepository;
+import idv.tia201.g2.web.chat.dao.MessageChatSessionRepository;
 import idv.tia201.g2.web.chat.dto.MessageDto;
+import idv.tia201.g2.web.chat.service.ChatRoomService;
+import idv.tia201.g2.web.chat.service.MessageService;
+import idv.tia201.g2.web.chat.vo.ChatSessions;
+import idv.tia201.g2.web.chat.vo.Messages;
 import idv.tia201.g2.web.user.dto.TotalUserDTO;
 import idv.tia201.g2.web.user.vo.TotalUsers;
 import jakarta.servlet.http.HttpSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
@@ -31,6 +37,11 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     @Autowired
     ObjectMapper objectMapper;
 
+    @Autowired
+    MessageService messageService;
+
+    @Autowired
+    ChatRoomService chatRoomService;
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
@@ -79,8 +90,13 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
         }
 
         // 4. 將 messages 存到資料庫
-        System.out.println(messageDto);
+            //存訊息
+        System.out.println("messageDto : " + messageDto);
+        Messages message = messageService.saveMessage(messageDto);
+            //更新聊天室時間
+        chatRoomService.updateLastActivity(message);
 
+        System.out.println("message : " + message);
     }
 
     @Override

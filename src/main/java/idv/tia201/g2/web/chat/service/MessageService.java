@@ -9,4 +9,5 @@ public interface MessageService {
     MessageDto MessagesToMessageDto(Messages m);
 
     List<MessageDto> getChatMessagesData(Integer chatId);
+    public Messages saveMessage ( MessageDto messageDto );
 }
