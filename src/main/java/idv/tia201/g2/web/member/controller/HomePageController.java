@@ -3,8 +3,7 @@ package idv.tia201.g2.web.member.controller;
 import idv.tia201.g2.web.store.service.StoreService;
 import idv.tia201.g2.web.store.vo.Store;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 import java.util.Date;
@@ -19,13 +18,24 @@ public class HomePageController {
         this.storeService = storeService;
     }
 
-    @RequestMapping("home")
+    @GetMapping("/home")
     public List<Store> GetStoreList() throws ParseException {
         //取得今天有上班的店家
 
         Date today = new Date();
 
         return storeService.getStoreListForHome(today);
+
+    }
+
+    @PostMapping("/search")
+    public List<Store> SearchStoreList(@RequestBody String keyword) {
+        return storeService.findStoreByName(keyword);
+
+    }
+    @PostMapping("/search/place")
+    public List<Store> SearchStoreAddressList(@RequestBody String keyword) {
+        return storeService.findStoreByAddress(keyword);
 
     }
 

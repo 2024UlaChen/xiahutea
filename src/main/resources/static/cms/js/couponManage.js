@@ -28,6 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     throw new Error(errorData.message);
                 });
             }
+            console.log()
             return response.json();
         })
         .then(data => {

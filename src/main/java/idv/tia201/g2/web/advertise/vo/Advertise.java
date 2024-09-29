@@ -1,12 +1,14 @@
 package idv.tia201.g2.web.advertise.vo;
 
-import idv.tia201.g2.web.user.vo.TotalUsers;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import idv.tia201.g2.core.pojo.Core;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 @Entity
@@ -15,8 +17,9 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class advertise {
+public class Advertise extends Core {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ads_id",updatable = false)
     private Integer adsId;
     private String title;
@@ -24,10 +27,14 @@ public class advertise {
     private String description;
     @Column(name = "img_url")
     private byte[] imgUrl;
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "start_time")
-    private Date startTime;
+    @JsonFormat(pattern = "yyyy/MM/dd HH:mm", timezone = "GMT+8")
+    private Timestamp startTime;
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(pattern = "yyyy/MM/dd HH:mm", timezone = "GMT+8")
     @Column(name = "end_time")
-    private Date endTime;
+    private Timestamp endTime;
     @Column(name = "homepage_display")
     private Boolean homeDisplay;
     private Boolean isactive;
@@ -35,9 +42,9 @@ public class advertise {
     private Long adsTotalUserid;
     @Column(name = "roletype_id")
     private int roleTypeId;
-
-    @ManyToOne
-    @JoinColumn(name = "ads_total_users_id", insertable = false, updatable = false)
-    private TotalUsers totalusers;
+//
+//    @ManyToOne
+//    @JoinColumn(name = "ads_total_users_id", insertable = false, updatable = false)
+//    private TotalUsers totalusers;
 }
 

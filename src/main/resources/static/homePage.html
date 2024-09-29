@@ -44,8 +44,8 @@
 
     <!--    <link rel="stylesheet" href="./slicktools/slick-theme.css">-->
         <link rel="stylesheet" href="./css/k.css">
-        
-    
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
    
   </head>
   <body>
@@ -64,12 +64,12 @@
               <div class="col-lg-6">
                 <div class="query-bar">
                   <a href="#">
-                    <i class="fa fa-search" aria-hidden="true"></i>
+
                   </a>
-                  <input type="text" placeholder="搜尋品牌、門市或商品" name="" id="">
-                  <a href="#">
+                  <input type="text" placeholder="搜尋品牌、門市或商品" name="" id="user-enter-keyword">
+                  <a href="#" id="forSearchStore">
                     <span>
-                      <i class="fa fa-times" aria-hidden="true"></i>
+                      <i class="fa fa-search" aria-hidden="true"></i>
                     </span>
                   </a>
                 </div>
@@ -215,8 +215,27 @@
     <div class="Container m-5">
       <div class="row KunSpeedSearch">
         <div class="col-3"></div>
-        <div class="col" id="localLog">
+        <div class="col" id="localLog-Modal" data-bs-toggle="modal" data-bs-target="#localModal">
           <i class="fa-solid fa-map-location"><a href="#">找附近</a></i>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="localModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="localModalLabel">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <input type="text" id="user-place" placeholder="輸入地址">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">確認</button>
+              </div>
+              <div class="modal-footer">
+
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="autoCatchUserPlace">自動抓取位置</button>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- Button trigger modal -->
@@ -250,8 +269,8 @@
                   aria-label="Default select example"
                 >
                   <option selected>選擇縣市</option>
-                  <option value="1">新北市</option>
-                  <option value="2">台北市</option></select
+                  <option value="新北市">新北市</option>
+                  <option value="台北市">台北市</option></select
                 ><br />
 
                 <select
@@ -270,7 +289,7 @@
                 >
                   關閉
                 </button>
-                <button type="button" class="btn btn-primary">儲存</button>
+                <button type="button" class="btn btn-primary" id="twoPlaceSearch" >儲存</button>
               </div>
             </div>
           </div>
@@ -291,211 +310,22 @@
         </div>
 
         <div class="col">
-          <i class="fa-solid fa-tags"><a href="./coupon.html">我的券夾</a></i>
+          <i class="fa-solid fa-tags"><a href="./coupon.html">券夾</a></i>
         </div>
         <div class="col-3"></div>
       </div>
       <!-- 商家卡片呈現 -->
 
       <div class="row justify-content-center" id="store-body">
-        <figure class="col-3 figure my-5 Heart">
-          <img
-            src="https://images.deliveryhero.io/image/fd-tw/tw-logos/cm2me-logo.jpg"
-            alt=""
-            class="rounded KunIndexSotreImg"
-          />
-          
-            
-          
 
-          <div class="row">
-            <figcaption
-              class="figure-caption col-6 IndexImgNameFontSize drinkAddress"
-              data-address="106台北市大安區復興南路一段107巷39號"
-              
-            >
-            <i class="fa-regular fa-heart" style="color: red;"></i> 得正大安計畫
-            </figcaption>
-            <figcaption class="figure-caption col">
-              <i class="fa-2x fa-solid fa-truck"></i>
-            </figcaption>
-            <figcaption class="figure-caption col-12 footer2">
-              <i class="KunStar fa-solid fa-star"></i
-              ><span class="KunRank">4.8</span
-              >&nbsp;‧&nbsp;11:00~22:00&nbsp;‧<span class="sotreDistance"
-                >??公里</span
-              >
-            </figcaption>
-          </div>
-        </figure>
 
-        <figure class="col-3 figure my-5 Heart">
-          <img
-            src="https://images.deliveryhero.io/image/fd-tw/tw-logos/cm2me-logo.jpg"
-            alt=""
-            class="rounded KunIndexSotreImg"
-          />
-          <div class="row">
-            <figcaption
-              class="figure-caption col-6 IndexImgNameFontSize drinkAddress"
-              style="font-weight: bold; color: black"
-              data-address="231新北市新店區北新路一段257號"
-            >
-            <i class="fa-regular fa-heart" style="color: red;"></i> 得正新店計畫
-            </figcaption>
-            <figcaption class="figure-caption col">
-              <i class="fa-2x fa-solid fa-truck"></i>
-            </figcaption>
-            <figcaption class="figure-caption col-12 footer2">
-              <i class="KunStar fa-solid fa-star"></i
-              ><span class="KunRank">4.5</span
-              >&nbsp;‧&nbsp;11:00~22:00&nbsp;‧&nbsp;<span class="sotreDistance"
-                >??公里</span
-              >
-            </figcaption>
-          </div>
-        </figure>
-        <figure class="col-3 figure my-5 Heart">
-          <img
-            src="https://images.deliveryhero.io/image/fd-tw/tw-logos/cm2me-logo.jpg"
-            alt=""
-            class="rounded KunIndexSotreImg"
-          />
-          <div class="row">
-            <figcaption
-              class="figure-caption col-6 IndexImgNameFontSize drinkAddress"
-              data-address="231新北市新店區北新路二段166號"
-            >
-            <i class="fa-regular fa-heart" style="color: red;"></i>  八曜和茶七張店
-            </figcaption>
-            <figcaption class="figure-caption col">
-              <i class="fa-solid fa-truck fa-2x"></i>
-            </figcaption>
-            <figcaption class="figure-caption col-12 footer2">
-              <i class="KunStar fa-solid fa-star"></i
-              ><span class="KunRank">5</span
-              >&nbsp;‧&nbsp;11:00~22:00&nbsp;‧&nbsp;<span class="sotreDistance"
-                >??公里</span
-              >
-            </figcaption>
-          </div>
-        </figure>
-        <figure class="col-3 figure my-5 Heart">
-          <img
-            src="https://images.deliveryhero.io/image/fd-tw/tw-logos/cm2me-logo.jpg"
-            alt=""
-            class="rounded KunIndexSotreImg"
-          />
-          <div class="row">
-            <figcaption
-              class="figure-caption col-6 IndexImgNameFontSize drinkAddress"
-              data-address="105台北市松山區慶城街1號2樓"
-            >
-            <i class="fa-regular fa-heart" style="color: red;"></i> 春水塘慶成店
-            </figcaption>
-            <figcaption class="figure-caption col">
-              <i class="fa-solid fa-truck fa-2x"></i>
-            </figcaption>
-            <figcaption class="figure-caption col-12 footer2">
-              <i class="KunStar fa-solid fa-star"></i
-              ><span class="KunRank">4.6</span
-              >&nbsp;‧&nbsp;11:00~22:00&nbsp;‧&nbsp;<span class="sotreDistance"
-                >??公里</span
-              >
-            </figcaption>
-          </div>
-        </figure>
-        <figure class="col-3 figure my-5 Heart">
-          <img src="https://images.deliveryhero.io/image/fd-tw/tw-logos/cm2me-logo.jpg" alt="" class="rounded KunIndexSotreImg" />
-          <div class="row">
-            <figcaption
-              class="figure-caption col-6 IndexImgNameFontSize drinkAddress"
-              data-address="231新北市新店區民族路46號1樓"
-            >
-            <i class="fa-regular fa-heart" style="color: red;"></i>  一沐日大坪林店
-            </figcaption>
-            <figcaption class="figure-caption col">
-              <i class="fa-2x fa-solid fa-truck"></i>
-            </figcaption>
-            <figcaption class="figure-caption col-12 footer2">
-              <i class="KunStar fa-solid fa-star"></i
-              ><span class="KunRank">4.4</span
-              >&nbsp;‧&nbsp;11:00~22:00&nbsp;‧&nbsp;<span class="sotreDistance"
-                >??公里</span
-              >
-            </figcaption>
-          </div>
-        </figure>
-        <!--here-->
-        <figure class="col-3 figure my-5 Heart">
-          <img src="https://images.deliveryhero.io/image/fd-tw/tw-logos/cm2me-logo.jpg" alt="" class="rounded KunIndexSotreImg" />
-          <div class="row">
-            <figcaption
-              class="figure-caption col-6 IndexImgNameFontSize drinkAddress"
-              data-address="116台北市文山區景文街104號"
-            >
-            <i class="fa-regular fa-heart" style="color: red;"></i>  五同好景美店
-            </figcaption>
-            <figcaption class="figure-caption col">
-              <i class="fa-solid fa-truck fa-2x"></i>
-            </figcaption>
-            <figcaption class="figure-caption col-12 footer2">
-              <i class="KunStar fa-solid fa-star"></i
-              ><span class="KunRank">4.4</span
-              >&nbsp;‧&nbsp;11:00~22:00&nbsp;‧&nbsp;<span class="sotreDistance"
-                >??公里</span
-              >
-            </figcaption>
-          </div>
-        </figure>
-        <figure class="col-3 figure my-5 Heart">
-          <img src="https://images.deliveryhero.io/image/fd-tw/tw-logos/cm2me-logo.jpg" alt="" class="rounded KunIndexSotreImg" />
-          <div class="row">
-            <figcaption
-              class="figure-caption col-6 IndexImgNameFontSize drinkAddress"
-              data-address="234新北市永和區永和路一段158號"
-            >
-            <i class="fa-regular fa-heart" style="color: red;"></i>  在睡五分鐘永和店
-            </figcaption>
-            <figcaption class="figure-caption col">
-              <i class="fa-solid fa-truck fa-2x"></i>
-            </figcaption>
-            <figcaption class="figure-caption col-12 footer2">
-              <i class="KunStar fa-solid fa-star"></i
-              ><span class="KunRank">4.4</span
-              >&nbsp;‧&nbsp;11:00~22:00&nbsp;‧&nbsp;<span class="sotreDistance"
-                >??公里</span
-              >
-            </figcaption>
-          </div>
-        </figure>
-        <figure class="col-3 figure my-5 Heart">
-          <img src="https://images.deliveryhero.io/image/fd-tw/tw-logos/cm2me-logo.jpg" alt="" class="rounded KunIndexSotreImg" />
-          <div class="row">
-            <figcaption
-              class="figure-caption col-6 IndexImgNameFontSize drinkAddress"
-              data-address="220新北市板橋區三民路二段19號"
-            >
-            <i class="fa-regular fa-heart" style="color: red;"></i>  沐白板橋店
-            </figcaption>
-            <figcaption class="figure-caption col Heart">
-              <i class="fa-solid fa-truck fa-2x"></i>
-            </figcaption>
-            <figcaption class="figure-caption col-12 footer2">
-              <i class="KunStar fa-solid fa-star"></i
-              ><span class="KunRank">4.4</span
-              >&nbsp;‧&nbsp;11:00~22:00&nbsp;‧&nbsp;<span class="sotreDistance"
-                >??公里</span
-              >
-            </figcaption>
-          </div>
-        </figure>
+
       </div>
 
       <div class="row align-items-md-stretch">
         <div class="col-md-6">
           <div class="h-100 p-5 text-white bg-dark rounded-3">
-            <h2>有夏虎茶真好，快來瞭解我們吧</h2>
+            <h2 style="color: aliceblue">有夏虎茶真好，快來瞭解我們吧</h2>
 
             <a href="faq.html" class="btn btn-outline-light" type="button">
               快速上手
@@ -621,12 +451,17 @@
 <script src="assets/js/lightbox.min.js"></script>
 <script src="assets/js/owl.thumbs.min.js"></script>
 <script src="assets/js/jquery.scrollbar.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
 <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyC3nDHy1dARR-Pa_2jjPCjvsOR4bcILYsM'></script>
 <script src="assets/js/frontend-plugin.js"></script>
+
 
 <script>
       
   document.addEventListener("DOMContentLoaded", function () {
+      getUserLocation();
     //監聽有這個屬性的KunIndexSotreImg 如果有空心就改實心
     //實心紅
     let RedHeart = '<i class="fa-solid fa-heart" style="color: red;"></i>';
@@ -653,37 +488,13 @@
         }
       });
     } );
-    // //典籍找附近之後 過濾三公里內
-    // let localTag = document.querySelector('#localLog');
-    // localTag.addEventListener("click",function(){
 
-    //     if (navigator.geolocation) {
-    //         navigator.geolocation.getCurrentPosition(function(position){
-    //             // 取得 position 位置資訊，可於 console 中印出來看看
-    //             console.log(position);
 
-    //             let lat = position.coords.latitude;
-    //             let lng = position.coords.longitude;
-    //             //有了經緯度後開始計算距離
-    //             let allDrinkAddress = document.querySelectorAll('.drinkAddress');
-    //             // console.log(allDrinkAddress);
-    //             // allDrinkAddress.forEach(element => {
-    //             //     // console.log(element.getAttribute("data-address"));  // 取得飲料店地址
-
-    //             // });
-
-    //             });
-    //     // 有支援
-    //     }else{
-    //         alert("該瀏覽器不支援定位");
-    //     }
-
-    // });//定位找附近
 
     let userLogin = document.querySelector(".userLogin"); //登入按鈕
     let searchPlace = document.querySelector(".searchPlace");
 
-    //加入愛心失敗
+    //加入愛心未完成
     let heartTag =
       '<div class="favorite-text"><i class="fa-solid fa-heart"></i></div>';
     let storetags = document.querySelectorAll(".KunIndexSotreImg");
@@ -712,15 +523,27 @@ let allSotre = document.querySelectorAll('.Heart');
     getStoreList("/xiaHuTea/home","");
 
     //產生store-body
+    //註冊收尋監聽
+    ListenSearchStoreKeyWord();
+
+
+
+    document.querySelector('#twoPlaceSearch').addEventListener('click',function (){
+        const placeBar =document.querySelector('#PlaceSearch').value;
+        const areaBar = document.querySelector('#AreaSearch').value;
+        getStoreList("/xiaHuTea/search/place",placeBar+areaBar,"POST");
+
+    })
 
   }); //end dom
 
   $(document).ready(function () {
     var districts = {
-      1: [
+      "新北市": [
         "板橋區",
         "新莊區",
         "中和區",
+        "新店區",
         "永和區",
         "三重區",
         "蘆洲區",
@@ -735,7 +558,7 @@ let allSotre = document.querySelectorAll('.Heart');
         "泰山區",
         "林口區",
       ],
-      2: [
+        "台北市": [
         "中正區",
         "大同區",
         "中山區",
@@ -818,15 +641,12 @@ let allSotre = document.querySelectorAll('.Heart');
       
       function initMap() {
         function getDistance() {
-          //const status = document.querySelector('#status'); // 狀況
-          // const result = document.querySelector('#result'); // 結果
+
           const drinkAddressTags = document.querySelectorAll(".drinkAddress"); // 飲料店地址
 
-          // result.textContent = "";
-
           function error() {
-            // status.textContent = "瀏覽器不支援定位";
-            alert("瀏覽器不支援定位");
+
+            swal.fire({text:"瀏覽器不支援定位"});
           }
 
           function success(position) {
@@ -853,33 +673,46 @@ let allSotre = document.querySelectorAll('.Heart');
               function callback(response, status) {
                 if (status === "OK") {
                   // 取得使用者位置後 首先抓取 每家店的位址 進行計算
+
                   const origin = response.originAddresses[0];
                   const destination = response.destinationAddresses[0];
+
                   console.log("response.rows" + response.rows[0].elements[0]);
                   if (response.rows[0].elements[0].status === "OK") {
                     const distance = response.rows[0].elements[0].distance.text;
 
-                    //let storeFooter = $(drinkAddress).nextAll().eq(1);//獲取當層元素
                     const sotreFooter = $(drinkAddress).nextAll().eq(1);
                     console.log("distance :" + distance);
 
-                    // sotreFooter.find('.sotreDistance').text();
-                    console.log(
+                    sotreFooter.find('.sotreDistance').text();
+
                       sotreFooter
                         .find(".sotreDistance")
                         .html(
                           `&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;約${distance}`
-                        )
-                    );
+                        );
+
+                      //超過10km排除
+                      if(parseInt(distance) > 10){
+                          console.log("超過10公里");
+                          document.querySelectorAll('[data-address]').forEach(function (element){
+                              if(element.getAttribute('data-address') === distance){
+                                  console.log("是你");
+                                  console.log(distance);
+                              }
+
+                          });
+                      }
+
 
                     // result.textContent = `從 ${origin} 到 ${destination} 的距離是 ${distance}`;
                   } else {
                     const sotreFooter = $(drinkAddress).nextAll().eq(1);
-                    sotreFooter.find(".sotreDistance").text(`計算失敗}`);
+                    sotreFooter.find(".sotreDistance").text(`計算失敗`);
                   }
                 } else {
                   const sotreFooter = $(drinkAddress).nextAll().eq(1);
-                  sotreFooter.find(".sotreDistance").text(`計算失敗}`);
+                  sotreFooter.find(".sotreDistance").text(`計算失敗`);
                 }
               }
             });
@@ -894,25 +727,57 @@ let allSotre = document.querySelectorAll('.Heart');
         }
 
         document
-          .querySelector("#localLog")
+          .querySelector("#autoCatchUserPlace")
           .addEventListener("click", getDistance);
       }
     </script>
     <script>
-      function getStoreList(url,data){
+      function ListenSearchStoreKeyWord(){
+        //監聽輸入關鍵字
+        document.querySelector('#forSearchStore').addEventListener('click',function (e){
+          //停止預設行為
+          e.preventDefault();
+          let uservalue = (document.querySelector("#user-enter-keyword").value).trim();
+          if(uservalue !==""){
+            let data = uservalue;
+            console.log(data);
+            console.log("有監測到");
+            getStoreList("/xiaHuTea/search",data,"POST");
+
+          }
+
+
+        })
+      }
+
+      function getStoreList(url,data,method="GET"){
 
         $.ajax({
           dataType: "json",
+          contentType: 'application/json',
+          method:method,
           url: url,
           data: data,
           success: function (data){
-            console.log(data);
             $('#store-body').empty(); //清空
+            if( data.length === 0  ){
+              console.log("沒東西");
+              swal.fire({
+                text:"回傳筆數0筆",
+                confirmButtonText: "回首頁",
+              }).then((res) => {
+                if(res.isConfirmed){
+                  getStoreList("/xiaHuTea/home","");
+                }
+              });
+            }
+
+
 
             data.forEach(function (row){
               const base64Img = row.logo;
               let imgid = "img"+row.storeId;
-              console.log(imgid);
+
               let str =`<figure class="col-3 figure my-5 Heart">
           <img
             src=""
@@ -923,7 +788,7 @@ let allSotre = document.querySelectorAll('.Heart');
           <div class="row">
             <figcaption
               class="figure-caption col-6 IndexImgNameFontSize drinkAddress"
-              data-address="{row.storeAddress}"
+              data-address="${row.storeAddress}"
 
             >
             <i class="fa-regular fa-heart" style="color: red;"></i> ${row.storeName}
@@ -942,12 +807,11 @@ let allSotre = document.querySelectorAll('.Heart');
         </figure>`;
               document.querySelector('#store-body').insertAdjacentHTML("afterbegin",str);
 
-
               storeImage = document.querySelector(`#${imgid}`);
 
               let imgFormat;
               if(base64Img !=null){
-                console.log(base64Img.substring(0,20));
+
                 if (base64Img.startsWith("iVBORw0KGgo")) {
                   imgFormat = "png"; // PNG 圖片的 base64 開頭
                 } else if (base64Img.startsWith("/9j/")) {
@@ -980,6 +844,35 @@ let allSotre = document.querySelectorAll('.Heart');
             });
           }
         });
+      }
+
+
+      function getUserLocation(){
+          if ("geolocation" in navigator) {
+              /* geolocation is available */
+              //監聽點擊定位
+              document.querySelector('#autoCatchUserPlace').addEventListener('click',function () {
+
+                  navigator.geolocation.getCurrentPosition(function (position) {
+                      // 取得 position 位置資訊，可於 console 中印出來看看
+                      console.log(position);
+                      const lng = position.coords.longitude;
+                      const lat = position.coords.latitude;
+                      console.log(lng);
+                      console.log(lat);
+                      document.querySelectorAll('.drinkAddress').forEach(function (row){
+                          console.log(row.getAttribute("data-address"));
+                      });
+
+
+
+                  });
+
+              });
+          } else {
+              document.querySelector('#user-place').placeholder="不支援自動定位請手打";
+          }
+
       }
     </script>
     <script
