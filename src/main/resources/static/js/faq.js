@@ -44,14 +44,8 @@ $("a#search").on("click", (e) => {
     query_faq();
 })
 $(document).on("keyup", function (e) {
-    // if(e.which == 13){
-    //     $("a#search").click();
-    // }
     $("a#search").click();
 })
 
-$("#chat-icon").on("click",() => {
-    console.log("ttt")
-    $(".chat-container").toggle();
-})
+
 

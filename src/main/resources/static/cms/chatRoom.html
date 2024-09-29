@@ -76,10 +76,6 @@
             .then(ChatMessagesData =>{
                 return ChatMessagesData;
             })
-        // console.log('這裡是外部定義的getChatMessagesData chatId : ' + chatId);
-        // 利用chatId去取得資料
-        // 目前是傳入假資料
-        // return chatId === 2 ? messages2 : messages;
     }
 
     actionHandlers.loadMoreChatRooms = async (type) => {
@@ -127,7 +123,6 @@
             senderId : payload.senderId,
             timestamp : payload.timestamp
         }
-        console.log("接收方接收訊息" + message.senderId)
         let activeChatId = chat.getActiveChatId();      //獲取這個聊天室的id
         chat.updateChatListInfo(message.chatId,message);  //更新聊天室側邊欄聊天室列表
         if(activeChatId === message.chatId){
