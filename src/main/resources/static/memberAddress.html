@@ -45,9 +45,6 @@
                                     <img class="userPhoto" src="img/xiahutealogo.jpg" alt="userPhoto">
                                 </div>
                                 <div>userName</div>
-                                <div>
-                                    <span>userAccount</span>
-                                </div>
                             </div>
                             <div>
                                 <ul class="member-list">
@@ -82,34 +79,34 @@
                                 <hr>
                                 <div>
                                     <ul id="memberAddress">
-                                        <li>
-                                            <i class="fa fa-map-marker" aria-hidden="true"></i>
-                                            <span>新竹縣寶山鄉 www</span>
-                                            <button data-address-edit="1">
-                                                <i class="fa fa-pencil"></i>
-                                            </button>
-                                            <button data-address-delete="1">
-                                                <i class="fa fa-trash"></i>
-                                            </button>
-                                        </li>
-                                        <li>
-                                            <i class="fa fa-map-marker" aria-hidden="true"></i>
-                                            <span>台北市中山區南京東路三段219號</span>
-                                            <button data-address-edit="2">
-                                                <i class="fa fa-pencil"></i>
-                                            </button>
-                                            <button data-address-delete="2">
-                                                <i class="fa fa-trash"></i>
-                                            </button>
-                                        </li>
                                     </ul>
-                                    <hr>
                                     <div class="addressSaving">
-                                        <button>新增地址</button>
+                                        <button class="newAddr" data-target="#addrModal" data-toggle="modal">新增地址</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+                        <div class="modal fade" id="addrModal" tabindex="-1" role="dialog"
+                             aria-labelledby="exampleModalCenterTitle" >
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <span class="modal-title" id="addrModalTitle">編輯地址</span>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span >&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body" id="addrModalBody">
+                                    </div>
+                                    <div class="modal-footer modalFooter">
+                                        <button type="button" class="btn btnSave saveAddr" >儲存</button>
+                                        <button type="button" class="btn btnCancel" data-dismiss="modal">取消</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -139,8 +136,15 @@
 <script src="assets/js/jquery.scrollbar.min.js"></script>
 <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyC3nDHy1dARR-Pa_2jjPCjvsOR4bcILYsM'></script>
 <script src="assets/js/frontend-plugin.js"></script>
+<script src="cms/plugins/sweetalert2/sweetalert2.all.min.js"></script>
+
+
 <script src="js/general.js"></script>
+<script src="js/address.js"></script>
+
 <script src="js/memberGeneral.js"></script>
+<script src="js/memberAddress.js"></script>
+
 </body>
 
 

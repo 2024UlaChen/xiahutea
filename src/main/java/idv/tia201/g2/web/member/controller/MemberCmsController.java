@@ -16,7 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("cms/manage")
 public class MemberCmsController {
-    private static final Logger log = LoggerFactory.getLogger(MemberCmsController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MemberCmsController.class);
     @Autowired
     private MemberService memberService;
 
