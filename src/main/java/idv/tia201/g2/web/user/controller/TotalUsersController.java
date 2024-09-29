@@ -20,9 +20,6 @@ public class TotalUsersController {
     public TotalUserDTO getTotalUser(HttpSession session){
         TotalUserDTO user = (TotalUserDTO) session.getAttribute("totalUserDTO");
         return user;
-
-
-
     }
 
 }
