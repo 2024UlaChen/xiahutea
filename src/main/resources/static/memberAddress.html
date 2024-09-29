@@ -84,11 +84,32 @@
                                     <ul id="memberAddress">
                                     </ul>
                                     <div class="addressSaving">
-                                        <button>新增地址</button>
+                                        <button class="newAddr" data-target="#addrModal" data-toggle="modal">新增地址</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+                        <div class="modal fade" id="addrModal" tabindex="-1" role="dialog"
+                             aria-labelledby="exampleModalCenterTitle" >
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <span class="modal-title" id="addrModalTitle">編輯地址</span>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span >&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body" id="addrModalBody">
+                                    </div>
+                                    <div class="modal-footer modalFooter">
+                                        <button type="button" class="btn btnSave saveAddr">儲存</button>
+                                        <button type="button" class="btn btnCancel" data-dismiss="modal">取消</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -122,6 +143,8 @@
 
 
 <script src="js/general.js"></script>
+<script src="js/address.js"></script>
+
 <script src="js/memberGeneral.js"></script>
 <script src="js/memberAddress.js"></script>
 
