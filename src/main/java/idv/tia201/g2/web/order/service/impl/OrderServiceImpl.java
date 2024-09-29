@@ -2,7 +2,6 @@ package idv.tia201.g2.web.order.service.impl;
 
 import idv.tia201.g2.core.util.ValidateUtil;
 import idv.tia201.g2.web.coupon.dao.CustomerCoupon;
-import idv.tia201.g2.web.coupon.vo.CustomerCoupons;
 import idv.tia201.g2.web.member.dao.MemberDao;
 import idv.tia201.g2.web.member.dao.MemberLoyaltyCardRepository;
 import idv.tia201.g2.web.member.service.MemberLoyaltyCardService;
@@ -13,6 +12,7 @@ import idv.tia201.g2.web.order.dao.OrderDao;
 import idv.tia201.g2.web.order.dao.OrderDetailDao;
 import idv.tia201.g2.web.order.dto.NotificationDto;
 import idv.tia201.g2.web.order.dto.OrderDto;
+import idv.tia201.g2.web.order.service.InvoiceService;
 import idv.tia201.g2.web.order.service.NotificationService;
 import idv.tia201.g2.web.order.service.OrderService;
 import idv.tia201.g2.web.order.util.OrderMappingUtil;
@@ -62,6 +62,8 @@ public class OrderServiceImpl implements OrderService {
     private MemberLoyaltyCardService memberLoyaltyCardService;
     @Autowired
     private NotificationService notificationService;
+    @Autowired
+    private InvoiceService invoiceService;
 
     // -------- FINISH ---------------------------------
     // 前台 訂單新增
@@ -197,6 +199,9 @@ public class OrderServiceImpl implements OrderService {
         // 建立通知的內容
         NotificationDto notificationDto = new NotificationDto(order.getOrderId(), order.getOrderCreateDatetime());
         notificationService.notifyNewOrder(notificationDto);
+
+        // 開立發票
+        invoiceService.setInvoiceInfo(order);
         return orderDto;
     }
 
