@@ -127,13 +127,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Integer updateMemberByValidSatusAndCustomerRemark(Member member) {
-        if (member.getCustomerRemark() == null) {
-            member.setMessage("customer remark data is null");
-            member.setSuccessful(false);
-            return 0;
-        }
-        return memberDao.updateMemberInfo(member.getCustomerId(), member.getValidStatus(), member.getCustomerRemark());
+    public Boolean updateMemberByValidSatusAndCustomerRemark(Member member) {
+        return memberDao.updateMemberInfo(member);
     }
 
     @Override
@@ -187,7 +182,9 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Member findMemberById(Integer memberId) {
-        return memberDao.findMemberById(memberId);
+        Member member=memberDao.findMemberById(memberId);
+        member.setSuccessful(true);
+        return member;
     }
 
     @Override
