@@ -1,12 +1,12 @@
-myLoad(".storeheader","storeheader.html")
-myLoad(".storeaside","storeaside.html")
-myLoad(".storefooter","storefooter.html")
+myLoad(".storeheader", "storeheader.html")
+myLoad(".storeaside", "storeaside.html")
+myLoad(".storefooter", "storefooter.html")
 
-function myLoad(target,url){
+function myLoad(target, url) {
     $.ajax({
         type: "GET",
         url: url,
-        async:false,
+        async: false,
         dataType: "text",
         success: function (response) {
             $(target).html(response);
@@ -17,7 +17,7 @@ function myLoad(target,url){
     });
 }
 
-$(function (){
+$(function () {
     console.log("側邊欄更新")
     let showStore = $("li.nav-item.show-store")
     let showAdmin = $("li.nav-item.show-admin")
@@ -26,20 +26,36 @@ $(function (){
         .then(data => {
             userTypeId = data.userTypeId;
             console.log(userTypeId);
-            if(userTypeId === 3){
-                $.each(showStore,function (index,item){
+            if (userTypeId === 3) {
+                $.each(showStore, function (index, item) {
                     $(item).addClass("d-none")
                 })
-                console.log("管理員顯示")
-            }else{
-                $.each(showAdmin,function (index,item){
+            } else {
+                $.each(showAdmin, function (index, item) {
                     $(item).addClass("d-none")
                 })
-                console.log("店家顯示")
             }
         })
         .catch(error => {
-            console.log("錯誤登入")
             $(".sidebar").eq(0).addClass("d-none")
+        });
+})
+
+$("li#logout").on("click", e => {
+    Swal.fire({
+        title: "登出",
+        text: "請確認是否登出",
+        showCancelButton: true
+    }).then(function(result) {
+        if (result.value) {
+            fetch("/store/logout")
+            location.href = "./backstageLogin.html"
+        }
+        else {
+
+        }
     });
 })
+
+
+
