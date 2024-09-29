@@ -31,13 +31,15 @@ $(function (){
                     $(item).addClass("d-none")
                 })
                 console.log("管理員顯示")
-            }else if (userTypeId === 1){
+            }else{
                 $.each(showAdmin,function (index,item){
                     $(item).addClass("d-none")
                 })
                 console.log("店家顯示")
-            }else{
-                $("aside").addClass("d-none")
             }
         })
+        .catch(error => {
+            console.log("錯誤登入")
+            $(".sidebar").eq(0).addClass("d-none")
+    });
 })
