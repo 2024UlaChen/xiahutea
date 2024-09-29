@@ -10,12 +10,15 @@ $.each(window.DEFAULT_ADDRESS.data, function (index, item) {
 
 const memberAddressUl = document.querySelector("#memberAddress");
 const addrModalBody = document.querySelector("#addrModalBody");
+const addrModalBlock = document.querySelector("#addrModal");
+
 const newAddrBtn = document.querySelector(".newAddr");
 const saveAddrBtn = document.querySelector(".saveAddr");
 
 const sessionDetail = JSON.parse(sessionStorage.getItem("memberData"));
 
 function getAddress(memberId) {
+    memberAddressUl.innerHTML = "";
     let addrList = "";
     fetch(`member/address`, {
         method: "POST",
@@ -117,8 +120,9 @@ document.addEventListener("click", function (e) {
     if (e.target.classList.contains("editAddr")) {
         editAddr(e.target);
     } else if (e.target.classList.contains("delAddr")) {
+
     } else {
-        // e.stopPropagation();
+        e.stopPropagation();
     }
 })
 
@@ -159,7 +163,7 @@ newAddrBtn.addEventListener("click", function () {
             <div>
     `;
     addrModalBody.innerHTML = modalBodyData;
-    addrModalBody.setAttribute("data-addressId", "default");
+    addrModalBody.setAttribute("data-addressId", "-1");
 })
 
 saveAddrBtn.addEventListener("click", function (e) {
@@ -174,10 +178,35 @@ saveAddrBtn.addEventListener("click", function (e) {
         Swal.fire("詳細地址必須包含路名", "", "error");
     } else {
         let sendDataAddressId = modalBody.getAttribute("data-addressId");
-        if (sendDataAddressId === "default") {
-            console.log(sendDataAddressId);
-        } else {
-            console.log(sendDataAddressId);
+        let postData = {
+            customerAddressId: sendDataAddressId,
+            customerAddress: finalAddr
+        };
+        if (sendDataAddressId === "-1") {
+            postData.customerId = sessionDetail.data.customerId;
         }
+        fetch(`member/address/update`, {
+            method: "POST",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(postData),
+        }).then(res => res.json()).then(data => {
+            console.log(data);
+            if (data.successful) {
+                let closeBtn = e.target.closest(".modal-content").querySelector(".close");
+                Swal.fire({
+                    icon: "success",
+                    title: data.message,
+                    timer: 1500
+                }).then(() => {
+                    closeBtn.click();
+                    getAddress(sessionDetail.data.customerId);
+                })
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: data.message,
+                });
+            }
+        })
     }
 })

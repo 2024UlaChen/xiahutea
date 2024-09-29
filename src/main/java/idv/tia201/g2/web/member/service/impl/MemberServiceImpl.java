@@ -163,7 +163,8 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Boolean saveMemberAddress(MemberAddress memberAddress) {
-        return false;
+        memberDao.updateMemberAddress(memberAddress);
+        return true;
     }
 
     @Override

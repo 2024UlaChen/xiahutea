@@ -21,7 +21,6 @@ public class MemberController {
     @Autowired
     private MemberService memberService;
 
-
     @GetMapping("address/{memberId}")
     public List<MemberAddress> getMemberAddress(@PathVariable Integer memberId) {
         return memberService.findAddressByMemberId(memberId);
@@ -102,5 +101,19 @@ public class MemberController {
             core.setSuccessful(true);
             return core;
         }
+    }
+
+    @PostMapping("address/update")
+    public Core UpdateAddressByAddressId(@RequestBody MemberAddress memberAddress) {
+        Core core = new Core();
+        if (memberAddress == null) {
+            core.setSuccessful(false);
+            core.setMessage("data is wrong , plz check!");
+            return core;
+        }
+        memberService.saveMemberAddress(memberAddress);
+        core.setSuccessful(true);
+        core.setMessage("成功");
+        return core;
     }
 }
