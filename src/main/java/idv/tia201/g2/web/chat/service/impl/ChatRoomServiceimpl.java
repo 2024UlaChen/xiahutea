@@ -2,6 +2,7 @@ package idv.tia201.g2.web.chat.service.impl;
 
 import idv.tia201.g2.web.chat.dao.ChatSessionRepository;
 import idv.tia201.g2.web.chat.dto.ChatRoom;
+import idv.tia201.g2.web.chat.dto.Participant;
 import idv.tia201.g2.web.chat.service.ChatRoomService;
 import idv.tia201.g2.web.chat.vo.ChatSessions;
 import idv.tia201.g2.web.chat.vo.Messages;
@@ -28,6 +29,10 @@ public class ChatRoomServiceimpl implements ChatRoomService {
         Integer userType = user.getUserTypeId();            //會員種類
         Long userTotalUserId = user.getTotalUserId();       //全平台ID
         List<ChatRoom> chatRoomData = chatSessionDao.findChatRoomData(userType, userTotalUserId);
+        if(chatRoomData.isEmpty()){
+            addChatRoom(user);
+            getChatRoom(user);
+        }
         return chatRoomData;
     }
 

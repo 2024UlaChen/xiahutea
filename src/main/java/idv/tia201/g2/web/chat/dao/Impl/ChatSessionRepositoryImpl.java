@@ -50,7 +50,7 @@ public class ChatSessionRepositoryImpl implements ChatSessionOperation {
                             "   when 1 then attender.total_user_id = ?" +
                             "   when 3 then admin.total_user_id = ? " +
                         "   end " +
-                        "   and m.sent_at = chat.last_activity or chat.last_activity is NULL " +
+                        "   and (m.sent_at = chat.last_activity or chat.last_activity is NULL) " +
                         "order by m.sent_at DESC";
 
         Query query = em.createNativeQuery(jpql)
