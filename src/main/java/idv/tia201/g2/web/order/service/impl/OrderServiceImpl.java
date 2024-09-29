@@ -1,7 +1,9 @@
 package idv.tia201.g2.web.order.service.impl;
 
 import idv.tia201.g2.core.util.ValidateUtil;
-import idv.tia201.g2.web.coupon.dao.CustomerCoupon;
+import idv.tia201.g2.web.coupon.dao.CustomerCouponDao;
+import idv.tia201.g2.web.coupon.service.CustomerCouponService;
+import idv.tia201.g2.web.coupon.vo.CustomerCoupons;
 import idv.tia201.g2.web.member.dao.MemberDao;
 import idv.tia201.g2.web.member.dao.MemberLoyaltyCardRepository;
 import idv.tia201.g2.web.member.service.MemberLoyaltyCardService;
@@ -52,7 +54,7 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private MemberLoyaltyCardRepository memberLoyaltyCardRepository;
     @Autowired
-    private CustomerCoupon customerCouponDao;
+    private CustomerCouponDao customerCouponDao;
 
     @Autowired
     private OrderMappingUtil orderMappingUtil;
@@ -60,6 +62,8 @@ public class OrderServiceImpl implements OrderService {
     private MemberService memberService;
     @Autowired
     private MemberLoyaltyCardService memberLoyaltyCardService;
+    @Autowired
+    private CustomerCouponService customerCouponService;
     @Autowired
     private NotificationService notificationService;
     @Autowired
@@ -88,7 +92,7 @@ public class OrderServiceImpl implements OrderService {
         }
         // 會員使用集點卡
         Integer loyaltyCardId = order.getLoyaltyCardId();
-        if (loyaltyCardId != null) {
+        if(loyaltyCardId != null) {
             CustomerLoyaltyCard customerLoyaltyCard = memberLoyaltyCardRepository.findByLoyaltyCardId(loyaltyCardId);
             if (customerLoyaltyCard == null) {
                 orderDto.setMessage("無此集點卡");
@@ -97,20 +101,22 @@ public class OrderServiceImpl implements OrderService {
             }
             memberLoyaltyCardService.UpdatePoints(loyaltyCardId, order.getLoyaltyDiscount());
         }
-        // todo 優惠券
-//        int customerCouponsId = order.getCustomerCouponsId();
-//        if (!isEmpty(customerCouponsId)) {
-//            CustomerCoupons customerCoupon = customerCouponDao.findByCustomerIdAndCouponId(customerId, customerCouponsId);
-//            if (customerCoupon == null) {
-//                orderDto.setMessage("無此優惠券");
-//                orderDto.setSuccessful(false);
-//                return orderDto;
-//            }
-//            customerCoupon.setCouponQuantity(customerCoupon.getCouponQuantity() - 1);
-//            customerCouponDao.save(customerCoupon);
-//        }
+        // 會員使用優惠券
+        Integer customerCouponsId = order.getCustomerCouponsId();
+        if(customerCouponsId != null) {
+            CustomerCoupons customerCoupon = customerCouponDao.findByCustomerIdAndCustomerCouponsId(customerId, customerCouponsId);
+            if (customerCoupon == null) {
+                orderDto.setMessage("無此優惠券");
+                orderDto.setSuccessful(false);
+                return orderDto;
+            }
+            customerCouponService.updateCouponQuantity(customerId, customerCoupon.getCouponId() , customerCoupon.getCouponQuantity() - 1);
+        }
 
-        if(order.getCouponDiscount() < 0 || order.getLoyaltyDiscount() < 0 || order.getCustomerMoneyDiscount() < 0){
+        if(
+            order.getCouponDiscount() < 0 || order.getLoyaltyDiscount() < 0 ||
+            order.getCustomerMoneyDiscount() < 0 || order.getCustomerMoneyDiscount() > member.getCustomerMoney()
+        ){
             orderDto.setMessage("折抵金額錯誤");
             orderDto.setSuccessful(false);
             return orderDto;
@@ -132,9 +138,9 @@ public class OrderServiceImpl implements OrderService {
         }
         final String invoiceCarrier = order.getInvoiceCarrier();
         final String invoiceVat = order.getInvoiceVat() + "";
-        if(order.getInvoiceMethod() == 1){  // 載具
+        if(order.getInvoiceMethod() == 1){  // 手機載具
             if(isEmpty(invoiceCarrier) || invoiceCarrier.charAt(0) != '/' || invoiceCarrier.trim().length() != 8){
-                orderDto.setMessage("載具輸入錯誤");
+                orderDto.setMessage("手機載具輸入錯誤");
                 orderDto.setSuccessful(false);
                 return orderDto;
             }
@@ -182,16 +188,30 @@ public class OrderServiceImpl implements OrderService {
                 return orderDto;
             }
         }
+
         // 會員使用點數
         memberService.updateMemberMoneyById(customerId, - order.getCustomerMoneyDiscount());
+
         order.setOrderStatus(1);
         order.setOrderCreateDatetime(new Timestamp(System.currentTimeMillis()));
         orderDao.insert(order);
+        // 存商品
         for (OrderDetail orderDetail : orderDetails) {
             orderDetail.setOrderId(order.getOrderId());
             orderDetailDao.insert(orderDetail);
         }
-        orderDto.setMessage("訂單已成立");
+
+        // 傳送發票參數給綠界
+        String addInvoiceNo = invoiceService.createInvoice(order);
+        if(addInvoiceNo == null){
+            orderDto.setMessage("開立發票失敗");
+            orderDto.setSuccessful(false);
+            return orderDto;
+        }
+        //存發票
+        orderDao.saveInvoiceNo(order.getOrderId(), addInvoiceNo);
+
+        orderDto.setMessage("訂單新增成功");
         orderDto.setSuccessful(true);
         orderDto.setOrders(order);
         orderDto.setOrderDetails(orderDetails);
@@ -199,9 +219,6 @@ public class OrderServiceImpl implements OrderService {
         // 建立通知的內容
         NotificationDto notificationDto = new NotificationDto(order.getOrderId(), order.getOrderCreateDatetime());
         notificationService.notifyNewOrder(notificationDto);
-
-        // 開立發票
-        invoiceService.setInvoiceInfo(order);
         return orderDto;
     }
 

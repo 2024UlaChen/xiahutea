@@ -38,6 +38,17 @@ public class OrderDaoImpl implements OrderDao {
         return result != null ? 1 : 0 ;
     }
 
+    // 新增發票號碼
+    @Override
+    public Integer saveInvoiceNo(Integer orderId, String invoiceNo) {
+        String hql = "UPDATE Orders o SET o.invoiceNo = :invoiceNo WHERE o.orderId = :orderId";
+        return session
+                .createQuery(hql)
+                .setParameter("orderId", orderId)
+                .setParameter("invoiceNo", invoiceNo)
+                .executeUpdate();
+    }
+
     // 後台 訂單明細 顯示
     @Override
     public Orders selectByOrderId(int orderId) {
