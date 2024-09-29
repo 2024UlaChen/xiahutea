@@ -100,7 +100,6 @@
             .then(res => res.json())
             .then(data => {
                 userTypeId = data.userTypeId;
-                console.log("getUID:" + data.totalUserId);
                 return data.totalUserId;
             })
     }
@@ -109,7 +108,6 @@
         message.timestamp = new Date();
         chat.updateChatListInfo(message.chatId,message);
         chat.appendMessage(message) ;
-        console.log("傳送端" + message.senderId);
         if (webSocket) {
             webSocket.send(
                 JSON.stringify({

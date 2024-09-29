@@ -80,10 +80,8 @@ public class ChatSessionRepositoryImpl implements ChatSessionOperation {
             Participant attender = new Participant();
             if (result[3] instanceof Long) {
                 attender.setUserId((Long) result[3]); // 直接轉換為 Long
-                System.out.println("long");
             } else if (result[3] instanceof BigInteger) {
                 attender.setUserId(((BigInteger) result[3]).longValue());   // JPA 將整數類型的結果視為 BigInteger
-                System.out.println("BigInteger");
             }
             attender.setName((String) result[4]);
             attender.setAvatar((byte[]) result[5]);
