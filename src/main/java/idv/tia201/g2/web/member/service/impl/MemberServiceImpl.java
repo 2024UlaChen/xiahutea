@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
+import javax.print.DocFlavor;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -163,6 +164,10 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Boolean saveMemberAddress(MemberAddress memberAddress) {
+//        TODO ADDRESS FORMAT
+        if (memberAddress.getCustomerAddressId() == null || memberAddress.getCustomerId() == null || !StringUtils.hasText(memberAddress.getCustomerAddress())) {
+            return false;
+        }
         memberDao.updateMemberAddress(memberAddress);
         return true;
     }
@@ -170,6 +175,9 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Boolean deleteByMemberAddressId(Integer customerAddressId) {
         try {
+//            if (customerAddressId == null ) {
+//                return false;
+//            }
             int resultCount = memberDao.deleteByMemberAddressId(customerAddressId);
             return resultCount > 0;
         } catch (Exception e) {

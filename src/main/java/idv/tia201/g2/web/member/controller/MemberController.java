@@ -104,16 +104,39 @@ public class MemberController {
     }
 
     @PostMapping("address/update")
-    public Core UpdateAddressByAddressId(@RequestBody MemberAddress memberAddress) {
+    public Core updateAddressByAddressId(@RequestBody MemberAddress memberAddress) {
         Core core = new Core();
         if (memberAddress == null) {
             core.setSuccessful(false);
             core.setMessage("data is wrong , plz check!");
             return core;
         }
-        memberService.saveMemberAddress(memberAddress);
+        if (!memberService.saveMemberAddress(memberAddress)) {
+            core.setSuccessful(false);
+            core.setMessage("data is wrong , plz check!");
+            return core;
+        }
         core.setSuccessful(true);
-        core.setMessage("成功");
+        core.setMessage("success");
         return core;
+    }
+
+    @DeleteMapping("address/{customerAddressId}")
+    public Core deleteAddressByAddressId(@PathVariable Integer customerAddressId) {
+        Core core = new Core();
+        if (customerAddressId == null) {
+            core.setSuccessful(false);
+            core.setMessage("data is wrong , plz check!");
+            return core;
+        }
+        if (!memberService.deleteByMemberAddressId(customerAddressId)) {
+            core.setSuccessful(false);
+            core.setMessage("data is wrong , plz check!");
+            return core;
+        }
+        core.setSuccessful(true);
+        core.setMessage("已刪除");
+        return core;
+
     }
 }

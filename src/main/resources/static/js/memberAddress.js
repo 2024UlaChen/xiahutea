@@ -7,10 +7,8 @@ $.each(window.DEFAULT_ADDRESS.data, function (index, item) {
     addrSet.add(item.city + "-" + item.district);
 })
 
-
 const memberAddressUl = document.querySelector("#memberAddress");
 const addrModalBody = document.querySelector("#addrModalBody");
-const addrModalBlock = document.querySelector("#addrModal");
 
 const newAddrBtn = document.querySelector(".newAddr");
 const saveAddrBtn = document.querySelector(".saveAddr");
@@ -45,10 +43,8 @@ function getAddress(memberId) {
             });
             addrList += `<hr>`
             memberAddressUl.innerHTML = addrList;
-            // cmsAddrList.classList.add("hidden");
         })
 }
-
 
 function getDefaultCity(nowCity) {
     let cityList = "";
@@ -100,13 +96,11 @@ function editAddr(target) {
             <div>
                 <input title="detail address" type="text" name="your detail address" 
                 size="100" id="nowDetailAddr" class="form-control" value="${addrList[2]}">
-            <div>
-    `;
+            <div>`;
     addrModalBody.innerHTML = modalBodyData;
     addrModalBody.setAttribute("data-addressId", dataAddressId);
 
 }
-
 
 document.addEventListener("DOMContentLoaded", function () {
     if (sessionDetail === null || sessionDetail.data.customerId === null || sessionDetail.data.customerId === undefined) {
@@ -120,7 +114,20 @@ document.addEventListener("click", function (e) {
     if (e.target.classList.contains("editAddr")) {
         editAddr(e.target);
     } else if (e.target.classList.contains("delAddr")) {
+        Swal.fire({
+            title: "確定刪除地址?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#73B4BA",
+            cancelButtonColor: "#6c757d",
+            confirmButtonText: `<span class="sweetAlertFont">是，確定刪除</span>`,
+            cancelButtonText: `<span class="sweetAlertFont">否</span>`,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                delAttr(e.target);
+            }
 
+        });
     } else {
         e.stopPropagation();
     }
@@ -138,6 +145,20 @@ document.addEventListener("change", function (e) {
         changeDetailAddr.value = "";
     }
 })
+
+
+// 刪除地址
+function delAttr(target) {
+    let dataAddressId = target.closest("li").getAttribute("data-addressId");
+    fetch(`member/address/${dataAddressId}`, {
+        method: "DELETE",
+    }).then(res => res.json()).then(data => {
+        console.log(data);
+        if(data.successful){
+            getAddress(sessionDetail.data.customerId);
+        }
+    })
+}
 
 // 新增地址
 newAddrBtn.addEventListener("click", function () {
@@ -180,17 +201,14 @@ saveAddrBtn.addEventListener("click", function (e) {
         let sendDataAddressId = modalBody.getAttribute("data-addressId");
         let postData = {
             customerAddressId: sendDataAddressId,
-            customerAddress: finalAddr
+            customerAddress: finalAddr,
+            customerId: sessionDetail.data.customerId
         };
-        if (sendDataAddressId === "-1") {
-            postData.customerId = sessionDetail.data.customerId;
-        }
         fetch(`member/address/update`, {
             method: "POST",
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(postData),
         }).then(res => res.json()).then(data => {
-            console.log(data);
             if (data.successful) {
                 let closeBtn = e.target.closest(".modal-content").querySelector(".close");
                 Swal.fire({
