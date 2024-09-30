@@ -116,6 +116,9 @@ public class MemberServiceImpl implements MemberService {
             member.setSuccessful(false);
             return member;
         }
+        TotalUsers LoginTotalUser = totalUserDao.findByUserTypeIdAndUserId(0, member.getCustomerId());
+        member.setData(LoginTotalUser.getTotalUserId());
+
         member.setMessage("登入成功");
         member.setSuccessful(true);
         return member;
