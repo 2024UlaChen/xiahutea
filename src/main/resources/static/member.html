@@ -79,8 +79,11 @@
                                 <hr>
                                 <div class="teamo-contact-fom member-setting">
                                     <div>
-                                        <img class="userPhoto" src="assets/images/xiahutealogo.jpg" id="memberPhoto"
-                                             alt="userPhoto">
+                                        <label for="memberPhotoInput" class="form-label">
+                                            <img class="userPhoto"  id="memberPhotoImg"
+                                                 alt="userPhoto">
+                                        </label>
+                                        <input class="form-control hidden" type="file" id="memberPhotoInput">
                                     </div>
                                     <div>
                                         <div class="col-sm-6 no-padding">
@@ -94,6 +97,7 @@
                                             <span class="form-label"><span class="warn">*</span> 會員錢包 </span>
                                             <div class="form-control-wrap" aria-label="Default select example">
                                                 <input title="your-email" type="email" name="your-email" size="40"
+                                                       disabled
                                                        class="form-control form-control-email">
                                             </div>
                                         </div>
