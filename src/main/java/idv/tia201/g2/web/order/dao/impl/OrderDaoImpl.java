@@ -1,12 +1,12 @@
 package idv.tia201.g2.web.order.dao.impl;
 
+import java.util.List;
 import idv.tia201.g2.web.order.dao.OrderDao;
 import idv.tia201.g2.web.order.vo.Orders;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
-import java.util.List;
 
 @Repository
 public class OrderDaoImpl implements OrderDao {
@@ -38,11 +38,11 @@ public class OrderDaoImpl implements OrderDao {
         return result != null ? 1 : 0 ;
     }
 
-    // 新增發票號碼
+    // 後端 訂單新增 > 發票新增
     @Override
-    public Integer saveInvoiceNo(Integer orderId, String invoiceNo) {
+    public void saveInvoiceNo(Integer orderId, String invoiceNo) {
         String hql = "UPDATE Orders o SET o.invoiceNo = :invoiceNo WHERE o.orderId = :orderId";
-        return session
+        session
                 .createQuery(hql)
                 .setParameter("orderId", orderId)
                 .setParameter("invoiceNo", invoiceNo)

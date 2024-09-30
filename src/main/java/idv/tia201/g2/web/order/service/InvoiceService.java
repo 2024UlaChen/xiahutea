@@ -3,7 +3,7 @@ package idv.tia201.g2.web.order.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import idv.tia201.g2.web.order.util.InvoiceUtil;
+import idv.tia201.g2.web.order.util.InvoiceAesUtil;
 import idv.tia201.g2.web.order.vo.Orders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
@@ -32,7 +32,7 @@ public class InvoiceService {
     // 設定 傳入發票參數
     public Map<String, Object> setInvoiceInfo(Orders order) {
 
-        String carrierType = "";          //載具類別
+        String carrierType = "";        //載具類別
         String carrierNum = "";
 
         // case 1 : 電子發票-手機載具
@@ -102,8 +102,8 @@ public class InvoiceService {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-        // 2. JSON字串 > URL編碼大寫 > AES加密。
-        String encryptedData = InvoiceUtil.encryptAES(jsonData);
+        // 2. JSON字串 > URL編碼大寫 > AES加密
+        String encryptedData = InvoiceAesUtil.encryptAES(jsonData);
 
         // 回傳參數
         Map<String, Object> params = new LinkedHashMap<>();
@@ -126,8 +126,8 @@ public class InvoiceService {
 
         String encryptedData = objectParams.get("Data").asText();
         //  AES解密 > URL編碼大寫 > JSON
-        String jsonData = InvoiceUtil.decryptAES(encryptedData);
-        // 確保解密成功，並且解密後的數據不是空值
+        String jsonData = InvoiceAesUtil.decryptAES(encryptedData);
+        // 確保解密成功，並且解密後不是空值
         if (jsonData == null || jsonData.isEmpty()) {
             return null;
         }
@@ -140,12 +140,13 @@ public class InvoiceService {
             throw new RuntimeException(e);
         }
 
-        // 取出屬性
-        int rtnCode = data.get("RtnCode").asInt();
+        // 取出屬性值
         String invoiceNo = data.get("InvoiceNo").asText();
+        int rtnCode = data.get("RtnCode").asInt();
         if(rtnCode != 1){
             return null ;
         }
+        //回傳發票號碼
         return invoiceNo;
     }
 
@@ -159,7 +160,7 @@ public class InvoiceService {
             throw new RuntimeException(e);
         }
 
-        // 傳送表頭
+        // 傳送表頭格式與參數
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
         HttpEntity<String> requestEntity = new HttpEntity<>(jsonParams, headers);

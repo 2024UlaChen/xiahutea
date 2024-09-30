@@ -16,7 +16,8 @@ public class InvoiceController {
     @Autowired
     private InvoiceService invoiceService;
 
-    // 接收發票回傳參數
+    // -------- FINISH ---------------------------------
+    // 後端 接收發票回傳參數
     @PostMapping("/issueInvoice")
     public ResponseEntity<String> issueInvoice(@RequestBody Orders order) {
         String invoiceNo = invoiceService.createInvoice(order);
