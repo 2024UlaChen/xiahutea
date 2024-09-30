@@ -130,6 +130,29 @@
         }
     }
 
+    const searchChatRoom = async () => {
+        // 關鍵字
+        let inputVal = $("input.chat-room-filter-input").eq(0).val();
+        // 聊天室名稱元素
+        let chatRoomNameEles = $("div.chat-room-name");
+
+        //找到符合關鍵字的用戶
+        $.each(chatRoomNameEles,function (index,item){
+            let chatRoomName = $(item).text();
+            let ChatRoomCard = $(item).closest("div.chat-room-card").eq(0);
+
+            if(inputVal.length > 0){
+                if(chatRoomName.indexOf(inputVal) > -1){
+                    $(ChatRoomCard).removeClass("d-none");
+                } else {
+                    $(ChatRoomCard).addClass("d-none")
+                }
+            }else {
+                $(ChatRoomCard).removeClass("d-none");
+            }
+        })
+    }
+
     const chat = new WeienChat();
 
     let webSocket;
@@ -148,6 +171,10 @@
         webSocket.addEventListener('message', handleSendMessage);
 
     });
+
+    $(document).on("keyup", function (e) {
+        searchChatRoom();
+    })
 
 </script>
 

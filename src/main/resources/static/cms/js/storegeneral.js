@@ -24,7 +24,6 @@ $(function () {
         .then(res => res.json())
         .then(data => {
             userTypeId = data.userTypeId;
-            console.log(userTypeId);
             if (userTypeId === 3) {
                 $.each(showStore, function (index, item) {
                     $(item).addClass("d-none")
