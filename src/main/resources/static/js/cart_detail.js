@@ -262,6 +262,7 @@ document.addEventListener("DOMContentLoaded",function(){
               couponSelect_el.disabled = false;
               membercard_count_el.style.display = "none";
               moneybag_count_el.style.display = "none";
+              moneybag_discount_number_el.disabled=true;
               moneybag_discount_number_el.value = '';
               membercard_minus_number_el.textContent = '$0';
               moneybag_minus_number_el.textContent = '$0';
@@ -294,6 +295,7 @@ document.addEventListener("DOMContentLoaded",function(){
               membercard_count_el.style.display = "none";
               membercard_minus_number_el.textContent = '$0';
               memberCardSelected = false;
+              select_membercard_input_el.checked=false;
           } else {
               // 使用會員卡
               GetMemberCardPoint(storeId, customerId);
@@ -302,8 +304,9 @@ document.addEventListener("DOMContentLoaded",function(){
               moneybag_discount_number_el.value = '';
               couponSelect_el.innerHTML = '<option disabled selected >請選擇優惠券</option>';
               couponSelect_el.disabled = true;
+              moneybag_discount_number_el.disabled=true;
               coupon_minus_number_el.textContent = '$0';
-              membercard_minus_number_el.textContent = '$0';
+              moneybag_minus_number_el.textContent = '$0';
               memberCardSelected = true;
               couponSelected = false;
               moneyBagSelected = false;
@@ -324,6 +327,8 @@ document.addEventListener("DOMContentLoaded",function(){
               // 取消會員錢包
               moneybag_count_el.style.display = "none";
               moneybag_minus_number_el.textContent = '$0';
+              moneybag_discount_number_el.value = '';
+              moneybag_discount_number_el.disabled=true;
               select_moneybag_input_el.checked=false;
               moneyBagSelected = false;
           } else {
@@ -980,15 +985,15 @@ document.addEventListener("DOMContentLoaded",function(){
 
           //建立存到order的JSON數據
           //準備載具號碼及統編
-          if(vehicle_number_el.textContent===''){
+          if(vehicle_number_el.value===''){
               invoiceCarrier = null;
           }else{
-              invoiceCarrier = vehicle_number_el.textContent
+              invoiceCarrier = vehicle_number_el.value
           }
-          if(uniform_numbers_el.textContent===''){
+          if(uniform_numbers_el.value===''){
               invoiceVat = null;
           }else{
-              invoiceVat = parseInt(uniform_numbers_el.textContent)
+              invoiceVat = parseInt(uniform_numbers_el.value)
           }
           const orderData = {
               orders: {
@@ -1631,6 +1636,20 @@ document.addEventListener("DOMContentLoaded",function(){
             { id: 'taro', label: '芋圓', condition: product.taro },
             { id: 'herbal_jelly', label: '仙草', condition: product.herbal_jelly }
         ];
+        // 先添加「無加料」選項
+        const noAddOnInput = document.createElement('input');
+        noAddOnInput.type = 'radio';
+        noAddOnInput.id = 'no_add_ons';
+        noAddOnInput.name = 'materials-options';
+        noAddOnInput.value = 'none'; // 可以根據需要設定值
+
+        const noAddOnLabel = document.createElement('label');
+        noAddOnLabel.setAttribute('for', 'no_add_ons');
+        noAddOnLabel.textContent = '無加料';
+
+        // 將「無加料」選項添加到容器中
+        addOnsContainer.appendChild(noAddOnInput);
+        addOnsContainer.appendChild(noAddOnLabel);
 
         // 根據每個條件生成對應的選項
         addOnsOptions.forEach(option => {
