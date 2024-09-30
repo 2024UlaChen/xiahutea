@@ -31,7 +31,7 @@ public class EcPayController {
         // 列印所有參數，確認收到的資料
         allParams.forEach((key, value) -> System.out.println(key + ": " + value));
 
-        // 根據 RtnCode 判斷交易結果
+        // 根據 RtnCode及交易編號 判斷交易結果
         String rtnCode = allParams.get("RtnCode");
         if ("1".equals(rtnCode)) {
             return "redirect:/paysuccess.html";
