@@ -54,4 +54,9 @@ public interface MemberService {
 
     Boolean updateMemberMoneyById(Integer memberId , Integer memberMoney);
 
+    void updateMemberPwd(Integer memberId, String newPwd);
+
+    Boolean checkMemberPwd(Integer memberId ,String oldPwd);
+
+
 }

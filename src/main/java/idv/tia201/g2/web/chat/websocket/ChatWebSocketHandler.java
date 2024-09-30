@@ -3,6 +3,9 @@ package idv.tia201.g2.web.chat.websocket;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import idv.tia201.g2.web.chat.dao.ChatSessionRepository;
 import idv.tia201.g2.web.chat.dto.MessageDto;
+import idv.tia201.g2.web.chat.service.ChatRoomService;
+import idv.tia201.g2.web.chat.service.MessageService;
+import idv.tia201.g2.web.chat.vo.Messages;
 import idv.tia201.g2.web.user.dto.TotalUserDTO;
 import idv.tia201.g2.web.user.vo.TotalUsers;
 import jakarta.servlet.http.HttpSession;
@@ -31,6 +34,11 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     @Autowired
     ObjectMapper objectMapper;
 
+    @Autowired
+    MessageService messageService;
+
+    @Autowired
+    ChatRoomService chatRoomService;
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
@@ -57,30 +65,25 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
         HttpSession httpSession = (HttpSession) session.getAttributes().get("HTTP_SESSION");
         TotalUserDTO user = (TotalUserDTO) httpSession.getAttribute("totalUserDTO");
         Long recipientsId;
-        System.out.println("UserTypeId : "  + user.getUserTypeId());
         //管理員視角
         if (user.getUserTypeId() == 3) {
-            System.out.println("管理員視角");
             recipientsId = chatSessionRepository.findAttenderIdByChatSessionId(messageDto.getChatSessionId());
         //其他視角
         } else {
-            System.out.println("會員視角");
             recipientsId = chatSessionRepository.findAdministratorIdByChatSessionId(messageDto.getChatSessionId());
         }
 
         // 3. 接收方有連線，就傳遞訊息，否則移除 Map
         WebSocketSession recipientSession = SESSIONS_MAP.get(recipientsId);
-        if (recipientSession != null & recipientSession.isOpen()) {
-            System.out.println("對方連線中");
+        if (recipientSession != null && recipientSession.isOpen()) {
             SESSIONS_MAP.get(recipientsId).sendMessage(text);
-        } else {
-            System.out.println("對方忙線中");
-            SESSIONS_MAP.remove(SESSIONS_MAP.get(recipientsId));
         }
 
         // 4. 將 messages 存到資料庫
-        System.out.println(messageDto);
-
+            //存訊息
+        Messages message = messageService.saveMessage(messageDto);
+            //更新聊天室時間
+        chatRoomService.updateLastActivity(message);
     }
 
     @Override

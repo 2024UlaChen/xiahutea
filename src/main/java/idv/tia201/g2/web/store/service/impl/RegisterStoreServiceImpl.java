@@ -2,14 +2,18 @@ package idv.tia201.g2.web.store.service.impl;
 
 import idv.tia201.g2.core.pojo.Mail;
 import idv.tia201.g2.core.util.MailUtil;
+import idv.tia201.g2.web.chat.service.ChatRoomService;
+import idv.tia201.g2.web.chat.service.impl.ChatRoomServiceimpl;
 import idv.tia201.g2.web.store.dao.StoreDao;
 import idv.tia201.g2.web.store.dto.RegisterStoreDTO;
 import idv.tia201.g2.web.store.service.RegisterStoreService;
 import idv.tia201.g2.web.store.util.StoreToRegisterStore;
 import idv.tia201.g2.web.store.vo.Store;
 import idv.tia201.g2.web.user.dao.TotalUserDao;
+import idv.tia201.g2.web.user.dto.TotalUserDTO;
 import idv.tia201.g2.web.user.vo.TotalUsers;
 import jakarta.mail.MessagingException;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -39,6 +43,8 @@ public class RegisterStoreServiceImpl implements RegisterStoreService {
     private TotalUserDao totalUserDao;
 
     Integer userType = 1;
+    @Autowired
+    private ChatRoomService chatRoomService;
 
     @Override
     public Store register(Store store) {
@@ -197,21 +203,29 @@ public class RegisterStoreServiceImpl implements RegisterStoreService {
             return newData;
         }
 
-//        若狀態為「成為店家」 就要 產生密碼 & 發信 & 成為totalUser
+//        若狀態為「成為店家」 就要 產生密碼 & 發信 & 成為totalUser & 新增聊天室
         if (newData.getStoreStatus() == 1) {
+            //新增亂數密碼
             String randomPassword = generateRandomString(9, 14);
             newData.setPassword(randomPassword);
+            //寄信
             sendMail(newData);
+
+
             TotalUsers totalUser = new TotalUsers(null, userType, newData.getStoreId());
-            totalUserDao.save(totalUser);
+            TotalUsers save = totalUserDao.save(totalUser);
+
+            TotalUserDTO totalUserDTO = new TotalUserDTO();
+            BeanUtils.copyProperties(save,totalUserDTO);
+
+            chatRoomService.addChatRoom(totalUserDTO);
+
         }
 
         //依 userId 存資料
         Store store = storeDao.findByStoreId(newData.getStoreId());
         copyPropertiesIgnoreNull(newData,store);
         Store save = storeDao.save(store);
-
-
 
         save.setSuccessful(true);
         save.setMessage("更新成功");
