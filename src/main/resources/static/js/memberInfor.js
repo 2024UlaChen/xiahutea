@@ -1,3 +1,22 @@
+const photoBlock = document.querySelector(".memberPhoto");
+const memberPhotoInput = document.querySelector("#memberPhotoInput");
+const asidePhoto = document.querySelector("#asidePhoto");
+let uploadImg;
+photoBlock.addEventListener("click", function () {
+    memberPhotoInput.click();
+})
+
+memberPhotoInput.addEventListener("change", function (event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function (event) {
+            const fileData = event.target.result;
+            photoBlock.style.backgroundImage = `url(${fileData})`;
+        };
+        reader.readAsDataURL(file);
+    }
+})
 
 
 // input檢核
@@ -30,3 +49,13 @@ function phoneValid(phone) {
         }
     })
 }
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const sessionDetail = JSON.parse(sessionStorage.getItem("memberData"));
+    fetch(`member/` + sessionDetail.data.customerId)
+        .then(res => res.text())
+        .then(data => {
+            console.log(data);
+        })    // asidePhoto.src = fileData;
+})

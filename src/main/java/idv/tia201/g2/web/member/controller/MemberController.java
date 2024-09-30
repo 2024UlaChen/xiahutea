@@ -137,6 +137,18 @@ public class MemberController {
         core.setSuccessful(true);
         core.setMessage("已刪除");
         return core;
+    }
 
+    @GetMapping("{memberId}")
+    public Member getMemberInformation(@PathVariable Integer memberId) {
+        Member member = new Member();
+        if (memberId == null) {
+            member.setSuccessful(false);
+            member.setMessage("no memberId");
+            return member;
+        }
+        member = memberService.findMemberById(memberId);
+        member.setSuccessful(true);
+        return member;
     }
 }

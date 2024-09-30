@@ -42,7 +42,7 @@
                         <aside class="col-lg-4 no-padding member-aside">
                             <div class="member-introduction">
                                 <div>
-                                    <img class="userPhoto" src="img/xiahutealogo.jpg" alt="userPhoto">
+                                    <img class="userPhoto" src="img/xiahutealogo.jpg" alt="userPhoto" id="asidePhoto">
                                 </div>
                                 <div>userName</div>
                             </div>
@@ -78,23 +78,24 @@
                                 </div>
                                 <hr>
                                 <div class="teamo-contact-fom member-setting">
-                                    <div>
-                                        <label for="memberPhotoInput" class="form-label">
-                                            <img class="userPhoto"  id="memberPhotoImg"
-                                                 alt="userPhoto">
-                                        </label>
-                                        <input class="form-control hidden" type="file" id="memberPhotoInput">
+                                    <div id="memberPhotoBlock">
+                                        <div class="memberPhoto" >
+                                            <i class="fa fa-plus"></i>
+                                        </div>
+                                        <input class="form-control hidden" type="file" id="memberPhotoInput"
+                                               accept="image/gif,image/jpeg,image/jpg,image/png">
+
                                     </div>
                                     <div>
-                                        <div class="col-sm-6 no-padding">
+                                        <div>
                                             <span class="form-label"><span class="warn">*</span>姓名</span>
                                             <span class="form-control-wrap your-email">
                                                     <input title="your-email" type="email" name="your-email" size="40"
                                                            class="form-control form-control-email">
                                         </span>
                                         </div>
-                                        <div class=" col-sm-6 no-padding">
-                                            <span class="form-label"><span class="warn">*</span> 會員錢包 </span>
+                                        <div>
+                                            <span class="form-label">會員錢包 </span>
                                             <div class="form-control-wrap" aria-label="Default select example">
                                                 <input title="your-email" type="email" name="your-email" size="40"
                                                        disabled
@@ -128,8 +129,8 @@
                                                    class="form-control datepicker">
                                         </span>
                                     </div>
-                                    <div class="dataSave">
-                                        <button>確認</button>
+                                    <div>
+                                        <button class="btnSave">確認</button>
                                     </div>
                                 </div>
                             </div>
@@ -167,6 +168,7 @@
 
 <script src="js/general.js"></script>
 <script src="js/memberGeneral.js"></script>
+<script src="js/memberInfor.js"></script>
 
 </body>
 
