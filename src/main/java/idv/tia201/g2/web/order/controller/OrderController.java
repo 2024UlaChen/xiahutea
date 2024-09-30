@@ -11,7 +11,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,8 +19,6 @@ public class OrderController {
 
     @Autowired
     private OrderService orderService;
-    @Autowired
-    private OrderRepository orderRepository;
 
     // -------- FINISH ---------------------------------
     // 前台 新增資料
@@ -50,20 +47,14 @@ public class OrderController {
     }
 
     // 後台 訂單列表 顯示
-//    @GetMapping("manage")
-//    public List<Orders> manage() {
-//        return orderService.findAll();
-//    }
-
     @GetMapping("manage")
     public Page<Orders> findAllByPageable(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ){
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "orderCreateDatetime"));
         return orderService.findAll(pageable);
     }
-
 
     // 後台 訂單明細 顯示
     @GetMapping("manage/{orderId}")
