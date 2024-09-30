@@ -40,7 +40,6 @@ public class DisputeServiceImpl implements DisputeService {
     @Autowired
     private MemberService memberService;
 
-    // todo 退款錢包
     // -------- FINISH ---------------------------------
     // 前台 爭議表格 顯示
     @Override

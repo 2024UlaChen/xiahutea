@@ -3,6 +3,7 @@ package idv.tia201.g2.web.member.controller;
 import idv.tia201.g2.core.pojo.Core;
 import idv.tia201.g2.web.member.service.MemberService;
 import idv.tia201.g2.web.member.vo.Member;
+import idv.tia201.g2.web.user.dto.TotalUserDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
@@ -40,11 +41,20 @@ public class LoginController {
 //        System.out.println(httpSession.getId());
         member = memberService.login(member);
 
-        if(!member.isSuccessful()){
+        if (!member.isSuccessful()) {
             core.setSuccessful(false);
             core.setMessage(member.getMessage());
             return core;
         }
+
+        TotalUserDTO totalUserDTO = new TotalUserDTO();
+        totalUserDTO.setTotalUserId((Long) member.getData());
+        totalUserDTO.setUserId(member.getCustomerId());
+        totalUserDTO.setUserTypeId(0);
+        totalUserDTO.setLogo(member.getCustomerImg());
+
+        httpSession.setAttribute("loggedin", true);
+        httpSession.setAttribute("totalUserDTO", totalUserDTO);
 
         Map<String, Object> memberData = new HashMap<String, Object>();
         memberData.put("customerId", member.getCustomerId());

@@ -82,7 +82,7 @@ queryBtn.addEventListener("click", function () {
                         <span>${item.customerId}</span>
                     </td>
                     <td>
-                        <span>${item.customerEmail}</span>
+                        <span>${nullToEmpty(item.customerEmail)}</span>
                     </td>
                     <td>
                         <span>${item.customerPhone}</span>
@@ -103,19 +103,30 @@ queryBtn.addEventListener("click", function () {
 
     }
 })
+
 function nullToEmpty(data) {
     return (data == null) ? "" : data;
 }
 
 function getCmsMemberList() {
     let queryMemberList = "";
-    fetch(`manage`)
+    fetch(`manage/all`)
         .then(res => res.json())
         .then(data => {
-            $.each(data, function (index, item) {
-                let statusClassName = (item.validStatus) ? "statusInValid" : "statusIsValid";
-                let statusChiName = (item.validStatus) ? "停權" : "生效";
-                queryMemberList += `
+            if (data.length === 0) {
+                Swal.fire({
+                    icon: "error",
+                    title: "非管理員權限，無法檢視",
+                    showConfirmButton: false,
+                    timer: 1500
+                }).then(() => {
+                    location.replace("../cms/backstageLogin.html");
+                })
+            } else {
+                $.each(data, function (index, item) {
+                    let statusClassName = (item.validStatus) ? "statusInValid" : "statusIsValid";
+                    let statusChiName = (item.validStatus) ? "停權" : "生效";
+                    queryMemberList += `
                 <tr data-listindex="${index}">
                     <td>
                         <span>${item.nickname}</span>
@@ -139,18 +150,29 @@ function getCmsMemberList() {
                     </td>
                 </tr>
                 `;
-            });
-            memberList.innerHTML = queryMemberList;
+                });
+                memberList.innerHTML = queryMemberList;
+            }
+
         })
 }
 
 
 function getCmsMemberInfoById(memberid) {
-    fetch(`manage/` + memberid)
-        .then(res => res.json())
+    fetch(`manage/detail`, {
+        method: "POST",
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            customerId: memberid,
+        }),
+    }).then(res => res.json())
         .then(data => {
-            sessionStorage.setItem("cmsMemberDetail", JSON.stringify(data));
-            location.href = "../cms/memberEdit.html";
+            if (data.successful) {
+                // sessionStorage.setItem("cmsMemberDetail", JSON.stringify(data));
+                location.href = "../cms/memberEdit.html";
+            } else {
+                console.log("get member error");
+            }
         });
 }
 

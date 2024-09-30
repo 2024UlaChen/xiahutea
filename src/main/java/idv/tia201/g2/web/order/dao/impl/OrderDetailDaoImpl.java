@@ -14,15 +14,15 @@ public class OrderDetailDaoImpl implements OrderDetailDao {
     @PersistenceContext
     private Session session;
 
-    // todo
+    // ------- FINISH ---------------------------
+    // 後端 訂單新增 > 明細新增
     @Override
     public int insert(OrderDetail orderDetail) {
         session.merge(orderDetail);
         return 1;
     }
 
-    // ------- FINISH ---------------------------
-    // 前台 訂單明細 顯示
+    // 前後台 訂單&爭議明細 顯示
     @Override
     public List<OrderDetail> selectByOrderId(int orderId) {
         String hql = "FROM OrderDetail WHERE orderId= :orderId";

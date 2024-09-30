@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 @Service
 public class OrderMappingUtil {
 
-    // FINISH
     public OrderDto createOrderDto(Orders order, DisputeOrder disputeOrder, List<OrderDetail> orderDetails) {
         OrderDto orderDto = new OrderDto();
 
