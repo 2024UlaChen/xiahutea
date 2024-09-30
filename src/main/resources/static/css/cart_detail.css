@@ -21,14 +21,16 @@
 
 .progress-list li{   
   display: flex;
+  font-family:"Helvetica", "Arial","LiHei Pro","黑體-繁","微軟正黑體", sans-serif;
   font-size: 21px;
+  font-weight: bold;
   flex-direction: column;
   text-align: center;
   justify-content: center;
   border-radius: 50%;
   width: 120px;
   height: 120px;
-  background-image: linear-gradient(45deg, #995be4, #ecf2ea, #995be4);
+  background-image: linear-gradient(45deg, #5be48b, rgba(142, 182, 157, 0.36), #5be476);
   position: relative;
 }
 
@@ -65,10 +67,6 @@
   width: 100%;
 }
 
-.customer-name{
-  margin-left: 20px;
-}
-
 .store-info {
   display: flex; /* 使用 Flexbox 佈局 */
   align-items: center; /* 垂直居中對齊 */
@@ -79,7 +77,8 @@
   margin: 10px; /* 外邊距，用於元素之間的距離 */
   text-decoration: none; /* 去除默認的超鏈接下劃線 */
   color: #343a40; /* 文字顏色 */
-  font-size: 16px; /* 文字大小 */
+  font-size: 22px;
+  letter-spacing: 3px; /* 字體間格 */
   font-weight: bold; /* 文字加粗 */
   max-width: 100%;
   box-sizing: border-box;
@@ -91,9 +90,8 @@
 }
 
 .checkout-content-img img {
-  width: 100px; /* 設置圖片的寬度 */
-  height: 100px; /* 設置圖片的高度 */
-  
+  width: 150px; /* 設置圖片的寬度 */
+  height: 150px; /* 設置圖片的高度 */
 }
 
 .store-name {
@@ -124,6 +122,11 @@
   align-items: center;
 }
 
+.customer-name {
+  font-size: 22px ;
+  color: #343a40 ;
+  margin-left: 20px;
+}
 .user-info img{
   max-width: 20%; /* 最大宽度 500px */
   max-height: 5%; /* 最大高度 300px */
@@ -133,15 +136,11 @@
   margin-bottom: 10px;
 }
 
-.user-name{
-  margin-left: 30px;
-}
-
-
+/* 商品列表 */
 .item-content {
   display: flex;
   flex-direction: column;
-  background-color: #cbd6e1;
+  background-color: #ebeff6;
   margin-bottom: 8px;
 }
 
@@ -153,7 +152,7 @@
 
 .product-name {
   margin: 0; /* 移除默認的外邊距 */
-  font-size: 20px;
+  font-size: 22px;
 }
 
 .product-buttons {
@@ -161,22 +160,29 @@
   gap: 10px;
 }
 
-.product-buttons button {
+.edit-btn {
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 18px;
-  color: #007bff;
+  font-size: 26px;
+  color: #FAC792;
+}
+
+.delete-btn{
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 26px;
+  color: #dc3545;
 }
 
 .product-buttons button:hover {
-  color: #0056b3;
+  color: #0e59ca;
 }
 
 .product-detail{
   display: flex;
 }
-
 
 /* 運送方式 */
 .recevier-method {
@@ -186,23 +192,22 @@
   border-radius: 5px;
   margin: 10px;
   color: #343a40;
-  font-size: 16px;
-  font-weight: bold;
+  font-size: 18px;
+  /*font-weight: bold;*/
   box-sizing: border-box;
   width: 45%;
 }
 
 .recevier-method h4{
   text-align: left;
+  margin-top: 30px;
+  font-size: 22px;
 }
 
-
 .pick-up, .carry-out, .carry-out-default {
-  /* display: flex;   div標籤就有區塊一行效果 */
   margin-bottom: 5px; /* 讓選項之間有距離 */
  text-align: left;
 }
-
 
 .carry-out-address {
   width: 100%; /* 確保輸入欄寬度填滿父容器 */
@@ -224,7 +229,6 @@
   margin-left: 20px;
 }
 
-
 /*取貨時間 */
 .recevie-time{
   text-align: left;
@@ -239,12 +243,13 @@
 .coupon-use {
   padding: 10px 20px;
   background-color: #f8f9fa;
+  /*font-family: "Helvetica", "Arial", "LiHei Pro", "黑體-繁", "微軟正黑體", sans-serif;*/
   border: none;
   border-radius: 5px;
   margin: 10px;
   color: #343a40;
-  font-size: 16px;
-  font-weight: bold;
+  font-size: 18px;
+  /*font-weight: bold;*/
   box-sizing: border-box;
   width: 45%;
 }
@@ -282,8 +287,9 @@
 }
 
 .coupon-use h4 {
-  text-align: left; /* 標題靠左對齊 */
-  margin-bottom: 10px; /* 增加標題和內容之間的間距 */
+  text-align: left;
+  margin-top: 30px;
+  font-size: 22px;
 }
 
 .select-coupon, .coupon-number,
@@ -291,11 +297,11 @@
   text-align: left;
 }
 
-.coupon-number {
-  width: 100%; /* 確保輸入欄寬度填滿父容器 */
-  border: 1px solid #ccc; /* 邊框顏色為淺灰色，1px 寬度 */
-  border-radius: 4px; /* 可選：設置圓角邊框 */
-}
+/*.coupon-number {*/
+/*  width: 100%; !* 確保輸入欄寬度填滿父容器 *!*/
+/*  border: 1px solid #ccc; !* 邊框顏色為淺灰色，1px 寬度 *!*/
+/*  border-radius: 4px; !* 可選：設置圓角邊框 *!*/
+/*}*/
 
 /*訂單彙總*/
 
@@ -306,11 +312,16 @@
   border-radius: 5px;
   margin: 10px;
   color: #343a40;
-  font-size: 16px;
-  font-weight: bold;
+  font-size: 18px;
+  /*font-weight: bold;*/
   box-sizing: border-box;
   width: 45%;
   text-align: left;
+}
+
+.amount-summary h4,
+.amount-result h4{
+  font-size:22px;
 }
 
 .summary-product-detail,
@@ -323,14 +334,16 @@
   margin-bottom: 10px; /* 增加內容之間的間距 */
 }
 
+.total-amount{
+  font-weight: bold;
+  font-size: 20px;
+}
+
 hr {
   border: 0;
   height: 1px;
   background: #333; /* 設置顏色 */
   margin: 10px 0;   /* 設置上下間距 */
-}
-.amount-result h4,p{
-  color: red;
 }
 
 .btn-addtopurchase{
@@ -438,7 +451,6 @@ input.qtyplus{
   border-top: 1px solid #aaa;
   border-bottom: 1px solid #aaa;
 }
-
 
 input.qtyplus {
   width: 40px;
@@ -567,7 +579,7 @@ input.qtyminus {
   border-radius: 5px; /* 圓角，如果需要直角可以設置為0 */
   margin: 10px; /* 外邊距，用於元素之間的距離 */
   color: white; 
-  font-size: 20px; 
+  font-size: 22px;
   font-weight: bold; /* 文字加粗 */
   max-width: 100%;
   box-sizing: border-box;
@@ -589,6 +601,7 @@ input.qtyminus {
 
 .payable-price {
   margin-left: auto;
+  font-size: 22px;
 }
 
 /*取貨人資料 */
@@ -604,9 +617,7 @@ input.qtyminus {
   box-sizing: border-box;
   width: 45%;
   flex-direction: column;
-
 }
-
 
 input.pickuper{
   margin-bottom: 10px;
