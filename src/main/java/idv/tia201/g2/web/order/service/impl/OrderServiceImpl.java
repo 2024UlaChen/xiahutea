@@ -284,10 +284,6 @@ public class OrderServiceImpl implements OrderService {
     }
 
     // 後台 訂單列表 顯示
-  //  @Override
-//    public List<Orders> findAll() {
-//        return orderDao.selectAll();
-//    }
     @Override
     public Page<Orders> findAll(Pageable pageable) {
         return orderRepository.findAll(pageable);

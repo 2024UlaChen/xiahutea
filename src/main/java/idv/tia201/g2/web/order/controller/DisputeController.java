@@ -4,8 +4,11 @@ import idv.tia201.g2.web.order.dto.OrderDto;
 import idv.tia201.g2.web.order.service.DisputeService;
 import idv.tia201.g2.web.order.vo.DisputeOrder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
 
 @RestController
 @RequestMapping("dispute")
@@ -32,8 +35,12 @@ public class DisputeController {
 
     // 後台 爭議列表 顯示
     @GetMapping("manage")
-    public List<DisputeOrder> manage(){
-        return disputeService.findAll();
+    public Page<DisputeOrder> findAllByPageable(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ){
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "applyDatetime"));
+        return disputeService.findAll(pageable);
     }
 
     // 後台 爭議明細 顯示

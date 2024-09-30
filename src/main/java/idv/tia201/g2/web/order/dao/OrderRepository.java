@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface OrderRepository extends JpaRepository<Orders, Integer> {
 
+    // 後台 訂單列表 顯示
     @Query("FROM Orders")
     Page<Orders> findAll(Pageable pageable);
 

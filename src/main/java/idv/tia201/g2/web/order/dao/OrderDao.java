@@ -9,7 +9,6 @@ public interface OrderDao {
     int update(Orders orders);
     void saveInvoiceNo(Integer orderId, String invoiceNo);
 
-//    List<Orders> selectAll();
     Orders selectByOrderId(int orderId);
     List<Orders> selectBycCustomerId(int customerId);
 
