@@ -59,9 +59,9 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     // 後台 訂單列表 顯示
-    @Override
-    public List<Orders> selectAll() {
-        TypedQuery<Orders> query = session.createQuery("FROM Orders", Orders.class);
-        return query.getResultList();
-    }
+//    @Override
+//    public List<Orders> selectAll() {
+//        TypedQuery<Orders> query = session.createQuery("FROM Orders", Orders.class);
+//        return query.getResultList();
+//    }
 }

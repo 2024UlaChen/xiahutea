@@ -12,6 +12,7 @@ import idv.tia201.g2.web.member.vo.Member;
 import idv.tia201.g2.web.order.dao.DisputeDao;
 import idv.tia201.g2.web.order.dao.OrderDao;
 import idv.tia201.g2.web.order.dao.OrderDetailDao;
+import idv.tia201.g2.web.order.dao.OrderRepository;
 import idv.tia201.g2.web.order.dto.NotificationDto;
 import idv.tia201.g2.web.order.dto.OrderDto;
 import idv.tia201.g2.web.order.service.InvoiceService;
@@ -27,6 +28,8 @@ import idv.tia201.g2.web.store.dao.StoreDao;
 import idv.tia201.g2.web.store.vo.CustomerLoyaltyCard;
 import idv.tia201.g2.web.store.vo.Store;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.sql.Timestamp;
@@ -68,6 +71,8 @@ public class OrderServiceImpl implements OrderService {
     private NotificationService notificationService;
     @Autowired
     private InvoiceService invoiceService;
+    @Autowired
+    private OrderRepository orderRepository;
 
     // -------- FINISH ---------------------------------
     // 前台 訂單新增
@@ -279,9 +284,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
     // 後台 訂單列表 顯示
+  //  @Override
+//    public List<Orders> findAll() {
+//        return orderDao.selectAll();
+//    }
     @Override
-    public List<Orders> findAll() {
-        return orderDao.selectAll();
+    public Page<Orders> findAll(Pageable pageable) {
+        return orderRepository.findAll(pageable);
     }
 
     // 後台 訂單明細 顯示

@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
   <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
 
+
   <style>
 
       /* 查詢欄   */
@@ -62,16 +63,29 @@
           background-color: #F8F9FA;
           float: right;
       }
-
       .btn-block {
           width: 100px;
+          height: 35px;
           font-weight: bolder;
       }
-
-      /* 隱藏 bs內建的查詢btn */
-      div.dataTables_wrapper div.dataTables_filter {
-          display: none;
+      /*分頁*/
+      #page_div{
+          display: flex;       /* 使用 flexbox */
+          justify-content: center; /* 水平置中 */
+          gap: 20px;          /* 按鈕之間的間距 */
       }
+      .page_btn{
+          margin-top: 8px;
+      }
+      .page-button{
+          border: 1px #C0C0C0 solid;
+          width: 30px;
+          height: 35px;
+          text-align: center;
+          border-radius: 4px;
+      }
+
+
 
       /*  訂單列表  */
       #order_thread, #order_tbody {
@@ -165,6 +179,11 @@
                   </tbody>
                 </table>
                 <!--/.訂單列表    -->
+                <div id="page_div">
+                  <button id="previous" class="btn btn-block btn-default page_btn">上一頁</button>
+                  <span id="pagination" class="page_btn"></span>
+                  <button id="next" class="btn btn-block btn-default page_btn">下一頁</button>
+                </div>
               </div>
             </div>
           </div>
@@ -192,48 +211,68 @@
 <script src="dist/js/demo.js"></script>
 
 <script>
-    // $(function () {
-    //     $("#example1").DataTable({
-    //         "responsive": true, "lengthChange": false, "autoWidth": false,
-    //     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-    //     $('#example2').DataTable({
-    //         "paging": true,
-    //         "lengthChange": false,
-    //         "searching": true,
-    //         "ordering": true,
-    //         "info": true,
-    //         "autoWidth": false,
-    //         "responsive": true,
-    //     });
-    // });
-</script>
-<script>
+    let currentPage = 0; // 當前頁數
+    let totalPages = 0; // 總頁數
+    const size = 10; // 每頁顯示的筆數
+
     document.addEventListener("DOMContentLoaded", function () {
         // todo 權限判斷
 
-
         // 0. 顯示列表資料
-        init();
+        init(currentPage, size);
+        // 確保元素存在再添加事件監聽器
+        const nextButton = document.getElementById("next");
+        const previousButton = document.getElementById("previous");
+
+        if (nextButton) {
+            nextButton.addEventListener("click", function() {
+                if (currentPage < totalPages - 1) {
+                    currentPage++;
+                    init(currentPage, size); // 重新載入下一頁資料
+                }
+            });
+        } else {
+            console.error("Next button not found");
+        }
+
+        if (previousButton) {
+            previousButton.addEventListener("click", function() {
+                if (currentPage > 0) {
+                    currentPage--;
+                    init(currentPage, size); // 重新載入上一頁資料
+                }
+            });
+        }
+    });
+
         // 顯示 明細
-        function init() {
-            fetch('/order/manage')
+        function init(page, size) {
+            fetch(`/order/manage?page=${page}&size=${size}`)
                 .then(response => response.json())
-                .then(data => showDB(data))
+                .then(data => {
+                    console.log(data);
+                    totalPages = data.totalPages; // 更新總頁數
+                    showDB(data); // 顯示資料
+                    updatePagination(); // 更新分頁按鈕狀態
+                })
                 .catch((error) => {
                     console.log("錯誤原因：" + error);
                 });
         }
         function showDB(data) {
             let orderHtml = "";
-            for (let i = data.length-1; i >= 0; i--) {
+            let orders = data.content; // 取得所有訂單
+
+            for (let i = 0; i < orders.length; i++) {
+                    const order = orders[i];  // 取出當前的訂單物件
                 orderHtml += `
                     <tr>
-                        <td class="order_date_value">${data[i].orderCreateDatetime}</td>
-                        <td class="order_id_value"><a href="./storeOrderDetail.html?orderId=${data[i].orderId}">${data[i].orderId}</a></td>
-                        <td class="order_username_value">${data[i].customer.nickname}</td>
-                        <td class="order_status_value">${statusText(data[i].orderStatus)}</td>
-                        <td class="order_store_value">${data[i].store.storeName}</td>
-                        <td>${data[i].orderProductQuantity}</td>
+                        <td class="order_date_value">${order.orderCreateDatetime}</td>
+                        <td class="order_id_value"><a href="./storeOrderDetail.html?orderId=${order.orderId}">${order.orderId}</a></td>
+                        <td class="order_username_value">${order.customer.nickname}</td>
+                        <td class="order_status_value">${statusText(order.orderStatus)}</td>
+                        <td class="order_store_value">${order.store.storeName}</td>
+                        <td>${order.orderProductQuantity}</td>
                     </tr>
                 `;
             }
@@ -247,6 +286,42 @@
                 case 4 : return "訂單完成";
             }
         }
+
+        function updatePagination() {
+            const previousButton = document.getElementById("previous");
+            const nextButton = document.getElementById("next");
+            const pagination = document.getElementById("pagination");
+
+            if (previousButton) {
+                previousButton.disabled = (currentPage === 0);
+            }
+            if (nextButton) {
+                nextButton.disabled = (currentPage >= totalPages - 1);
+            }
+
+            // 只顯示5頁的按鈕
+            let startPage = Math.max(0, currentPage - 2); // 當前頁的前兩頁
+            let endPage = Math.min(totalPages - 1, currentPage + 4); // 當前頁的後兩頁
+
+            let pageButtons = "";
+            for (let i = startPage; i <= endPage; i++) {
+                pageButtons += `<button class="page-button" data-page="${i}" ${i === currentPage ? 'disabled' : ''}>${i + 1}</button>`;
+            }
+
+            // 更新頁碼按鈕和頁碼顯示
+            pagination.innerHTML = `
+                <div>${pageButtons}</div>
+                <div >第 ${currentPage + 1} 頁 / 共 ${totalPages} 頁</div>
+            `;
+            const pageButtonsElements = document.querySelectorAll(".page-button");
+            pageButtonsElements.forEach(button => {
+                button.addEventListener("click", function() {
+                    currentPage = parseInt(this.getAttribute("data-page"), 10);
+                    init(currentPage, size); // 重新載入資料
+                });
+            });
+        }
+
         //----------------------------------------------------------
         // 1.查詢欄
         // 1.1 輸入查詢相關欄位，點查詢btn可篩選訂單
@@ -310,7 +385,7 @@
                 // 顯示或隱藏該列
                 row.style.display = show_row ? "" : "none";
             });
-        });
+
     });
 </script>
 </body>
