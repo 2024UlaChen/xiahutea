@@ -12,5 +12,4 @@ public interface DisputeService  {
     List<DisputeOrder> findAll();
     OrderDto findByOrderId(int orderId);
     OrderDto findByDisputeOrderId(int disputeOrderId);
-
 }
