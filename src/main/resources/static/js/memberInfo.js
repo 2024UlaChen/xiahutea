@@ -1,7 +1,18 @@
+const memberInfoName = document.querySelector("#memberInfoName");
+const memberInfoMoney = document.querySelector("#memberInfoMoney");
+const memberInfoPhone = document.querySelector("#memberInfoPhone");
+const memberInfoBirthday = document.querySelector("#memberInfoBirthday");
+const memberInfoSex = document.querySelector("#memberInfoSex");
+
+//ABOUT  IMG
 const photoBlock = document.querySelector(".memberPhoto");
 const memberPhotoInput = document.querySelector("#memberPhotoInput");
 const asidePhoto = document.querySelector("#asidePhoto");
-let uploadImg;
+
+// BTN
+const memberInfoSaveBtn = document.querySelector("#memberInfoSave");
+
+
 photoBlock.addEventListener("click", function () {
     memberPhotoInput.click();
 })
@@ -32,34 +43,36 @@ function isCheckedFalse(target) {
 }
 
 
-function phoneValid(phone) {
-    cmsQueryMemberCellphoneTxt.addEventListener("input", function () {
-        if (phone.value.length === 0) {
-            isCheckedSuccess(this);
-        } else {
-            if (isNaN(phone.value)) {
-                this.previousElementSibling.textContent = "僅接受數字";
-                isCheckedFalse(this);
-            } else if (!phone.value.startsWith("09")) {
-                this.previousElementSibling.textContent = "開頭必須是09";
-                isCheckedFalse(this);
-            } else {
-                isCheckedSuccess(this);
-            }
-        }
-    })
+function nullToEmpty(data) {
+    return (data == null) ? "" : data;
 }
-
-
+function changeDateFormat(date){
+    const hyphen ="-";
+    const slash = "/";
+    if(date.includes(hyphen))
+        return date.replaceAll(hyphen,slash);
+    if(date.includes(slash))
+        return date.replaceAll(slash,hyphen);
+}
 document.addEventListener("DOMContentLoaded", function () {
     const sessionDetail = JSON.parse(sessionStorage.getItem("memberData"));
-    console.log(sessionDetail);
-    console.log("===");
     fetch(`member`, {
         method: "POST",
         headers: {'Content-Type': 'application/json'},
-    }).then(res => res.text())
+    }).then(res => res.json())
         .then(data => {
             console.log(data);
+            if (data.successful) {
+                memberInfoName.value = nullToEmpty(data.nickname);
+                memberInfoMoney.value = data.customerMoney;
+                memberInfoPhone.value = data.customerPhone;
+                memberInfoBirthday.value = changeDateFormat(data.birthday);
+                memberInfoSex.value = data.sex;
+                photoBlock.style.backgroundImage=`url(${data.customerImg})`;
+            }
         })    // asidePhoto.src = fileData;
+})
+
+memberInfoSaveBtn.addEventListener("click",function(){
+
 })

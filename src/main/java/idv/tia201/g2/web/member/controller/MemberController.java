@@ -152,6 +152,19 @@ public class MemberController {
         }
         member = memberService.findMemberById(totalUserDTO.getUserId());
         member.setSuccessful(true);
+        System.out.println(member);
         return member;
+    }
+
+    @PostMapping("update")
+    public Core updateMemberInfo(Member member) {
+        Core core = new Core();
+        if (member == null) {
+            core.setSuccessful(false);
+            core.setMessage("no member data");
+            return core;
+        }
+//        memberService.
+        return core;
     }
 }
