@@ -45,10 +45,12 @@
     font-size: 16px;
     font-weight: bold;
 }
+
 .checkInValid {
     color: #dc3545;
     font-weight: bold;
 }
+
 /*carrier normal setting*/
 
 .memberCarrier div {
@@ -96,7 +98,7 @@
     justify-content: center;
 }
 
-.modal-footer button, .addressSaving button {
+.addressSaving button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -111,7 +113,7 @@
 }
 
 
-.modal-footer button:hover, .addressSaving button:hover, .dataSave button:hover {
+.addressSaving button:hover, .dataSave button:hover {
     background-color: white;
     border: 1px solid #73B4BA;
     color: #73B4BA;
@@ -164,4 +166,75 @@
     justify-content: center;
 }
 
+/*memberSetting*/
 
+.memberSetting > div {
+    margin-bottom: 2%;
+}
+
+.settingBlock {
+    display: flex;
+    align-items: center;
+    border: 1px solid #c8cacc;
+    border-radius: 5px;
+    padding-left: 5%;
+    padding-right: 1%;
+}
+
+
+.settingBlock input {
+    width: 100%;
+    border: 1px transparent solid;
+}
+
+.settingBlock:hover, .settingBlock:focus {
+    border: 1px #6c757d solid;
+}
+
+.settingBlock input:focus, .settingBlock input:active:focus, input[type="password"]:focus {
+    border: 1px transparent solid !important;
+
+}
+
+.modal-dialog-centered {
+    display: flex;
+    align-items: center;
+    /*min-height: calc(100% - 1rem);*/
+}
+
+
+#addrModalBody div {
+    margin-bottom: 2%;
+}
+
+#addrModalTitle {
+    font: 20px bold;
+    color: black
+}
+
+
+/*btn setting*/
+
+.btnCancel, .btnDownload, .btnQuery {
+    background-color: #6c757d;
+    border: 1px solid #6c757d;
+    color: white;
+}
+
+.btnCancel:hover, .btnDownload:hover, .btnQuery:hover {
+    background-color: white;
+    border: 1px solid #6c757d;
+    color: #6c757d;
+}
+
+.btnSave {
+    background-color: #73B4BA;
+    border: 1px solid #73B4BA;
+    color: white;
+}
+
+.btnSave:hover {
+    background-color: white;
+    border: 1px solid #73B4BA;
+    color: #73B4BA;
+}

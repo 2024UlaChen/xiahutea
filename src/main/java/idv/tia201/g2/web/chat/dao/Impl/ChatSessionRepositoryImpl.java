@@ -10,6 +10,7 @@ import jakarta.persistence.Query;
 import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 public class ChatSessionRepositoryImpl implements ChatSessionOperation {
@@ -40,16 +41,18 @@ public class ChatSessionRepositoryImpl implements ChatSessionOperation {
                         "from chat_sessions chat " +
                         "       join total_users attender on chat.attender_id = attender.total_user_id" +
                         "       join total_users admin on chat.administrator_id = admin.total_user_id" +
-                        "       join messages m on m.chat_session_id = chat.chat_session_id" +
+                        "       left join messages m on m.chat_session_id = chat.chat_session_id" +
                         "       left join customer c on c.customer_id = attender.user_id" +
                         "       left join store s on s.store_id = attender.user_id" +
                         "       join administrators a on a.administrator_id  = admin.user_id " +
-                        "where m.sent_at = chat.last_activity " +
-                        "and case ? " +
-                        "   when 0 then attender.total_user_id = ?" +
-                        "   when 1 then attender.total_user_id = ?" +
-                        "   when 3 then admin.total_user_id = ? " +
-                        "end";
+                        "where " +
+                        "   case ? " +
+                            "   when 0 then attender.total_user_id = ?" +
+                            "   when 1 then attender.total_user_id = ?" +
+                            "   when 3 then admin.total_user_id = ? " +
+                        "   end " +
+                        "   and (m.sent_at = chat.last_activity or chat.last_activity is NULL) " +
+                        "order by m.sent_at DESC";
 
         Query query = em.createNativeQuery(jpql)
                 .setParameter(1, userTypeId)
@@ -78,13 +81,16 @@ public class ChatSessionRepositoryImpl implements ChatSessionOperation {
             Participant attender = new Participant();
             if (result[3] instanceof Long) {
                 attender.setUserId((Long) result[3]); // 直接轉換為 Long
-                System.out.println("long");
             } else if (result[3] instanceof BigInteger) {
                 attender.setUserId(((BigInteger) result[3]).longValue());   // JPA 將整數類型的結果視為 BigInteger
-                System.out.println("BigInteger");
             }
             attender.setName((String) result[4]);
-            attender.setAvatar((byte[]) result[5]);
+            byte[] bytes = (byte[]) result[5];
+            String base64Str = "data:image/png;base64,";
+            if(bytes != null){
+                base64Str += Base64.getEncoder().encodeToString(bytes);
+            }
+            attender.setAvatar(base64Str);
             attender.setType((Integer) result[6]);
             participantList.add(attender);
 

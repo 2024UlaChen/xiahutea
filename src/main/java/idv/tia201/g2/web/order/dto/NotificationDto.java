@@ -12,4 +12,5 @@ public class NotificationDto {
 
     private int orderId;
     private Timestamp orderCreateDatetime;
+
 }

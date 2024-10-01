@@ -2,8 +2,8 @@ package idv.tia201.g2.web.order.vo;
 
 import idv.tia201.g2.core.pojo.Core;
 import idv.tia201.g2.web.product.vo.Product;
-import jakarta.persistence.*;
 import lombok.*;
+import jakarta.persistence.*;
 
 @Entity
 @Builder

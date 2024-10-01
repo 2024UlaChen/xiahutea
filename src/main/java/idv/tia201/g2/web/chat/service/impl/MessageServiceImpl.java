@@ -5,6 +5,7 @@ import idv.tia201.g2.web.chat.dto.ImgDto;
 import idv.tia201.g2.web.chat.dto.MessageDto;
 import idv.tia201.g2.web.chat.service.MessageService;
 import idv.tia201.g2.web.chat.vo.Messages;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,5 +45,17 @@ public class MessageServiceImpl implements MessageService {
             ChatMessagesData.add(messageDto);
         }
         return ChatMessagesData;
+    }
+
+    public Messages saveMessage ( MessageDto messageDto ){
+        Messages message = new Messages();
+        BeanUtils.copyProperties(messageDto,message);
+        message.setMessageContent(messageDto.getContent());
+        if(messageDto.getImg() != null && messageDto.getImg().getSrc() != null){
+            message.setAttach(messageDto.getImg().getSrc());
+        }
+        message.setSenderId(messageDto.getSenderId());
+        message.setSentAt(messageDto.getTimestamp());
+        return messageChatSessionRepository.save(message);
     }
 }

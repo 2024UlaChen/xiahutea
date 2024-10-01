@@ -1,12 +1,11 @@
 package idv.tia201.g2.web.order.dto;
 
+import lombok.*;
 import java.util.List;
-
 import idv.tia201.g2.core.pojo.Core;
 import idv.tia201.g2.web.order.vo.DisputeOrder;
 import idv.tia201.g2.web.order.vo.OrderDetail;
 import idv.tia201.g2.web.order.vo.Orders;
-import lombok.*;
 
 @Data
 @Builder

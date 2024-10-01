@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded",function () {
     // 取得 URL 中的 couponId 參數
     let urlParams = new URLSearchParams(window.location.search);
     let couponId = urlParams.get('couponId');
+    console.log("couponID:",couponId)
 
     //********************************確認是否為修改跳轉頁面**********************
     if (couponId) {
@@ -75,15 +76,7 @@ document.addEventListener("DOMContentLoaded",function () {
         var endDate = this.value;
         coupon_start_date_el.setAttribute('max', endDate);
     });
-    //**********************************選擇限制張數*************************
-    // is_limit_el.addEventListener("click", function () {
-    //     limit_amount_el.disabled = false;
-    //     limit_amount_el.focus();
-    // })
-    // no_limit_el.addEventListener("click", function () {
-    //     limit_amount_el.value = "";
-    //     limit_amount_el.disabled = true;
-    // });
+
     //********************************表單送出*********************************
     coupon_form_el.addEventListener('submit', function (event) {
         event.preventDefault();
