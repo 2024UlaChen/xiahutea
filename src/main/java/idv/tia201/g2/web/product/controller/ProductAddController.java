@@ -2,11 +2,13 @@ package idv.tia201.g2.web.product.controller;
 
 
 
+import idv.tia201.g2.web.product.dto.ProductCategoryDTO;
 import idv.tia201.g2.web.product.service.ProductService;
 import idv.tia201.g2.web.product.vo.Product;
 
 import idv.tia201.g2.web.store.service.StoreService;
 import idv.tia201.g2.web.store.vo.Store;
+import idv.tia201.g2.web.user.dto.TotalUserDTO;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -23,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.List;
 
 
@@ -42,7 +45,6 @@ public class ProductAddController {
 
 
 
-
     // 查找所有產品
     @GetMapping("/all")
     public List<Product> getAllProducts() {
@@ -54,6 +56,9 @@ public class ProductAddController {
     public List<Product> getProductsByProductName(@RequestParam String productName) {
         return productService.getProductsByProductName(productName);
     }
+
+
+
 
     @GetMapping("/search")
     public ResponseEntity<List<Product>> searchProducts(
@@ -88,10 +93,12 @@ public class ProductAddController {
 
 
     @PostMapping("/add")
-    public ResponseEntity<String> addProduct(@RequestBody ProductDTO productDTO) {
+    public ResponseEntity<String> addProduct(@RequestBody ProductDTO productDTO) throws IOException {
         // 获取店铺ID
         // 调用 Service 层进行处理
+
         boolean success = productService.addProduct(productDTO);
+
 
         if (success) {
             return ResponseEntity.ok("商品新增成功!");
@@ -101,7 +108,10 @@ public class ProductAddController {
     }
 
     @PutMapping("/update/{productId}")
-    public ResponseEntity<String> updateProduct(@PathVariable Integer productId,@RequestBody ProductDTO productDTO) {
+    public ResponseEntity<String> updateProduct(@PathVariable Integer productId,@RequestBody ProductDTO productDTO ,HttpSession session) {
+        TotalUserDTO totalUserDTO = (TotalUserDTO)session.getAttribute("totalUserDTO");
+        Integer userTypeId = totalUserDTO.getUserTypeId(); // 1 : 商家 、 3 : 管理員
+        Integer userId = totalUserDTO.getUserId();// storeId 或 adminId
         try {
             boolean success = productService.updateProduct(productId, productDTO);
 
@@ -128,7 +138,17 @@ public class ProductAddController {
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
         return productService.getProducts(pageable);
+
+
+
     }
+
+    @GetMapping("/byCategory")
+    public List<ProductDTO> getProductsByCategory(@RequestParam Integer ProductCategoryId) {
+        return productService.getProductsByCategory(ProductCategoryId);
+    }
+
+
 
 
 }

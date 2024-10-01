@@ -2,6 +2,7 @@ package idv.tia201.g2.web.product.service.impl;
 
 import idv.tia201.g2.web.product.dao.ProductCategoryDao;
 import idv.tia201.g2.web.product.dao.ProductDao;
+import idv.tia201.g2.web.product.dto.ProductCategoryDTO;
 import idv.tia201.g2.web.product.dto.ProductDTO;
 import idv.tia201.g2.web.product.service.ProductService;
 import idv.tia201.g2.web.product.vo.Product;
@@ -18,7 +19,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -28,6 +32,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private StoreDao storeDao;
+
+    @Autowired
+    private ProductCategoryDao productCategoryDao;
 
 
     //找出全部的產品
@@ -50,6 +57,23 @@ public class ProductServiceImpl implements ProductService {
         return productDao.findByProductCategoryIdAndProductNameContaining(productCategoryId, productName);
     }
 
+    @Override
+    public List<ProductCategoryDTO> getProductsByCategory() {
+        return null;
+    }
+
+    @Override
+    public List<ProductDTO> getProductsByCategory(Integer ProductCategoryId) {
+        List<Product> products = productDao.findByProductCategoryId(ProductCategoryId);
+        // 轉換實體列表到 DTO 列表
+        return products.stream()
+                .map(this::convertToProductDTO)
+                .collect(Collectors.toList());
+
+    }
+
+
+
 
     //獲取產品名字
     public List<Product> getProductsByProductName(String productName) {
@@ -59,16 +83,17 @@ public class ProductServiceImpl implements ProductService {
 
 
     //新增
-    public boolean addProduct(ProductDTO productDTO) {
+    public boolean addProduct(ProductDTO productDTO)  {
         // 创建 Product 实体对象
         Product product = new Product();
         product.setProductName(productDTO.getProductName());
-        product.setProductPrice(productDTO.getProductPrice());
+       product.setProductPrice(productDTO.getProductPrice());
         product.setSize(productDTO.getSize());
         product.setProductStatus(productDTO.isProductStatus());
-        product.setProductStoreId(productDTO.getProductStoreId());
+
         product.setProductCategoryId(productDTO.getProductCategoryId());
         product.setProductStoreId(1);
+        // 设置图片字节
         product.setNormalIce(productDTO.isNormalIce());
         product.setLessIce(productDTO.isLessIce());
         product.setLightIce(productDTO.isLightIce());
@@ -87,6 +112,7 @@ public class ProductServiceImpl implements ProductService {
         product.setHerbalJelly(productDTO.isHerbalJelly());
 
 
+
         productDao.save(product);
 
 
@@ -94,6 +120,46 @@ public class ProductServiceImpl implements ProductService {
 
         return true;
     }
+
+    public Product saveProduct(ProductDTO productDTO) {
+        Product product = new Product();
+        product.setProductName(productDTO.getProductName());
+
+        product.setSize(productDTO.getSize());
+        product.setProductStatus(productDTO.isProductStatus());
+        product.setProductPrice(productDTO.getProductPrice());
+        product.setProductCategoryId(productDTO.getProductCategoryId());
+        product.setProductStoreId(1);
+        // 设置图片字节
+        product.setNormalIce(productDTO.isNormalIce());
+        product.setLessIce(productDTO.isLessIce());
+        product.setLightIce(productDTO.isLightIce());
+        product.setIceFree(productDTO.isIceFree());
+        product.setRoomTemperature(productDTO.isRoomTemperature());
+        product.setHot(productDTO.isHot());
+        product.setFullSugar(productDTO.isFullSugar());
+        product.setLessSugar(productDTO.isLessSugar());
+        product.setHalfSugar(productDTO.isHalfSugar());
+        product.setQuarterSugar(productDTO.isQuarterSugar());
+        product.setNoSugar(productDTO.isNoSugar());
+        product.setPearl(productDTO.isPearl());
+        product.setPudding(productDTO.isPudding());
+        product.setCoconutJelly(productDTO.isCoconutJelly());
+        product.setTaro(productDTO.isTaro());
+        product.setHerbalJelly(productDTO.isHerbalJelly());
+
+
+
+        return productDao.save(product);
+    }
+
+    public void updateProductImage(Integer productId, byte[] imageBytes) {
+        Product product = productDao.findByProductId(productId);
+        product.setProductPicture(imageBytes);
+        productDao.save(product);
+    }
+
+
 
     public boolean updateProduct(Integer productId, ProductDTO productDTO) {
         try {
@@ -191,4 +257,6 @@ public class ProductServiceImpl implements ProductService {
         dto.setHerbalJelly(product.isHerbalJelly());
         return dto;
     }
+
+
 }
