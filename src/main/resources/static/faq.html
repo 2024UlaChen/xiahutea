@@ -451,7 +451,7 @@
         <div class="chat-container">
             <div id="weien-chat"></div>
         </div>
-        <div id="chat-icon" class=".d-none">
+        <div id="chat-icon" class="">
             <b class="bi bi-chat-dots"></b>
         </div>
 
@@ -526,8 +526,13 @@
             .then(data => {
                 userTypeId = data.userTypeId;
                 return data.totalUserId;
+            }).catch(error=>{
+                console.log("錯誤 : " + error)
+                let chatRoom = $("div.chat-room").eq(0);
+                $(chatRoom).css("visibility","hidden");
+                $(chatRoom).addClass("d-none")
+                console.log($("div.chat-room").eq(0))
             })
-        // return 45;
     }
 
     actionHandlers.sendMessage = (message) => {
@@ -561,17 +566,25 @@
     }
 
     const chat = new WeienChat();
+
     let webSocket;
 
     $("#chat-icon").on("click",async() => {
         $(".chat-container").toggle();
     })
+
     document.addEventListener('DOMContentLoaded', async () => {
-    //      // 加載完成以後啟動
+        // 加載完成以後啟動
         await chat.init();
         chat.state.value.showMode = 'mobile'
+        await function (){
+            if(userTypeId === 0){
+                $(".weien-chating-name").eq(0).text("管理員");
+                console.log($(".weien-chating-name").eq(0));
+            }
+        }
         let chatRoomsData = await actionHandlers.getChatRoomsData();        //獲取聊天室資料
-        let chatSessionId = await chatRoomsData[0].chatId;                        //第一筆聊天室的 chatId
+        let chatSessionId = await chatRoomsData[0].chatId;                  //第一筆聊天室的 chatId
         chat.state.value.activeChatId = chatSessionId;
         webSocket = new WebSocket(url);
         webSocket.addEventListener('message', handleSendMessage);
