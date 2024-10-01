@@ -31,6 +31,8 @@ public interface ProductCategoryDao extends JpaRepository<ProductCategory, Integ
      ProductCategory findByCategoryId(Integer categoryId);
 //用分類名作模糊查詢
     List<ProductCategory> findByCategoryNameContaining(String categoryName);
+    List<ProductCategory> findAllByOrderByCategorySortAsc();
 
+    Page<ProductCategory> findByProductStoreId(Integer productStoreId, Pageable pageable);
 
 }

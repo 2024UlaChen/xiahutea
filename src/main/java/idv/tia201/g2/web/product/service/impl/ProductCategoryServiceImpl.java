@@ -10,9 +10,13 @@ import idv.tia201.g2.web.product.vo.ProductCategory;
 import idv.tia201.g2.web.store.dao.StoreDao;
 import idv.tia201.g2.web.store.vo.Store;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -43,7 +47,7 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
 
     public ProductCategory update(Integer categoryId, ProductCategoryDTO updatedCategoryDTO) {
         // 根据 categoryId 查找现有分类
-        ProductCategory existingCategory = productCategoryDao.findById(categoryId).orElse(null);
+        ProductCategory existingCategory = productCategoryDao.findByCategoryId(categoryId);
 
         if (existingCategory != null) {
             // 更新分类的字段
@@ -60,14 +64,26 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     }
 
 
-    public void saveCategory(ProductCategoryDTO categoryDTO) {
+
+    @Override
+    public String saveCategory(ProductCategoryDTO categoryDTO, Integer userId,Integer userTypeId) {
+        // 进行输入校验，例如检查必填字段是否为空
+        if (categoryDTO.getCategoryName() == null || categoryDTO.getCategoryName().isEmpty()) {
+            return "分类名称不能为空";
+        }
+
+
+
         ProductCategory category = new ProductCategory();
         category.setCategoryName(categoryDTO.getCategoryName());
         category.setCategorySort(categoryDTO.getCategorySort());
-        category.setCategoryStatus(categoryDTO.getCategoryStatus());  // 注意這裡的 isStatus() 用來取得 boolean 值
+        category.setCategoryStatus(categoryDTO.getCategoryStatus());
+        category.setProductStoreId(userId);
 
-
+        // 保存分类
         productCategoryDao.save(category);
+
+        return "分类添加成功";
     }
 
 
@@ -85,8 +101,23 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
 
     @Override
     public Page<ProductCategory> getCategories(Pageable pageable) {
+
         return productCategoryDao.findAll(pageable);
     }
 
 
+    @Override
+    public boolean checkStoreOwnership(Integer userId,Integer storeId) {
+        // 调用 StoreDAO 检查该用户是否为 storeId 对应店铺的拥有者
+        Store store =storeDao.findByStoreId(storeId);
+        return store != null && store.getStoreId().equals(userId);
+    }
+
+    @Override
+    public Page<ProductCategory> getProductCategoryByStoreId(Integer productStoreId, Pageable pageable) {
+         return productCategoryDao.findByProductStoreId(productStoreId, pageable);
+    }
+
+
 }
+
