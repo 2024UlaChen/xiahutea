@@ -1,5 +1,6 @@
 package idv.tia201.g2.web.order.controller;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import idv.tia201.g2.web.order.dto.OrderDto;
@@ -10,6 +11,7 @@ import idv.tia201.g2.web.user.dto.TotalUserDTO;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -31,6 +33,9 @@ public class OrderController {
     public Page<OrderDto> memberOrder(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) int status, // 新增狀態篩選
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dateStart, // 開始日期
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dateEnd, // 結束日期
             HttpSession httpSession
     ) {
         TotalUserDTO totalUserDTO = (TotalUserDTO) httpSession.getAttribute("totalUserDTO");
@@ -38,6 +43,12 @@ public class OrderController {
             return Page.empty();
         }
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "orderCreateDatetime"));
+//        // 判斷是否有日期範圍
+//        if (dateStart != null && dateEnd != null) {
+//            return orderService.findByCustomerIdAndDateRange(totalUserDTO.getUserId(), status, dateStart.atStartOfDay(), dateEnd.plusDays(1).atStartOfDay(), pageable);
+//        }
+//        // 沒有日期範圍，按狀態查詢
+//        return orderService.findByCustomerIdAndStatus(totalUserDTO.getUserId(), status, pageable);
         return orderService.findByCustomerId(totalUserDTO.getUserId(), pageable);
     }
 

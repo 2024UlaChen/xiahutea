@@ -34,6 +34,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 import static org.springframework.util.ObjectUtils.isEmpty;
@@ -244,9 +245,28 @@ public class OrderServiceImpl implements OrderService {
             // 收集結果
         }).collect(Collectors.toList());
 
-        // Page<OrderDto>
+        // 回傳Page<OrderDto>
         return new PageImpl<>(orderDtos, pageable, orders.getTotalElements());
     }
+
+    public Page<OrderDto> findByCustomerIdAndDateRange(Integer customerId, Integer orderStatus, Timestamp dateStart, Timestamp dateEnd, Pageable pageable) {
+        Page<Orders> orders;
+        // 根據 customerId 和訂單建立日期範圍來過濾訂單
+        if (orderStatus != null) {
+            orders = orderRepository.findByCustomerIdAndOrderStatusAndOrderCreateDatetimeBetween(customerId, orderStatus, dateStart, dateEnd, pageable);
+        }else {
+            orders = orderRepository.findByCustomerIdAndOrderCreateDatetimeBetween(customerId, dateStart, dateEnd, pageable);
+        }
+        //                      建立流             || 映射每個訂單
+        List<OrderDto> orderDtos = orders.stream().map(order -> {
+            DisputeOrder disputeOrder = disputeDao.selectByOrderId(order.getOrderId());
+            List<OrderDetail> orderDetails = orderDetailDao.selectByOrderId(order.getOrderId());
+            return orderMappingUtil.createOrderDto(order, disputeOrder, orderDetails);
+            // 收集結果
+        }).collect(Collectors.toList());
+        return new PageImpl<>(orderDtos, pageable, orders.getTotalElements());
+    }
+
 
     // 前台 訂單明細 顯示
     @Override

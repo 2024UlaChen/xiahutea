@@ -267,23 +267,33 @@
 <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyC3nDHy1dARR-Pa_2jjPCjvsOR4bcILYsM'></script>
 <script src="assets/js/frontend-plugin.js"></script>
 <script src="./js/general.js"></script>
+<!-- sweet alert  -->
+<script src="cms/plugins/sweetalert2/sweetalert2.all.js"></script>
 
 <script>
-    let currentPage = 0; // 當前頁數
-    let totalPages = 0; // 總頁數
     const size = 9; // 每頁顯示的筆數
+    let totalPages = 0; // 總頁數
+    let currentPage = 0; // 當前頁數
+
+    // 取得sessionStorage會員ID
+    function getCustomerId(){
+        const memberData = JSON.parse(sessionStorage.getItem("memberData"));
+        return memberData.data.customerId;
+    }
 
     document.addEventListener("DOMContentLoaded", function(){
-        // todo 判斷會員是否登入
-        // TODO 待session
+        if(getCustomerId() == null){
+            Swal.fire("請先登入會員");
+            location.href = `./homePage.html`;
+            return;
+        }
 
         // 0.顯示列表
-        init(currentPage, size);
+        init(currentPage, size, getCustomerId());
 
         // 確保元素存在 添加事件監聽器
         const nextButton = document.getElementById("next");
         const previousButton = document.getElementById("previous");
-
         if (nextButton) {
             nextButton.addEventListener("click", function () {
                 if (currentPage < totalPages - 1) {
@@ -302,14 +312,21 @@
         }
     });
 
-    function init(page, size) {
-        // http://localhost:8080/orderList.html?customerId=1
-        let customerId = getQueryParam("customerId");
-        if (customerId) {
-            fetch(`/order/member/${customerId}?page=${page}&size=${size}`)
+    function init(page, size, customerId, status = "", dateStart = "", dateEnd = "") {
+        if (getCustomerId()) {
+
+            let url = `/order/member/${customerId}?page=${page}&size=${size}`;
+            if (status) {
+                url += `&status=${encodeURIComponent(status)}`;
+            }
+            if (dateStart && dateEnd) {
+                url += `&dateStart=${encodeURIComponent(dateStart)}&dateEnd=${encodeURIComponent(dateEnd)}`;
+            }
+
+            fetch(url)
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data)
+                    // console.log(data)
                     totalPages = data.totalPages; // 更新總頁數
                     showDB(data); // 顯示資料
                     updatePagination(); // 更新分頁按鈕狀態
@@ -318,11 +335,6 @@
                     console.log("錯誤原因：" + error);
                 });
         }
-    }
-    // 取得URL的查詢參數
-    function getQueryParam(param) {
-        let urlParams = new URLSearchParams(window.location.search);
-        return urlParams.get(param);
     }
 
     // 1. 訂單列表
@@ -350,7 +362,6 @@
                         statusClass = "unknown"; // 未知狀態的樣式
                         break;
                 }
-
 
                 // 1.1.2 點擊可進入訂單明細
                 // 1.1.3 有爭議訂單時，則顯示爭議狀態文字
@@ -418,8 +429,6 @@
                 </a>
             </li>
         `;
-        }else {
-                console.log(`第 ${i} 筆資料的 orders 屬性為 undefined`);
         }
             document.getElementsByClassName("order_list_ul")[0].innerHTML = orderHtml;
         }
@@ -479,7 +488,6 @@
     // 2.1 輸入訂單狀態 & 訂單日期，點查詢btn可篩選訂單
     let btn_select = document.getElementById("select_btn");
     btn_select.addEventListener("click", function (e) {
-
         e.preventDefault();
         let select_order_status_el = document.getElementsByClassName("select_status")[0];
         let select_order_date1_el = document.getElementsByClassName("select_date")[0];
@@ -487,6 +495,8 @@
         let select_order_status = select_order_status_el.value || "";
         let select_order_date1 = select_order_date1_el.value || "";
         let select_order_date2 = select_order_date2_el.value || "";
+
+
         let order_rows = document.querySelectorAll("ul.list-products li.product-item");
 
         order_rows.forEach(row => {
@@ -521,7 +531,11 @@
             }
            // 顯示或隱藏該列
            row.style.display = show_row ? "" : "none";
-      });
+        });
+
+        // 呼叫 init 函數並傳入查詢條件
+        init(currentPage, size, getCustomerId(), select_order_status, select_order_date1, select_order_date2);
+
     });
 
 </script>

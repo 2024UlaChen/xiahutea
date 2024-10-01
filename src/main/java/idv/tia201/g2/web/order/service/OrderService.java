@@ -1,5 +1,6 @@
 package idv.tia201.g2.web.order.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 import idv.tia201.g2.web.order.dto.OrderDto;
 import idv.tia201.g2.web.order.vo.OrderDetail;
@@ -16,5 +17,8 @@ public interface OrderService {
     Page<Orders> findAll(Pageable pageable);
     List<OrderDetail> findByOrderId(int orderId);
     Page<OrderDto> findByCustomerId(int customerId, Pageable pageable);
+
     OrderDto findByMemberOrderId(int orderId);
+    Page<OrderDto> findByCustomerIdAndDateRange(Integer customerId, Integer orderStatus, Timestamp dateStart, Timestamp dateEnd, Pageable pageable);
+
 }
