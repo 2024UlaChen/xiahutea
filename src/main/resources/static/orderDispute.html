@@ -167,27 +167,32 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function(){
-        // todo 判斷會員是否登入
-        // TODO 待session
-
-        // 0. 顯示申請表
-        init();
-
-        function init(){
-            let orderId = getQueryParam("orderId");
-            if (orderId) {
-            fetch(`/dispute/member/applyDispute/${orderId}`)
-                  .then(resp => resp.json())
-                  .then(data => showDB(data))
-                  .catch((error) => {
-                      console.log("錯誤原因:" + error);
-                  });
+        // 取得sessionStorage會員ID
+        const memberData = JSON.parse(sessionStorage.getItem("memberData"));
+        const customerId = memberData.data.customerId;
+        if(!memberData || customerId == null){
+            Swal.fire("請先登入會員");
+            location.href = `./homePage.html`;
         }
 
         // 取得URL的查詢參數
         function getQueryParam(param) {
             let urlParams = new URLSearchParams(window.location.search);
             return urlParams.get(param);
+        }
+        //-------------------------------------------------------
+        // 0. 顯示申請表
+        init();
+        function init() {
+            let orderId = getQueryParam("orderId");
+            if (orderId) {
+                fetch(`/dispute/member/applyDispute/${orderId}`)
+                      .then(resp => resp.json())
+                      .then(data => showDB(data))
+                      .catch((error) => {
+                          console.log("錯誤原因:" + error);
+                      });
+            }
         }
 
         function showDB(data){
@@ -265,10 +270,11 @@
                             disputeReason: form_reason_el.value
                         }
 
-                        // 2.1 點擊後 檢查文字長度，
+                        // 2.1 點擊後 檢查文字長度
                         if (form_reason_el.value.length > 0) {
                             e.preventDefault();
 
+                            let orderId = getQueryParam("orderId");
                             // 2.2 送出資料至後端
                             fetch(`/dispute/member/applyDispute/${orderId}`, {
                                 method: "POST",
@@ -277,22 +283,22 @@
                                 },
                                 body: JSON.stringify(dispute_data) // 將資料轉為 JSON 格式
                             })
-                                  .then(resp => resp.json()).then(data => {
-                                if (data.successful) {
-                                    console.log(data.message);
-                                    Swal.fire({
-                                        title: '申請完成',
-                                        text: '',
-                                        icon: 'success',
-                                        showConfirmButton: true
-                                    }).then(() => {
-                                        location.href = `./orderDetail.html?orderId=${orderId}`;
-                                    });
-                                } else {
-                                    console.log(data.message);
-                                    Swal.fire('申請失敗', '', 'error');
-                                }
-                            });
+                                .then(resp => resp.json()).then(data => {
+                                    if (data.successful) {
+                                        console.log(data.message);
+                                        Swal.fire({
+                                            title: '申請完成',
+                                            text: '',
+                                            icon: 'success',
+                                            showConfirmButton: true
+                                        }).then(() => {
+                                            location.href = `./orderDetail.html?orderId=${orderId}`;
+                                        });
+                                    } else {
+                                        console.log(data.message);
+                                        Swal.fire('申請失敗', '', 'error');
+                                    }
+                                });
                         } else {
                             e.preventDefault();
                             Swal.fire('申請原因 請輸入內容', '', 'error');
@@ -300,14 +306,13 @@
                     });
                 }
             }
-                //-------------------------------------------------------
-                // 3. btn 取消 > 回上一頁
-                let btn_back_el = document.getElementById("btn_back");
-                btn_back_el.addEventListener("click", function(e){
-                    e.preventDefault();
-                    location.href = `./orderDetail.html?orderId=${orderId}`;
-                });
-            }
+            //-------------------------------------------------------
+            // 3. btn 取消 > 回上一頁
+            let btn_back_el = document.getElementById("btn_back");
+            btn_back_el.addEventListener("click", function(e){
+                e.preventDefault();
+                location.href = `./orderDetail.html?orderId=${orderId}`;
+            });
         }
     });
 </script>

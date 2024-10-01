@@ -1,15 +1,15 @@
 package idv.tia201.g2.web.order.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import idv.tia201.g2.web.order.dto.OrderDto;
 import idv.tia201.g2.web.order.service.OrderService;
 import idv.tia201.g2.web.order.vo.OrderDetail;
 import idv.tia201.g2.web.order.vo.Orders;
+import idv.tia201.g2.web.user.dto.TotalUserDTO;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -29,18 +29,28 @@ public class OrderController {
     // 前台 訂單列表 顯示
     @GetMapping("member/{customerId}")
     public Page<OrderDto> memberOrder(
-            @PathVariable Integer customerId,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "10") int size,
+            HttpSession httpSession
     ) {
+        TotalUserDTO totalUserDTO = (TotalUserDTO) httpSession.getAttribute("totalUserDTO");
+        if (totalUserDTO.getUserTypeId() != 0) {
+            return Page.empty();
+        }
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "orderCreateDatetime"));
-        return orderService.findByCustomerId(customerId, pageable);
+        return orderService.findByCustomerId(totalUserDTO.getUserId(), pageable);
     }
 
     // 前台 訂單明細 顯示
     @GetMapping("member/detail/{orderId}")
-    public OrderDto memberDetail(@PathVariable Integer orderId) {
-        return orderService.findByMemberOrderId(orderId);
+    public OrderDto memberDetail(@PathVariable Integer orderId, HttpSession httpSession) {
+        TotalUserDTO totalUserDTO = (TotalUserDTO) httpSession.getAttribute("totalUserDTO");
+        OrderDto order = orderService.findByMemberOrderId(orderId);
+        if (totalUserDTO.getUserTypeId() != 0 || !(totalUserDTO.getUserId().equals(order.getOrders().getCustomerId()))) {
+            OrderDto orderDto = new OrderDto();
+            return orderDto;
+        }
+        return order;
     }
 
     // 前台 訂單明細 新增評分

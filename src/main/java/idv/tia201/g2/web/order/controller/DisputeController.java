@@ -3,6 +3,8 @@ package idv.tia201.g2.web.order.controller;
 import idv.tia201.g2.web.order.dto.OrderDto;
 import idv.tia201.g2.web.order.service.DisputeService;
 import idv.tia201.g2.web.order.vo.DisputeOrder;
+import idv.tia201.g2.web.user.dto.TotalUserDTO;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,8 +22,14 @@ public class DisputeController {
     // -------- FINISH ---------------------------------
     // 前台 爭議申請表 顯示
     @GetMapping("member/applyDispute/{orderId}")
-    public OrderDto apply(@PathVariable Integer orderId){
-        return disputeService.findByOrderId(orderId);
+    public OrderDto apply(@PathVariable Integer orderId, HttpSession httpSession){
+        TotalUserDTO totalUserDTO = (TotalUserDTO)  httpSession.getAttribute("totalUserDTO");
+        OrderDto dispute = disputeService.findByOrderId(orderId);
+        if (totalUserDTO.getUserTypeId() != 0 || !(totalUserDTO.getUserId().equals(dispute.getOrders().getCustomerId()))) {
+            OrderDto orderDto = new OrderDto();
+            return orderDto;
+        }
+        return dispute;
     }
 
     // 前台 爭議申請表 新增
