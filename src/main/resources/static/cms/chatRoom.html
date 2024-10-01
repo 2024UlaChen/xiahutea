@@ -54,6 +54,10 @@
 <script type="module">
     import { actionHandlers, WeienChat } from './js/weien-chat.js'
     let userTypeId;
+    const adminTypeId = 3;
+    const url
+        =  `ws://${location.host}${location.pathname.substring(0, location.pathname.lastIndexOf('/') + 1)}chat`;
+
 
     // 使用前須覆寫actionHandlers中必要的方法
     // 詳細可以去 weien-chat.js 中的 actionHandlers查看
@@ -61,7 +65,6 @@
         return await fetch("/chatroomdata")
             .then(res => res.json())
             .then(data =>{
-                console.log(data);
                 return data;
             })
     }
@@ -73,10 +76,6 @@
             .then(ChatMessagesData =>{
                 return ChatMessagesData;
             })
-        // console.log('這裡是外部定義的getChatMessagesData chatId : ' + chatId);
-        // 利用chatId去取得資料
-        // 目前是傳入假資料
-        // return chatId === 2 ? messages2 : messages;
     }
 
     actionHandlers.loadMoreChatRooms = async (type) => {
@@ -95,21 +94,59 @@
 
         return await fetch("/totalusers")
             .then(res => res.json())
-            .then(data =>{
+            .then(data => {
                 userTypeId = data.userTypeId;
                 return data.totalUserId;
             })
     }
 
+    actionHandlers.sendMessage = (message) => {
+        message.timestamp = new Date();
+        chat.updateChatListInfo(message.chatId,message);
+        chat.appendMessage(message) ;
+        if (webSocket) {
+            webSocket.send(
+                JSON.stringify({
+                chatSessionId: message.chatId,
+                content: message.content,
+                senderId : message.senderId,
+                timestamp : message.timestamp
+            })
+            )
+        }
+    }
+
+    const handleSendMessage = e => {
+        let payload = JSON.parse(e.data);
+        let message = {chatId : payload.chatSessionId,
+            content : payload.content,
+            senderId : payload.senderId,
+            timestamp : payload.timestamp
+        }
+        let activeChatId = chat.getActiveChatId();      //獲取這個聊天室的id
+        chat.updateChatListInfo(message.chatId,message);  //更新聊天室側邊欄聊天室列表
+        if(activeChatId === message.chatId){
+            chat.appendMessage(message) ;
+        }
+    }
+
     const chat = new WeienChat();
+
+    let webSocket;
 
     document.addEventListener('DOMContentLoaded', async () => {
         // 加載完成以後啟動
         await chat.init();
-        if (userTypeId !== 3){
-            chat.state.value.showMode = 'mobile'
+        if (userTypeId !== adminTypeId){
+            chat.state.value.showMode = 'mobile'        // 不要顯示側邊欄
+            let chatRoomsData = await actionHandlers.getChatRoomsData();        //獲取聊天室資料
+            let chatSessionId = chatRoomsData[0].chatId;                        //第一筆聊天室的 chatId
+            chat.state.value.activeChatId = chatSessionId;
         }
-        chat.state.value.activeChatId = 1;
+        webSocket = new WebSocket(url);
+
+        webSocket.addEventListener('message', handleSendMessage);
+
     });
 
 </script>

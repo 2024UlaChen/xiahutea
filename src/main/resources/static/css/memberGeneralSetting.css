@@ -136,3 +136,12 @@ select:focus,
     border-radius: 50%;
     text-align: center;
 }
+
+
+
+
+/*valid*/
+.checkInValidTxt {
+    color: #dc3545;
+    font-weight: bold;
+}

@@ -222,7 +222,7 @@ resetPwdBtn.addEventListener("click", function () {
                             showConfirmButton: false,
                             timer: 1500
                         }).then(() => {
-                            location.href = "../login.html";
+                            location.replace("../login.html");
                         })
                     } else {
                         Swal.fire("驗證失敗，請重新輸入", "", "error");

@@ -1,11 +1,11 @@
 package idv.tia201.g2.web.order.vo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import idv.tia201.g2.core.pojo.Core;
 import idv.tia201.g2.web.member.vo.Member;
-import jakarta.persistence.*;
 import lombok.*;
+import jakarta.persistence.*;
 import java.sql.Timestamp;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 @Builder

@@ -17,7 +17,7 @@ public interface MemberService {
 
     Integer updateMemberCarrier(Member member);
 
-    Integer updateMemberByValidSatusAndCustomerRemark(Member member);
+    Boolean updateMemberByValidSatusAndCustomerRemark(Member member);
 
     //    編輯地址
     MemberAddress editMemberAddress(MemberAddress memberAddress);
@@ -53,5 +53,10 @@ public interface MemberService {
     Boolean deleteByMemberAddressId(Integer customerAddressId);
 
     Boolean updateMemberMoneyById(Integer memberId , Integer memberMoney);
+
+    void updateMemberPwd(Integer memberId, String newPwd);
+
+    Boolean checkMemberPwd(Integer memberId ,String oldPwd);
+
 
 }

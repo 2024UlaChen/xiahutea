@@ -180,6 +180,7 @@ document.addEventListener("DOMContentLoaded",function(){
 
   //獲得localstorage資料(購物車)
   const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+    console.log("cartItems:",cartItems)
   //localstorage購物車資料分類
   const groupedItems = sortCartItems(cartItems);
   console.log('分類後購物車商品列表: ',groupedItems)
@@ -316,12 +317,13 @@ document.addEventListener("DOMContentLoaded",function(){
               // 取消會員錢包
               moneybag_count_el.style.display = "none";
               moneybag_minus_number_el.textContent = '$0';
+              select_moneybag_input_el.checked=false;
               moneyBagSelected = false;
           } else {
               // 使用會員錢包
               moneybag_count_el.style.display = "flex";
               if (loginMember.customerMoney != null) {
-                  if (loginMember.customerMoney === 0) {
+                  if (loginMember.customerMoney <= 0) {
                       moneybag_count_el.textContent = `會員錢包餘額為 ${loginMember.customerMoney}元，無法扣除`;
                       couponSelected = false;
                       memberCardSelected = false;
