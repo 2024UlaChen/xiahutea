@@ -10,6 +10,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import static idv.tia201.g2.core.util.EncrypSHA.SHAEncrypt;
 import static idv.tia201.g2.web.store.util.PasswordUtil.checkPassword;
 
 @Service
@@ -48,8 +49,10 @@ public class AdminServiceImpl implements AdminService {
             return totalUserDTO;
         }
 
+//        密碼加密
+        String SHAPassword = SHAEncrypt(password);
 //        進入 DAO 利用 username & password 找 admin
-        admin = adminDao.login(username, password);
+        admin = adminDao.login(username, SHAPassword);
 
 //        如果回傳 null 代表登入失敗，如果不是 null 代表 登入成功
         if (admin == null) {

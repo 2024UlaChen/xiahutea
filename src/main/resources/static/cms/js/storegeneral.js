@@ -18,14 +18,12 @@ function myLoad(target, url) {
 }
 
 $(function () {
-    console.log("側邊欄更新")
     let showStore = $("li.nav-item.show-store")
     let showAdmin = $("li.nav-item.show-admin")
     fetch("/totalusers")
         .then(res => res.json())
         .then(data => {
             userTypeId = data.userTypeId;
-            console.log(userTypeId);
             if (userTypeId === 3) {
                 $.each(showStore, function (index, item) {
                     $(item).addClass("d-none")
@@ -38,6 +36,11 @@ $(function () {
         })
         .catch(error => {
             $(".sidebar").eq(0).addClass("d-none")
+            console.log($("div.storeaside").next())
+            let containEle = $("div.storeaside").next().children();
+            $.each(containEle,function (index,item){
+                $(item).addClass("d-none")
+            })
         });
 })
 
