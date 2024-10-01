@@ -6,6 +6,6 @@ import lombok.Data;
 public class Participant {
     private Long userId;
     private String name;
-    private byte[] avatar;
+    private String avatar;
     private Integer type;
 }

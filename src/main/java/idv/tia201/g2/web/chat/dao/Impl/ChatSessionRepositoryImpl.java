@@ -10,6 +10,7 @@ import jakarta.persistence.Query;
 import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 public class ChatSessionRepositoryImpl implements ChatSessionOperation {
@@ -84,7 +85,12 @@ public class ChatSessionRepositoryImpl implements ChatSessionOperation {
                 attender.setUserId(((BigInteger) result[3]).longValue());   // JPA 將整數類型的結果視為 BigInteger
             }
             attender.setName((String) result[4]);
-            attender.setAvatar((byte[]) result[5]);
+            byte[] bytes = (byte[]) result[5];
+            String base64Str = "data:image/png;base64,";
+            if(bytes != null){
+                base64Str += Base64.getEncoder().encodeToString(bytes);
+            }
+            attender.setAvatar(base64Str);
             attender.setType((Integer) result[6]);
             participantList.add(attender);
 
