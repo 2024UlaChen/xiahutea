@@ -5,6 +5,8 @@ import idv.tia201.g2.core.util.ValidateUtil;
 import idv.tia201.g2.web.member.service.MemberService;
 import idv.tia201.g2.web.member.vo.Member;
 import idv.tia201.g2.web.member.vo.MemberAddress;
+import idv.tia201.g2.web.user.dto.TotalUserDTO;
+import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -139,15 +141,16 @@ public class MemberController {
         return core;
     }
 
-    @GetMapping("{memberId}")
-    public Member getMemberInformation(@PathVariable Integer memberId) {
+    @PostMapping
+    public Member getMemberInformation(HttpSession httpSession) {
+        TotalUserDTO totalUserDTO = (TotalUserDTO) httpSession.getAttribute("totalUserDTO");
         Member member = new Member();
-        if (memberId == null) {
+        if (totalUserDTO == null || null == totalUserDTO.getUserId()) {
             member.setSuccessful(false);
             member.setMessage("no memberId");
             return member;
         }
-        member = memberService.findMemberById(memberId);
+        member = memberService.findMemberById(totalUserDTO.getUserId());
         member.setSuccessful(true);
         return member;
     }

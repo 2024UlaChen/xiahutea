@@ -42,7 +42,7 @@
                         <aside class="col-lg-4 no-padding member-aside">
                             <div class="member-introduction">
                                 <div>
-                                    <img class="userPhoto" src="img/xiahutealogo.jpg" alt="userPhoto" id="asidePhoto">
+                                    <img class="userPhoto" alt="userPhoto" id="asidePhoto">
                                 </div>
                                 <div>userName</div>
                             </div>
@@ -79,55 +79,50 @@
                                 <hr>
                                 <div class="teamo-contact-fom member-setting">
                                     <div id="memberPhotoBlock">
-                                        <div class="memberPhoto" >
+                                        <div class="memberPhoto">
                                             <i class="fa fa-plus"></i>
                                         </div>
                                         <input class="form-control hidden" type="file" id="memberPhotoInput"
                                                accept="image/gif,image/jpeg,image/jpg,image/png">
-
                                     </div>
                                     <div>
                                         <div>
                                             <span class="form-label"><span class="warn">*</span>姓名</span>
-                                            <span class="form-control-wrap your-email">
-                                                    <input title="your-email" type="email" name="your-email" size="40"
-                                                           class="form-control form-control-email">
-                                        </span>
+                                            <input title="your-name" type="text" name="your-name" size="40"
+                                                   class="form-control"
+                                                   id="memberInfoName">
                                         </div>
                                         <div>
                                             <span class="form-label">會員錢包 </span>
-                                            <div class="form-control-wrap" aria-label="Default select example">
-                                                <input title="your-email" type="email" name="your-email" size="40"
-                                                       disabled
-                                                       class="form-control form-control-email">
-                                            </div>
+                                            <input title="your-money" type="text" name="your-money" size="40"
+                                                   disabled id="memberInfoMoney"
+                                                   class="form-control">
                                         </div>
                                     </div>
                                     <div>
-                                        <span class="form-label"><span class="warn">*</span>手機號碼</span>
-                                        <span class="form-control-wrap your-phone">
-                                                    <input title="your-phone" type="text" name="your-phone"
-                                                           class="form-control form-control-phone" minlength="10"
-                                                           maxlength="10" placeholder="0912345678">
-                                        </span>
-                                        <span class="remind">僅支援台灣手機</span>
+                                        <span class="form-label">手機號碼</span>
+                                        <input title="your-phone" type="text" name="your-phone"
+                                               class="form-control form-control-phone" minlength="10"
+                                               id="memberInfoPhone" disabled>
+                                        <span id="PhoneTip"></span>
                                     </div>
+
                                     <div>
                                         <span class="form-label"> 性別 </span>
-                                        <select class="form-select-wrap col-sm-12"
-                                                aria-label="Default select example">
-                                            <option selected value="default" disabled>請選擇性別</option>
+                                        <select class="form-control">
+                                            <option selected value="default"
+                                                    disabled>請選擇性別
+                                            </option>
                                             <option value="male">男性</option>
                                             <option value="female">女性</option>
                                             <option value="none">不提供</option>
                                         </select>
                                     </div>
                                     <div>
-                                        <label class="form-label" for="memberBirthday"> 生日 </label>
-                                        <span class="form-control-wrap member-birthday">
-                                            <input type="date" name="birthday" id="memberBirthday"
-                                                   class="form-control datepicker">
-                                        </span>
+                                        <span class="form-label"> 生日 </span>
+                                        <input type="date" name="birthday"
+                                               id="memberBirthday"
+                                               class="form-control datepicker">
                                     </div>
                                     <div>
                                         <button class="btnSave">確認</button>
@@ -168,7 +163,7 @@
 
 <script src="js/general.js"></script>
 <script src="js/memberGeneral.js"></script>
-<script src="js/memberInfor.js"></script>
+<script src="js/memberInfo.js"></script>
 
 </body>
 

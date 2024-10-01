@@ -53,8 +53,12 @@ function phoneValid(phone) {
 
 document.addEventListener("DOMContentLoaded", function () {
     const sessionDetail = JSON.parse(sessionStorage.getItem("memberData"));
-    fetch(`member/` + sessionDetail.data.customerId)
-        .then(res => res.text())
+    console.log(sessionDetail);
+    console.log("===");
+    fetch(`member`, {
+        method: "POST",
+        headers: {'Content-Type': 'application/json'},
+    }).then(res => res.text())
         .then(data => {
             console.log(data);
         })    // asidePhoto.src = fileData;
