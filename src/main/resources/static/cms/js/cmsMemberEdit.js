@@ -16,9 +16,9 @@ const cancelBtn = document.querySelector("#cmsMemberCancel");
 const saveBtn = document.querySelector("#cmsMemberSave");
 const addrCollapseBtn = document.querySelector("#cmsMemberAddrCollapse");
 
-function getAddress(memberId) {
+function getAddress() {
     let addrList = "";
-    fetch(`manage/address/` + memberId)
+    fetch(`manage/address`)
         .then(res => res.json())
         .then(data => {
             $.each(data, function (index, item) {
@@ -47,25 +47,28 @@ function nullToEmpty(data) {
 }
 
 function loadCmsMemberInfo() {
-    let sessionDetail = JSON.parse(sessionStorage.getItem("cmsMemberDetail"));
-    console.log(sessionDetail);
-    cmsMemberBirthdayTxt.value = nullToEmpty(sessionDetail.birthday).replaceAll("/", "-");
-    CmsMemberCreateDateTxt.value = nullToEmpty(sessionDetail.createDate).replaceAll("/", "-");
-    cmsMemberCarrierTxt.value = sessionDetail.customerCarrier;
-    cmsMemberEmailTxt.value = sessionDetail.customerEmail;
-    cmsMemberMoney.value = sessionDetail.customerMoney;
-    cmsMemberPhoneTxt.value = sessionDetail.customerPhone;
-    cmsMemberRemarkTxt.value = sessionDetail.customerRemark;
-    cmsMemberNameTxt.value = sessionDetail.nickname;
-    cmsMemberIsValidTxt.checked = sessionDetail.validStatus;
-    if (sessionDetail.sex === "female") {
-        cmsMemberSex.value = "女性";
-    } else if (sessionDetail.sex === "male") {
-        cmsMemberSex.value = "男性";
-    } else {
-        cmsMemberSex.value = "不提供";
-    }
-    getAddress(sessionDetail.customerId);
+    fetch(`manage/detail`)
+        .then(res => res.json())
+        .then(data => {
+            // let sessionDetail = JSON.parse(sessionStorage.getItem("cmsMemberDetail"));
+            cmsMemberBirthdayTxt.value = nullToEmpty(data.birthday).replaceAll("/", "-");
+            CmsMemberCreateDateTxt.value = nullToEmpty(data.createDate).replaceAll("/", "-");
+            cmsMemberCarrierTxt.value = data.customerCarrier;
+            cmsMemberEmailTxt.value = data.customerEmail;
+            cmsMemberMoney.value = data.customerMoney;
+            cmsMemberPhoneTxt.value = data.customerPhone;
+            cmsMemberRemarkTxt.value = data.customerRemark;
+            cmsMemberNameTxt.value = data.nickname;
+            cmsMemberIsValidTxt.checked = data.validStatus;
+            if (data.sex === "female") {
+                cmsMemberSex.value = "女性";
+            } else if (data.sex === "male") {
+                cmsMemberSex.value = "男性";
+            } else {
+                cmsMemberSex.value = "不提供";
+            }
+        });
+    getAddress();
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -73,58 +76,36 @@ document.addEventListener("DOMContentLoaded", () => {
 })
 
 cancelBtn.addEventListener("click", function () {
-    Swal.fire({
-        title: "確定取消當前編輯?",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#73B4BA",
-        cancelButtonColor: "#6c757d",
-        confirmButtonText: "是，取消",
-        cancelButtonText: "否"
-    }).then((result) => {
-        if (result.isConfirmed) {
-            sessionStorage.removeItem("cmsMemberDetail");
-            location.href = "./memberManage.html"
-        }
-    });
+    // sessionStorage.removeItem("cmsMemberDetail");
+    location.href = "./memberManage.html"
 });
 
 function updateMemberInfo() {
-    let changeSessionDetail = JSON.parse(sessionStorage.getItem("cmsMemberDetail"));
-    const memberId = changeSessionDetail.customerId;
-    if (changeSessionDetail.customerRemark === cmsMemberRemarkTxt.value && changeSessionDetail.validStatus === cmsMemberIsValidTxt.checked) {
-        Swal.fire("與目前設定無差異", "", "error");
-    } else {
-        let updateData = {
-            "customerRemark": cmsMemberRemarkTxt.value,
-            "validStatus": cmsMemberIsValidTxt.checked
-        };
-        fetch(`manage/${memberId}`, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json-patch+json'
-            },
-            body: JSON.stringify(updateData)
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.successful) {
-                    fetch(`manage/${memberId}`)
-                        .then(res => res.json())
-                        .then(data => {
-                            sessionStorage.removeItem("cmsMemberDetail");
-                            sessionStorage.setItem("cmsMemberDetail", JSON.stringify(data));
-                        })
-                } else {
-                    //TODO
+    fetch(`manage/detail`)
+        .then(res => res.json())
+        .then(data => {
+            // let changeSessionDetail = JSON.parse(sessionStorage.getItem("cmsMemberDetail"));
+            const memberId = data.customerId;
+            if (data.customerRemark === cmsMemberRemarkTxt.value && data.validStatus === cmsMemberIsValidTxt.checked) {
+                Swal.fire("與目前設定無差異", "", "error");
+            } else {
+                let updateData = {
+                    "customerRemark": cmsMemberRemarkTxt.value,
+                    "validStatus": cmsMemberIsValidTxt.checked
+                };
+                fetch(`manage/update`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(updateData)
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                    });
+                Swal.fire("已儲存!", "", "success");
+            }
+        });
 
-                }
-                // sessionStorage.removeItem("cmsMemberDetail");
-                // sessionStorage.setItem("cmsMemberDetail", JSON.stringify(data));
-                // loadCmsMemberInfo();
-            })
-        Swal.fire("已儲存!", "", "success");
-    }
 }
 
 saveBtn.addEventListener("click", function () {
