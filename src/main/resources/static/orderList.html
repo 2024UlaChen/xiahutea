@@ -90,7 +90,7 @@
             text-align: center;
             line-height: 20px;
             font-size: 16px;
-            background-color: #F8F9FA;
+            background-color: white;
             border: 1px solid #73B4BA;
             border-radius: 5px;
         }
@@ -102,9 +102,12 @@
             color: #53a0a7;
             text-align: center;
             line-height: 20px;
-            background-color: #F8F9FA;
+            background-color: white;
             border: 1px solid #73B4BA;
             border-radius: 4px;
+        }
+        #page_text{
+            text-align: center;
         }
 
         /* 訂單區塊*/
@@ -330,14 +333,10 @@
         // 1. 訂單排序從新到舊
         for(let i =  0; i < orderDtos.length; i++) {
             const orderDto = orderDtos[i];
-
-            console.log("orderDtos.length:" + orderDtos.length);
-            console.log("orderDto: ", orderDto)
             // 檢查 orderDto 和 orders 是否存在
             if (orderDto && orderDto.orders) {
                 // 1.1.1 訂單狀態不同 更改不同顏色
                 let statusClass = "";
-
                 switch (statusText(orderDto.orders.orderStatus)) {
                     case "訂單成立":
                     case "正在外送":
@@ -449,7 +448,7 @@
         // 更新頁碼按鈕和頁碼顯示
         pagination.innerHTML = `
             <div>${pageButtons}</div>
-            <div >第 ${currentPage + 1} 頁 / 共 ${totalPages} 頁</div>
+            <div id="page_text">第 ${currentPage + 1} 頁 / 共 ${totalPages} 頁</div>
         `;
         const pageButtonsElements = document.querySelectorAll(".page-button");
         pageButtonsElements.forEach(button => {

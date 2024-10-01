@@ -80,6 +80,9 @@
             text-align: center;
             border-radius: 4px;
         }
+        #page_text{
+            text-align: center;
+        }
         /*  訂單列表  */
         #dispute_thread , #dispute_tbody{
             text-align: center;
@@ -313,7 +316,7 @@
             // 更新頁碼按鈕和頁碼顯示
             pagination.innerHTML = `
             <div>${pageButtons}</div>
-            <div >第 ${currentPage + 1} 頁 / 共 ${totalPages} 頁</div>
+            <div id="page_text">第 ${currentPage + 1} 頁 / 共 ${totalPages} 頁</div>
         `;
             const pageButtonsElements = document.querySelectorAll(".page-button");
             pageButtonsElements.forEach(button => {
