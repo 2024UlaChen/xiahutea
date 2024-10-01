@@ -148,7 +148,7 @@ document.addEventListener("DOMContentLoaded",function(){
 
   //一進到結帳選擇頁面先用localstorage抓DB以及獲取sessionstorage目前登入用戶ID
   //TODO 獲得用戶ID以抓取資料渲染
-  const customer = sessionStorage.getItem('customer');
+  const customer = sessionStorage.getItem('memberData');
   if(customer){
       let customerData = JSON.parse(customer);
       customerId = customerData.customerId;
