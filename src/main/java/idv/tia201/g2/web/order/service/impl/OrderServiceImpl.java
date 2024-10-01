@@ -29,13 +29,13 @@ import idv.tia201.g2.web.store.vo.CustomerLoyaltyCard;
 import idv.tia201.g2.web.store.vo.Store;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import static org.springframework.util.ObjectUtils.isEmpty;
 
 @Service
@@ -233,18 +233,19 @@ public class OrderServiceImpl implements OrderService {
 
     // 前台 訂單列表 顯示
     @Override
-    public List<OrderDto> findByCustomerId(int customerId) {
-        List<Orders> orders = orderDao.selectBycCustomerId(customerId);
-        // 建立流
-        Stream<Orders> stream = orders.stream();
-        // 映射每個訂單
-        Stream<OrderDto> orderDtoStream = stream.map(order -> {
+    public Page<OrderDto> findByCustomerId(int customerId, Pageable pageable) {
+        Page<Orders> orders = orderRepository.findByCustomerId(customerId, pageable);
+
+        //                      建立流             || 映射每個訂單
+        List<OrderDto> orderDtos = orders.stream().map(order -> {
             DisputeOrder disputeOrder = disputeDao.selectByOrderId(order.getOrderId());
             List<OrderDetail> orderDetails = orderDetailDao.selectByOrderId(order.getOrderId());
             return orderMappingUtil.createOrderDto(order, disputeOrder, orderDetails);
-        });
-        // 收集結果並返回
-        return orderDtoStream.collect(Collectors.toList());
+            // 收集結果
+        }).collect(Collectors.toList());
+
+        // Page<OrderDto>
+        return new PageImpl<>(orderDtos, pageable, orders.getTotalElements());
     }
 
     // 前台 訂單明細 顯示

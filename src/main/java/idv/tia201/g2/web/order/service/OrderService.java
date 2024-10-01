@@ -13,9 +13,8 @@ public interface OrderService {
     Orders addStar(Orders order);
     Orders updateStatus(Orders order);
 
-  //  List<Orders> findAll();
     Page<Orders> findAll(Pageable pageable);
     List<OrderDetail> findByOrderId(int orderId);
-    List<OrderDto> findByCustomerId(int customerId);
+    Page<OrderDto> findByCustomerId(int customerId, Pageable pageable);
     OrderDto findByMemberOrderId(int orderId);
 }

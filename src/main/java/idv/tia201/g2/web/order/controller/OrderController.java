@@ -1,7 +1,6 @@
 package idv.tia201.g2.web.order.controller;
 
 import java.util.List;
-import idv.tia201.g2.web.order.dao.OrderRepository;
 import idv.tia201.g2.web.order.dto.OrderDto;
 import idv.tia201.g2.web.order.service.OrderService;
 import idv.tia201.g2.web.order.vo.OrderDetail;
@@ -29,8 +28,13 @@ public class OrderController {
 
     // 前台 訂單列表 顯示
     @GetMapping("member/{customerId}")
-    public List<OrderDto> memberOrder(@PathVariable Integer customerId) {
-        return orderService.findByCustomerId(customerId);
+    public Page<OrderDto> memberOrder(
+            @PathVariable Integer customerId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "orderCreateDatetime"));
+        return orderService.findByCustomerId(customerId, pageable);
     }
 
     // 前台 訂單明細 顯示
