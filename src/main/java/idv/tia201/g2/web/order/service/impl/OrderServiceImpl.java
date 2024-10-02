@@ -1,6 +1,9 @@
 package idv.tia201.g2.web.order.service.impl;
 
 import idv.tia201.g2.core.util.ValidateUtil;
+import idv.tia201.g2.web.coupon.dao.CustomerCouponDao;
+import idv.tia201.g2.web.coupon.service.CustomerCouponService;
+import idv.tia201.g2.web.coupon.vo.CustomerCoupons;
 import idv.tia201.g2.web.member.dao.MemberDao;
 import idv.tia201.g2.web.member.dao.MemberLoyaltyCardRepository;
 import idv.tia201.g2.web.member.service.MemberLoyaltyCardService;
@@ -9,8 +12,10 @@ import idv.tia201.g2.web.member.vo.Member;
 import idv.tia201.g2.web.order.dao.DisputeDao;
 import idv.tia201.g2.web.order.dao.OrderDao;
 import idv.tia201.g2.web.order.dao.OrderDetailDao;
+import idv.tia201.g2.web.order.dao.OrderRepository;
 import idv.tia201.g2.web.order.dto.NotificationDto;
 import idv.tia201.g2.web.order.dto.OrderDto;
+import idv.tia201.g2.web.order.service.InvoiceService;
 import idv.tia201.g2.web.order.service.NotificationService;
 import idv.tia201.g2.web.order.service.OrderService;
 import idv.tia201.g2.web.order.util.OrderMappingUtil;
@@ -23,12 +28,15 @@ import idv.tia201.g2.web.store.dao.StoreDao;
 import idv.tia201.g2.web.store.vo.CustomerLoyaltyCard;
 import idv.tia201.g2.web.store.vo.Store;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import static org.springframework.util.ObjectUtils.isEmpty;
 
 @Service
@@ -49,6 +57,8 @@ public class OrderServiceImpl implements OrderService {
     private ProductDao productDao;
     @Autowired
     private MemberLoyaltyCardRepository memberLoyaltyCardRepository;
+    @Autowired
+    private CustomerCouponDao customerCouponDao;
 
     @Autowired
     private OrderMappingUtil orderMappingUtil;
@@ -57,7 +67,13 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private MemberLoyaltyCardService memberLoyaltyCardService;
     @Autowired
+    private CustomerCouponService customerCouponService;
+    @Autowired
     private NotificationService notificationService;
+    @Autowired
+    private InvoiceService invoiceService;
+    @Autowired
+    private OrderRepository orderRepository;
 
     // -------- FINISH ---------------------------------
     // 前台 訂單新增
@@ -80,26 +96,6 @@ public class OrderServiceImpl implements OrderService {
             orderDto.setSuccessful(false);
             return orderDto;
         }
-
-        Integer loyaltyCardId = order.getLoyaltyCardId();
-        if (loyaltyCardId != null) {
-            CustomerLoyaltyCard customerLoyaltyCard = memberLoyaltyCardRepository.findByLoyaltyCardId(loyaltyCardId);
-            if (customerLoyaltyCard == null) {
-                orderDto.setMessage("無此集點卡");
-                orderDto.setSuccessful(false);
-                return orderDto;
-            }
-            // 會員使用集點卡
-            memberLoyaltyCardService.UpdatePoints(loyaltyCardId, order.getLoyaltyDiscount());
-        }
-        // todo 優惠券
-
-
-        if(order.getCouponDiscount() < 0 || order.getLoyaltyDiscount() < 0 || order.getCustomerMoneyDiscount() < 0){
-            orderDto.setMessage("折抵金額錯誤");
-            orderDto.setSuccessful(false);
-            return orderDto;
-        }
         if(order.getOrderProductQuantity() < 0 || order.getProductAmount() < 0 ){
             orderDto.setMessage("商品數量或商品總金額錯誤");
             orderDto.setSuccessful(false);
@@ -117,9 +113,9 @@ public class OrderServiceImpl implements OrderService {
         }
         final String invoiceCarrier = order.getInvoiceCarrier();
         final String invoiceVat = order.getInvoiceVat() + "";
-        if(order.getInvoiceMethod() == 1){  // 載具
+        if(order.getInvoiceMethod() == 1){  // 手機載具
             if(isEmpty(invoiceCarrier) || invoiceCarrier.charAt(0) != '/' || invoiceCarrier.trim().length() != 8){
-                orderDto.setMessage("載具輸入錯誤");
+                orderDto.setMessage("手機載具輸入錯誤");
                 orderDto.setSuccessful(false);
                 return orderDto;
             }
@@ -142,11 +138,15 @@ public class OrderServiceImpl implements OrderService {
                 return orderDto;
             }
         }
-        if( isEmpty(order.getReceiverMethod()) || isEmpty(order.getReceiverName()) || isEmpty(order.getReceiverPhone()) || isEmpty(order.getReceiverDatetime())){
+        if(
+            isEmpty(order.getReceiverMethod()) || isEmpty(order.getReceiverName()) ||
+            isEmpty(order.getReceiverPhone()) || isEmpty(order.getReceiverDatetime())
+        ){
             orderDto.setMessage("未輸入取貨資訊");
             orderDto.setSuccessful(false);
             return orderDto;
         }
+
         // 訂單明細檢查
         for (OrderDetail orderDetail : orderDetails) {
             int productId = orderDetail.getProductId();
@@ -167,19 +167,61 @@ public class OrderServiceImpl implements OrderService {
                 return orderDto;
             }
         }
+        if(
+            order.getCouponDiscount() < 0 || order.getLoyaltyDiscount() < 0 || order.getCustomerMoneyDiscount() < 0 ||
+            order.getCustomerMoneyDiscount() > member.getCustomerMoney()
+        ){
+            orderDto.setMessage("折抵金額錯誤");
+            orderDto.setSuccessful(false);
+            return orderDto;
+        }
+        // 會員使用集點卡
+        Integer loyaltyCardId = order.getLoyaltyCardId();
+        if(loyaltyCardId != null) {
+            CustomerLoyaltyCard customerLoyaltyCard = memberLoyaltyCardRepository.findByLoyaltyCardId(loyaltyCardId);
+            if (customerLoyaltyCard == null) {
+                orderDto.setMessage("無此集點卡");
+                orderDto.setSuccessful(false);
+                return orderDto;
+            }
+            memberLoyaltyCardService.UpdatePoints(loyaltyCardId, order.getLoyaltyDiscount());
+        }
+        // 會員使用優惠券
+        Integer customerCouponsId = order.getCustomerCouponsId();
+        if(customerCouponsId != null) {
+            CustomerCoupons customerCoupon = customerCouponDao.findByCustomerIdAndCustomerCouponsId(customerId, customerCouponsId);
+            if (customerCoupon == null) {
+                orderDto.setMessage("無此優惠券");
+                orderDto.setSuccessful(false);
+                return orderDto;
+            }
+            customerCouponService.updateCouponQuantity(customerId, customerCoupon.getCouponId() , customerCoupon.getCouponQuantity() - 1);
+        }
         // 會員使用點數
         memberService.updateMemberMoneyById(customerId, - order.getCustomerMoneyDiscount());
-        // todo 優惠券
-
 
         order.setOrderStatus(1);
         order.setOrderCreateDatetime(new Timestamp(System.currentTimeMillis()));
+        order.setSuccessful(true);
         orderDao.insert(order);
+        // 存商品
         for (OrderDetail orderDetail : orderDetails) {
             orderDetail.setOrderId(order.getOrderId());
+            orderDetail.setSuccessful(true);
             orderDetailDao.insert(orderDetail);
         }
-        orderDto.setMessage("訂單已成立");
+
+        // 傳送發票參數給綠界
+        String addInvoiceNo = invoiceService.createInvoice(order);
+        if(addInvoiceNo == null){
+            orderDto.setMessage("開立發票失敗");
+            orderDto.setSuccessful(false);
+            return orderDto;
+        }
+        //存發票
+        orderDao.saveInvoiceNo(order.getOrderId(), addInvoiceNo);
+
+        orderDto.setMessage("訂單新增成功");
         orderDto.setSuccessful(true);
         orderDto.setOrders(order);
         orderDto.setOrderDetails(orderDetails);
@@ -192,19 +234,39 @@ public class OrderServiceImpl implements OrderService {
 
     // 前台 訂單列表 顯示
     @Override
-    public List<OrderDto> findByCustomerId(int customerId) {
-        List<Orders> orders = orderDao.selectBycCustomerId(customerId);
-        // 建立流
-        Stream<Orders> stream = orders.stream();
-        // 映射每個訂單
-        Stream<OrderDto> orderDtoStream = stream.map(order -> {
+    public Page<OrderDto> findByCustomerId(int customerId, Pageable pageable) {
+        Page<Orders> orders = orderRepository.findByCustomerId(customerId, pageable);
+
+        //                      建立流             || 映射每個訂單
+        List<OrderDto> orderDtos = orders.stream().map(order -> {
             DisputeOrder disputeOrder = disputeDao.selectByOrderId(order.getOrderId());
             List<OrderDetail> orderDetails = orderDetailDao.selectByOrderId(order.getOrderId());
             return orderMappingUtil.createOrderDto(order, disputeOrder, orderDetails);
-        });
-        // 收集結果並返回
-        return orderDtoStream.collect(Collectors.toList());
+            // 收集結果
+        }).collect(Collectors.toList());
+
+        // 回傳Page<OrderDto>
+        return new PageImpl<>(orderDtos, pageable, orders.getTotalElements());
     }
+
+    public Page<OrderDto> findByCustomerIdAndDateRange(Integer customerId, Integer orderStatus, Timestamp dateStart, Timestamp dateEnd, Pageable pageable) {
+        Page<Orders> orders;
+        // 根據 customerId 和訂單建立日期範圍來過濾訂單
+        if (orderStatus != null) {
+            orders = orderRepository.findByCustomerIdAndOrderStatusAndOrderCreateDatetimeBetween(customerId, orderStatus, dateStart, dateEnd, pageable);
+        }else {
+            orders = orderRepository.findByCustomerIdAndOrderCreateDatetimeBetween(customerId, dateStart, dateEnd, pageable);
+        }
+        //                      建立流             || 映射每個訂單
+        List<OrderDto> orderDtos = orders.stream().map(order -> {
+            DisputeOrder disputeOrder = disputeDao.selectByOrderId(order.getOrderId());
+            List<OrderDetail> orderDetails = orderDetailDao.selectByOrderId(order.getOrderId());
+            return orderMappingUtil.createOrderDto(order, disputeOrder, orderDetails);
+            // 收集結果
+        }).collect(Collectors.toList());
+        return new PageImpl<>(orderDtos, pageable, orders.getTotalElements());
+    }
+
 
     // 前台 訂單明細 顯示
     @Override
@@ -244,8 +306,8 @@ public class OrderServiceImpl implements OrderService {
 
     // 後台 訂單列表 顯示
     @Override
-    public List<Orders> findAll() {
-        return orderDao.selectAll();
+    public Page<Orders> findAll(Pageable pageable) {
+        return orderRepository.findAll(pageable);
     }
 
     // 後台 訂單明細 顯示

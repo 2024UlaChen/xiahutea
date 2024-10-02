@@ -126,6 +126,17 @@
             color: white;
         }
 
+
+        .off-shelf {
+            background-color:#6c757d;
+            border-color: #6c757d;
+            color: white;
+        }
+
+        .custom-label {
+            margin-right: 10px; /* 右侧间距 */
+        }
+
     </style>
 
 
@@ -165,8 +176,8 @@
                     <div class="card-tools">
                         <div class="input-group">
 
-                            <input type="search" id="searchInput1" class="form-control mr-2" placeholder="搜尋商品分類">
-                            <input type="search" id="searchInput2" class="form-control mr-2" placeholder="搜尋商品分類">
+                            <label for="searchInput2" class="mr-2" id="searchInput2-label">搜尋商店名稱:</label>
+                            <input type="search" id="searchInput2" class="form-control mr-2" placeholder="搜尋商店名稱">
 
                             <input type="search" id="searchInput" class="form-control" placeholder="搜尋商品分類">
                             <div class="input-group-append">
@@ -200,7 +211,7 @@
                             <label>狀態</label>
                             <div>
                                 <input type="radio" name="categoryStatus" value="1" checked> 啟用
-                                <input type="radio" name="categoryStatus" value="0"> 停用
+                                <input type="radio" name="categoryStatus" value="0" > 停用
 
                             </div>
 
@@ -232,8 +243,8 @@
 
                             <label>狀態</label>
                             <div>
-                                <input type="radio" name="categoryStatus" value="1" checked> 啟用
-                                <input type="radio" name="categoryStatus" value="0"> 停用
+                                <input type="radio" name="editStatus" value="1" checked> 啟用
+                                <input type="radio" name="editStatus" value="0"> 停用
 
                             </div>
 
@@ -260,9 +271,9 @@
                         <table class="table table-striped projects" id="categoryTable">
                             <thead>
                                 <tr>
-                                    <th style="width: 12%">
+<!--                                    <th style="width: 12%">-->
 
-                                    </th>
+<!--                                    </th>-->
 
                                     <th style="width: 25%">
                                         商品分類
@@ -346,9 +357,44 @@
     <script src="https://unpkg.com/sweetalert2@11"></script>
 
     <script>
-<!--彈窗-->
 
-    const categoryadd=document.querySelector('#add');
+
+        // 使用 fetch 從後端獲取 TotalUserDTO
+        fetch('/totalusers', {
+            method: 'GET', // 請求方法是 GET
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json(); // 將返回的結果解析為 JSON 格式
+            })
+            .then(data => {
+                console.log('TotalUserDTO:', data); // 在控制台中顯示 TotalUserDTO
+
+                // 根據獲取到的 TotalUserDTO 處理邏輯
+                if (data && data.userTypeId === 1) {
+                    // 如果角色是 store，隱藏搜尋框
+                    document.getElementById('searchInput2').style.display = 'none';
+                    document.getElementById('searchInput2-label').style.display = 'none';
+                }
+
+                if (data && data.userTypeId === 3) {
+                    // 隱藏新增按鈕
+                    document.getElementById('add').style.display = 'none';
+
+
+                }
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+            });
+
+
+
+
+
+ const categoryadd=document.querySelector('#add');
     const modal=document.querySelector('#myModal');
     const closebtn=document.querySelector('.close');
     const categoryform=document.querySelector('#categoryForm');
@@ -387,11 +433,10 @@
         const isEnabled = selectedStatus === "1";
 
         const data = {
-            storeId: 1, // Ensure storeId is defined
             "categoryName": categoryName, // Ensure categoryName is defined
            "categorySort": Number.parseInt(categorySort),
             "categoryStatus": isEnabled
-            // Ensure categorySort is defined
+
 
         }
 
@@ -428,47 +473,6 @@
     })
 
 
-    function loadCategories() {
-        fetch('/categories/all')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP错误！状态: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(categories => {
-                const categoryTableBody = document.querySelector('#categoryTable tbody');
-                categoryTableBody.innerHTML = ''; // 清空表格现有行
-
-                categories.forEach(category => {
-                    const newRow = document.createElement('tr');
-                    newRow.innerHTML = `
-                    <td>
-
-                    </td>
-                    <td>${category.categoryName}</td>
-                    <td>${category.categorySort}</td>
-                    <td>
-                        <a class="btn btn-sm btn-edit update_btn" href="#" data-id="${category.categoryId}">
-                            <i class="fas fa-pencil-alt"></i>
-                            編輯
-                        </a>
-
-                    </td>
-                `;
-                    categoryTableBody.appendChild(newRow);
-                });
-            })
-            .catch(error => {
-                console.error('获取数据失败:', error);
-            });
-    }
-
-// 在页面加载时调用
-    document.addEventListener('DOMContentLoaded', loadCategories);
-
-
-
 
 // 在点击更新按钮时执行
     document.getElementById("categoryTable").addEventListener('click', function(e) {
@@ -477,6 +481,7 @@
             const categoryId = updateBtn.getAttribute('data-id');
             let editModal = document.getElementById('editModal');
             let editClose = document.querySelector('span.editclose');
+
 
 
             // 使用 fetch 从服务器获取类别数据
@@ -493,6 +498,15 @@
 
                     document.getElementById('editcategoryName').value = data.categoryName;
                     document.getElementById('editcategorySort').value = data.categorySort;
+                    // 根据 categoryStatus 设置启用或停用的单选按钮
+                    if (data.categoryStatus === true) {
+                        document.querySelector('input[name="editStatus"][value="1"]').checked = true; // 启用
+                        document.querySelector('input[name="editStatus"][value="0"]').checked = false; // 确保停用状态未勾选
+                    } else {
+                        document.querySelector('input[name="editStatus"][value="1"]').checked = false; // 确保启用状态未勾选
+                        document.querySelector('input[name="editStatus"][value="0"]').checked = true; // 停用
+                    }
+
                     document.getElementById('editModal').style.display = 'block';
                     // 监听关闭按钮点击事件
                     editClose.addEventListener('click', function () {
@@ -503,18 +517,22 @@
                 .catch(error => console.error('Error fetching category data:', error));
         }
 
+
         document.getElementById('editCategoryForm').addEventListener('submit', function(event) {
             event.preventDefault();
 
-          // 防止表单默认提交行为
+            // 防止表单默认提交行为
 
             const updateBtn = e.target;
             const categoryId = updateBtn.getAttribute('data-id');
             const editcategoryName = document.getElementById('editcategoryName');
             const editcategorySort = document.getElementById('editcategorySort');
+            let editStatus = document.querySelector('input[name="editStatus"]:checked').value;
+            let selectStatus= editStatus === "1";
+
             let editModal=document.getElementById('editModal');
 
-            if (!editcategoryName || !editcategorySort) {
+            if (!editcategoryName.value || !editcategorySort.value) {
                 editresultMessage.textContent = '所有字段都是必填的。';
                 return;
             }
@@ -528,7 +546,8 @@
                 },
                 body: JSON.stringify({
                     categoryName: editcategoryName.value,
-                    categorySort: editcategorySort.value
+                    categorySort: editcategorySort.value,
+                    categoryStatus: selectStatus
                 }),
             })
                 .then(response => {
@@ -540,9 +559,7 @@
                 .then(data => {
                     // 更新成功后的处理
                     console.log('Category updated successfully:', data);
-                    editbtn.addEventListener("click",function (){
-                        editModal.style.display='none';
-                    })
+
 
 
 
@@ -554,6 +571,7 @@
                         row.children[2].textContent = data.categorySort; // 更新分类排序
                     }
                     // 隐藏模态窗口
+                    editModal.style.display='none';
 
                     // 这里可以添加刷新页面或更新界面逻辑
                 })
@@ -562,19 +580,14 @@
 
 
         })
-
-
-
-
-
-
-
     });
 
+
+
 // =============================================
-const paginationControls = document.getElementById('paginationControls');
-const searchButton = document.getElementById('searchButton');
-const searchInput = document.getElementById('searchInput');
+var paginationControls = document.getElementById('paginationControls');
+var searchButton = document.getElementById('searchButton');
+var searchInput = document.getElementById('searchInput');
 
 // 當搜尋按鈕被點擊時觸發的事件處理器
 searchButton.addEventListener('click', function() {
@@ -587,7 +600,13 @@ searchButton.addEventListener('click', function() {
         fetchCategories('', 0);
     }
 });
-
+        searchInput.addEventListener('keyup', function(e) {
+            const categoryName = searchInput.value.trim();
+            if (e.which == 13) {
+              e.preventDefault(); // 防止表單提交或其他預設行為
+                searchfetchCategories(categoryName); // 呼叫搜尋函數
+            }
+        });
 // 當搜尋框內容變化時觸發的事件處理器
 searchInput.addEventListener('input', function() {
     const categoryName = searchInput.value.trim();
@@ -642,16 +661,23 @@ function fetchCategories(query, page) {
 }
 
 // 更新表格的示例函數
-function updateCategoryTable(categories) {
+function updateCategoryTable(categories,userTypeId) {
     const categoryTableBody = document.querySelector('#categoryTable tbody');
     categoryTableBody.innerHTML = ''; // 清空表格內容
 
+
     categories.forEach(category => {
         const row = document.createElement('tr');
+
+        const statusBadge = category.categoryStatus === true
+            ? `<span class="badge badge-success on-shelf">啟用</span>`
+            : `<span class="badge badge-danger off-shelf">停用</span>`;
+
         row.innerHTML = `
-            <td></td>
+            ${userTypeId === 3 ? `<td>${category.productStoreId}</td>` : ''} <!-- Assuming productStoreName is available -->
             <td>${category.categoryName}</td>
             <td>${category.categorySort}</td>
+            <td>${statusBadge}</td>
             <td>
                 <a class="btn btn-sm btn-edit update_btn" href="#" data-id="${category.categoryId}">
                     <i class="fas fa-pencil-alt"></i> 編輯

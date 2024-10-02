@@ -9,12 +9,18 @@ import idv.tia201.g2.web.member.vo.Member;
 import idv.tia201.g2.web.member.vo.MemberAddress;
 import idv.tia201.g2.web.user.dao.TotalUserDao;
 import idv.tia201.g2.web.user.vo.TotalUsers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -23,6 +29,8 @@ import java.util.List;
 @Service
 @Transactional
 public class MemberServiceImpl implements MemberService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MemberServiceImpl.class);
 
     @Autowired
     MemberDao memberDao;
@@ -38,6 +46,12 @@ public class MemberServiceImpl implements MemberService {
 
     Integer userType = 0;
 
+    public byte[] loadImg() throws IOException {
+        String imagePath = "static/img/userIcon.jpg";
+        ClassLoader classLoader = getClass().getClassLoader();
+        File file = new File(classLoader.getResource(imagePath).getFile());
+        return Files.readAllBytes(file.toPath());
+    }
 
     @Override
     public Member register(Member member) {
@@ -72,14 +86,24 @@ public class MemberServiceImpl implements MemberService {
             LocalDate date = LocalDate.now();
             member.setCreateDate(Date.valueOf(date));
             member.setUpdateDate(Date.valueOf(date));
+//            發送驗證簡訊
 //            String verifyCode = sendSmsService.sendSMS(phone);
             String verifyCode = "AAA123";
             member.setVerifyCode(verifyCode);
+            try {
+                member.setCustomerImg(loadImg());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            LOGGER.info("register data: {}", member);
             memberDao.createMember(member);
-            return memberDao.findMemberByPhone(phone);
+            member = memberDao.findMemberByPhone(phone);
+            member.setSuccessful(true);
+            member.setMessage("註冊成功");
+
+            return member;
         }
     }
-
 
     @Override
     public Member login(Member member) {
@@ -100,8 +124,6 @@ public class MemberServiceImpl implements MemberService {
         }
         String encodePwd = EncrypSHA.SHAEncrypt(password);
         member.setCustomerPassword(encodePwd);
-        System.out.println(password);
-        System.out.println(encodePwd);
         member = memberDao.findMemberForLogin(phone, encodePwd);
         if (member == null) {
             member = new Member();
@@ -109,24 +131,36 @@ public class MemberServiceImpl implements MemberService {
             member.setSuccessful(false);
             return member;
         }
+        TotalUsers LoginTotalUser = totalUserDao.findByUserTypeIdAndUserId(0, member.getCustomerId());
+        member.setData(LoginTotalUser.getTotalUserId());
+
         member.setMessage("登入成功");
         member.setSuccessful(true);
         return member;
     }
 
     @Override
-    public Member editMember(Member member) {
-        return null;
+    public Boolean editMember(Member member) {
+        Member originalMember = memberDao.findMemberById(member.getCustomerId());
+        originalMember.setBirthday(member.getBirthday());
+        originalMember.setCustomerEmail(member.getCustomerEmail());
+        originalMember.setSex(member.getSex());
+        originalMember.setNickname(member.getNickname());
+        LocalDate date = LocalDate.now();
+        originalMember.setUpdateDate(Date.valueOf(date));
+        return memberDao.updateMemberInfo(originalMember);
     }
 
     @Override
-    public Integer updateMemberByValidSatusAndCustomerRemark(Member member) {
-        if (member.getCustomerRemark() == null) {
-            member.setMessage("customer remark data is null");
-            member.setSuccessful(false);
-            return 0;
-        }
-        return memberDao.updateMemberInfo(member.getCustomerId(), member.getValidStatus(), member.getCustomerRemark());
+    public Member editMemberImg(Integer customerId, MultipartFile img) throws IOException {
+        Member member = memberDao.findMemberById(customerId);
+        member.setCustomerImg(img.getBytes());
+        return memberDao.updateMember(member);
+    }
+
+    @Override
+    public Boolean updateMemberByValidSatusAndCustomerRemark(Member member) {
+        return memberDao.updateMemberInfo(member);
     }
 
     @Override
@@ -157,12 +191,20 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Boolean saveMemberAddress(MemberAddress memberAddress) {
-        return false;
+//        TODO ADDRESS FORMAT
+        if (memberAddress.getCustomerAddressId() == null || memberAddress.getCustomerId() == null || !StringUtils.hasText(memberAddress.getCustomerAddress())) {
+            return false;
+        }
+        memberDao.updateMemberAddress(memberAddress);
+        return true;
     }
 
     @Override
     public Boolean deleteByMemberAddressId(Integer customerAddressId) {
         try {
+//            if (customerAddressId == null ) {
+//                return false;
+//            }
             int resultCount = memberDao.deleteByMemberAddressId(customerAddressId);
             return resultCount > 0;
         } catch (Exception e) {
@@ -172,7 +214,9 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Member findMemberById(Integer memberId) {
-        return memberDao.findMemberById(memberId);
+        Member member = memberDao.findMemberById(memberId);
+        member.setSuccessful(true);
+        return member;
     }
 
     @Override
@@ -249,15 +293,12 @@ public class MemberServiceImpl implements MemberService {
                 TotalUsers totalUser = new TotalUsers(null, userType, queryMember.getCustomerId());
                 totalUserDao.save(totalUser);
                 memberDao.updateMemberInfo(queryMember.getCustomerId(), false, queryMember.getCustomerRemark());
-
             } else {
                 String encodePwd = EncrypSHA.SHAEncrypt(member.getCustomerPassword());
                 queryMember.setCustomerPassword(encodePwd);
                 queryMember.setValidStatus(false);
-
                 memberDao.updateMemberInfo(queryMember);
             }
-
             return true;
         } else {
             return false;
@@ -274,4 +315,18 @@ public class MemberServiceImpl implements MemberService {
         }
     }
 
+    @Override
+    public Boolean checkMemberPwd(Integer memberId, String oldPwd) {
+        String originalPwd = memberDao.findMemberById(memberId).getCustomerPassword();
+        String encodePwd = EncrypSHA.SHAEncrypt(oldPwd);
+        return encodePwd.equals(originalPwd);
+    }
+
+    @Override
+    public void updateMemberPwd(Integer memberId, String newPwd) {
+        String encodePwd = EncrypSHA.SHAEncrypt(newPwd);
+        Member member = memberDao.findMemberById(memberId);
+        member.setCustomerPassword(encodePwd);
+        memberDao.updateMemberInfo(member);
+    }
 }

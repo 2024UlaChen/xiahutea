@@ -58,7 +58,7 @@
       href="https://fonts.googleapis.com/css?family=Lato:300,300i,400,400i,700,700i&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./css/k.css" />
+    <link rel="stylesheet" href="css/homePage.css" />
     <style>
       /* .b-example-divider {
   height: 3rem;
@@ -221,7 +221,7 @@
       </div>
 
       <div class="container px-4 py-5" id="custom-cards">
-        <div class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-5">
+        <div class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-5" id="coupon-list">
           <div class="col" data-bs-toggle="modal" data-bs-target=".exampleModal">
             <div
               class="card card-cover h-100 overflow-hidden text-dark bg-dark rounded-5 shadow-lg"
@@ -271,7 +271,7 @@
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">優惠券說明</h5>
+              <h5 class="modal-title" id="exampleModalLabel">優惠券說明1111</h5>
               <button
                 type="button"
                 class="btn-close"
@@ -336,7 +336,7 @@
       <div class="row align-items-md-stretch">
         <div class="col-md-6">
           <div class="h-100 p-5 text-white bg-dark rounded-3">
-            <h2>有夏虎茶真好，快來瞭解我們吧</h2>
+            <h2 style="color: whitesmoke">有夏虎茶真好，快來瞭解我們吧</h2>
 
             <a href="faq.html" class="btn btn-outline-light" type="button"
               >快速上手</a
@@ -460,5 +460,114 @@
       integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
       crossorigin="anonymous"
     ></script>
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded',function (){
+
+      //取得登入
+      $.ajax({
+        url:"/coupon/list",
+        method:'GET',
+        dataType:"json",
+        contentType: 'application/json',
+        success:function (couponsData){
+          console.log(couponsData);
+          if(!couponsData){
+            location.href = 'login.html';
+          }
+          if(couponsData === null){
+            location.href = 'login.html';
+          }
+          //清空
+          $('#coupon-list').empty();
+          couponsData.forEach(function (row){
+            let str = `
+<div class="col" data-bs-toggle="modal" data-bs-target="#exampleModal${row.customerCouponsId}">
+            <div
+              class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 shadow-lg"
+              style=" background-image: url('img/CouponLogo.jpg'); background-size: contain; background-position: center;"
+            >
+              <div class="d-flex flex-column h-100 p-5 pb-3 text-shadow-1" style="color:whitesmoke">
+                <h2 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold" style="color:whitesmoke">${row.coupon.couponName}</h2>
+                <ul class="d-flex list-unstyled mt-auto">
+                  <li class="me-auto">
+                    <img
+                      src="https://github.com/twbs.png"
+                      alt="Bootstrap"
+                      width="32"
+                      height="32"
+                      class="rounded-circle border border-white"
+                    />
+                  </li>
+                  <li class="d-flex align-items-center me-3">
+                    <svg class="bi me-2" width="1em" height="1em">
+                      <use xlink:href="#geo-fill"></use>
+                    </svg>
+                    <small>數量:${row.couponQuantity}</small>
+                  </li>
+                  <li class="d-flex align-items-center">
+                    <svg class="bi me-2" width="1em" height="1em">
+                      <use xlink:href="#calendar3"></use>
+                    </svg>
+                    <small>期限:${(row.coupon.expiredDate).split(" ")[0]}</small>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+   <div
+        class="modal fade"
+        id="exampleModal${row.customerCouponsId}"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">${row.coupon.couponRule}</h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <p>折抵${row.coupon.discount}元</p>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                關閉
+              </button>
+
+            </div>
+          </div>
+        </div>
+      </div>
+`;
+            document.querySelector('#coupon-list').insertAdjacentHTML('afterbegin',str);
+
+          });
+        },
+        err:function (data){
+          console.log(data);
+          console.log('gg');
+        }
+
+      });
+
+
+
+
+
+
+    });//DOM End
+  </script>
   </body>
 </html>

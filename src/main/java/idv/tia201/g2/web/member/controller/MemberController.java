@@ -5,22 +5,43 @@ import idv.tia201.g2.core.util.ValidateUtil;
 import idv.tia201.g2.web.member.service.MemberService;
 import idv.tia201.g2.web.member.vo.Member;
 import idv.tia201.g2.web.member.vo.MemberAddress;
+import idv.tia201.g2.web.user.dto.TotalUserDTO;
+import jakarta.servlet.http.HttpSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
 @RequestMapping("member")
 public class MemberController {
+    private static final Logger LOGGER = LoggerFactory.getLogger(MemberController.class);
+
     @Autowired
     private MemberService memberService;
-
 
     @GetMapping("address/{memberId}")
     public List<MemberAddress> getMemberAddress(@PathVariable Integer memberId) {
         return memberService.findAddressByMemberId(memberId);
+    }
+
+    @PostMapping("address")
+    public Core getMemberAddress(@RequestBody MemberAddress memberAddress) {
+        Core core = new Core();
+        if (memberAddress == null) {
+            core.setMessage("no data , plz check");
+            core.setSuccessful(false);
+            return core;
+        }
+        core.setMessage("get address");
+        core.setSuccessful(true);
+        core.setData(memberService.findAddressByMemberId(memberAddress.getCustomerId()));
+        return core;
     }
 
     @GetMapping("carrier/{memberId}")
@@ -50,5 +71,131 @@ public class MemberController {
             core.setSuccessful(false);
         }
         return core;
+    }
+
+    @PostMapping("setting/check")
+    public Core checkMemberPwd(@RequestBody Member member) {
+        Core core = new Core();
+        if (member == null || !StringUtils.hasText(member.getCustomerPassword())) {
+            core.setSuccessful(false);
+            core.setMessage("original pwd is wrong , plz check!");
+            return core;
+        } else {
+            if (!memberService.checkMemberPwd(member.getCustomerId(), member.getCustomerPassword())) {
+                core.setMessage("密碼錯誤");
+                core.setSuccessful(false);
+                return core;
+            }
+            core.setMessage("pwd check successful");
+            core.setSuccessful(true);
+            return core;
+        }
+    }
+
+    @PostMapping("setting/update")
+    public Core updateMemberPwd(@RequestBody Member member) {
+        Core core = new Core();
+        if (member == null || !StringUtils.hasText(member.getCustomerPassword())) {
+            core.setSuccessful(false);
+            core.setMessage("original pwd is wrong , plz check!");
+            return core;
+        } else {
+            memberService.updateMemberPwd(member.getCustomerId(), member.getCustomerPassword());
+            core.setMessage("更新成功");
+            core.setSuccessful(true);
+            return core;
+        }
+    }
+
+    @PostMapping("address/update")
+    public Core updateAddressByAddressId(@RequestBody MemberAddress memberAddress) {
+        Core core = new Core();
+        if (memberAddress == null) {
+            core.setSuccessful(false);
+            core.setMessage("data is wrong , plz check!");
+            return core;
+        }
+        if (!memberService.saveMemberAddress(memberAddress)) {
+            core.setSuccessful(false);
+            core.setMessage("data is wrong , plz check!");
+            return core;
+        }
+        core.setSuccessful(true);
+        core.setMessage("success");
+        return core;
+    }
+
+    @DeleteMapping("address/{customerAddressId}")
+    public Core deleteAddressByAddressId(@PathVariable Integer customerAddressId) {
+        Core core = new Core();
+        if (customerAddressId == null) {
+            core.setSuccessful(false);
+            core.setMessage("data is wrong , plz check!");
+            return core;
+        }
+        if (!memberService.deleteByMemberAddressId(customerAddressId)) {
+            core.setSuccessful(false);
+            core.setMessage("data is wrong , plz check!");
+            return core;
+        }
+        core.setSuccessful(true);
+        core.setMessage("已刪除");
+        return core;
+    }
+
+    @PostMapping
+    public Member getMemberInformation(HttpSession httpSession) {
+        TotalUserDTO totalUserDTO = (TotalUserDTO) httpSession.getAttribute("totalUserDTO");
+        Member member = new Member();
+        if (totalUserDTO == null || null == totalUserDTO.getUserId()) {
+            member.setSuccessful(false);
+            member.setMessage("no memberId");
+            return member;
+        }
+        member = memberService.findMemberById(totalUserDTO.getUserId());
+        member.setSuccessful(true);
+        return member;
+    }
+
+    @PostMapping("updateImg")
+    public Member updateMemberInfo(@RequestParam("img") MultipartFile file, @RequestParam String customerId) throws IOException {
+        Member member = new Member();
+        if (!StringUtils.hasText(customerId)) {
+            member.setSuccessful(false);
+            member.setMessage("no memberId");
+            return member;
+        }
+        if (file.isEmpty()) {
+            member.setSuccessful(false);
+            member.setMessage("no img");
+            return member;
+        }
+
+        member = memberService.editMemberImg(Integer.parseInt(customerId), file);
+        member.setSuccessful(true);
+        member.setMessage("update done");
+        System.out.println(member);
+        return member;
+    }
+
+    @PostMapping("update")
+    public Member updateMemberInfo(@RequestBody Member member, HttpSession httpSession) {
+        TotalUserDTO totalUserDTO = (TotalUserDTO) httpSession.getAttribute("totalUserDTO");
+        if (totalUserDTO == null || null == totalUserDTO.getUserId() || member == null) {
+            member.setSuccessful(false);
+            member.setMessage("no memberId");
+            return member;
+        }
+        if (!totalUserDTO.getUserId().equals(member.getCustomerId())) {
+            member.setSuccessful(false);
+            member.setMessage("wrong memberId");
+            return member;
+        }
+        memberService.editMember(member);
+        member = memberService.findMemberById(totalUserDTO.getUserId());
+        member.setSuccessful(true);
+        member.setMessage("update done");
+        return member;
+
     }
 }

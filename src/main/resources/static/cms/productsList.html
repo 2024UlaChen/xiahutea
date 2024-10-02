@@ -92,6 +92,9 @@
 
                                 <div class="card-tools">
                                     <div class="input-group">
+                                        <label for="searchInput2" class="mr-2" id="label-searchInput2">搜尋商店名稱:</label>
+
+                                        <input type="search" id="searchInput2" class="form-control mr-2" placeholder="搜尋商店名稱">
                                         <select class="form-control select2 productcategory" style="width:5%;">
                                             <option selected="selected">奶茶類</option>
                                             <option>奶茶類</option>
@@ -304,13 +307,41 @@
 
 <script>
 
-//查詢
-// let search_btn=document.querySelector('.search');
-// search_btn.addEventListener("click",function (){
-//     alert("rrr")
-// })
+    // 使用 fetch 從後端獲取 TotalUserDTO
+    fetch('/totalusers', {
+        method: 'GET', // 請求方法是 GET
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json(); // 將返回的結果解析為 JSON 格式
+        })
+        .then(data => {
+            console.log('TotalUserDTO:', data); // 在控制台中顯示 TotalUserDTO
 
-  $('#add').on('click',function (){
+            // 根據獲取到的 TotalUserDTO 處理邏輯
+            if (data && data.userTypeId === 1) {
+                // 如果角色是 store，隱藏搜尋框
+                document.getElementById('searchInput2').style.display = 'none';
+                document.getElementById('label-searchInput2').style.display = 'none';
+            }
+
+            if (data && data.userTypeId === 3) {
+                // 隱藏新增按鈕
+                document.getElementById('add').style.display = 'none';
+
+
+            }
+        })
+        .catch(error => {
+            console.error('Fetch error:', error);
+        });
+
+
+
+
+    $('#add').on('click',function (){
       window.location.href="addProducts.html"
     })
 
@@ -324,67 +355,6 @@ function getCategoryNameById(categoryId) {
         });
 }
 
-function loadProducts() {
-    fetch('/products/all')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP错误！状态: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(products => {
-            const myTableBody = document.querySelector('#myTable tbody');
-            myTableBody.innerHTML = ''; // 清空表格现有行
-
-            products.forEach(product => {
-                getCategoryNameById(product.productCategoryId)
-                    .then(categoryName =>{
-                        const newRow = document.createElement('tr');
-                        newRow.innerHTML = `
-                   <tr>
-                           <td>
-                              ${product.productId}
-                             </td>
-                              <td>
-                                ${categoryName}
-                               </td>
-                                <td>
-                                  ${product.productName}
-                                  </td>
-                                   <td>
-                                    $${product.productPrice}
-                                    </td>
-                                     <td>
-                                       ${product.size}
-                                      </td>
-                                       <td>
-                                       <span class="badge badge-success on-shelf">上架</span>
-                                        </td>
-                                       <td class="project-actions text-right">
-                                        <a class="btn btn-edit btn-sm update_btn" href="addProducts.html?productId=${product.productId}" data-id="${product.productId}">
-                                         <i class="fas fa-pencil-alt">
-                                              </i>
-                                                 編輯
-                                              </a>
-
-                                              </td>
-                                            </tr>
-                `;
-                        myTableBody.appendChild(newRow);
-
-                    })
-
-            });
-        })
-        .catch(error => {
-            console.error('获取数据失败:', error);
-        });
-}
-
-// 在页面加载时调用
-document.addEventListener('DOMContentLoaded', loadProducts);
-
-// 獲取分類信息
 // =========獲取商品分類選項====
 let categoryOptions = document.querySelector('.productcategory');
 
@@ -412,255 +382,189 @@ fetch('/categories/all')
 
 
     });
-// ==============================================
-// var searchBtn =document.getElementById('searchBtn');
-// var productSearch=document.getElementById('productNameInput');
-//
-//
-//
-// searchBtn.addEventListener("click",function () {
-//     var productCategoryId = document.querySelector('.productcategory').value;
-//     var productName = document.getElementById('productNameInput').value.trim();
-//
-//     // 发起 fetch 请求到后台
-//     fetch(`/products/search?productCategoryId=${encodeURIComponent(productCategoryId)}&productName=${encodeURIComponent(productName)}`)
-//         .then(response => {
-//             if (!response.ok) {
-//                 throw new Error(`HTTP 错误! 状态: ${response.status}`);
-//             }
-//             return response.json(); // 解析 JSON 响应
-//         })
-//         .then(data => {
-//             if (data.length === 0) {
-//                 console.log('未找到匹配的商品');
-//             } else {
-//                 updateProductTable(data); // 更新表格顯示搜尋結果
-//             }
-//         })
-//         .catch(error => {
-//             console.error('搜索失败:', error);
-//             alert('搜索失败，请重试!');
-//         });
-// });
-//
-//
-//
-//
-//
-//
-//
-// function updateProductTable(products) {
-//     const productTableBody = document.querySelector('#myTable tbody');
-//     productTableBody.innerHTML = ''; // 清空表格内容
-//
-//     // 创建一个包含所有异步操作的数组
-//     const promises = products.map(product =>
-//         getCategoryNameById(product.productCategoryId).then(categoryName => {
-//             const newRow = document.createElement('tr');
-//             newRow.innerHTML = `
-//                 <td>${product.productId}</td>
-//                 <td>${categoryName}</td>
-//                 <td>${product.productName}</td>
-//                 <td>$${product.productPrice}</td>
-//                 <td>${product.size}</td>
-//                 <td>
-//                     <span class="badge badge-success ${product.productStatus ? 'on-shelf' : 'off-shelf'}">
-//                         ${product.productStatus ? '上架' : '下架'}
-//                     </span>
-//                 </td>
-//                 <td class="project-actions text-right">
-//                     <a class="btn btn-edit btn-sm update_btn" href="addProducts.html?productId=${product.productId}" data-id="${product.productId}">
-//                         <i class="fas fa-pencil-alt"></i> 编辑
-//                     </a>
-//                 </td>
-//             `;
-//             productTableBody.appendChild(newRow);
-//         })
-//     );
-//
-//     // 等待所有异步操作完成后再更新表格
-//     Promise.all(promises).then(() => {
-//         console.log('所有产品行已更新');
-//     }).catch(error => {
-//         console.error('更新产品表格时出错:', error);
-//     });
-// }
 
 
+    // Cache DOM elements
+    var searchBtn = document.getElementById('searchBtn');
+    var productSearch = document.getElementById('productNameInput');
+    var paginationControls = document.getElementById('paginationControls');
+
+    // Event listener for search button click
+    searchBtn.addEventListener("click", function() {
+        var productCategoryId = document.querySelector('.productcategory').value;
+        var productName = productSearch.value.trim();
+
+        if (productName) {
+            searchfetchProducts(productCategoryId, productName);
+        } else {
+            fetchProducts(productCategoryId, '', 0); // Fetch by category only if no product name
+        }
+    });
 
 
-var searchBtn = document.getElementById('searchBtn');
-var productSearch = document.getElementById('productNameInput');
+    // Event listener for input in the product name search field
+    productSearch.addEventListener("input", function() {
+        var productName = productSearch.value.trim();
+        if (!productName) {
+            fetchProducts('', '', 0); // Clear search and show all products
+        }
+    });
 
-searchBtn.addEventListener("click", function() {
-    var productCategoryId = document.querySelector('.productcategory').value;
-    var productName = document.getElementById('productNameInput').value.trim();
 
-    if (productName) {
-        searchfetchProducts(productCategoryId, productName);
-    } else {
-        fetchProducts(productCategoryId, '', 0); // 调用时提供 categoryId
+    productSearch.addEventListener('keyup', function(e) {
+        var productCategoryId = document.querySelector('.productcategory').value;
+        var productName = productSearch.value.trim();
+        if (e.which == 13) {
+            e.preventDefault(); // 防止表單提交或其他預設行為
+            searchfetchProducts(productCategoryId, productName);// 呼叫搜尋函數
+        }
+    });
+
+    // Fetch search results by category and product name
+    function searchfetchProducts(queryId, queryName) {
+        const url = `/products/search?productCategoryId=${encodeURIComponent(queryId)}&productName=${encodeURIComponent(queryName)}`;
+
+        fetch(url)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json(); // Parse JSON
+            })
+            .then(data => {
+                if (data.length === 0) {
+                    console.log('No matching products found');
+                } else {
+                    updateProductTable(data);
+                }
+                paginationControls.innerHTML = ''; // Hide pagination on search results
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+            });
     }
-});
 
-productSearch.addEventListener("input", function() {
-    var productName = document.getElementById('productNameInput').value.trim();
-    if (!productName) {
-        fetchProducts('', '', 0); // 清空查询条件，显示所有产品
+    // Fetch products with pagination
+    function fetchProducts(productCategoryId, productName, page) {
+        const url = `/products/paginated?page=${page}&size=10` +
+            `${productCategoryId ? `&categoryId=${encodeURIComponent(productCategoryId)}` : ''}` +
+            `${productName ? `&productName=${encodeURIComponent(productName)}` : ''}`;
+
+        fetch(url)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json(); // Parse JSON
+            })
+            .then(data => {
+                updateProductTable(data.content); // Update table data
+                updatePageControls(data.totalPages, page); // Update pagination
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+            });
     }
-});
 
-function searchfetchProducts(queryId, queryName) {
-    const url = `/products/search?productCategoryId=${encodeURIComponent(queryId)}&productName=${encodeURIComponent(queryName)}`;
+    // Update the product table
+    function updateProductTable(products) {
+        const productTableBody = document.querySelector('#myTable tbody');
+        productTableBody.innerHTML = ''; // Clear table content
 
-    fetch(url)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json(); // 解析 JSON 格式的响应体
-        })
-        .then(data => {
-            if (data.length === 0) {
-                console.log('未找到匹配的商品');
-            } else {
-                updateProductTable(data);
-            }
-            paginationControls.innerHTML = ''; // 搜索结果不显示分页
-        })
-        .catch(error => {
-            console.error('Fetch error:', error);
-        });
-}
+        const promises = products.map(product =>
+            getCategoryNameById(product.productCategoryId).then(categoryName => {
+                const newRow = document.createElement('tr');
 
-function fetchProducts(productCategoryId, productName, page) {
-    const url = `/products/paginated?page=${page}&size=10` +
-        `${productCategoryId ? `&categoryId=${encodeURIComponent(productCategoryId)}` : ''}` +
-        `${productName ? `&productName=${encodeURIComponent(productName)}` : ''}`;
+                const statusBadge = product.productStatus
+                    ? `<span class="badge badge-success on-shelf">上架</span>`
+                    : `<span class="badge badge-danger off-shelf">下架</span>`;
 
-    fetch(url)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json(); // 解析 JSON 格式的响应体
-        })
-        .then(data => {
-            updateProductTable(data.content); // 更新表格数据
-            updatePageControls(data.totalPages, page); // 更新分页控件
-        })
-        .catch(error => {
-            console.error('Fetch error:', error);
-        });
-}
-
-function updateProductTable(products) {
-    const productTableBody = document.querySelector('#myTable tbody');
-    productTableBody.innerHTML = ''; // 清空表格内容
-
-    // 创建一个包含所有异步操作的数组
-    const promises = products.map(product =>
-        getCategoryNameById(product.productCategoryId).then(categoryName => {
-            const newRow = document.createElement('tr');
-            newRow.innerHTML = `
+                newRow.innerHTML = `
                 <td>${product.productId}</td>
                 <td>${categoryName}</td>
                 <td>${product.productName}</td>
                 <td>$${product.productPrice}</td>
                 <td>${product.size}</td>
                 <td>
-                    <span class="badge badge-success ${product.productStatus ? 'on-shelf' : 'off-shelf'}">
-                        ${product.productStatus ? '上架' : '下架'}
-                    </span>
+                  ${statusBadge}
                 </td>
                 <td class="project-actions text-right">
                     <a class="btn btn-edit btn-sm update_btn" href="addProducts.html?productId=${product.productId}" data-id="${product.productId}">
-                        <i class="fas fa-pencil-alt"></i> 编辑
+                        <i class="fas fa-pencil-alt"></i> 編輯
                     </a>
                 </td>
             `;
-            productTableBody.appendChild(newRow);
-        })
-    );
+                productTableBody.appendChild(newRow);
+            })
+        );
 
-    // 等待所有异步操作完成后再更新表格
-    Promise.all(promises).then(() => {
-        console.log('所有产品行已更新');
-    }).catch(error => {
-        console.error('更新产品表格时出错:', error);
-    });
-}
-
-function updatePageControls(totalPages, currentPage) {
-    const paginationControls = document.getElementById('paginationControls');
-    paginationControls.innerHTML = ''; // 清空现有分页控件
-
-    // 创建分页导航
-    const nav = document.createElement('nav');
-    nav.setAttribute('aria-label', 'Page navigation example');
-
-    // 创建 ul 元素用于分页
-    const ul = document.createElement('ul');
-    ul.className = 'pagination justify-content-end';
-
-    // 上一页按钮
-    const prevLi = document.createElement('li');
-    prevLi.className = 'page-item ' + (currentPage === 0 ? 'disabled' : '');
-    const prevLink = document.createElement('a');
-    prevLink.className = 'page-link';
-    prevLink.href = '#';
-    prevLink.setAttribute('tabindex', '-1');
-    prevLink.setAttribute('aria-disabled', 'true');
-    prevLink.id = 'prev';
-    prevLink.textContent = 'Previous';
-    if (currentPage > 0) {
-        prevLink.addEventListener('click', () => {
-            fetchProducts(productSearch.value.trim(), currentPage - 1); // 加载上一页
+        Promise.all(promises).then(() => {
+            console.log('All product rows updated');
+        }).catch(error => {
+            console.error('Error updating product table:', error);
         });
     }
-    prevLi.appendChild(prevLink);
-    ul.appendChild(prevLi);
 
-    // 页码按钮
-    for (let i = 0; i < totalPages; i++) {
-        const li = document.createElement('li');
-        li.className = 'page-item ' + (i === currentPage ? 'active' : '');
-        const link = document.createElement('a');
-        link.className = 'page-link';
-        link.href = '#';
-        link.textContent = i + 1;
-        link.addEventListener('click', () => {
-            fetchProducts(productSearch.value.trim(), i); // 加载第 i 页
-        });
-        li.appendChild(link);
-        ul.appendChild(li);
+    // Update pagination controls
+    function updatePageControls(totalPages, currentPage) {
+        paginationControls.innerHTML = ''; // Clear existing pagination controls
+
+        const nav = document.createElement('nav');
+        nav.setAttribute('aria-label', 'Page navigation example');
+        const ul = document.createElement('ul');
+        ul.className = 'pagination justify-content-end';
+
+        // Previous button
+        const prevLi = document.createElement('li');
+        prevLi.className = 'page-item ' + (currentPage === 0 ? 'disabled' : '');
+        const prevLink = document.createElement('a');
+        prevLink.className = 'page-link';
+        prevLink.href = '#';
+        prevLink.textContent = 'Previous';
+        if (currentPage > 0) {
+            prevLink.addEventListener('click', () => {
+                fetchProducts(document.querySelector('.productcategory').value, productSearch.value.trim(), currentPage - 1); // Load previous page
+            });
+        }
+        prevLi.appendChild(prevLink);
+        ul.appendChild(prevLi);
+
+        // Page number buttons
+        for (let i = 0; i < totalPages; i++) {
+            const li = document.createElement('li');
+            li.className = 'page-item ' + (i === currentPage ? 'active' : '');
+            const link = document.createElement('a');
+            link.className = 'page-link';
+            link.href = '#';
+            link.textContent = i + 1;
+            link.addEventListener('click', () => {
+                fetchProducts(document.querySelector('.productcategory').value, productSearch.value.trim(), i); // Load specific page
+            });
+            li.appendChild(link);
+            ul.appendChild(li);
+        }
+
+        // Next button
+        const nextLi = document.createElement('li');
+        nextLi.className = 'page-item ' + (currentPage === totalPages - 1 ? 'disabled' : '');
+        const nextLink = document.createElement('a');
+        nextLink.className = 'page-link';
+        nextLink.href = '#';
+        nextLink.textContent = 'Next';
+        if (currentPage < totalPages - 1) {
+            nextLink.addEventListener('click', () => {
+                fetchProducts(document.querySelector('.productcategory').value, productSearch.value.trim(), currentPage + 1); // Load next page
+            });
+        }
+        nextLi.appendChild(nextLink);
+        ul.appendChild(nextLi);
+
+        nav.appendChild(ul);
+        paginationControls.appendChild(nav);
     }
 
-    // 下一页按钮
-    const nextLi = document.createElement('li');
-    nextLi.className = 'page-item ' + (currentPage === totalPages - 1 ? 'disabled' : '');
-    const nextLink = document.createElement('a');
-    nextLink.className = 'page-link';
-    nextLink.href = '#';
-    nextLink.id = 'next';
-    nextLink.textContent = 'Next';
-    if (currentPage < totalPages - 1) {
-        nextLink.addEventListener('click', () => {
-            fetchProducts(productSearch.value.trim(), currentPage + 1); // 加载下一页
-        });
-    }
-    nextLi.appendChild(nextLink);
-    ul.appendChild(nextLi);
-
-    nav.appendChild(ul);
-    paginationControls.appendChild(nav);
-}
-
-// 初次加载所有产品，默认加载第 0 页，每页显示 10 条数据
-fetchProducts('', '', 0);
-
-
-
+    // Load the first page of products on initial page load
+    fetchProducts('', '', 0);
 
 
 

@@ -21,7 +21,7 @@ public class MemberDaoImpl implements MemberDao {
     }
 
     @Override
-    public Member findMemberById(int memberId) {
+    public Member findMemberById(Integer memberId) {
         return session.get(Member.class, memberId);
     }
 
@@ -82,9 +82,14 @@ public class MemberDaoImpl implements MemberDao {
     }
 
     @Override
-    public boolean updateMemberInfo(Member member) {
+    public Boolean updateMemberInfo(Member member) {
         session.merge(member);
         return true;
+    }
+
+    @Override
+    public Member updateMember(Member member) {
+        return session.merge(member);
     }
 
     @Override
@@ -120,7 +125,7 @@ public class MemberDaoImpl implements MemberDao {
     }
 
     @Override
-    public boolean updateMemberAddress(MemberAddress memberAddress) {
+    public Boolean updateMemberAddress(MemberAddress memberAddress) {
         session.merge(memberAddress);
         return true;
     }
@@ -138,7 +143,7 @@ public class MemberDaoImpl implements MemberDao {
     }
 
     @Override
-    public boolean createMemberAddress(MemberAddress memberAddress) {
+    public Boolean createMemberAddress(MemberAddress memberAddress) {
         session.persist(memberAddress);
         return true;
     }

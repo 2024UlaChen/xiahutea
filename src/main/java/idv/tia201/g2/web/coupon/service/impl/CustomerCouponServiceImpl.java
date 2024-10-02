@@ -6,6 +6,8 @@ import idv.tia201.g2.web.coupon.vo.CustomerCoupons;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CustomerCouponServiceImpl implements CustomerCouponService {
     @Autowired
@@ -22,5 +24,10 @@ public class CustomerCouponServiceImpl implements CustomerCouponService {
         } else {
             throw new RuntimeException("無法找到對應的優惠券資料");
         }
+    }
+
+    @Override
+    public List<CustomerCoupons> getCustomerCoupons(Integer customerId) {
+        return customerCouponDao.findByCustomerId(customerId);
     }
 }

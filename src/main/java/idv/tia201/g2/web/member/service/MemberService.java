@@ -2,7 +2,9 @@ package idv.tia201.g2.web.member.service;
 
 import idv.tia201.g2.web.member.vo.Member;
 import idv.tia201.g2.web.member.vo.MemberAddress;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface MemberService {
@@ -13,11 +15,13 @@ public interface MemberService {
     Member login(Member member);
 
     //    編輯
-    Member editMember(Member member);
+    Member editMemberImg(Integer customerId, MultipartFile img) throws IOException;
+
+    Boolean editMember(Member member);
 
     Integer updateMemberCarrier(Member member);
 
-    Integer updateMemberByValidSatusAndCustomerRemark(Member member);
+    Boolean updateMemberByValidSatusAndCustomerRemark(Member member);
 
     //    編輯地址
     MemberAddress editMemberAddress(MemberAddress memberAddress);
@@ -52,6 +56,11 @@ public interface MemberService {
     //    刪地址
     Boolean deleteByMemberAddressId(Integer customerAddressId);
 
-    Boolean updateMemberMoneyById(Integer memberId , Integer memberMoney);
+    Boolean updateMemberMoneyById(Integer memberId, Integer memberMoney);
+
+    void updateMemberPwd(Integer memberId, String newPwd);
+
+    Boolean checkMemberPwd(Integer memberId, String oldPwd);
+
 
 }

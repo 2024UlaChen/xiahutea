@@ -1,14 +1,41 @@
+// ASIDE
+const asidePhoto = document.querySelector("#asidePhoto");
+const asideName = document.querySelector("#asideName");
+
 const carrierEditBtn = document.querySelector("#carrierEdit");
 const carrierDeleteBtn = document.querySelector("#carrierDelete");
 
 const memberCarrierBarcode = document.querySelector("#memberCarrierBarcode");
 const memberCarrierText = document.querySelector("#memberCarrierText");
 
+// TODO - 改抓memberID
+// const memberId = 2;
+function getMemberId() {
+    const sessionDetail = JSON.parse(sessionStorage.getItem("memberData"));
+    return parseInt(sessionDetail.data.customerId);
+}
+function nullToEmpty(data) {
+    return (data == null) ? "" : data;
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    getCarrier(getMemberId());
+    fetch(`member`, {
+        method: "POST",
+    }).then(res => res.json())
+        .then(data => {
+            if (data.successful) {
+                let userImg = (nullToEmpty(data.customerImg) === "") ? "" : `data:image/png;base64,${data.customerImg}`;
+                asidePhoto.setAttribute("src", userImg);
+                asideName.innerText = nullToEmpty(data.nickname);
+            }
+        })
+});
+
 function getCarrier(memberId) {
     fetch(`member/carrier/` + memberId)
         .then(res => res.text())
         .then(data => {
-            console.log(data.length);
             if (data.length !== 0) {
                 memberCarrierText.classList.remove("checkInValid");
                 carrierDeleteBtn.classList.remove("hidden")
@@ -24,14 +51,6 @@ function getCarrier(memberId) {
             }
         });
 }
-// TODO - 改抓memberID
-const memberId = 2;
-
-document.addEventListener("DOMContentLoaded", function () {
-    // TODO - change member id
-    getCarrier(memberId);
-
-});
 
 function updateCarrier(newCarrierTxt, memberId, type) {
     fetch(`member/carrier?type=` + encodeURIComponent(type), {
@@ -43,10 +62,9 @@ function updateCarrier(newCarrierTxt, memberId, type) {
             type: type
         }),
     }).then(res => res.json()).then(data => {
-        console.log(data)
         if (data.successful) {
             Swal.fire("已更新載具", "", "success");
-            getCarrier(memberId);
+            getCarrier(getMemberId());
         } else {
             Swal.fire({
                 icon: "error",
@@ -63,7 +81,7 @@ carrierEditBtn.addEventListener("click", function () {
         title: "請輸入載具條碼，輸入確認後會自動產生條碼",
         input: "text",
         inputValue: inputValueTxt,
-        inputPlaceholder: "/123-456",
+        inputPlaceholder: "/1234567",
         showCancelButton: true,
         width: 350,
         confirmButtonText: `<span class="sweetAlertFont">更新載具</span>`,
@@ -81,7 +99,7 @@ carrierEditBtn.addEventListener("click", function () {
         }
     }).then((result) => {
         if (result.isConfirmed) {
-            updateCarrier(result.value, memberId, "update");
+            updateCarrier(result.value, getMemberId(), "update");
         }
     })
 })
@@ -98,7 +116,7 @@ carrierDeleteBtn.addEventListener("click", function () {
         cancelButtonText: `<span class="sweetAlertFont">否</span>`,
     }).then((result) => {
         if (result.isConfirmed) {
-            updateCarrier("", memberId, "delete");
+            updateCarrier("", getMemberId(), "delete");
         }
     });
 })
