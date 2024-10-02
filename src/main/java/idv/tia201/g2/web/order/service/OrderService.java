@@ -16,9 +16,10 @@ public interface OrderService {
 
     Page<Orders> findAll(Pageable pageable);
     List<OrderDetail> findByOrderId(int orderId);
+
     Page<OrderDto> findByCustomerId(int customerId, Pageable pageable);
+    Page<OrderDto> findByCustomerIdAndDateRange(Integer customerId, Timestamp dateStart, Timestamp dateEnd, Pageable pageable);
 
     OrderDto findByMemberOrderId(int orderId);
-    Page<OrderDto> findByCustomerIdAndDateRange(Integer customerId, Integer orderStatus, Timestamp dateStart, Timestamp dateEnd, Pageable pageable);
 
 }

@@ -231,7 +231,7 @@ public class OrderServiceImpl implements OrderService {
         return orderDto;
     }
 
-    // 前台 訂單列表 顯示
+    // 前台 訂單列表 顯示 全訂單
     @Override
     public Page<OrderDto> findByCustomerId(int customerId, Pageable pageable) {
         Page<Orders> orders = orderRepository.findByCustomerId(customerId, pageable);
@@ -247,15 +247,13 @@ public class OrderServiceImpl implements OrderService {
         // 回傳Page<OrderDto>
         return new PageImpl<>(orderDtos, pageable, orders.getTotalElements());
     }
-
-    public Page<OrderDto> findByCustomerIdAndDateRange(Integer customerId, Integer orderStatus, Timestamp dateStart, Timestamp dateEnd, Pageable pageable) {
+    // 前台 訂單列表 顯示 篩選日期
+    @Override
+    public Page<OrderDto> findByCustomerIdAndDateRange(Integer customerId, Timestamp dateStart, Timestamp dateEnd, Pageable pageable) {
         Page<Orders> orders;
         // 根據 customerId 和訂單建立日期範圍來過濾訂單
-        if (orderStatus != null) {
-            orders = orderRepository.findByCustomerIdAndOrderStatusAndOrderCreateDatetimeBetween(customerId, orderStatus, dateStart, dateEnd, pageable);
-        }else {
-            orders = orderRepository.findByCustomerIdAndOrderCreateDatetimeBetween(customerId, dateStart, dateEnd, pageable);
-        }
+        orders = orderRepository.findByCustomerIdAndOrderCreateDatetimeBetween(customerId, dateStart, dateEnd, pageable);
+
         //                      建立流             || 映射每個訂單
         List<OrderDto> orderDtos = orders.stream().map(order -> {
             DisputeOrder disputeOrder = disputeDao.selectByOrderId(order.getOrderId());
