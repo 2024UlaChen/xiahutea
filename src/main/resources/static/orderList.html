@@ -264,9 +264,9 @@
     const size = 9;                 // 每頁顯示的筆數
     let totalPages = 0;             // 總頁數
     let currentPage = 0;            // 當前頁數
-    let dateRangeApplied = false;   // 是否已應用日期範圍
     let selectedDateStart = "";     // 選擇的開始日期
     let selectedDateEnd = "";       // 選擇的結束日期
+    let dateRangeApplied = false;   // 是否已選擇日期範圍
 
     // 取得sessionStorage會員ID
     const memberData = JSON.parse(sessionStorage.getItem("memberData"));
@@ -296,7 +296,7 @@
                   console.log("totalUserDTO 錯誤原因:" + error);
               });
 
-        // 上下頁按鈕
+        // btn 上下頁
         const nextButton = document.getElementById("next");
         const previousButton = document.getElementById("previous");
         if (nextButton) {
@@ -316,7 +316,7 @@
             });
         }
 
-        // 查詢按鈕
+        // btn 查詢
         const btnSelect = document.getElementById("select_btn");
         btnSelect.addEventListener("click", function (e) {
             e.preventDefault();
@@ -325,7 +325,7 @@
             let selectOrderDate1 = selectOrderDate1El.value || "";
             let selectOrderDate2 = selectOrderDate2El.value || "";
 
-            // 按查詢條件重載訂單
+            // 依查詢條件載入訂單
             init(currentPage, size, customerId, selectOrderDate1, selectOrderDate2);
         });
     });

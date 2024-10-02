@@ -251,7 +251,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Page<OrderDto> findByCustomerIdAndDateRange(Integer customerId, Timestamp dateStart, Timestamp dateEnd, Pageable pageable) {
         Page<Orders> orders;
-        // 根據 customerId 和訂單建立日期範圍來過濾訂單
+        // 根據 customerId 和訂單建立日期範圍來篩選訂單
         orders = orderRepository.findByCustomerIdAndOrderCreateDatetimeBetween(customerId, dateStart, dateEnd, pageable);
 
         //                      建立流             || 映射每個訂單

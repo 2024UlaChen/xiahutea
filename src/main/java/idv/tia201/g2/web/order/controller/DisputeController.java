@@ -10,7 +10,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
+import java.sql.Timestamp;
+import java.time.LocalDate;
 
 @RestController
 @RequestMapping("dispute")
@@ -44,12 +47,36 @@ public class DisputeController {
     // 後台 爭議列表 顯示
     @GetMapping("manage")
     public Page<DisputeOrder> findAllByPageable(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer size,
+            @RequestParam(required = false) Integer disputeOrderId,
+            @RequestParam(required = false) Integer orderId,
+            @RequestParam(required = false) String storeName,
+            @RequestParam(required = false) String memberNickname,
+            @RequestParam(required = false) Integer disputeStatus,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy/MM/dd") LocalDate dateStart, // 開始日期
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy/MM/dd") LocalDate dateEnd, // 結束日期
             HttpSession httpSession
     ){
+        TotalUserDTO totalUserDTO = (TotalUserDTO) httpSession.getAttribute("totalUserDTO");
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "applyDatetime"));
-        return disputeService.findAll(pageable);
+        // 如果不是店家或管理者
+        if (totalUserDTO.getUserTypeId() != 3 && totalUserDTO.getUserTypeId() != 1) {
+            return Page.empty();
+        }
+
+        // 檢查 dateStart 和 dateEnd 是否為 null
+        Timestamp startTimestamp = null;
+        Timestamp endTimestamp = null;
+        if (dateStart != null) {
+            startTimestamp = Timestamp.valueOf(dateStart.atStartOfDay());
+        }
+        if (dateEnd != null) {
+            endTimestamp = Timestamp.valueOf(dateEnd.plusDays(1).atStartOfDay());
+        }
+        // 判斷是否設定店家id
+        Integer storeId = (totalUserDTO.getUserTypeId() == 1) ? totalUserDTO.getUserTypeId() : null;
+        return disputeService.findByCriteria(disputeOrderId, orderId, storeId, storeName, memberNickname, disputeStatus, startTimestamp, endTimestamp, pageable);
     }
 
     // 後台 爭議明細 顯示
