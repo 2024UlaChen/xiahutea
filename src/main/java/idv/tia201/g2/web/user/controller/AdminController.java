@@ -41,20 +41,33 @@ public class AdminController {
             session.setAttribute("loggedin", true);
             session.setAttribute("totalUserDTO", totalUserDTO);
 
-            // 設置一個 Cookie
-            String SHAUserneme = EncrypSHA.SHAEncrypt(admin.getAdminUsername());
-            String SHAPassword = EncrypSHA.SHAEncrypt(admin.getAdminPassword());
-            Cookie usernameCookie = new Cookie("username", SHAUserneme);
-            Cookie passwordCookie = new Cookie("password", SHAPassword);
-            // 設置過期時間（秒）
-            usernameCookie.setMaxAge(60 * 60 * 24 * 7); // 1周
-            passwordCookie.setMaxAge(60 * 60 * 24 * 7); // 1周
-            // 設置路徑
-            usernameCookie.setPath("/");
-            passwordCookie.setPath("/");
-            // 發送給 client 端
-            response.addCookie(usernameCookie);
-            response.addCookie(passwordCookie);
+            // 是否有勾選記住登入資料
+            Boolean rememberMe = Boolean.valueOf(String.valueOf(admin.getData()));
+            if (rememberMe){
+                // 設置一個 Cookie
+                String SHAUserneme = EncrypSHA.SHAEncrypt(admin.getAdminUsername());
+                String SHAPassword = EncrypSHA.SHAEncrypt(admin.getAdminPassword());
+                Cookie usernameCookie = new Cookie("username", SHAUserneme);
+                Cookie passwordCookie = new Cookie("password", SHAPassword);
+                // 設置過期時間（秒）
+                usernameCookie.setMaxAge(60 * 60 * 24 * 7); // 1周
+                passwordCookie.setMaxAge(60 * 60 * 24 * 7); // 1周
+                // 設置路徑
+                usernameCookie.setPath("/");
+                passwordCookie.setPath("/");
+                // 發送給 client 端
+                response.addCookie(usernameCookie);
+                response.addCookie(passwordCookie);
+            }else {
+                Cookie usernameCookie = new Cookie("username", "");
+                Cookie passwordCookie = new Cookie("password", "");
+                usernameCookie.setMaxAge(0);
+                passwordCookie.setMaxAge(0);
+                usernameCookie.setPath("/");
+                passwordCookie.setPath("/");
+                response.addCookie(usernameCookie);
+                response.addCookie(passwordCookie);
+            }
         }
 
         return totalUserDTO;
