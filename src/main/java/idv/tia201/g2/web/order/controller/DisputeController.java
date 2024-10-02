@@ -52,17 +52,6 @@ public class DisputeController {
         return disputeService.findAll(pageable);
     }
 
-
-    // 後台 爭議明細 顯示
-    @GetMapping({"manage/getUser"})
-    public TotalUserDTO getUser(HttpSession httpSession){
-        TotalUserDTO totalUserDTO = (TotalUserDTO) httpSession.getAttribute("totalUserDTO");
-        if(totalUserDTO.getUserTypeId() != 3){
-            return null;
-        }
-        return totalUserDTO;
-    }
-
     // 後台 爭議明細 顯示
     @GetMapping({"manage/{disputeOrderId}"})
     public OrderDto detail(@PathVariable Integer disputeOrderId, HttpSession httpSession){

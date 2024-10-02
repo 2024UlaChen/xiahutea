@@ -15,7 +15,6 @@
   <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
   <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
 
-
   <style>
 
       /* 查詢欄   */
@@ -222,7 +221,31 @@
     document.addEventListener("DOMContentLoaded", function () {
         // todo 權限判斷
 
-        // 0. 顯示列表資料
+        // 判斷權限
+        fetch(`/totalusers`)
+            .then(resp => resp.json())
+            .then(totalUserDTO => {
+                console.log(totalUserDTO)
+                console.log(totalUserDTO.userTypeId)
+                if(totalUserDTO.userTypeId !== 1 && totalUserDTO.userTypeId !== 3){
+                    Swal.fire({
+                        title: "權限不足",
+                        text: '',
+                        icon: 'error',
+                        showConfirmButton: true  // 確認按鈕
+                    }).then(() => {
+                        location.href = "./storeOrderList.html";
+                    });
+                }
+                // 如果是店家&管理員才能檢視
+                init();
+            })
+            .catch((error) => {
+                console.log("錯誤原因:" + error);
+            });
+        //===========================================================================
+
+        // 顯示列表資料
         init(currentPage, size);
 
         // 確保元素存在 添加事件監聽器
@@ -252,15 +275,15 @@
         fetch(`/order/manage?page=${page}&size=${size}`)
             .then(response => response.json())
             .then(data => {
+                showAllDB(data); // 顯示資料
                 totalPages = data.totalPages; // 更新總頁數
-                showDB(data); // 顯示資料
                 updatePagination(); // 更新分頁按鈕狀態
             })
             .catch((error) => {
                 console.log("錯誤原因：" + error);
             });
     }
-    function showDB(data) {
+    function showAllDB(data) {
         let orderHtml = "";
         let orders = data.content; // 取得所有訂單
 
