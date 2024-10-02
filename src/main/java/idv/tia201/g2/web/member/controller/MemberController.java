@@ -158,6 +158,7 @@ public class MemberController {
 
     @PostMapping("update")
     public Core updateMemberInfo(Member member) {
+        System.out.println(member);
         Core core = new Core();
         if (member == null) {
             core.setSuccessful(false);

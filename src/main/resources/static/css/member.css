@@ -242,7 +242,7 @@
 
 
 /*member infor*/
-#memberPhotoBlock{
+#memberPhotoBlock {
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -251,11 +251,10 @@
 .memberPhoto {
     filter: brightness(95%);
     transition: filter 0.5s ease-in-out;
-    background-image: url("../img/xiahutealogo.jpg");
     border-radius: 50%;
     background-repeat: no-repeat;
     background-position: center;
-    background-size:120%;
+    background-size: 120%;
     width: 100px;
     height: 100px;
     display: flex;
@@ -272,6 +271,6 @@
     cursor: pointer;
 }
 
-#asidePhoto{
-
+.none {
+    display: none;
 }
