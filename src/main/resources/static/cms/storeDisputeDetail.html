@@ -228,8 +228,20 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             // todo 權限判斷
-            // todo 退款到錢包
-            // todo 頁數
+
+            // 取得權限
+            fetch(`/dispute/manage/getUser`)
+                  .then(resp => resp.json())
+                  .then(totalUserDTO => {
+                      if(totalUserDTO.userTypeId !== 3){
+                          Swal.fire("僅限管理員權限");
+                          location.href = "./cms/storeDisputeList.html";
+                      }
+                      init();
+                  })
+                  .catch((error) => {
+                      console.log("錯誤原因:" + error);
+                  });
 
             // 0. 顯示明細
             init();
@@ -243,8 +255,6 @@
                           .catch((error) => {
                               console.log("錯誤原因:" + error);
                           });
-                } else {
-                    console.error("訂單號碼錯誤");
                 }
             }
             // 取得URL的查詢參數

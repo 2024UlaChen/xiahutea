@@ -45,15 +45,31 @@ public class DisputeController {
     @GetMapping("manage")
     public Page<DisputeOrder> findAllByPageable(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "10") int size,
+            HttpSession httpSession
     ){
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "applyDatetime"));
         return disputeService.findAll(pageable);
     }
 
+
+    // 後台 爭議明細 顯示
+    @GetMapping({"manage/getUser"})
+    public TotalUserDTO getUser(HttpSession httpSession){
+        TotalUserDTO totalUserDTO = (TotalUserDTO) httpSession.getAttribute("totalUserDTO");
+        if(totalUserDTO.getUserTypeId() != 3){
+            return null;
+        }
+        return totalUserDTO;
+    }
+
     // 後台 爭議明細 顯示
     @GetMapping({"manage/{disputeOrderId}"})
-    public OrderDto detail(@PathVariable Integer disputeOrderId){
+    public OrderDto detail(@PathVariable Integer disputeOrderId, HttpSession httpSession){
+        TotalUserDTO totalUserDTO = (TotalUserDTO) httpSession.getAttribute("totalUserDTO");
+        if(totalUserDTO.getUserTypeId() != 3){
+            return null;
+        }
         return disputeService.findByDisputeOrderId(disputeOrderId);
     }
 

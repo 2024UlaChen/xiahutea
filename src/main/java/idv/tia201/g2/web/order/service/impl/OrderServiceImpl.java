@@ -34,7 +34,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 import static org.springframework.util.ObjectUtils.isEmpty;
