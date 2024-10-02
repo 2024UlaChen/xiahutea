@@ -56,16 +56,7 @@ function nullToEmpty(data) {
     return (data == null) ? "" : data;
 }
 
-function changeDateFormat(date) {
-    const hyphen = "-";
-    const slash = "/";
-    if (date === null)
-        return "";
-    if (date.includes(hyphen))
-        return date.replaceAll(hyphen, slash);
-    if (date.includes(slash))
-        return date.replaceAll(slash, hyphen);
-}
+
 
 document.addEventListener("DOMContentLoaded", function () {
     fetch(`member`, {
@@ -77,7 +68,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 memberInfoName.value = nullToEmpty(data.nickname);
                 memberInfoMoney.value = nullToEmpty(data.customerMoney);
                 memberInfoPhone.value = data.customerPhone;
-                memberInfoBirthday.value = changeDateFormat(data.birthday);
+                memberInfoBirthday.value = data.birthday;
+
                 memberInfoSex.value = data.sex;
                 memberInfoEmail.value = nullToEmpty(data.customerEmail);
                 let userImg = (nullToEmpty(data.customerImg) === "") ? "" : `data:image/png;base64,${data.customerImg}`;
@@ -107,7 +99,12 @@ memberInfoSaveBtn.addEventListener("click", function () {
         Swal.fire("email格式錯誤，請再確認", "", "error");
     } else {
         const sessionDetail = JSON.parse(sessionStorage.getItem("memberData"));
-
+        Swal.fire({
+            title: 'Updating...',
+            icon: 'info',
+            showConfirmButton: false,
+            allowOutsideClick: false,
+        });
         fetch(`member/update`, {
             method: "POST",
             headers: {'Content-Type': 'application/json'},
@@ -115,25 +112,33 @@ memberInfoSaveBtn.addEventListener("click", function () {
                 customerId: sessionDetail.data.customerId,
                 nickname: memberInfoName.value.trim(),
                 customerEmail: memberInfoEmail.value.trim(),
-                birthday: changeDateFormat(memberInfoBirthday.value),
+                birthday: memberInfoBirthday.value,
                 sex: memberInfoSex.value,
             }),
         }).then(res => res.json())
             .then(data => {
                 if (data.successful) {
-                    const formData = new FormData();
-                    formData.append('customerId', sessionDetail.data.customerId);
-                    formData.append('img', memberPhotoInput.files[0]);
-                    fetch(`member/updateImg`, {
-                        method: "POST",
-                        body: formData
-                    }).then(res => res.json()).then(data => {
-                        if (data.successful) {
-                            location.reload();
-                        } else {
-                            console.log("img error")
-                        }
-                    })
+                    if (memberPhotoInput.files.length !== 0) {
+                        const formData = new FormData();
+                        formData.append('customerId', sessionDetail.data.customerId);
+                        formData.append('img', memberPhotoInput.files[0]);
+                        fetch(`member/updateImg`, {
+                            method: "POST",
+                            body: formData
+                        }).then(res => res.json()).then(data => {
+                            if (data.successful) {
+                                Swal.close();
+                                console.log("img change")
+                                location.reload();
+                            } else {
+                                console.log("img error")
+                            }
+                        })
+                    } else {
+                        console.log("img no change")
+                        location.reload();
+                    }
+                    console.log("other change")
                 } else {
                     console.log("other error")
                 }
