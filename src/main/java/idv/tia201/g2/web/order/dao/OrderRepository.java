@@ -22,6 +22,5 @@ public interface OrderRepository extends JpaRepository<Orders, Integer> {
     @Query("FROM Orders o WHERE o.customerId = :customerId")
     Page<Orders> findByCustomerId(@Param("customerId") int customerId, Pageable pageable);
 
-    Page<Orders> findByCustomerIdAndOrderStatusAndOrderCreateDatetimeBetween(Integer customerId, Integer orderStatus, Timestamp orderCreateDatetime, Timestamp orderCreateDatetime2, Pageable pageable);
     Page<Orders> findByCustomerIdAndOrderCreateDatetimeBetween(Integer customerId, Timestamp orderCreateDatetime, Timestamp orderCreateDatetime2, Pageable pageable);
 }
