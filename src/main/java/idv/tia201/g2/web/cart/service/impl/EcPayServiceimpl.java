@@ -5,6 +5,7 @@ import ecpay.payment.integration.AllInOne;
 import ecpay.payment.integration.domain.AioCheckOutALL;
 import ecpay.payment.integration.ecpayOperator.EcpayFunction;
 import idv.tia201.g2.web.cart.service.EcPayService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
@@ -15,16 +16,18 @@ import java.util.UUID;
 public class EcPayServiceimpl implements EcPayService {
 
     @Override
-    public String ecpayCheckout(Integer totalAmount) {
+    public String ecpayCheckout(Integer totalAmount, HttpSession session) {
         //建立基本MerchanId hashket hashIV AllinOne 繼承AllinonBase
         AllInOne aio = new AllInOne();
         AioCheckOutALL obj = new AioCheckOutALL();
         //生成隨機訂單號
         String uuId = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 20);
+        // 將訂單號存入session中
+        session.setAttribute("MerchantTradeNo", uuId);
         // 生成當下時間，格式為 yyyy/MM/dd HH:mm:ss
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         String currentDate = sdf.format(new Date());
-
+        System.out.println("Checkout Session ID: " + session.getId());
         obj.setMerchantTradeNo(uuId);
         obj.setMerchantTradeDate(currentDate);
         obj.setTotalAmount(String.valueOf(totalAmount));

@@ -58,7 +58,7 @@
       href="https://fonts.googleapis.com/css?family=Lato:300,300i,400,400i,700,700i&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./css/k.css" />
+    <link rel="stylesheet" href="css/homePage.css" />
     <style>
       /* .b-example-divider {
   height: 3rem;
@@ -473,6 +473,9 @@
         contentType: 'application/json',
         success:function (couponsData){
           console.log(couponsData);
+          if(!couponsData){
+            location.href = 'login.html';
+          }
           if(couponsData === null){
             location.href = 'login.html';
           }
@@ -483,10 +486,10 @@
 <div class="col" data-bs-toggle="modal" data-bs-target="#exampleModal${row.customerCouponsId}">
             <div
               class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 shadow-lg"
-              style=" background-image: url('img/xiahutealogo.jpg'); background-size: contain; background-position: center;"
+              style=" background-image: url('img/CouponLogo.jpg'); background-size: contain; background-position: center;"
             >
-              <div class="d-flex flex-column h-100 p-5 pb-3 text-dark text-shadow-1">
-                <h2 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">${row.coupon.couponName}</h2>
+              <div class="d-flex flex-column h-100 p-5 pb-3 text-shadow-1" style="color:whitesmoke">
+                <h2 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold" style="color:whitesmoke">${row.coupon.couponName}</h2>
                 <ul class="d-flex list-unstyled mt-auto">
                   <li class="me-auto">
                     <img
@@ -507,7 +510,7 @@
                     <svg class="bi me-2" width="1em" height="1em">
                       <use xlink:href="#calendar3"></use>
                     </svg>
-                    <small>有效期:${row.coupon.expiredDate}</small>
+                    <small>期限:${(row.coupon.expiredDate).split(" ")[0]}</small>
                   </li>
                 </ul>
               </div>

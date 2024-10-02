@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
@@ -89,16 +90,17 @@ public class MemberServiceImpl implements MemberService {
 //            String verifyCode = sendSmsService.sendSMS(phone);
             String verifyCode = "AAA123";
             member.setVerifyCode(verifyCode);
-            LOGGER.info("register data: {}", member);
-            memberDao.createMember(member);
-            member = memberDao.findMemberByPhone(phone);
-            member.setSuccessful(true);
-            member.setMessage("註冊成功");
             try {
                 member.setCustomerImg(loadImg());
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+            LOGGER.info("register data: {}", member);
+            memberDao.createMember(member);
+            member = memberDao.findMemberByPhone(phone);
+            member.setSuccessful(true);
+            member.setMessage("註冊成功");
+
             return member;
         }
     }
@@ -138,8 +140,22 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Member editMember(Member member) {
-        return null;
+    public Boolean editMember(Member member) {
+        Member originalMember = memberDao.findMemberById(member.getCustomerId());
+        originalMember.setBirthday(member.getBirthday());
+        originalMember.setCustomerEmail(member.getCustomerEmail());
+        originalMember.setSex(member.getSex());
+        originalMember.setNickname(member.getNickname());
+        LocalDate date = LocalDate.now();
+        originalMember.setUpdateDate(Date.valueOf(date));
+        return memberDao.updateMemberInfo(originalMember);
+    }
+
+    @Override
+    public Member editMemberImg(Integer customerId, MultipartFile img) throws IOException {
+        Member member = memberDao.findMemberById(customerId);
+        member.setCustomerImg(img.getBytes());
+        return memberDao.updateMember(member);
     }
 
     @Override

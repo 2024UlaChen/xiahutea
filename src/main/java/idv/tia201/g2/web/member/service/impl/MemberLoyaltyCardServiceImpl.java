@@ -6,6 +6,8 @@ import idv.tia201.g2.web.store.vo.CustomerLoyaltyCard;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class MemberLoyaltyCardServiceImpl implements MemberLoyaltyCardService {
 
@@ -28,6 +30,11 @@ public class MemberLoyaltyCardServiceImpl implements MemberLoyaltyCardService {
     @Override
     public CustomerLoyaltyCard GetCustomerLoyaltyCard(Integer loyaltyCardId) {
         return memberLoyaltyCardRepository.findByLoyaltyCardId(loyaltyCardId);
+    }
+
+    @Override
+    public List<CustomerLoyaltyCard> GetCustomerLoyaltyCards(Integer memberId) {
+        return memberLoyaltyCardRepository.findCustomerLoyaltyCardsByMemberId(memberId);
     }
 
     @Override

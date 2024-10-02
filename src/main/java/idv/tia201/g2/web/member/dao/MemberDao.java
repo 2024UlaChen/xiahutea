@@ -25,6 +25,8 @@ public interface MemberDao {
     List<MemberAddress> findMemberAddressByMemberId(String memberId);
 
     //update
+    Member updateMember(Member member);
+
     Boolean updateMemberInfo(Member member);
 
     Integer updateMemberInfo(Integer memberId, Boolean status, String memberRemark);
