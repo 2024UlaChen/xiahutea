@@ -1,6 +1,5 @@
 package idv.tia201.g2.web.order.dao.impl;
 
-import java.util.List;
 import idv.tia201.g2.web.order.dao.DisputeDao;
 import idv.tia201.g2.web.order.vo.DisputeOrder;
 import jakarta.persistence.NoResultException;
@@ -52,11 +51,4 @@ public class DisputeDaoImpl implements DisputeDao {
         return query.getSingleResult();
     }
 
-    // 後台 爭議列表 顯示
-    @Override
-    public List<DisputeOrder> selectAll() {
-        String hql = "from DisputeOrder";
-        TypedQuery<DisputeOrder> query = session.createQuery(hql, DisputeOrder.class);
-        return query.getResultList();
-    }
 }

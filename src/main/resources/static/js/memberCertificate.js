@@ -80,7 +80,7 @@ checkVerifyCodeBtn.addEventListener("click", function () {
                     showConfirmButton: false,
                     timer: 1500
                 }).then(() => {
-                    location.replace("../homePage.html");
+                    location.replace("../login.html");
                 })
             } else {
                 Swal.fire("驗證碼失敗，請重新輸入", "", "error");

@@ -1,3 +1,7 @@
+// ASIDE
+const asidePhoto = document.querySelector("#asidePhoto");
+const asideName = document.querySelector("#asideName");
+
 const defaultPwdTip = "6-16位英數混合，英文需區分大小寫";
 const pwdRegex = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z0-9]{6,16}$/;
 
@@ -10,7 +14,9 @@ const newCheckPwdTip = document.querySelector("#newCheckPwdTip");
 
 const settingBtn = document.querySelector("#settingBtn");
 
-
+function nullToEmpty(data) {
+    return (data == null) ? "" : data;
+}
 function isCheckedSuccessOrDefult(target) {
     let targetDiv = target.closest(".settingBlock");
     let targetTxt = targetDiv.closest("div").nextElementSibling;
@@ -85,14 +91,26 @@ function checkIsEmpty(...args) {
 pwdValid(oldPwdInput, oldPwdTip);
 pwdValid(newPwdInput, newPwdTip);
 pwdValid(NewCheckPwdInput, newCheckPwdTip);
+function getUserImg(){
+    fetch(`member`, {
+        method: "POST",
+    }).then(res => res.json())
+        .then(data => {
+            if (data.successful) {
+                let userImg = (nullToEmpty(data.customerImg) === "") ? "" : `data:image/png;base64,${data.customerImg}`;
+                asidePhoto.setAttribute("src", userImg);
+                asideName.innerText = nullToEmpty(data.nickname);
+            }
+        })
+}
 
 // DOM
 document.addEventListener("DOMContentLoaded", function () {
     oldPwdTip.innerText = defaultPwdTip;
     newPwdTip.innerText = defaultPwdTip;
     newCheckPwdTip.innerText = defaultPwdTip;
+    getUserImg();
 })
-console.log(JSON.parse(sessionStorage.getItem("memberData")).data.customerId);
 settingBtn.addEventListener("click", function () {
     if (checkIsEmpty(oldPwdInput, newPwdInput, NewCheckPwdInput)) {
         Swal.fire("任一資料不可為空，請再確認", "", "error");
