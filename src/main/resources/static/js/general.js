@@ -27,7 +27,6 @@ document.addEventListener("click", function (e) {
                 fetch("member/logout")
                     .then(res => res.text())
                     .then(data => {
-                        console.log(data);
                         sessionStorage.removeItem("memberData");
                         Swal.fire({
                             icon: "success",
@@ -42,19 +41,15 @@ document.addEventListener("click", function (e) {
             }
         });
     }
-    console.log(e.target);
 
     if(e.target.classList.contains("queryMember")){
         // ASIDE
         const queryBarUseImg = document.querySelector("#queryBarUseImg");
         const queryBarUseName = document.querySelector("#queryBarUseName");
-
-        console.log(sessionStorage.getItem("memberData"));
         fetch(`member`, {
             method: "POST",
         }).then(res => res.json())
             .then(data => {
-                console.log(data)
                 if (data.successful) {
                     let userImg = (nullToEmpty(data.customerImg) === "") ? "" : `data:image/png;base64,${data.customerImg}`;
                     queryBarUseImg.setAttribute("src", userImg);
