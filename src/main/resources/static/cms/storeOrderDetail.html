@@ -274,8 +274,7 @@
             fetch(`/totalusers`)
                   .then(resp => resp.json())
                   .then(totalUserDTO => {
-                      console.log(totalUserDTO)
-                      console.log(totalUserDTO.userTypeId)
+                      // console.log(totalUserDTO)
                       if(totalUserDTO.userTypeId !== 1 && totalUserDTO.userTypeId !== 3){
                           Swal.fire({
                               title: "權限不足",
@@ -481,6 +480,7 @@
                         },
                         body: JSON.stringify(order_data) // 將資料轉為 JSON 格式
                     }).then(res => res.json()).then(data => {
+                        console.log(data)
                         if(data.successful){
                             console.log(data.message);
                             Swal.fire({

@@ -100,7 +100,7 @@ public class OrderServiceImpl implements OrderService {
             orderDto.setSuccessful(false);
             return orderDto;
         }
-        if(order.getPaymentMethod() != 1 || isEmpty(order.getPaymentAmount())){
+        if(order.getPaymentMethod() != 1 || isEmpty(order.getPaymentAmount()) || order.getPaymentAmount() < 0){
             orderDto.setMessage("付款方法或付款金額錯誤");
             orderDto.setSuccessful(false);
             return orderDto;
@@ -166,20 +166,17 @@ public class OrderServiceImpl implements OrderService {
                 return orderDto;
             }
         }
-        if(
-            order.getCouponDiscount() < 0 || order.getLoyaltyDiscount() < 0 || order.getCustomerMoneyDiscount() < 0 ||
-            order.getCustomerMoneyDiscount() > member.getCustomerMoney()
-        ){
-            orderDto.setMessage("折抵金額錯誤");
-            orderDto.setSuccessful(false);
-            return orderDto;
-        }
         // 會員使用集點卡
         Integer loyaltyCardId = order.getLoyaltyCardId();
         if(loyaltyCardId != null) {
             CustomerLoyaltyCard customerLoyaltyCard = memberLoyaltyCardRepository.findByLoyaltyCardId(loyaltyCardId);
             if (customerLoyaltyCard == null) {
                 orderDto.setMessage("無此集點卡");
+                orderDto.setSuccessful(false);
+                return orderDto;
+            }
+            if(order.getLoyaltyDiscount() < 0 || ((customerLoyaltyCard.getPoints()) - order.getLoyaltyDiscount() < 0)){
+                orderDto.setMessage("集點卡折抵金額錯誤");
                 orderDto.setSuccessful(false);
                 return orderDto;
             }
@@ -194,10 +191,23 @@ public class OrderServiceImpl implements OrderService {
                 orderDto.setSuccessful(false);
                 return orderDto;
             }
+            if(
+                order.getCouponDiscount() < 0 ||
+                (!order.getCouponDiscount().equals(customerCoupon.getCoupon().getDiscount()))
+            ){
+                orderDto.setMessage("優惠券折抵金額錯誤");
+                orderDto.setSuccessful(false);
+                return orderDto;
+            }
             customerCouponService.updateCouponQuantity(customerId, customerCoupon.getCouponId() , customerCoupon.getCouponQuantity() - 1);
         }
         // 會員使用點數
-        memberService.updateMemberMoneyById(customerId, - order.getCustomerMoneyDiscount());
+        if(order.getCustomerMoneyDiscount() < 0 || order.getCustomerMoneyDiscount() > member.getCustomerMoney()){
+            orderDto.setMessage("會員錢包折抵金額錯誤");
+            orderDto.setSuccessful(false);
+            return orderDto;
+        }
+        memberService.updateMemberMoneyById(customerId, (- order.getCustomerMoneyDiscount()));
 
         order.setOrderStatus(1);
         order.setOrderCreateDatetime(new Timestamp(System.currentTimeMillis()));

@@ -308,7 +308,7 @@
                             <th>退款金額<span class="red_star">*</span></th>
                             <td>
                                 <label class="input_lab">
-                                    <input id="dispute_money" type="text" value="${nullText(data.disputeOrder.refundAmount)}">
+                                    <input id="dispute_money" type="text" value="${nullText(data.disputeOrder.refundAmount)}" disabled>
                                 </label>
                             </td>
                         </tr>
@@ -316,7 +316,7 @@
                             <th>不同意原因<span class="red_star">*</span></th>
                             <td>
                                 <label class="input_lab">
-                                    <textarea class="input_text" id="reject_reason">${nullText(data.disputeOrder.rejectReason)}</textarea>
+                                    <textarea class="input_text" id="reject_reason" disabled>${nullText(data.disputeOrder.rejectReason)}</textarea>
                                 </label>
                             </td>
                         </tr>

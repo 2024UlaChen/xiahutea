@@ -175,8 +175,7 @@
         fetch(`/totalusers`)
               .then(resp => resp.json())
               .then(totalUserDTO => {
-                  console.log(totalUserDTO)
-                  console.log(totalUserDTO.userTypeId)
+                  // console.log(totalUserDTO)
                   if(totalUserDTO.userTypeId !== 0){
                       Swal.fire({
                           title: "請登入會員",
