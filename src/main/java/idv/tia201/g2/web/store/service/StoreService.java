@@ -45,4 +45,6 @@ public interface StoreService {
     Page<Store> searchStore(StoreViewModel store, Integer page);
     List<Store> getStoreListForHome(Date today) throws ParseException;
 
+    Store updateStoreRank(Integer storeId,Float score);
+
 }

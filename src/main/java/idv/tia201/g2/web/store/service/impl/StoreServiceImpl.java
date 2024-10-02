@@ -378,5 +378,20 @@ public class StoreServiceImpl implements StoreService {
         return storeCalendarRepository.findByStoreHolidayAndStoreStatus(today);
     }
 
+    @Override
+    public Store updateStoreRank(Integer storeId, Float score) {
+        Store data = storeDao.findByStoreId(storeId);
+
+        if(data.getScore() == null){
+            data.setScore(score);
+            return storeDao.save(data);
+
+        }
+        float num = (data.getScore() + score)/2;
+        data.setScore(num);
+        return storeDao.save(data);
+
+    }
+
 
 }

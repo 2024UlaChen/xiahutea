@@ -197,6 +197,13 @@ public class StoreController {
             storeService.editStoreStatus(storeId);
         }
     }
+    @PostMapping("/updateScore")
+    public Store updateScore(@RequestBody Store store){
+        if(store != null && store.getStoreId() != null && store.getScore() != null){
+            return storeService.updateStoreRank(store.getStoreId(),store.getScore());
+        }
+        return null;
+    }
 
 
 
@@ -251,6 +258,8 @@ public class StoreController {
 
 
     }
+
+
 
 
 
