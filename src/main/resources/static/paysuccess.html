@@ -13,12 +13,15 @@
 <body>
 <h1>支付成功!感謝您的購買!</h1>
 
-<p>8秒後跳轉回首頁....</p>
+<p>8秒後跳轉至訂單明細....</p>
 
 </body>
 <script>
+    // localStorage.clear();
+    localStorage.removeItem('cartItems');
+    const orderId = localStorage.getItem('orderId');
     setTimeout(function() {
-        window.location.href = "/homePage.html";  // 這裡設置跳轉的URL，例如首頁的路徑
+        window.location.href = `/orderDetail.html?orderId=${orderId}`;  // 這裡設置跳轉的URL，例如首頁的路徑
     }, 8000);
 </script>
 </html>

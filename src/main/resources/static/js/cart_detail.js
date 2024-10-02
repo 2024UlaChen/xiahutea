@@ -79,16 +79,24 @@ document.addEventListener("DOMContentLoaded",function(){
   let membercard_minus_number_el = document.getElementsByClassName('membercard-minus-number')[0];
   let moneybag_minus_number_el = document.getElementsByClassName('moneybag-minus-number')[0];
   let last_totalAmount;
+  let totalAmount;
+  let totalquanity;
+  let productamount;
+  let invoiceMethod;
+  let receiverMethod;
+  let invoiceCarrier;
+  let invoiceVat;
 
-  let platform_fee_number_el = document.getElementsByClassName('platform-fee-number')[0];
+
+    let platform_fee_number_el = document.getElementsByClassName('platform-fee-number')[0];
   let CouponAmountText=null;
   let CouponAmount=null;
   let MemberCardAmountText=null;
   let MemberCardAmount=null;
   let MoneyBagAmountText=null;
-  let MoneyBagAmount=null;
-  let PlatformfeeText=null;
-  let PlatformAmount=null;
+  let MoneyBagAmount;
+  let PlatformfeeText;
+  let PlatformAmount;
 
   let total_amount_el = document.getElementsByClassName('total-amount')[0];
 
@@ -134,15 +142,13 @@ document.addEventListener("DOMContentLoaded",function(){
   let remark_el = document.getElementById('remark')
   let charLimit = 60;  // 設定字數限制
 
-
-
   let btn_backto_last_page2_el = document.getElementsByClassName("btn-backto-last-page2")[0];
   let btn_submit_order_el = document.getElementsByClassName("btn-submit-order")[0];
   let btn_modal_close_el = document.getElementsByClassName("btn_modal_close")[0];
 
   //一進到結帳選擇頁面先用localstorage抓DB以及獲取sessionstorage目前登入用戶ID
   //TODO 獲得用戶ID以抓取資料渲染
-  const customer = sessionStorage.getItem('customer');
+  const customer = sessionStorage.getItem('memberData');
   if(customer){
       let customerData = JSON.parse(customer);
       customerId = customerData.customerId;
@@ -175,7 +181,18 @@ document.addEventListener("DOMContentLoaded",function(){
                   text: error.message,
                   icon: 'error'
               });
+              history.back();
           })
+    }else{
+        // 當找不到 memberData 時，顯示錯誤訊息
+        Swal.fire({
+            title: '會員資料缺失',
+            text: '請登入',
+            icon: 'info'
+        }).then(() => {
+            // 跳轉回登入頁面或執行其他行為
+            window.location.href = '/login.html';
+        });
     }
 
   //獲得localstorage資料(購物車)
@@ -235,6 +252,7 @@ document.addEventListener("DOMContentLoaded",function(){
       // });
       //自取選項
       pick_up_input_el.addEventListener('click',function (){
+          receiverMethod = 1;
           pickupMethod_el.textContent ="自取";
           console.log("address :  ",nowstore.storeAddress)
           final_address_el.textContent = nowstore.storeAddress;
@@ -255,6 +273,7 @@ document.addEventListener("DOMContentLoaded",function(){
               couponSelect_el.disabled = false;
               membercard_count_el.style.display = "none";
               moneybag_count_el.style.display = "none";
+              moneybag_discount_number_el.disabled=true;
               moneybag_discount_number_el.value = '';
               membercard_minus_number_el.textContent = '$0';
               moneybag_minus_number_el.textContent = '$0';
@@ -287,6 +306,7 @@ document.addEventListener("DOMContentLoaded",function(){
               membercard_count_el.style.display = "none";
               membercard_minus_number_el.textContent = '$0';
               memberCardSelected = false;
+              select_membercard_input_el.checked=false;
           } else {
               // 使用會員卡
               GetMemberCardPoint(storeId, customerId);
@@ -295,8 +315,9 @@ document.addEventListener("DOMContentLoaded",function(){
               moneybag_discount_number_el.value = '';
               couponSelect_el.innerHTML = '<option disabled selected >請選擇優惠券</option>';
               couponSelect_el.disabled = true;
+              moneybag_discount_number_el.disabled=true;
               coupon_minus_number_el.textContent = '$0';
-              membercard_minus_number_el.textContent = '$0';
+              moneybag_minus_number_el.textContent = '$0';
               memberCardSelected = true;
               couponSelected = false;
               moneyBagSelected = false;
@@ -317,6 +338,8 @@ document.addEventListener("DOMContentLoaded",function(){
               // 取消會員錢包
               moneybag_count_el.style.display = "none";
               moneybag_minus_number_el.textContent = '$0';
+              moneybag_discount_number_el.value = '';
+              moneybag_discount_number_el.disabled=true;
               select_moneybag_input_el.checked=false;
               moneyBagSelected = false;
           } else {
@@ -601,6 +624,7 @@ document.addEventListener("DOMContentLoaded",function(){
 
       //發票方式
       select_paper_el.addEventListener("click", function () {
+        invoiceMethod =2;
         vehicle_number_el.disabled = true;
         uniform_numbers_el.disabled= true;
         // checksava_vehicle_el.disabled = true;
@@ -612,6 +636,7 @@ document.addEventListener("DOMContentLoaded",function(){
       })
       select_vehicle_el.addEventListener("click", function () {
         // checksava_vehicle_el.disabled = false;
+        invoiceMethod =1;
         vehicle_number_el.disabled = false;
         vehicle_number_el.value = loginMember.customerCarrier;
         uniform_numbers_el.disabled= true;
@@ -620,6 +645,7 @@ document.addEventListener("DOMContentLoaded",function(){
         uniform_numbers_error_el.style.display="none";
       })
       select_paper_uniform_el.addEventListener("click",function (){
+        invoiceMethod = 3;
         uniform_numbers_el.disabled=false;
         vehicle_number_el.disabled = true;
         // checksava_vehicle_el.disabled = true;
@@ -849,32 +875,187 @@ document.addEventListener("DOMContentLoaded",function(){
 
       //訂單轉綠界金流
       btn_submit_order_el.addEventListener('click',function (){
+          // const testjson = {
+          //     "orders": {
+          //         "customerId": 1,
+          //         "storeId": 1,
+          //         "orderStatus": 1,
+          //         "couponDiscount": 10,
+          //         "loyaltyDiscount": 5,
+          //         "customerMoneyDiscount": 15,
+          //         "orderProductQuantity": 3,
+          //         "productAmount": 300,
+          //         "paymentMethod": 1,
+          //         "paymentAmount": 270,
+          //         "invoiceMethod": 1,
+          //         "invoiceCarrier": "",
+          //         "invoiceVat": "",
+          //         "receiverMethod": 1,
+          //         "receiverName": "王xx",
+          //         "receiverPhone": "0987654321",
+          //         "receiverDatetime": "2024/09/25 14:00"
+          //     },
+          //     "orderDetails": [
+          //         {
+          //             "orderDetailId": 2001,
+          //             "orderId": 120,
+          //             "productId": 6,
+          //             "productSugar": "正常糖",
+          //             "productTemperature": "熱",
+          //             "productAddMaterials": "珍珠",
+          //             "productQuantity": 1,
+          //             "productPrice": 100
+          //         }],
+          //     "disputeOrder": null
+          // }
+          //生成訂單編號
+          let now = new Date();
+          // let orderId = Number(now.getFullYear().toString() +
+          //     (now.getMonth() + 1).toString().padStart(2, '0') +
+          //     now.getDate().toString().padStart(2, '0') +
+          //     now.getHours().toString().padStart(2, '0') +
+          //     now.getMinutes().toString().padStart(2, '0'));
+          let orderId = Math.floor(Math.random() * 999) + 1;
+
+          //先建立空的orDetails預備放入所有商品明細
+          const orderDetails = [];
+          // 找到所有商品詳細資料
+          const cartitems_el = document.querySelectorAll('.cart-item');
+          console.log("cart-item",cartitems_el)
+          cartitems_el.forEach(cartitem=>{
+              let productId =cartitem.getAttribute('data-product-id');
+              productId = parseInt(productId, 10);
+              // 獲取 product-detail 的父元素
+              let productDetail = cartitem.nextElementSibling; // 獲取下一個兄弟元素
+              // 初始化變數
+              let productTemperature = '';
+              let productSugar = '';
+              let productAddMaterials = '';
+              let productPrice = '';
+              let quantityNumber = 0;
+
+              if (productDetail && productDetail.classList.contains('product-detail')) {
+                  // 冰塊
+                  let temperatureElement = productDetail.querySelector('[data-type="ice"]');
+                  if (temperatureElement) {
+                      productTemperature = temperatureElement.textContent.trim().replace(/\s*\/\s*/, '');
+                      console.log('冰塊:', productTemperature);
+                  } else {
+                      console.error('找不到 ice 節點');
+                  }
+                  // 甜度
+                  let sugarElement = productDetail.querySelector('[data-type="sugar"]');
+                  if (sugarElement) {
+                      productSugar = sugarElement.textContent.trim().replace(/\s*\/\s*/, '');
+                      console.log('甜度:', productSugar);
+                  } else {
+                      console.error('找不到 sugar 節點');
+                  }
+
+                  // 加料
+                  let addMaterialsElement = productDetail.querySelector('[data-type="add-ons"]');
+                  if (addMaterialsElement) {
+                      productAddMaterials = addMaterialsElement.textContent.trim().replace(/\s*\/\s*/, '');
+                      console.log('加料:', productAddMaterials);
+                  } else {
+                      console.error('找不到 materials 節點');
+                  }
+
+                  // 商品價格
+                  let priceElement = productDetail.querySelector('[data-type="price"]');
+                  if (priceElement) {
+                      productPrice = parseInt(priceElement.textContent.trim().replace(/[^0-9]/g, ''), 10);
+                      console.log('商品價格:', productPrice);
+                  } else {
+                      console.error('找不到 productprice 節點');
+                  }
+
+                  // 數量
+                  let quantityElement = productDetail.querySelector('[data-type="quantity"]');
+                  if (quantityElement) {
+                      quantityNumber = parseInt(quantityElement.textContent.trim().match(/\d+/)[0], 10);
+                      console.log('數量:', quantityNumber);
+                  } else {
+                      console.error('找不到 quantityNumber 節點');
+                  }
+              } else {
+                  console.error('找不到 product-detail 節點');
+              }
+              // 將每個商品的資料組成物件，並推入 orderDetails 陣列中
+              orderDetails.push({
+                  // orderDetailId: ,
+                  // orderId: orderId,
+                  productId: productId,
+                  productSugar: productSugar,
+                  productTemperature: productTemperature,
+                  productAddMaterials: productAddMaterials,
+                  productQuantity: quantityNumber,
+                  productPrice: productPrice
+              });
+          })
+
+          //建立存到order的JSON數據
+          //準備載具號碼及統編
+          if(vehicle_number_el.value===''){
+              invoiceCarrier = null;
+          }else{
+              invoiceCarrier = vehicle_number_el.value
+          }
+          if(uniform_numbers_el.value===''){
+              invoiceVat = null;
+          }else{
+              invoiceVat = parseInt(uniform_numbers_el.value)
+          }
+          const orderData = {
+              orders: {
+                  customerId: 1,
+                  storeId:storeId,
+                  orderStatus: 1,
+                  couponDiscount: CouponAmount,
+                  loyaltyDiscount: MemberCardAmount,
+                  customerMoneyDiscount: MoneyBagAmount,
+                  orderProductQuantity: totalquanity,
+                  productAmount: productamount,
+                  paymentMethod: 1,
+                  paymentAmount: totalAmount,
+                  invoiceMethod: invoiceMethod,
+                  invoiceCarrier:invoiceCarrier,
+                  invoiceVat:invoiceVat,
+                  receiverMethod: receiverMethod,
+                  receiverName: customer_el.textContent,
+                  receiverPhone: phone_el.textContent,
+                  receiverDatetime: pickupTime_el.textContent.replace(/-/g, '/')
+              },
+              orderDetails: orderDetails , // 將動態生成的商品明細加入
+              "disputeOrder": null
+          };
+          console.log("orders:",orderData);
+
+          fetch('order/addOrder',{
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(orderData)
+          })
+              .then(response => {
+                  if (!response.ok) {
+                      throw new Error('傳輸數據異常');
+                  }
+                  return response.json();
+              })
+              .then(data => {
+                  console.log('成功:', data); // 處理響應數據
+                  //把訂單編號存到Local 後續可以用，先移除(若有)
+                  localStorage.removeItem('orderId');
+                  localStorage.setItem('orderId', data.orders.orderId);
+              })
+              .catch(error => {
+                  console.error('發生錯誤:', error); // 錯誤處理
+              });
+
           const params = new URLSearchParams();
           params.append('TotalAmount', last_totalAmount); // 交易金額
-          // 商品名稱
-          // let productNames = document.querySelectorAll('.product-name');
-          // let productNameString = '';
-          // let uniqueNames = new Set();
-          // // 遍歷所有商品名稱，並檢查是否重複
-          // productNames.forEach((productNameElement, index) => {
-          //     const productName = productNameElement.textContent.trim();
-          //     // 只有當名稱不在 Set 中時才加入
-          //     if (!uniqueNames.has(productName)) {
-          //         uniqueNames.add(productName);
-          //         productNameString += productName;
-          //         if (index < productNames.length - 1) {
-          //             productNameString += '#'; // 使用 # 作為商品名稱分隔符號
-          //         }
-          //     }
-          // });
-          // // 移除結尾的多餘的分隔符號
-          // if (productNameString.endsWith('#')) {
-          //     productNameString = productNameString.slice(0, -1);
-          // }
-          // params.append('ItemName', productNameString);
-
-          // params.append('ChoosePayment', 'Credit'); // 選擇的付款方式
-
           fetch('/payment/createorder', {
               method: 'POST',
               headers:{
@@ -928,6 +1109,7 @@ document.addEventListener("DOMContentLoaded",function(){
     });
     return groupedItems;
   }
+    //TODO //F01 localstorage購物車資料分類(新)
     //F02 用商品ID抓商品資料及店家資訊 sortCartItems->findproductbyid
     function findproductbyid(productIds){
       fetch('/cart/checkoutlist/findByproductIds', {
@@ -961,11 +1143,17 @@ document.addEventListener("DOMContentLoaded",function(){
           })
           .catch(error => {
               console.error('獲取商品時出錯:', error);
+              const errorMessage = error.message || '發生未知錯誤，請稍後再試。';
               Swal.fire({
-                  title: '錯誤',
-                  text: error,
-                  icon: 'error'
+                  title: '提醒',
+                  text: errorMessage.replace(/Error: /, ''),
+                  icon: 'info'
+              }).then(() => {
+                  // 當使用者點擊提示框後進行跳轉
+                  // window.location.href = 'homePage.html'; // 跳轉到指定的網頁
+                  history.back();
               });
+
           });
     }
 
@@ -1031,17 +1219,7 @@ document.addEventListener("DOMContentLoaded",function(){
         // 如果格式無法識別，返回png
         return 'png';
     }
-    //轉換店家圖片格式
-    //findproductbyid->findstorebyid>arrayBufferToBase64
-    // function arrayBufferToBase64(buffer) {
-    //     let binary = '';
-    //     let bytes = new Uint8Array(buffer);
-    //     let len = bytes.byteLength;
-    //     for (let i = 0; i < len; i++) {
-    //         binary += String.fromCharCode(bytes[i]);
-    //     }
-    //     return window.btoa(binary);
-    // }
+
     //F05 判斷是否目前時間為營業時間
     function isinOpeningHours(openingHours, closingHours) {
         const now = new Date();
@@ -1086,6 +1264,7 @@ document.addEventListener("DOMContentLoaded",function(){
           let address_el = document.getElementsByClassName("address")[0];
 
           carry_out_radio_el.addEventListener("click", function () {
+              receiverMethod = 2;
               address_el.disabled = false;
               address_el.focus();
               pickupMethod_el.textContent ="外送";
@@ -1142,6 +1321,7 @@ document.addEventListener("DOMContentLoaded",function(){
                     //點擊外送(預設地址)展開子選項
                     let carryout_default_input_el = document.getElementsByClassName('carryout-default-input')[0];
                     carryout_default_input_el.addEventListener('click',function (){
+                        receiverMethod = 2;
                         suboptions.style.display="block";
                         address_el.disabled = true;
                         address_el.value="";
@@ -1216,9 +1396,17 @@ document.addEventListener("DOMContentLoaded",function(){
             //把彙整後商品資訊放到購物明細區塊
             item_detail_el.appendChild(itemContent);
             // 動態綁定 edit-btn 事件
-            //鎖定這一次新建立的cartItem底下的編輯按鈕
+            //TODO 鎖定這一次新建立的cartItem底下的編輯按鈕 ，點擊杯數加料要變更金額
             const editBtn = cartItem.querySelector('.edit-btn');
             editBtn.addEventListener('click',function (){
+              // 取得被點擊商品的 productId
+              let productId = this.closest('.cart-item').dataset.productId;
+              // 從 products 陣列中根據 productId 找到對應的商品資料
+              const product = products.find(p => p.productId === parseInt(productId));
+              //動態生成冰塊、甜度、加料選項
+              generateIceOptions(product);
+              generateSugarOptions(product);
+              generateAddOnsOptions(product);
               //修改: 開啟燈箱，並重置燈箱選項
               document.querySelectorAll(`input[name="ice-options"]`)
                   .forEach(radio=>{radio.checked = false});
@@ -1273,14 +1461,14 @@ document.addEventListener("DOMContentLoaded",function(){
             const selectedIce = document.querySelector('input[name="ice-options"]:checked');
             const selectedSugar = document.querySelector('input[name="sugar-options"]:checked');
             const selectedMaterials = document.querySelector('input[name="materials-options"]:checked');
-            const selectedSize = document.querySelector('input[name="size-options"]:checked');
+            // const selectedSize = document.querySelector('input[name="size-options"]:checked');
             const newQuantity = parseInt(qty_el.value);
             //確認冰塊、甜度、加料、尺寸皆有選
-            if (!selectedIce || !selectedSugar || !selectedMaterials|| !selectedSize) {
+            if (!selectedIce || !selectedSugar || !selectedMaterials) {
                 Swal.fire({
                     icon: 'warning',
                     title: '請選擇所有項目',
-                    text: '請選擇所有選項（冰塊、甜度、加料、尺寸）。',
+                    text: '請選擇所有選項（冰塊、甜度、加料）。',
                     confirmButtonText: '確定'
                 });
                 return;
@@ -1289,7 +1477,7 @@ document.addEventListener("DOMContentLoaded",function(){
             const iceText = selectedIce.nextElementSibling.textContent;
             const sugarText = selectedSugar.nextElementSibling.textContent;
             const materialsText = selectedMaterials.nextElementSibling.textContent;
-            const sizeText = selectedSize.nextElementSibling.textContent;
+            // const sizeText = selectedSize.nextElementSibling.textContent;
             //指定到該點擊更新按鈕下最近的商品細項父節點
             const itemContent = currentCartItem.closest(".item-content");
             //再利用父節點指定到其下的細項
@@ -1301,13 +1489,13 @@ document.addEventListener("DOMContentLoaded",function(){
                 ice: iceText,
                 sugar: sugarText,
                 materials: materialsText,
-                size: sizeText
+                // size: sizeText
             };
             //更新頁面商品細項
             productDetail.querySelector('[data-type="ice"]').textContent = `${iceText} / `;
             productDetail.querySelector('[data-type="sugar"]').textContent = `${sugarText} / `;
             productDetail.querySelector('[data-type="add-ons"]').textContent = `${materialsText} / `;
-            productDetail.querySelector('[data-type="size"]').textContent = `${sizeText} / `;
+            // productDetail.querySelector('[data-type="size"]').textContent = `${sizeText} / `;
             productDetail.querySelector('[data-type="quantity"]').textContent = `${newQuantity} 杯`;
 
             // 遍歷購物車中的商品，檢查是否有相同品名和選項的商品
@@ -1346,7 +1534,6 @@ document.addEventListener("DOMContentLoaded",function(){
                 document.body.style.paddingRight = '0px';
                 // 清除全局變數
                 currentCartItem = null;
-
         }
     //F11 判斷冰塊
       function getIceOption(Item) {
@@ -1358,7 +1545,45 @@ document.addEventListener("DOMContentLoaded",function(){
         if (Item.hot) return '熱飲';
         return '未選擇';
       }
-    //F12 判斷甜度
+    //F11(新) 判斷商品冰塊加入燈箱選項
+    function generateIceOptions(product) {
+        // 取得容器節點
+        let iceContainer = document.querySelector('.lightbox-radio-group');
+        // 清空原有的選項，避免重複生成
+        iceContainer.innerHTML = '';
+
+        // 定義每個選項的資料
+        const iceOptions = [
+            { id: 'normal_ice', value: 1, label: '正常冰', condition: product.normalIce },
+            { id: 'less_ice', value: 2, label: '少冰', condition: product.lessIce },
+            { id: 'ice_free', value: 3, label: '去冰', condition: product.iceFree },
+            { id: 'light_ice', value: 4, label: '微冰', condition: product.lightIce },
+            { id: 'room_temperature', value: 5, label: '常溫', condition: product.roomTemperature },
+            { id: 'hot', value: 6, label: '熱飲', condition: product.hot }
+        ];
+
+        // 根據每個條件生成對應的選項
+        iceOptions.forEach(option => {
+            if (option.condition) {
+                // 動態創建 input 和 label
+                const input = document.createElement('input');
+                input.type = 'radio';
+                input.id = option.id;
+                input.name = 'ice-options';
+                input.value = option.value;
+
+                const label = document.createElement('label');
+                label.setAttribute('for', option.id);
+                label.textContent = option.label;
+
+                // 將 input 和 label 添加到容器中
+                iceContainer.appendChild(input);
+                iceContainer.appendChild(label);
+            }
+        });
+    }
+
+      //F12 判斷甜度
       function getSugarOption(Item) {
         if (Item.full_sugar) return '全糖';
         if (Item.less_sugar) return '少糖';
@@ -1367,7 +1592,43 @@ document.addEventListener("DOMContentLoaded",function(){
         if (Item.no_sugar) return '無糖';
         return '未選擇';
       }
-    //F13 判斷加料
+      //F12(新) 根據商品資訊生成燈箱甜度選項
+    function generateSugarOptions(product) {
+        // 取得容器節點
+        const sugarContainer = document.querySelectorAll('.lightbox-radio-group')[1];
+        // 清空原有的選項，避免重複生成
+        sugarContainer.innerHTML = '';
+
+        // 定義每個甜度選項的資料
+        const sugarOptions = [
+            { id: 'full_sugar', value: 1, label: '全糖', condition: product.fullSugar },
+            { id: 'less_sugar', value: 2, label: '少糖', condition: product.lessSugar },
+            { id: 'half_sugar', value: 3, label: '半糖', condition: product.halfSugar },
+            { id: 'quarter_sugar', value: 4, label: '微糖', condition: product.quarterSugar },
+            { id: 'no_sugar', value: 5, label: '無糖', condition: product.noSugar }
+        ];
+
+        // 根據每個條件生成對應的選項
+        sugarOptions.forEach(option => {
+            if (option.condition) {
+                // 動態創建 input 和 label
+                const input = document.createElement('input');
+                input.type = 'radio';
+                input.id = option.id;
+                input.name = 'sugar-options';
+                input.value = option.value;
+
+                const label = document.createElement('label');
+                label.setAttribute('for', option.id);
+                label.textContent = option.label;
+
+                // 將 input 和 label 添加到容器中
+                sugarContainer.appendChild(input);
+                sugarContainer.appendChild(label);
+            }
+        });
+    }
+      //F13 判斷加料
       function getAddOns(Item) {
         if (Item.pearl) return '加珍珠';
         if (Item.pudding) return '加布丁';
@@ -1376,8 +1637,58 @@ document.addEventListener("DOMContentLoaded",function(){
         if (Item.herbal_jelly) return '加仙草';
         return '無加料';
       }
+      //F13(新) 根據商品資訊產生燈箱加料選項
+    function generateAddOnsOptions(product) {
+        // 取得加料的容器節點
+        const addOnsContainer = document.querySelectorAll('.lightbox-radio-group')[2];
+        // 清空原有的選項，避免重複生成
+        addOnsContainer.innerHTML = '';
 
-      //F09 更新localstorage
+        // 定義每個加料選項的資料
+        const addOnsOptions = [
+            { id: 'pearl', label: '珍珠', condition: product.pearl },
+            { id: 'pudding', label: '布丁', condition: product.pudding },
+            { id: 'coconut_jelly', label: '椰果', condition: product.coconut_jelly },
+            { id: 'taro', label: '芋圓', condition: product.taro },
+            { id: 'herbal_jelly', label: '仙草', condition: product.herbal_jelly }
+        ];
+        // 先添加「無加料」選項
+        const noAddOnInput = document.createElement('input');
+        noAddOnInput.type = 'radio';
+        noAddOnInput.id = 'no_add_ons';
+        noAddOnInput.name = 'materials-options';
+        noAddOnInput.value = 'none'; // 可以根據需要設定值
+
+        const noAddOnLabel = document.createElement('label');
+        noAddOnLabel.setAttribute('for', 'no_add_ons');
+        noAddOnLabel.textContent = '無加料';
+
+        // 將「無加料」選項添加到容器中
+        addOnsContainer.appendChild(noAddOnInput);
+        addOnsContainer.appendChild(noAddOnLabel);
+
+        // 根據每個條件生成對應的選項
+        addOnsOptions.forEach(option => {
+            if (option.condition) {
+                // 動態創建 input 和 label
+                const input = document.createElement('input');
+                input.type = 'radio';
+                input.id = option.id;
+                input.name = 'materials-options';
+                input.value = option.value;
+
+                const label = document.createElement('label');
+                label.setAttribute('for', option.id);
+                label.textContent = option.label;
+
+                // 將 input 和 label 添加到容器中
+                addOnsContainer.appendChild(input);
+                addOnsContainer.appendChild(label);
+            }
+        });
+    }
+
+      //F09 更新localstorage TODO 更改為新的localstorage格式
       //renderproductdetail->handlelightbox->updateLocalStorage
         function updateLocalStorage() {
             //先抓目前頁面上所有商品項
@@ -1527,8 +1838,8 @@ document.addEventListener("DOMContentLoaded",function(){
             }
         //F20 計算訂單金額
         function Calculatetotal(){
-            let totalAmount = 0;
-            let totalquanity = 0;
+            totalAmount = 0;
+            totalquanity = 0;
             // 抓所有的商品明細項目，根據 data-type 屬性來取得價格和數量
             document.querySelectorAll('.item-content')
                 .forEach(itemContent => {
@@ -1544,6 +1855,7 @@ document.addEventListener("DOMContentLoaded",function(){
                 // 累加每個商品的總額及數量
                 totalquanity += quantity;
                 totalAmount += price * quantity;
+                productamount = totalAmount;
             });
             //商品總數與折扣前總價
             product_unit_el.textContent=`商品X${totalquanity}`;
@@ -1584,43 +1896,6 @@ document.addEventListener("DOMContentLoaded",function(){
             last_totalAmount = totalAmount;
             total_amount_el.textContent = `$${totalAmount}`;
         }
-
-
-    // 獲取尺寸的輔助函數
-  //   function getSize(size) {
-  //     switch (size) {
-  //       case 1:
-  //         return '小杯';
-  //       case 2:
-  //         return '中杯';
-  //       case 3:
-  //         return '大杯';
-  //       default:
-  //         return '未知尺寸';
-  //     }
-  //   }
-      // 提供商品選項
-      //       function fetchProductOptions(productId){
-      //         fetch(`/getProductOptions?productName=${encodeURIComponent(productName)}`)
-      //         .then(response => response.json())
-      //         .then(data =>{
-      //           data.ice.forEach(option => {
-      //            ice_el +=
-      //            <input type="radio" id="${option.id}" name="ice-options" value="${option.value}">
-      //            <label for="${option.id}">${option.label}</label>
-      //           });
-      //           data.sugar.forEach(option => {
-      //                  sugar_el +=
-      //                  <input type="radio" id="${option.id}" name="sugar-options" value="${option.value}">
-      //                  <label for="${option.id}">${option.label}</label>
-      //                 });
-      //           data.materials.forEach(option => {
-      //                  materials_el +=
-      //                  <input type="radio" id="${option.id}" name="materials-options" value="${option.value}">
-      //                  <label for="${option.id}">${option.label}</label>
-      //                });
-      //         });
-      //       }
     })
 
 
