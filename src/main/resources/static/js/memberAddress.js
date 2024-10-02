@@ -1,4 +1,7 @@
-// console.log(window.DEFAULT_ADDRESS.data);
+// ASIDE
+const asidePhoto = document.querySelector("#asidePhoto");
+const asideName = document.querySelector("#asideName");
+
 const citySet = new Set();
 const addrSet = new Set();
 const defaultCity = "台北市";
@@ -101,12 +104,24 @@ function editAddr(target) {
     addrModalBody.setAttribute("data-addressId", dataAddressId);
 
 }
-
+function nullToEmpty(data) {
+    return (data == null) ? "" : data;
+}
 document.addEventListener("DOMContentLoaded", function () {
     if (sessionDetail === null || sessionDetail.data.customerId === null || sessionDetail.data.customerId === undefined) {
     } else {
         getAddress(sessionDetail.data.customerId);
     }
+    fetch(`member`, {
+        method: "POST",
+    }).then(res => res.json())
+        .then(data => {
+            if (data.successful) {
+                let userImg = (nullToEmpty(data.customerImg) === "") ? "" : `data:image/png;base64,${data.customerImg}`;
+                asidePhoto.setAttribute("src", userImg);
+                asideName.innerText = nullToEmpty(data.nickname);
+            }
+        })
 })
 
 
@@ -153,7 +168,6 @@ function delAttr(target) {
     fetch(`member/address/${dataAddressId}`, {
         method: "DELETE",
     }).then(res => res.json()).then(data => {
-        console.log(data);
         if(data.successful){
             getAddress(sessionDetail.data.customerId);
         }
