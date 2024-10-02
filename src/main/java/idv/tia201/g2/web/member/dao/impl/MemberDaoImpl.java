@@ -88,6 +88,11 @@ public class MemberDaoImpl implements MemberDao {
     }
 
     @Override
+    public Member updateMember(Member member) {
+        return session.merge(member);
+    }
+
+    @Override
     public Integer updateMemberInfo(Integer memberId, Boolean status, String memberRemark) {
         final String sql = "update CUSTOMER set valid_status = :status , " +
                 " customer_remark = :memberRemark  where  customer_id = :memberId ";

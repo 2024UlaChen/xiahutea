@@ -65,7 +65,6 @@ public class Member extends Core {
     private String sex;
 
     @Column(name = "birthday")
-    @JsonFormat(pattern = "yyyy/MM/dd")
     private Date birthday;
 
     @Column(name = "customer_remark")
