@@ -129,7 +129,7 @@
                       </li>
                       <li class="switcher-option">
                         <a href="coupon.html">
-                          <span> 我的券夾 </span>
+                          <span> 優惠券 </span>
                         </a>
                       </li>
                       <hr>
@@ -228,11 +228,11 @@
               </div>
               <div class="modal-body">
                 <input type="text" id="user-place" placeholder="輸入地址">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">確認</button>
+
               </div>
               <div class="modal-footer">
 
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="autoCatchUserPlace">自動抓取位置</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="autoCatchUserPlace">定位</button>
               </div>
             </div>
           </div>
@@ -310,7 +310,7 @@
         </div>
 
         <div class="col">
-          <i class="fa-solid fa-tags"><a href="./coupon.html">券夾</a></i>
+          <i class="fa-solid fa-tags"><a href="./coupon.html">優惠券</a></i>
         </div>
         <div class="col-3"></div>
       </div>
@@ -652,7 +652,10 @@ let allSotre = document.querySelectorAll('.Heart');
           function success(position) {
             const latitude = position.coords.latitude;
             const longitude = position.coords.longitude;
-            const userPosition = new google.maps.LatLng(latitude, longitude); // 取得使用者地址
+            const userPosition = document.querySelector('#user-place').value !== "" ? document.querySelector('#user-place').value : new google.maps.LatLng(latitude, longitude) ;
+
+
+
 
             const service = new google.maps.DistanceMatrixService();
             const drinkAddressTags = document.querySelectorAll(".drinkAddress"); // 飲料店地址
@@ -694,14 +697,10 @@ let allSotre = document.querySelectorAll('.Heart');
 
                       //超過10km排除
                       if(parseInt(distance) > 10){
-                          console.log("超過10公里");
-                          document.querySelectorAll('[data-address]').forEach(function (element){
-                              if(element.getAttribute('data-address') === distance){
-                                  console.log("是你");
-                                  console.log(distance);
-                              }
 
-                          });
+                          let te =sotreFooter.closest(".storeLinkCard");
+                          $(te).remove();
+
                       }
 
 
@@ -718,6 +717,8 @@ let allSotre = document.querySelectorAll('.Heart');
             });
           }
 
+
+
           if (!navigator.geolocation) {
             status.textContent = "不支援地理定位";
           } else {
@@ -728,7 +729,9 @@ let allSotre = document.querySelectorAll('.Heart');
 
         document
           .querySelector("#autoCatchUserPlace")
-          .addEventListener("click", getDistance);
+          .addEventListener("click", function (){
+              getDistance();
+          });
       }
     </script>
     <script>
@@ -778,7 +781,7 @@ let allSotre = document.querySelectorAll('.Heart');
               const base64Img = row.logo;
               let imgid = "img"+row.storeId;
 
-              let str =`<figure class="col-3 figure my-5 Heart">
+              let str =`<figure class="col-3 figure my-5 Heart storeLinkCard" >
           <img
             src=""
             alt=""

@@ -88,6 +88,7 @@ function showNotification(order) {
             <span class="float-right text-muted text-sm">${new Date(order.orderCreateDatetime).toLocaleString()}</span>
         </a>
     `;
+
     // 最新的通知放最上面
     const notificationContainer = document.getElementById("notification");
     notificationContainer.insertAdjacentHTML('afterbegin', notificationHtml);

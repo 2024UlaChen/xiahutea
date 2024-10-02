@@ -1,11 +1,17 @@
 package idv.tia201.g2.web.order.controller;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import idv.tia201.g2.web.order.dto.OrderDto;
 import idv.tia201.g2.web.order.service.OrderService;
 import idv.tia201.g2.web.order.vo.OrderDetail;
 import idv.tia201.g2.web.order.vo.Orders;
+import idv.tia201.g2.web.user.dto.TotalUserDTO;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -24,30 +30,55 @@ public class OrderController {
 
     // 前台 訂單列表 顯示
     @GetMapping("member/{customerId}")
-    public List<OrderDto> memberOrder(@PathVariable Integer customerId) {
-        return orderService.findByCustomerId(customerId);
+    public Page<OrderDto> memberOrder(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) int status, // 新增狀態篩選
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dateStart, // 開始日期
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dateEnd, // 結束日期
+            HttpSession httpSession
+    ) {
+        TotalUserDTO totalUserDTO = (TotalUserDTO) httpSession.getAttribute("totalUserDTO");
+        if (totalUserDTO.getUserTypeId() != 0) {
+            return Page.empty();
+        }
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "orderCreateDatetime"));
+//        // 判斷是否有日期範圍
+//        if (dateStart != null && dateEnd != null) {
+//            return orderService.findByCustomerIdAndDateRange(totalUserDTO.getUserId(), status, dateStart.atStartOfDay(), dateEnd.plusDays(1).atStartOfDay(), pageable);
+//        }
+//        // 沒有日期範圍，按狀態查詢
+//        return orderService.findByCustomerIdAndStatus(totalUserDTO.getUserId(), status, pageable);
+        return orderService.findByCustomerId(totalUserDTO.getUserId(), pageable);
     }
 
     // 前台 訂單明細 顯示
     @GetMapping("member/detail/{orderId}")
-    public OrderDto memberDetail(@PathVariable Integer orderId) {
-        return orderService.findByMemberOrderId(orderId);
+    public OrderDto memberDetail(@PathVariable Integer orderId, HttpSession httpSession) {
+        TotalUserDTO totalUserDTO = (TotalUserDTO) httpSession.getAttribute("totalUserDTO");
+        OrderDto order = orderService.findByMemberOrderId(orderId);
+        if (totalUserDTO.getUserTypeId() != 0 || !(totalUserDTO.getUserId().equals(order.getOrders().getCustomerId()))) {
+            OrderDto orderDto = new OrderDto();
+            return orderDto;
+        }
+        return order;
     }
 
     // 前台 訂單明細 新增評分
     @PutMapping("member/star/{orderId}")
-    public Orders addNewStar(
-            @PathVariable Integer orderId,
-            @RequestBody Orders reqOrders
-    ) {
+    public Orders addNewStar( @PathVariable Integer orderId, @RequestBody Orders reqOrders) {
         reqOrders.setOrderId(orderId);
         return orderService.addStar(reqOrders);
     }
 
     // 後台 訂單列表 顯示
     @GetMapping("manage")
-    public List<Orders> manage() {
-        return orderService.findAll();
+    public Page<Orders> findAllByPageable(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ){
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "orderCreateDatetime"));
+        return orderService.findAll(pageable);
     }
 
     // 後台 訂單明細 顯示
@@ -58,9 +89,7 @@ public class OrderController {
 
     // 後台 訂單明細 修改
     @PutMapping("manage/{orderId}")
-    public Orders save(
-            @PathVariable Integer orderId,
-            @RequestBody Orders reqOrders
+    public Orders save( @PathVariable Integer orderId,@RequestBody Orders reqOrders
     ) {
         reqOrders.setOrderId(orderId);
         return orderService.updateStatus(reqOrders);
