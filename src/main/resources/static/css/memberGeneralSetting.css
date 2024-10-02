@@ -132,7 +132,8 @@ select:focus,
 .userPhoto {
     margin: 0 auto;
     display: flex;
-    width: 30%;
+    width: 150px;
+    height: 150px;
     border-radius: 50%;
     text-align: center;
 }

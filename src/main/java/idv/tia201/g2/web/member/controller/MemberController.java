@@ -5,6 +5,8 @@ import idv.tia201.g2.core.util.ValidateUtil;
 import idv.tia201.g2.web.member.service.MemberService;
 import idv.tia201.g2.web.member.vo.Member;
 import idv.tia201.g2.web.member.vo.MemberAddress;
+import idv.tia201.g2.web.user.dto.TotalUserDTO;
+import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -137,6 +139,33 @@ public class MemberController {
         core.setSuccessful(true);
         core.setMessage("已刪除");
         return core;
+    }
 
+    @PostMapping
+    public Member getMemberInformation(HttpSession httpSession) {
+        TotalUserDTO totalUserDTO = (TotalUserDTO) httpSession.getAttribute("totalUserDTO");
+        Member member = new Member();
+        if (totalUserDTO == null || null == totalUserDTO.getUserId()) {
+            member.setSuccessful(false);
+            member.setMessage("no memberId");
+            return member;
+        }
+        member = memberService.findMemberById(totalUserDTO.getUserId());
+        member.setSuccessful(true);
+        System.out.println(member);
+        return member;
+    }
+
+    @PostMapping("update")
+    public Core updateMemberInfo(Member member) {
+        System.out.println(member);
+        Core core = new Core();
+        if (member == null) {
+            core.setSuccessful(false);
+            core.setMessage("no member data");
+            return core;
+        }
+//        memberService.
+        return core;
     }
 }

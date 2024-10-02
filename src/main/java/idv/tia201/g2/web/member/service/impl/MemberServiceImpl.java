@@ -17,7 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
-import javax.print.DocFlavor;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -43,6 +45,12 @@ public class MemberServiceImpl implements MemberService {
 
     Integer userType = 0;
 
+    public byte[] loadImg() throws IOException {
+        String imagePath = "static/img/userIcon.jpg";
+        ClassLoader classLoader = getClass().getClassLoader();
+        File file = new File(classLoader.getResource(imagePath).getFile());
+        return Files.readAllBytes(file.toPath());
+    }
 
     @Override
     public Member register(Member member) {
@@ -86,6 +94,11 @@ public class MemberServiceImpl implements MemberService {
             member = memberDao.findMemberByPhone(phone);
             member.setSuccessful(true);
             member.setMessage("註冊成功");
+            try {
+                member.setCustomerImg(loadImg());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
             return member;
         }
     }
@@ -185,7 +198,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Member findMemberById(Integer memberId) {
-        Member member=memberDao.findMemberById(memberId);
+        Member member = memberDao.findMemberById(memberId);
         member.setSuccessful(true);
         return member;
     }

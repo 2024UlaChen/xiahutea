@@ -444,22 +444,13 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        // todo 判斷會員是否登入
-        // TODO 待session
-
-        // 0. 顯示明細
-        init();
-
-        function init() {
-            let orderId = getQueryParam("orderId");
-            if (orderId) {
-                fetch(`/order/member/detail/${orderId}`)
-                    .then(resp => resp.json())
-                    .then(data => showDB(data))
-                    .catch((error) => {
-                        console.log("錯誤原因:" + error);
-                    });
-            }
+        // 取得sessionStorage會員ID
+        const memberData = JSON.parse(sessionStorage.getItem("memberData"));
+        const customerId = memberData.data.customerId;
+        if(!memberData || customerId == null){
+            Swal.fire("請先登入會員");
+            location.href = `./homePage.html`;
+            return;
         }
         // 取得URL的查詢參數
         function getQueryParam(param) {
@@ -467,7 +458,24 @@
             return urlParams.get(param);
         }
 
-        // todo 待確認logo
+        //-------------------------------------------------------
+        // 0. 顯示明細
+        init();
+        function init() {
+            let orderId = getQueryParam("orderId");
+            if (orderId) {
+                fetch(`/order/member/detail/${orderId}`)
+                    .then(resp => resp.json())
+                    .then(data =>{
+                        // console.log(data)
+                        showDB(data); // 顯示資料
+                    })
+                    .catch((error) => {
+                        console.log("錯誤原因:" + error);
+                    });
+            }
+        }
+
         function showDB(data) {
             let storeInfoHtml;
             storeInfoHtml = `
@@ -700,7 +708,6 @@
                             orderFeedback: order_feedback.value
                         };
 
-                        // todo: 待確認${orderId}
                         let orderId = getQueryParam("orderId");
                         if (orderId) {
                             fetch(`/order/member/star/${orderId}`, {
@@ -744,11 +751,10 @@
                     return Number.parseInt(span_el.getAttribute("data-star"), 10);
                 }
 
-                // todo 待更改 customerId
                 // 3. btn 回上一頁
                 const order_btn_back = document.getElementsByClassName("order_btn_back")[0];
                 order_btn_back.addEventListener("click", function () {
-                    location.href = `./orderList.html?customerId=1`;
+                    location.href = `./orderList.html`;
                 });
             }
         }
