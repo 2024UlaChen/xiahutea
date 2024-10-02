@@ -12,7 +12,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -152,20 +154,48 @@ public class MemberController {
         }
         member = memberService.findMemberById(totalUserDTO.getUserId());
         member.setSuccessful(true);
+        return member;
+    }
+
+    @PostMapping("updateImg")
+    public Member updateMemberInfo(@RequestParam("img") MultipartFile file, @RequestParam String customerId) throws IOException {
+        Member member = new Member();
+        if (!StringUtils.hasText(customerId)) {
+            member.setSuccessful(false);
+            member.setMessage("no memberId");
+            return member;
+        }
+        if (file.isEmpty()) {
+            member.setSuccessful(false);
+            member.setMessage("no img");
+            return member;
+        }
+
+        member = memberService.editMemberImg(Integer.parseInt(customerId), file);
+        member.setSuccessful(true);
+        member.setMessage("update done");
         System.out.println(member);
         return member;
     }
 
     @PostMapping("update")
-    public Core updateMemberInfo(Member member) {
-        System.out.println(member);
-        Core core = new Core();
-        if (member == null) {
-            core.setSuccessful(false);
-            core.setMessage("no member data");
-            return core;
+    public Member updateMemberInfo(@RequestBody Member member, HttpSession httpSession) {
+        TotalUserDTO totalUserDTO = (TotalUserDTO) httpSession.getAttribute("totalUserDTO");
+        if (totalUserDTO == null || null == totalUserDTO.getUserId() || member == null) {
+            member.setSuccessful(false);
+            member.setMessage("no memberId");
+            return member;
         }
-//        memberService.
-        return core;
+        if (!totalUserDTO.getUserId().equals(member.getCustomerId())) {
+            member.setSuccessful(false);
+            member.setMessage("wrong memberId");
+            return member;
+        }
+        memberService.editMember(member);
+        member = memberService.findMemberById(totalUserDTO.getUserId());
+        member.setSuccessful(true);
+        member.setMessage("update done");
+        return member;
+
     }
 }
