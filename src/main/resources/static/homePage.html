@@ -90,13 +90,7 @@
                       </span>
                     </a>
                   </li>
-                  <li>
-                    <a href="#">
-                      <span>
-                        <i class="fa fa-bell" aria-hidden="true"></i>
-                      </span>
-                    </a>
-                  </li>
+
                   <li class="teamo-dropdown block-account">
                     <a href="#" data-teamo="teamo-dropdown">
                       <span>
@@ -289,7 +283,7 @@
                 >
                   關閉
                 </button>
-                <button type="button" class="btn btn-primary" id="twoPlaceSearch" >儲存</button>
+                <button type="button" class="btn btn-primary" id="twoPlaceSearch" data-bs-dismiss="modal" >確認</button>
               </div>
             </div>
           </div>
@@ -454,7 +448,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 
-<script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyC3nDHy1dARR-Pa_2jjPCjvsOR4bcILYsM'></script>
+
 <script src="assets/js/frontend-plugin.js"></script>
 
 
@@ -470,9 +464,9 @@
     ALLStores.forEach((element) => {
       
       element.addEventListener('click',function(){
-        console.log(this);
+
         var ele = this.nextElementSibling.querySelector('.fa-heart');
-        console.log(ele);
+
         if(ele.classList.contains('fa-regular')){
           ele.classList.remove('fa-regular');
           ele.classList.add('fa-solid');
@@ -506,7 +500,7 @@
         }
       });
       item.addEventListener("mouseleave", function () {
-        console.log("走了");
+
         let heartElement =
           item.parentElement.querySelector(".favorite-text");
         if (heartElement) {
@@ -534,6 +528,20 @@ let allSotre = document.querySelectorAll('.Heart');
         getStoreList("/xiaHuTea/search/place",placeBar+areaBar,"POST");
 
     })
+
+
+      document.querySelector('#user-enter-keyword').addEventListener('keypress',function (e){
+          if(e.key === "Enter"){
+              if(this.value !== ""){
+                  getStoreList("/xiaHuTea/search",this.value,"POST");
+              }
+          }
+      });
+
+
+    document.querySelector('#localLog-Modal').addEventListener('click',function (){
+        getStoreList("/xiaHuTea/home","");
+    });//點擊找附近
 
   }); //end dom
 
@@ -578,7 +586,7 @@ let allSotre = document.querySelectorAll('.Heart');
       var selectedCity = $(this).val();
       var selectedArea = $("#AreaSearch");
 
-      console.log(selectedCity);
+
       if (selectedCity) {
         selectedArea.empty(); //清空之前選單
         selectedArea.append('<option value="">請選擇區域</option>');
@@ -638,9 +646,12 @@ let allSotre = document.querySelectorAll('.Heart');
     
     <script>
 
-      
+
       function initMap() {
+
         function getDistance() {
+
+
 
           const drinkAddressTags = document.querySelectorAll(".drinkAddress"); // 飲料店地址
 
@@ -680,12 +691,12 @@ let allSotre = document.querySelectorAll('.Heart');
                   const origin = response.originAddresses[0];
                   const destination = response.destinationAddresses[0];
 
-                  console.log("response.rows" + response.rows[0].elements[0]);
+
                   if (response.rows[0].elements[0].status === "OK") {
                     const distance = response.rows[0].elements[0].distance.text;
 
                     const sotreFooter = $(drinkAddress).nextAll().eq(1);
-                    console.log("distance :" + distance);
+
 
                     sotreFooter.find('.sotreDistance').text();
 
@@ -713,6 +724,8 @@ let allSotre = document.querySelectorAll('.Heart');
                   const sotreFooter = $(drinkAddress).nextAll().eq(1);
                   sotreFooter.find(".sotreDistance").text(`計算失敗`);
                 }
+                  // 計算完成後重置狀態
+
               }
             });
           }
@@ -721,18 +734,29 @@ let allSotre = document.querySelectorAll('.Heart');
 
           if (!navigator.geolocation) {
             status.textContent = "不支援地理定位";
+
+
           } else {
             status.textContent = "加載中...";
             navigator.geolocation.getCurrentPosition(success, error);
           }
+
         }
 
         document
           .querySelector("#autoCatchUserPlace")
           .addEventListener("click", function (){
+
+
               getDistance();
           });
       }
+        window.onload = function () {
+            if (!window.google) {
+                console.error("Google Maps API not loaded.");
+            }
+            initMap(); // 確保在頁面加載後初始化地圖
+        }
     </script>
     <script>
       function ListenSearchStoreKeyWord(){
@@ -743,14 +767,14 @@ let allSotre = document.querySelectorAll('.Heart');
           let uservalue = (document.querySelector("#user-enter-keyword").value).trim();
           if(uservalue !==""){
             let data = uservalue;
-            console.log(data);
-            console.log("有監測到");
+
             getStoreList("/xiaHuTea/search",data,"POST");
 
           }
 
 
         })
+
       }
 
       function getStoreList(url,data,method="GET"){
@@ -764,7 +788,7 @@ let allSotre = document.querySelectorAll('.Heart');
           success: function (data){
             $('#store-body').empty(); //清空
             if( data.length === 0  ){
-              console.log("沒東西");
+
               swal.fire({
                 text:"回傳筆數0筆",
                 confirmButtonText: "回首頁",
@@ -781,13 +805,16 @@ let allSotre = document.querySelectorAll('.Heart');
               const base64Img = row.logo;
               let imgid = "img"+row.storeId;
 
-              let str =`<figure class="col-3 figure my-5 Heart storeLinkCard" >
+              let str =`
+<figure class="col-3 figure my-5 Heart storeLinkCard" >
+<a href="productMenu.html?storeId=${row.storeId}">
           <img
             src=""
             alt=""
             class="rounded KunIndexSotreImg"
             id="${imgid}"
           />
+          </a>
           <div class="row">
             <figcaption
               class="figure-caption col-6 IndexImgNameFontSize drinkAddress"
@@ -856,15 +883,15 @@ let allSotre = document.querySelectorAll('.Heart');
               //監聽點擊定位
               document.querySelector('#autoCatchUserPlace').addEventListener('click',function () {
 
+
                   navigator.geolocation.getCurrentPosition(function (position) {
-                      // 取得 position 位置資訊，可於 console 中印出來看看
-                      console.log(position);
+
+
                       const lng = position.coords.longitude;
                       const lat = position.coords.latitude;
-                      console.log(lng);
-                      console.log(lat);
+
                       document.querySelectorAll('.drinkAddress').forEach(function (row){
-                          console.log(row.getAttribute("data-address"));
+
                       });
 
 
@@ -873,17 +900,14 @@ let allSotre = document.querySelectorAll('.Heart');
 
               });
           } else {
-              document.querySelector('#user-place').placeholder="不支援自動定位請手打";
+              document.querySelector('#user-place').placeholder="不支援定位請輸入地址";
           }
 
       }
     </script>
-    <script
-      async
-      defer
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAm4iwqRUtQfPBubWGDHpMB9cQ4uLvkM4I&libraries=places&callback=initMap"
-    ></script>
-   
-    
+
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAm4iwqRUtQfPBubWGDHpMB9cQ4uLvkM4I&libraries=places&v=weekly&callback=initMap"></script>
+
+
   </body>
 </html>

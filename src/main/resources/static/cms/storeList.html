@@ -277,10 +277,7 @@
                       });
             }//檢查是否為管理員登入
             else{
-              //側邊欄處理
-              document.querySelector("#storeInfoAsideLink").classList.add("d-none");
-              document.querySelector("#storeLoyaltyCardAsideLink").classList.add("d-none");
-              document.querySelector("#storePasswordAsideLink").classList.add("d-none");
+
               GetSearchResultByAjax("/store/search?status=10");
 
 
