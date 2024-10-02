@@ -231,10 +231,46 @@
     background-color: #73B4BA;
     border: 1px solid #73B4BA;
     color: white;
+    font-size: 16px;
 }
 
 .btnSave:hover {
     background-color: white;
     border: 1px solid #73B4BA;
     color: #73B4BA;
+}
+
+
+/*member infor*/
+#memberPhotoBlock {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.memberPhoto {
+    filter: brightness(95%);
+    transition: filter 0.5s ease-in-out;
+    border-radius: 50%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 120%;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    horiz-align: center;
+    justify-content: center;
+    vertical-align: center;
+    color: #6c757d;
+    font-size: 24px;
+}
+
+.memberPhoto:hover {
+    filter: brightness(70%);
+    cursor: pointer;
+}
+
+.none {
+    display: none;
 }
