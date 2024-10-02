@@ -181,7 +181,18 @@ document.addEventListener("DOMContentLoaded",function(){
                   text: error.message,
                   icon: 'error'
               });
+              history.back();
           })
+    }else{
+        // 當找不到 memberData 時，顯示錯誤訊息
+        Swal.fire({
+            title: '會員資料缺失',
+            text: '請登入',
+            icon: 'info'
+        }).then(() => {
+            // 跳轉回登入頁面或執行其他行為
+            window.location.href = '/login.html';
+        });
     }
 
   //獲得localstorage資料(購物車)
@@ -1035,34 +1046,37 @@ document.addEventListener("DOMContentLoaded",function(){
               })
               .then(data => {
                   console.log('成功:', data); // 處理響應數據
+                  //把訂單編號存到Local 後續可以用，先移除(若有)
+                  localStorage.removeItem('orderId');
+                  localStorage.setItem('orderId', data.orders.orderId);
               })
               .catch(error => {
                   console.error('發生錯誤:', error); // 錯誤處理
               });
 
-          // const params = new URLSearchParams();
-          // params.append('TotalAmount', last_totalAmount); // 交易金額
-          // fetch('/payment/createorder', {
-          //     method: 'POST',
-          //     headers:{
-          //         'Content-Type': 'application/x-www-form-urlencoded'
-          //     },
-          //     body: params.toString()
-          // }).then(response => response.text()) // 因為後端返回的是 HTML 表單，所以需要使用 .text()
-          //     .then(htmlForm => {
-          //         // 創建一個空的 div 並將 HTML 表單插入
-          //         const formContainer = document.createElement('div');
-          //         formContainer.innerHTML = htmlForm;
-          //
-          //         // 將表單插入到當前頁面中
-          //         document.body.appendChild(formContainer);
-          //
-          //         // 自動提交表單
-          //         const form = formContainer.querySelector('form');
-          //         form.submit(); // 自動提交支付表單，跳轉到綠界
-          //     }).catch(error => {
-          //     console.error('發生錯誤:', error);
-          // });
+          const params = new URLSearchParams();
+          params.append('TotalAmount', last_totalAmount); // 交易金額
+          fetch('/payment/createorder', {
+              method: 'POST',
+              headers:{
+                  'Content-Type': 'application/x-www-form-urlencoded'
+              },
+              body: params.toString()
+          }).then(response => response.text()) // 因為後端返回的是 HTML 表單，所以需要使用 .text()
+              .then(htmlForm => {
+                  // 創建一個空的 div 並將 HTML 表單插入
+                  const formContainer = document.createElement('div');
+                  formContainer.innerHTML = htmlForm;
+
+                  // 將表單插入到當前頁面中
+                  document.body.appendChild(formContainer);
+
+                  // 自動提交表單
+                  const form = formContainer.querySelector('form');
+                  form.submit(); // 自動提交支付表單，跳轉到綠界
+              }).catch(error => {
+              console.error('發生錯誤:', error);
+          });
       })
     //******** ************************************function區****************************************
   //F01 localstorage購物車資料分類
@@ -1136,8 +1150,10 @@ document.addEventListener("DOMContentLoaded",function(){
                   icon: 'info'
               }).then(() => {
                   // 當使用者點擊提示框後進行跳轉
-                  window.location.href = 'homePage.html'; // 跳轉到指定的網頁
+                  // window.location.href = 'homePage.html'; // 跳轉到指定的網頁
+                  history.back();
               });
+
           });
     }
 
