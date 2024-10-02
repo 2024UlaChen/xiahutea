@@ -58,7 +58,7 @@
       href="https://fonts.googleapis.com/css?family=Lato:300,300i,400,400i,700,700i&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./css/k.css" />
+    <link rel="stylesheet" href="css/homePage.css" />
     <style>
       /* .b-example-divider {
   height: 3rem;
@@ -473,6 +473,9 @@
         contentType: 'application/json',
         success:function (couponsData){
           console.log(couponsData);
+          if(!couponsData){
+            location.href = 'login.html';
+          }
           if(couponsData === null){
             location.href = 'login.html';
           }
