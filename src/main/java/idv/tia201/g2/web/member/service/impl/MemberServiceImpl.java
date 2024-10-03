@@ -226,24 +226,13 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public List<Member> findQueryMember(Member member) {
-//        TODO REVISE
-        if (!ObjectUtils.isEmpty(member.getValidStatus())) {
-            return findMemberByValidStatus(member.getValidStatus());
-        } else if (StringUtils.hasText(member.getNickname())) {
-            return memberDao.findMemberByNickname(member.getNickname());
-        } else {
-            List<Member> memberResultList = new ArrayList<>();
-            if (StringUtils.hasText(member.getCustomerPhone())) {
-                memberResultList.add(memberDao.findMemberByPhone(member.getCustomerPhone()));
-            }
+//        動態查詢 - 電話 / id / 狀態 / name
 
-            if (!StringUtils.isEmpty(member.getCustomerId())) {
-                memberResultList.add(memberDao.findMemberById(member.getCustomerId()));
-            }
-            return memberResultList;
-        }
-//        String memberId = StringUtils.isEmpty(member.getCustomerId())?null:member.getCustomerId();
-//        return memberDao.findMemberByQueryParam()
+        String queryName = member.getNickname();
+        String queryPhone = member.getCustomerPhone();
+        Integer queryId = member.getCustomerId();
+        Boolean queryStatus = member.getValidStatus();
+        return memberDao.findMemberByQueryParam(queryName, queryId, queryPhone, queryStatus);
     }
 
     @Override

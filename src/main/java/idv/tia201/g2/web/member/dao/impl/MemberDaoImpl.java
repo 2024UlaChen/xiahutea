@@ -4,8 +4,14 @@ import idv.tia201.g2.web.member.dao.MemberDao;
 import idv.tia201.g2.web.member.vo.Member;
 import idv.tia201.g2.web.member.vo.MemberAddress;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -63,17 +69,36 @@ public class MemberDaoImpl implements MemberDao {
     }
 
     @Override
-    public List<Member> findMemberByQueryParam(String nickname, Integer memberId, String phone, Boolean status) {
-//        TODO REVISE
-        final String sql = "select * from CUSTOMER where valid_status = :status and " +
-                " nickname = :nickname and  CUSTOMER_PHONE = :phone and  customer_id = :memberId ";
-        return session
-                .createNativeQuery(sql, Member.class)
-                .setParameter("nickname", nickname)
-                .setParameter("phone", phone)
-                .setParameter("memberId", memberId)
-                .setParameter("status", status)
-                .getResultList();
+    public List<Member> findMemberByQueryParam(String nickname, Integer customerId, String phone, Boolean status) {
+
+        CriteriaBuilder cb = session.getCriteriaBuilder();
+        CriteriaQuery<Member> cq = cb.createQuery(Member.class);
+        Root<Member> root = cq.from(Member.class);
+        Predicate statusCondition, idCondition, phoneCondition, nameCondition;
+        if (status == null) {
+            statusCondition = cb.isNotNull(root.get("validStatus"));
+        } else {
+            statusCondition = cb.equal(root.get("validStatus"), status);
+        }
+        if (customerId == null) {
+            idCondition = cb.isNotNull(root.get("customerId"));
+        } else {
+            idCondition = cb.equal(root.get("customerId"), customerId);
+        }
+        if (!StringUtils.hasText(phone)) {
+            phoneCondition = cb.isNotNull(root.get("customerPhone"));
+        } else {
+            phoneCondition = cb.like(root.get("customerPhone"), "%" + phone + "%");
+        }
+        if (!StringUtils.hasText(nickname)) {
+            nameCondition = cb.isNotNull(root.get("nickname"));
+        } else {
+            nameCondition = cb.like(root.get("nickname"), "%" + nickname + "%");
+        }
+        Predicate finalCondition = cb.and(nameCondition, statusCondition, phoneCondition, idCondition);
+        cq.where(finalCondition);
+        Query<Member> query = session.createQuery(cq);
+        return query.getResultList();
     }
 
     @Override
@@ -115,7 +140,7 @@ public class MemberDaoImpl implements MemberDao {
     }
 
     @Override
-    public Integer updateMemberMoney(Integer memberId, Integer memberMoney){
+    public Integer updateMemberMoney(Integer memberId, Integer memberMoney) {
         final String sql = "update CUSTOMER set customer_money =  customer_money + :memberMoney   where  customer_id = :memberId ";
         return session
                 .createNativeQuery(sql, Member.class)

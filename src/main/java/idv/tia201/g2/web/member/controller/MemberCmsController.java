@@ -66,14 +66,13 @@ public class MemberCmsController {
 
 
     @PostMapping
-    public List<Member> manage(Model model, @RequestBody Member member) {
+    public List<Member> manage(@RequestBody Member member) {
         if (member == null) {
             member = new Member();
             member.setMessage("no member data");
             member.setSuccessful(false);
             return null;
         }
-//        TODO REVISE
         return memberService.findQueryMember(member);
     }
 

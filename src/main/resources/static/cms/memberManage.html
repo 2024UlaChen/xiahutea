@@ -50,14 +50,14 @@
                                    placeholder="姓名">
                         </div>
                         <div class="form-group col-sm-3">
-                            <label for="cmsQueryMemberId">顧客編號:</label>
+                            <label for="cmsQueryMemberId">顧客ID:</label>
                             <span class="errorTip"></span>
                             <input type="text" class="form-control form-control-lg" id="cmsQueryMemberId"
                                    name="cmsQueryMemberId" placeholder="編號" data-error="編號輸入錯誤">
                         </div>
                         <div class="form-group col-sm-3">
                             <label for="cmsQueryMemberCellphone">手機:</label>
-                            <span class="errorTip"></span>
+                            <span class="errorTip">(支援模糊搜尋)</span>
                             <input type="text" class="form-control form-control-lg " id="cmsQueryMemberCellphone"
                                    required
                                    maxlength="10" min="10" pattern="[0-9]{10}" data-error="手機輸入錯誤"
@@ -86,7 +86,7 @@
                         <thead>
                         <tr>
                             <th class="col-sm-2"> 顧客暱稱</th>
-                            <th class="col-sm-2"> 顧客編號</th>
+                            <th class="col-sm-2"> 顧客ID</th>
                             <th class="col-sm-3"> 顧客信箱</th>
                             <th class="col-sm-3"> 顧客手機</th>
                             <th class="col-sm-1"> 狀態</th>

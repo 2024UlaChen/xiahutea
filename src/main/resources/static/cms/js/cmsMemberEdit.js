@@ -46,13 +46,25 @@ function nullToEmpty(data) {
     return (data == null) ? "" : data;
 }
 
+function changeDateFormat(date) {
+    const SLASH = "/";
+    const HYPHEN = "-";
+    if (date === "")
+        return date;
+    if (date.includes(SLASH))
+        return date.replaceAll(SLASH, HYPHEN)
+    if (date.includes(HYPHEN))
+        return date.replaceAll(HYPHEN, SLASH)
+}
+
 function loadCmsMemberInfo() {
     fetch(`manage/detail`)
         .then(res => res.json())
         .then(data => {
+            console.log(data);
             // let sessionDetail = JSON.parse(sessionStorage.getItem("cmsMemberDetail"));
-            cmsMemberBirthdayTxt.value = nullToEmpty(data.birthday).replaceAll("/", "-");
-            CmsMemberCreateDateTxt.value = nullToEmpty(data.createDate).replaceAll("/", "-");
+            cmsMemberBirthdayTxt.value = nullToEmpty(data.birthday);
+            CmsMemberCreateDateTxt.value = nullToEmpty(data.createDate);
             cmsMemberCarrierTxt.value = data.customerCarrier;
             cmsMemberEmailTxt.value = data.customerEmail;
             cmsMemberMoney.value = data.customerMoney;
@@ -64,8 +76,10 @@ function loadCmsMemberInfo() {
                 cmsMemberSex.value = "女性";
             } else if (data.sex === "male") {
                 cmsMemberSex.value = "男性";
-            } else {
+            } else if (data.sex === "none") {
                 cmsMemberSex.value = "不提供";
+            } else {
+                cmsMemberSex.value = nullToEmpty(data.sex);
             }
         });
     getAddress();
