@@ -25,6 +25,7 @@ import idv.tia201.g2.web.order.vo.Orders;
 import idv.tia201.g2.web.product.dao.ProductDao;
 import idv.tia201.g2.web.product.vo.Product;
 import idv.tia201.g2.web.store.dao.StoreDao;
+import idv.tia201.g2.web.store.service.StoreService;
 import idv.tia201.g2.web.store.vo.CustomerLoyaltyCard;
 import idv.tia201.g2.web.store.vo.Store;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,6 +65,8 @@ public class OrderServiceImpl implements OrderService {
     private OrderMappingUtil orderMappingUtil;
     @Autowired
     private MemberService memberService;
+    @Autowired
+    private StoreService storeService;
     @Autowired
     private MemberLoyaltyCardService memberLoyaltyCardService;
     @Autowired
@@ -225,6 +228,8 @@ public class OrderServiceImpl implements OrderService {
         }
         memberService.updateMemberMoneyById(customerId, (- order.getCustomerMoneyDiscount()));
 
+        // todo 增加集點卡點數
+
         order.setOrderStatus(1);
         order.setOrderCreateDatetime(new Timestamp(System.currentTimeMillis()));
         order.setSuccessful(true);
@@ -309,19 +314,27 @@ public class OrderServiceImpl implements OrderService {
         final Orders oldOrder = orderDao.selectByOrderId(newOrder.getOrderId());
         final Integer ordersStar = newOrder.getOrderScore();
         final String orderFeedBack = newOrder.getOrderFeedback();
-        if(ordersStar == 0){
+        final Integer storeId = oldOrder.getStoreId();
+        if(!(isEmpty(oldOrder.getOrderScore()))){
+            newOrder.setMessage("不可重複評分");
+            newOrder.setSuccessful(false);
+            return newOrder;
+        }
+        if( ordersStar < 1 || ordersStar > 5 ){
             newOrder.setMessage("未輸入評分");
             newOrder.setSuccessful(false);
             return newOrder;
         }
-        if(!(isEmpty(oldOrder.getOrderScore()))){
-            newOrder.setMessage("不可重複評分");
+        if (isEmpty(storeId)) {
+            newOrder.setMessage("無此商店");
             newOrder.setSuccessful(false);
             return newOrder;
         }
         oldOrder.setOrderScore(ordersStar);
         oldOrder.setOrderFeedback(orderFeedBack);
         orderDao.update(oldOrder);
+        // 放入商店評分內
+        storeService.updateStoreRank(storeId, Float.valueOf(ordersStar));
         newOrder.setMessage("評分完成");
         newOrder.setSuccessful(true);
         return newOrder;
