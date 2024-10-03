@@ -168,30 +168,22 @@
 <script>
     document.addEventListener("DOMContentLoaded", function(){
         // 取得sessionStorage會員ID
-        // const memberData = JSON.parse(sessionStorage.getItem("memberData"));
-        // const customerId = memberData.data.customerId;
+        const memberData = sessionStorage.getItem("memberData") ? JSON.parse(sessionStorage.getItem("memberData")) : null;
+        const customerId = memberData && memberData.data ? memberData.data.customerId : null;
 
         // 判斷權限
-        fetch(`/totalusers`)
-              .then(resp => resp.json())
-              .then(totalUserDTO => {
-                  // console.log(totalUserDTO)
-                  if(totalUserDTO.userTypeId !== 0){
-                      Swal.fire({
-                          title: "請登入會員",
-                          text: '',
-                          icon: 'error',
-                          showConfirmButton: true  // 確認按鈕
-                      }).then(() => {
-                          location.href = "./login.html";
-                      });
-                  }
-                  // 如果是會員才能檢視
-                  init();
-              })
-              .catch((error) => {
-                  console.log("錯誤原因:" + error);
-              });
+        if(!(customerId)){
+            Swal.fire({
+                title: "請登入會員",
+                text: '',
+                icon: 'error',
+                showConfirmButton: true  // 確認按鈕
+            }).then(() => {
+                location.href = "./login.html";
+            });
+        }
+        // 如果是會員才能檢視
+        init();
         //-------------------------------------------------------
         // 取得URL的查詢參數
         function getQueryParam(param) {
@@ -199,8 +191,7 @@
             return urlParams.get(param);
         }
         //-------------------------------------------------------
-        // 0. 顯示申請表
-        // init();
+        // 顯示申請表
         function init() {
             let orderId = getQueryParam("orderId");
             if (orderId) {
