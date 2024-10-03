@@ -1,5 +1,6 @@
 package idv.tia201.g2.web.order.controller;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,25 +32,28 @@ public class OrderController {
     // 前台 訂單列表 顯示
     @GetMapping("member/{customerId}")
     public Page<OrderDto> memberOrder(
+            @PathVariable Integer customerId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(required = false) int status, // 新增狀態篩選
-            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dateStart, // 開始日期
-            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dateEnd, // 結束日期
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy/MM/dd") LocalDate dateStart, // 開始日期
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy/MM/dd") LocalDate dateEnd, // 結束日期
             HttpSession httpSession
     ) {
         TotalUserDTO totalUserDTO = (TotalUserDTO) httpSession.getAttribute("totalUserDTO");
+//        System.out.println("--------------totalUserDTO--------------"+totalUserDTO);
         if (totalUserDTO.getUserTypeId() != 0) {
             return Page.empty();
         }
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "orderCreateDatetime"));
-//        // 判斷是否有日期範圍
-//        if (dateStart != null && dateEnd != null) {
-//            return orderService.findByCustomerIdAndDateRange(totalUserDTO.getUserId(), status, dateStart.atStartOfDay(), dateEnd.plusDays(1).atStartOfDay(), pageable);
-//        }
-//        // 沒有日期範圍，按狀態查詢
-//        return orderService.findByCustomerIdAndStatus(totalUserDTO.getUserId(), status, pageable);
-        return orderService.findByCustomerId(totalUserDTO.getUserId(), pageable);
+        // 判斷是否有日期範圍
+        if (dateStart != null && dateEnd != null) {
+            Timestamp startTimestamp = Timestamp.valueOf(dateStart.atStartOfDay());
+            Timestamp endTimestamp = Timestamp.valueOf(dateEnd.plusDays(1).atStartOfDay());
+            // 篩選在日期範圍內的
+            return orderService.findByCustomerIdAndDateRange(customerId, startTimestamp, endTimestamp, pageable);
+        }
+        // 查詢全部
+        return orderService.findByCustomerId(customerId, pageable);
     }
 
     // 前台 訂單明細 顯示

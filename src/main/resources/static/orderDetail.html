@@ -447,20 +447,38 @@
         // 取得sessionStorage會員ID
         const memberData = JSON.parse(sessionStorage.getItem("memberData"));
         const customerId = memberData.data.customerId;
-        if(!memberData || customerId == null){
-            Swal.fire("請先登入會員");
-            location.href = `./homePage.html`;
-            return;
-        }
+
+        // 判斷權限
+        fetch(`/totalusers`)
+            .then(resp => resp.json())
+            .then(totalUserDTO => {
+                console.log(totalUserDTO)
+                console.log(totalUserDTO.userTypeId)
+                if(totalUserDTO.userTypeId !== 0){
+                    // Swal.fire({
+                    //     title: "請登入會員",
+                    //     text: '',
+                    //     icon: 'error',
+                    //     showConfirmButton: true  // 確認按鈕
+                    // }).then(() => {
+                        location.href = "./login.html";
+                    // });
+                }
+                // 如果是會員才能檢視
+                init();
+            })
+            .catch((error) => {
+                console.log("錯誤原因:" + error);
+            });
+        //-------------------------------------------------------
         // 取得URL的查詢參數
         function getQueryParam(param) {
             let urlParams = new URLSearchParams(window.location.search);
             return urlParams.get(param);
         }
-
         //-------------------------------------------------------
         // 0. 顯示明細
-        init();
+        // init();
         function init() {
             let orderId = getQueryParam("orderId");
             if (orderId) {
