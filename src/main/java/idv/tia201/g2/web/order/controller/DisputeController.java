@@ -60,12 +60,12 @@ public class DisputeController {
     ){
         TotalUserDTO totalUserDTO = (TotalUserDTO) httpSession.getAttribute("totalUserDTO");
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "applyDatetime"));
-        // 如果不是店家或管理者
+        // 如果不是店家或管理者權限 不可檢視
         if (totalUserDTO.getUserTypeId() != 3 && totalUserDTO.getUserTypeId() != 1) {
             return Page.empty();
         }
 
-        // 檢查 dateStart 和 dateEnd 是否為 null
+        // 檢查 查詢日起迄 是否為 null
         Timestamp startTimestamp = null;
         Timestamp endTimestamp = null;
         if (dateStart != null) {
@@ -74,7 +74,7 @@ public class DisputeController {
         if (dateEnd != null) {
             endTimestamp = Timestamp.valueOf(dateEnd.plusDays(1).atStartOfDay());
         }
-        // 判斷是否設定店家id
+        // 判斷user的權限，如果是admin可看全部訂單，如果是store只能看storeId的訂單
         Integer storeId = (totalUserDTO.getUserTypeId() == 1) ? totalUserDTO.getUserTypeId() : null;
         return disputeService.findByCriteria(disputeOrderId, orderId, storeId, storeName, memberNickname, disputeStatus, startTimestamp, endTimestamp, pageable);
     }

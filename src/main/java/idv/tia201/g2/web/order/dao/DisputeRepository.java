@@ -10,10 +10,6 @@ import java.sql.Timestamp;
 
 public interface DisputeRepository extends JpaRepository<DisputeOrder,Integer > {
 
-
-//    @Query("FROM DisputeOrder")
-//    Page<DisputeOrder> findAll(Pageable pageable);
-
     // 後台 爭議列表 顯示 & 依條件查詢
     @Query("SELECT d FROM DisputeOrder d " +
             "JOIN d.order o " +
