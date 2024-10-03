@@ -526,6 +526,10 @@ let allSotre = document.querySelectorAll('.Heart');
         const placeBar =document.querySelector('#PlaceSearch').value;
         const areaBar = document.querySelector('#AreaSearch').value;
         getStoreList("/xiaHuTea/search/place",placeBar+areaBar,"POST");
+        setTimeout(function (){
+            getDistance(0);
+        },1000);
+
 
     })
 
@@ -645,103 +649,120 @@ let allSotre = document.querySelectorAll('.Heart');
 
     
     <script>
+        function getDistance(status = 1) {
+
+
+
+            const drinkAddressTags = document.querySelectorAll(".drinkAddress"); // 飲料店地址
+
+            function error() {
+
+                swal.fire({text:"瀏覽器不支援定位"});
+            }
+
+            function success(position) {
+                const latitude = position.coords.latitude;
+                const longitude = position.coords.longitude;
+                let userPosition = document.querySelector('#user-place').value !== "" ? document.querySelector('#user-place').value : new google.maps.LatLng(latitude, longitude) ;
+                if(status === 1){
+
+                    sessionStorage.setItem('userPosition', userPosition);
+                }else{
+                    if(!sessionStorage.getItem('userPosition')){
+                        userPosition = sessionStorage.getItem('userPosition');
+
+                    }
+
+                }
+
+
+
+
+
+
+
+
+                const service = new google.maps.DistanceMatrixService();
+                const drinkAddressTags = document.querySelectorAll(".drinkAddress"); // 飲料店地址
+
+
+                drinkAddressTags.forEach(function (drinkAddress) {
+
+                    service.getDistanceMatrix(
+                        {
+                            origins: [userPosition],
+                            destinations: [drinkAddress.getAttribute("data-address")],
+                            travelMode: google.maps.TravelMode.DRIVING, //開車
+                            unitSystem: google.maps.UnitSystem.METRIC, // 公里
+                            avoidHighways: false,
+                            avoidTolls: false,
+                        },
+                        callback
+                    );
+
+                    function callback(response, status) {
+                        if (status === "OK") {
+                            // 取得使用者位置後 首先抓取 每家店的位址 進行計算
+
+                            const origin = response.originAddresses[0];
+                            const destination = response.destinationAddresses[0];
+
+
+                            if (response.rows[0].elements[0].status === "OK") {
+                                const distance = response.rows[0].elements[0].distance.text;
+
+                                const sotreFooter = $(drinkAddress).nextAll().eq(1);
+
+
+                                sotreFooter.find('.sotreDistance').text();
+
+                                sotreFooter
+                                    .find(".sotreDistance")
+                                    .html(
+                                        `&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;約${distance}`
+                                    );
+
+                                //超過10km排除
+                                if(parseInt(distance) > 10){
+
+                                    let te =sotreFooter.closest(".storeLinkCard");
+                                    $(te).remove();
+
+                                }
+
+
+                                // result.textContent = `從 ${origin} 到 ${destination} 的距離是 ${distance}`;
+                            } else {
+                                const sotreFooter = $(drinkAddress).nextAll().eq(1);
+                                sotreFooter.find(".sotreDistance").text(`計算失敗`);
+                            }
+                        } else {
+                            const sotreFooter = $(drinkAddress).nextAll().eq(1);
+                            sotreFooter.find(".sotreDistance").text(`計算失敗`);
+                        }
+                        // 計算完成後重置狀態
+
+                    }
+                });
+            }
+
+
+
+            if (!navigator.geolocation) {
+                status.textContent = "不支援地理定位";
+
+
+            } else {
+                status.textContent = "加載中...";
+                navigator.geolocation.getCurrentPosition(success, error);
+            }
+
+        }
 
 
       function initMap() {
 
-        function getDistance() {
 
-
-
-          const drinkAddressTags = document.querySelectorAll(".drinkAddress"); // 飲料店地址
-
-          function error() {
-
-            swal.fire({text:"瀏覽器不支援定位"});
-          }
-
-          function success(position) {
-            const latitude = position.coords.latitude;
-            const longitude = position.coords.longitude;
-            const userPosition = document.querySelector('#user-place').value !== "" ? document.querySelector('#user-place').value : new google.maps.LatLng(latitude, longitude) ;
-
-
-
-
-            const service = new google.maps.DistanceMatrixService();
-            const drinkAddressTags = document.querySelectorAll(".drinkAddress"); // 飲料店地址
-
-            drinkAddressTags.forEach(function (drinkAddress) {
-              service.getDistanceMatrix(
-                {
-                  origins: [userPosition],
-                  destinations: [drinkAddress.getAttribute("data-address")],
-                  travelMode: google.maps.TravelMode.DRIVING, //開車
-                  unitSystem: google.maps.UnitSystem.METRIC, // 公里
-                  avoidHighways: false,
-                  avoidTolls: false,
-                },
-                callback
-              );
-
-              function callback(response, status) {
-                if (status === "OK") {
-                  // 取得使用者位置後 首先抓取 每家店的位址 進行計算
-
-                  const origin = response.originAddresses[0];
-                  const destination = response.destinationAddresses[0];
-
-
-                  if (response.rows[0].elements[0].status === "OK") {
-                    const distance = response.rows[0].elements[0].distance.text;
-
-                    const sotreFooter = $(drinkAddress).nextAll().eq(1);
-
-
-                    sotreFooter.find('.sotreDistance').text();
-
-                      sotreFooter
-                        .find(".sotreDistance")
-                        .html(
-                          `&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;約${distance}`
-                        );
-
-                      //超過10km排除
-                      if(parseInt(distance) > 10){
-
-                          let te =sotreFooter.closest(".storeLinkCard");
-                          $(te).remove();
-
-                      }
-
-
-                    // result.textContent = `從 ${origin} 到 ${destination} 的距離是 ${distance}`;
-                  } else {
-                    const sotreFooter = $(drinkAddress).nextAll().eq(1);
-                    sotreFooter.find(".sotreDistance").text(`計算失敗`);
-                  }
-                } else {
-                  const sotreFooter = $(drinkAddress).nextAll().eq(1);
-                  sotreFooter.find(".sotreDistance").text(`計算失敗`);
-                }
-                  // 計算完成後重置狀態
-
-              }
-            });
-          }
-
-
-
-          if (!navigator.geolocation) {
-            status.textContent = "不支援地理定位";
-
-
-          } else {
-            status.textContent = "加載中...";
-            navigator.geolocation.getCurrentPosition(success, error);
-          }
-
-        }
 
         document
           .querySelector("#autoCatchUserPlace")
@@ -751,14 +772,14 @@ let allSotre = document.querySelectorAll('.Heart');
               getDistance();
           });
       }
+
         window.onload = function () {
             if (!window.google) {
                 console.error("Google Maps API not loaded.");
             }
             initMap(); // 確保在頁面加載後初始化地圖
         }
-    </script>
-    <script>
+
       function ListenSearchStoreKeyWord(){
         //監聽輸入關鍵字
         document.querySelector('#forSearchStore').addEventListener('click',function (e){
@@ -769,6 +790,12 @@ let allSotre = document.querySelectorAll('.Heart');
             let data = uservalue;
 
             getStoreList("/xiaHuTea/search",data,"POST");
+
+            setTimeout(function (){
+                getDistance(0);
+            },1000);
+
+
 
           }
 
@@ -828,7 +855,7 @@ let allSotre = document.querySelectorAll('.Heart');
             </figcaption>
             <figcaption class="figure-caption col-12 footer2">
               <i class="KunStar fa-solid fa-star"></i
-              ><span class="KunRank">4.8</span
+              ><span class="KunRank">${row.score}</span
               >&nbsp;‧&nbsp;11:00~22:00&nbsp;‧<span class="sotreDistance"
                 >??公里</span
               >
