@@ -105,15 +105,22 @@ public class OrderServiceImpl implements OrderService {
             orderDto.setSuccessful(false);
             return orderDto;
         }
-        if(order.getInvoiceMethod() != 1 && order.getInvoiceMethod() != 2 && order.getInvoiceMethod() != 3){
+        // 判斷發票
+        Integer invoiceMethod = order.getInvoiceMethod();
+        String invoiceCarrier = order.getInvoiceCarrier();
+        String invoiceVat = order.getInvoiceVat() + "";
+        if(invoiceMethod != 1 && invoiceMethod != 2 && invoiceMethod != 3){
             orderDto.setMessage("發票方式錯誤");
             orderDto.setSuccessful(false);
             return orderDto;
         }
-        final String invoiceCarrier = order.getInvoiceCarrier();
-        final String invoiceVat = order.getInvoiceVat() + "";
-        if(order.getInvoiceMethod() == 1){  // 手機載具
-            if(isEmpty(invoiceCarrier) || invoiceCarrier.charAt(0) != '/' || invoiceCarrier.trim().length() != 8){
+        if(invoiceMethod == 1){  // 手機載具
+            if (order.getInvoiceCarrier() == null ||  order.getInvoiceVat() != null){
+                orderDto.setMessage("手機載具需輸入載具號碼，且不可輸入統編");
+                orderDto.setSuccessful(false);
+                return orderDto;
+            }
+            if(invoiceCarrier.charAt(0) != '/' || invoiceCarrier.trim().length() != 8){
                 orderDto.setMessage("手機載具輸入錯誤");
                 orderDto.setSuccessful(false);
                 return orderDto;
@@ -130,7 +137,19 @@ public class OrderServiceImpl implements OrderService {
                 }
             }
         }
-        if (order.getInvoiceMethod() == 3) {  // 統編
+        if(invoiceMethod == 2){
+            if (order.getInvoiceCarrier() != null || order.getInvoiceVat() != null){
+                orderDto.setMessage("一般會員載具不需輸入載具號碼，且不可輸入統編");
+                orderDto.setSuccessful(false);
+                return orderDto;
+            }
+        }
+        if(invoiceMethod == 3) {  // 統編
+            if (invoiceCarrier != null || invoiceVat == null){
+                orderDto.setMessage("統編發票不需輸入載具號碼，且需輸入統編");
+                orderDto.setSuccessful(false);
+                return orderDto;
+            }
             if(!(ValidateUtil.isValidTWBID(invoiceVat))){
                 orderDto.setMessage("統編輸入錯誤");
                 orderDto.setSuccessful(false);
@@ -186,15 +205,12 @@ public class OrderServiceImpl implements OrderService {
         Integer customerCouponsId = order.getCustomerCouponsId();
         if(customerCouponsId != null) {
             CustomerCoupons customerCoupon = customerCouponDao.findByCustomerIdAndCustomerCouponsId(customerId, customerCouponsId);
-            if (customerCoupon == null) {
-                orderDto.setMessage("無此優惠券");
+            if (customerCoupon == null || customerCoupon.getCouponQuantity() <= 0) {
+                orderDto.setMessage("無此優惠券或數量不足");
                 orderDto.setSuccessful(false);
                 return orderDto;
             }
-            if(
-                order.getCouponDiscount() < 0 ||
-                (!order.getCouponDiscount().equals(customerCoupon.getCoupon().getDiscount()))
-            ){
+            if(order.getCouponDiscount() < 0 || (!order.getCouponDiscount().equals(customerCoupon.getCoupon().getDiscount()))){
                 orderDto.setMessage("優惠券折抵金額錯誤");
                 orderDto.setSuccessful(false);
                 return orderDto;

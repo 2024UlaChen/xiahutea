@@ -229,6 +229,7 @@
     let dateRangeApplied = false;   // 是否已選擇日期範圍
 
     document.addEventListener("DOMContentLoaded", function() {
+
         // 判斷權限
         fetch(`/totalusers`)
               .then(resp => resp.json())
@@ -243,11 +244,8 @@
                       }).then(() => {
                           location.href = "./backstageLogin.html";
                       });
-                  }else if(totalUserDTO.userTypeId === 1){
-                      // 店家檢視
-                        initStore();
-                  }else if(totalUserDTO.userTypeId === 3){
-                      // 管理員檢視
+                  }else if(totalUserDTO.userTypeId === 1 || totalUserDTO.userTypeId === 3){
+                      // 店家 & 管理員權限檢視
                       init(currentPage, size);
                   }
               })
@@ -328,11 +326,6 @@
               .catch((error) => {
                   console.log("data 錯誤原因：" + error);
               });
-    }
-
-    function initStore() {
-        // 店家專用初始化邏輯
-        init(currentPage, size, disputeOrderId, orderId, storeName, memberNickname, disputeStatus, selectedDateStart, selectedDateEnd);
     }
 
     function showDB(data) {

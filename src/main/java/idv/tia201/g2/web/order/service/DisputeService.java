@@ -14,6 +14,9 @@ public interface DisputeService  {
     OrderDto findByOrderId(Integer orderId);
     OrderDto findByDisputeOrderId(Integer disputeOrderId);
 
-    Page<DisputeOrder> findByCriteria(Integer disputeOrderId, Integer orderId, Integer storeId, String storeName, String memberNickname, Integer disputeStatus, Timestamp dateStart, Timestamp dateEnd, Pageable pageable);
+    Page<DisputeOrder> findByCriteria(
+            Integer disputeOrderId, Integer orderId, Integer storeId, String storeName, String memberNickname,
+            Integer disputeStatus, Timestamp dateStart, Timestamp dateEnd, Pageable pageable
+    );
 
 }
