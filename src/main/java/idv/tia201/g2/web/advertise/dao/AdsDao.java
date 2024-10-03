@@ -9,5 +9,5 @@ import java.util.List;
 public interface AdsDao extends JpaRepository<Advertise,Integer> {
     public Advertise findBytitle(String title);
     public List<Advertise> findByAdsTotalUserid(Long adsTotalUserid);
-    List<Advertise> findByHomeDisplayInAndIsactiveInAndStartTimeBetween(boolean homeDisplayIn, boolean isActiveIn, Timestamp startTime, Timestamp endTime );
+    List<Advertise> findByHomeDisplayAndIsactiveAndStartTimeBetween(boolean homeDisplayIn, boolean isActiveIn, Timestamp startTime, Timestamp endTime );
 }
