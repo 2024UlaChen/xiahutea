@@ -9,7 +9,7 @@
             href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i&display=swap"
             rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Lato:300,300i,400,400i,700,700i&display=swap" rel="stylesheet">
-    
+
     <link rel="stylesheet" href="assets/css/font-awesome.min.css">
     
     <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
@@ -63,13 +63,15 @@
               </div>
               <div class="col-lg-6">
                 <div class="query-bar">
-                  <a href="#">
-
+                  <a href="#" id="forSearchStore">
+                      <span>
+                      <i class="fa fa-search" aria-hidden="true"></i>
+                    </span>
                   </a>
                   <input type="text" placeholder="搜尋品牌、門市或商品" name="" id="user-enter-keyword">
-                  <a href="#" id="forSearchStore">
+                  <a href="#" >
                     <span>
-                      <i class="fa fa-search" aria-hidden="true"></i>
+                      <i class="fa fa-times" aria-hidden="true" id="clearSearch"></i>
                     </span>
                   </a>
                 </div>
@@ -102,17 +104,16 @@
                         <div class="account-list row">
                           <div class="col-lg-12 no-padding">
                             <div class="col-sm-4">
-                              <img src="/assets/images/xiahutealogo.jpg" alt="userPhoto">
+                              <img src="" alt="userPhoto" id="userLogo">
                             </div>
                             <div class="col-lg-8">
-                              <span>userName</span>
-                              <span>userAccount</span>
+                              <span id="userName">userName</span>
                             </div>
                           </div>
                         </div>
                       </li>
                       <li class="switcher-option">
-                        <a href="memberSetting.html">
+                        <a href="member.html">
                           <span> 帳號設定 </span>
                         </a>
                       </li>
@@ -130,11 +131,6 @@
                       <li class="switcher-option">
                         <a href="orderList.html">
                           <span> 訂單管理 </span>
-                        </a>
-                      </li>
-                      <li class="switcher-option">
-                        <a href="#">
-                          <span> 意見回饋 </span>
                         </a>
                       </li>
                       <li class="switcher-option">
@@ -350,11 +346,11 @@
                                   <h3>夏虎茶</h3>
                               </li>
                               <li class="menu-item">
-                                  <a href="#">公司資訊：雲仲資訊股份有限公司</a>
+                                  <span href="#">公司資訊：雲仲資訊股份有限公司</span>
                               </li>
                               <li class="menu-item">
-                                  <a href="#">統一編號：58364751
-                                  </a>
+                                  <span href="#">統一編號：58364751
+                                  </span>
                               </li>
                           </ul>
                       </div>
@@ -366,19 +362,17 @@
                       <div class="teamo-custommenu default">
                           <ul class="menu">
                               <li class="menu-item">
-                                  <a href="#">常見問題</a>
+                                  <a href="faq.html">常見問題</a>
                               </li>
                               <li class="menu-item">
-                                  <a href="#">隱私權條款</a>
+                                  <a href="privacyRule.html">隱私權條款</a>
+                              </li>
+
+                              <li class="menu-item">
+                                  <a href="userRule.html">使用者條款</a>
                               </li>
                               <li class="menu-item">
-                                  <a href="#">意見回饋</a>
-                              </li>
-                              <li class="menu-item">
-                                  <a href="#">使用者條款</a>
-                              </li>
-                              <li class="menu-item">
-                                  <a href="#">信用卡條款</a>
+                                  <a href="creditCardRule.html">信用卡條款</a>
                               </li>
                           </ul>
                       </div>
@@ -444,18 +438,17 @@
 <script src="assets/js/fancybox/source/jquery.fancybox.js"></script>
 <script src="assets/js/lightbox.min.js"></script>
 <script src="assets/js/owl.thumbs.min.js"></script>
-<script src="assets/js/jquery.scrollbar.min.js"></script>
-
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 
 
 <script src="assets/js/frontend-plugin.js"></script>
-
+    <script src="js/homePageMember.js"></script>
 
 <script>
       
   document.addEventListener("DOMContentLoaded", function () {
-      getUserLocation();
+      getUser();
+
     //監聽有這個屬性的KunIndexSotreImg 如果有空心就改實心
     //實心紅
     let RedHeart = '<i class="fa-solid fa-heart" style="color: red;"></i>';
@@ -546,6 +539,14 @@ let allSotre = document.querySelectorAll('.Heart');
     document.querySelector('#localLog-Modal').addEventListener('click',function (){
         getStoreList("/xiaHuTea/home","");
     });//點擊找附近
+
+
+
+      //clear search
+      document.querySelector('#clearSearch').addEventListener('click',function (e){
+          e.preventDefault();
+          document.querySelector('#user-enter-keyword').value='';
+      });
 
   }); //end dom
 
@@ -670,6 +671,9 @@ let allSotre = document.querySelectorAll('.Heart');
                 }else{
                     if(!sessionStorage.getItem('userPosition')){
                         userPosition = sessionStorage.getItem('userPosition');
+                        if(!userPosition){
+                            return;
+                        }
 
                     }
 
@@ -831,6 +835,29 @@ let allSotre = document.querySelectorAll('.Heart');
             data.forEach(function (row){
               const base64Img = row.logo;
               let imgid = "img"+row.storeId;
+              let ot =row.openingHours;
+              let et = row.closingHours;
+              let storeScore = row.score? row.score:'統計中'
+
+              if(ot){
+                  ot= ot.substring(0,5);
+              }else{
+                  ot ='未設置';
+              }
+                if(et){
+                    et= et.substring(0,5);
+                }else{
+                    et ='未設置';
+                }
+                let isdelieve='';
+                if(row.isDelivery){
+                    isdelieve = '<i class="fa-2x fa-solid fa-truck"></i>';
+                }else{
+                    isdelieve =`
+    <i class="fa-2x fa-solid fa-truck" data-fa-mask="fa-solid fa-slash" style="color: red;">禁</i>
+
+`;
+                }
 
               let str =`
 <figure class="col-3 figure my-5 Heart storeLinkCard" >
@@ -851,13 +878,13 @@ let allSotre = document.querySelectorAll('.Heart');
             <i class="fa-regular fa-heart" style="color: red;"></i> ${row.storeName}
             </figcaption>
             <figcaption class="figure-caption col">
-              <i class="fa-2x fa-solid fa-truck"></i>
+              ${isdelieve}
             </figcaption>
             <figcaption class="figure-caption col-12 footer2">
               <i class="KunStar fa-solid fa-star"></i
-              ><span class="KunRank">${row.score}</span
-              >&nbsp;‧&nbsp;11:00~22:00&nbsp;‧<span class="sotreDistance"
-                >??公里</span
+              ><span class="KunRank">${storeScore}</span
+              >&nbsp;‧&nbsp;${ot}~${et}&nbsp;‧<span class="sotreDistance"
+                >未定位</span
               >
             </figcaption>
           </div>

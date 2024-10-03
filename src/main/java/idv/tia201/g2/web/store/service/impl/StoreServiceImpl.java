@@ -1,15 +1,17 @@
 package idv.tia201.g2.web.store.service.impl;
 
+import idv.tia201.g2.web.member.dao.MemberLoyaltyCardRepository;
 import idv.tia201.g2.web.store.dao.StoreCalendarRepository;
 import idv.tia201.g2.web.store.dao.StoreDao;
 import idv.tia201.g2.web.store.model.StoreViewModel;
 import idv.tia201.g2.web.store.service.StoreService;
+import idv.tia201.g2.web.store.vo.CustomerLoyaltyCard;
 import idv.tia201.g2.web.store.vo.Store;
 import idv.tia201.g2.web.store.vo.StoreCalendar;
 import idv.tia201.g2.web.user.dao.TotalUserDao;
 import idv.tia201.g2.web.user.dto.TotalUserDTO;
 import idv.tia201.g2.web.user.vo.TotalUsers;
-import org.aspectj.apache.bcel.generic.RET;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -35,12 +37,14 @@ public class StoreServiceImpl implements StoreService {
     private final StoreDao storeDao;
     private final StoreCalendarRepository storeCalendarRepository;
     private final TotalUserDao totalUserDao;
+    private final MemberLoyaltyCardRepository memberLoyaltyCardRepository;
     //注入dao
     @Autowired
-    public StoreServiceImpl(StoreDao storeDao, StoreCalendarRepository storeCalendarRepository,TotalUserDao totalUserDao) {
+    public StoreServiceImpl(StoreDao storeDao, StoreCalendarRepository storeCalendarRepository,TotalUserDao totalUserDao,MemberLoyaltyCardRepository memberLoyaltyCardRepository) {
         this.storeDao = storeDao;
         this.storeCalendarRepository = storeCalendarRepository;
         this.totalUserDao = totalUserDao;
+        this.memberLoyaltyCardRepository = memberLoyaltyCardRepository;
     }
 
 
@@ -390,6 +394,22 @@ public class StoreServiceImpl implements StoreService {
         float num = (data.getScore() + score)/2;
         data.setScore(num);
         return storeDao.save(data);
+
+    }
+
+    @Override
+    public CustomerLoyaltyCard updateMemberStoreLoyaltyPoints(Integer storeId, Integer memberId, Integer totalMoney) {
+        CustomerLoyaltyCard data = memberLoyaltyCardRepository.findByStoreIdAndMemberId(storeId,memberId);
+        //檢查是否集點卡使用中
+        Store store = data.getStore();
+        if(store.getValidStatus()){
+            //使用中才需要執行以下動作
+            Integer point = (Integer) totalMoney/store.getExchangeRate();
+            Integer sum = data.getPoints() + point;
+            data.setPoints(sum);
+            return memberLoyaltyCardRepository.save(data);
+        }
+        return null;
 
     }
 
