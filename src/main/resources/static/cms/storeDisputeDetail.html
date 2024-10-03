@@ -248,9 +248,8 @@
                       console.log("錯誤原因:" + error);
                   });
 
-            //===========================================================================
+            //---------------------------------------------------------------------------
             // 顯示明細
-            // init();
             function init() {
                 let disputeOrderId = getQueryParam("disputeOrderId");
                 if (disputeOrderId) {
@@ -267,6 +266,7 @@
                 let urlParams = new URLSearchParams(window.location.search);
                 return urlParams.get(param);
             }
+            //---------------------------------------------------------------------------
             // 找明細
             function showDB(data) {
                 let detailHtml;
@@ -453,7 +453,6 @@
                         Swal.fire("請輸入不同意爭議原因", "", "error");
                     }
                 });
-
                 //-------------------------------------------------------------------------
                 // 6. 點擊儲存btn 需儲存內容
                 btn_dispute_save.addEventListener("click", function () {
@@ -517,37 +516,27 @@
             //---------------------------------------------------------------------------
             function statusText(statusNum) {
                 switch (statusNum) {
-                    case 1 :
-                        return "申請爭議";
-                    case 2 :
-                        return "同意爭議";
-                    case 3 :
-                        return "取消爭議";
+                    case 1 : return "申請爭議";
+                    case 2 : return "同意爭議";
+                    case 3 : return "取消爭議";
                 }
             }
             function paymentMethodText() {
                 return "信用卡";
             }
             function nullText(nullValue){
-                if(nullValue != null ){
-                    return nullValue;
-                }else{
-                    return "";
-                }
+                return nullValue != null ? nullValue : "-";
             }
             function nullMoney(moneyValue){
-                if(moneyValue === 0 ){
-                    return "" ;
-                }else{
-                    return moneyValue;
-                }
+                return moneyValue === 0 ? moneyValue : "";
             }
             //---------------------------------------------------------------------------
-            // 7. btn 回上一頁
+            // btn 回上一頁
             const btn_dispute_back = document.getElementById("btn_dispute_back");
             btn_dispute_back.addEventListener("click", function () {
                 location.href = `./storeDisputeList.html`;
             });
+            //---------------------------------------------------------------------------
         });
     </script>
 </body>

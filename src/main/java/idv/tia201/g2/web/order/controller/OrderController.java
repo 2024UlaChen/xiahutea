@@ -39,7 +39,6 @@ public class OrderController {
             HttpSession httpSession
     ) {
         TotalUserDTO totalUserDTO = (TotalUserDTO) httpSession.getAttribute("totalUserDTO");
-//        System.out.println("--------------totalUserDTO--------------"+totalUserDTO);
         if (totalUserDTO.getUserTypeId() != 0) {
             return Page.empty();
         }

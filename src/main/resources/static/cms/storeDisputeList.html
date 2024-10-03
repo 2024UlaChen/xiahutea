@@ -72,6 +72,7 @@
         }
         .page_btn{
             margin-top: 8px;
+            text-align: center;
         }
         .page-button{
             border: 1px #C0C0C0 solid;
@@ -254,7 +255,6 @@
                   console.log("totalUserDTO 錯誤原因:" + error);
               });
         //----------------------------------------------------------
-
         // btn 上下頁
         const nextButton = document.getElementById("next");
         const previousButton = document.getElementById("previous");
@@ -280,7 +280,7 @@
                 }
             });
         }
-
+        //----------------------------------------------------------
         // btn 查詢
         const btnSelect = document.getElementById("btn_select");
         btnSelect.addEventListener("click", function (e) {
@@ -342,7 +342,7 @@
               });
     }
     //----------------------------------------------------------
-
+    // 爭議列表
     function showDB(data) {
         let disputeHtml = "";
         let disputes = data.content; // 取得所有爭議
@@ -364,17 +364,7 @@
         }
         document.getElementById("dispute_tbody").innerHTML = disputeHtml;
     }
-    function statusText(statusNum) {
-        switch (statusNum) {
-            case 1 : return "申請爭議";
-            case 2 : return "同意爭議";
-            case 3 : return "取消爭議";
-        }
-    }
-    function nullText(nullValue){
-        return nullValue != null ? nullValue : "-";
-    }
-
+    //----------------------------------------------------------
     function updatePagination() {
         const previousButton = document.getElementById("previous");
         const nextButton = document.getElementById("next");
@@ -413,6 +403,17 @@
                 );
             });
         });
+    }
+    //----------------------------------------------------------
+    function statusText(statusNum) {
+        switch (statusNum) {
+            case 1 : return "申請爭議";
+            case 2 : return "同意爭議";
+            case 3 : return "取消爭議";
+        }
+    }
+    function nullText(nullValue){
+        return nullValue != null ? nullValue : "-";
     }
     //----------------------------------------------------------
 </script>

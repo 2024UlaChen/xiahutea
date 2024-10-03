@@ -25,8 +25,6 @@
     <link rel="stylesheet" href="assets/fonts/flaticon/flaticon.css">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="css/general.css">
-    <!-- SweetAlert2 CSS樣式 -->
-    <link rel="stylesheet" href="/cms/plugins/sweetalert2/sweetalert2.css">
 
     <style>
         /* 爭議申請表   */
@@ -37,10 +35,10 @@
             height: 100%;
             display: flex;
             justify-content: center;
-            align-items: center; /* 垂直置中 */
-            flex-direction: column; /* 垂直排列子元素 */
-            padding: 20px; /* 添加一些內邊距以獲得更好的間距 */
-            box-sizing: border-box; /* 確保 padding 不會影響寬度和高度 */
+            align-items: center;
+            flex-direction: column;
+            padding: 20px;
+            box-sizing: border-box;
             border-radius: 1%;
         }
         /* form 區塊*/
@@ -91,9 +89,9 @@
         /* btn 區塊*/
         .button-container {
             display: flex;
-            justify-content: center; /* 水平置中 */
-            gap: 30px; /* 添加按鈕之間的間距 */
-            padding: 5px; /* 添加內邊距 */
+            justify-content: center;
+            gap: 30px;
+            padding: 5px;
         }
         button#demo1{
             display: inline-flex;
@@ -203,7 +201,7 @@
                       });
             }
         }
-
+        //-------------------------------------------------------
         function showDB(data){
             let formHtml;
             formHtml=`
@@ -251,7 +249,7 @@
             const form_el = document.getElementsByClassName("dispute_form")[0];
             if(form_el) {
                 form_el.innerHTML = formHtml;
-
+                //-------------------------------------------------------
                 // 1 判斷DB是否已有爭議資料
                 let form_reason_el = document.getElementsByClassName("dispute_form_reason")[0];
                 if (data.disputeOrder && data.disputeOrder.disputeOrderId != null) {
@@ -267,6 +265,7 @@
                     });
 
                 } else {
+                    //-------------------------------------------------------
                     // 2. btn 送出
                     let btn_submit_el = document.getElementsByClassName("btn_submit")[0];
                     btn_submit_el.addEventListener("click", function (e) {

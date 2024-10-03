@@ -14,8 +14,9 @@ public interface OrderRepository extends JpaRepository<Orders, Integer> {
 
     // 前台 訂單列表 顯示
     @Query("FROM Orders o WHERE o.customerId = :customerId")
-    Page<Orders> findByCustomerId(@Param("customerId") int customerId, Pageable pageable);
+    Page<Orders> findByCustomerId(@Param("customerId") Integer customerId, Pageable pageable);
 
+    // 前台 訂單列表 顯示 & 篩選日期
     Page<Orders> findByCustomerIdAndOrderCreateDatetimeBetween(Integer customerId, Timestamp orderCreateDatetime, Timestamp orderCreateDatetime2, Pageable pageable);
 
     // 後台 訂單列表 顯示 & 依條件查詢

@@ -78,6 +78,7 @@
       }
       .page_btn {
           margin-top: 8px;
+          text-align: center;
       }
       .page-button {
           border: 1px #C0C0C0 solid;
@@ -251,7 +252,6 @@
                 console.log("totalUserDTO 錯誤原因:" + error);
             });
         //----------------------------------------------------------
-
         // btn 上下頁
         const nextButton = document.getElementById("next");
         const previousButton = document.getElementById("previous");
@@ -277,7 +277,7 @@
                 }
             });
         }
-
+        //----------------------------------------------------------
         // btn 查詢
         // 輸入查詢相關欄位，點查詢btn可篩選訂單
         const btnSelect = document.getElementById("btn_select");
@@ -336,7 +336,7 @@
             });
     }
     //----------------------------------------------------------
-
+    // 訂單列表
     function showDB(data) {
         let orderHtml = "";
         let orders = data.content; // 取得所有訂單
@@ -356,15 +356,7 @@
         }
         document.getElementById("order_tbody").innerHTML = orderHtml;
     }
-    function statusText(statusNum) {
-        switch (statusNum) {
-            case 1 : return "訂單成立";
-            case 2 : return "準備完成";
-            case 3 : return "正在外送";
-            case 4 : return "訂單完成";
-        }
-    }
-
+    //----------------------------------------------------------
     function updatePagination() {
         const previousButton = document.getElementById("previous");
         const nextButton = document.getElementById("next");
@@ -403,6 +395,15 @@
                 );
             });
         });
+    }
+    //----------------------------------------------------------
+    function statusText(statusNum) {
+        switch (statusNum) {
+            case 1 : return "訂單成立";
+            case 2 : return "準備完成";
+            case 3 : return "正在外送";
+            case 4 : return "訂單完成";
+        }
     }
     //----------------------------------------------------------
 </script>
