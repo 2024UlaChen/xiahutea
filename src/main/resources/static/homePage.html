@@ -428,7 +428,7 @@
       
   document.addEventListener("DOMContentLoaded", function () {
       getUser();
-      queryStr();
+
 
     //監聽有這個屬性的KunIndexSotreImg 如果有空心就改實心
     //實心紅
@@ -528,6 +528,7 @@ let allSotre = document.querySelectorAll('.Heart');
           e.preventDefault();
           document.querySelector('#user-enter-keyword').value='';
       });
+      queryStr();
 
   }); //end dom
 

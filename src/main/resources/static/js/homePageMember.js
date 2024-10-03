@@ -56,11 +56,15 @@ function SearchBar(){
 function queryStr(){
     if(sessionStorage.getItem("queryStr")){
         let data = sessionStorage.getItem("queryStr");
-        getStoreList("/xiaHuTea/search",data,"POST");
-
         setTimeout(function (){
-            getDistance(0);
-        },1000);
+            getStoreList("/xiaHuTea/search",data,"POST");
+
+            setTimeout(function (){
+                getDistance(0);
+            },1000);
+
+        },2500);
+
 
         sessionStorage.removeItem("queryStr");
     }
