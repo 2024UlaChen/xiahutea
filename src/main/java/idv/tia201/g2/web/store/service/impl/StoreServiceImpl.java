@@ -397,21 +397,7 @@ public class StoreServiceImpl implements StoreService {
 
     }
 
-    @Override
-    public CustomerLoyaltyCard updateMemberStoreLoyaltyPoints(Integer storeId, Integer memberId, Integer totalMoney) {
-        CustomerLoyaltyCard data = memberLoyaltyCardRepository.findByStoreIdAndMemberId(storeId,memberId);
-        //檢查是否集點卡使用中
-        Store store = data.getStore();
-        if(store.getValidStatus()){
-            //使用中才需要執行以下動作
-            Integer point = (Integer) totalMoney/store.getExchangeRate();
-            Integer sum = data.getPoints() + point;
-            data.setPoints(sum);
-            return memberLoyaltyCardRepository.save(data);
-        }
-        return null;
 
-    }
 
 
 }
