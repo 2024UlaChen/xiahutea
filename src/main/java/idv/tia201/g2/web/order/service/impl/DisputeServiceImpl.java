@@ -1,6 +1,7 @@
 package idv.tia201.g2.web.order.service.impl;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.List;
 import idv.tia201.g2.web.member.dao.MemberDao;
 import idv.tia201.g2.web.member.service.MemberService;
@@ -17,9 +18,12 @@ import idv.tia201.g2.web.order.vo.OrderDetail;
 import idv.tia201.g2.web.order.vo.Orders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import static org.springframework.util.ObjectUtils.isEmpty;
 
 @Service
@@ -88,8 +92,27 @@ public class DisputeServiceImpl implements DisputeService {
 
     // 後台 爭議列表 顯示 & 依條件查詢
     @Override
-    public Page<DisputeOrder> findByCriteria(Integer disputeOrderId, Integer orderId, Integer storeId, String storeName, String memberNickname, Integer disputeStatus, Timestamp dateStart, Timestamp dateEnd, Pageable pageable) {
-        return disputeRepository.findByCriteria(disputeOrderId, orderId, storeId, storeName, memberNickname, disputeStatus, dateStart, dateEnd, pageable);
+    public Page<DisputeOrder> findByCriteria(
+            Integer disputeOrderId, Integer orderId, Integer storeId, String storeName, String memberNickname,
+            Integer disputeStatus, LocalDate dateStart, LocalDate dateEnd, Integer page, Integer size
+    ) {
+        // 分頁排序
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "applyDatetime"));
+
+        // 檢查 查詢起迄日期 是否null
+        Timestamp startTimestamp = null;
+        Timestamp endTimestamp = null;
+        if (dateStart != null) {
+            startTimestamp = Timestamp.valueOf(dateStart.atStartOfDay());
+        }
+        if (dateEnd != null) {
+            endTimestamp = Timestamp.valueOf(dateEnd.plusDays(1).atStartOfDay());
+        }
+
+        return disputeRepository.findByCriteria(
+                disputeOrderId, orderId, storeId, storeName, memberNickname,
+                disputeStatus, startTimestamp, endTimestamp, pageable
+        );
     }
 
     // 後台 爭議明細 顯示
@@ -104,7 +127,7 @@ public class DisputeServiceImpl implements DisputeService {
         return orderMappingUtil.createOrderDto(order, disputeOrder, orderDetails);
     }
 
-    // 後台 爭議明細 修改>爭議狀態
+    // 後台 爭議明細 修改 > 爭議狀態
     @Override
     public DisputeOrder updateInfo(DisputeOrder newDispute) {
         final DisputeOrder oldDispute = disputeDao.selectByDisputeId(newDispute.getDisputeOrderId());

@@ -2,7 +2,6 @@ package idv.tia201.g2.web.order.controller;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import idv.tia201.g2.web.order.dto.OrderDto;
 import idv.tia201.g2.web.order.service.OrderService;
@@ -33,8 +32,8 @@ public class OrderController {
     @GetMapping("member/{customerId}")
     public Page<OrderDto> memberOrder(
             @PathVariable Integer customerId,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer size,
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy/MM/dd") LocalDate dateStart, // 開始日期
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy/MM/dd") LocalDate dateEnd, // 結束日期
             HttpSession httpSession
@@ -75,25 +74,56 @@ public class OrderController {
         return orderService.addStar(reqOrders);
     }
 
-    // 後台 訂單列表 顯示
+    // 後台 訂單列表 顯示 & 判斷權限
     @GetMapping("manage")
     public Page<Orders> findAllByPageable(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
-    ){
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "orderCreateDatetime"));
-        return orderService.findAll(pageable);
+            HttpSession httpSession,
+            @RequestParam(required = false) Integer orderId,
+            @RequestParam(required = false) String storeName,
+            @RequestParam(required = false) String memberNickname,
+            @RequestParam(required = false) Integer orderStatus,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy/MM/dd") LocalDate dateStart, // 開始日期
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy/MM/dd") LocalDate dateEnd, // 結束日期
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer size
+            ){
+        TotalUserDTO totalUserDTO = (TotalUserDTO) httpSession.getAttribute("totalUserDTO");
+        Integer userTypeId = totalUserDTO.getUserTypeId();
+
+        // 判斷權限：如果不是店家或管理者權限，不可檢視
+        if (userTypeId != 3 && userTypeId != 1) {
+            return Page.empty();
+        }
+        // 判斷權限：如果是admin可看全部訂單，如果是store只能看storeId的訂單
+        Integer storeId = (userTypeId == 1) ? userTypeId : null;
+
+        return orderService.findByCriteria(
+                orderId, storeId, storeName, memberNickname,
+                orderStatus, dateStart, dateEnd, page, size
+        );
     }
 
     // 後台 訂單明細 顯示
     @GetMapping("manage/{orderId}")
-    public List<OrderDetail> detail(@PathVariable Integer orderId) {
-        return orderService.findByOrderId(orderId);
+    public List<OrderDetail> detail(@PathVariable Integer orderId, HttpSession httpSession) {
+        TotalUserDTO totalUserDTO = (TotalUserDTO) httpSession.getAttribute("totalUserDTO");
+        // 判斷權限：只有管理者權限可檢視全部，店家只可檢視該店家的訂單
+        Integer userTypeId = totalUserDTO.getUserTypeId();
+        if(userTypeId == 3){
+            return orderService.findByOrderId(orderId);
+        }else if(userTypeId == 1){
+            Integer storeId = orderService.findByMemberOrderId(orderId).getOrders().getStoreId();
+            if(!storeId.equals(totalUserDTO.getUserId())){
+                return null;
+            }
+            return orderService.findByOrderId(orderId);
+        }
+        return null;
     }
 
     // 後台 訂單明細 修改
     @PutMapping("manage/{orderId}")
-    public Orders save( @PathVariable Integer orderId,@RequestBody Orders reqOrders
+    public Orders save( @PathVariable Integer orderId, @RequestBody Orders reqOrders
     ) {
         reqOrders.setOrderId(orderId);
         return orderService.updateStatus(reqOrders);

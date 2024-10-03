@@ -141,7 +141,6 @@
                                         <label>
                                             店家名稱<input type="search" class="select_order">
                                         </label>
-                                        <br>
                                         <label>
                                             申請日期<input type="date" class="select_date">
                                         </label>
@@ -149,8 +148,8 @@
                                         <label id="select_date2_lab">
                                             申請日期<input type="date" class="select_date">
                                         </label>
-                                        <label>處理狀態</label>
                                         <label>
+                                            處理狀態
                                             <select id="select_status">
                                                 <option value="" selected>請選擇</option>
                                                 <option value="1">申請爭議</option>
@@ -215,13 +214,15 @@
 <script src="dist/js/demo.js"></script>
 
 <script>
+    // 初始值
     const size = 10;                // 每頁顯示的筆數
     let currentPage = 0;            // 當前頁數
     let totalPages = 0;             // 總頁數
     let storeId = "";               // 店家
-    let storeName = "";
+    // 查詢條件
     let disputeOrderId = "";
     let orderId = "";
+    let storeName = "";
     let memberNickname = "";
     let disputeStatus = "";
     let selectedDateStart = "";     // 選擇的開始日期
@@ -250,8 +251,9 @@
                   }
               })
               .catch((error) => {
-                  console.log("錯誤原因:" + error);
+                  console.log("totalUserDTO 錯誤原因:" + error);
               });
+        //----------------------------------------------------------
 
         // btn 上下頁
         const nextButton = document.getElementById("next");
@@ -260,7 +262,10 @@
             nextButton.addEventListener("click", function () {
                 if (currentPage < totalPages - 1) {
                     currentPage++;
-                    init(currentPage, size, disputeOrderId, orderId, storeName, memberNickname, disputeStatus, selectedDateStart, selectedDateEnd); // 重新載入下一頁資料
+                    init(  // 重新載入下一頁資料
+                          currentPage, size, disputeOrderId, orderId, storeName, memberNickname,
+                          disputeStatus, selectedDateStart, selectedDateEnd
+                    );
                 }
             });
         }
@@ -268,7 +273,10 @@
             previousButton.addEventListener("click", function () {
                 if (currentPage > 0) {
                     currentPage--;
-                    init(currentPage, size, disputeOrderId, orderId, storeName, memberNickname, disputeStatus, selectedDateStart, selectedDateEnd); // 重新載入上一頁資料
+                    init(  // 重新載入上一頁資料
+                          currentPage, size, disputeOrderId, orderId, storeName, memberNickname,
+                          disputeStatus, selectedDateStart, selectedDateEnd
+                    );
                 }
             });
         }
@@ -286,12 +294,18 @@
             let select_dispute_date2 = document.getElementsByClassName("select_date")[1]?.value || "";
 
             // 依查詢條件載入訂單
-            init(currentPage, size, select_dispute_id, select_order_id, select_order_store, select_order_user, select_dispute_status, select_dispute_date1, select_dispute_date2);
+            init(
+                  currentPage, size, select_dispute_id, select_order_id, select_order_store, select_order_user,
+                  select_dispute_status, select_dispute_date1, select_dispute_date2
+            );
         });
     });
-
+    //----------------------------------------------------------
     // 顯示 明細
-    function init(page, size, disputeOrderId = "", orderId = "", storeName = "", memberNickname = "", disputeStatus = "", dateStart = "", dateEnd = "") {
+    function init(
+          page, size, disputeOrderId = "", orderId = "", storeName = "", memberNickname = "",
+          disputeStatus = "", dateStart = "", dateEnd = ""
+    ) {
         let url = `/dispute/manage?page=${page}&size=${size}`;
         if (disputeOrderId) {
             url += `&disputeOrderId=${encodeURIComponent(disputeOrderId)}`;
@@ -320,17 +334,18 @@
               .then(data => {
                   // console.log("----------data:"+JSON.stringify(data, null, 2))
                   totalPages = data.totalPages; // 更新總頁數
-                  updatePagination(); // 更新分頁按鈕狀態
-                  showDB(data); // 顯示資料
+                  updatePagination();           // 更新分頁按鈕狀態
+                  showDB(data);                 // 顯示資料
               })
               .catch((error) => {
                   console.log("data 錯誤原因：" + error);
               });
     }
+    //----------------------------------------------------------
 
     function showDB(data) {
         let disputeHtml = "";
-        let disputes = data.content; // 取得所有訂單
+        let disputes = data.content; // 取得所有爭議
 
         for(let i = 0; i < disputes.length; i++){
             const dispute = disputes[i];
@@ -357,12 +372,9 @@
         }
     }
     function nullText(nullValue){
-        if(nullValue != null ){
-            return nullValue;
-        }else{
-            return "-";
-        }
+        return nullValue != null ? nullValue : "-";
     }
+
     function updatePagination() {
         const previousButton = document.getElementById("previous");
         const nextButton = document.getElementById("next");
@@ -381,7 +393,9 @@
 
         let pageButtons = "";
         for (let i = startPage; i <= endPage; i++) {
-            pageButtons += `<button class="page-button" data-page="${i}" ${i === currentPage ? 'disabled' : ''}>${i + 1}</button>`;
+            pageButtons += `
+                <button class="page-button" data-page="${i}" ${i === currentPage ? 'disabled' : ''}>${i + 1}</button>
+            `;
         }
 
         // 更新頁數按鈕和頁數顯示
@@ -393,11 +407,14 @@
         pageButtonsElements.forEach(button => {
             button.addEventListener("click", function () {
                 currentPage = parseInt(this.getAttribute("data-page"), 10);
-                init(currentPage, size, disputeOrderId, orderId, storeName, memberNickname, disputeStatus, selectedDateStart, selectedDateEnd); // 重新載入資料
+                init(
+                      currentPage, size, disputeOrderId, orderId, storeName, memberNickname,
+                      disputeStatus, selectedDateStart, selectedDateEnd
+                );
             });
         });
     }
-
+    //----------------------------------------------------------
 </script>
 </body>
 </html>

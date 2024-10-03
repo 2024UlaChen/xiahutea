@@ -28,12 +28,11 @@ import idv.tia201.g2.web.store.dao.StoreDao;
 import idv.tia201.g2.web.store.vo.CustomerLoyaltyCard;
 import idv.tia201.g2.web.store.vo.Store;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 import static org.springframework.util.ObjectUtils.isEmpty;
@@ -44,6 +43,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private OrderDao orderDao;
+    @Autowired
+    private OrderRepository orderRepository;
     @Autowired
     private OrderDetailDao orderDetailDao;
     @Autowired
@@ -71,8 +72,7 @@ public class OrderServiceImpl implements OrderService {
     private NotificationService notificationService;
     @Autowired
     private InvoiceService invoiceService;
-    @Autowired
-    private OrderRepository orderRepository;
+
 
     // -------- FINISH ---------------------------------
     // 前台 訂單新增
@@ -145,7 +145,7 @@ public class OrderServiceImpl implements OrderService {
             }
         }
         if(invoiceMethod == 3) {  // 統編
-            if (invoiceCarrier != null || invoiceVat == null){
+            if (invoiceCarrier != null || order.getInvoiceVat() == null){
                 orderDto.setMessage("統編發票不需輸入載具號碼，且需輸入統編");
                 orderDto.setSuccessful(false);
                 return orderDto;
@@ -259,7 +259,7 @@ public class OrderServiceImpl implements OrderService {
 
     // 前台 訂單列表 顯示 全訂單
     @Override
-    public Page<OrderDto> findByCustomerId(int customerId, Pageable pageable) {
+    public Page<OrderDto> findByCustomerId(Integer customerId, Pageable pageable) {
         Page<Orders> orders = orderRepository.findByCustomerId(customerId, pageable);
 
         //                      建立流             || 映射每個訂單
@@ -293,7 +293,7 @@ public class OrderServiceImpl implements OrderService {
 
     // 前台 訂單明細 顯示
     @Override
-    public OrderDto findByMemberOrderId(int orderId){
+    public OrderDto findByMemberOrderId(Integer orderId){
         Orders orders = orderDao.selectByOrderId(orderId);
         if(orders == null){
             return null;
@@ -307,7 +307,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Orders addStar(Orders newOrder){
         final Orders oldOrder = orderDao.selectByOrderId(newOrder.getOrderId());
-        final int ordersStar = newOrder.getOrderScore();
+        final Integer ordersStar = newOrder.getOrderScore();
         final String orderFeedBack = newOrder.getOrderFeedback();
         if(ordersStar == 0){
             newOrder.setMessage("未輸入評分");
@@ -327,15 +327,33 @@ public class OrderServiceImpl implements OrderService {
         return newOrder;
     }
 
-    // 後台 訂單列表 顯示
+    // 後台 訂單列表 顯示 & 依條件查詢
     @Override
-    public Page<Orders> findAll(Pageable pageable) {
-        return orderRepository.findAll(pageable);
+    public Page<Orders> findByCriteria(
+            Integer orderId, Integer storeId, String storeName, String memberNickname,
+            Integer orderStatus, LocalDate dateStart, LocalDate dateEnd, Integer page, Integer size
+    ) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "orderCreateDatetime"));
+
+        // 檢查 查詢日起迄 是否為 null
+        Timestamp startTimestamp = null;
+        Timestamp endTimestamp = null;
+        if (dateStart != null) {
+            startTimestamp = Timestamp.valueOf(dateStart.atStartOfDay());
+        }
+        if (dateEnd != null) {
+            endTimestamp = Timestamp.valueOf(dateEnd.plusDays(1).atStartOfDay());
+        }
+
+        return orderRepository.findByCriteria(
+                orderId, storeId, storeName, memberNickname,
+                orderStatus, startTimestamp, endTimestamp, pageable
+        );
     }
 
     // 後台 訂單明細 顯示
     @Override
-    public List<OrderDetail> findByOrderId(int orderId) {
+    public List<OrderDetail> findByOrderId(Integer orderId) {
         return orderDetailDao.selectByOrderId(orderId);
     }
 
@@ -343,7 +361,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Orders updateStatus(Orders newOrder) {
         final Orders oldOrder = orderDao.selectByOrderId(newOrder.getOrderId());
-        if(oldOrder.getOrderStatus() >= newOrder.getOrderStatus() ){ //舊訂單狀態值 > 新訂單狀態值
+        // 舊訂單狀態值 需 < 新訂單狀態值
+        if(oldOrder.getOrderStatus() >= newOrder.getOrderStatus() ){
             newOrder.setMessage("修改失敗");
             newOrder.setSuccessful(false);
             return newOrder;
