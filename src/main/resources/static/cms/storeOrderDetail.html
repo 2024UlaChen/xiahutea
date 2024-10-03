@@ -14,8 +14,6 @@
     <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
-    <!-- SweetAlert2 CSS樣式 -->
-    <link rel="stylesheet" href="/cms/plugins/sweetalert2/sweetalert2.css">
 
     <style>
         /* 左右main區塊  */
@@ -271,12 +269,32 @@
     </script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            // todo 權限判斷
 
-            // 0. 顯示明細
+            // 判斷權限
+            fetch(`/totalusers`)
+                  .then(resp => resp.json())
+                  .then(totalUserDTO => {
+                      console.log(totalUserDTO)
+                      console.log(totalUserDTO.userTypeId)
+                      if(totalUserDTO.userTypeId !== 1 && totalUserDTO.userTypeId !== 3){
+                          Swal.fire({
+                              title: "權限不足",
+                              text: '',
+                              icon: 'error',
+                              showConfirmButton: true  // 確認按鈕
+                          }).then(() => {
+                              location.href = "./storeOrderList.html";
+                          });
+                      }
+                      // 如果是店家&管理員才能檢視
+                      init();
+                  })
+                  .catch((error) => {
+                      console.log("錯誤原因:" + error);
+                  });
+            //===========================================================================
+            // 顯示明細
             init();
-
-            // 顯示 明細
             function init() {
                 let orderId = getQueryParam("orderId");
                 if (orderId) {          // 確保 orderId 存在

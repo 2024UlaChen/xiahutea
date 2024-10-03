@@ -9,7 +9,7 @@
             href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i&display=swap"
             rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Lato:300,300i,400,400i,700,700i&display=swap" rel="stylesheet">
-    
+
     <link rel="stylesheet" href="assets/css/font-awesome.min.css">
     
     <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
@@ -63,13 +63,15 @@
               </div>
               <div class="col-lg-6">
                 <div class="query-bar">
-                  <a href="#">
-
+                  <a href="#" id="forSearchStore">
+                      <span>
+                      <i class="fa fa-search" aria-hidden="true"></i>
+                    </span>
                   </a>
                   <input type="text" placeholder="搜尋品牌、門市或商品" name="" id="user-enter-keyword">
-                  <a href="#" id="forSearchStore">
+                  <a href="#" >
                     <span>
-                      <i class="fa fa-search" aria-hidden="true"></i>
+                      <i class="fa fa-times" aria-hidden="true" id="clearSearch"></i>
                     </span>
                   </a>
                 </div>
@@ -102,17 +104,16 @@
                         <div class="account-list row">
                           <div class="col-lg-12 no-padding">
                             <div class="col-sm-4">
-                              <img src="/assets/images/xiahutealogo.jpg" alt="userPhoto">
+                              <img src="" alt="" class="userPhoto" id="userLogo">
                             </div>
                             <div class="col-lg-8">
-                              <span>userName</span>
-                              <span>userAccount</span>
+                              <span id="userName">userName</span>
                             </div>
                           </div>
                         </div>
                       </li>
                       <li class="switcher-option">
-                        <a href="memberSetting.html">
+                        <a href="member.html">
                           <span> 帳號設定 </span>
                         </a>
                       </li>
@@ -130,11 +131,6 @@
                       <li class="switcher-option">
                         <a href="orderList.html">
                           <span> 訂單管理 </span>
-                        </a>
-                      </li>
-                      <li class="switcher-option">
-                        <a href="#">
-                          <span> 意見回饋 </span>
                         </a>
                       </li>
                       <li class="switcher-option">
@@ -294,13 +290,11 @@
           >
         </div>
 
-        <div class="col">
-          <i class="fa-solid fa-store"><a href="#">找品牌</a></i>
-        </div>
+
 
         
         <div class="col">
-          <i class="fa-solid fa-rectangle-list"><a href="#">曾點過</a></i>
+          <i class="fa-solid fa-rectangle-list"><a href="orderList.html">曾點過</a></i>
         </div>
 
         <div class="col">
@@ -350,11 +344,11 @@
                                   <h3>夏虎茶</h3>
                               </li>
                               <li class="menu-item">
-                                  <a href="#">公司資訊：雲仲資訊股份有限公司</a>
+                                  <span >公司資訊：雲仲資訊股份有限公司</span>
                               </li>
                               <li class="menu-item">
-                                  <a href="#">統一編號：58364751
-                                  </a>
+                                  <span >統一編號：58364751
+                                  </span>
                               </li>
                           </ul>
                       </div>
@@ -366,19 +360,17 @@
                       <div class="teamo-custommenu default">
                           <ul class="menu">
                               <li class="menu-item">
-                                  <a href="#">常見問題</a>
+                                  <a href="faq.html">常見問題</a>
                               </li>
                               <li class="menu-item">
-                                  <a href="#">隱私權條款</a>
+                                  <a href="privacyRule.html">隱私權條款</a>
+                              </li>
+
+                              <li class="menu-item">
+                                  <a href="userRule.html">使用者條款</a>
                               </li>
                               <li class="menu-item">
-                                  <a href="#">意見回饋</a>
-                              </li>
-                              <li class="menu-item">
-                                  <a href="#">使用者條款</a>
-                              </li>
-                              <li class="menu-item">
-                                  <a href="#">信用卡條款</a>
+                                  <a href="creditCardRule.html">信用卡條款</a>
                               </li>
                           </ul>
                       </div>
@@ -387,25 +379,7 @@
               <div class="footer-end">
                   <div class="row">
                       <div class="col-sm-12 col-xs-12">
-                          <div class="teamo-socials">
-                              <ul class="socials">
-                                  <li>
-                                      <a href="#" class="social-item" target="_blank">
-                                        <i class="fa-brands fa fa-facebook"></i>
-                                      </a>
-                                  </li>
-                                  <li>
-                                      <a href="#" class="social-item" target="_blank">
-                                        <i class="fa-brands fa-twitter"></i>
-                                      </a>
-                                  </li>
-                                  <li>
-                                      <a href="#" class="social-item" target="_blank">
-                                        <i class="fa-brands fa-instagram"></i>
-                                      </a>
-                                  </li>
-                              </ul>
-                          </div>
+
                           <div class="coppyright">
                               © 2024 XiaHuTea 台灣 . All rights reserved
                           </div>
@@ -444,18 +418,18 @@
 <script src="assets/js/fancybox/source/jquery.fancybox.js"></script>
 <script src="assets/js/lightbox.min.js"></script>
 <script src="assets/js/owl.thumbs.min.js"></script>
-<script src="assets/js/jquery.scrollbar.min.js"></script>
-
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 
 
 <script src="assets/js/frontend-plugin.js"></script>
-
+    <script src="js/homePageMember.js"></script>
 
 <script>
       
   document.addEventListener("DOMContentLoaded", function () {
-      getUserLocation();
+      getUser();
+
+
     //監聽有這個屬性的KunIndexSotreImg 如果有空心就改實心
     //實心紅
     let RedHeart = '<i class="fa-solid fa-heart" style="color: red;"></i>';
@@ -526,6 +500,10 @@ let allSotre = document.querySelectorAll('.Heart');
         const placeBar =document.querySelector('#PlaceSearch').value;
         const areaBar = document.querySelector('#AreaSearch').value;
         getStoreList("/xiaHuTea/search/place",placeBar+areaBar,"POST");
+        setTimeout(function (){
+            getDistance(0);
+        },1000);
+
 
     })
 
@@ -542,6 +520,15 @@ let allSotre = document.querySelectorAll('.Heart');
     document.querySelector('#localLog-Modal').addEventListener('click',function (){
         getStoreList("/xiaHuTea/home","");
     });//點擊找附近
+
+
+
+      //clear search
+      document.querySelector('#clearSearch').addEventListener('click',function (e){
+          e.preventDefault();
+          document.querySelector('#user-enter-keyword').value='';
+      });
+      queryStr();
 
   }); //end dom
 
@@ -645,103 +632,123 @@ let allSotre = document.querySelectorAll('.Heart');
 
     
     <script>
+        function getDistance(status = 1) {
+
+
+
+            const drinkAddressTags = document.querySelectorAll(".drinkAddress"); // 飲料店地址
+
+            function error() {
+
+                swal.fire({text:"瀏覽器不支援定位"});
+            }
+
+            function success(position) {
+                const latitude = position.coords.latitude;
+                const longitude = position.coords.longitude;
+                let userPosition = document.querySelector('#user-place').value !== "" ? document.querySelector('#user-place').value : new google.maps.LatLng(latitude, longitude) ;
+                if(status === 1){
+
+                    sessionStorage.setItem('userPosition', userPosition);
+                }else{
+                    if(!sessionStorage.getItem('userPosition')){
+                        userPosition = sessionStorage.getItem('userPosition');
+                        if(!userPosition){
+                            return;
+                        }
+
+                    }
+
+                }
+
+
+
+
+
+
+
+
+                const service = new google.maps.DistanceMatrixService();
+                const drinkAddressTags = document.querySelectorAll(".drinkAddress"); // 飲料店地址
+
+
+                drinkAddressTags.forEach(function (drinkAddress) {
+
+                    service.getDistanceMatrix(
+                        {
+                            origins: [userPosition],
+                            destinations: [drinkAddress.getAttribute("data-address")],
+                            travelMode: google.maps.TravelMode.DRIVING, //開車
+                            unitSystem: google.maps.UnitSystem.METRIC, // 公里
+                            avoidHighways: false,
+                            avoidTolls: false,
+                        },
+                        callback
+                    );
+
+                    function callback(response, status) {
+                        if (status === "OK") {
+                            // 取得使用者位置後 首先抓取 每家店的位址 進行計算
+
+                            const origin = response.originAddresses[0];
+                            const destination = response.destinationAddresses[0];
+
+
+                            if (response.rows[0].elements[0].status === "OK") {
+                                const distance = response.rows[0].elements[0].distance.text;
+
+                                const sotreFooter = $(drinkAddress).nextAll().eq(1);
+
+
+                                sotreFooter.find('.sotreDistance').text();
+
+                                sotreFooter
+                                    .find(".sotreDistance")
+                                    .html(
+                                        `&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;約${distance}`
+                                    );
+
+                                //超過10km排除
+                                if(parseInt(distance) > 10){
+
+                                    let te =sotreFooter.closest(".storeLinkCard");
+                                    $(te).remove();
+
+                                }
+
+
+                                // result.textContent = `從 ${origin} 到 ${destination} 的距離是 ${distance}`;
+                            } else {
+                                const sotreFooter = $(drinkAddress).nextAll().eq(1);
+                                sotreFooter.find(".sotreDistance").text(`計算失敗`);
+                            }
+                        } else {
+                            const sotreFooter = $(drinkAddress).nextAll().eq(1);
+                            sotreFooter.find(".sotreDistance").text(`計算失敗`);
+                        }
+                        // 計算完成後重置狀態
+
+                    }
+                });
+            }
+
+
+
+            if (!navigator.geolocation) {
+                status.textContent = "不支援地理定位";
+
+
+            } else {
+                status.textContent = "加載中...";
+                navigator.geolocation.getCurrentPosition(success, error);
+            }
+
+        }
 
 
       function initMap() {
 
-        function getDistance() {
 
-
-
-          const drinkAddressTags = document.querySelectorAll(".drinkAddress"); // 飲料店地址
-
-          function error() {
-
-            swal.fire({text:"瀏覽器不支援定位"});
-          }
-
-          function success(position) {
-            const latitude = position.coords.latitude;
-            const longitude = position.coords.longitude;
-            const userPosition = document.querySelector('#user-place').value !== "" ? document.querySelector('#user-place').value : new google.maps.LatLng(latitude, longitude) ;
-
-
-
-
-            const service = new google.maps.DistanceMatrixService();
-            const drinkAddressTags = document.querySelectorAll(".drinkAddress"); // 飲料店地址
-
-            drinkAddressTags.forEach(function (drinkAddress) {
-              service.getDistanceMatrix(
-                {
-                  origins: [userPosition],
-                  destinations: [drinkAddress.getAttribute("data-address")],
-                  travelMode: google.maps.TravelMode.DRIVING, //開車
-                  unitSystem: google.maps.UnitSystem.METRIC, // 公里
-                  avoidHighways: false,
-                  avoidTolls: false,
-                },
-                callback
-              );
-
-              function callback(response, status) {
-                if (status === "OK") {
-                  // 取得使用者位置後 首先抓取 每家店的位址 進行計算
-
-                  const origin = response.originAddresses[0];
-                  const destination = response.destinationAddresses[0];
-
-
-                  if (response.rows[0].elements[0].status === "OK") {
-                    const distance = response.rows[0].elements[0].distance.text;
-
-                    const sotreFooter = $(drinkAddress).nextAll().eq(1);
-
-
-                    sotreFooter.find('.sotreDistance').text();
-
-                      sotreFooter
-                        .find(".sotreDistance")
-                        .html(
-                          `&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;約${distance}`
-                        );
-
-                      //超過10km排除
-                      if(parseInt(distance) > 10){
-
-                          let te =sotreFooter.closest(".storeLinkCard");
-                          $(te).remove();
-
-                      }
-
-
-                    // result.textContent = `從 ${origin} 到 ${destination} 的距離是 ${distance}`;
-                  } else {
-                    const sotreFooter = $(drinkAddress).nextAll().eq(1);
-                    sotreFooter.find(".sotreDistance").text(`計算失敗`);
-                  }
-                } else {
-                  const sotreFooter = $(drinkAddress).nextAll().eq(1);
-                  sotreFooter.find(".sotreDistance").text(`計算失敗`);
-                }
-                  // 計算完成後重置狀態
-
-              }
-            });
-          }
-
-
-
-          if (!navigator.geolocation) {
-            status.textContent = "不支援地理定位";
-
-
-          } else {
-            status.textContent = "加載中...";
-            navigator.geolocation.getCurrentPosition(success, error);
-          }
-
-        }
 
         document
           .querySelector("#autoCatchUserPlace")
@@ -751,14 +758,14 @@ let allSotre = document.querySelectorAll('.Heart');
               getDistance();
           });
       }
+
         window.onload = function () {
             if (!window.google) {
                 console.error("Google Maps API not loaded.");
             }
             initMap(); // 確保在頁面加載後初始化地圖
         }
-    </script>
-    <script>
+
       function ListenSearchStoreKeyWord(){
         //監聽輸入關鍵字
         document.querySelector('#forSearchStore').addEventListener('click',function (e){
@@ -769,6 +776,12 @@ let allSotre = document.querySelectorAll('.Heart');
             let data = uservalue;
 
             getStoreList("/xiaHuTea/search",data,"POST");
+
+            setTimeout(function (){
+                getDistance(0);
+            },1000);
+
+
 
           }
 
@@ -804,6 +817,26 @@ let allSotre = document.querySelectorAll('.Heart');
             data.forEach(function (row){
               const base64Img = row.logo;
               let imgid = "img"+row.storeId;
+              let ot =row.openingHours;
+              let et = row.closingHours;
+              let storeScore = row.score? row.score:'統計中'
+
+              if(ot){
+                  ot= ot.substring(0,5);
+              }else{
+                  ot ='未設置';
+              }
+                if(et){
+                    et= et.substring(0,5);
+                }else{
+                    et ='未設置';
+                }
+                let isdelieve='';
+                if(row.isDelivery){
+                    isdelieve = '<i class="fa-2x fa-solid fa-truck"></i>';
+                }else{
+                    isdelieve ='';
+                }
 
               let str =`
 <figure class="col-3 figure my-5 Heart storeLinkCard" >
@@ -824,13 +857,13 @@ let allSotre = document.querySelectorAll('.Heart');
             <i class="fa-regular fa-heart" style="color: red;"></i> ${row.storeName}
             </figcaption>
             <figcaption class="figure-caption col">
-              <i class="fa-2x fa-solid fa-truck"></i>
+              ${isdelieve}
             </figcaption>
             <figcaption class="figure-caption col-12 footer2">
               <i class="KunStar fa-solid fa-star"></i
-              ><span class="KunRank">4.8</span
-              >&nbsp;‧&nbsp;11:00~22:00&nbsp;‧<span class="sotreDistance"
-                >??公里</span
+              ><span class="KunRank">${storeScore}</span
+              >&nbsp;‧&nbsp;${ot}~${et}&nbsp;‧<span class="sotreDistance"
+                >未定位</span
               >
             </figcaption>
           </div>

@@ -14,4 +14,5 @@ public interface AdsService {
     public List<Store> findByids(List<Integer> userids);
     public List<Advertise> findstoreAdvertises(Long userid);
     public Store findStoreById(int id);
+    List<Advertise> getHomePageAdvertises();
 }
