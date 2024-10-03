@@ -43,6 +43,7 @@ public class MemberLoyaltyCardServiceImpl implements MemberLoyaltyCardService {
         //確認是否是新增
         CustomerLoyaltyCard data = memberLoyaltyCardRepository.findByStoreIdAndMemberId(customerLoyaltyCard.getStoreId(), customerLoyaltyCard.getMemberId());
         if (data != null) {return false;}
+        customerLoyaltyCard.setPoints(0);
         memberLoyaltyCardRepository.save(customerLoyaltyCard);
         return true;
     }
@@ -54,6 +55,7 @@ public class MemberLoyaltyCardServiceImpl implements MemberLoyaltyCardService {
         CustomerLoyaltyCard customerLoyaltyCard = new CustomerLoyaltyCard();
         customerLoyaltyCard.setStoreId(storeId);
         customerLoyaltyCard.setMemberId(memberId);
+
         AddCustomerLoyaltyCard(customerLoyaltyCard);
 
         CustomerLoyaltyCard data = memberLoyaltyCardRepository.findByStoreIdAndMemberId(storeId,memberId);
