@@ -290,13 +290,11 @@
           >
         </div>
 
-        <div class="col">
-          <i class="fa-solid fa-store"><a href="#">找品牌</a></i>
-        </div>
+
 
         
         <div class="col">
-          <i class="fa-solid fa-rectangle-list"><a href="#">曾點過</a></i>
+          <i class="fa-solid fa-rectangle-list"><a href="orderList.html">曾點過</a></i>
         </div>
 
         <div class="col">
@@ -346,10 +344,10 @@
                                   <h3>夏虎茶</h3>
                               </li>
                               <li class="menu-item">
-                                  <span href="#">公司資訊：雲仲資訊股份有限公司</span>
+                                  <span >公司資訊：雲仲資訊股份有限公司</span>
                               </li>
                               <li class="menu-item">
-                                  <span href="#">統一編號：58364751
+                                  <span >統一編號：58364751
                                   </span>
                               </li>
                           </ul>
@@ -381,25 +379,7 @@
               <div class="footer-end">
                   <div class="row">
                       <div class="col-sm-12 col-xs-12">
-                          <div class="teamo-socials">
-                              <ul class="socials">
-                                  <li>
-                                      <a href="#" class="social-item" target="_blank">
-                                        <i class="fa-brands fa fa-facebook"></i>
-                                      </a>
-                                  </li>
-                                  <li>
-                                      <a href="#" class="social-item" target="_blank">
-                                        <i class="fa-brands fa-twitter"></i>
-                                      </a>
-                                  </li>
-                                  <li>
-                                      <a href="#" class="social-item" target="_blank">
-                                        <i class="fa-brands fa-instagram"></i>
-                                      </a>
-                                  </li>
-                              </ul>
-                          </div>
+
                           <div class="coppyright">
                               © 2024 XiaHuTea 台灣 . All rights reserved
                           </div>
@@ -448,6 +428,7 @@
       
   document.addEventListener("DOMContentLoaded", function () {
       getUser();
+      queryStr();
 
     //監聽有這個屬性的KunIndexSotreImg 如果有空心就改實心
     //實心紅
@@ -853,10 +834,7 @@ let allSotre = document.querySelectorAll('.Heart');
                 if(row.isDelivery){
                     isdelieve = '<i class="fa-2x fa-solid fa-truck"></i>';
                 }else{
-                    isdelieve =`
-    <i class="fa-2x fa-solid fa-truck" data-fa-mask="fa-solid fa-slash" style="color: red;">禁</i>
-
-`;
+                    isdelieve ='';
                 }
 
               let str =`

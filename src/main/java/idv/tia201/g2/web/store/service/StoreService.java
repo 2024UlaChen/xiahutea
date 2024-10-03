@@ -1,10 +1,10 @@
 package idv.tia201.g2.web.store.service;
 
 import idv.tia201.g2.web.store.model.StoreViewModel;
-import idv.tia201.g2.web.store.vo.CustomerLoyaltyCard;
+
 import idv.tia201.g2.web.store.vo.Store;
 import idv.tia201.g2.web.user.dto.TotalUserDTO;
-import idv.tia201.g2.web.user.vo.TotalUsers;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
@@ -47,6 +47,6 @@ public interface StoreService {
     List<Store> getStoreListForHome(Date today) throws ParseException;
 
     Store updateStoreRank(Integer storeId,Float score);
-    CustomerLoyaltyCard updateMemberStoreLoyaltyPoints(Integer storeId, Integer memberId, Integer totalMoney);
+
 
 }
