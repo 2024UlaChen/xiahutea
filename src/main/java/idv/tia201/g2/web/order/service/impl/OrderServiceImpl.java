@@ -12,6 +12,7 @@ import idv.tia201.g2.web.member.vo.Member;
 import idv.tia201.g2.web.order.dao.DisputeDao;
 import idv.tia201.g2.web.order.dao.OrderDao;
 import idv.tia201.g2.web.order.dao.OrderDetailDao;
+import idv.tia201.g2.web.order.dao.OrderRepository;
 import idv.tia201.g2.web.order.dto.NotificationDto;
 import idv.tia201.g2.web.order.dto.OrderDto;
 import idv.tia201.g2.web.order.service.InvoiceService;
@@ -27,12 +28,14 @@ import idv.tia201.g2.web.store.dao.StoreDao;
 import idv.tia201.g2.web.store.vo.CustomerLoyaltyCard;
 import idv.tia201.g2.web.store.vo.Store;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import static org.springframework.util.ObjectUtils.isEmpty;
 
 @Service
@@ -68,6 +71,8 @@ public class OrderServiceImpl implements OrderService {
     private NotificationService notificationService;
     @Autowired
     private InvoiceService invoiceService;
+    @Autowired
+    private OrderRepository orderRepository;
 
     // -------- FINISH ---------------------------------
     // 前台 訂單新增
@@ -226,21 +231,39 @@ public class OrderServiceImpl implements OrderService {
         return orderDto;
     }
 
-    // 前台 訂單列表 顯示
+    // 前台 訂單列表 顯示 全訂單
     @Override
-    public List<OrderDto> findByCustomerId(int customerId) {
-        List<Orders> orders = orderDao.selectBycCustomerId(customerId);
-        // 建立流
-        Stream<Orders> stream = orders.stream();
-        // 映射每個訂單
-        Stream<OrderDto> orderDtoStream = stream.map(order -> {
+    public Page<OrderDto> findByCustomerId(int customerId, Pageable pageable) {
+        Page<Orders> orders = orderRepository.findByCustomerId(customerId, pageable);
+
+        //                      建立流             || 映射每個訂單
+        List<OrderDto> orderDtos = orders.stream().map(order -> {
             DisputeOrder disputeOrder = disputeDao.selectByOrderId(order.getOrderId());
             List<OrderDetail> orderDetails = orderDetailDao.selectByOrderId(order.getOrderId());
             return orderMappingUtil.createOrderDto(order, disputeOrder, orderDetails);
-        });
-        // 收集結果並返回
-        return orderDtoStream.collect(Collectors.toList());
+            // 收集結果
+        }).collect(Collectors.toList());
+
+        // 回傳Page<OrderDto>
+        return new PageImpl<>(orderDtos, pageable, orders.getTotalElements());
     }
+    // 前台 訂單列表 顯示 篩選日期
+    @Override
+    public Page<OrderDto> findByCustomerIdAndDateRange(Integer customerId, Timestamp dateStart, Timestamp dateEnd, Pageable pageable) {
+        Page<Orders> orders;
+        // 根據 customerId 和訂單建立日期範圍來篩選訂單
+        orders = orderRepository.findByCustomerIdAndOrderCreateDatetimeBetween(customerId, dateStart, dateEnd, pageable);
+
+        //                      建立流             || 映射每個訂單
+        List<OrderDto> orderDtos = orders.stream().map(order -> {
+            DisputeOrder disputeOrder = disputeDao.selectByOrderId(order.getOrderId());
+            List<OrderDetail> orderDetails = orderDetailDao.selectByOrderId(order.getOrderId());
+            return orderMappingUtil.createOrderDto(order, disputeOrder, orderDetails);
+            // 收集結果
+        }).collect(Collectors.toList());
+        return new PageImpl<>(orderDtos, pageable, orders.getTotalElements());
+    }
+
 
     // 前台 訂單明細 顯示
     @Override
@@ -280,8 +303,8 @@ public class OrderServiceImpl implements OrderService {
 
     // 後台 訂單列表 顯示
     @Override
-    public List<Orders> findAll() {
-        return orderDao.selectAll();
+    public Page<Orders> findAll(Pageable pageable) {
+        return orderRepository.findAll(pageable);
     }
 
     // 後台 訂單明細 顯示

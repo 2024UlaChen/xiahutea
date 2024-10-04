@@ -65,12 +65,28 @@
 
       .btn-block {
           width: 100px;
+          height: 35px;
           font-weight: bolder;
       }
 
-      /* 隱藏 bs內建的查詢btn */
-      div.dataTables_wrapper div.dataTables_filter {
-          display: none;
+      /*分頁*/
+      #page_div {
+          display: flex; /* 使用 flexbox */
+          justify-content: center; /* 水平置中 */
+          gap: 20px; /* 按鈕之間的間距 */
+      }
+      .page_btn {
+          margin-top: 8px;
+      }
+      .page-button {
+          border: 1px #C0C0C0 solid;
+          width: 30px;
+          height: 35px;
+          text-align: center;
+          border-radius: 4px;
+      }
+      #page_text{
+          text-align: center;
       }
 
       /*  訂單列表  */
@@ -165,6 +181,11 @@
                   </tbody>
                 </table>
                 <!--/.訂單列表    -->
+                <div id="page_div">
+                  <button id="previous" class="btn btn-block btn-default page_btn">上一頁</button>
+                  <span id="pagination" class="page_btn"></span>
+                  <button id="next" class="btn btn-block btn-default page_btn">下一頁</button>
+                </div>
               </div>
             </div>
           </div>
@@ -192,126 +213,209 @@
 <script src="dist/js/demo.js"></script>
 
 <script>
-    // $(function () {
-    //     $("#example1").DataTable({
-    //         "responsive": true, "lengthChange": false, "autoWidth": false,
-    //     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-    //     $('#example2').DataTable({
-    //         "paging": true,
-    //         "lengthChange": false,
-    //         "searching": true,
-    //         "ordering": true,
-    //         "info": true,
-    //         "autoWidth": false,
-    //         "responsive": true,
-    //     });
-    // });
-</script>
-<script>
+
+    let currentPage = 0; // 當前頁數
+    let totalPages = 0; // 總頁數
+    const size = 10; // 每頁顯示的筆數
+
     document.addEventListener("DOMContentLoaded", function () {
-        // todo 權限判斷
+        // todo 權限判斷顯示內容
 
+        // 判斷權限
+        fetch(`/totalusers`)
+            .then(resp => resp.json())
+            .then(totalUserDTO => {
+                console.log(totalUserDTO)
+                console.log(totalUserDTO.userTypeId)
+                if(totalUserDTO.userTypeId !== 1 && totalUserDTO.userTypeId !== 3){
+                    Swal.fire({
+                        title: "權限不足",
+                        text: '',
+                        icon: 'error',
+                        showConfirmButton: true  // 確認按鈕
+                    }).then(() => {
+                        location.href = "./backstageLogin.html";
+                    });
+                }
+                // 如果是店家&管理員才能檢視
+                init();
+            })
+            .catch((error) => {
+                console.log("錯誤原因:" + error);
+            });
+        //===========================================================================
 
-        // 0. 顯示列表資料
-        init();
-        // 顯示 明細
-        function init() {
-            fetch('/order/manage')
-                .then(response => response.json())
-                .then(data => showDB(data))
-                .catch((error) => {
-                    console.log("錯誤原因：" + error);
-                });
+        // 顯示列表資料
+        init(currentPage, size);
+
+        // 確保元素存在 添加事件監聽器
+        const nextButton = document.getElementById("next");
+        const previousButton = document.getElementById("previous");
+
+        if (nextButton) {
+            nextButton.addEventListener("click", function () {
+                if (currentPage < totalPages - 1) {
+                    currentPage++;
+                    init(currentPage, size); // 重新載入下一頁資料
+                }
+            });
         }
-        function showDB(data) {
-            let orderHtml = "";
-            for (let i = data.length-1; i >= 0; i--) {
-                orderHtml += `
-                    <tr>
-                        <td class="order_date_value">${data[i].orderCreateDatetime}</td>
-                        <td class="order_id_value"><a href="./storeOrderDetail.html?orderId=${data[i].orderId}">${data[i].orderId}</a></td>
-                        <td class="order_username_value">${data[i].customer.nickname}</td>
-                        <td class="order_status_value">${statusText(data[i].orderStatus)}</td>
-                        <td class="order_store_value">${data[i].store.storeName}</td>
-                        <td>${data[i].orderProductQuantity}</td>
-                    </tr>
-                `;
-            }
-            document.getElementById("order_tbody").innerHTML = orderHtml;
+        if (previousButton) {
+            previousButton.addEventListener("click", function () {
+                if (currentPage > 0) {
+                    currentPage--;
+                    init(currentPage, size); // 重新載入上一頁資料
+                }
+            });
         }
-        function statusText(statusNum) {
-            switch (statusNum) {
-                case 1 : return "訂單成立";
-                case 2 : return "準備完成";
-                case 3 : return "正在外送";
-                case 4 : return "訂單完成";
-            }
+    });
+
+    // 顯示 明細
+    function init(page, size) {
+        fetch(`/order/manage?page=${page}&size=${size}`)
+            .then(response => response.json())
+            .then(data => {
+                showAllDB(data); // 顯示資料
+                totalPages = data.totalPages; // 更新總頁數
+                updatePagination(); // 更新分頁按鈕狀態
+            })
+            .catch((error) => {
+                console.log("錯誤原因：" + error);
+            });
+    }
+    function showAllDB(data) {
+        let orderHtml = "";
+        let orders = data.content; // 取得所有訂單
+
+        for (let i =  0; i < orders.length  ; i++) {
+            const order = orders[i];
+            orderHtml += `
+                <tr>
+                    <td class="order_date_value">${order.orderCreateDatetime}</td>
+                    <td class="order_id_value"><a href="./storeOrderDetail.html?orderId=${order.orderId}">${order.orderId}</a></td>
+                    <td class="order_username_value">${order.customer.nickname}</td>
+                    <td class="order_status_value">${statusText(order.orderStatus)}</td>
+                    <td class="order_store_value">${order.store.storeName}</td>
+                    <td>${order.orderProductQuantity}</td>
+                </tr>
+            `;
         }
-        //----------------------------------------------------------
-        // 1.查詢欄
-        // 1.1 輸入查詢相關欄位，點查詢btn可篩選訂單
-        let btn_select = document.getElementById("btn_select");
-        btn_select.addEventListener("click", function () {
+        document.getElementById("order_tbody").innerHTML = orderHtml;
+    }
 
-            let select_order_id = document.getElementsByClassName("select_order")[0]?.value.toLowerCase() || "";
-            let select_order_user = document.getElementsByClassName("select_order")[1]?.value.toLowerCase() || "";
-            let select_order_store = document.getElementsByClassName("select_order")[2]?.value.toLowerCase() || "";
-            let select_order_status = document.getElementById("select_status").value || "";
-            let select_order_date1 = document.getElementsByClassName("select_date")[0]?.value || "";
-            let select_order_date2 = document.getElementsByClassName("select_date")[1]?.value || "";
+    function statusText(statusNum) {
+        switch (statusNum) {
+            case 1 :
+                return "訂單成立";
+            case 2 :
+                return "準備完成";
+            case 3 :
+                return "正在外送";
+            case 4 :
+                return "訂單完成";
+        }
+    }
 
-            let order_rows = document.querySelectorAll("tbody tr");
-            order_rows.forEach(row => {
+    function updatePagination() {
+        const previousButton = document.getElementById("previous");
+        const nextButton = document.getElementById("next");
+        const pagination = document.getElementById("pagination");
 
-                let order_id_el = row.getElementsByClassName("order_id_value")[0];
-                let order_user_el = row.getElementsByClassName("order_username_value")[0];
-                let order_store_el = row.getElementsByClassName("order_store_value")[0];
-                let order_status_el = row.getElementsByClassName("order_status_value")[0];
-                let order_date_el = row.getElementsByClassName("order_date_value")[0];
+        if (previousButton) {
+            previousButton.disabled = (currentPage === 0);
+        }
+        if (nextButton) {
+            nextButton.disabled = (currentPage >= totalPages - 1);
+        }
 
-                if (!order_id_el || !order_user_el || !order_store_el || !order_status_el || !order_date_el) {
-                    return; // 跳過此列
-                }
-                // 取得訂單列表資料
-                let order_id = order_id_el.innerText.trim().toLowerCase();
-                let order_user = order_user_el.innerText.trim().toLowerCase();
-                let order_store = order_store_el.innerText.trim().toLowerCase();
-                let order_status = order_status_el.innerText.trim();
-                let order_date = order_date_el.innerText.trim();
+        // 只顯示5頁的按鈕
+        let startPage = Math.max(0, currentPage - 2);
+        let endPage = Math.min(totalPages - 1, currentPage + 4);
 
-                let show_row = true;
+        let pageButtons = "";
+        for (let i = startPage; i <= endPage; i++) {
+            pageButtons += `<button class="page-button" data-page="${i}" ${i === currentPage ? 'disabled' : ''}>${i + 1}</button>`;
+        }
 
-                // 篩選條件
-                if (select_order_id && !order_id.includes(select_order_id)) {
-                    show_row = false;
-                }
-                if (select_order_user && !order_user.includes(select_order_user)) {
-                    show_row = false;
-                }
-                if (select_order_store && !order_store.includes(select_order_store)) {
-                    show_row = false;
-                }
-                if (select_order_status && order_status !== select_order_status) {
-                    show_row = false;
-                }
-
-                if (select_order_date1 && select_order_date2) {
-                    let order_date_obj = new Date(order_date);
-                    let date1 = new Date(select_order_date1);
-                    let date2 = new Date(select_order_date2);
-                    // 設定 date1 和 date2 的時間範圍
-                    date1.setHours(0, 0, 0, 0); // 9/22 00:00
-                    date2.setHours(23, 59, 59, 999); // 9/22 23:59
-
-                    if (order_date_obj < date1 || order_date_obj > date2) {
-                        show_row = false;
-                    }
-                }
-                // 顯示或隱藏該列
-                row.style.display = show_row ? "" : "none";
+        // 更新頁碼按鈕和頁碼顯示
+        pagination.innerHTML = `
+            <div>${pageButtons}</div>
+            <div id="page_text">第 ${currentPage + 1} 頁 / 共 ${totalPages} 頁</div>
+        `;
+        const pageButtonsElements = document.querySelectorAll(".page-button");
+        pageButtonsElements.forEach(button => {
+            button.addEventListener("click", function () {
+                currentPage = parseInt(this.getAttribute("data-page"), 10);
+                init(currentPage, size); // 重新載入資料
             });
         });
+    }
+
+    //----------------------------------------------------------
+    // 1.查詢欄
+    // 1.1 輸入查詢相關欄位，點查詢btn可篩選訂單
+    let btn_select = document.getElementById("btn_select");
+    btn_select.addEventListener("click", function () {
+
+        let select_order_id = document.getElementsByClassName("select_order")[0]?.value.toLowerCase() || "";
+        let select_order_user = document.getElementsByClassName("select_order")[1]?.value.toLowerCase() || "";
+        let select_order_store = document.getElementsByClassName("select_order")[2]?.value.toLowerCase() || "";
+        let select_order_status = document.getElementById("select_status").value || "";
+        let select_order_date1 = document.getElementsByClassName("select_date")[0]?.value || "";
+        let select_order_date2 = document.getElementsByClassName("select_date")[1]?.value || "";
+
+        let order_rows = document.querySelectorAll("tbody tr");
+        order_rows.forEach(row => {
+
+            let order_id_el = row.getElementsByClassName("order_id_value")[0];
+            let order_user_el = row.getElementsByClassName("order_username_value")[0];
+            let order_store_el = row.getElementsByClassName("order_store_value")[0];
+            let order_status_el = row.getElementsByClassName("order_status_value")[0];
+            let order_date_el = row.getElementsByClassName("order_date_value")[0];
+
+            if (!order_id_el || !order_user_el || !order_store_el || !order_status_el || !order_date_el) {
+                return; // 跳過此列
+            }
+            // 取得訂單列表資料
+            let order_id = order_id_el.innerText.trim().toLowerCase();
+            let order_user = order_user_el.innerText.trim().toLowerCase();
+            let order_store = order_store_el.innerText.trim().toLowerCase();
+            let order_status = order_status_el.innerText.trim();
+            let order_date = order_date_el.innerText.trim();
+
+            let show_row = true;
+
+            // 篩選條件
+            if (select_order_id && !order_id.includes(select_order_id)) {
+                show_row = false;
+            }
+            if (select_order_user && !order_user.includes(select_order_user)) {
+                show_row = false;
+            }
+            if (select_order_store && !order_store.includes(select_order_store)) {
+                show_row = false;
+            }
+            if (select_order_status && order_status !== select_order_status) {
+                show_row = false;
+            }
+
+            if (select_order_date1 && select_order_date2) {
+                let order_date_obj = new Date(order_date);
+                let date1 = new Date(select_order_date1);
+                let date2 = new Date(select_order_date2);
+                // 設定 date1 和 date2 的時間範圍
+                date1.setHours(0, 0, 0, 0); // 9/22 00:00
+                date2.setHours(23, 59, 59, 999); // 9/22 23:59
+
+                if (order_date_obj < date1 || order_date_obj > date2) {
+                    show_row = false;
+                }
+            }
+            // 顯示或隱藏該列
+            row.style.display = show_row ? "" : "none";
+        });
     });
+
 </script>
 </body>
 </html>

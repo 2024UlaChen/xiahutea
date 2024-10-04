@@ -3,9 +3,17 @@ package idv.tia201.g2.web.order.controller;
 import idv.tia201.g2.web.order.dto.OrderDto;
 import idv.tia201.g2.web.order.service.DisputeService;
 import idv.tia201.g2.web.order.vo.DisputeOrder;
+import idv.tia201.g2.web.user.dto.TotalUserDTO;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
+import java.sql.Timestamp;
+import java.time.LocalDate;
 
 @RestController
 @RequestMapping("dispute")
@@ -17,8 +25,14 @@ public class DisputeController {
     // -------- FINISH ---------------------------------
     // 前台 爭議申請表 顯示
     @GetMapping("member/applyDispute/{orderId}")
-    public OrderDto apply(@PathVariable Integer orderId){
-        return disputeService.findByOrderId(orderId);
+    public OrderDto apply(@PathVariable Integer orderId, HttpSession httpSession){
+        TotalUserDTO totalUserDTO = (TotalUserDTO)  httpSession.getAttribute("totalUserDTO");
+        OrderDto dispute = disputeService.findByOrderId(orderId);
+        if (totalUserDTO.getUserTypeId() != 0 || !(totalUserDTO.getUserId().equals(dispute.getOrders().getCustomerId()))) {
+            OrderDto orderDto = new OrderDto();
+            return orderDto;
+        }
+        return dispute;
     }
 
     // 前台 爭議申請表 新增
@@ -32,13 +46,46 @@ public class DisputeController {
 
     // 後台 爭議列表 顯示
     @GetMapping("manage")
-    public List<DisputeOrder> manage(){
-        return disputeService.findAll();
+    public Page<DisputeOrder> findAllByPageable(
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer size,
+            @RequestParam(required = false) Integer disputeOrderId,
+            @RequestParam(required = false) Integer orderId,
+            @RequestParam(required = false) String storeName,
+            @RequestParam(required = false) String memberNickname,
+            @RequestParam(required = false) Integer disputeStatus,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy/MM/dd") LocalDate dateStart, // 開始日期
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy/MM/dd") LocalDate dateEnd, // 結束日期
+            HttpSession httpSession
+    ){
+        TotalUserDTO totalUserDTO = (TotalUserDTO) httpSession.getAttribute("totalUserDTO");
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "applyDatetime"));
+        // 如果不是店家或管理者
+        if (totalUserDTO.getUserTypeId() != 3 && totalUserDTO.getUserTypeId() != 1) {
+            return Page.empty();
+        }
+
+        // 檢查 dateStart 和 dateEnd 是否為 null
+        Timestamp startTimestamp = null;
+        Timestamp endTimestamp = null;
+        if (dateStart != null) {
+            startTimestamp = Timestamp.valueOf(dateStart.atStartOfDay());
+        }
+        if (dateEnd != null) {
+            endTimestamp = Timestamp.valueOf(dateEnd.plusDays(1).atStartOfDay());
+        }
+        // 判斷是否設定店家id
+        Integer storeId = (totalUserDTO.getUserTypeId() == 1) ? totalUserDTO.getUserTypeId() : null;
+        return disputeService.findByCriteria(disputeOrderId, orderId, storeId, storeName, memberNickname, disputeStatus, startTimestamp, endTimestamp, pageable);
     }
 
     // 後台 爭議明細 顯示
     @GetMapping({"manage/{disputeOrderId}"})
-    public OrderDto detail(@PathVariable Integer disputeOrderId){
+    public OrderDto detail(@PathVariable Integer disputeOrderId, HttpSession httpSession){
+        TotalUserDTO totalUserDTO = (TotalUserDTO) httpSession.getAttribute("totalUserDTO");
+        if(totalUserDTO.getUserTypeId() != 3){
+            return null;
+        }
         return disputeService.findByDisputeOrderId(disputeOrderId);
     }
 

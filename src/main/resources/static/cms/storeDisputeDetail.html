@@ -13,8 +13,6 @@
     <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
-    <!-- SweetAlert2 CSS樣式 -->
-    <link rel="stylesheet" href="/cms/plugins/sweetalert2/sweetalert2.css">
 
     <style>
         /* 左右main區塊  */
@@ -227,13 +225,32 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            // todo 權限判斷
-            // todo 退款到錢包
-            // todo 頁數
 
-            // 0. 顯示明細
-            init();
+            // 判斷權限
+            fetch(`/totalusers`)
+                  .then(resp => resp.json())
+                  .then(totalUserDTO => {
+                      // console.log(totalUserDTO)
+                      if(totalUserDTO.userTypeId !== 3){
+                          Swal.fire({
+                              title: "權限不足",
+                              text: '',
+                              icon: 'error',
+                              showConfirmButton: true  // 確認按鈕
+                          }).then(() => {
+                              location.href = "./storeDisputeList.html";
+                          });
+                      }
+                      // 如果是管理員才能檢視
+                      init();
+                  })
+                  .catch((error) => {
+                      console.log("錯誤原因:" + error);
+                  });
+
             //===========================================================================
+            // 顯示明細
+            init();
             function init() {
                 let disputeOrderId = getQueryParam("disputeOrderId");
                 if (disputeOrderId) {
@@ -243,8 +260,6 @@
                           .catch((error) => {
                               console.log("錯誤原因:" + error);
                           });
-                } else {
-                    console.error("訂單號碼錯誤");
                 }
             }
             // 取得URL的查詢參數
@@ -254,7 +269,7 @@
             }
             // 找明細
             function showDB(data) {
-                let detailHtml = "";
+                let detailHtml;
                 detailHtml = `
                         <tr>
                             <td id="dispute_order_id">${data.disputeOrder.disputeOrderId}</td>
@@ -267,7 +282,7 @@
                 `;
                 document.getElementById("detail_tbody").innerHTML = detailHtml;
 
-                let disputeHtml = "";
+                let disputeHtml;
                 disputeHtml = `
                         <tr>
                             <th>申請日期</th>
@@ -320,7 +335,7 @@
                 `;
                 document.getElementById("dispute_tbody").innerHTML = disputeHtml;
 
-                let productTfootHtml = "";
+                let productTfootHtml;
                 productTfootHtml = `
                             <tr>
                                 <td colspan="5"></td>

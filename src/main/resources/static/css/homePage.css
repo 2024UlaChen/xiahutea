@@ -272,5 +272,17 @@ div.header-message > h1 {
     background-position: center center;
     background-size: cover;
   }
+a {
+  text-decoration: none;
+  color: #0a0a0a;
+}
+.userPhoto {
+  margin: 0 auto;
+  display: flex;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  text-align: center;
+}
 
   

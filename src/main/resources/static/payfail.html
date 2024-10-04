@@ -4,18 +4,22 @@
     <meta charset="UTF-8">
     <title>支付失敗</title>
 </head>
+<style>
     body{
         text-align: center;
     }
+</style>
 <body>
 <h1>支付失敗!請再試一次!</h1>
 
-<p>8秒後跳轉回首頁....</p>
+<p>8秒後跳轉至訂單明細....</p>
 
 </body>
 <script>
+    const orderId = localStorage.getItem('orderId');
     setTimeout(function() {
-        window.location.href = "/homePage.html";  // 這裡設置跳轉的URL，例如首頁的路徑
+        window.location.href = `/orderDetail.html?orderId=${orderId}`;
+        // window.location.href = "/homePage.html";  // 這裡設置跳轉的URL，例如首頁的路徑
     }, 8000);
 </script>
 </html>

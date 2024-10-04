@@ -42,9 +42,9 @@
                         <aside class="col-lg-4 no-padding member-aside">
                             <div class="member-introduction">
                                 <div>
-                                    <img class="userPhoto" src="img/xiahutealogo.jpg" alt="userPhoto">
+                                    <img class="userPhoto"  id="asidePhoto">
                                 </div>
-                                <div>userName</div>
+                                <div id="asideName"></div>
                             </div>
                             <div>
                                 <ul class="member-list">
@@ -78,43 +78,42 @@
                                 </div>
                                 <hr>
                                 <div class="teamo-contact-fom member-setting">
-                                    <div>
-                                        <label for="memberPhotoInput" class="form-label">
-                                            <img class="userPhoto"  id="memberPhotoImg"
-                                                 alt="userPhoto">
-                                        </label>
-                                        <input class="form-control hidden" type="file" id="memberPhotoInput">
-                                    </div>
-                                    <div>
-                                        <div class="col-sm-6 no-padding">
-                                            <span class="form-label"><span class="warn">*</span>姓名</span>
-                                            <span class="form-control-wrap your-email">
-                                                    <input title="your-email" type="email" name="your-email" size="40"
-                                                           class="form-control form-control-email">
-                                        </span>
+                                    <div id="memberPhotoBlock">
+                                        <div class="memberPhoto">
+                                            <i class="fa fa-plus"></i>
+                                            <img class="userPhoto none " id="uploadImg" >
+
                                         </div>
-                                        <div class=" col-sm-6 no-padding">
-                                            <span class="form-label"><span class="warn">*</span> 會員錢包 </span>
-                                            <div class="form-control-wrap" aria-label="Default select example">
-                                                <input title="your-email" type="email" name="your-email" size="40"
-                                                       disabled
-                                                       class="form-control form-control-email">
-                                            </div>
-                                        </div>
+                                        <input class="form-control hidden" type="file" id="memberPhotoInput"
+                                               accept="image/gif,image/jpeg,image/jpg,image/png">
                                     </div>
                                     <div>
-                                        <span class="form-label"><span class="warn">*</span>手機號碼</span>
-                                        <span class="form-control-wrap your-phone">
-                                                    <input title="your-phone" type="text" name="your-phone"
-                                                           class="form-control form-control-phone" minlength="10"
-                                                           maxlength="10" placeholder="0912345678">
-                                        </span>
-                                        <span class="remind">僅支援台灣手機</span>
+                                        <span class="form-label"><span class="warn">*</span>姓名</span>
+                                        <input title="your-name" type="text" name="your-name" size="40"
+                                               class="form-control"
+                                               id="memberInfoName">
                                     </div>
                                     <div>
-                                        <span class="form-label"> 性別 </span>
-                                        <select class="form-select-wrap col-sm-12"
-                                                aria-label="Default select example">
+                                        <span class="form-label">手機號碼</span>
+                                        <input title="your-phone" type="text" name="your-phone"
+                                               class="form-control form-control-phone" minlength="10"
+                                               id="memberInfoPhone" disabled>
+                                    </div>
+                                    <div>
+                                        <span class="form-label">會員錢包 </span>
+                                        <input title="your-money" type="text" name="your-money" size="40"
+                                               disabled id="memberInfoMoney"
+                                               class="form-control">
+                                    </div>
+                                    <div>
+                                        <span class="form-label"><span class="warn">*</span>Email</span>
+                                        <input title="your-mail" type="email" name="your-mail"
+                                               class="form-control " id="memberInfoEmail">
+                                        <span id="emailTip"></span>
+                                    </div>
+                                    <div>
+                                        <span class="form-label"> <span class="warn">*</span>性別 </span>
+                                        <select class="form-control" id="memberInfoSex">
                                             <option selected value="default" disabled>請選擇性別</option>
                                             <option value="male">男性</option>
                                             <option value="female">女性</option>
@@ -122,14 +121,13 @@
                                         </select>
                                     </div>
                                     <div>
-                                        <label class="form-label" for="memberBirthday"> 生日 </label>
-                                        <span class="form-control-wrap member-birthday">
-                                            <input type="date" name="birthday" id="memberBirthday"
-                                                   class="form-control datepicker">
-                                        </span>
+                                        <span class="form-label"><span class="warn">*</span> 生日 </span>
+                                        <input type="date" name="birthday"
+                                               id="memberInfoBirthday"
+                                               class="form-control ">
                                     </div>
-                                    <div class="dataSave">
-                                        <button>確認</button>
+                                    <div>
+                                        <button class="btnSave" id="memberInfoSave">確認</button>
                                     </div>
                                 </div>
                             </div>
@@ -167,6 +165,7 @@
 
 <script src="js/general.js"></script>
 <script src="js/memberGeneral.js"></script>
+<script src="js/memberInfo.js"></script>
 
 </body>
 

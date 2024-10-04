@@ -1,3 +1,7 @@
+// ASIDE
+const asidePhoto = document.querySelector("#asidePhoto");
+const asideName = document.querySelector("#asideName");
+
 const carrierEditBtn = document.querySelector("#carrierEdit");
 const carrierDeleteBtn = document.querySelector("#carrierDelete");
 
@@ -10,16 +14,28 @@ function getMemberId() {
     const sessionDetail = JSON.parse(sessionStorage.getItem("memberData"));
     return parseInt(sessionDetail.data.customerId);
 }
+function nullToEmpty(data) {
+    return (data == null) ? "" : data;
+}
 
 document.addEventListener("DOMContentLoaded", function () {
     getCarrier(getMemberId());
+    fetch(`member`, {
+        method: "POST",
+    }).then(res => res.json())
+        .then(data => {
+            if (data.successful) {
+                let userImg = (nullToEmpty(data.customerImg) === "") ? "" : `data:image/png;base64,${data.customerImg}`;
+                asidePhoto.setAttribute("src", userImg);
+                asideName.innerText = nullToEmpty(data.nickname);
+            }
+        })
 });
 
 function getCarrier(memberId) {
     fetch(`member/carrier/` + memberId)
         .then(res => res.text())
         .then(data => {
-            console.log(data.length);
             if (data.length !== 0) {
                 memberCarrierText.classList.remove("checkInValid");
                 carrierDeleteBtn.classList.remove("hidden")
@@ -46,7 +62,6 @@ function updateCarrier(newCarrierTxt, memberId, type) {
             type: type
         }),
     }).then(res => res.json()).then(data => {
-        console.log(data)
         if (data.successful) {
             Swal.fire("已更新載具", "", "success");
             getCarrier(getMemberId());

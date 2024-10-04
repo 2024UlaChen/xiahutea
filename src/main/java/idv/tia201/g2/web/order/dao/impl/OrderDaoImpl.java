@@ -1,6 +1,5 @@
 package idv.tia201.g2.web.order.dao.impl;
 
-import java.util.List;
 import idv.tia201.g2.web.order.dao.OrderDao;
 import idv.tia201.g2.web.order.vo.Orders;
 import jakarta.persistence.PersistenceContext;
@@ -20,15 +19,6 @@ public class OrderDaoImpl implements OrderDao {
     public int insert(Orders orders) {
         session.persist(orders);
         return 1;
-    }
-
-    // 前台 訂單列表 顯示
-    @Override
-    public List<Orders> selectBycCustomerId(int customerId) {
-        String hql = "FROM Orders WHERE customerId = :customerId";
-        TypedQuery<Orders> query = session.createQuery(hql, Orders.class)
-                .setParameter("customerId", customerId);
-        return query.getResultList();
     }
 
     // 後台 訂單明細 新增
@@ -58,10 +48,4 @@ public class OrderDaoImpl implements OrderDao {
         return query.getSingleResult();
     }
 
-    // 後台 訂單列表 顯示
-    @Override
-    public List<Orders> selectAll() {
-        TypedQuery<Orders> query = session.createQuery("FROM Orders", Orders.class);
-        return query.getResultList();
-    }
 }

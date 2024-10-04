@@ -6,6 +6,7 @@ import idv.tia201.g2.web.member.dao.MemberDao;
 import idv.tia201.g2.web.member.service.MemberService;
 import idv.tia201.g2.web.member.vo.Member;
 import idv.tia201.g2.web.order.dao.DisputeDao;
+import idv.tia201.g2.web.order.dao.DisputeRepository;
 import idv.tia201.g2.web.order.dao.OrderDao;
 import idv.tia201.g2.web.order.dao.OrderDetailDao;
 import idv.tia201.g2.web.order.dto.OrderDto;
@@ -15,6 +16,8 @@ import idv.tia201.g2.web.order.vo.DisputeOrder;
 import idv.tia201.g2.web.order.vo.OrderDetail;
 import idv.tia201.g2.web.order.vo.Orders;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import static org.springframework.util.ObjectUtils.isEmpty;
@@ -25,6 +28,8 @@ public class DisputeServiceImpl implements DisputeService {
 
     @Autowired
     private DisputeDao disputeDao;
+    @Autowired
+    private DisputeRepository disputeRepository;
 
     @Autowired
     private OrderDao orderDao;
@@ -43,7 +48,7 @@ public class DisputeServiceImpl implements DisputeService {
     // -------- FINISH ---------------------------------
     // 前台 爭議表格 顯示
     @Override
-    public OrderDto findByOrderId(int orderId) {
+    public OrderDto findByOrderId(Integer orderId) {
         Orders order = orderDao.selectByOrderId(orderId);
         List<OrderDetail> orderDetails = orderDetailDao.selectByOrderId(orderId);
         DisputeOrder disputeOrder = disputeDao.selectByOrderId(orderId);
@@ -87,13 +92,13 @@ public class DisputeServiceImpl implements DisputeService {
 
     // 後台 爭議列表 顯示
     @Override
-    public List<DisputeOrder> findAll() {
-        return disputeDao.selectAll();
+    public Page<DisputeOrder> findByCriteria(Integer disputeOrderId, Integer orderId, Integer storeId, String storeName, String memberNickname, Integer disputeStatus, Timestamp dateStart, Timestamp dateEnd, Pageable pageable) {
+        return disputeRepository.findByCriteria(disputeOrderId, orderId, storeId, storeName, memberNickname, disputeStatus, dateStart, dateEnd, pageable);
     }
 
     // 後台 爭議明細 顯示
     @Override
-    public OrderDto findByDisputeOrderId(int disputeOrderId) {
+    public OrderDto findByDisputeOrderId(Integer disputeOrderId) {
         DisputeOrder disputeOrder = disputeDao.selectByDisputeId(disputeOrderId);
         if(disputeOrder == null) {
             return null;

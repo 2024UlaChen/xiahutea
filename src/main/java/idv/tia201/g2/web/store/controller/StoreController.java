@@ -77,6 +77,12 @@ public class StoreController {
 
 
     }
+
+    @GetMapping("/getInfo/{storeId}")
+    public Store getInfo(@PathVariable("storeId") Integer storeId){
+        return storeService.findStoreById(storeId);
+    }
+
     @GetMapping("/storeinfo/{storeId}")
     public Store StoreInfo(HttpSession session,@PathVariable Integer storeId){
         if(checkStoreLogin(session,storeId)){
@@ -204,6 +210,7 @@ public class StoreController {
 
 
 
+
     public boolean IsStoreLogin(HttpSession session){
         TotalUserDTO data = (TotalUserDTO) session.getAttribute("totalUserDTO");
         return data.getUserTypeId() == 1;
@@ -251,6 +258,8 @@ public class StoreController {
 
 
     }
+
+
 
 
 
