@@ -541,8 +541,15 @@
             .then(res => res.json())
             .then(data => {
                 userTypeId = data.userTypeId;
-                totalUserId = data.totalUserId;
-                return totalUserId;
+                if(userTypeId === 0){
+                    totalUserId = data.totalUserId;
+                    return totalUserId;
+                }
+                console.log("錯誤 : " + error)
+                let chatRoom = $("div.chat-room").eq(0);
+                $(chatRoom).css("visibility","hidden");
+                $(chatRoom).addClass("d-none")
+                console.log($("div.chat-room").eq(0))
             }).catch(error=>{
                 console.log("錯誤 : " + error)
                 let chatRoom = $("div.chat-room").eq(0);
@@ -613,7 +620,8 @@
             chatId : payload.chatSessionId,
             content : payload.content,
             senderId : payload.senderId,
-            timestamp : payload.timestamp
+            timestamp : payload.timestamp,
+            img:payload.img
         }
         let activeChatId = chat.getActiveChatId();      //獲取這個聊天室的id
         chat.updateChatListInfo(message.chatId,message);  //更新聊天室側邊欄聊天室列表
@@ -637,7 +645,6 @@
         await function (){
             if(userTypeId === 0){
                 $(".weien-chating-name").eq(0).text("管理員");
-                console.log($(".weien-chating-name").eq(0));
             }
         }
         let chatRoomsData = await actionHandlers.getChatRoomsData();        //獲取聊天室資料
@@ -648,7 +655,6 @@
         webSocket.addEventListener('message', handleSendMessage);
         webSocket.addEventListener('error',(event) => {
             console.log("Message received:", event.data)})
-    //
     });
 
 </script>

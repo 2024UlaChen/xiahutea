@@ -28,8 +28,15 @@ $(function () {
                 $.each(showStore, function (index, item) {
                     $(item).addClass("d-none")
                 })
-            } else {
+            } else if (userTypeId === 1) {
                 $.each(showAdmin, function (index, item) {
+                    $(item).addClass("d-none")
+                })
+            } else {
+                $(".sidebar").eq(0).addClass("d-none")
+                console.log($("div.storeaside").next())
+                let containEle = $("div.storeaside").next().children();
+                $.each(containEle,function (index,item){
                     $(item).addClass("d-none")
                 })
             }
