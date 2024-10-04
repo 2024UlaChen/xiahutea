@@ -69,7 +69,9 @@
             
               <div class="col-lg-3">
                 <div class="header-message">
-                  <h1>夏虎茶</h1>
+                  <h1>
+                    <a href="homePage.html" id="searchHome">夏虎茶</a>
+                  </h1>
                 </div>
               </div>
               <div class="col-lg-6">
@@ -160,8 +162,8 @@
                       </li>
                       <hr />
                       <li class="switcher-option">
-                        <a href="#" class="logOut">
-                          <span class="logOut"> 登出 </span>
+                        <a href="#" id="logOut">
+                          <span > 登出 </span>
                         </a>
                       </li>
                     </ul>
@@ -276,6 +278,7 @@
     <script src="assets/js/jquery-1.12.4.min.js"></script>
     <script src="assets/js/jquery.plugin-countdown.min.js"></script>
     <script src="assets/js/jquery-countdown.min.js"></script>
+    <script src="cms/plugins/sweetalert2/sweetalert2.all.min.js"></script>
     <script src="assets/js/bootstrap.min.js"></script>
     <script src="assets/js/owl.carousel.min.js"></script>
     <script src="assets/js/magnific-popup.min.js"></script>
@@ -405,7 +408,8 @@
 
 
 
-
+    //監聽logout
+      logOutSkip();
     });//DOM End
   </script>
   </body>
