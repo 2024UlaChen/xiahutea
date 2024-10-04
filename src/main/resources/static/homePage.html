@@ -58,7 +58,9 @@
             
               <div class="col-lg-3">
                 <div class="header-message">
-                  <h1>夏虎茶</h1>
+                  <h1>
+                      <a href="homePage.html" id="searchHome">夏虎茶</a>
+                  </h1>
                 </div>
               </div>
               <div class="col-lg-6">
@@ -140,7 +142,7 @@
                       </li>
                       <hr>
                       <li class="switcher-option">
-                        <a href="#">
+                        <a href="#" id="logOut">
                           <span> 登出 </span>
                         </a>
                       </li>
@@ -155,49 +157,7 @@
     </header>
     
     <div class="kunClass" id="homeDisplayAds">
-      <div>
-        <img
-          class="KunSlickImg"
-          src="https://chevigal.com/wp-content/uploads/20220227231508_23.jpg"
-          alt="輪播"
-        />
-      </div>
-      <div>
-        <img
-          class="KunSlickImg"
-          src="https://pgw.udn.com.tw/gw/photo.php?u=https://uc.udn.com.tw/photo/2023/12/11/98/28109410.jpg&s=Y&x=0&y=99&sw=697&sh=551&sl=W&fw=800&exp=3600"
-          alt="輪播"
-          sizes=""
-          srcset=""
-        />
-      </div>
-      <div>
-        <img
-          class="KunSlickImg"
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6ffcQVEtCkd0i7Q4-j5RQiZZKcAnN1y1Ybw&s"
-          alt="輪播"
-          sizes=""
-          srcset=""
-        />
-      </div>
-      <div>
-        <img
-          class="KunSlickImg"
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSaL4fNpnWebtDTQMYGtME0r0E2rzKQrCy5-g&s"
-          alt="輪播"
-          sizes=""
-          srcset=""
-        />
-      </div>
-      <div>
-        <img
-          class="KunSlickImg"
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSaJEsYL7HJg2ZF_ZNXqoRJSPx4E8c2fv3a_A&s"
-          alt="輪播"
-          sizes=""
-          srcset=""
-        />
-      </div>
+
     </div>
     <!--輪播結束-->
 
@@ -390,7 +350,7 @@
       </div>
   </footer>
   
-    <!-- <script src="./js/general.js"></script> -->
+
     <script
       src="https://code.jquery.com/jquery-3.7.1.min.js"
       integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
@@ -444,65 +404,26 @@
         />
       </div>`;
                       //$('#homeDisplayAds').empty();
-                      //document.querySelector('#homeDisplayAds').insertAdjacentHTML('afterbegin',adsSclicks);
+                      document.querySelector('#homeDisplayAds').insertAdjacentHTML('afterbegin',adsSclicks);
                   }
 
 
               })
           });
 
-    //監聽有這個屬性的KunIndexSotreImg 如果有空心就改實心
-    //實心紅
-    let RedHeart = '<i class="fa-solid fa-heart" style="color: red;"></i>';
-    let noHeart = '<i class="fa-regular fa-heart"></i>';
-    let ALLStores = document.querySelectorAll('.KunIndexSotreImg');
-    ALLStores.forEach((element) => {
-      
-      element.addEventListener('click',function(){
 
-        var ele = this.nextElementSibling.querySelector('.fa-heart');
 
-        if(ele.classList.contains('fa-regular')){
-          ele.classList.remove('fa-regular');
-          ele.classList.add('fa-solid');
-          ele.style.color = 'red'; // 改變顏色為紅色
-          //如果是實心 就取代 改成空心
-          //this.nextElementSibling.querySelector('.fa-solid') =noHeart;
-        }else{
-          ele.classList.remove('fa-solid');
-          ele.classList.add('fa-regular');
-          ele.style.color = 'red'; // 
-          //如果是空心 取代 改成實心
-          //this.nextElementSibling.querySelector('.fa-solid') =RedHeart;
-        }
-      });
-    } );
+
 
 
 
     let userLogin = document.querySelector(".userLogin"); //登入按鈕
     let searchPlace = document.querySelector(".searchPlace");
 
-    //加入愛心未完成
-    let heartTag =
-      '<div class="favorite-text"><i class="fa-solid fa-heart"></i></div>';
-    let storetags = document.querySelectorAll(".KunIndexSotreImg");
-    storetags.forEach(function (item) {
-      //監聽被覆蓋
-      item.addEventListener("mouseenter", function () {
-        if (!item.parentElement.querySelector(".favorite-text")) {
-          // item.insertAdjacentHTML('afterend', heartTag);
-        }
-      });
-      item.addEventListener("mouseleave", function () {
 
-        let heartElement =
-          item.parentElement.querySelector(".favorite-text");
-        if (heartElement) {
-          // heartElement.remove();
-        }
-      });
-    }); //所有店家迴圈
+
+
+
     
 
 //監聽商家
@@ -549,7 +470,26 @@ let allSotre = document.querySelectorAll('.Heart');
           e.preventDefault();
           document.querySelector('#user-enter-keyword').value='';
       });
+
       queryStr();
+      logOutSkip();
+      setTimeout(function (){
+          document.querySelectorAll('.workTime').forEach(function (row){
+
+              let openH = parseInt(row.textContent.split(':')[0]);
+              let now = new Date();
+              nowH = now.getHours();
+              if(openH > nowH){
+                  let icon = '<span style="color:red;font-weight:bold;text-decoration: underline ">尚未營業</span>';
+
+                  let parentTag = row.closest('.storeLinkCard');
+                  parentTag.querySelector('a').insertAdjacentHTML('afterbegin',icon);
+              }
+          });
+
+      },1000);
+
+
 
   }); //end dom
 
@@ -627,27 +567,32 @@ let allSotre = document.querySelectorAll('.Heart');
       }
     });
 
-    $(".kunClass").slick({
-      centerMode: true,
-      slidesToShow: 1,
-      slidesToScroll: 1,
-      autoplay: true,
-      autoplaySpeed: 2000,
-      arrows: false,
-    });
-    $(".slick-slide").css("filter", "blur(3px)");
-    $(".slick-center").css("filter", "none");
-    // 监听 Slick 的初始化和切换事件，以确保正确应用模糊效果
-    $(".kunClass").on(
-      "init afterChange",
-      function (event, slick, currentSlide) {
-        // 确保在初始化和每次滑动后应用正确的滤镜
+    setTimeout(function (){
+        $(".kunClass").slick({
+            centerMode: true,
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            autoplay: true,
+            autoplaySpeed: 2000,
+            arrows: false,
+        });
         $(".slick-slide").css("filter", "blur(3px)");
-        $(".slick-slide").css("overflow", "hidden");
         $(".slick-center").css("filter", "none");
-        $(".slick-center").css("overflow", "none");
-      }
-    );
+        // 监听 Slick 的初始化和切换事件，以确保正确应用模糊效果
+        $(".kunClass").on(
+            "init afterChange",
+            function (event, slick, currentSlide) {
+                // 确保在初始化和每次滑动后应用正确的滤镜
+                $(".slick-slide").css("filter", "blur(3px)");
+                $(".slick-slide").css("overflow", "hidden");
+                $(".slick-center").css("filter", "none");
+                $(".slick-center").css("overflow", "none");
+            }
+        );
+    },700);
+
+
+
   });
 </script>
 
@@ -835,31 +780,43 @@ let allSotre = document.querySelectorAll('.Heart');
 
 
 
-            data.forEach(function (row){
-              const base64Img = row.logo;
-              let imgid = "img"+row.storeId;
-              let ot =row.openingHours;
-              let et = row.closingHours;
-              let storeScore = row.score? row.score:'統計中'
+            data.forEach(function (row) {
+                const base64Img = row.logo;
+                let imgid = "img" + row.storeId;
+                let ot = row.openingHours;
+                let et = row.closingHours;
+                let storeScore = row.score ? row.score : '統計中'
+                let imgTime = `<img
+                    src=""
+                    alt=""
+                    className="rounded KunIndexSotreImg"
+                    id="${imgid}"
+                />`;
 
-              if(ot){
-                  ot= ot.substring(0,5);
-              }else{
-                  ot ='未設置';
-              }
-                if(et){
-                    et= et.substring(0,5);
-                }else{
-                    et ='未設置';
+                if (ot) {
+                    ot = ot.substring(0, 5);
+                    now = new Date();
+
+
+
+
+
+                } else {
+                    ot = '未設置';
                 }
-                let isdelieve='';
-                if(row.isDelivery){
+                if (et) {
+                    et = et.substring(0, 5);
+                } else {
+                    et = '未設置';
+                }
+                let isdelieve = '';
+                if (row.isDelivery) {
                     isdelieve = '<i class="fa-2x fa-solid fa-truck"></i>';
-                }else{
-                    isdelieve ='';
+                } else {
+                    isdelieve = '';
                 }
 
-              let str =`
+                let str = `
 <figure class="col-3 figure my-5 Heart storeLinkCard" >
 <a href="productMenu.html?storeId=${row.storeId}">
           <img
@@ -875,7 +832,7 @@ let allSotre = document.querySelectorAll('.Heart');
               data-address="${row.storeAddress}"
 
             >
-            <i class="fa-regular fa-heart" style="color: red;"></i> ${row.storeName}
+             ${row.storeName}
             </figcaption>
             <figcaption class="figure-caption col">
               ${isdelieve}
@@ -883,46 +840,41 @@ let allSotre = document.querySelectorAll('.Heart');
             <figcaption class="figure-caption col-12 footer2">
               <i class="KunStar fa-solid fa-star"></i
               ><span class="KunRank">${storeScore}</span
-              >&nbsp;‧&nbsp;${ot}~${et}&nbsp;‧<span class="sotreDistance"
+              >&nbsp;‧<span class="workTime">${ot}~${et}</span>&nbsp;&nbsp;‧<span class="sotreDistance"
                 >未定位</span
               >
             </figcaption>
           </div>
         </figure>`;
-              document.querySelector('#store-body').insertAdjacentHTML("afterbegin",str);
+                document.querySelector('#store-body').insertAdjacentHTML("afterbegin", str);
 
-              storeImage = document.querySelector(`#${imgid}`);
+                storeImage = document.querySelector(`#${imgid}`);
 
-              let imgFormat;
-              if(base64Img !=null){
+                let imgFormat;
+                if (base64Img != null) {
 
-                if (base64Img.startsWith("iVBORw0KGgo")) {
-                  imgFormat = "png"; // PNG 圖片的 base64 開頭
-                } else if (base64Img.startsWith("/9j/")) {
-                  imgFormat = "jpeg"; // JPEG 圖片的 base64 開頭
-                }else if (base64Img.startsWith("R0lGODlh")) {
-                  imgFormat = "gif"; // JPEG 圖片的 base64 開頭
-                }else if (base64Img.startsWith("Qk0")) {
-                  imgFormat = "bmp"; // JPEG 圖片的 base64 開頭
-                }else if (base64Img.startsWith("UklGR")) {
-                  imgFormat = "webp"; // JPEG 圖片的 base64 開頭
-                }else if (base64Img.startsWith("PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmci")) {
-                  imgFormat = "svg+xml"; // JPEG 圖片的 base64 開頭
+                    if (base64Img.startsWith("iVBORw0KGgo")) {
+                        imgFormat = "png"; // PNG 圖片的 base64 開頭
+                    } else if (base64Img.startsWith("/9j/")) {
+                        imgFormat = "jpeg"; // JPEG 圖片的 base64 開頭
+                    } else if (base64Img.startsWith("R0lGODlh")) {
+                        imgFormat = "gif"; // JPEG 圖片的 base64 開頭
+                    } else if (base64Img.startsWith("Qk0")) {
+                        imgFormat = "bmp"; // JPEG 圖片的 base64 開頭
+                    } else if (base64Img.startsWith("UklGR")) {
+                        imgFormat = "webp"; // JPEG 圖片的 base64 開頭
+                    } else if (base64Img.startsWith("PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmci")) {
+                        imgFormat = "svg+xml"; // JPEG 圖片的 base64 開頭
+                    } else {
+                        console.error("不支持的圖片格式");
+                    }
                 }
-                else {
-                  console.error("不支持的圖片格式");
+
+
+                if (imgFormat) {
+                    // 確保有對應的 img 元素
+                    storeImage.src = `data:image/${imgFormat};base64,${base64Img}`;
                 }
-              }
-
-
-              if (imgFormat) {
-                // 確保有對應的 img 元素
-                storeImage.src = `data:image/${imgFormat};base64,${base64Img}`;
-              }
-
-
-
-
 
 
             });
@@ -931,9 +883,9 @@ let allSotre = document.querySelectorAll('.Heart');
       }
 
 
-      function getUserLocation(){
-          if ("geolocation" in navigator) {
-              /* geolocation is available */
+        function getUserLocation() {
+            if ("geolocation" in navigator) {
+                /* geolocation is available */
               //監聽點擊定位
               document.querySelector('#autoCatchUserPlace').addEventListener('click',function () {
 
