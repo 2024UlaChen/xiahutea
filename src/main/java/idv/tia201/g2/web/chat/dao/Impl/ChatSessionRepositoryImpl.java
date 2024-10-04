@@ -1,5 +1,6 @@
 package idv.tia201.g2.web.chat.dao.Impl;
 
+import idv.tia201.g2.web.chat.util.ImageProcessor;
 import idv.tia201.g2.web.chat.dao.ChatSessionOperation;
 import idv.tia201.g2.web.chat.dto.ChatRoom;
 import idv.tia201.g2.web.chat.dto.Participant;
@@ -7,10 +8,10 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 
+import java.io.IOException;
 import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 
 public class ChatSessionRepositoryImpl implements ChatSessionOperation {
@@ -19,7 +20,7 @@ public class ChatSessionRepositoryImpl implements ChatSessionOperation {
     private EntityManager em;
 
     @Override
-    public List<ChatRoom> findChatRoomData(Integer userTypeId, Long userId) {
+    public List<ChatRoom> findChatRoomData(Integer userTypeId, Long userId) throws IOException {
         String jpql =
                 "select " +
                         "   chat.chat_session_id as chatId," +
@@ -86,9 +87,9 @@ public class ChatSessionRepositoryImpl implements ChatSessionOperation {
             }
             attender.setName((String) result[4]);
             byte[] bytes = (byte[]) result[5];
-            String base64Str = "data:image/png;base64,";
+            String base64Str = "";
             if(bytes != null){
-                base64Str += Base64.getEncoder().encodeToString(bytes);
+                base64Str += ImageProcessor.encodeImage(bytes);
             }
             attender.setAvatar(base64Str);
             attender.setType((Integer) result[6]);

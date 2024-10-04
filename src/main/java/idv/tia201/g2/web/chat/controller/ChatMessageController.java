@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class ChatMessageController {
 
 
     @GetMapping("{chatId}")
-    public List<MessageDto> getChatMessagesData(@PathVariable Integer chatId) {
+    public List<MessageDto> getChatMessagesData(@PathVariable Integer chatId) throws IOException {
         List<MessageDto> chatMessagesData = new ArrayList<>();
         chatMessagesData = messageService.getChatMessagesData(chatId);
 
