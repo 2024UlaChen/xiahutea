@@ -1,7 +1,7 @@
 package idv.tia201.g2.web.product.controller;
 
 
-import idv.tia201.g2.web.product.dao.ProductCategoryDao;
+
 import idv.tia201.g2.web.product.dto.ProductCategoryDTO;
 import idv.tia201.g2.web.product.service.ProductCategoryService;
 
@@ -15,13 +15,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
+
 import org.springframework.web.bind.annotation.*;
 
 
-import java.util.Collections;
+import java.util.ArrayList;
+
 import java.util.List;
-import java.util.Map;
+
 
 
 @RestController
@@ -30,29 +31,62 @@ public class ProductCategoryController {
 
    @Autowired
    private ProductCategoryService productCategoryService;
-   @Autowired
-   private ProductCategoryDao productCategoryDao;
+
+   // 菜單店鋪 ID 獲取所有分類
+   @GetMapping("/store/{storeId}")
+   public ResponseEntity<List<ProductCategory>> getCategoriesForStore(@PathVariable Integer storeId) {
+      List<ProductCategory> categories = productCategoryService.getCategoriesByStore(storeId);
+      return ResponseEntity.ok(categories);
+   }
+
 
    // 获取所有分类
    @GetMapping("/all")
-   public List<ProductCategory> getAllCategories() {
-     return  productCategoryService.getAllCategories();
+   public List<ProductCategory> getAllCategories(HttpSession session) {
+      TotalUserDTO totalUserDTO = (TotalUserDTO) session.getAttribute("totalUserDTO");
+      Integer userTypeId = totalUserDTO.getUserTypeId(); // 1: 商家, 3: 管理員
+      Integer userId = totalUserDTO.getUserId(); // 商家的ID
+      List<ProductCategory> categories = new ArrayList<>(); // Initialize the categories list
 
+      // 根據用戶角色篩選產品分類
+      if (userTypeId == 3) {
+         // 管理員，返回所有店家產品分類資料
+         categories = productCategoryService.getAllCategories();
+      } else if (userTypeId == 1 || userTypeId== 0) {
+         // 商家，過濾返回該商家的產品分類
+         categories = productCategoryService.getProductCategoryByStoreId(userId);
+      } else {
+         // Optionally handle unexpected user types, e.g., log this event
+         categories = new ArrayList<>(); // Return an empty list for unrecognized user types
+      }
 
-   }
+      return categories;
+   };
 
 
 
    @GetMapping("/findByName")
-   public List<ProductCategory> getCategoriesByName(@RequestParam String categoryName) {
-      List<ProductCategory> categories = productCategoryService.getCategoriesByName(categoryName);
-      if (categories.isEmpty()) {
-         // 返回空列表，不需要特別處理
-         return Collections.emptyList();
-      } else {
-         return categories;
+   public List<ProductCategory> getCategoriesByName(@RequestParam String categoryName, HttpSession session) {
+      TotalUserDTO totalUserDTO = (TotalUserDTO) session.getAttribute("totalUserDTO");
+
+
+      Integer userTypeId = totalUserDTO.getUserTypeId(); // 1: 商家, 3: 管理员
+      Integer userId = totalUserDTO.getUserId(); // storeId 或 adminId
+
+      List<ProductCategory> categories;
+
+      if (userTypeId == 1) { // 商家
+         // 店家只能查詢自己的分类
+
+      categories=productCategoryService.getCategoriesByNameAndStoreId(categoryName, userId);
+      } else { // 管理员
+         // 管理员可以查詢所有分类
+         categories = productCategoryService.getCategoriesByName(categoryName);
       }
+
+      return categories; // 返回找到的分类
    }
+
 
 
    // 根据ID获取分类
@@ -93,7 +127,7 @@ public class ProductCategoryController {
       Integer userId = totalUserDTO.getUserId(); // storeId 或 adminId
 
 
-      ProductCategory updatedCategory = productCategoryService.update(categoryId, updatedProductCategoryDTO);
+      ProductCategory updatedCategory = productCategoryService.update(categoryId, updatedProductCategoryDTO, userTypeId, userId);
 
       if (updatedCategory != null) {
          return ResponseEntity.ok("分类修改成功！");

@@ -35,19 +35,36 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     @Override
     public List<ProductCategory> getAllCategories() {
 
-        return productCategoryDao.findAll();
+        return productCategoryDao.findAllByOrderByCategorySortAsc();
     }
 
     @Override
     public ProductCategory getProductCategoryById(Integer categoryId) {
 
-        return productCategoryDao.findById(categoryId).orElse(null);
+        return productCategoryDao.findByCategoryId(categoryId);
     }
 
 
-    public ProductCategory update(Integer categoryId, ProductCategoryDTO updatedCategoryDTO) {
+    public ProductCategory update(Integer categoryId, ProductCategoryDTO updatedCategoryDTO, Integer userTypeId, Integer userId) {
         // 根据 categoryId 查找现有分类
         ProductCategory existingCategory = productCategoryDao.findByCategoryId(categoryId);
+
+        // 如果用戶是商家，驗證該分類是否屬於該商家
+        if (userTypeId == 1 && !existingCategory.getProductStoreId().equals(userId)) {
+           return null;
+        }
+
+        List<ProductCategory> duplicateCategories = productCategoryDao.findByCategoryNameAndProductStoreId(updatedCategoryDTO.getCategoryName(), userId);
+
+// 檢查是否存在不同 ID 的重複分類
+        if (!duplicateCategories.isEmpty()) {
+            for (ProductCategory category : duplicateCategories) {
+                // 如果找到的分類 ID 與當前更新的分類不同，則表示分類名稱重複
+                if (!category.getCategoryId().equals(categoryId)) {
+                    return null;
+                }
+            }
+        }
 
         if (existingCategory != null) {
             // 更新分类的字段
@@ -71,8 +88,6 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
         if (categoryDTO.getCategoryName() == null || categoryDTO.getCategoryName().isEmpty()) {
             return "分类名称不能为空";
         }
-
-
 
         ProductCategory category = new ProductCategory();
         category.setCategoryName(categoryDTO.getCategoryName());
@@ -117,6 +132,23 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     public Page<ProductCategory> getProductCategoryByStoreId(Integer productStoreId, Pageable pageable) {
          return productCategoryDao.findByProductStoreId(productStoreId, pageable);
     }
+
+    @Override
+    public List<ProductCategory> getCategoriesByNameAndStoreId(String categoryName, Integer storeId) {
+        return productCategoryDao.findByCategoryNameAndProductStoreId(categoryName, storeId);
+    }
+
+    @Override
+    public List<ProductCategory> getProductCategoryByStoreId(Integer storeId) {
+        return productCategoryDao.findByProductStoreIdOrderByCategorySortAsc(storeId);
+    }
+
+    @Override
+    public List<ProductCategory> getCategoriesByStore(Integer storeId) {
+        return productCategoryDao.findByProductStoreId(storeId);
+    }
+
+    ;
 
 
 }

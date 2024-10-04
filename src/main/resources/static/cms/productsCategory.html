@@ -272,7 +272,7 @@
                             <thead>
                                 <tr>
 <!--                                    <th style="width: 12%">-->
-
+                                    <th style="width: 12%" id="storeNameColumn" style="display: none;">店家ID</th> <!-- 店家名稱欄位，預設隱藏 -->
 <!--                                    </th>-->
 
                                     <th style="width: 25%">
@@ -372,392 +372,418 @@
             .then(data => {
                 console.log('TotalUserDTO:', data); // 在控制台中顯示 TotalUserDTO
 
+                // 提取 userTypeId
+                var userTypeId = data.userTypeId;
+
                 // 根據獲取到的 TotalUserDTO 處理邏輯
-                if (data && data.userTypeId === 1) {
+                if (userTypeId === 1) {
                     // 如果角色是 store，隱藏搜尋框
                     document.getElementById('searchInput2').style.display = 'none';
                     document.getElementById('searchInput2-label').style.display = 'none';
                 }
 
-                if (data && data.userTypeId === 3) {
+                if (userTypeId === 3) {
                     // 隱藏新增按鈕
                     document.getElementById('add').style.display = 'none';
 
-
                 }
+                    // 更新類別表格，將 userTypeId 傳遞給函數
+
+
+                    const categoryadd = document.querySelector('#add');
+                    const modal = document.querySelector('#myModal');
+                    const closebtn = document.querySelector('.close');
+                    const categoryform = document.querySelector('#categoryForm');
+                    const resultMessage = document.querySelector('#resultMessage');
+
+                    categoryadd.addEventListener('click', () => {
+                        modal.style.display = 'block';
+                    });
+
+                    // Add event listener for closing the modal
+                    closebtn.addEventListener('click', () => {
+                        modal.style.display = 'none';
+                    });
+
+                    // Handle form submission for adding a new category
+                    categoryform.addEventListener('submit', async (event) => {
+                        event.preventDefault();
+
+                        const selectedStatus = document.querySelector('input[name="categoryStatus"]:checked').value;
+                        const categoryName = document.querySelector('#categoryName').value.trim();
+                        const categorySort = document.querySelector('#categorySort').value.trim();
+
+                        if (!categoryName || !categorySort) {
+                            resultMessage.textContent = '所有字段都是必填的。';
+                            return;
+                        }
+
+                        const validPattern = /^[a-zA-Z\u4e00-\u9fa5\s]+$/;
+
+                        // 验证分类名称是否符合要求
+                        if (!validPattern.test(categoryName)) {
+                            resultMessage.textContent = '分類名稱只能包含英文和中文';
+                            return;
+                        } else {
+                            resultMessage.textContent = '';
+                        }
+
+                        const isEnabled = selectedStatus === '1';
+
+                        const data = {
+                            "categoryName": categoryName,
+                            "categorySort": Number.parseInt(categorySort),
+                            "categoryStatus": isEnabled
+                        };
+
+                        try {
+                            // 发送请求
+                            const response = fetch('/categories/save', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify(data)  // 将数据转换为JSON格式
+                            }).then(response => {
+                                // 检查响应状态是否表示错误
+                                if (!response.ok) {
+                                    throw new Error(`HTTP错误！状态: ${response.status}`);
+                                }
+                            }).then(data => {
+                                console.log('分類提交成功:', data);
+                                // 显示成功消息
+                                Swal.fire({
+                                    text: "商品分類新增成功!",
+                                    icon: "success"
+                                });
+                                // 关闭模态窗口
+                                modal.style.display = 'none';
+                            });
+                        } catch (error) {
+                            Swal.fire({
+                                icon: "error",
+                                text: "分類新增錯誤",
+                            });
+                        }
+                    })
+
+                    function closeEdit() {
+                        let editModal = document.getElementById('editModal');
+                        const editClose = document.querySelector('span.editclose');
+                        // 监听关闭按钮点击事件
+                        editClose.addEventListener('click', function () {
+                            editModal.style.display = 'none'; // 隐藏模态窗口
+                        });
+                    }
+
+// 在点击更新按钮时执行
+                    var eVal;
+                    document.getElementById("categoryTable").addEventListener('click', function (e) {
+                        if (e.target && e.target.classList.contains('update_btn')) {
+                            eVal = e;
+                            const updateBtn = e.target;
+                            const categoryId = updateBtn.getAttribute('data-id');
+                            closeEdit();
+
+
+                            // 使用 fetch 从服务器获取类别数据
+                            fetch(`/categories/${categoryId}`)
+                                .then(response => {
+                                    // 检查响应是否成功
+                                    if (!response.ok) {
+                                        throw new Error('Network response was not ok');
+                                    }
+                                    return response.json(); // 将响应体解析为 JSON
+                                })
+                                .then(data => {
+                                    // 填充表单字段
+
+                                    document.getElementById('editcategoryName').value = data.categoryName;
+                                    document.getElementById('editcategorySort').value = data.categorySort;
+                                    // 根据 categoryStatus 设置启用或停用的单选按钮
+                                    if (data.categoryStatus === true) {
+                                        document.querySelector('input[name="editStatus"][value="1"]').checked = true; // 启用
+                                        document.querySelector('input[name="editStatus"][value="0"]').checked = false; // 确保停用状态未勾选
+                                    } else {
+                                        document.querySelector('input[name="editStatus"][value="1"]').checked = false; // 确保启用状态未勾选
+                                        document.querySelector('input[name="editStatus"][value="0"]').checked = true; // 停用
+                                    }
+
+                                    document.getElementById('editModal').style.display = 'block';
+                                })
+                                .catch(error => console.error('Error fetching category data:', error));
+                        }
+                    });
+
+                    document.getElementById('editCategoryForm').addEventListener('submit', function (event) {
+                        event.preventDefault();
+
+                        // 防止表单默认提交行为
+
+                        const updateBtn = eVal.target;
+                        const categoryId = updateBtn.getAttribute('data-id');
+                        const editcategoryName = document.getElementById('editcategoryName');
+                        const editcategorySort = document.getElementById('editcategorySort');
+                        let editStatus = document.querySelector('input[name="editStatus"]:checked').value;
+                        let selectStatus = editStatus === "1";
+
+                        let editModal = document.getElementById('editModal');
+
+                        if (!editcategoryName.value || !editcategorySort.value) {
+                            editresultMessage.textContent = '所有字段都是必填的。';
+                            return;
+                        }
+
+                        // 提交编辑数据
+
+                        let categoryData = {
+                            categoryName: editcategoryName.value,
+                            categorySort: parseInt(editcategorySort.value),
+                            categoryStatus: selectStatus
+                        };
+                        editModal.style.display = 'none'; // 隐藏模态窗口
+                        fetch(`/categories/update/${categoryId}`, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(categoryData),
+                        })
+                            .then(response => {
+                                if (!response.ok) {
+                                    // 假設伺服器返回的錯誤消息不是 JSON 格式
+                                    response.text().then(text => {
+                                        throw new Error(`錯誤：${text}`); // 抛出文本作為錯誤消息
+                                    });
+                                }
+                            })
+                            .then(data => {
+                                console.log('分類更新成功：', data);
+                                const tdElt = document.getElementById('categoryName_' + categoryId);
+                                const row = document.querySelector(`tr[data-id="${categoryId}"]`);
+                                if (row) {
+                                    row.children[1].textContent = data.categoryName; // 更新分類名稱
+                                    row.children[2].textContent = data.categorySort; // 更新分類排序
+                                }
+                                tdElt.textContent = editcategoryName.value;// 更新分類名稱
+                                alert('分類更新成功！');  // 顯示成功訊息
+                                return;
+                            })
+                            .catch(error => {
+                                console.error('更新分類時出錯：', error);
+                                alert(error.message); // 顯示錯誤消息
+                            });
+                    })
+
+
+// =============================================
+                    var paginationControls = document.getElementById('paginationControls');
+                    var searchButton = document.getElementById('searchButton');
+                    var searchInput = document.getElementById('searchInput');
+
+// 當搜尋按鈕被點擊時觸發的事件處理器
+                    searchButton.addEventListener('click', function () {
+                        const categoryName = searchInput.value.trim();
+                        if (categoryName) {
+                            // 如果有搜尋字串，進行搜尋請求
+                            searchfetchCategories(categoryName);
+                        } else {
+                            // 如果搜尋欄為空，返回第一頁所有分類
+                            fetchCategories('', 0);
+                        }
+                    });
+                    searchInput.addEventListener('keyup', function (e) {
+                        const categoryName = searchInput.value.trim();
+                        if (e.which == 13) {
+                            e.preventDefault(); // 防止表單提交或其他預設行為
+                            searchfetchCategories(categoryName); // 呼叫搜尋函數
+                        }
+                    });
+
+                    searchInput.addEventListener('input', function () {
+                        const categoryName = searchInput.value.trim();
+                        if (!categoryName) {
+                            // 當輸入框清空時，回到第一頁
+                            fetchCategories('', 0);
+                        }
+                    });
+
+// 搜尋分類，根據名稱進行查詢
+                    function searchfetchCategories(query) {
+                        const url = `/categories/findByName?categoryName=${encodeURIComponent(query)}`;
+
+                        fetch(url)
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Network response was not ok');
+                                }
+                                return response.json(); // 解析 JSON 格式的響應體
+                            })
+                            .then(data => {
+                                if (data.length === 0) {
+                                    console.log('未找到匹配的分類');
+                                } else {
+                                    updateCategoryTable(data); // 更新表格顯示搜尋結果
+                                }
+                                paginationControls.innerHTML = ''; // 搜尋結果不顯示分頁
+                            })
+                            .catch(error => {
+                                console.error('Fetch error:', error);
+                            });
+                    }
+
+// 分頁功能，請求指定頁碼的數據，每頁顯示 10 筆
+                    function fetchCategories(query, page) {
+                        const url = `/categories/paginated?page=${page}&size=10${query ? `&categoryName=${encodeURIComponent(query)}` : ''}`;
+
+                        fetch(url)
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Network response was not ok');
+                                }
+                                return response.json(); // 解析 JSON 格式的響應體
+                            })
+                            .then(data => {
+                                updateCategoryTable(data.content); // 更新表格數據
+                                updatePaginationControls(data.totalPages, page); // 更新分頁按鈕
+                            })
+                            .catch(error => {
+                                console.error('Fetch error:', error);
+                            });
+                    }
+
+
+
+                    // 更新表格的示例函數
+                    function updateCategoryTable(categories, userTypeId) {
+                        const categoryTableBody = document.querySelector('#categoryTable tbody');
+                        const storeNameColumn = document.getElementById('storeNameColumn');
+
+                        // 清空表格內容
+                        categoryTableBody.innerHTML = '';
+
+                        // 如果是管理員，顯示店家名稱欄位
+                        if (userTypeId === 3) {
+                            storeNameColumn.style.display = ''; // 顯示店家名稱欄位
+                        } else {
+                            storeNameColumn.style.display = 'none'; // 隱藏店家名稱欄位
+                        }
+
+                        categories.forEach(category => {
+                            const row = document.createElement('tr');
+
+                            // 如果是管理員，顯示店家名稱
+                            if (userTypeId === 3) {
+                                const storeNameCell = document.createElement('td');
+                                storeNameCell.textContent = category.productStoreId; // 假設這裡存放的是店家名稱或 ID
+                                row.appendChild(storeNameCell);
+                            }
+
+                            // 其他欄位
+                            const nameCell = document.createElement('td');
+                            nameCell.textContent = category.categoryName;
+                            row.appendChild(nameCell);
+                            nameCell.id = 'categoryName_' + category.categoryId;
+
+                            const sortCell = document.createElement('td');
+                            sortCell.textContent = category.categorySort;
+                            row.appendChild(sortCell);
+
+                            const statusBadge = category.categoryStatus === true
+                                ? `<span class="badge badge-success on-shelf">啟用</span>`
+                                : `<span class="badge badge-danger off-shelf">停用</span>`;
+                            const statusCell = document.createElement('td');
+                            statusCell.innerHTML = statusBadge;
+                            row.appendChild(statusCell);
+
+                            const actionCell = document.createElement('td');
+                            actionCell.innerHTML = `
+            <a class="btn btn-sm btn-edit update_btn" href="#" data-id="${category.categoryId}">
+                <i class="fas fa-pencil-alt"></i> 編輯
+            </a>
+        `;
+                            row.appendChild(actionCell);
+
+                            categoryTableBody.appendChild(row);
+                        });
+                    }
+
+
+                    // 更新分頁控制的示例函數
+                    function updatePaginationControls(totalPages, currentPage) {
+                        const paginationControls = document.getElementById('paginationControls');
+                        paginationControls.innerHTML = ''; // Clear existing pagination controls
+
+                        // Create the pagination nav
+                        const nav = document.createElement('nav');
+                        nav.setAttribute('aria-label', 'Page navigation example');
+
+                        // Create the ul element for pagination
+                        const ul = document.createElement('ul');
+                        ul.className = 'pagination justify-content-end';
+
+                        // Previous button
+                        const prevLi = document.createElement('li');
+                        prevLi.className = 'page-item ' + (currentPage === 0 ? 'disabled' : '');
+                        const prevLink = document.createElement('a');
+                        prevLink.className = 'page-link';
+                        prevLink.href = '#';
+                        prevLink.setAttribute('tabindex', '-1');
+                        prevLink.setAttribute('aria-disabled', 'true');
+                        prevLink.id = 'prev';
+                        prevLink.textContent = 'Previous';
+                        if (currentPage > 0) {
+                            prevLink.addEventListener('click', () => {
+                                fetchCategories(searchInput.value.trim(), currentPage - 1); // Load previous page
+                            });
+                        }
+                        prevLi.appendChild(prevLink);
+                        ul.appendChild(prevLi);
+
+                        // Page buttons
+                        for (let i = 0; i < totalPages; i++) {
+                            const li = document.createElement('li');
+                            li.className = 'page-item ' + (i === currentPage ? 'active' : '');
+                            const link = document.createElement('a');
+                            link.className = 'page-link';
+                            link.href = '#';
+                            link.textContent = i + 1;
+                            link.addEventListener('click', () => {
+                                fetchCategories(searchInput.value.trim(), i); // Load page i
+                            });
+                            li.appendChild(link);
+                            ul.appendChild(li);
+                        }
+
+                        // Next button
+                        const nextLi = document.createElement('li');
+                        nextLi.className = 'page-item ' + (currentPage === totalPages - 1 ? 'disabled' : '');
+                        const nextLink = document.createElement('a');
+                        nextLink.className = 'page-link';
+                        nextLink.href = '#';
+                        nextLink.id = 'next';
+                        nextLink.textContent = 'Next';
+                        if (currentPage < totalPages - 1) {
+                            nextLink.addEventListener('click', () => {
+                                fetchCategories(searchInput.value.trim(), currentPage + 1); // Load next page
+                            });
+                        }
+                        nextLi.appendChild(nextLink);
+                        ul.appendChild(nextLi);
+
+                        // Append ul to nav, and nav to paginationControls
+                        nav.appendChild(ul);
+                        paginationControls.appendChild(nav);
+                    }
+
+// 初次載入所有分類，默認加載第 0 頁，每頁顯示 10 筆資料
+                    fetchCategories('', 0); // 默認加載第 0 頁
+
             })
             .catch(error => {
                 console.error('Fetch error:', error);
             });
 
-
-
-
-
- const categoryadd=document.querySelector('#add');
-    const modal=document.querySelector('#myModal');
-    const closebtn=document.querySelector('.close');
-    const categoryform=document.querySelector('#categoryForm');
-    const resultMessage = document.querySelector('#resultMessage');
-
-   categoryadd.addEventListener('click', () => {
-        modal.style.display = 'block';
-    });
-
-// Add event listener for closing the modal
-
-    closebtn.addEventListener('click', () => {
-        modal.style.display = 'none';
-    });
-
-// Handle form submission for adding a new category
-    categoryform.addEventListener('submit', async (event) => {
-        event.preventDefault();
-
-        const selectedStatus = document.querySelector('input[name="categoryStatus"]:checked').value;
-        const categoryName = document.querySelector('#categoryName').value.trim();
-        const categorySort = document.querySelector('#categorySort').value.trim();
-
-        if (!categoryName || !categorySort) {
-            resultMessage.textContent = '所有字段都是必填的。';
-            return;
-        }
-
-        const validPattern = /^[a-zA-Z\u4e00-\u9fa5\s]+$/;
-
-        // 验证分类名称是否符合要求
-        if (!validPattern.test(categoryName)) {
-            resultMessage.textContent = '分類名稱只能包含英文和中文';
-            return;
-        }
-        const isEnabled = selectedStatus === "1";
-
-        const data = {
-            "categoryName": categoryName, // Ensure categoryName is defined
-           "categorySort": Number.parseInt(categorySort),
-            "categoryStatus": isEnabled
-
-
-        }
-
-        try {
-            // 发送请求
-            const response = await fetch('/categories/save', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)  // 将数据转换为JSON格式
-            });
-
-            // 检查响应状态是否表示错误
-            if (!response.ok) {
-                throw new Error(`HTTP错误！状态: ${response.status}`);
-            }
-
-            // 解析JSON响应
-            const result = await response.json();
-
-
-            Swal.fire({
-                text: "商品分類新增成功!",
-                icon: "success"
-            });
-        } catch (error) {
-
-            Swal.fire({
-                icon: "error",
-                text: "分類新增錯誤",
-            });
-        }
-    })
-
-
-
-// 在点击更新按钮时执行
-    document.getElementById("categoryTable").addEventListener('click', function(e) {
-        if (e.target && e.target.classList.contains('update_btn')) {
-            const updateBtn = e.target;
-            const categoryId = updateBtn.getAttribute('data-id');
-            let editModal = document.getElementById('editModal');
-            let editClose = document.querySelector('span.editclose');
-
-
-
-            // 使用 fetch 从服务器获取类别数据
-            fetch(`/categories/${categoryId}`)
-                .then(response => {
-                    // 检查响应是否成功
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json(); // 将响应体解析为 JSON
-                })
-                .then(data => {
-                    // 填充表单字段
-
-                    document.getElementById('editcategoryName').value = data.categoryName;
-                    document.getElementById('editcategorySort').value = data.categorySort;
-                    // 根据 categoryStatus 设置启用或停用的单选按钮
-                    if (data.categoryStatus === true) {
-                        document.querySelector('input[name="editStatus"][value="1"]').checked = true; // 启用
-                        document.querySelector('input[name="editStatus"][value="0"]').checked = false; // 确保停用状态未勾选
-                    } else {
-                        document.querySelector('input[name="editStatus"][value="1"]').checked = false; // 确保启用状态未勾选
-                        document.querySelector('input[name="editStatus"][value="0"]').checked = true; // 停用
-                    }
-
-                    document.getElementById('editModal').style.display = 'block';
-                    // 监听关闭按钮点击事件
-                    editClose.addEventListener('click', function () {
-                        editModal.style.display = 'none'; // 隐藏模态窗口
-                    });
-
-                })
-                .catch(error => console.error('Error fetching category data:', error));
-        }
-
-
-        document.getElementById('editCategoryForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            // 防止表单默认提交行为
-
-            const updateBtn = e.target;
-            const categoryId = updateBtn.getAttribute('data-id');
-            const editcategoryName = document.getElementById('editcategoryName');
-            const editcategorySort = document.getElementById('editcategorySort');
-            let editStatus = document.querySelector('input[name="editStatus"]:checked').value;
-            let selectStatus= editStatus === "1";
-
-            let editModal=document.getElementById('editModal');
-
-            if (!editcategoryName.value || !editcategorySort.value) {
-                editresultMessage.textContent = '所有字段都是必填的。';
-                return;
-            }
-
-            // 提交编辑数据
-
-            fetch(`/categories/update/${categoryId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    categoryName: editcategoryName.value,
-                    categorySort: editcategorySort.value,
-                    categoryStatus: selectStatus
-                }),
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json(); // 将响应体解析为 JSON
-                })
-                .then(data => {
-                    // 更新成功后的处理
-                    console.log('Category updated successfully:', data);
-
-
-
-
-                    location.reload();
-
-                    const row = document.querySelector(`tr[data-id="${categoryId}"]`);
-                    if (row) {
-                        row.children[1].textContent = data.categoryName; // 更新分类名称
-                        row.children[2].textContent = data.categorySort; // 更新分类排序
-                    }
-                    // 隐藏模态窗口
-                    editModal.style.display='none';
-
-                    // 这里可以添加刷新页面或更新界面逻辑
-                })
-                .catch(error => console.error('Error updating category:', error));
-
-
-
-        })
-    });
-
-
-
-// =============================================
-var paginationControls = document.getElementById('paginationControls');
-var searchButton = document.getElementById('searchButton');
-var searchInput = document.getElementById('searchInput');
-
-// 當搜尋按鈕被點擊時觸發的事件處理器
-searchButton.addEventListener('click', function() {
-    const categoryName = searchInput.value.trim();
-    if (categoryName) {
-        // 如果有搜尋字串，進行搜尋請求
-        searchfetchCategories(categoryName);
-    } else {
-        // 如果搜尋欄為空，返回第一頁所有分類
-        fetchCategories('', 0);
-    }
-});
-        searchInput.addEventListener('keyup', function(e) {
-            const categoryName = searchInput.value.trim();
-            if (e.which == 13) {
-              e.preventDefault(); // 防止表單提交或其他預設行為
-                searchfetchCategories(categoryName); // 呼叫搜尋函數
-            }
-        });
-// 當搜尋框內容變化時觸發的事件處理器
-searchInput.addEventListener('input', function() {
-    const categoryName = searchInput.value.trim();
-    if (!categoryName) {
-        // 當輸入框清空時，回到第一頁
-        fetchCategories('', 0);
-    }
-});
-
-// 搜尋分類，根據名稱進行查詢
-function searchfetchCategories(query) {
-    const url = `/categories/findByName?categoryName=${encodeURIComponent(query)}`;
-
-    fetch(url)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json(); // 解析 JSON 格式的響應體
-        })
-        .then(data => {
-            if (data.length === 0) {
-                console.log('未找到匹配的分類');
-            } else {
-                updateCategoryTable(data); // 更新表格顯示搜尋結果
-            }
-            paginationControls.innerHTML = ''; // 搜尋結果不顯示分頁
-        })
-        .catch(error => {
-            console.error('Fetch error:', error);
-        });
-}
-
-// 分頁功能，請求指定頁碼的數據，每頁顯示 10 筆
-function fetchCategories(query, page) {
-    const url = `/categories/paginated?page=${page}&size=10${query ? `&categoryName=${encodeURIComponent(query)}` : ''}`;
-
-    fetch(url)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json(); // 解析 JSON 格式的響應體
-        })
-        .then(data => {
-            updateCategoryTable(data.content); // 更新表格數據
-            updatePaginationControls(data.totalPages, page); // 更新分頁按鈕
-        })
-        .catch(error => {
-            console.error('Fetch error:', error);
-        });
-}
-
-// 更新表格的示例函數
-function updateCategoryTable(categories,userTypeId) {
-    const categoryTableBody = document.querySelector('#categoryTable tbody');
-    categoryTableBody.innerHTML = ''; // 清空表格內容
-
-
-    categories.forEach(category => {
-        const row = document.createElement('tr');
-
-        const statusBadge = category.categoryStatus === true
-            ? `<span class="badge badge-success on-shelf">啟用</span>`
-            : `<span class="badge badge-danger off-shelf">停用</span>`;
-
-        row.innerHTML = `
-            ${userTypeId === 3 ? `<td>${category.productStoreId}</td>` : ''} <!-- Assuming productStoreName is available -->
-            <td>${category.categoryName}</td>
-            <td>${category.categorySort}</td>
-            <td>${statusBadge}</td>
-            <td>
-                <a class="btn btn-sm btn-edit update_btn" href="#" data-id="${category.categoryId}">
-                    <i class="fas fa-pencil-alt"></i> 編輯
-                </a>
-
-            </td>
-        `;
-        categoryTableBody.appendChild(row);
-    });
-}
-
-// 更新分頁控制的示例函數
-function updatePaginationControls(totalPages, currentPage) {
-    const paginationControls = document.getElementById('paginationControls');
-    paginationControls.innerHTML = ''; // Clear existing pagination controls
-
-    // Create the pagination nav
-    const nav = document.createElement('nav');
-    nav.setAttribute('aria-label', 'Page navigation example');
-
-    // Create the ul element for pagination
-    const ul = document.createElement('ul');
-    ul.className = 'pagination justify-content-end';
-
-    // Previous button
-    const prevLi = document.createElement('li');
-    prevLi.className = 'page-item ' + (currentPage === 0 ? 'disabled' : '');
-    const prevLink = document.createElement('a');
-    prevLink.className = 'page-link';
-    prevLink.href = '#';
-    prevLink.setAttribute('tabindex', '-1');
-    prevLink.setAttribute('aria-disabled', 'true');
-    prevLink.id = 'prev';
-    prevLink.textContent = 'Previous';
-    if (currentPage > 0) {
-        prevLink.addEventListener('click', () => {
-            fetchCategories(searchInput.value.trim(), currentPage - 1); // Load previous page
-        });
-    }
-    prevLi.appendChild(prevLink);
-    ul.appendChild(prevLi);
-
-    // Page buttons
-    for (let i = 0; i < totalPages; i++) {
-        const li = document.createElement('li');
-        li.className = 'page-item ' + (i === currentPage ? 'active' : '');
-        const link = document.createElement('a');
-        link.className = 'page-link';
-        link.href = '#';
-        link.textContent = i + 1;
-        link.addEventListener('click', () => {
-            fetchCategories(searchInput.value.trim(), i); // Load page i
-        });
-        li.appendChild(link);
-        ul.appendChild(li);
-    }
-
-    // Next button
-    const nextLi = document.createElement('li');
-    nextLi.className = 'page-item ' + (currentPage === totalPages - 1 ? 'disabled' : '');
-    const nextLink = document.createElement('a');
-    nextLink.className = 'page-link';
-    nextLink.href = '#';
-    nextLink.id = 'next';
-    nextLink.textContent = 'Next';
-    if (currentPage < totalPages - 1) {
-        nextLink.addEventListener('click', () => {
-            fetchCategories(searchInput.value.trim(), currentPage + 1); // Load next page
-        });
-    }
-    nextLi.appendChild(nextLink);
-    ul.appendChild(nextLi);
-
-    // Append ul to nav, and nav to paginationControls
-    nav.appendChild(ul);
-    paginationControls.appendChild(nav);
-}
-
-// 初次載入所有分類，默認加載第 0 頁，每頁顯示 10 筆資料
-fetchCategories('', 0); // 默認加載第 0 頁
 
 
     </script>
