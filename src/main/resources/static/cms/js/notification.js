@@ -45,10 +45,12 @@ function getOrdersFromStorage() {
     const orders = sessionStorage.getItem('orders');
     return orders ? JSON.parse(orders) : [];
 }
+// 取得未讀通知
 function getUnreadOrder() {
     const unreadOrder = localStorage.getItem('unreadOrder');
     return unreadOrder ? JSON.parse(unreadOrder) : [];
 }
+// 設定未讀通知
 function setUnreadOrder(unreadOrder) {
     localStorage.setItem('unreadOrder', JSON.stringify(unreadOrder));
 }

@@ -25,15 +25,15 @@ import idv.tia201.g2.web.order.vo.Orders;
 import idv.tia201.g2.web.product.dao.ProductDao;
 import idv.tia201.g2.web.product.vo.Product;
 import idv.tia201.g2.web.store.dao.StoreDao;
+import idv.tia201.g2.web.store.service.StoreService;
 import idv.tia201.g2.web.store.vo.CustomerLoyaltyCard;
 import idv.tia201.g2.web.store.vo.Store;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 import static org.springframework.util.ObjectUtils.isEmpty;
@@ -44,6 +44,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private OrderDao orderDao;
+    @Autowired
+    private OrderRepository orderRepository;
     @Autowired
     private OrderDetailDao orderDetailDao;
     @Autowired
@@ -64,6 +66,8 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private MemberService memberService;
     @Autowired
+    private StoreService storeService;
+    @Autowired
     private MemberLoyaltyCardService memberLoyaltyCardService;
     @Autowired
     private CustomerCouponService customerCouponService;
@@ -71,8 +75,7 @@ public class OrderServiceImpl implements OrderService {
     private NotificationService notificationService;
     @Autowired
     private InvoiceService invoiceService;
-    @Autowired
-    private OrderRepository orderRepository;
+
 
     // -------- FINISH ---------------------------------
     // 前台 訂單新增
@@ -100,20 +103,27 @@ public class OrderServiceImpl implements OrderService {
             orderDto.setSuccessful(false);
             return orderDto;
         }
-        if(order.getPaymentMethod() != 1 || isEmpty(order.getPaymentAmount())){
+        if(order.getPaymentMethod() != 1 || isEmpty(order.getPaymentAmount()) || order.getPaymentAmount() < 0){
             orderDto.setMessage("付款方法或付款金額錯誤");
             orderDto.setSuccessful(false);
             return orderDto;
         }
-        if(order.getInvoiceMethod() != 1 && order.getInvoiceMethod() != 2 && order.getInvoiceMethod() != 3){
+        // 判斷發票
+        Integer invoiceMethod = order.getInvoiceMethod();
+        String invoiceCarrier = order.getInvoiceCarrier();
+        String invoiceVat = order.getInvoiceVat() + "";
+        if(invoiceMethod != 1 && invoiceMethod != 2 && invoiceMethod != 3){
             orderDto.setMessage("發票方式錯誤");
             orderDto.setSuccessful(false);
             return orderDto;
         }
-        final String invoiceCarrier = order.getInvoiceCarrier();
-        final String invoiceVat = order.getInvoiceVat() + "";
-        if(order.getInvoiceMethod() == 1){  // 手機載具
-            if(isEmpty(invoiceCarrier) || invoiceCarrier.charAt(0) != '/' || invoiceCarrier.trim().length() != 8){
+        if(invoiceMethod == 1){  // 手機載具
+            if (order.getInvoiceCarrier() == null ||  order.getInvoiceVat() != null){
+                orderDto.setMessage("手機載具需輸入載具號碼，且不可輸入統編");
+                orderDto.setSuccessful(false);
+                return orderDto;
+            }
+            if(invoiceCarrier.charAt(0) != '/' || invoiceCarrier.trim().length() != 8){
                 orderDto.setMessage("手機載具輸入錯誤");
                 orderDto.setSuccessful(false);
                 return orderDto;
@@ -130,7 +140,19 @@ public class OrderServiceImpl implements OrderService {
                 }
             }
         }
-        if (order.getInvoiceMethod() == 3) {  // 統編
+        if(invoiceMethod == 2){
+            if (order.getInvoiceCarrier() != null || order.getInvoiceVat() != null){
+                orderDto.setMessage("一般會員載具不需輸入載具號碼，且不可輸入統編");
+                orderDto.setSuccessful(false);
+                return orderDto;
+            }
+        }
+        if(invoiceMethod == 3) {  // 統編
+            if (invoiceCarrier != null || order.getInvoiceVat() == null){
+                orderDto.setMessage("統編發票不需輸入載具號碼，且需輸入統編");
+                orderDto.setSuccessful(false);
+                return orderDto;
+            }
             if(!(ValidateUtil.isValidTWBID(invoiceVat))){
                 orderDto.setMessage("統編輸入錯誤");
                 orderDto.setSuccessful(false);
@@ -166,13 +188,21 @@ public class OrderServiceImpl implements OrderService {
                 return orderDto;
             }
         }
-        if(
-            order.getCouponDiscount() < 0 || order.getLoyaltyDiscount() < 0 || order.getCustomerMoneyDiscount() < 0 ||
-            order.getCustomerMoneyDiscount() > member.getCustomerMoney()
-        ){
-            orderDto.setMessage("折抵金額錯誤");
-            orderDto.setSuccessful(false);
-            return orderDto;
+        // 會員使用優惠券
+        Integer customerCouponsId = order.getCustomerCouponsId();
+        if(customerCouponsId != null) {
+            CustomerCoupons customerCoupon = customerCouponDao.findByCustomerIdAndCustomerCouponsId(customerId, customerCouponsId);
+            if (customerCoupon == null || customerCoupon.getCouponQuantity() <= 0) {
+                orderDto.setMessage("無此優惠券或數量不足");
+                orderDto.setSuccessful(false);
+                return orderDto;
+            }
+            if(order.getCouponDiscount() < 0 || (!order.getCouponDiscount().equals(customerCoupon.getCoupon().getDiscount()))){
+                orderDto.setMessage("優惠券折抵金額錯誤");
+                orderDto.setSuccessful(false);
+                return orderDto;
+            }
+            customerCouponService.updateCouponQuantity(customerId, customerCoupon.getCouponId() , customerCoupon.getCouponQuantity() - 1);
         }
         // 會員使用集點卡
         Integer loyaltyCardId = order.getLoyaltyCardId();
@@ -183,36 +213,37 @@ public class OrderServiceImpl implements OrderService {
                 orderDto.setSuccessful(false);
                 return orderDto;
             }
-            memberLoyaltyCardService.UpdatePoints(loyaltyCardId, order.getLoyaltyDiscount());
-        }
-        // 會員使用優惠券
-        Integer customerCouponsId = order.getCustomerCouponsId();
-        if(customerCouponsId != null) {
-            CustomerCoupons customerCoupon = customerCouponDao.findByCustomerIdAndCustomerCouponsId(customerId, customerCouponsId);
-            if (customerCoupon == null) {
-                orderDto.setMessage("無此優惠券");
+            if(order.getLoyaltyDiscount() < 0 || ((customerLoyaltyCard.getPoints()) - order.getLoyaltyDiscount() < 0)){
+                orderDto.setMessage("集點卡折抵金額錯誤");
                 orderDto.setSuccessful(false);
                 return orderDto;
             }
-            customerCouponService.updateCouponQuantity(customerId, customerCoupon.getCouponId() , customerCoupon.getCouponQuantity() - 1);
+            // 折抵集點卡點數
+            memberLoyaltyCardService.UpdatePoints(loyaltyCardId, order.getLoyaltyDiscount());
         }
+        // todo 增加集點卡點數
+        memberLoyaltyCardService.updateMemberStoreLoyaltyPoints(storeId, customerId, order.getProductAmount());
+
         // 會員使用點數
-        memberService.updateMemberMoneyById(customerId, - order.getCustomerMoneyDiscount());
+        if(order.getCustomerMoneyDiscount() < 0 || order.getCustomerMoneyDiscount() > member.getCustomerMoney()){
+            orderDto.setMessage("會員錢包折抵金額錯誤");
+            orderDto.setSuccessful(false);
+            return orderDto;
+        }
+        memberService.updateMemberMoneyById(customerId, (- order.getCustomerMoneyDiscount()));
 
         order.setOrderStatus(1);
         order.setOrderCreateDatetime(new Timestamp(System.currentTimeMillis()));
-        order.setSuccessful(true);
         orderDao.insert(order);
         // 存商品
         for (OrderDetail orderDetail : orderDetails) {
             orderDetail.setOrderId(order.getOrderId());
-            orderDetail.setSuccessful(true);
             orderDetailDao.insert(orderDetail);
         }
 
         // 傳送發票參數給綠界
         String addInvoiceNo = invoiceService.createInvoice(order);
-        if(addInvoiceNo == null){
+        if(isEmpty(addInvoiceNo)){
             orderDto.setMessage("開立發票失敗");
             orderDto.setSuccessful(false);
             return orderDto;
@@ -233,7 +264,7 @@ public class OrderServiceImpl implements OrderService {
 
     // 前台 訂單列表 顯示 全訂單
     @Override
-    public Page<OrderDto> findByCustomerId(int customerId, Pageable pageable) {
+    public Page<OrderDto> findByCustomerId(Integer customerId, Pageable pageable) {
         Page<Orders> orders = orderRepository.findByCustomerId(customerId, pageable);
 
         //                      建立流             || 映射每個訂單
@@ -267,7 +298,7 @@ public class OrderServiceImpl implements OrderService {
 
     // 前台 訂單明細 顯示
     @Override
-    public OrderDto findByMemberOrderId(int orderId){
+    public OrderDto findByMemberOrderId(Integer orderId){
         Orders orders = orderDao.selectByOrderId(orderId);
         if(orders == null){
             return null;
@@ -281,35 +312,61 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Orders addStar(Orders newOrder){
         final Orders oldOrder = orderDao.selectByOrderId(newOrder.getOrderId());
-        final int ordersStar = newOrder.getOrderScore();
+        final Integer ordersStar = newOrder.getOrderScore();
         final String orderFeedBack = newOrder.getOrderFeedback();
-        if(ordersStar == 0){
+        final Integer storeId = oldOrder.getStoreId();
+        if(!(isEmpty(oldOrder.getOrderScore()))){
+            newOrder.setMessage("不可重複評分");
+            newOrder.setSuccessful(false);
+            return newOrder;
+        }
+        if( ordersStar < 1 || ordersStar > 5 ){
             newOrder.setMessage("未輸入評分");
             newOrder.setSuccessful(false);
             return newOrder;
         }
-        if(!(isEmpty(oldOrder.getOrderScore()))){
-            newOrder.setMessage("不可重複評分");
+        if (isEmpty(storeId)) {
+            newOrder.setMessage("無此商店");
             newOrder.setSuccessful(false);
             return newOrder;
         }
         oldOrder.setOrderScore(ordersStar);
         oldOrder.setOrderFeedback(orderFeedBack);
         orderDao.update(oldOrder);
+        // 放入商店評分內
+        storeService.updateStoreRank(storeId, Float.valueOf(ordersStar));
         newOrder.setMessage("評分完成");
         newOrder.setSuccessful(true);
         return newOrder;
     }
 
-    // 後台 訂單列表 顯示
+    // 後台 訂單列表 顯示 & 依條件查詢
     @Override
-    public Page<Orders> findAll(Pageable pageable) {
-        return orderRepository.findAll(pageable);
+    public Page<Orders> findByCriteria(
+            Integer orderId, Integer storeId, String storeName, String memberNickname,
+            Integer orderStatus, LocalDate dateStart, LocalDate dateEnd, Integer page, Integer size
+    ) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "orderCreateDatetime"));
+
+        // 檢查 查詢日起迄 是否為 null
+        Timestamp startTimestamp = null;
+        Timestamp endTimestamp = null;
+        if (dateStart != null) {
+            startTimestamp = Timestamp.valueOf(dateStart.atStartOfDay());
+        }
+        if (dateEnd != null) {
+            endTimestamp = Timestamp.valueOf(dateEnd.plusDays(1).atStartOfDay());
+        }
+
+        return orderRepository.findByCriteria(
+                orderId, storeId, storeName, memberNickname,
+                orderStatus, startTimestamp, endTimestamp, pageable
+        );
     }
 
     // 後台 訂單明細 顯示
     @Override
-    public List<OrderDetail> findByOrderId(int orderId) {
+    public List<OrderDetail> findByOrderId(Integer orderId) {
         return orderDetailDao.selectByOrderId(orderId);
     }
 
@@ -317,7 +374,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Orders updateStatus(Orders newOrder) {
         final Orders oldOrder = orderDao.selectByOrderId(newOrder.getOrderId());
-        if(oldOrder.getOrderStatus() >= newOrder.getOrderStatus() ){ //舊訂單狀態值 > 新訂單狀態值
+        // 舊訂單狀態值 需 < 新訂單狀態值
+        if(oldOrder.getOrderStatus() >= newOrder.getOrderStatus() ){
             newOrder.setMessage("修改失敗");
             newOrder.setSuccessful(false);
             return newOrder;
