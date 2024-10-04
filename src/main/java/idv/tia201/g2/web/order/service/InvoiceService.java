@@ -139,6 +139,7 @@ public class InvoiceService {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
+        System.out.println("--------Invoice--data-----"+data);
 
         // 取出屬性值
         String invoiceNo = data.get("InvoiceNo").asText();
@@ -171,10 +172,10 @@ public class InvoiceService {
         // 回傳結果
         if (response.getStatusCode() == HttpStatus.OK) {
             String responseBody = response.getBody();
-            System.out.println("----------Response Body: " + responseBody);
+            System.out.println("----------Response Body: ------" + responseBody);
             return getInvoiceInfo(responseBody); // 如果成功 回傳發票號碼
         } else {
-//            System.out.println("----------Error: " + response.getStatusCode() + " - " + response.getBody());
+            System.out.println("----------Error: " + response.getStatusCode() + " - " + response.getBody());
             return null;
         }
     }

@@ -247,6 +247,8 @@
                 </div>
             `;
             const form_el = document.getElementsByClassName("dispute_form")[0];
+
+            let orderId = getQueryParam("orderId");
             if(form_el) {
                 form_el.innerHTML = formHtml;
                 //-------------------------------------------------------
@@ -282,7 +284,7 @@
                         if (form_reason_el.value.length > 0) {
                             e.preventDefault();
 
-                            let orderId = getQueryParam("orderId");
+
                             // 2.2 送出資料至後端
                             fetch(`/dispute/member/applyDispute/${orderId}`, {
                                 method: "POST",
@@ -313,14 +315,13 @@
                         }
                     });
                 }
+                //-------------------------------------------------------
+                // 3. btn 取消 > 回上一頁
+                let btn_back_el = document.getElementById("btn_back");
+                btn_back_el.addEventListener("click", function(e){
+                    location.href = `./orderDetail.html?orderId=${orderId}`;
+                });
             }
-            //-------------------------------------------------------
-            // 3. btn 取消 > 回上一頁
-            let btn_back_el = document.getElementById("btn_back");
-            btn_back_el.addEventListener("click", function(e){
-                e.preventDefault();
-                location.href = `./orderDetail.html?orderId=${orderId}`;
-            });
         }
     });
 </script>

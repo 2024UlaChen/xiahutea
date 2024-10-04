@@ -202,6 +202,7 @@ public class OrderServiceImpl implements OrderService {
                 orderDto.setSuccessful(false);
                 return orderDto;
             }
+            // 折抵集點卡
             memberLoyaltyCardService.UpdatePoints(loyaltyCardId, order.getLoyaltyDiscount());
         }
         // 會員使用優惠券
@@ -228,8 +229,6 @@ public class OrderServiceImpl implements OrderService {
         }
         memberService.updateMemberMoneyById(customerId, (- order.getCustomerMoneyDiscount()));
 
-        // todo 增加集點卡點數
-
         order.setOrderStatus(1);
         order.setOrderCreateDatetime(new Timestamp(System.currentTimeMillis()));
         order.setSuccessful(true);
@@ -240,10 +239,12 @@ public class OrderServiceImpl implements OrderService {
             orderDetail.setSuccessful(true);
             orderDetailDao.insert(orderDetail);
         }
+        // todo 增加集點卡點數
+        memberLoyaltyCardService.updateMemberStoreLoyaltyPoints(storeId,customerId,order.getProductAmount());
 
         // 傳送發票參數給綠界
         String addInvoiceNo = invoiceService.createInvoice(order);
-        if(addInvoiceNo == null){
+        if( isEmpty(addInvoiceNo)){
             orderDto.setMessage("開立發票失敗");
             orderDto.setSuccessful(false);
             return orderDto;

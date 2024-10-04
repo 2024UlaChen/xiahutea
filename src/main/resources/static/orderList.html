@@ -369,7 +369,7 @@
                     let dataDisputeStatus = orderDto.disputeOrder.disputeStatus;
                     if (dataDisputeStatus === 1) {
                         disputeTextHtml = `
-                            <div class="dispute_text" id="dispute_status">爭議狀態： ${disputeStatusText(dataDisputeStatus)}</div>
+                            <span class="dispute_text" id="dispute_status">爭議狀態： ${disputeStatusText(dataDisputeStatus)}</span>
                         `;
                     } else if (dataDisputeStatus === 2) {
                         disputeTextHtml = `
