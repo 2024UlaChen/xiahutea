@@ -39,7 +39,6 @@ public class MemberCmsController {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("memberData", resultPage.getContent());
         map.put("totalPage", resultPage.getTotalPages());
-        map.put("nowPage", resultPage.getNumber());
 
         core.setData(map);
         core.setSuccessful(true);

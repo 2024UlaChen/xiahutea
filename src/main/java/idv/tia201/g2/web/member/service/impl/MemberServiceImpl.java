@@ -246,15 +246,6 @@ public class MemberServiceImpl implements MemberService {
         int end = Math.min((start + pageRequest.getPageSize()), totalList.size());
         List<Member> pageContent = totalList.subList(start, end);
         Page<Member> nowPage = new PageImpl<>(pageContent, pageRequest, totalList.size());
-        System.out.println(nowPage.getTotalPages());
-        System.out.println(nowPage.getTotalElements());
-        System.out.println(nowPage.getNumber());
-        System.out.println(nowPage.getSize());
-        System.out.println(start);
-        System.out.println(end);
-        for (Member m : nowPage) {
-            System.out.println(m);
-        }
         return nowPage;
 
     }
