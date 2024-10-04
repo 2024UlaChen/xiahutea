@@ -54,6 +54,7 @@
 <script type="module">
     import { actionHandlers, WeienChat } from './js/weien-chat.js'
     let userTypeId;
+    let totalUserId;
     const adminTypeId = 3;
     const url
         =  `ws://${location.host}${location.pathname.substring(0, location.pathname.lastIndexOf('/') + 1)}chat`;
@@ -96,7 +97,14 @@
             .then(res => res.json())
             .then(data => {
                 userTypeId = data.userTypeId;
-                return data.totalUserId;
+                totalUserId = data.totalUserId;
+                return totalUserId;
+            }).catch(error=>{
+                console.log("錯誤 : " + error)
+                let chatRoom = $("div.chat-room").eq(0);
+                $(chatRoom).css("visibility","hidden");
+                $(chatRoom).addClass("d-none")
+                console.log($("div.chat-room").eq(0))
             })
     }
 
@@ -116,12 +124,52 @@
         }
     }
 
+    actionHandlers.updateFile = async (selectedFile) =>{
+        console.log(selectedFile)
+        let reader = new FileReader(); // 用來讀取檔案的物件
+        reader.readAsDataURL(selectedFile); // 讀取檔案
+        let imgMessage;
+        reader.addEventListener("load", function () {
+            console.log(reader.result)
+            //要傳送的資料
+            let timestamp = new Date();
+            imgMessage = {
+                chatId: chat.getActiveChatId(),
+                senderId: totalUserId,
+                content: selectedFile.name,
+                timestamp : timestamp,
+                img:{
+                    src:reader.result
+                }
+            }
+            chat.updateChatListInfo(imgMessage.chatId,imgMessage);
+            chat.appendMessage(imgMessage);
+            console.log("reader.result.length:", imgMessage.img.src);
+
+            // 檢查 WebSocket 連接
+            if (webSocket && webSocket.readyState === WebSocket.OPEN) {
+                webSocket.send(
+                    JSON.stringify({
+                        chatSessionId: imgMessage.chatId,
+                        content: imgMessage.content,
+                        senderId: imgMessage.senderId,
+                        timestamp: timestamp,
+                        img:{
+                            src:imgMessage.img.src
+                        }
+                    })
+                );
+            }
+        });
+    }
+
     const handleSendMessage = e => {
         let payload = JSON.parse(e.data);
         let message = {chatId : payload.chatSessionId,
             content : payload.content,
             senderId : payload.senderId,
-            timestamp : payload.timestamp
+            timestamp : payload.timestamp,
+            img:payload.img
         }
         let activeChatId = chat.getActiveChatId();      //獲取這個聊天室的id
         chat.updateChatListInfo(message.chatId,message);  //更新聊天室側邊欄聊天室列表
