@@ -9,8 +9,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
 
-    <link rel="stylesheet" href="./slick.css">
-    <link rel="stylesheet" href="./slick-theme.css">
+
     <link rel="shortcut icon" type="image/x-icon" href="assets/images/favicon.png"/>
     <link
             href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i&display=swap"
@@ -616,6 +615,11 @@
             color: #ff6600;
         }
 
+        #adImage {
+            max-width: 100%; /* 使图像自适应父元素宽度 */
+            height: auto;    /* 保持宽高比 */
+        }
+
     </style>
 </head>
 
@@ -629,22 +633,21 @@
             <div class="restaurant-details">
 
                 <div class="restaurant-text">
-                    <h3>忠孝店</h3>
-                    <p>藍彩茶所</p>
+
+                    <h4 class="storeName">藍彩茶所</h4>
                     <div class="rating">
-                        <span>⭐⭐⭐⭐⭐</span>
+                        <span span id="storeRating">⭐⭐⭐⭐⭐</span>
                         <span>(3)</span>
                     </div>
                     <div class="hours">
-                        <i class="fa-solid fa-business-time"></i><span>11:00
-                                ~ 21:00</span>
+                        <i class="fa-solid fa-business-time"></i><span id="openHours"></span>~<span id="closingHours"></span>
                     </div>
                     <div class="phone">
-                        <i class="fa-solid fa-phone"></i><span>02-27769858</span>
+                        <i class="fa-solid fa-phone"></i><span id="storePhone">02-27769858</span>
                     </div>
                     <div class="address">
                         <i class="fa-sharp-duotone fa-solid fa-map-location-dot"></i>
-                        <span>台北市大安區忠孝東路四段77巷34號</span>
+                        <span class="storeAddress">台北市大安區忠孝東路四段77巷34號</span>
                     </div>
                 </div>
 
@@ -656,10 +659,10 @@
             </div>
 
 
-            <!-- <div class="myclass">
-                <div><img src="./cat_picture.jpg"></div>
+            <div class="myclass">
+                <img id="adImage" src="" alt="Advertisement Image" />
 
-            </div> -->
+            </div>
 
         </div>
 
@@ -685,26 +688,26 @@
             <!-- Modal Sections -->
             <div id="storeInfo" class="modal-section active">
 
-                <div>康青龍 新店寶強店</div>
-                <span>⭐⭐⭐⭐⭐</span>
-                <div>4.1 (20)</div>
+                <div class="storeName">康青龍 新店寶強店</div>
+                <span>⭐⭐⭐⭐⭐</span><span class="score"></span>
 
-                <div><i class="fa-solid fa-business-time"></i>12:00 ~ 20:20</div>
-                <div><i class="fa-solid fa-phone"></i>02-2914-8066</div>
-                <div><i class="fa-sharp-duotone fa-solid fa-map-location-dot"></i>新北市新店區寶強路1號1樓</div>
-                <div><i class="fa-solid fa-money-check-dollar"></i>可LINE PAY</div>
-                <div>商行資訊</div>
-                <div>杰儒國際貿易有限公司</div>
-                <div>66309280</div>
+                <div><i class="fa-solid fa-business-time"></i><span class="open"></span>~<span class="closing"></span></div>
+                <div><i class="fa-solid fa-phone"></i><span class="phone">02-2914-8066</span></div>
+                <div><i class="fa-sharp-duotone fa-solid fa-map-location-dot"></i><span class="address"></span></div>
+
+                <div class="vat">66309280</div>
 
             </div>
             <div id="deliveryOptions" class="modal-section">
                 <h5>訂購說明</h5>
-                <div class="section-content">從今日開放預訂 4 日內的訂單</div>
+                <div class="section-content">
+                   滿 <span class="delivery"></span>可外送
+                </div>
+
 
                 <h5>取貨方式</h5>
                 <div class="section-content">
-                    <strong>外送</strong><br>
+                    <span class="isdelivery"><strong>外送</strong></span><br>
                     營業期間都可下單
                 </div>
             </div>
@@ -714,23 +717,6 @@
     </div>
 
     <div class="menu-container ">
-        <div class="menu-section">
-            <h2>經典義式咖啡</h2>
-            <ul class="menulist">
-                <li>咖啡拿鐵 <span>70</span></li>
-                <li>卡布奇諾 <span>70</span></li>
-                <li>美式黑咖啡 <span>70</span></li>
-                <li>焦糖拿鐵 <span>80</span></li>
-                <li>榛果拿鐵 <span>80</span></li>
-                <li>香草拿鐵 <span>80</span></li>
-                <li>黑糖拿鐵 <span>80</span></li>
-                <li>橙皮拿鐵 <span>80</span></li>
-                <li>路易莎特調咖啡 <span>80</span></li>
-                <li>鸚鵡咖啡 <span>80</span></li>
-                <li>義式摩卡 <span>80</span></li>
-                <li>焦糖瑪奇朵 <span>80</span></li>
-            </ul>
-        </div>
 
     </div>
 
@@ -746,9 +732,9 @@
             </div>
             <form>
                 <div class="content">
-                    <div class="pic">
-                        <img src="./drink.png">
-                    </div>
+                  <div class="pic">
+                      <img id="productImage" alt="Product Image" />
+                   </div>
 
                     <div class="section">
                         <label><span style="color: red;">*</span>尺寸</label>
@@ -824,10 +810,6 @@
                         </div>
                     </div>
 
-                    <div class="section">
-                        <label><span style="color: red;">*</span>訂購人姓名</label>
-                        <input type="text" placeholder="避免使用特殊符號，最多10字" class="person">
-                    </div>
                 </div>
 
 
@@ -890,33 +872,97 @@
 
 
 <script>
+// <!-- http://localhost:8080/productMenu.html?storeId=1-->
+    const urlParams = new URLSearchParams(window.location.search);
+    const storeId = urlParams.get('storeId'); // 这里获取的是 'storeId' 参数的值
+    const storeIdNum = parseInt(storeId); // 将字符串转换为数字
 
-    fetch('store/storeinfo/1', {
-        method: 'GET', // 請求方法是 GET
-    })
+
+if (isNaN(storeIdNum)) {
+    console.error('无效的店家 ID'); // 处理无效的店家 ID
+} else {
+    // Fetch 店家信息
+    fetch(`/store/storeinfo/${storeIdNum}`) // 根据你的后端 API 结构调整路径
         .then(response => {
             if (!response.ok) {
-                throw new Error('Network response was not ok');
+                throw new Error(`HTTP error! Status: ${response.status}`);
             }
-            return response.json(); // 將返回的結果解析為 JSON 格式
+            return response.json();
         })
-        .then(data => {
-            // 假設數據格式與你提供的 XML 結構相同，這裡將 JSON 填充到對應的 HTML 元素
-            document.getElementById('storeName').textContent = data.storeName;
-            document.getElementById('storeId').textContent = data.storeId;
-            document.getElementById('registerDay').textContent = new Date(data.registerDay).toLocaleString();
-            document.getElementById('storeAddress').textContent = data.storeAddress;
-            document.getElementById('storePhone').textContent = data.storePhone;
-            document.getElementById('openingHours').textContent = data.openingHours;
-            document.getElementById('closingHours').textContent = data.closingHours;
-            document.getElementById('isDelivery').textContent = data.isDelivery ? 'Yes' : 'No';
-            document.getElementById('deliveryDistance').textContent = data.deliveryDistance + ' km';
-            document.getElementById('deliveryMoney').textContent = data.deliveryMoney + ' TWD';
-            document.getElementById('isTakeOrders').textContent = data.isTakeOrders ? 'Yes' : 'No';
+        .then(store => {
+            console.log('店家信息:', store);
+            document.querySelector('.storeName').textContent = store.storeName
+            document.getElementById('openHours').textContent=store.openingHours;
+            document.getElementById('closingHours').textContent=store.closingHours;
+            document.getElementById('storePhone').textContent=store.storePhone;
+            document.querySelector('.storeAddress').textContent=store.storeAddress;
+            document.querySelector('div.storeName').textContent=store.storeName;
+            document.querySelector('span.score').textContent=store.score;
+            document.querySelector('.open').textContent=store.openingHours;
+            document.querySelector('.closing').textContent=store.closingHours;
+            document.querySelector('span.phone').textContent=store.storePhone;
+            document.querySelector('span.address').textContent=store.storeAddress;
+            document.querySelector('span.delivery').textContent=store.deliveryMoney;
+            document.querySelector('.vat').textContent=store.vat;
+
+            const isDelivery = document.querySelector('.isdelivery');
+            if (store.isDelivery) {
+                isDelivery.textContent = "此商品可提供外送服務";
+            } else {
+                isDelivery.textContent = "此商品不提供外送服務";
+            }
+
+
+
+            function fetchProductImage(productId) {
+                // Construct the URL for the image based on the product ID
+                const url = `/products/${productId}/image`; // Adjust the URL according to your API endpoint
+
+                // Use fetch to get the image
+                fetch(url)
+                    .then(response => {
+                        if (response.ok) {
+                            // Convert the response to a blob
+                            return response.blob();
+                        } else {
+                            throw new Error('Image not found');
+                        }
+                    })
+                    .then(blob => {
+                        // Create a local URL for the blob and display it
+                        const imageUrl = URL.createObjectURL(blob);
+                        document.getElementById('productImage').src = imageUrl; // Assuming there's an <img> tag with this ID
+                    })
+                    .catch(error => {
+                        console.error('Error fetching the image:', error);
+                        // Handle error (e.g., display a placeholder image or a message)
+                    });
+            }
+
+// Call the function with a specific product ID (e.g., 1)
+            fetchProductImage(76);
+
+
+
+
+
+
+
+
+
         })
         .catch(error => {
-            console.error('Fetch error:', error);
+            console.error('Error fetching store information:', error);
         });
+
+
+    fetchProductsAndCategories(storeIdNum); // 调用函数以获取产品和类别信息
+}
+
+
+
+
+
 
 
 
@@ -924,15 +970,6 @@
         window.location.href="addProducts.html"
     })
 
-    function getCategoryNameById(categoryId) {
-        return fetch(`/categories/${categoryId}`)
-            .then(response => response.json())
-            .then(category => category.categoryName)
-            .catch(error => {
-                console.error('获取分类名称时出错:', error);
-                return '未知分类'; // 如果出错，返回一个默认值
-            });
-    }
 
 
 
@@ -969,31 +1006,41 @@
     });
 
 
-    // 獲取所有分類
-    fetch('/categories/all')
-        .then(response => response.json())
-        .then(categories => {
-            // 遍歷每個分類，獲取相應的產品
-            categories.forEach(category => {
 
-                if (category.categoryStatus === false) { // 如果分类状态为'下架'
-                    return; // 跳过该分类，连同该分类下的产品都不处理
-                }
 
-                fetch(`/products/byCategory?ProductCategoryId=${category.categoryId}`)
-                    .then(response => response.json())
-                    .then(products => {
-                        // 顯示產品
-                        displayProducts(category.categoryName, products);
-                    })
-                    .catch(error => {
-                        console.error('Error fetching products:', error);
-                    });
+    function fetchProductsAndCategories(storeId) {
+
+        fetch(`/categories/store/${storeId}`)
+            .then(response => response.json())
+            .then(categories => {
+                // 遍歷每個分類，獲取相應的產品
+                categories.forEach(category => {
+
+                    if (category.categoryStatus === false) { // 如果分类状态为'下架'
+                        return; // 跳过该分类，连同该分类下的产品都不处理
+                    }
+
+                    fetch(`/products/byCategory?ProductCategoryId=${category.categoryId}`)
+                        .then(response => response.json())
+                        .then(products => {
+                            // 顯示產品
+                            displayProducts(category.categoryName, products);
+                        })
+                        .catch(error => {
+                            console.error('Error fetching products:', error);
+                        });
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching categories:', error);
             });
-        })
-        .catch(error => {
-            console.error('Error fetching categories:', error);
-        });
+
+       }
+
+
+
+
+
 
     // 顯示產品的函數
     function displayProducts(categoryName, products) {
@@ -1182,149 +1229,6 @@
     }
 
 
-    // // 顯示模態框並顯示產品信息
-    // async function showProductModal(productId) {
-    //     try {
-    //         // 獲取產品詳細信息
-    //         const response = await fetch(`/products/${productId}`);
-    //
-    //         if (!response.ok) {
-    //             throw new Error('Network response was not ok');
-    //         }
-    //
-    //         const product = await response.json();
-    //
-    //         const buyNumInput = document.getElementById("buyNum");
-    //         buyNumInput.value = 1; // 重置購買數量為1
-    //         buyNumInput.value = buyNum;
-    //
-    //         // 設置單價和總價
-    //         const unitPrice = Number.parseInt(product.productPrice); // 獲取產品單價
-    //         document.getElementById("totalAmt").textContent = unitPrice; // 顯示單價
-    //
-    //         // 設置標題、價格和 size
-    //         document.getElementById('productTitle').textContent = product.productName;
-    //         document.querySelector('div.size').textContent = product.size;
-    //
-    //         // 模態框的選項設置
-    //         const temperatureOptions = document.getElementById("temperatureOptions");
-    //         const sweetnessOptions = document.getElementById("sweetnessOptions");
-    //         const toppingsOptions = document.getElementById("toppingsOptions");
-    //
-    //         // 清空之前的內容
-    //         temperatureOptions.innerHTML = '';
-    //         sweetnessOptions.innerHTML = '';
-    //         toppingsOptions.innerHTML = '';
-    //
-    //         // 溫度選項映射
-    //         addOption(temperatureOptions, product.normalIce, "正常冰", "temperature");
-    //         addOption(temperatureOptions, product.lessIce, "少冰", "temperature");
-    //         addOption(temperatureOptions, product.iceFree, "去冰", "temperature");
-    //         addOption(temperatureOptions, product.lightIce, "微冰", "temperature");
-    //         addOption(temperatureOptions, product.roomTemperature, "常溫", "temperature");
-    //         addOption(temperatureOptions, product.hot, "熱", "temperature");
-    //
-    //         // 甜度選項映射
-    //         addOption(sweetnessOptions, product.fullSugar, "全糖", "sweetness");
-    //         addOption(sweetnessOptions, product.lessSugar, "少糖", "sweetness");
-    //         addOption(sweetnessOptions, product.halfSugar, "半糖", "sweetness");
-    //         addOption(sweetnessOptions, product.quarterSugar, "微糖", "sweetness");
-    //         addOption(sweetnessOptions, product.noSugar, "無糖", "sweetness");
-    //
-    //         // 加料選項映射
-    //         addOption(toppingsOptions, product.pearl, "珍珠", "topping");
-    //         addOption(toppingsOptions, product.pudding, "布丁", "topping");
-    //         addOption(toppingsOptions, product.coconutJelly, "椰果", "topping");
-    //         addOption(toppingsOptions, product.taro, "芋園", "topping");
-    //         addOption(toppingsOptions, product.herbalJelly, "仙草", "topping");
-    //
-    //         attachOptionEventHandlers();
-    //
-    //         // 計算總價
-    //         let buyNum = 1;
-    //         let maxBuy = 999;
-    //         let minBuy = 1;
-    //         let totalPrice = unitPrice;
-    //
-    //         const updateTotalPrice = () => {
-    //             totalPrice = unitPrice * buyNum;
-    //             document.getElementById("totalAmt").textContent = totalPrice;
-    //         };
-    //
-    //         // 增加數量
-    //         document.querySelector(".plus").addEventListener("click", function () {
-    //             buyNum = Math.min(buyNum + 1, maxBuy);
-    //             buyNumInput.value = buyNum;
-    //             updateTotalPrice();
-    //         });
-    //
-    //         // 減少數量
-    //         document.querySelector(".minus").addEventListener("click", function () {
-    //             buyNum = Math.max(buyNum - 1, minBuy);
-    //             buyNumInput.value = buyNum;
-    //             updateTotalPrice();
-    //         });
-    //
-    //         // 添加到購物車
-    //         document.getElementById('addToCartButton').addEventListener('click', function (e) {
-    //             e.preventDefault();
-    //             addToCart(productId);
-    //         });
-    //
-    //         // 顯示模態框
-    //         document.getElementById("lightbox").style.display = "block";
-    //     } catch (error) {
-    //         console.error('Error fetching product data:', error);
-    //     }
-    // }
-    //
-    //
-    //
-    // // 添加選項的輔助函數，根據條件增加選項
-    // function addOption(container, condition, text, type) {
-    //     if (condition) {
-    //         const div = document.createElement("div");
-    //         div.classList.add(type);  // 使用不同的類名來區分選項類型
-    //         div.textContent = text;
-    //         container.appendChild(div);
-    //     }
-    // }
-    //
-    //
-    //
-    //
-    // // 將商品加入購物車的函數
-    // function addToCart(productId) {
-    //     // 從 localStorage 獲取現有的購物車數據
-    //     let cart = JSON.parse(localStorage.getItem('cart')) || {};
-    //
-    //     // 確保該商品ID有對應的數據
-    //     if (!cart[productId]) {
-    //         cart[productId] = {};
-    //     }
-    //
-    //     // 獲取當前的選擇（從 localStorage 讀取尺寸、溫度、甜度等）
-    //     const selectedSize = localStorage.getItem('selectedSize');
-    //     const selectedTemperature = localStorage.getItem('selectedTemperature');
-    //     const selectedSweetness = localStorage.getItem('selectedSweetness');
-    //     const selectedToppings = localStorage.getItem('selectedToppings');
-    //     const buyNum=localStorage.getItem('buyNum')
-    //
-    //     // 更新該商品ID的數據
-    //     cart[productId] = {
-    //         size: selectedSize || "未選擇尺寸", // 默認值 "未選擇尺寸"
-    //         temperature: selectedTemperature || "未選擇溫度",
-    //         sweetness: selectedSweetness || "未選擇甜度",
-    //         toppings: selectedToppings || "未選擇加料",
-    //         buyNum: buyNum
-    //     };
-    //
-    //     // 保存更新的購物車數據到 localStorage
-    //     localStorage.setItem('cart', JSON.stringify(cart));
-    //
-    //     // 顯示提示訊息，確認商品已添加到購物車
-    //     alert('商品已成功加入購物車！');
-    // }
 
     // 為選項添加事件處理器
     attachOptionEventHandlers(productId);
