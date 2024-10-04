@@ -154,7 +154,7 @@
       </div>
     </header>
     
-    <div class="kunClass">
+    <div class="kunClass" id="homeDisplayAds">
       <div>
         <img
           class="KunSlickImg"
@@ -428,7 +428,28 @@
       
   document.addEventListener("DOMContentLoaded", function () {
       getUser();
+      //處理輪播
+      fetch('xiaHuTea/AdsList').then(response => response.json()).then(
+          list =>{
 
+              list.forEach(function (data){
+                  if(data.imgUrl){
+                      let imgFormat = getImgFormatByBase64(data.imgUrl);
+                      let imgdata = `data:image/${imgFormat};base64,${data.imgUrl}`;
+                      let adsSclicks =`<div>
+        <img
+          class="KunSlickImg"
+          src="${imgdata}"
+          alt="輪播"
+        />
+      </div>`;
+                      //$('#homeDisplayAds').empty();
+                      //document.querySelector('#homeDisplayAds').insertAdjacentHTML('afterbegin',adsSclicks);
+                  }
+
+
+              })
+          });
 
     //監聽有這個屬性的KunIndexSotreImg 如果有空心就改實心
     //實心紅

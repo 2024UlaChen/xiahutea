@@ -2,6 +2,8 @@ package idv.tia201.g2.web.member.service.impl;
 
 import idv.tia201.g2.web.member.dao.MemberLoyaltyCardRepository;
 import idv.tia201.g2.web.member.service.MemberLoyaltyCardService;
+import idv.tia201.g2.web.store.dao.StoreDao;
+import idv.tia201.g2.web.store.service.StoreService;
 import idv.tia201.g2.web.store.vo.CustomerLoyaltyCard;
 import idv.tia201.g2.web.store.vo.Store;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +16,11 @@ public class MemberLoyaltyCardServiceImpl implements MemberLoyaltyCardService {
 
 
     private MemberLoyaltyCardRepository memberLoyaltyCardRepository;
+    private StoreDao storeDao;
     @Autowired
-    public MemberLoyaltyCardServiceImpl(MemberLoyaltyCardRepository memberLoyaltyCardRepository) {
+    public MemberLoyaltyCardServiceImpl(MemberLoyaltyCardRepository memberLoyaltyCardRepository,StoreDao storeDao) {
         this.memberLoyaltyCardRepository = memberLoyaltyCardRepository;
+        this.storeDao = storeDao;
     }
 
     @Override
@@ -43,6 +47,7 @@ public class MemberLoyaltyCardServiceImpl implements MemberLoyaltyCardService {
         //確認是否是新增
         CustomerLoyaltyCard data = memberLoyaltyCardRepository.findByStoreIdAndMemberId(customerLoyaltyCard.getStoreId(), customerLoyaltyCard.getMemberId());
         if (data != null) {return false;}
+
         customerLoyaltyCard.setPoints(0);
         memberLoyaltyCardRepository.save(customerLoyaltyCard);
         return true;
@@ -60,7 +65,7 @@ public class MemberLoyaltyCardServiceImpl implements MemberLoyaltyCardService {
 
         CustomerLoyaltyCard data = memberLoyaltyCardRepository.findByStoreIdAndMemberId(storeId,memberId);
         //檢查是否集點卡使用中
-        Store store = data.getStore();
+        Store store =   storeDao.findByStoreId(storeId);
         if(store.getValidStatus()){
             //使用中才需要執行以下動作
             Integer point = (Integer) totalMoney/store.getExchangeRate();

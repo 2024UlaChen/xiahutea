@@ -45,8 +45,8 @@ public class HomePageController {
 
     @GetMapping("AdsList")
     public List<Advertise> getHomeAdsList()  {
-        List<Advertise> list = adsService.getHomePageAdvertises();
-        return list;
+        return adsService.getHomePageAdvertises();
+
     }
 
 }
