@@ -14,6 +14,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -113,7 +115,7 @@ public class MemberCmsController {
         Member sessionMember = (Member) httpSession.getAttribute("cmsMemberDetails");
         sessionMember.setValidStatus(member.getValidStatus());
         sessionMember.setCustomerRemark(member.getCustomerRemark());
-
+        sessionMember.setUpdateDate(Date.valueOf(LocalDate.now()));
         if (!memberService.updateMemberByValidSatusAndCustomerRemark(sessionMember)) {
             core.setSuccessful(false);
             core.setMessage("update fail");

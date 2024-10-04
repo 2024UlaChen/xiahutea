@@ -1,4 +1,5 @@
 //table all element
+const cmsMemberIdTxt = document.querySelector("#cmsMemberId");
 const cmsMemberNameTxt = document.querySelector("#cmsMemberName");
 const cmsMemberSex = document.querySelector("#cmsSex");
 const cmsMemberBirthdayTxt = document.querySelector("#cmsMemberBirthday");
@@ -63,6 +64,7 @@ function loadCmsMemberInfo() {
         .then(data => {
             console.log(data);
             // let sessionDetail = JSON.parse(sessionStorage.getItem("cmsMemberDetail"));
+            cmsMemberIdTxt.value = data.customerId;
             cmsMemberBirthdayTxt.value = nullToEmpty(data.birthday);
             CmsMemberCreateDateTxt.value = nullToEmpty(data.createDate);
             cmsMemberCarrierTxt.value = data.customerCarrier;

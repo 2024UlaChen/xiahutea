@@ -135,8 +135,8 @@ function getCmsMemberList(pageNo) {
                         <span class="badge badge-success memberStatus ${statusClassName}">${statusChiName}</span>
                     </td>
                     <td>
-                        <button class="btn btnEdit">
-                            <i class="fas fa-pencil-alt"> </i> 修改
+                        <button class="btn btnEdit memberEdit ">
+                            <i class="fas fa-pencil-alt memberEdit"> </i> 修改
                         </button>
                     </td>
                 </tr>
@@ -167,7 +167,7 @@ function getCmsMemberInfoById(memberid) {
 }
 
 memberList.addEventListener("click", function (e) {
-    if (e.target.classList.contains("btnEdit")) {
+    if (e.target.classList.contains("memberEdit")) {
         e.target.closest("tr").querySelectorAll("td").forEach(item => {
             if (item.dataset.memberid !== undefined) {
                 getCmsMemberInfoById(item.dataset.memberid);
@@ -220,8 +220,8 @@ function getQueryData(pageNo) {
                         <span class="badge badge-success memberStatus ${statusClassName}">${statusChiName}</span>
                     </td>
                     <td>
-                        <button class="btn btnEdit">
-                            <i class="fas fa-pencil-alt"> </i> 修改
+                        <button class="btn btnEdit memberEdit">
+                            <i class="fas fa-pencil-alt memberEdit"> </i> 修改
                         </button>
                     </td>
                 </tr>
