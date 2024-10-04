@@ -226,14 +226,9 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public List<Member> findMemberByValidStatus(Boolean memberValidStatus) {
-        return memberDao.findMemberByValidStatus(memberValidStatus);
-    }
-
-    @Override
     public Page<Member> findQueryMember(Member member, int pageNo) {
 //        動態查詢 - 電話 / id / 狀態 / name
-        final int ONE_PAGE_SIZE = 6 ;
+        final int ONE_PAGE_SIZE = 6;
 
         String queryName = member.getNickname();
         String queryPhone = member.getCustomerPhone();
@@ -296,11 +291,11 @@ public class MemberServiceImpl implements MemberService {
             if ("REGISTER".equals(type)) {
                 TotalUsers totalUser = new TotalUsers(null, userType, queryMember.getCustomerId());
                 totalUserDao.save(totalUser);
-                memberDao.updateMemberInfo(queryMember.getCustomerId(), false, queryMember.getCustomerRemark());
+                memberDao.updateMemberInfo(queryMember.getCustomerId(), true, queryMember.getCustomerRemark(),false);
             } else {
                 String encodePwd = EncrypSHA.SHAEncrypt(member.getCustomerPassword());
                 queryMember.setCustomerPassword(encodePwd);
-                queryMember.setValidStatus(false);
+                queryMember.setAliveStatus(true);
                 memberDao.updateMemberInfo(queryMember);
             }
             return true;

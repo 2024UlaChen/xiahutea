@@ -121,12 +121,13 @@ public class MemberDaoImpl implements MemberDao {
     }
 
     @Override
-    public Integer updateMemberInfo(Integer memberId, Boolean status, String memberRemark) {
-        final String sql = "update CUSTOMER set valid_status = :status , " +
+    public Integer updateMemberInfo(Integer memberId, Boolean aliveStatus, String memberRemark, Boolean validStatus) {
+        final String sql = "update CUSTOMER set alive_status = :aliveStatus , valid_status = :validStatus ," +
                 " customer_remark = :memberRemark  where  customer_id = :memberId ";
         return session
                 .createNativeQuery(sql, Member.class)
-                .setParameter("status", status)
+                .setParameter("aliveStatus", aliveStatus)
+                .setParameter("validStatus", validStatus)
                 .setParameter("memberRemark", memberRemark)
                 .setParameter("memberId", memberId)
                 .executeUpdate();
@@ -179,11 +180,11 @@ public class MemberDaoImpl implements MemberDao {
 
     @Override
     public Integer updateVerifyCodeById(Integer memberId, String verifyCode) {
-        final String sql = "update CUSTOMER set verify_code = :verifyCode  , valid_status= :validStatus   where  customer_id = :memberId ";
+        final String sql = "update CUSTOMER set verify_code = :verifyCode  , alive_status= :aliveStatus   where  customer_id = :memberId ";
         return session
                 .createNativeQuery(sql, Member.class)
                 .setParameter("verifyCode", verifyCode)
-                .setParameter("validStatus", true)
+                .setParameter("aliveStatus", false)
                 .setParameter("memberId", memberId)
                 .executeUpdate();
     }

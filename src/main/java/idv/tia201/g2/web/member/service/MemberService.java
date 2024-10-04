@@ -32,7 +32,6 @@ public interface MemberService {
 
     Page<Member> findQueryMember(Member member, int pageNo);
 
-    List<Member> findMemberByValidStatus(Boolean memberValidStatus);
 
     //    判斷是否存在會員
     Boolean isExistMember(Member member);
