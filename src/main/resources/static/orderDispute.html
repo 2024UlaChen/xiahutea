@@ -25,8 +25,6 @@
     <link rel="stylesheet" href="assets/fonts/flaticon/flaticon.css">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="css/general.css">
-    <!-- SweetAlert2 CSS樣式 -->
-    <link rel="stylesheet" href="/cms/plugins/sweetalert2/sweetalert2.css">
 
     <style>
         /* 爭議申請表   */
@@ -37,10 +35,10 @@
             height: 100%;
             display: flex;
             justify-content: center;
-            align-items: center; /* 垂直置中 */
-            flex-direction: column; /* 垂直排列子元素 */
-            padding: 20px; /* 添加一些內邊距以獲得更好的間距 */
-            box-sizing: border-box; /* 確保 padding 不會影響寬度和高度 */
+            align-items: center;
+            flex-direction: column;
+            padding: 20px;
+            box-sizing: border-box;
             border-radius: 1%;
         }
         /* form 區塊*/
@@ -91,9 +89,9 @@
         /* btn 區塊*/
         .button-container {
             display: flex;
-            justify-content: center; /* 水平置中 */
-            gap: 30px; /* 添加按鈕之間的間距 */
-            padding: 5px; /* 添加內邊距 */
+            justify-content: center;
+            gap: 30px;
+            padding: 5px;
         }
         button#demo1{
             display: inline-flex;
@@ -168,31 +166,22 @@
 <script>
     document.addEventListener("DOMContentLoaded", function(){
         // 取得sessionStorage會員ID
-        // const memberData = JSON.parse(sessionStorage.getItem("memberData"));
-        // const customerId = memberData.data.customerId;
+        const memberData = sessionStorage.getItem("memberData") ? JSON.parse(sessionStorage.getItem("memberData")) : null;
+        const customerId = memberData && memberData.data ? memberData.data.customerId : null;
 
         // 判斷權限
-        fetch(`/totalusers`)
-              .then(resp => resp.json())
-              .then(totalUserDTO => {
-                  console.log(totalUserDTO)
-                  console.log(totalUserDTO.userTypeId)
-                  if(totalUserDTO.userTypeId !== 0){
-                      Swal.fire({
-                          title: "請登入會員",
-                          text: '',
-                          icon: 'error',
-                          showConfirmButton: true  // 確認按鈕
-                      }).then(() => {
-                          location.href = "./login.html";
-                      });
-                  }
-                  // 如果是會員才能檢視
-                  init();
-              })
-              .catch((error) => {
-                  console.log("錯誤原因:" + error);
-              });
+        if(!(customerId)){
+            Swal.fire({
+                title: "請登入會員",
+                text: '',
+                icon: 'error',
+                showConfirmButton: true  // 確認按鈕
+            }).then(() => {
+                location.href = "./login.html";
+            });
+        }
+        // 如果是會員才能檢視
+        init();
         //-------------------------------------------------------
         // 取得URL的查詢參數
         function getQueryParam(param) {
@@ -200,8 +189,7 @@
             return urlParams.get(param);
         }
         //-------------------------------------------------------
-        // 0. 顯示申請表
-        // init();
+        // 顯示申請表
         function init() {
             let orderId = getQueryParam("orderId");
             if (orderId) {
@@ -213,7 +201,7 @@
                       });
             }
         }
-
+        //-------------------------------------------------------
         function showDB(data){
             let formHtml;
             formHtml=`
@@ -259,9 +247,11 @@
                 </div>
             `;
             const form_el = document.getElementsByClassName("dispute_form")[0];
+
+            let orderId = getQueryParam("orderId");
             if(form_el) {
                 form_el.innerHTML = formHtml;
-
+                //-------------------------------------------------------
                 // 1 判斷DB是否已有爭議資料
                 let form_reason_el = document.getElementsByClassName("dispute_form_reason")[0];
                 if (data.disputeOrder && data.disputeOrder.disputeOrderId != null) {
@@ -277,6 +267,7 @@
                     });
 
                 } else {
+                    //-------------------------------------------------------
                     // 2. btn 送出
                     let btn_submit_el = document.getElementsByClassName("btn_submit")[0];
                     btn_submit_el.addEventListener("click", function (e) {
@@ -293,7 +284,7 @@
                         if (form_reason_el.value.length > 0) {
                             e.preventDefault();
 
-                            let orderId = getQueryParam("orderId");
+
                             // 2.2 送出資料至後端
                             fetch(`/dispute/member/applyDispute/${orderId}`, {
                                 method: "POST",
@@ -324,14 +315,13 @@
                         }
                     });
                 }
+                //-------------------------------------------------------
+                // 3. btn 取消 > 回上一頁
+                let btn_back_el = document.getElementById("btn_back");
+                btn_back_el.addEventListener("click", function(e){
+                    location.href = `./orderDetail.html?orderId=${orderId}`;
+                });
             }
-            //-------------------------------------------------------
-            // 3. btn 取消 > 回上一頁
-            let btn_back_el = document.getElementById("btn_back");
-            btn_back_el.addEventListener("click", function(e){
-                e.preventDefault();
-                location.href = `./orderDetail.html?orderId=${orderId}`;
-            });
         }
     });
 </script>

@@ -25,8 +25,6 @@
   <link rel="stylesheet" href="assets/fonts/flaticon/flaticon.css">
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="css/general.css">
-  <!-- SweetAlert2 CSS樣式 -->
-  <link rel="stylesheet" href="/cms/plugins/sweetalert2/sweetalert2.css">
 
   <style>
       .material-symbols-outlined {
@@ -445,31 +443,22 @@
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         // 取得sessionStorage會員ID
-        const memberData = JSON.parse(sessionStorage.getItem("memberData"));
-        const customerId = memberData.data.customerId;
+        const memberData = sessionStorage.getItem("memberData") ? JSON.parse(sessionStorage.getItem("memberData")) : null;
+        const customerId = memberData && memberData.data ? memberData.data.customerId : null;
 
         // 判斷權限
-        fetch(`/totalusers`)
-            .then(resp => resp.json())
-            .then(totalUserDTO => {
-                console.log(totalUserDTO)
-                console.log(totalUserDTO.userTypeId)
-                if(totalUserDTO.userTypeId !== 0){
-                    // Swal.fire({
-                    //     title: "請登入會員",
-                    //     text: '',
-                    //     icon: 'error',
-                    //     showConfirmButton: true  // 確認按鈕
-                    // }).then(() => {
-                        location.href = "./login.html";
-                    // });
-                }
-                // 如果是會員才能檢視
-                init();
-            })
-            .catch((error) => {
-                console.log("錯誤原因:" + error);
+        if(!(customerId)){
+            Swal.fire({
+                title: "請登入會員",
+                text: '',
+                icon: 'error',
+                showConfirmButton: true  // 確認按鈕
+            }).then(() => {
+                location.href = "./login.html";
             });
+        }
+        // 如果是會員才能檢視
+        init();
         //-------------------------------------------------------
         // 取得URL的查詢參數
         function getQueryParam(param) {
@@ -477,8 +466,7 @@
             return urlParams.get(param);
         }
         //-------------------------------------------------------
-        // 0. 顯示明細
-        // init();
+        // 顯示明細
         function init() {
             let orderId = getQueryParam("orderId");
             if (orderId) {
@@ -493,7 +481,7 @@
                     });
             }
         }
-
+        //-------------------------------------------------------
         function showDB(data) {
             let storeInfoHtml;
             storeInfoHtml = `
@@ -567,10 +555,39 @@
                         <td id="order_date">${data.orders.orderCreateDatetime}</td>
                     </tr>
                 </tbody>
-        `;
+            `;
             document.getElementsByClassName("order_info_tb")[0].innerHTML = orderInfoHtml;
-            //-------------------------------------------------------------------
 
+            let productInfoHtml;
+            productInfoHtml = `
+                <div class="product_list">
+                    <li class="product_li">
+                          <!--   商品明細寫在JS    -->
+                    </li>
+                </div>
+                <div class="product_total">
+                     <span>商品  x  ${data.orders.orderProductQuantity}</span>
+                </div>
+                <div class="pay_money">
+                    <span>訂單金額</span>
+                    <span class="pay_money_num">$ ${data.orders.productAmount}</span>
+                </div>
+            `;
+            document.getElementsByClassName("product_info")[0].innerHTML = productInfoHtml;
+
+            let productHtml = "";
+            let detailList = data.orderDetails;
+            for (let i = 0; i < detailList.length; i++) {
+                productHtml += `
+                    <ul class="product_ul">
+                        <div class="product_name">${detailList[i].product.productName}  ( ${detailList[i].product.size} )</div>
+                        <span>${detailList[i].productSugar} / ${detailList[i].productTemperature} / ${detailList[i].productAddMaterials} / $ ${detailList[i].productPrice} / ${detailList[i].productQuantity} 項</span>
+                    </ul>
+                `;
+            }
+            document.getElementsByClassName("product_li")[0].innerHTML = productHtml;
+            //-------------------------------------------------------------------
+            // 爭議btn
             if (store_info_el) {
                 store_info_el.innerHTML = storeInfoHtml;
 
@@ -613,36 +630,8 @@
                     btn_dispute_apply.innerHTML="已送爭議";
                 }
             }
-
-            let productInfoHtml;
-            productInfoHtml = `
-              <div class="product_list">
-                  <li class="product_li">
-                        <!--   商品明細寫在JS    -->
-                  </li>
-              </div>
-              <div class="product_total">
-                   <span>商品  x  ${data.orders.orderProductQuantity}</span>
-              </div>
-              <div class="pay_money">
-                  <span>訂單金額</span>
-                  <span class="pay_money_num">$ ${data.orders.productAmount}</span>
-              </div>
-        `;
-            document.getElementsByClassName("product_info")[0].innerHTML = productInfoHtml;
-
-            let productHtml = "";
-            let detailList = data.orderDetails;
-            for (let i = 0; i < detailList.length; i++) {
-                productHtml += `
-                <ul class="product_ul">
-                    <div class="product_name">${detailList[i].product.productName}  ( ${detailList[i].product.size} )</div>
-                    <span>${detailList[i].productSugar} / ${detailList[i].productTemperature} / ${detailList[i].productAddMaterials} / $ ${detailList[i].productPrice} / ${detailList[i].productQuantity} 項</span>
-                </ul>
-            `;
-            }
-            document.getElementsByClassName("product_li")[0].innerHTML = productHtml;
-
+            //-------------------------------------------------------------------
+            // 訂單評分
             let starHtml;
             starHtml = `
                 <p class="star_title">訂單編號</p>
@@ -754,7 +743,7 @@
                                         btn_star_close.click();
                                     }
                                 }).catch((error) => {
-                                console.error("錯誤原因2：", error);
+                                console.error("評分 錯誤原因2：", error);
                             });
                         }
                     } else {
@@ -768,7 +757,7 @@
                     }
                     return Number.parseInt(span_el.getAttribute("data-star"), 10);
                 }
-
+                //---------------------------------------------------------------------------
                 // 3. btn 回上一頁
                 const order_btn_back = document.getElementsByClassName("order_btn_back")[0];
                 order_btn_back.addEventListener("click", function () {
@@ -776,17 +765,13 @@
                 });
             }
         }
-        //=========================================================================================
+        //---------------------------------------------------------------------------
         function statusText(statusNum) {
             switch (statusNum) {
-                case 1 :
-                    return "訂單成立";
-                case 2 :
-                    return "準備完成";
-                case 3 :
-                    return "正在外送";
-                case 4 :
-                    return "訂單完成";
+                case 1 : return "訂單成立";
+                case 2 : return "準備完成";
+                case 3 : return "正在外送";
+                case 4 : return "訂單完成";
             }
         }
         function paymentMethodText() {
@@ -795,25 +780,20 @@
         function invoiceText(invoiceNum) {
             switch (invoiceNum) {
                 case 1 : return "電子發票-手機載具";
-                case 2 : return "電子發票-綠界會員";
+                case 2 : return "電子發票-會員載具";
                 case 3 : return "電子發票-統一發票";
             }
         }
         function receiverMethodText(receiverNum) {
             switch (receiverNum) {
-                case 1 :
-                    return "自取";
-                case 2 :
-                    return "外送";
+                case 1 : return "自取";
+                case 2 : return "外送";
             }
         }
         function nullText(nullValue) {
-            if (nullValue != null) {
-                return nullValue;
-            } else {
-                return "";
-            }
+            return nullValue != null ? nullValue : "";
         }
+        //---------------------------------------------------------------------------
     });
 </script>
 </body>

@@ -15,9 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import idv.tia201.g2.web.product.dto.ProductDTO;
@@ -43,7 +45,28 @@ public class ProductAddController {
     @Autowired
     private  StoreService storeService;
 
+//    @GetMapping("/{id}/image")
+//    public ResponseEntity<byte[]> getProductImage(@PathVariable Integer productId) {
+//        Product product = productService.getProductById(productId);
+//        if (product != null && product.getProductPicture() != null) {
+//            return ResponseEntity.ok()
+//                    .contentType(MediaType.IMAGE_JPEG) // 根據圖片類型設置
+//                    .body(product.getProductPicture());
+//        }
+//        return ResponseEntity.notFound().build();
+//    }
 
+
+    @GetMapping("/products")
+    public List<Product> getProducts(@RequestParam("storeId") Integer storeId) {
+        return productService.findProductsByStoreId(storeId);
+    }
+
+
+    @GetMapping("/store/{storeId}") // 在 storeId 前面加上 /
+    public List<Product> getProductsByStoreId(@PathVariable Integer storeId) {
+        return productService.findProductsByStoreId(storeId);
+    }
 
     // 查找所有產品
     @GetMapping("/all")
@@ -59,21 +82,40 @@ public class ProductAddController {
 
 
 
-
     @GetMapping("/search")
     public ResponseEntity<List<Product>> searchProducts(
             @RequestParam Integer productCategoryId,
-            @RequestParam String productName
+            @RequestParam String productName,
+            HttpSession session
     ) {
         try {
-            List<Product> products = productService.searchProducts(productCategoryId, productName);
-            // 返回200 OK状态及查询结果
+            // 從 session 中獲取 TotalUserDTO
+            TotalUserDTO totalUserDTO = (TotalUserDTO) session.getAttribute("totalUserDTO");
+            Integer userTypeId = totalUserDTO.getUserTypeId(); // 1 : 商家, 3 : 管理員
+            Integer userId = totalUserDTO.getUserId(); // storeId 或 adminId
+
+            List<Product> products;
+
+            // 如果是管理員
+            if (userTypeId == 3) {
+                products = productService.searchProducts(productCategoryId, productName);
+            }
+            // 如果是商家
+            else if (userTypeId == 1) {
+                products = productService.searchProducts(userId, productCategoryId, productName);
+            } else {
+                // 如果用戶類型無法識別，返回空列表或適當錯誤
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+            }
+
+            // 返回200 OK狀態及查詢結果
             return ResponseEntity.ok(products);
         } catch (Exception e) {
-            // 返回500 Internal Server Error状态及错误信息
+            // 返回500 Internal Server Error狀態及錯誤信息
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
 
 
     @GetMapping("/{productId}")
@@ -93,11 +135,16 @@ public class ProductAddController {
 
 
     @PostMapping("/add")
-    public ResponseEntity<String> addProduct(@RequestBody ProductDTO productDTO) throws IOException {
+    public ResponseEntity<String> addProduct(@RequestBody ProductDTO productDTO,HttpSession session) throws IOException {
         // 获取店铺ID
         // 调用 Service 层进行处理
+        TotalUserDTO totalUserDTO = (TotalUserDTO)session.getAttribute("totalUserDTO");
+        Integer userTypeId = totalUserDTO.getUserTypeId(); // 1 : 商家 、 3 : 管理員
+        Integer userId = totalUserDTO.getUserId();// storeId 或 adminId
 
-        boolean success = productService.addProduct(productDTO);
+
+
+        boolean success = productService.addProduct(productDTO,userTypeId,userId);
 
 
         if (success) {
@@ -113,7 +160,7 @@ public class ProductAddController {
         Integer userTypeId = totalUserDTO.getUserTypeId(); // 1 : 商家 、 3 : 管理員
         Integer userId = totalUserDTO.getUserId();// storeId 或 adminId
         try {
-            boolean success = productService.updateProduct(productId, productDTO);
+            boolean success = productService.updateProduct(productId, productDTO,userTypeId,userId);
 
             if (success) {
                 return ResponseEntity.ok("商品更新成功!");
@@ -133,14 +180,40 @@ public class ProductAddController {
     }
 
     @GetMapping("/paginated")
-    public Page<Product> getProductsPaginated(
+    public ResponseEntity<Page<Product>> getProductsPaginated(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "10") int size,
+            HttpSession session) {
+
+        // 從 session 中獲取 totalUserDTO
+        TotalUserDTO totalUserDTO = (TotalUserDTO) session.getAttribute("totalUserDTO");
+
+        // 如果 session 中沒有 totalUserDTO，返回 403 未授權
+        if (totalUserDTO == null) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
+        // 獲取用戶類型和用戶ID
+        Integer userTypeId = totalUserDTO.getUserTypeId(); // 1: 商家, 3: 管理員
+        Integer userId = totalUserDTO.getUserId(); // 商家ID
+
         Pageable pageable = PageRequest.of(page, size);
-        return productService.getProducts(pageable);
+        Page<Product> products;
 
+        // 根據用戶角色篩選產品
+        if (userTypeId == 3) {
+            // 管理員，返回所有店家產品資料
+            products = productService.getProducts(pageable);
+        } else if (userTypeId == 1) {
+            // 商家，過濾返回該商家的產品
+            products = productService.getProductByStoreId(userId, pageable);
+        } else {
+            // 非商家或管理員角色，返回空結果或者拋出未授權
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
 
-
+        // 返回分頁結果
+        return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
     @GetMapping("/byCategory")
@@ -148,6 +221,39 @@ public class ProductAddController {
         return productService.getProductsByCategory(ProductCategoryId);
     }
 
+    @GetMapping("/byCategories")
+    public ResponseEntity<List<Product>> getProductsByCategory(
+            @RequestParam Integer productCategoryId,
+            HttpSession session) {
+        TotalUserDTO totalUserDTO = (TotalUserDTO) session.getAttribute("totalUserDTO");
+        Integer storeId = totalUserDTO.getUserId(); // 這裡的 userId 對應商店 ID
+        List<Product> products = productService.getProductsByCategoryAndStore(storeId, productCategoryId);
+        return ResponseEntity.ok(products);
+    }
+
+
+    @PostMapping("/upload")
+    public ResponseEntity<String> uploadImage(@RequestParam("productPicture") MultipartFile file) {
+        try {
+            productService.saveImage(file);
+            return ResponseEntity.status(HttpStatus.OK).body("Image uploaded successfully");
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error uploading image");
+        }
+    }
+
+// 根據產品ID獲取產品圖片
+@GetMapping("/{id}/image")
+public ResponseEntity<byte[]> getProductImage(@PathVariable Integer id) {
+    byte[] imageData = productService.getProductImage(id);
+    if (imageData != null) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", "image/jpeg"); // 或者根據需要設置為其他圖片格式
+        return new ResponseEntity<>(imageData, headers, HttpStatus.OK);
+    } else {
+        return ResponseEntity.notFound().build();
+    }
+}
 
 
 

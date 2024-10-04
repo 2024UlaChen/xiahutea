@@ -15,13 +15,6 @@ public class DisputeDaoImpl implements DisputeDao {
     private Session session;
 
     // ------- FINISH ---------------------------
-    // 前台 爭議申請 新增
-    @Override
-    public int insert(DisputeOrder disputeOrder) {
-        session.persist(disputeOrder);
-        return 1;
-    }
-
     // 前台 爭議申請 顯示
     @Override
     public DisputeOrder selectByOrderId(Integer orderId) {
@@ -35,10 +28,10 @@ public class DisputeDaoImpl implements DisputeDao {
         }
     }
 
-    // 後台 爭議明細 儲存
+    // 前台 爭議申請 新增
     @Override
-    public int update(DisputeOrder disputeOrder) {
-        session.merge(disputeOrder);
+    public int insert(DisputeOrder disputeOrder) {
+        session.persist(disputeOrder);
         return 1;
     }
 
@@ -49,6 +42,13 @@ public class DisputeDaoImpl implements DisputeDao {
         TypedQuery<DisputeOrder> query = session.createQuery(hql, DisputeOrder.class)
                 .setParameter("disputeOrderId", disputeOrderId);
         return query.getSingleResult();
+    }
+
+    // 後台 爭議明細 儲存
+    @Override
+    public int update(DisputeOrder disputeOrder) {
+        session.merge(disputeOrder);
+        return 1;
     }
 
 }
