@@ -12,11 +12,15 @@ import idv.tia201.g2.web.user.vo.TotalUsers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.data.domain.Page;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,6 +49,8 @@ public class MemberServiceImpl implements MemberService {
     private SendSmsService sendSmsService;
 
     Integer userType = 0;
+    @Autowired
+    private DataSourceTransactionManagerAutoConfiguration dataSourceTransactionManagerAutoConfiguration;
 
     public byte[] loadImg() throws IOException {
         String imagePath = "static/img/userIcon.jpg";
@@ -225,14 +231,32 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public List<Member> findQueryMember(Member member) {
+    public Page<Member> findQueryMember(Member member, int pageNo) {
 //        動態查詢 - 電話 / id / 狀態 / name
+        final int ONE_PAGE_SIZE = 6 ;
 
         String queryName = member.getNickname();
         String queryPhone = member.getCustomerPhone();
         Integer queryId = member.getCustomerId();
         Boolean queryStatus = member.getValidStatus();
-        return memberDao.findMemberByQueryParam(queryName, queryId, queryPhone, queryStatus);
+        List<Member> totalList = memberDao.findMemberByQueryParam(queryName, queryId, queryPhone, queryStatus, pageNo);
+
+        Pageable pageRequest = PageRequest.of(pageNo, ONE_PAGE_SIZE);
+        int start = (int) pageRequest.getOffset();
+        int end = Math.min((start + pageRequest.getPageSize()), totalList.size());
+        List<Member> pageContent = totalList.subList(start, end);
+        Page<Member> nowPage = new PageImpl<>(pageContent, pageRequest, totalList.size());
+        System.out.println(nowPage.getTotalPages());
+        System.out.println(nowPage.getTotalElements());
+        System.out.println(nowPage.getNumber());
+        System.out.println(nowPage.getSize());
+        System.out.println(start);
+        System.out.println(end);
+        for (Member m : nowPage) {
+            System.out.println(m);
+        }
+        return nowPage;
+
     }
 
     @Override

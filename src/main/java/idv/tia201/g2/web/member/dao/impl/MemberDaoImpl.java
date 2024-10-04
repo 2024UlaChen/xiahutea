@@ -10,6 +10,10 @@ import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
@@ -69,8 +73,7 @@ public class MemberDaoImpl implements MemberDao {
     }
 
     @Override
-    public List<Member> findMemberByQueryParam(String nickname, Integer customerId, String phone, Boolean status) {
-
+    public List<Member> findMemberByQueryParam(String nickname, Integer customerId, String phone, Boolean status, int pageNo) {
         CriteriaBuilder cb = session.getCriteriaBuilder();
         CriteriaQuery<Member> cq = cb.createQuery(Member.class);
         Root<Member> root = cq.from(Member.class);

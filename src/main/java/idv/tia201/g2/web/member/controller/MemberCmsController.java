@@ -10,11 +10,14 @@ import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("cms/manage")
@@ -24,13 +27,23 @@ public class MemberCmsController {
     private MemberService memberService;
 
     @GetMapping("all")
-    public List<Member> manage(HttpSession httpSession) {
-        TotalUserDTO totalUserDTO = (TotalUserDTO) httpSession.getAttribute("totalUserDTO");
-        if (totalUserDTO.getUserTypeId() != 3) {
-            List<Member> member = new ArrayList<>();
-            return member;
-        }
-        return memberService.findAllMember();
+    public Core manage(HttpSession httpSession, @RequestParam("searchPageNo") int pageNo) {
+        Core core = new Core();
+//        TotalUserDTO totalUserDTO = (TotalUserDTO) httpSession.getAttribute("totalUserDTO");
+//        if (totalUserDTO.getUserTypeId() != 3) {
+//            core.setSuccessful(false);
+//            return core;
+//        }
+        System.out.println("=================");
+        Page<Member> resultPage = memberService.findQueryMember(new Member(), pageNo);
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("memberData", resultPage.getContent());
+        map.put("totalPage", resultPage.getTotalPages());
+        map.put("nowPage", resultPage.getNumber());
+
+        core.setData(map);
+        core.setSuccessful(true);
+        return core;
     }
 
     @PostMapping("detail")
@@ -66,14 +79,27 @@ public class MemberCmsController {
 
 
     @PostMapping
-    public List<Member> manage(@RequestBody Member member) {
-        if (member == null) {
-            member = new Member();
-            member.setMessage("no member data");
-            member.setSuccessful(false);
-            return null;
+    public Core manage(@RequestBody Member member, HttpSession httpSession, @RequestParam("searchPageNo") int pageNo) {
+        Core core = new Core();
+        TotalUserDTO totalUserDTO = (TotalUserDTO) httpSession.getAttribute("totalUserDTO");
+        if (totalUserDTO.getUserTypeId() != 3) {
+            core.setSuccessful(false);
+            return core;
         }
-        return memberService.findQueryMember(member);
+        if (member == null) {
+            core.setMessage("no member data");
+            core.setSuccessful(false);
+            return core;
+        }
+
+        Page<Member> resultPage = memberService.findQueryMember(member, pageNo);
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("memberData", resultPage.getContent());
+        map.put("totalPage", resultPage.getTotalPages());
+        System.out.println(resultPage.getTotalPages());
+        core.setData(map);
+        core.setSuccessful(true);
+        return core;
     }
 
     @GetMapping("address")
