@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
@@ -26,7 +27,7 @@ public class ChatRoomServiceimpl implements ChatRoomService {
     public final static long ADMINTOTALUSERID = 1;
 
     @Override
-    public List<ChatRoom> getChatRoom(TotalUserDTO user) {
+    public List<ChatRoom> getChatRoom(TotalUserDTO user) throws IOException {
         Integer userType = user.getUserTypeId();            //會員種類
         Long userTotalUserId = user.getTotalUserId();       //全平台ID
         List<ChatRoom> chatRoomData = chatSessionDao.findChatRoomData(userType, userTotalUserId);

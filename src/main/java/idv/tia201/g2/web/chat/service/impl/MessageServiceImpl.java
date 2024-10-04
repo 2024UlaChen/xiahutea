@@ -1,6 +1,6 @@
 package idv.tia201.g2.web.chat.service.impl;
 
-import idv.tia201.g2.web.chat.ImgUtil.ImageProcessor;
+import idv.tia201.g2.web.chat.util.ImageProcessor;
 import idv.tia201.g2.web.chat.dao.MessageChatSessionRepository;
 import idv.tia201.g2.web.chat.dto.ImgDto;
 import idv.tia201.g2.web.chat.dto.MessageDto;
