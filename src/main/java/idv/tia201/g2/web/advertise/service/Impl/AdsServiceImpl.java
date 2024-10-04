@@ -12,6 +12,7 @@ import idv.tia201.g2.web.user.vo.TotalUsers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Service
@@ -100,5 +101,12 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public Store findStoreById(int storeid) {
         return storeDao.findByStoreId(storeid);
+    }
+
+    @Override
+    public List<Advertise> getHomePageAdvertises() {
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+
+        return adsDao.findByHomeDisplayAndIsactiveAndStartTimeLessThanAndEndTimeGreaterThan(true,true,now,now);
     }
 }

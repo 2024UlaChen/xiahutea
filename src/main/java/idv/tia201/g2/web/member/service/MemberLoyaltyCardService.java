@@ -12,4 +12,6 @@ public interface MemberLoyaltyCardService {
     List<CustomerLoyaltyCard> GetCustomerLoyaltyCards(Integer memberId);
 
     boolean AddCustomerLoyaltyCard(CustomerLoyaltyCard customerLoyaltyCard);
+
+    CustomerLoyaltyCard updateMemberStoreLoyaltyPoints(Integer storeId, Integer memberId, Integer totalMoney);
 }
