@@ -290,6 +290,11 @@
                       list.forEach(function (row){
                           let base64Img = row.store.logo;
                           let imgformat = getBase64Img(base64Img);
+                          let passday = row.store.expiredDate;
+                          if(row.store.validStatus){
+                              passday = '激活中';
+                          }
+
                           let str =`
                           <div class="col" data-bs-toggle="modal" data-bs-target="#exampleModal${row.loyaltyCardId}">
                 <div class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 shadow-lg Kuncard"
@@ -302,7 +307,7 @@
                       </li>
                       <li class="d-flex align-items-center me-3">
                         <svg class="bi me-2" width="1em" height="1em"><use xlink:href="#geo-fill"></use></svg>
-                        <small class="text-dark">效期:${row.store.expiredDate}</small>
+                        <small class="text-dark">效期:${passday}</small>
                       </li>
                       <li class="d-flex align-items-center">
                         <svg class="bi me-2" width="1em" height="1em"><use xlink:href="#calendar3"></use></svg>
@@ -333,7 +338,7 @@
               ></button>
             </div>
             <div class="modal-body">
-              <p>點數一點可折抵一元</p>
+              <p>點數十點可折抵五十元</p>
             </div>
             <div class="modal-footer">
               <button
