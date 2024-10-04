@@ -99,47 +99,47 @@ const chatListSettings = () => {
         width: 'calc(4em + 45px)',         // 未指定時的預設值: width: 5em;
         padding: '12px 10px 12px 12px',    // 未指定時的預設值: padding: '10px';
         options: [
-            // {
-            //     // text: '釘選',  // bind設定成功時, 無傳入text也可以正常運作
-            //     click: actionHandlers.pinnedToggle,
-            //     bind: {
-            //         property: 'pinned',
-            //         text: [
-            //             // 可以直接使用行內樣式做微調
-            //             `
-            //                 <i class="bi bi-pin" style="margin-right: 8px; transform: translateY(1px); font-size:16px"></i>
-            //                 <p>對話置頂</p>
-            //             `,
-            //             `
-            //                 <i class="bi bi-pin-angle" style="margin-right: 8px; transform: translateY(-1px); font-size:16px"></i>
-            //                 <p>取消置頂</p>
-            //             `
-            //         ],
-            //         condition: (binder) => {
-            //             return !binder.value.pinned;
-            //         }
-            //     }
-            // },
-            // {
-            //     // text: '通知',  // bind設定成功時, 無傳入text也可以正常運作
-            //     click: actionHandlers.notifyToggle,
-            //     bind: {
-            //         property: 'notifySettings',
-            //         text: [
-            //             `
-            //                 <i class="bi bi-bell-fill" style="margin-right: 8px; transform: translateY(1px); font-size:16px"></i>
-            //                 <span>取消通知</span>
-            //             `,
-            //             `
-            //                 <i class="bi bi-bell-slash-fill" style="margin-right: 8px; transform: translateY(-1px); font-size:16px"></i>
-            //                 <span>開啟通知</span>
-            //             `
-            //         ],
-            //         condition: (binder) => {
-            //             return binder.value.notifySettings === 'on';
-            //         }
-            //     }
-            // },
+            {
+                // text: '釘選',  // bind設定成功時, 無傳入text也可以正常運作
+                click: actionHandlers.pinnedToggle,
+                bind: {
+                    property: 'pinned',
+                    text: [
+                        // 可以直接使用行內樣式做微調
+                        `
+                            <i class="bi bi-pin" style="margin-right: 8px; transform: translateY(1px); font-size:16px"></i>
+                            <p>對話置頂</p>
+                        `,
+                        `
+                            <i class="bi bi-pin-angle" style="margin-right: 8px; transform: translateY(-1px); font-size:16px"></i>
+                            <p>取消置頂</p>
+                        `
+                    ],
+                    condition: (binder) => {
+                        return !binder.value.pinned;
+                    }
+                }
+            },
+            {
+                // text: '通知',  // bind設定成功時, 無傳入text也可以正常運作
+                click: actionHandlers.notifyToggle,
+                bind: {
+                    property: 'notifySettings',
+                    text: [
+                        `
+                            <i class="bi bi-bell-fill" style="margin-right: 8px; transform: translateY(1px); font-size:16px"></i>
+                            <span>取消通知</span>
+                        `,
+                        `
+                            <i class="bi bi-bell-slash-fill" style="margin-right: 8px; transform: translateY(-1px); font-size:16px"></i>
+                            <span>開啟通知</span>
+                        `
+                    ],
+                    condition: (binder) => {
+                        return binder.value.notifySettings === 'on';
+                    }
+                }
+            },
         ],
         scrollEvent: {
             trigger: 'bottom',
@@ -162,30 +162,30 @@ const chatingSettings = () => {
         width: 'calc(4em + 45px)',         // 未指定時的預設值: width: 5em;
         padding: '12px 10px 12px 12px',    // 未指定時的預設值: padding: '10px';
         options: [
-            // {
-            //     text: '釘選',
-            //     click: actionHandlers.pinnedToggle, // 請於下方的actionHandlers進行定義
-            //     bind: {
-            //         property: 'pinned',
-            //         text: ['取消置頂', '對話置頂'],
-            //         condition: (binder) => {
-            //             return binder.value.pinned;
-            //         }
-            //     },
-            //     slider: 'pinned' // 可以與bind同時使用 (如果有需要的話)
-            // },
-            // {
-            //     text: '通知',
-            //     click: actionHandlers.notifyToggle, // 請於下方的actionHandlers進行定義
-            //     bind: {
-            //         property: 'notifySettings',
-            //         text: ['取消通知', '開啟通知'],
-            //         condition: (binder) => {
-            //             return binder.value.notifySettings === 'on';
-            //         }
-            //     },
-            //     slider: 'notifySettings' // 可以與bind同時使用 (如果有需要的話)
-            // },
+            {
+                text: '釘選',
+                click: actionHandlers.pinnedToggle, // 請於下方的actionHandlers進行定義
+                bind: {
+                    property: 'pinned',
+                    text: ['取消置頂', '對話置頂'],
+                    condition: (binder) => {
+                        return binder.value.pinned;
+                    }
+                },
+                slider: 'pinned' // 可以與bind同時使用 (如果有需要的話)
+            },
+            {
+                text: '通知',
+                click: actionHandlers.notifyToggle, // 請於下方的actionHandlers進行定義
+                bind: {
+                    property: 'notifySettings',
+                    text: ['取消通知', '開啟通知'],
+                    condition: (binder) => {
+                        return binder.value.notifySettings === 'on';
+                    }
+                },
+                slider: 'notifySettings' // 可以與bind同時使用 (如果有需要的話)
+            },
         ],
         scrollEvent: {
             trigger: 'top',
@@ -213,18 +213,18 @@ const filterSettings = () => {
                 suffix: '',
                 click: actionHandlers.getChatRoomsData
             },
-            // {
-            //     text: '未讀', // 超過兩個字高機率爆版
-            //     prefix: '<i class="bi bi-chat-dots"></i>',
-            //     suffix: '',
-            //     click: actionHandlers.filterUnread
-            // },
-            // {
-            //     text: '釘選', // 超過兩個字高機率爆版
-            //     prefix: '<i class="bi bi-pin-angle"></i>',
-            //     suffix: '',
-            //     click: actionHandlers.filterPinned
-            // },
+            {
+                text: '未讀', // 超過兩個字高機率爆版
+                prefix: '<i class="bi bi-chat-dots"></i>',
+                suffix: '',
+                click: actionHandlers.filterUnread
+            },
+            {
+                text: '釘選', // 超過兩個字高機率爆版
+                prefix: '<i class="bi bi-pin-angle"></i>',
+                suffix: '',
+                click: actionHandlers.filterPinned
+            },
         ]
     }
 }
@@ -251,10 +251,17 @@ const textareaSettings = () => {
                     if (e.target === fileInput) return; //避免click事件遞迴
 
                     fileInput.click();
-                    fileInput.addEventListener('change', event => {
+                    const handleFileChange = (event) => {
                         const selectedFile = event.target.files[0];
                         actionHandlers.updateFile(selectedFile);
-                    })
+
+                        // 移除事件監聽器，避免多次觸發
+                        fileInput.removeEventListener('change', handleFileChange);
+                        fileInput.value = '';
+                    };
+
+                    // 綁定事件監聽器
+                    fileInput.addEventListener('change', handleFileChange);
                 }
             },
         ]
@@ -1015,7 +1022,7 @@ export class WeienChat {
         if (message.value.img) {
             content = `<img src="${message.value.img.src}" alt="${message.value.img.alt}" style="margin-top: 3px"></img>`;
         }
-        content += `<p style="margin-top: 3px">${message.value.content}</p>`;
+        content += `<p style="margin-top: 3px">${message.value.content || ''}</p>`;
         messageCard.innerHTML = `
             <div class="chat-room-avatar">
                 <div class="weien-message-sender-name">${sender.name}</div>
@@ -1420,7 +1427,7 @@ export class WeienChat {
             </div>
             <div class="chat-room-overview">
                 <div class="chat-room-header">
-                    <div style="display: flex; align-items: center;">
+                    <div style="display: flex; align-items: center; flex: 1; max-width: calc(100% - 2.5em);">
                         <div class="chat-room-name"></div>
                         <div class="chat-room-participants"></div>
                     </div>
@@ -1461,7 +1468,7 @@ export class WeienChat {
                 } else if (len > 2) {
                     text = '會話群組';
                 } else if (len === 2) {
-                    text = chatingWith.name;
+                    text = this._getChatingWith(chat).name;
                 } else {
                     text = 'ERROR - 這個聊天室只有一個參與者';
                 }

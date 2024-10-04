@@ -8,9 +8,11 @@ import idv.tia201.g2.web.chat.vo.ChatSessions;
 import idv.tia201.g2.web.chat.vo.Messages;
 import idv.tia201.g2.web.user.dao.TotalUserDao;
 import idv.tia201.g2.web.user.dto.TotalUserDTO;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
@@ -25,13 +27,22 @@ public class ChatRoomServiceimpl implements ChatRoomService {
     public final static long ADMINTOTALUSERID = 1;
 
     @Override
-    public List<ChatRoom> getChatRoom(TotalUserDTO user) {
+    public List<ChatRoom> getChatRoom(TotalUserDTO user) throws IOException {
         Integer userType = user.getUserTypeId();            //會員種類
         Long userTotalUserId = user.getTotalUserId();       //全平台ID
         List<ChatRoom> chatRoomData = chatSessionDao.findChatRoomData(userType, userTotalUserId);
         if(chatRoomData.isEmpty()){
             addChatRoom(user);
             getChatRoom(user);
+        }
+        if(user.getUserTypeId() != 3){
+            List<Participant> participants = chatRoomData.get(0).getParticipants();
+            for (Participant p :participants){
+                if(p.getUserId() != user.getTotalUserId()){
+                    p.setName("管理員");
+                }
+            }
+
         }
         return chatRoomData;
     }
