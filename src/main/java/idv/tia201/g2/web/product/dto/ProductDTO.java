@@ -20,7 +20,7 @@ public class ProductDTO {
         private boolean productStatus;
         private Integer productStoreId;
         private Integer productCategoryId;
-        private MultipartFile productPicture;
+        private String productPicture;
         private String size;
         private boolean normalIce;
         private boolean lessIce;

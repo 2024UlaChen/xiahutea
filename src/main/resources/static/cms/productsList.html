@@ -355,6 +355,22 @@ function getCategoryNameById(categoryId) {
         });
 }
 
+    function getStoreNameById(storeId) {
+        // 假设你有一个 API 路径 '/api/stores/' 来获取店铺信息
+        return fetch(`/api/stores/${storeId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('无法获取店铺信息');
+                }
+                return response.json(); // 假设 API 返回的是 JSON 格式
+            })
+            .then(storeData => storeData.storeName) // 假设返回的 JSON 中有 storeName 字段
+            .catch(error => {
+                console.error('获取店铺名称失败:', error);
+                return '未知店铺'; // 如果出错，返回一个默认值
+            });
+    }
+
 // =========獲取商品分類選項====
 let categoryOptions = document.querySelector('.productcategory');
 
@@ -470,6 +486,29 @@ fetch('/categories/all')
     function updateProductTable(products) {
         const productTableBody = document.querySelector('#myTable tbody');
         productTableBody.innerHTML = ''; // Clear table content
+
+
+        // // 使用 fetch 從後端獲取 TotalUserDTO
+        // fetch('/totalusers', {
+        //     method: 'GET', // 請求方法是 GET
+        // })
+        //     .then(response => {
+        //         if (!response.ok) {
+        //             throw new Error('Network response was not ok');
+        //         }
+        //         return response.json(); // 將返回的結果解析為 JSON 格式
+        //     })
+        //     .then(data => {
+        //         if (data && data.userTypeId === 3) {
+        //
+        //
+        //
+        //
+        //         }
+        //     })
+        //     .catch(error => {
+        //         console.error('Fetch error:', error);
+        //     });
 
         const promises = products.map(product =>
             getCategoryNameById(product.productCategoryId).then(categoryName => {

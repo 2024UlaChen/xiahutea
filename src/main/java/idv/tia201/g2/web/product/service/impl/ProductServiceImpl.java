@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
@@ -74,7 +75,6 @@ public class ProductServiceImpl implements ProductService {
 
 
 
-
     //獲取產品名字
     public List<Product> getProductsByProductName(String productName) {
         return productDao.findByProductNameContaining(productName);
@@ -83,16 +83,15 @@ public class ProductServiceImpl implements ProductService {
 
 
     //新增
-    public boolean addProduct(ProductDTO productDTO)  {
+    public boolean addProduct(ProductDTO productDTO,Integer userTypeId,Integer userId) throws IOException {
         // 创建 Product 实体对象
         Product product = new Product();
         product.setProductName(productDTO.getProductName());
        product.setProductPrice(productDTO.getProductPrice());
         product.setSize(productDTO.getSize());
         product.setProductStatus(productDTO.isProductStatus());
-
         product.setProductCategoryId(productDTO.getProductCategoryId());
-        product.setProductStoreId(1);
+        product.setProductStoreId(userId);
         // 设置图片字节
         product.setNormalIce(productDTO.isNormalIce());
         product.setLessIce(productDTO.isLessIce());
@@ -110,6 +109,8 @@ public class ProductServiceImpl implements ProductService {
         product.setCoconutJelly(productDTO.isCoconutJelly());
         product.setTaro(productDTO.isTaro());
         product.setHerbalJelly(productDTO.isHerbalJelly());
+        product.setProductPicture(productDTO.getProductPicture().getBytes());
+
 
 
 
@@ -121,37 +122,7 @@ public class ProductServiceImpl implements ProductService {
         return true;
     }
 
-    public Product saveProduct(ProductDTO productDTO) {
-        Product product = new Product();
-        product.setProductName(productDTO.getProductName());
 
-        product.setSize(productDTO.getSize());
-        product.setProductStatus(productDTO.isProductStatus());
-        product.setProductPrice(productDTO.getProductPrice());
-        product.setProductCategoryId(productDTO.getProductCategoryId());
-        product.setProductStoreId(1);
-        // 设置图片字节
-        product.setNormalIce(productDTO.isNormalIce());
-        product.setLessIce(productDTO.isLessIce());
-        product.setLightIce(productDTO.isLightIce());
-        product.setIceFree(productDTO.isIceFree());
-        product.setRoomTemperature(productDTO.isRoomTemperature());
-        product.setHot(productDTO.isHot());
-        product.setFullSugar(productDTO.isFullSugar());
-        product.setLessSugar(productDTO.isLessSugar());
-        product.setHalfSugar(productDTO.isHalfSugar());
-        product.setQuarterSugar(productDTO.isQuarterSugar());
-        product.setNoSugar(productDTO.isNoSugar());
-        product.setPearl(productDTO.isPearl());
-        product.setPudding(productDTO.isPudding());
-        product.setCoconutJelly(productDTO.isCoconutJelly());
-        product.setTaro(productDTO.isTaro());
-        product.setHerbalJelly(productDTO.isHerbalJelly());
-
-
-
-        return productDao.save(product);
-    }
 
     public void updateProductImage(Integer productId, byte[] imageBytes) {
         Product product = productDao.findByProductId(productId);
@@ -159,17 +130,61 @@ public class ProductServiceImpl implements ProductService {
         productDao.save(product);
     }
 
+    @Override
+    public Page<Product> getProductByStoreId(Integer productStoreId, Pageable pageable) {
+        return productDao.findByProductStoreId(productStoreId, pageable);
+    }
+
+    @Override
+    public List<Product> searchProducts(Integer storeId, Integer productCategoryId, String productName) {
+        return productDao.findByProductStoreIdAndProductCategoryIdAndProductNameContaining(storeId,productCategoryId,productName);    }
+
+    @Override
+    public List<Product> getProductsByCategoryAndStore(Integer storeId, Integer productCategoryId) {
+        return productDao.findByProductStoreIdAndProductCategoryId(storeId, productCategoryId);
+    }
+
+    @Override
+    public Product saveImage(MultipartFile file) throws IOException {
+        Product product=new Product();
+        product.setProductPicture(file.getBytes());
+
+        return product; // 返回 product 以供后续处理;
+    }
+
+    @Override
+    public List<Product> findProductsByStoreId(Integer storeId) {
+        return productDao.findByProductStoreId(storeId);
+    }
+
+    @Override
+    public byte[] getProductImage(Integer productId) {
+        Product product = productDao.findByProductId(productId);
+        return (product != null) ? product.getProductPicture() : null; // 返回圖片數據
+
+    }
 
 
-    public boolean updateProduct(Integer productId, ProductDTO productDTO) {
+    public boolean updateProduct(Integer productId, ProductDTO productDTO,Integer userTypeId, Integer userId) {
         try {
             // 查找现有产品
             Product existingProduct = productDao.findByProductId(productId);
+            if (userTypeId == 1 && !existingProduct.getProductStoreId().equals(userId)) {
+                throw new IllegalAccessException("您無權操作該產品，因為它不屬於您的商店。");
+            };
+
+            Product existingProductName = productDao.findByProductName(productDTO.getProductName());
 
             if (existingProduct == null) {
                 // 如果产品不存在，返回失败
                 return false;
             }
+
+            if (existingProductName !=null) {
+                // 如果产品不存在，返回失败
+                throw new IllegalArgumentException("產品名稱已經存在，請使用不同的名稱");
+
+            };
 
             // 更新产品的属性
             existingProduct.setProductName(productDTO.getProductName());
