@@ -253,12 +253,10 @@ public class OrderServiceImpl implements OrderService {
 
         orderDto.setMessage("訂單新增成功");
         orderDto.setSuccessful(true);
-        orderDto.setOrders(order);
-        orderDto.setOrderDetails(orderDetails);
 
-        // 建立通知的內容
+        // 建立通知的內容 依商店ID 發送訂單新增訊息
         NotificationDto notificationDto = new NotificationDto(order.getOrderId(), order.getOrderCreateDatetime());
-        notificationService.notifyNewOrder(notificationDto);
+        notificationService.addOrderNotify(notificationDto, storeId);
         return orderDto;
     }
 

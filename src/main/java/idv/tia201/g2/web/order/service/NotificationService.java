@@ -10,8 +10,9 @@ public class NotificationService {
 
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
-
-    public void notifyNewOrder(NotificationDto message) {
-        messagingTemplate.convertAndSend("/store/notifications", message);
+    // 依商店 發送自家訂單新增訊息
+    public void addOrderNotify(NotificationDto message, Integer storeId) {
+        System.out.println("----------------發送通知給商店ID: " + storeId + "，內容: " + message);
+        messagingTemplate.convertAndSend("/store/notifications/" + storeId, message);
     }
 }
