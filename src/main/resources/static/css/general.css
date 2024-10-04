@@ -1,4 +1,4 @@
-div.header-message>h1 {
+div.header-message > h1 {
     margin: 0 auto;
     border-radius: 50%;
     color: #73B4BA;
@@ -56,17 +56,32 @@ div.header-message>h1 {
 .header.style2 .top-bar {
     background: white;
 }
+
 .main-content {
     background: #f9f9f9;
 }
+
 .footer {
     background: white;
 }
 
-#queryUser img{
+#queryUser img {
     width: 50px;
     height: 50px;
 }
-#queryUser span{
+
+#queryUser span {
     font-size: 16px;
+}
+
+
+.userMenu .hiddenMenu {
+    display: none;
+}
+
+#noLogin span {
+    color: #dc3545;
+}
+#noLogin span:hover {
+    font-weight: bold;
 }

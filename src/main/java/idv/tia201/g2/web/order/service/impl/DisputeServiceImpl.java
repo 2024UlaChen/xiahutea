@@ -1,6 +1,7 @@
 package idv.tia201.g2.web.order.service.impl;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.List;
 import idv.tia201.g2.web.member.dao.MemberDao;
 import idv.tia201.g2.web.member.service.MemberService;
@@ -17,9 +18,12 @@ import idv.tia201.g2.web.order.vo.OrderDetail;
 import idv.tia201.g2.web.order.vo.Orders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import static org.springframework.util.ObjectUtils.isEmpty;
 
 @Service
@@ -30,16 +34,12 @@ public class DisputeServiceImpl implements DisputeService {
     private DisputeDao disputeDao;
     @Autowired
     private DisputeRepository disputeRepository;
-
     @Autowired
     private OrderDao orderDao;
-
     @Autowired
     private OrderDetailDao orderDetailDao;
-
     @Autowired
     private MemberDao memberDao;
-
     @Autowired
     private OrderMappingUtil orderMappingUtil;
     @Autowired
@@ -61,7 +61,7 @@ public class DisputeServiceImpl implements DisputeService {
     // 前台 爭議表格 申請
     @Override
     public DisputeOrder add(DisputeOrder disputeOrder) {
-        Member member = memberDao.findMemberById(disputeOrder.getCustomerId()); // 查找會員
+        Member member = memberDao.findMemberById(disputeOrder.getCustomerId());
         if(member == null) {
             disputeOrder.setMessage("申請失敗，無此會員ID");
             disputeOrder.setSuccessful(false);
@@ -90,10 +90,29 @@ public class DisputeServiceImpl implements DisputeService {
         return disputeOrder;
     }
 
-    // 後台 爭議列表 顯示
+    // 後台 爭議列表 顯示 & 依條件查詢
     @Override
-    public Page<DisputeOrder> findByCriteria(Integer disputeOrderId, Integer orderId, Integer storeId, String storeName, String memberNickname, Integer disputeStatus, Timestamp dateStart, Timestamp dateEnd, Pageable pageable) {
-        return disputeRepository.findByCriteria(disputeOrderId, orderId, storeId, storeName, memberNickname, disputeStatus, dateStart, dateEnd, pageable);
+    public Page<DisputeOrder> findByCriteria(
+            Integer disputeOrderId, Integer orderId, Integer storeId, String storeName, String memberNickname,
+            Integer disputeStatus, LocalDate dateStart, LocalDate dateEnd, Integer page, Integer size
+    ) {
+        // 分頁排序
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "applyDatetime"));
+
+        // 檢查 查詢起迄日期 是否null
+        Timestamp startTimestamp = null;
+        Timestamp endTimestamp = null;
+        if (dateStart != null) {
+            startTimestamp = Timestamp.valueOf(dateStart.atStartOfDay());
+        }
+        if (dateEnd != null) {
+            endTimestamp = Timestamp.valueOf(dateEnd.plusDays(1).atStartOfDay());
+        }
+
+        return disputeRepository.findByCriteria(
+                disputeOrderId, orderId, storeId, storeName, memberNickname,
+                disputeStatus, startTimestamp, endTimestamp, pageable
+        );
     }
 
     // 後台 爭議明細 顯示
@@ -108,23 +127,40 @@ public class DisputeServiceImpl implements DisputeService {
         return orderMappingUtil.createOrderDto(order, disputeOrder, orderDetails);
     }
 
-    // 後台 爭議明細 修改
+    // 後台 爭議明細 修改 > 爭議狀態
     @Override
     public DisputeOrder updateInfo(DisputeOrder newDispute) {
         final DisputeOrder oldDispute = disputeDao.selectByDisputeId(newDispute.getDisputeOrderId());
+        // 爭議狀態：可修改的狀態只有1
         if(oldDispute.getDisputeStatus() == 2 || oldDispute.getDisputeStatus() == 3) {
             newDispute.setMessage("修改失敗，爭議訂單已處理完成");
             newDispute.setSuccessful(false);
             return newDispute;
         }
-        // 同意時
+        // 爭議狀態：同意
         if(newDispute.getDisputeStatus() == 2){
             if(isEmpty(newDispute.getRefundAmount()) || !(isEmpty(newDispute.getRejectReason()))) {
                 newDispute.setMessage("修改失敗，必填欄位需完成");
                 newDispute.setSuccessful(false);
                 return newDispute;
             }
+            Orders order = orderDao.selectByOrderId(newDispute.getOrderId());
+            if(newDispute.getRefundAmount() > (order.getProductAmount() + order.getProcessingFees())){
+                newDispute.setMessage("修改失敗，退款金額不可大於商品金額+系統費");
+                newDispute.setSuccessful(false);
+                return newDispute;
+            }
+            // 爭議同意： 退款至會員錢包
+            Member member = memberDao.findMemberById(oldDispute.getCustomerId()); // 查找會員
+            if(member == null) {
+                newDispute.setMessage("申請失敗，無此會員ID");
+                newDispute.setSuccessful(false);
+                return newDispute;
+            }
+            // 會員錢包增加 退款金額
+            memberService.updateMemberMoneyById(member.getCustomerId(), newDispute.getRefundAmount());
         }
+        // 爭議狀態：不同意
         if(newDispute.getDisputeStatus() == 3){
             if(!(isEmpty(newDispute.getRefundAmount())) || isEmpty(newDispute.getRejectReason())){
                 newDispute.setMessage("修改失敗，必填欄位需完成");
@@ -139,17 +175,6 @@ public class DisputeServiceImpl implements DisputeService {
         oldDispute.setUpdateDatetime(new Timestamp(System.currentTimeMillis()));
         disputeDao.update(oldDispute);
 
-        // 爭議同意： 退款至會員錢包
-        if(newDispute.getDisputeStatus() == 2){
-            Member member = memberDao.findMemberById(oldDispute.getCustomerId()); // 查找會員
-            if(member == null) {
-                newDispute.setMessage("申請失敗，無此會員ID");
-                newDispute.setSuccessful(false);
-                return newDispute;
-            }
-            // 增加 退款金額
-            memberService.updateMemberMoneyById(member.getCustomerId(), newDispute.getRefundAmount());
-        }
         newDispute.setMessage("修改成功");
         newDispute.setSuccessful(true);
         return newDispute;

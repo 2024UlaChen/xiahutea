@@ -2,6 +2,7 @@ package idv.tia201.g2.web.member.dao;
 
 import idv.tia201.g2.web.member.vo.Member;
 import idv.tia201.g2.web.member.vo.MemberAddress;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public interface MemberDao {
 
     List<Member> findMemberByNickname(String nickname);
 
-    List<Member> findMemberByQueryParam(String nickname, Integer memberId, String phone, Boolean status);
+    List<Member> findMemberByQueryParam(String nickname, Integer memberId, String phone, Boolean status, int pageNo);
 
     List<MemberAddress> findMemberAddressByMemberId(String memberId);
 
@@ -29,9 +30,10 @@ public interface MemberDao {
 
     Boolean updateMemberInfo(Member member);
 
-    Integer updateMemberInfo(Integer memberId, Boolean status, String memberRemark);
+    Integer updateMemberInfo(Integer memberId, Boolean aliveStatus, String memberRemark, Boolean validStatus) ;
 
     Boolean updateMemberAddress(MemberAddress memberAddress);
+
     Integer updateMemberMoney(Integer memberId, Integer memberMoney);
 
     //delete
