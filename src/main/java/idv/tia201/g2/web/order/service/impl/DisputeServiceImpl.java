@@ -67,7 +67,6 @@ public class DisputeServiceImpl implements DisputeService {
     // 前台 爭議表格 申請
     @Override
     public DisputeOrder add(DisputeOrder disputeOrder) {
-
         Member member = memberDao.findMemberById(disputeOrder.getCustomerId());
         if(member == null) {
             disputeOrder.setMessage("申請失敗，無此會員ID");
@@ -94,11 +93,11 @@ public class DisputeServiceImpl implements DisputeService {
         disputeDao.insert(disputeOrder);
         disputeOrder.setMessage("申請完成");
         disputeOrder.setSuccessful(true);
-        Orders order = orderDao.selectByOrderId(disputeOrder.getOrderId());
-        Integer storeId = order.getStoreId();
 
         // 發送爭議通知
-        notificationService.addDisputeNotify(disputeOrder.getOrderId(), disputeOrder.getApplyDatetime(), storeId);
+        Orders order = orderDao.selectByOrderId(disputeOrder.getOrderId());
+        Integer storeId = order.getStoreId();
+        notificationService.addDisputeNotify(disputeOrder.getDisputeOrderId(), disputeOrder.getApplyDatetime(), storeId);
         return disputeOrder;
     }
 

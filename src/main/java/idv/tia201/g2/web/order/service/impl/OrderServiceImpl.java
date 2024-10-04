@@ -221,8 +221,6 @@ public class OrderServiceImpl implements OrderService {
             // 折抵集點卡點數
             memberLoyaltyCardService.UpdatePoints(loyaltyCardId, order.getLoyaltyDiscount());
         }
-        // todo 增加集點卡點數
-        memberLoyaltyCardService.updateMemberStoreLoyaltyPoints(storeId, customerId, order.getProductAmount());
 
         // 會員使用點數
         if(order.getCustomerMoneyDiscount() < 0 || order.getCustomerMoneyDiscount() > member.getCustomerMoney()){
@@ -253,7 +251,8 @@ public class OrderServiceImpl implements OrderService {
 
         orderDto.setMessage("訂單新增成功");
         orderDto.setSuccessful(true);
-
+        // 訂單新增時 增加集點卡點數
+        memberLoyaltyCardService.updateMemberStoreLoyaltyPoints(storeId, customerId, order.getProductAmount());
         // 建立通知的內容 依商店ID 發送訂單新增訊息
         notificationService.addOrderNotify(order.getOrderId(), order.getOrderCreateDatetime(), storeId);
         return orderDto;
@@ -291,7 +290,6 @@ public class OrderServiceImpl implements OrderService {
         }).collect(Collectors.toList());
         return new PageImpl<>(orderDtos, pageable, orders.getTotalElements());
     }
-
 
     // 前台 訂單明細 顯示
     @Override

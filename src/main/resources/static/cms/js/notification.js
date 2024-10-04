@@ -113,7 +113,7 @@ function showOrder(data) {
     // 訂單通知內容
     let notificationHtml = `
         <div class="dropdown-divider"></div>
-        <a href="./storeOrderDetail.html?orderId=${data.orderId}" class="dropdown-item">
+        <a href="./storeOrderDetail.html?orderId=${data.id}" class="dropdown-item">
             <i class="fas fa-envelope mr-2"></i> 新訂單 ${data.id}，請安排出單 
             <span class="float-right text-muted text-sm">${new Date(data.createDatetime).toLocaleString()}</span>
         </a>
@@ -161,8 +161,8 @@ function showDispute(data) {
     // 訂單通知內容
     let notificationHtml = `
         <div class="dropdown-divider"></div>
-        <a href="./storeDisputeDetail.html?disputeId=${data.id}" class="dropdown-item">
-            <i class="fas fa-envelope mr-2"></i> 新爭議 ${data.id}，請確認 
+        <a href="./storeDisputeList.html" class="dropdown-item">
+            <i class="fas fa-envelope mr-2"></i> 新爭議 ${data.id}，請進行確認 
             <span class="float-right text-muted text-sm">${new Date(data.createDatetime).toLocaleString()}</span>
         </a>
     `;
