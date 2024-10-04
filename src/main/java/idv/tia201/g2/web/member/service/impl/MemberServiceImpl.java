@@ -137,6 +137,13 @@ public class MemberServiceImpl implements MemberService {
             member.setSuccessful(false);
             return member;
         }
+        System.out.println(member.getValidStatus());
+        if(member.getValidStatus()){
+            member = new Member();
+            member.setMessage("帳號停權，請洽客服");
+            member.setSuccessful(false);
+            return member;
+        }
         TotalUsers LoginTotalUser = totalUserDao.findByUserTypeIdAndUserId(0, member.getCustomerId());
         member.setData(LoginTotalUser.getTotalUserId());
 
@@ -291,7 +298,7 @@ public class MemberServiceImpl implements MemberService {
             if ("REGISTER".equals(type)) {
                 TotalUsers totalUser = new TotalUsers(null, userType, queryMember.getCustomerId());
                 totalUserDao.save(totalUser);
-                memberDao.updateMemberInfo(queryMember.getCustomerId(), true, queryMember.getCustomerRemark(),false);
+                memberDao.updateMemberInfo(queryMember.getCustomerId(), true, queryMember.getCustomerRemark());
             } else {
                 String encodePwd = EncrypSHA.SHAEncrypt(member.getCustomerPassword());
                 queryMember.setCustomerPassword(encodePwd);
