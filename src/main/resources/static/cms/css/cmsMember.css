@@ -27,7 +27,7 @@
     color: white;
 }
 
-.btnEdit:hover {
+.btnEdit:hover, .btnPage:hover {
     background-color: white;
     border: 1px solid #FAC792;
     color: #f38f27;
@@ -43,6 +43,35 @@
     background-color: white;
     border: 1px solid #6c757d;
     color: #6c757d;
+}
+
+.btnPage {
+    background-color: #FAC792;
+    border: 1px solid #FAC792;
+    color: white;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 30px;
+    font-size: 16px;
+    border-radius: 5px;
+    margin-right: 5px;
+}
+
+
+
+.off, .off:hover {
+    background-color: #6c757d;
+    border: 1px solid #6c757d;
+    color: white;
+    cursor: not-allowed;
+}
+
+.now, .now:hover {
+    background-color: white;
+    border: 1px solid #FAC792;
+    color: #f38f27;
+    cursor: not-allowed;
 }
 
 .hidden {
@@ -145,6 +174,7 @@
     color: #dc3545;
     font-weight: bold;
 }
+
 .inputCheckInValid {
     border: 1px solid #dc3545;
 }

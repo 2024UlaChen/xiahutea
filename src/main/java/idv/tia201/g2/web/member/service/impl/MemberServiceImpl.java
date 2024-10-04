@@ -12,11 +12,15 @@ import idv.tia201.g2.web.user.vo.TotalUsers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.data.domain.Page;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,6 +49,8 @@ public class MemberServiceImpl implements MemberService {
     private SendSmsService sendSmsService;
 
     Integer userType = 0;
+    @Autowired
+    private DataSourceTransactionManagerAutoConfiguration dataSourceTransactionManagerAutoConfiguration;
 
     public byte[] loadImg() throws IOException {
         String imagePath = "static/img/userIcon.jpg";
@@ -220,30 +226,23 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public List<Member> findMemberByValidStatus(Boolean memberValidStatus) {
-        return memberDao.findMemberByValidStatus(memberValidStatus);
-    }
+    public Page<Member> findQueryMember(Member member, int pageNo) {
+//        動態查詢 - 電話 / id / 狀態 / name
+        final int ONE_PAGE_SIZE = 6;
 
-    @Override
-    public List<Member> findQueryMember(Member member) {
-//        TODO REVISE
-        if (!ObjectUtils.isEmpty(member.getValidStatus())) {
-            return findMemberByValidStatus(member.getValidStatus());
-        } else if (StringUtils.hasText(member.getNickname())) {
-            return memberDao.findMemberByNickname(member.getNickname());
-        } else {
-            List<Member> memberResultList = new ArrayList<>();
-            if (StringUtils.hasText(member.getCustomerPhone())) {
-                memberResultList.add(memberDao.findMemberByPhone(member.getCustomerPhone()));
-            }
+        String queryName = member.getNickname();
+        String queryPhone = member.getCustomerPhone();
+        Integer queryId = member.getCustomerId();
+        Boolean queryStatus = member.getValidStatus();
+        List<Member> totalList = memberDao.findMemberByQueryParam(queryName, queryId, queryPhone, queryStatus, pageNo);
 
-            if (!StringUtils.isEmpty(member.getCustomerId())) {
-                memberResultList.add(memberDao.findMemberById(member.getCustomerId()));
-            }
-            return memberResultList;
-        }
-//        String memberId = StringUtils.isEmpty(member.getCustomerId())?null:member.getCustomerId();
-//        return memberDao.findMemberByQueryParam()
+        Pageable pageRequest = PageRequest.of(pageNo, ONE_PAGE_SIZE);
+        int start = (int) pageRequest.getOffset();
+        int end = Math.min((start + pageRequest.getPageSize()), totalList.size());
+        List<Member> pageContent = totalList.subList(start, end);
+        Page<Member> nowPage = new PageImpl<>(pageContent, pageRequest, totalList.size());
+        return nowPage;
+
     }
 
     @Override
@@ -292,11 +291,11 @@ public class MemberServiceImpl implements MemberService {
             if ("REGISTER".equals(type)) {
                 TotalUsers totalUser = new TotalUsers(null, userType, queryMember.getCustomerId());
                 totalUserDao.save(totalUser);
-                memberDao.updateMemberInfo(queryMember.getCustomerId(), false, queryMember.getCustomerRemark());
+                memberDao.updateMemberInfo(queryMember.getCustomerId(), true, queryMember.getCustomerRemark(),false);
             } else {
                 String encodePwd = EncrypSHA.SHAEncrypt(member.getCustomerPassword());
                 queryMember.setCustomerPassword(encodePwd);
-                queryMember.setValidStatus(false);
+                queryMember.setAliveStatus(true);
                 memberDao.updateMemberInfo(queryMember);
             }
             return true;

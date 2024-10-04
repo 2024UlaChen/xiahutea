@@ -104,7 +104,7 @@
                         <div class="account-list row">
                           <div class="col-lg-12 no-padding">
                             <div class="col-sm-4">
-                              <img src="" alt="userPhoto" id="userLogo">
+                              <img src="" alt="" class="userPhoto" id="userLogo">
                             </div>
                             <div class="col-lg-8">
                               <span id="userName">userName</span>
@@ -428,7 +428,7 @@
       
   document.addEventListener("DOMContentLoaded", function () {
       getUser();
-      queryStr();
+
 
     //監聽有這個屬性的KunIndexSotreImg 如果有空心就改實心
     //實心紅
@@ -528,6 +528,7 @@ let allSotre = document.querySelectorAll('.Heart');
           e.preventDefault();
           document.querySelector('#user-enter-keyword').value='';
       });
+      queryStr();
 
   }); //end dom
 

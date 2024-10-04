@@ -77,6 +77,12 @@ public class StoreController {
 
 
     }
+
+    @GetMapping("/getInfo/{storeId}")
+    public Store getInfo(@PathVariable("storeId") Integer storeId){
+        return storeService.findStoreById(storeId);
+    }
+
     @GetMapping("/storeinfo/{storeId}")
     public Store StoreInfo(HttpSession session,@PathVariable Integer storeId){
         if(checkStoreLogin(session,storeId)){

@@ -2,6 +2,7 @@ package idv.tia201.g2.web.member.service;
 
 import idv.tia201.g2.web.member.vo.Member;
 import idv.tia201.g2.web.member.vo.MemberAddress;
+import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -29,9 +30,8 @@ public interface MemberService {
     //    列出所有member
     List<Member> findAllMember();
 
-    List<Member> findQueryMember(Member member);
+    Page<Member> findQueryMember(Member member, int pageNo);
 
-    List<Member> findMemberByValidStatus(Boolean memberValidStatus);
 
     //    判斷是否存在會員
     Boolean isExistMember(Member member);
