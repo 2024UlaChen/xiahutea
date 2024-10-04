@@ -5,14 +5,31 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+
 @Service
 public class NotificationService {
 
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
     // 依商店 發送自家訂單新增訊息
-    public void addOrderNotify(NotificationDto message, Integer storeId) {
-        System.out.println("----------------發送通知給商店ID: " + storeId + "，內容: " + message);
+    public void addOrderNotify(Integer orderId, Timestamp creatDate, Integer storeId) {
+        NotificationDto message = new NotificationDto();
+        message.setType(1);
+        message.setId(orderId);
+        message.setCreateDatetime(creatDate);
+
+        System.out.println("----------------發送訂單通知--商店ID: " + storeId + "，---通知內容: " + message);
+        messagingTemplate.convertAndSend("/store/notifications/" + storeId, message);
+    }
+    // 依商店 發送自家訂單新增訊息
+    public void addDisputeNotify(Integer disputeId, Timestamp creatDate, Integer storeId) {
+        NotificationDto message = new NotificationDto();
+        message.setType(2);
+        message.setId(disputeId);
+        message.setCreateDatetime(creatDate);
+
+        System.out.println("----------------發送爭議通知--商店ID: " + storeId + "，---通知內容: " + message);
         messagingTemplate.convertAndSend("/store/notifications/" + storeId, message);
     }
 }

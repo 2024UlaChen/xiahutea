@@ -255,8 +255,7 @@ public class OrderServiceImpl implements OrderService {
         orderDto.setSuccessful(true);
 
         // 建立通知的內容 依商店ID 發送訂單新增訊息
-        NotificationDto notificationDto = new NotificationDto(order.getOrderId(), order.getOrderCreateDatetime());
-        notificationService.addOrderNotify(notificationDto, storeId);
+        notificationService.addOrderNotify(order.getOrderId(), order.getOrderCreateDatetime(), storeId);
         return orderDto;
     }
 
