@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.WebSocketHandler;
+import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.config.annotation.*;
 
 @Configuration
@@ -24,6 +25,13 @@ public class WebSocketConfig implements WebSocketConfigurer, WebSocketMessageBro
                 .addInterceptors(new HttpSessionInterceptor());  // 加入攔截器
 
     }
+    @Override
+    public void configureWebSocketTransport(WebSocketTransportRegistration registration) {
+        registration.setMessageSizeLimit(64 * 1024);  // 默認限制為 64KB
+        registration.setSendBufferSizeLimit(512 * 1024); // 設置發送緩衝區限制為 512KB
+    }
+
+
     //-----------------------------------------------------------------------
 
     // Notification

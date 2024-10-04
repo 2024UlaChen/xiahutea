@@ -1,5 +1,6 @@
 package idv.tia201.g2.web.chat.service.impl;
 
+import idv.tia201.g2.web.chat.ImgUtil.ImageProcessor;
 import idv.tia201.g2.web.chat.dao.MessageChatSessionRepository;
 import idv.tia201.g2.web.chat.dto.ImgDto;
 import idv.tia201.g2.web.chat.dto.MessageDto;
@@ -9,7 +10,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 @Service
@@ -19,7 +22,7 @@ public class MessageServiceImpl implements MessageService {
     MessageChatSessionRepository messageChatSessionRepository;
 
     @Override
-    public MessageDto MessagesToMessageDto(Messages m) {
+    public MessageDto MessagesToMessageDto(Messages m) throws IOException {
         MessageDto messageDto = new MessageDto();
         messageDto.setMessageId(m.getMessageId());
         messageDto.setChatSessionId(m.getChatSessionId());
@@ -27,7 +30,8 @@ public class MessageServiceImpl implements MessageService {
         byte[] attach = m.getAttach();
         if(attach != null && attach.length >0){
             ImgDto imgDto = new ImgDto();
-            imgDto.setSrc(attach);
+            String encoded = ImageProcessor.encodeImage(attach);
+            imgDto.setSrc(encoded);
             messageDto.setImg(imgDto);
         }
 
@@ -37,7 +41,7 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public List<MessageDto> getChatMessagesData(Integer chatId) {
+    public List<MessageDto> getChatMessagesData(Integer chatId) throws IOException {
         List<Messages> messageByChatId = messageChatSessionRepository.findByChatSessionId(chatId);
         List<MessageDto> ChatMessagesData = new ArrayList<>();
         for (Messages m : messageByChatId) {
@@ -52,7 +56,20 @@ public class MessageServiceImpl implements MessageService {
         BeanUtils.copyProperties(messageDto,message);
         message.setMessageContent(messageDto.getContent());
         if(messageDto.getImg() != null && messageDto.getImg().getSrc() != null){
-            message.setAttach(messageDto.getImg().getSrc());
+            String src = messageDto.getImg().getSrc();
+            System.out.println(src);
+            // 檢查是否包含 "data:image" 前綴，並去除它
+            if (src.startsWith("data:image")) {
+                src = src.substring(src.indexOf(",") + 1);
+            }
+
+            try {
+                byte[] decoded = Base64.getDecoder().decode(src);
+                message.setAttach(decoded);
+            } catch (IllegalArgumentException e) {
+                // 處理 Base64 解碼錯誤
+                System.err.println("Base64 解碼錯誤: " + e.getMessage());
+            }
         }
         message.setSenderId(messageDto.getSenderId());
         message.setSentAt(messageDto.getTimestamp());
