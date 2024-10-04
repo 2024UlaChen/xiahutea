@@ -65,4 +65,11 @@ public class LoginController {
         core.setMessage("登入成功");
         return core;
     }
+
+    @GetMapping
+    public Boolean isLogin(HttpSession httpSession) {
+        return httpSession.getAttribute("loggedin") != null;
+
+    }
+
 }
