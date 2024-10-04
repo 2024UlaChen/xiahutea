@@ -26,11 +26,13 @@ public class InvoiceService {
     private static final String MerchantID = "2000132";
     private static final String INVOICE_API_URL = "https://einvoice-stage.ecpay.com.tw/B2CInvoice/Issue";
 
+    ObjectMapper objectMapper = new ObjectMapper();
+
     @Autowired
     private RestTemplate restTemplate;
 
-    // 設定 傳入發票參數
-    public Map<String, Object> setInvoiceInfo(Orders order) {
+    // 設定 發送的發票請求參數
+    public String setInvoiceInfo(Orders order) {
 
         String carrierType = "";        //載具類別
         String carrierNum = "";
@@ -40,7 +42,7 @@ public class InvoiceService {
             carrierType = "3";
             carrierNum = order.getInvoiceCarrier();
         }
-        // case 2 : 電子發票-綠界會員
+        // case 2 : 電子發票-會員載具(綠界)
         if(order.getInvoiceMethod() == 2){
             carrierType = "1";
             carrierNum = "";
@@ -93,9 +95,9 @@ public class InvoiceService {
         data.put("SalesAmount", 10);
         data.put("Items", items);
         data.put("InvType", "07");
-
+        //----------------------------------------------------
+        // data 加密
         // 1. Map > JSON字串
-        ObjectMapper objectMapper = new ObjectMapper();
         String jsonData;
         try {
             jsonData = objectMapper.writeValueAsString(data);
@@ -104,35 +106,42 @@ public class InvoiceService {
         }
         // 2. JSON字串 > URL編碼大寫 > AES加密
         String encryptedData = InvoiceAesUtil.encryptAES(jsonData);
-
-        // 回傳參數
+        //----------------------------------------------------
+        // 請求參數params 物件 轉 JSON
         Map<String, Object> params = new LinkedHashMap<>();
         params.put("MerchantID", MerchantID);
         params.put("RqHeader", rqHeader);
         params.put("Data", encryptedData);
 
-        return params;
+        String jsonParams;
+        try {
+            jsonParams = objectMapper.writeValueAsString(params);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
+        return jsonParams;
     }
 
+    // 取出 回傳的發票回應參數
     public String getInvoiceInfo(String params){
-        // JSON 轉 物件
-        ObjectMapper objectMapper = new ObjectMapper();
+        // 回傳參數params JSON 轉 物件
         JsonNode objectParams;
         try {
             objectParams = objectMapper.readTree(params);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-
+        //----------------------------------------------------
+        // 取出data解密
         String encryptedData = objectParams.get("Data").asText();
-        //  AES解密 > URL編碼大寫 > JSON
+        //  1. AES解密 > URL編碼大寫 > JSON
         String jsonData = InvoiceAesUtil.decryptAES(encryptedData);
         // 確保解密成功，並且解密後不是空值
         if (jsonData == null || jsonData.isEmpty()) {
             return null;
         }
-
-        // JSON > 物件
+        // 2. JSON > 物件
         JsonNode data;
         try {
             data = objectMapper.readTree(jsonData);
@@ -140,8 +149,8 @@ public class InvoiceService {
             throw new RuntimeException(e);
         }
         System.out.println("--------Invoice--data-----"+data);
-
-        // 取出屬性值
+        //----------------------------------------------------
+        // 取出data物件屬性值
         String invoiceNo = data.get("InvoiceNo").asText();
         int rtnCode = data.get("RtnCode").asInt();
         if(rtnCode != 1){
@@ -151,31 +160,28 @@ public class InvoiceService {
         return invoiceNo;
     }
 
+    // API綠界 發送與接收請求參數
     public String createInvoice(Orders order) {
-        Map<String, Object> params = setInvoiceInfo(order);
-        ObjectMapper objectMapper = new ObjectMapper();
-        String jsonParams;
-        try {
-            jsonParams = objectMapper.writeValueAsString(params);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
 
-        // 傳送表頭格式與參數
+        // 設定發票請求參數
+        String jsonParams = setInvoiceInfo(order);
+
+        // 設定傳送表頭格式與請求參數
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
         HttpEntity<String> requestEntity = new HttpEntity<>(jsonParams, headers);
 
-        // 綠界 API
+        // 綠界API 傳送參數 & 回傳參數
         ResponseEntity<String> response = restTemplate.exchange(INVOICE_API_URL, HttpMethod.POST, requestEntity, String.class);
 
         // 回傳結果
         if (response.getStatusCode() == HttpStatus.OK) {
             String responseBody = response.getBody();
-            System.out.println("----------Response Body: ------" + responseBody);
-            return getInvoiceInfo(responseBody); // 如果成功 回傳發票號碼
+//            System.out.println("----------Response Body: ------" + responseBody);
+            // 如果成功 回傳發票號碼
+            return getInvoiceInfo(responseBody);
         } else {
-            System.out.println("----------Error: " + response.getStatusCode() + " - " + response.getBody());
+//            System.out.println("----------Error: " + response.getStatusCode() + " - " + response.getBody());
             return null;
         }
     }
