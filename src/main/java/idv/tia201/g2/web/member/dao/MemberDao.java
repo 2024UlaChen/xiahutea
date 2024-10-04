@@ -13,24 +13,17 @@ public interface MemberDao {
 
     Member findMemberByPhone(String phone);
 
-//     Member findByMemberEmail(String email);
 
     Member findMemberForLogin(String username, String password);
 
-    List<Member> findMemberByValidStatus(Boolean status);
-
-    List<Member> findMemberByNickname(String nickname);
-
     List<Member> findMemberByQueryParam(String nickname, Integer memberId, String phone, Boolean status, int pageNo);
-
-    List<MemberAddress> findMemberAddressByMemberId(String memberId);
 
     //update
     Member updateMember(Member member);
 
     Boolean updateMemberInfo(Member member);
 
-    Integer updateMemberInfo(Integer memberId, Boolean aliveStatus, String memberRemark, Boolean validStatus) ;
+    Integer updateMemberInfo(Integer memberId, Boolean aliveStatus, String memberRemark);
 
     Boolean updateMemberAddress(MemberAddress memberAddress);
 
@@ -41,8 +34,6 @@ public interface MemberDao {
 
     //create
     void createMember(Member member);
-
-    Boolean createMemberAddress(MemberAddress memberAddress);
 
     Integer updateMemberCarrierById(Integer memberId, String memberCarrier);
 

@@ -26,7 +26,6 @@ public class MemberDaoImpl implements MemberDao {
 
     @Override
     public List<Member> findAllMember() {
-
         return session.createQuery("FROM Member", Member.class).getResultList();
     }
 
@@ -44,14 +43,6 @@ public class MemberDaoImpl implements MemberDao {
                 .uniqueResult();
     }
 
-    @Override
-    public List<Member> findMemberByNickname(String nickname) {
-        final String sql = "select * from CUSTOMER where nickname = :nickname ";
-        return session
-                .createNativeQuery(sql, Member.class)
-                .setParameter("nickname", nickname)
-                .getResultList();
-    }
 
     @Override
     public Member findMemberForLogin(String phone, String password) {
@@ -63,14 +54,6 @@ public class MemberDaoImpl implements MemberDao {
                 .uniqueResult();
     }
 
-    @Override
-    public List<Member> findMemberByValidStatus(Boolean status) {
-        final String sql = "select * from CUSTOMER where valid_status = :status ";
-        return session
-                .createNativeQuery(sql, Member.class)
-                .setParameter("status", status)
-                .getResultList();
-    }
 
     @Override
     public List<Member> findMemberByQueryParam(String nickname, Integer customerId, String phone, Boolean status, int pageNo) {
@@ -105,11 +88,6 @@ public class MemberDaoImpl implements MemberDao {
     }
 
     @Override
-    public List<MemberAddress> findMemberAddressByMemberId(String memberId) {
-        return List.of();
-    }
-
-    @Override
     public Boolean updateMemberInfo(Member member) {
         session.merge(member);
         return true;
@@ -121,13 +99,12 @@ public class MemberDaoImpl implements MemberDao {
     }
 
     @Override
-    public Integer updateMemberInfo(Integer memberId, Boolean aliveStatus, String memberRemark, Boolean validStatus) {
-        final String sql = "update CUSTOMER set alive_status = :aliveStatus , valid_status = :validStatus ," +
+    public Integer updateMemberInfo(Integer memberId, Boolean aliveStatus, String memberRemark) {
+        final String sql = "update CUSTOMER set alive_status = :aliveStatus ," +
                 " customer_remark = :memberRemark  where  customer_id = :memberId ";
         return session
                 .createNativeQuery(sql, Member.class)
                 .setParameter("aliveStatus", aliveStatus)
-                .setParameter("validStatus", validStatus)
                 .setParameter("memberRemark", memberRemark)
                 .setParameter("memberId", memberId)
                 .executeUpdate();
@@ -170,13 +147,6 @@ public class MemberDaoImpl implements MemberDao {
     public void createMember(Member member) {
         session.persist(member);
     }
-
-    @Override
-    public Boolean createMemberAddress(MemberAddress memberAddress) {
-        session.persist(memberAddress);
-        return true;
-    }
-
 
     @Override
     public Integer updateVerifyCodeById(Integer memberId, String verifyCode) {
