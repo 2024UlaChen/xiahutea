@@ -387,7 +387,11 @@
                     document.getElementById('add').style.display = 'none';
 
                 }
-                    // 更新類別表格，將 userTypeId 傳遞給函數
+
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+            });
 
 
                     const categoryadd = document.querySelector('#add');
@@ -779,10 +783,7 @@
 // 初次載入所有分類，默認加載第 0 頁，每頁顯示 10 筆資料
                     fetchCategories('', 0); // 默認加載第 0 頁
 
-            })
-            .catch(error => {
-                console.error('Fetch error:', error);
-            });
+
 
 
 

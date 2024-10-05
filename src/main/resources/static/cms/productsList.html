@@ -355,9 +355,19 @@ function getCategoryNameById(categoryId) {
         });
 }
 
+    // function getStoreNameById(storeId) {
+    //     return fetch(`/store/getInfo/${storeId}`)  // 假设这是你的 API 路径
+    //         .then(response =>return response.json(); )
+    //         .then(store => store.storeName)  // 返回店铺名称
+    //         }).catch(error => {
+    //             console.error('获取店铺名称时出错:', error);
+    //             return '未知店铺';  // 如果出错返回默认值
+    //         });
+    // }
+
     function getStoreNameById(storeId) {
         // 假设你有一个 API 路径 '/api/stores/' 来获取店铺信息
-        return fetch(`/api/stores/${storeId}`)
+        return fetch(`/store/getInfo/${storeId}`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('无法获取店铺信息');
@@ -488,28 +498,6 @@ fetch('/categories/all')
         productTableBody.innerHTML = ''; // Clear table content
 
 
-        // // 使用 fetch 從後端獲取 TotalUserDTO
-        // fetch('/totalusers', {
-        //     method: 'GET', // 請求方法是 GET
-        // })
-        //     .then(response => {
-        //         if (!response.ok) {
-        //             throw new Error('Network response was not ok');
-        //         }
-        //         return response.json(); // 將返回的結果解析為 JSON 格式
-        //     })
-        //     .then(data => {
-        //         if (data && data.userTypeId === 3) {
-        //
-        //
-        //
-        //
-        //         }
-        //     })
-        //     .catch(error => {
-        //         console.error('Fetch error:', error);
-        //     });
-
         const promises = products.map(product =>
             getCategoryNameById(product.productCategoryId).then(categoryName => {
                 const newRow = document.createElement('tr');
@@ -528,7 +516,7 @@ fetch('/categories/all')
                   ${statusBadge}
                 </td>
                 <td class="project-actions text-right">
-                    <a class="btn btn-edit btn-sm update_btn" href="addProducts.html?productId=${product.productId}" data-id="${product.productId}">
+                    <a class="btn btn-edit btn-sm update_btn" href="addProducts.html?productId=${product.productId}&type=E" data-id="${product.productId}">
                         <i class="fas fa-pencil-alt"></i> 編輯
                     </a>
                 </td>
