@@ -3,6 +3,8 @@ package idv.tia201.g2.web.product.vo;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.sql.Blob;
+
 @Entity
 @Setter
 @Getter
@@ -22,10 +24,14 @@ public class Product {
     private Integer productPrice;
     @Column(name="product_status")
     private boolean productStatus;
+
+    @Column(name="product_store_id")
     private Integer productStoreId;
-   
+
+    //
     @Column(name="product_picture")
     private byte[] productPicture;
+
     @Column(name="product_category_id")
     private Integer productCategoryId;
     @Column(name = "normalIce")
