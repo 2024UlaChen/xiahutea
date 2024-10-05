@@ -3,9 +3,20 @@ function getUser(){
         url:'member',
         method:'post',
         success:function (data){
-            if(!data){
-                //console.log('未登入');
-                document.querySelector('#userName').textContent = '';
+
+            if(!data.successful){
+                console.log('未登入');
+                $('.header-user-links').empty();
+                let str =`<li>
+                                <a href="login.html">
+                                  <span style="color:red">
+                                    <i class="fa fa-sign-in" aria-hidden="true" ></i>
+                                      <span>登入/註冊</span>
+                                  </span>
+                                </a>
+                            </li>`;
+                document.querySelector('.header-user-links').insertAdjacentHTML('afterbegin',str);
+
 
             }else{
 
@@ -94,3 +105,38 @@ function getImgFormatByBase64(base64Img){
     }
 
 }
+
+
+
+
+function logOutSkip(){
+    const tag = document.querySelector('#logOut');
+    if(tag){
+        tag.addEventListener('click',function (){
+            Swal.fire({
+                title: "確認登出?",
+                showDenyButton: true,
+                confirmButtonText: "登出",
+                denyButtonText: "否"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch("member/logout")
+                        .then(res => res.text())
+                        .then(data => {
+                            sessionStorage.removeItem("memberData");
+                            Swal.fire({
+                                icon: "success",
+                                title: "已登出",
+                                showConfirmButton: false,
+                                timer: 1000
+                            }).then(() => {
+                                location.replace("../login.html");
+                            })
+                        })
+
+                }
+            });
+        });
+    }
+}
+
