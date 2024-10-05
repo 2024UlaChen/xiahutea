@@ -81,8 +81,8 @@ document.addEventListener("DOMContentLoaded",function(){
     let coupon_minus_number_el = document.getElementsByClassName('coupon-minus-number')[0];
     let membercard_minus_number_el = document.getElementsByClassName('membercard-minus-number')[0];
     let moneybag_minus_number_el = document.getElementsByClassName('moneybag-minus-number')[0];
-    let last_totalAmount;
-    let totalAmount;
+    let last_totalAmount; //綠界支付金額
+    let totalAmount; //訂單實際金額
     let totalquanity;
     let productamount;
     let invoiceMethod;
@@ -420,7 +420,7 @@ document.addEventListener("DOMContentLoaded",function(){
 
     //頁面跳轉
     btn_addtopurchase_el.addEventListener("click", function (e) {
-        console.log("預計跳回該商家頁面");
+        window.history.back();
         e.stopPropagation();
     })
 
@@ -498,7 +498,7 @@ document.addEventListener("DOMContentLoaded",function(){
 
         //保存了第一頁資訊切換到第二頁
         payable_unit_el.textContent = product_unit_el.textContent;
-        payable_price_el.textContent = product_amount_el.textContent;
+        payable_price_el.textContent = total_amount_el.textContent;
         step1_el.classList.remove("active");
         step2_el.classList.add("active");
         if (step_content_el.style.display = "flex") {
@@ -986,6 +986,10 @@ document.addEventListener("DOMContentLoaded",function(){
         }else{
             ordernote =text2store_el.value;
         }
+        //若金額為0元為開立發票+2元但註記不進行請款
+        if(totalAmount ===0){
+            ordernote = (ordernote ? ordernote + "；" : "") + "僅開立發票用，不予請款";
+        }
         const orderData = {
             orders: {
                 customerId: customerId,
@@ -1033,6 +1037,10 @@ document.addEventListener("DOMContentLoaded",function(){
                 localStorage.setItem('orderId', data.orders.orderId);
                 //支付流程
                 const params = new URLSearchParams();
+                //若為0元，為開立發票+30元，不予用戶收款
+                if(last_totalAmount===0){
+                    last_totalAmount =30;
+                }
                 params.append('TotalAmount', last_totalAmount); // 交易金額
                 fetch('/payment/createorder', {
                     method: 'POST',
@@ -1662,6 +1670,19 @@ document.addEventListener("DOMContentLoaded",function(){
     function updateLocalStorage() {
         //先抓目前頁面上所有商品項
         const cartItems = document.querySelectorAll(".cart-item");
+        //若無商品了就跳提示並回上一頁
+        if (cartItems.length === 0) {
+            Swal.fire({
+                title: '購物車為空',
+                text: '沒有商品，將返回上一頁',
+                icon: 'info',
+                confirmButtonText: '確定'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.history.back();
+                }
+            });
+        }
         const typeOneData = {};
         //每個抓到商品ID，甜度冰塊尺寸杯數等資訊存到陣列中
         cartItems.forEach(product => {
@@ -1724,13 +1745,15 @@ document.addEventListener("DOMContentLoaded",function(){
                 if(data.points<10){
                     membercard_count_el.textContent=`會員點數為${data.points} 點，會員點數不足`;
                     membercard_minus_number_el.textContent = "$0";
-                }else{
+                }else if(data.points>=10){
                     membercard_count_el.textContent=`會員點數為${data.points} 點，10點可折抵50元`;
                     membercard_minus_number_el.textContent = "$50";
                     loyaltyCardId = data.loyaltyCardId;
+                }else{
+                    membercard_count_el.textContent="無會員卡資料";
+                    membercard_minus_number_el.textContent = "$0";
                 }
                 Calculatetotal();
-                // membercard_number_el.textContent=data.points;
             })
             .catch(error=>{
                 console.error('Error loading coupons:', error);

@@ -29,8 +29,11 @@
   border-radius: 50%;
   width: 120px;
   height: 120px;
-  background-image: linear-gradient(45deg, #73B4BA, rgba(142, 182, 157, 0.36), #73B4BA);
+  background-image: linear-gradient(45deg, #73B4BA, #73B4BA, #73B4BA);
+  color: #ffffff;
   position: relative;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .progress-list li+li{    /* 兄弟節點間格 */
@@ -573,7 +576,7 @@ input.qtyminus {
   display: flex; /* 使用 Flexbox 佈局 */
   align-items: center; /* 垂直居中對齊 */
   padding: 10px 5px; /* 內邊距，用於內容和邊框之間的距離 */
-  background-color: orange; /* 背景色 */
+  background-color: #73B4BA; /* 背景色 */
   border: none; /* 邊框顏色和寬度 */
   border-radius: 5px; /* 圓角，如果需要直角可以設置為0 */
   margin: 10px; /* 外邊距，用於元素之間的距離 */
@@ -594,8 +597,8 @@ input.qtyminus {
   border-radius: 5px;
   align-items: center; /* 垂直居中 */
   justify-content: center; /* 水平居中 */
-  font-size:23px;
-  color: orange;
+  font-size:20px;
+  color: black;
 }
 
 .payable-price {
