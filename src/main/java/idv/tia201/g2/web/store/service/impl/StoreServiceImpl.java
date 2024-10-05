@@ -31,6 +31,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import static idv.tia201.g2.core.util.EncrypSHA.SHAEncrypt;
+
 @Service
 public class StoreServiceImpl implements StoreService {
 
@@ -77,7 +79,8 @@ public class StoreServiceImpl implements StoreService {
         if(userData.getVat() == null || userData.getPassword() ==null) {return null;}
         Store data = storeDao.findByVat(userData.getVat());
         if( data == null  ) {return null;}
-        if(data.getPassword().equals(userData.getPassword())){
+        String ShaPassword = SHAEncrypt(userData.getPassword());
+        if(data.getPassword().equals(ShaPassword)){
             //密碼正確 登入成功
             data.setMessage("登入成功");
             data.setSuccessful(true);
@@ -155,7 +158,8 @@ public class StoreServiceImpl implements StoreService {
     public Store editStorePassword(Store store){
         //預計只回傳回PK和密碼  修改密碼
         Store oldDate = findStoreById(store.getStoreId());
-        oldDate.setPassword(store.getPassword());
+        String ShaPwd = SHAEncrypt(store.getPassword());
+        oldDate.setPassword(ShaPwd);
         return storeDao.save(oldDate);
     }
 
