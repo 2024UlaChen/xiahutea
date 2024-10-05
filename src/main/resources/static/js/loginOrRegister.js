@@ -184,7 +184,7 @@ btnLogin.addEventListener("click", function () {
                     timer: 1500
                 }).then(() => {
                     sessionStorage.setItem("memberData", JSON.stringify(data));
-                    location.replace("../login.html");
+                    location.replace("../homePage.html");
                 })
             } else {
                 Swal.fire(data.message, "", "error");
