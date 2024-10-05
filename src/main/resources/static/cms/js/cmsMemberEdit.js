@@ -1,4 +1,5 @@
 //table all element
+const cmsMemberIdTxt = document.querySelector("#cmsMemberId");
 const cmsMemberNameTxt = document.querySelector("#cmsMemberName");
 const cmsMemberSex = document.querySelector("#cmsSex");
 const cmsMemberBirthdayTxt = document.querySelector("#cmsMemberBirthday");
@@ -6,7 +7,9 @@ const cmsMemberEmailTxt = document.querySelector("#cmsMemberEmail");
 const cmsMemberPhoneTxt = document.querySelector("#cmsMemberPhone");
 const cmsMemberCarrierTxt = document.querySelector("#cmsMemberCarrier");
 const cmsMemberIsValidTxt = document.querySelector("#cmsMemberIsValid");
+const cmsMemberAliveStatusTxt = document.querySelector("#cmsMemberAliveStatus");
 const CmsMemberCreateDateTxt = document.querySelector("#CmsMemberCreateDate");
+const CmsMemberUpdateDateTxt = document.querySelector("#CmsMemberUpdateDate");
 const cmsMemberMoney = document.querySelector("#cmsMemberMoney");
 const cmsMemberRemarkTxt = document.querySelector("#cmsMemberRemark");
 const cmsAddrList = document.querySelector("#cmsAddrList");
@@ -46,13 +49,29 @@ function nullToEmpty(data) {
     return (data == null) ? "" : data;
 }
 
+function changeDateFormat(date) {
+    const SLASH = "/";
+    const HYPHEN = "-";
+    if (date === "")
+        return date;
+    if (date.includes(SLASH))
+        return date.replaceAll(SLASH, HYPHEN)
+    if (date.includes(HYPHEN))
+        return date.replaceAll(HYPHEN, SLASH)
+}
+
 function loadCmsMemberInfo() {
     fetch(`manage/detail`)
         .then(res => res.json())
         .then(data => {
+            console.log(data);
             // let sessionDetail = JSON.parse(sessionStorage.getItem("cmsMemberDetail"));
-            cmsMemberBirthdayTxt.value = nullToEmpty(data.birthday).replaceAll("/", "-");
-            CmsMemberCreateDateTxt.value = nullToEmpty(data.createDate).replaceAll("/", "-");
+            cmsMemberIdTxt.value = data.customerId;
+            cmsMemberBirthdayTxt.value = nullToEmpty(data.birthday);
+            CmsMemberCreateDateTxt.value = data.createDate;
+            console.log(parseInt(data.aliveStatus));
+            cmsMemberAliveStatusTxt.value = (data.aliveStatus) ? "已啟用" : "未啟用";
+            CmsMemberUpdateDateTxt.value = data.updateDate;
             cmsMemberCarrierTxt.value = data.customerCarrier;
             cmsMemberEmailTxt.value = data.customerEmail;
             cmsMemberMoney.value = data.customerMoney;
@@ -64,8 +83,10 @@ function loadCmsMemberInfo() {
                 cmsMemberSex.value = "女性";
             } else if (data.sex === "male") {
                 cmsMemberSex.value = "男性";
-            } else {
+            } else if (data.sex === "none") {
                 cmsMemberSex.value = "不提供";
+            } else {
+                cmsMemberSex.value = nullToEmpty(data.sex);
             }
         });
     getAddress();

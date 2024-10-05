@@ -249,24 +249,6 @@
     <!-- sweet alert  -->
     <script src="./plugins/sweetalert2/sweetalert2.all.js"></script>
 
-    <!-- Page specific script -->
-    <script>
-        $(function () {
-            $("#example1").DataTable({
-                "responsive": true, "lengthChange": false, "autoWidth": false,
-                "buttons": ["excel", "print"]
-            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-            $('#example2').DataTable({
-                "paging": true,
-                "lengthChange": false,
-                "searching": true,
-                "ordering": true,
-                "info": true,
-                "autoWidth": false,
-                "responsive": true,
-            });
-        });
-    </script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
 
@@ -274,8 +256,7 @@
             fetch(`/totalusers`)
                   .then(resp => resp.json())
                   .then(totalUserDTO => {
-                      console.log(totalUserDTO)
-                      console.log(totalUserDTO.userTypeId)
+                      // console.log(totalUserDTO)
                       if(totalUserDTO.userTypeId !== 1 && totalUserDTO.userTypeId !== 3){
                           Swal.fire({
                               title: "權限不足",
@@ -290,11 +271,10 @@
                       init();
                   })
                   .catch((error) => {
-                      console.log("錯誤原因:" + error);
+                      console.log("totalUserDTO 錯誤原因:" + error);
                   });
             //===========================================================================
             // 顯示明細
-            init();
             function init() {
                 let orderId = getQueryParam("orderId");
                 if (orderId) {          // 確保 orderId 存在
@@ -313,6 +293,7 @@
                 let urlParams = new URLSearchParams(window.location.search);
                 return urlParams.get(param);
             }
+            //-----------------------------------------------------------------------
             // 找明細
             function showDB(data) {
                 let status = data[0].orders.orderStatus;  // 取得訂單狀態值
@@ -320,118 +301,118 @@
 
                 let detailHtml = "";
                 detailHtml = `
-                        <tr>
-                            <td id="order_id">${data[0].orderId}</td>
-                            <td>${data[0].orders.customer.customerId}</td>
-                            <td>${data[0].orders.customer.nickname}</td>
-                            <td>${data[0].orders.store.storeName}</td>
-                            <td id="status_text">${statusTextValue}</td>
-                        </tr>
+                    <tr>
+                        <td id="order_id">${data[0].orderId}</td>
+                        <td>${data[0].orders.customer.customerId}</td>
+                        <td>${data[0].orders.customer.nickname}</td>
+                        <td>${data[0].orders.store.storeName}</td>
+                        <td id="status_text">${statusTextValue}</td>
+                    </tr>
                 `;
                 const detail_el = document.getElementById("detail_tbody");
 
                 let invoiceHtml ="";
                 invoiceHtml =`
-                        <tr>
-                            <th>開立發票方式</th>
-                            <td>${invoiceText(data[0].orders.invoiceMethod)}</td>
-                        </tr>
-                        <tr>
-                            <th>處理費發票號碼</th>
-                            <td>${nullText(data[0].orders.invoiceNo)}</td>
-                        </tr>
-                        <tr>
-                            <th>發票統編</th>
-                            <td>${nullText(data[0].orders.invoiceVat)}</td>
-                        </tr>
-                        <tr>
-                            <th>發票載具</th>
-                            <td>${nullText(data[0].orders.invoiceCarrier)}</td>
-                        </tr>
+                    <tr>
+                        <th>開立發票方式</th>
+                        <td>${invoiceText(data[0].orders.invoiceMethod)}</td>
+                    </tr>
+                    <tr>
+                        <th>處理費發票號碼</th>
+                        <td>${nullText(data[0].orders.invoiceNo)}</td>
+                    </tr>
+                    <tr>
+                        <th>發票統編</th>
+                        <td>${nullText(data[0].orders.invoiceVat)}</td>
+                    </tr>
+                    <tr>
+                        <th>發票載具</th>
+                        <td>${nullText(data[0].orders.invoiceCarrier)}</td>
+                    </tr>
                 `;
                 document.getElementById("invoice_tbody").innerHTML = invoiceHtml;
 
                 let receiverHtml ="";
                 receiverHtml =`
-                        <tr>
-                            <th>取貨方式</th>
-                            <td>${receiverMethodText(data[0].orders.receiverMethod)}</td>
-                        </tr>
-                        <tr>
-                            <th>取貨人姓名</th>
-                            <td>${data[0].orders.receiverName}</td>
-                        </tr>
-                        <tr>
-                            <th>取貨人電話</th>
-                            <td>${data[0].orders.receiverPhone}</td>
-                        </tr>
-                        <tr>
-                            <th>取貨時間</th>
-                            <td>${data[0].orders.receiverDatetime}</td>
-                        </tr>
-                        <tr>
-                            <th>外送地址</th>
-                            <td>${nullText(data[0].orders.receiverAddress)}</td>
-                        </tr>
-                        <tr>
-                            <th>訂單評分</th>
-                            <td>${nullText(data[0].orders.orderScore)}</td>
-                        </tr>
-                        <tr>
-                            <th>訂單評分建議</th>
-                            <td>${nullText(data[0].orders.orderFeedback)}</td>
-                        </tr>
-                        <tr>
-                            <th>訂單成立日期</th>
-                            <td>${data[0].orders.orderCreateDatetime}</td>
-                        </tr>
-                        <tr>
-                            <th>訂單更新日期</th>
-                            <td>${nullText(data[0].orders.orderUpdateDatetime)}</td>
-                        </tr>
+                    <tr>
+                        <th>取貨方式</th>
+                        <td>${receiverMethodText(data[0].orders.receiverMethod)}</td>
+                    </tr>
+                    <tr>
+                        <th>取貨人姓名</th>
+                        <td>${data[0].orders.receiverName}</td>
+                    </tr>
+                    <tr>
+                        <th>取貨人電話</th>
+                        <td>${data[0].orders.receiverPhone}</td>
+                    </tr>
+                    <tr>
+                        <th>取貨時間</th>
+                        <td>${data[0].orders.receiverDatetime}</td>
+                    </tr>
+                    <tr>
+                        <th>外送地址</th>
+                        <td>${nullText(data[0].orders.receiverAddress)}</td>
+                    </tr>
+                    <tr>
+                        <th>訂單評分</th>
+                        <td>${nullText(data[0].orders.orderScore)}</td>
+                    </tr>
+                    <tr>
+                        <th>訂單評分建議</th>
+                        <td>${nullText(data[0].orders.orderFeedback)}</td>
+                    </tr>
+                    <tr>
+                        <th>訂單成立日期</th>
+                        <td>${data[0].orders.orderCreateDatetime}</td>
+                    </tr>
+                    <tr>
+                        <th>訂單更新日期</th>
+                        <td>${nullText(data[0].orders.orderUpdateDatetime)}</td>
+                    </tr>
                 `;
                 document.getElementById("receiver_tbody").innerHTML = receiverHtml;
 
                 let productTfootHtml = "";
                 productTfootHtml=`
-                            <tr>
-                                <td colspan="5"></td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <th colspan="3">商品總金額</th>
-                                <td>${data[0].orders.productAmount}</td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <th colspan="3">平台處理費</th>
-                                <td>${data[0].orders.processingFees}</td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <th colspan="3">錢包折抵</th>
-                                <td>- ${nullMoney(data[0].orders.customerMoneyDiscount)}</td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <th colspan="3">優惠券折抵</th>
-                                <td>- ${nullMoney(data[0].orders.couponDiscount)}</td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <th colspan="3">集點折抵</th>
-                                <td>- ${nullMoney(data[0].orders.loyaltyDiscount)}</td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <th colspan="3">付款金額</th>
-                                <td>${data[0].orders.paymentAmount}</td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <th colspan="3">付款方式</th>
-                                <td>${paymentMethodText(data[0].orders.paymentMethod)}</td>
-                            </tr>
+                    <tr>
+                        <td colspan="5"></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <th colspan="3">商品總金額</th>
+                        <td>${data[0].orders.productAmount}</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <th colspan="3">平台處理費</th>
+                        <td>${data[0].orders.processingFees}</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <th colspan="3">錢包折抵</th>
+                        <td>- ${nullMoney(data[0].orders.customerMoneyDiscount)}</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <th colspan="3">優惠券折抵</th>
+                        <td>- ${nullMoney(data[0].orders.couponDiscount)}</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <th colspan="3">集點折抵</th>
+                        <td>- ${nullMoney(data[0].orders.loyaltyDiscount)}</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <th colspan="3">付款金額</th>
+                        <td>${data[0].orders.paymentAmount}</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <th colspan="3">付款方式</th>
+                        <td>${paymentMethodText(data[0].orders.paymentMethod)}</td>
+                    </tr>
                 `;
                 document.getElementById("product_tfoot").innerHTML = productTfootHtml;
 
@@ -464,7 +445,7 @@
                         select_status.setAttribute("disabled", "disabled");
                     }
                 }
-
+                //-----------------------------------------------------------------------
                 // 3. btn 儲存
                 btn_order_save.addEventListener("click", function () {
                     // 3.1 打包資料 傳送資料到後端
@@ -481,8 +462,9 @@
                         },
                         body: JSON.stringify(order_data) // 將資料轉為 JSON 格式
                     }).then(res => res.json()).then(data => {
+                        // console.log(data)
                         if(data.successful){
-                            console.log(data.message);
+                            // console.log(data.message);
                             Swal.fire({
                                 title: '更新成功',
                                 text: '',
@@ -504,7 +486,7 @@
             function invoiceText(invoiceNum) {
                 switch (invoiceNum) {
                     case 1 : return "電子發票-手機載具";
-                    case 2 : return "電子發票-綠界會員";
+                    case 2 : return "電子發票-會員載具";
                     case 3 : return "電子發票-統一發票";
                 }
             }
@@ -526,25 +508,18 @@
                 }
             }
             function nullText(nullValue){
-                if(nullValue != null ){
-                    return nullValue;
-                }else{
-                    return "";
-                }
+                return nullValue != null ? nullValue : "";
             }
             function nullMoney(moneyValue){
-                if(moneyValue === 0 ){
-                    return "" ;
-                }else{
-                    return moneyValue;
-                }
+                return moneyValue === 0 ? moneyValue : "";
             }
             //-----------------------------------------------------------------------
-            // 4. btn 回上一頁
+            // btn 回上一頁
             const btn_order_back = document.getElementById("btn_order_back");
             btn_order_back.addEventListener("click", function () {
                 location.href = `./storeOrderList.html`;
             });
+            //---------------------------------------------------------------------------
         });
     </script>
 </body>

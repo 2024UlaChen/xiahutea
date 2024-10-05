@@ -59,12 +59,13 @@ public class AdminServiceImpl implements AdminService {
             totalUserDTO.setMessage("使用者名稱或密碼錯誤");
             totalUserDTO.setSuccessful(false);
             return totalUserDTO;
-        }else {
-            TotalUsers LoginTotalUser = totalUserDao.findByUserTypeIdAndUserId(userTypeId, admin.getAdministratorId());
-            BeanUtils.copyProperties(LoginTotalUser, totalUserDTO);
-            totalUserDTO.setMessage("登入成功");
-            totalUserDTO.setSuccessful(true);
-            return totalUserDTO;
         }
+        // 登入成功
+        TotalUsers LoginTotalUser = totalUserDao.findByUserTypeIdAndUserId(userTypeId, admin.getAdministratorId());
+        BeanUtils.copyProperties(LoginTotalUser, totalUserDTO);
+        totalUserDTO.setMessage("登入成功");
+        totalUserDTO.setSuccessful(true);
+        return totalUserDTO;
+
     }
 }

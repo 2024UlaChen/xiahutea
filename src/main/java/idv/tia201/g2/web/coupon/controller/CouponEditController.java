@@ -46,7 +46,7 @@ public class CouponEditController {
     public List<CustomerCoupons> GetCustomerCoupon(HttpSession session) {
         TotalUserDTO totalUserDTO = (TotalUserDTO) session.getAttribute("totalUserDTO");
         if(totalUserDTO == null) {return null;}
-        return customerCouponService.getCustomerCoupons(totalUserDTO.getUserId());
+        return customerCouponService.getCustomerCouponsForShow(totalUserDTO.getUserId());
     }
 
 }

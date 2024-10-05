@@ -47,6 +47,7 @@ public class LoginController {
             return core;
         }
 
+
         TotalUserDTO totalUserDTO = new TotalUserDTO();
         totalUserDTO.setTotalUserId((Long) member.getData());
         totalUserDTO.setUserId(member.getCustomerId());
@@ -59,10 +60,17 @@ public class LoginController {
         Map<String, Object> memberData = new HashMap<String, Object>();
         memberData.put("customerId", member.getCustomerId());
         memberData.put("customerImg", member.getCustomerImg());
+        memberData.put("customerValidStatus", member.getValidStatus());
 
         core.setData(memberData);
         core.setSuccessful(true);
         core.setMessage("登入成功");
         return core;
     }
+
+    @GetMapping
+    public Boolean isLogin(HttpSession httpSession) {
+        return httpSession.getAttribute("loggedin") != null;
+    }
+
 }

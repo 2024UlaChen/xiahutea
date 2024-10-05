@@ -6,6 +6,7 @@ import idv.tia201.g2.web.coupon.vo.CustomerCoupons;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Service
@@ -30,4 +31,11 @@ public class CustomerCouponServiceImpl implements CustomerCouponService {
     public List<CustomerCoupons> getCustomerCoupons(Integer customerId) {
         return customerCouponDao.findByCustomerId(customerId);
     }
+
+    @Override
+    public List<CustomerCoupons> getCustomerCouponsForShow(Integer customerId) {
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+        return customerCouponDao.findByCustomerIdAndCouponQuantityGreaterThanAndCoupon_ExpiredDateGreaterThan(customerId,0,now);
+    }
+
 }

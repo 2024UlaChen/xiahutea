@@ -74,13 +74,13 @@
             border-radius: 5px;
         }
 
-        /*分頁*/
+        /* 分頁 */
         #page_div {
-            display: flex; /* 使用 flexbox */
-            justify-content: center; /* 水平置中 */
-            gap: 20px; /* 按鈕之間的間距 */
+            display: flex;
+            justify-content: center;
+            gap: 20px;
         }
-        /* 上下頁*/
+        /* 上下頁 */
         .page_btn {
             margin-top: 8px;
             width: 100px;
@@ -189,11 +189,6 @@
             background-color: #73B4BA;
         }
 
-        /* 爭議狀態 */
-        div.dispute_status_div.-off{
-            display: block;
-        }
-
     </style>
 </head>
 
@@ -269,33 +264,24 @@
     let dateRangeApplied = false;   // 是否已選擇日期範圍
 
     // 取得sessionStorage會員ID
-    const memberData = JSON.parse(sessionStorage.getItem("memberData"));
-    const customerId = memberData.data.customerId;
+    const memberData = sessionStorage.getItem("memberData") ? JSON.parse(sessionStorage.getItem("memberData")) : null;
+    const customerId = memberData && memberData.data ? memberData.data.customerId : null;
 
     document.addEventListener("DOMContentLoaded", function(){
-
         // 判斷權限
-        fetch(`/totalusers`)
-              .then(resp => resp.json())
-              .then(totalUserDTO => {
-                  console.log(totalUserDTO)
-                  if(totalUserDTO.userTypeId !== 0){
-                      // Swal.fire({
-                      //     title: "請登入會員",
-                      //     text: '',
-                      //     icon: 'error',
-                      //     showConfirmButton: true  // 確認按鈕
-                      // }).then(() => {
-                          location.href = "./login.html";
-                      // });
-                  }
-                  // 如果是會員才能檢視
-                  init(currentPage, size, customerId);
-              })
-              .catch((error) => {
-                  console.log("totalUserDTO 錯誤原因:" + error);
-              });
-
+        if(!(customerId)){
+            Swal.fire({
+                title: "請登入會員",
+                text: '',
+                icon: 'error',
+                showConfirmButton: true  // 確認按鈕
+            }).then(() => {
+                location.href = "./login.html";
+            });
+        }
+        // 如果是會員才能檢視
+        init(currentPage, size, customerId);
+        //-----------------------------------------------------------------------
         // btn 上下頁
         const nextButton = document.getElementById("next");
         const previousButton = document.getElementById("previous");
@@ -315,7 +301,7 @@
                 }
             });
         }
-
+        //----------------------------------------------------------
         // btn 查詢
         const btnSelect = document.getElementById("select_btn");
         btnSelect.addEventListener("click", function (e) {
@@ -329,16 +315,15 @@
             init(currentPage, size, customerId, selectOrderDate1, selectOrderDate2);
         });
     });
-
+    //-----------------------------------------------------------------------
     function init(page, size, customerId, dateStart = "", dateEnd = "") {
         if (customerId) {
-
             let url = `/order/member/${customerId}?page=${page}&size=${size}`;
             if (dateStart && dateEnd) {
                 url += `&dateStart=${encodeURIComponent(dateStart)}&dateEnd=${encodeURIComponent(dateEnd)}`;
-                dateRangeApplied = true; // 設置已應用日期範圍標誌
+                dateRangeApplied = true;  // 已選擇日期範圍
             } else {
-                dateRangeApplied = false; // 未應用日期範圍
+                dateRangeApplied = false; // 未選擇日期範圍
             }
 
             fetch(url)
@@ -346,26 +331,26 @@
                 .then(data => {
                     // console.log(data)
                     totalPages = data.totalPages; // 更新總頁數
-                    showDB(data);               // 顯示資料
-                    updatePagination();         // 更新分頁按鈕狀態
+                    updatePagination();           // 更新分頁按鈕狀態
+                    showDB(data);                 // 顯示資料
                 })
                 .catch((error) => {
                     console.log("data 錯誤原因：" + error);
                 });
         }
     }
-
-    // 1. 訂單列表
+    //-----------------------------------------------------------------------
+    // 訂單列表
     function showDB(data){
         let orderHtml = "";
         let orderDtos = data.content; // 取得所有訂單
 
-        // 1. 訂單排序從新到舊
+        // 訂單排序從新到舊
         for(let i =  0; i < orderDtos.length; i++) {
             const orderDto = orderDtos[i];
             // 檢查 orderDto 和 orders 是否存在
             if (orderDto && orderDto.orders) {
-                // 1.1.1 訂單狀態不同 更改不同顏色
+                // 訂單狀態不同 更改不同顏色
                 let statusClass = "";
                 switch (statusText(orderDto.orders.orderStatus)) {
                     case "訂單成立":
@@ -376,31 +361,27 @@
                     case "訂單完成":
                         statusClass = "complete";  // 藍色
                         break;
-                    default:
-                        statusClass = "unknown"; // 未知狀態的樣式
-                        break;
                 }
 
-                // 1.1.2 點擊可進入訂單明細
-                // 1.1.3 有爭議訂單時，則顯示爭議狀態文字
-                const disputeClass = orderDto.disputeOrder && orderDto.disputeOrder.disputeStatus ? "" : "-off";
-
-                let dataDisputeStatus = orderDto.disputeOrder ? orderDto.disputeOrder.disputeStatus : null;
-                let disputeTextHtml = "";
-                if (dataDisputeStatus === 1) {
-                    disputeTextHtml = `
-                    <div class="dispute_text" id="dispute_status">爭議狀態： ${disputeStatusText(dataDisputeStatus)}</div>
-                `;
-                } else if (dataDisputeStatus === 2) {
-                    disputeTextHtml = `
-                    <span class="dispute_text" id="dispute_status">爭議狀態： ${disputeStatusText(dataDisputeStatus)}</span>
-                    <span class="dispute_text"> / 退款金額：${orderDto.disputeOrder.refundAmount}元 </span>
-                `;
-                } else if (dataDisputeStatus === 3) {
-                    disputeTextHtml = `
-                    <span class="dispute_text" id="dispute_status">爭議狀態： ${disputeStatusText(dataDisputeStatus)}</span>
-                    <span class="dispute_text"> / 原因：${orderDto.disputeOrder.rejectReason} </span>
-                `;
+                // 有爭議訂單時，則顯示爭議狀態文字
+                let disputeTextHtml = `<span class="dispute_text" id="dispute_status"> - </span>`;
+                if (orderDto.disputeOrder) {
+                    let dataDisputeStatus = orderDto.disputeOrder.disputeStatus;
+                    if (dataDisputeStatus === 1) {
+                        disputeTextHtml = `
+                            <span class="dispute_text" id="dispute_status">爭議狀態： ${disputeStatusText(dataDisputeStatus)}</span>
+                        `;
+                    } else if (dataDisputeStatus === 2) {
+                        disputeTextHtml = `
+                            <span class="dispute_text" id="dispute_status">爭議狀態： ${disputeStatusText(dataDisputeStatus)}</span>
+                            <span class="dispute_text"> / 退款金額：${orderDto.disputeOrder.refundAmount}元 </span>
+                        `;
+                    } else if (dataDisputeStatus === 3) {
+                        disputeTextHtml = `
+                            <span class="dispute_text" id="dispute_status">爭議狀態： ${disputeStatusText(dataDisputeStatus)}</span>
+                            <span class="dispute_text"> / 原因：${orderDto.disputeOrder.rejectReason} </span>
+                        `;
+                    }
                 }
 
                 orderHtml += `
@@ -438,9 +419,7 @@
                                         <div class="order_time">
                                             <span class="order_date_value">${orderDto.orders.orderCreateDatetime}</span>
                                         </div>
-                                        <div class="order_time dispute_status_div  ${disputeClass}">
-                                             ${disputeTextHtml || ''}
-                                        </div>
+                                        <div class="order_time dispute_status_div "> ${disputeTextHtml} </div>
                                     </div>
                                 </div>
                             </div>
@@ -451,6 +430,7 @@
             document.getElementsByClassName("order_list_ul")[0].innerHTML = orderHtml;
         }
     }
+    //-----------------------------------------------------------------------
     function updatePagination() {
         const previousButton = document.getElementById("previous");
         const nextButton = document.getElementById("next");
@@ -485,6 +465,7 @@
             });
         });
     }
+    //-----------------------------------------------------------------------
     function statusText(statusNum) {
         switch (statusNum) {
             case 1 : return "訂單成立";
@@ -500,7 +481,7 @@
             case 3 : return "取消爭議";
         }
     }
-
+    //-----------------------------------------------------------------------
 </script>
 </body>
 </html>
