@@ -1,12 +1,10 @@
 package idv.tia201.g2.web.cart.controller;
 
-import ecpay.payment.integration.ecpayOperator.EcpayFunction;
 import idv.tia201.g2.web.cart.service.EcPayService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -38,19 +36,19 @@ public class EcPayController {
         System.out.println("Payment Result Session ID: " + session.getId());
 
         // 根據 RtnCode及交易編號 判斷交易結果
-        if (receivedMerchantTradeNo != null && receivedMerchantTradeNo.equals(storedMerchantTradeNo)) {
-            String rtnCode = allParams.get("RtnCode");
-            if ("1".equals(rtnCode)) {
-                return "redirect:/paysuccess.html";
-            } else {
-                return "redirect:/payfail.html";
-            }
-        } else {
-            System.out.println("receivedMerchantTradeNo"+receivedMerchantTradeNo);
-            System.out.println("storedMerchantTradeNo"+storedMerchantTradeNo);
-            System.err.println("交易編號不匹配或缺少交易編號");
-            return "redirect:/payfail.html";
-        }
+//        if (receivedMerchantTradeNo != null && receivedMerchantTradeNo.equals(storedMerchantTradeNo)) {
+//            String rtnCode = allParams.get("RtnCode");
+//            if ("1".equals(rtnCode)) {
+//                return "redirect:/paysuccess.html";
+//            } else {
+//                return "redirect:/payfail.html";
+//            }
+//        } else {
+//            System.out.println("receivedMerchantTradeNo"+receivedMerchantTradeNo);
+//            System.out.println("storedMerchantTradeNo"+storedMerchantTradeNo);
+//            System.err.println("交易編號不匹配或缺少交易編號");
+//            return "redirect:/payfail.html";
+//        }
 //        System.out.println("MerchantID:"+MerchantID);
 //        System.out.println("MerchantTradeNo:"+MerchantTradeNo);
 //        System.out.println("PaymentDate:"+PaymentDate);
@@ -66,5 +64,12 @@ public class EcPayController {
 //
 //        // 將結果添加到模型中
 ////        model.addAttribute("message", message);
+//    }
+        String rtnCode = allParams.get("RtnCode");
+        if ("1".equals(rtnCode)) {
+            return "redirect:/paysuccess.html";
+        } else {
+            return "redirect:/payfail.html";
+        }
     }
 }
