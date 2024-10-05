@@ -173,7 +173,7 @@
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="localModalLabel">Modal title</h5>
+                <h5 class="modal-title" id="localModalLabel">找附近</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
@@ -652,8 +652,8 @@ let allSotre = document.querySelectorAll('.Heart');
                         callback
                     );
 
-                    function callback(response, status) {
-                        if (status === "OK") {
+                    function callback(response, respStatus) {
+                        if (respStatus === "OK") {
                             // 取得使用者位置後 首先抓取 每家店的位址 進行計算
 
                             const origin = response.originAddresses[0];
@@ -675,7 +675,8 @@ let allSotre = document.querySelectorAll('.Heart');
                                     );
 
                                 //超過10km排除
-                                if(parseInt(distance) > 10){
+
+                                if(status  && parseInt(distance) > 10){
 
                                     let te =sotreFooter.closest(".storeLinkCard");
                                     $(te).remove();
@@ -817,7 +818,7 @@ let allSotre = document.querySelectorAll('.Heart');
                 }
 
                 let str = `
-<figure class="col-3 figure my-5 Heart storeLinkCard" >
+<figure class="col-3 figure my-5 Heart storeLinkCard shadow mx-3 bg-body rounded" >
 <a href="productMenu.html?storeId=${row.storeId}">
           <img
             src=""
