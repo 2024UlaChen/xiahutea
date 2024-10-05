@@ -10,7 +10,8 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 public class NotificationDto {
 
-    private int orderId;
-    private Timestamp orderCreateDatetime;
+    private Integer type;                // 訊息種類  1=訂單 2=爭議
+    private Integer Id;                  // 訂單或爭議ID
+    private Timestamp createDatetime;    // 建立日期
 
 }
