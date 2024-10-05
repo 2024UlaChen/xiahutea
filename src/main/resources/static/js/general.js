@@ -20,6 +20,9 @@ document.addEventListener("DOMContentLoaded", function () {
                         isLoginUl.classList.add("hiddenMenu");
                     }
                 })
+            SearchBar();
+            clearSearchBar();
+
         });
     fetch('footer.html')
         .then(response => response.text())
@@ -50,7 +53,6 @@ document.addEventListener("click", function (e) {
                             location.replace("../login.html");
                         })
                     })
-
             }
         });
     }
@@ -71,3 +73,26 @@ document.addEventListener("click", function (e) {
             });
     }
 })
+
+
+function clearSearchBar() {
+    //clear search
+    document.querySelector('#clearSearch').addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector('#user-enter-keyword').value = '';
+    });
+}
+
+function SearchBar() {
+    document.querySelector('#forSearchStore').addEventListener('click', function (e) {
+        //停止預設行為
+        e.preventDefault();
+        let uservalue = (document.querySelector("#user-enter-keyword").value).trim();
+        //導向首頁
+        //導向後剩下的指令全部停止 所以將資料放在sessionStrage
+        if (uservalue !== "") {
+            sessionStorage.setItem("queryStr", uservalue);
+            location.href = '../homePage.html';
+        }
+    })
+}

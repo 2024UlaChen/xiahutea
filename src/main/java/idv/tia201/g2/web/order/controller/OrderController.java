@@ -85,7 +85,7 @@ public class OrderController {
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy/MM/dd") LocalDate dateEnd, // 結束日期
             @RequestParam(defaultValue = "0") Integer page,
             @RequestParam(defaultValue = "10") Integer size
-            ){
+    ){
         TotalUserDTO totalUserDTO = (TotalUserDTO) httpSession.getAttribute("totalUserDTO");
         Integer userTypeId = totalUserDTO.getUserTypeId();
 

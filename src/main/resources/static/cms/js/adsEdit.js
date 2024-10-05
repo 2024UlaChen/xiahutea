@@ -22,8 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let adId = urlParams.get('adId');
     console.log("adid:",adId)
     //********************************取得使用者類型及ID*************************
-    fetch(`/advertise/manage/getrole`, {
-    })
+    fetch(`/advertise/manage/getrole`, {})
         .then(response => {
             if (!response.ok) {
                 return response.json().then(errorData => {
@@ -38,13 +37,35 @@ document.addEventListener("DOMContentLoaded", function () {
                     title: '查無此使用者資料',
                     text: '查無此使用者資料 ID=',
                     icon: 'error'
+                }).then(() => {
+                    window.location.href = 'backstageLogin.html';
                 });
-                return;
             }
             console.log('user Details:', totaluser);
             userid = totaluser.userId;
-            roletypeid =totaluser.userTypeId;
+            roletypeid = totaluser.userTypeId;
+
+            // 檢查為管理員
+            if (totaluser.userTypeId !== 3) {
+                Swal.fire({
+                    title: '請登入管理員帳號',
+                    text: '請登入商家或管理員',
+                    icon: 'info'
+                }).then(() => {
+                    window.location.href = 'backstageLogin.html';
+                });
+            }
         })
+        .catch(error => {
+            Swal.fire({
+                title: '用戶未登入管理員',
+                text: `錯誤訊息: ${error.message}`,
+                icon: 'error'
+            }).then(() => {
+                window.location.href = 'backstageLogin.html';
+            });
+        });
+
     //********************************確認是否為修改跳轉頁面**********************
     if (adId) {
         // 發送 GET 請求獲取優惠券資料
@@ -190,7 +211,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
 
-
         if(check_homedisplay_el.checked){
             ishomedisplay = 1
         }else {
@@ -201,7 +221,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }else {
             isActive = 0
         }
-
 
         let formData = new FormData();
 
