@@ -295,68 +295,29 @@
                           let imgformat = getBase64Img(base64Img);
                           let passday = row.store.expiredDate;
                           if(row.store.validStatus){
-                              passday = '激活中';
+                              passday = '使用中';
                           }
-
                           let str =`
-                          <div class="col" data-bs-toggle="modal" data-bs-target="#exampleModal${row.loyaltyCardId}">
-                <div class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 shadow Kuncard"
-                style="background-image: url('data:image/${imgformat};base64,${base64Img}'); background-size: cover; background-position: center;">
-                  <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
-                    <h4 class="display-8 pb-5 mb-5 lh-1 " style="color: black;">${row.store.storeName}</h4>
-                    <ul class="d-flex list-unstyled mt-auto">
-                      <li class="me-auto">
-                        <img src="https://github.com/twbs.png" alt="Bootstrap" width="32" height="32" class="rounded-circle border border-white">
-                      </li>
-                      <li class="d-flex align-items-center me-3">
-                        <svg class="bi me-2" width="1em" height="1em"><use xlink:href="#geo-fill"></use></svg>
-                        <small class="text-dark">效期:${passday}</small>
-                      </li>
-                      <li class="d-flex align-items-center">
-                        <svg class="bi me-2" width="1em" height="1em"><use xlink:href="#calendar3"></use></svg>
-                        <small class="text-dark">點數:${row.points}</small>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
+            <div class="border border-3  card mb-3 mx-2 shadow rounded-3" style=" max-width: 18rem;">
 
-              <!-- Modal -->
-                <div
-        class="modal fade "
-        id="exampleModal${row.loyaltyCardId}"
-        tabindex="-1"
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
-      >
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">會員卡說明</h5>
-              <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div class="modal-body">
-              <p>點數十點可折抵五十元</p>
-            </div>
-            <div class="modal-footer">
-              <button
-                type="button"
-                class="btn btn-secondary"
-                data-bs-dismiss="modal"
-              >
-                關閉
-              </button>
+  <div class="card-header bg-transparent border-success">${row.store.storeName}集點卡</div>
+  <div class="card-body text-success ">
+    <img src="data:image/${imgformat};base64,${base64Img}" alt="" class="rounded-3">
+  </div>
+  <div class="card-footer bg-transparent border-success">
+    <div>
+    <span>點數:${row.points}&nbsp;</span>
+    <span>效期:${passday}</span>
+</div>
+<div>&nbsp;</div>
+<div>
+規則:點數十點折抵五十元
+</div>
+  </div>
 
-            </div>
-          </div>
-        </div>
-      </div>
-                          `;
+</div>`;
+
+
                           document.querySelector('#loyaltyCards').insertAdjacentHTML('afterbegin',str);
                       });
                   }
