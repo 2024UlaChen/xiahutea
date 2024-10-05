@@ -2,6 +2,7 @@ package idv.tia201.g2.web.product.controller;
 
 
 
+import idv.tia201.g2.web.advertise.service.AdsService;
 import idv.tia201.g2.web.product.dto.ProductCategoryDTO;
 import idv.tia201.g2.web.product.service.ProductService;
 import idv.tia201.g2.web.product.vo.Product;
@@ -26,8 +27,11 @@ import idv.tia201.g2.web.product.dto.ProductDTO;
 import org.springframework.web.multipart.MultipartFile;
 
 
+import javax.sql.rowset.serial.SerialBlob;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.sql.Blob;
+import java.util.Base64;
 import java.util.List;
 
 
@@ -44,6 +48,10 @@ public class ProductAddController {
     private ProductService productService;
     @Autowired
     private  StoreService storeService;
+
+
+    @Autowired
+    private AdsService adsservice;
 
 //    @GetMapping("/{id}/image")
 //    public ResponseEntity<byte[]> getProductImage(@PathVariable Integer productId) {
@@ -142,25 +150,30 @@ public class ProductAddController {
         Integer userTypeId = totalUserDTO.getUserTypeId(); // 1 : 商家 、 3 : 管理員
         Integer userId = totalUserDTO.getUserId();// storeId 或 adminId
 
-
-
-        boolean success = productService.addProduct(productDTO,userTypeId,userId);
-
-
-        if (success) {
+        try {
+            // 将 Base64 数据解码为字节数组
+            byte[] fileBytes = Base64.getDecoder().decode(productDTO.getProductPicture());
+            // 將圖片資料byte轉換為 Blob 物件
+            //Blob blob = new SerialBlob(fileBytes);
+            productService.addProduct(productDTO, userTypeId, userId, fileBytes);
             return ResponseEntity.ok("商品新增成功!");
-        } else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("商品新增失败!");
-        }
+        } catch (Exception exp){
+            exp.getStackTrace();
+            System.out.println(exp.getMessage());
+        };
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("商品新增失败!");
     }
 
     @PutMapping("/update/{productId}")
-    public ResponseEntity<String> updateProduct(@PathVariable Integer productId,@RequestBody ProductDTO productDTO ,HttpSession session) {
+    public ResponseEntity<String> updateProduct(@PathVariable int productId,@RequestBody ProductDTO productDTO ,HttpSession session) {
         TotalUserDTO totalUserDTO = (TotalUserDTO)session.getAttribute("totalUserDTO");
         Integer userTypeId = totalUserDTO.getUserTypeId(); // 1 : 商家 、 3 : 管理員
         Integer userId = totalUserDTO.getUserId();// storeId 或 adminId
         try {
-            boolean success = productService.updateProduct(productId, productDTO,userTypeId,userId);
+            // 将 Base64 数据解码为字节数组
+            byte[] fileBytes = Base64.getDecoder().decode(productDTO.getProductPicture());
+            boolean success = productService.updateProduct(productId, productDTO,userTypeId,userId, fileBytes);
 
             if (success) {
                 return ResponseEntity.ok("商品更新成功!");
@@ -244,16 +257,33 @@ public class ProductAddController {
 
 // 根據產品ID獲取產品圖片
 @GetMapping("/{id}/image")
-public ResponseEntity<byte[]> getProductImage(@PathVariable Integer id) {
+public ResponseEntity<String> getProductImage(@PathVariable Integer id) {
     byte[] imageData = productService.getProductImage(id);
-    if (imageData != null) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Content-Type", "image/jpeg"); // 或者根據需要設置為其他圖片格式
-        return new ResponseEntity<>(imageData, headers, HttpStatus.OK);
+    if (imageData != null && imageData.length > 0) {
+        // 將圖片數據轉換為Base64字符串
+        String base64Image = Base64.getEncoder().encodeToString(imageData);
+        // 返回Base64字符串，並設置Content-Type為text/plain
+        return ResponseEntity.ok().header("Content-Type", "text/plain").body(base64Image);
     } else {
+        // 如果找不到圖片，返回404
         return ResponseEntity.notFound().build();
     }
-}
+    }
+
+    @GetMapping("/advertise/image/{adsTotalUserid}")
+    public ResponseEntity<String> getFirstImageByUserId(@PathVariable Long adsTotalUserid) {
+        byte[] image = productService.getFirstImageByUserId(adsTotalUserid);
+
+        if (image != null && image.length > 0) {
+            // 將圖片數據轉換為Base64字符串
+            String base64Image = Base64.getEncoder().encodeToString(image);
+            // 返回Base64字符串，並設置Content-Type為text/plain
+            return ResponseEntity.ok().header("Content-Type", "text/plain").body(base64Image);
+        } else {
+            // 如果找不到圖片，返回404
+            return ResponseEntity.notFound().build();
+        }
+    }
 
 
 
