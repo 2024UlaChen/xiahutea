@@ -25,6 +25,7 @@ public interface StoreDao extends JpaRepository<Store, Integer> {
 
     //區域模糊查詢
     List<Store> findByStoreAddressContaining(String address);
+    List<Store> findByStoreAddressContainingAndStoreStatus(String address, Integer storeStatus);
     //根據區域 和店名 模糊查詢
     List<Store> findByStoreNameContainingOrStoreAddressContaining(String name, String address);
     //登入用
