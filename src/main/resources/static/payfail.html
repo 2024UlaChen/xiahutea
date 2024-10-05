@@ -16,7 +16,8 @@
 
 </body>
 <script>
-    const orderId = localStorage.getItem('orderId');
+    let orderId = parseInt(localStorage.getItem('orderId'), 10);
+    console.log("orderId:",orderId)
     setTimeout(function() {
         window.location.href = `/orderDetail.html?orderId=${orderId}`;
         // window.location.href = "/homePage.html";  // 這裡設置跳轉的URL，例如首頁的路徑

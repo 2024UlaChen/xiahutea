@@ -18,8 +18,9 @@
 </body>
 <script>
     // localStorage.clear();
-    localStorage.removeItem('cartItems');
-    const orderId = localStorage.getItem('orderId');
+    localStorage.removeItem('cart');
+    let orderId = parseInt(localStorage.getItem('orderId'), 10);
+    console.log("orderId:",orderId)
     setTimeout(function() {
         window.location.href = `/orderDetail.html?orderId=${orderId}`;  // 這裡設置跳轉的URL，例如首頁的路徑
     }, 8000);

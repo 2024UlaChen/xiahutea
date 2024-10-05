@@ -52,7 +52,9 @@
           
             <div class="col-lg-3">
               <div class="header-message">
-                <h1>夏虎茶</h1>
+                  <h1>
+                      <a href="homePage.html" id="searchHome">夏虎茶</a>
+                  </h1>
               </div>
             </div>
             <div class="col-lg-6">
@@ -106,7 +108,7 @@
                       </div>
                     </li>
                     <li class="switcher-option">
-                      <a href="memberSetting.html">
+                      <a href="member.html">
                         <span> 帳號設定 </span>
                       </a>
                     </li>
@@ -134,8 +136,8 @@
                     </li>
                     <hr>
                     <li class="switcher-option">
-                      <a href="#" class="logOut">
-                        <span class="logOut"> 登出 </span>
+                      <a id="logOut">
+                        <span > 登出 </span>
                       </a>
                     </li>
                   </ul>
@@ -254,6 +256,7 @@
 <script src="assets/js/jquery-1.12.4.min.js"></script>
 <script src="assets/js/jquery.plugin-countdown.min.js"></script>
 <script src="assets/js/jquery-countdown.min.js"></script>
+  <script src="cms/plugins/sweetalert2/sweetalert2.all.min.js"></script>
 <script src="assets/js/bootstrap.min.js"></script>
 <script src="assets/js/owl.carousel.min.js"></script>
 <script src="assets/js/magnific-popup.min.js"></script>
@@ -290,6 +293,11 @@
                       list.forEach(function (row){
                           let base64Img = row.store.logo;
                           let imgformat = getBase64Img(base64Img);
+                          let passday = row.store.expiredDate;
+                          if(row.store.validStatus){
+                              passday = '激活中';
+                          }
+
                           let str =`
                           <div class="col" data-bs-toggle="modal" data-bs-target="#exampleModal${row.loyaltyCardId}">
                 <div class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 shadow-lg Kuncard"
@@ -302,7 +310,7 @@
                       </li>
                       <li class="d-flex align-items-center me-3">
                         <svg class="bi me-2" width="1em" height="1em"><use xlink:href="#geo-fill"></use></svg>
-                        <small class="text-dark">效期:${row.store.expiredDate}</small>
+                        <small class="text-dark">效期:${passday}</small>
                       </li>
                       <li class="d-flex align-items-center">
                         <svg class="bi me-2" width="1em" height="1em"><use xlink:href="#calendar3"></use></svg>
@@ -333,7 +341,7 @@
               ></button>
             </div>
             <div class="modal-body">
-              <p>點數一點可折抵一元</p>
+              <p>點數十點可折抵五十元</p>
             </div>
             <div class="modal-footer">
               <button
@@ -353,6 +361,7 @@
                       });
                   }
               });
+              logOutSkip();
 
         }); //end dom
 

@@ -2,6 +2,18 @@
     color: red;
 }
 
+.btn-info {
+    background-color: #73B4BA;
+    border-color: #73B4BA;
+}
+.btn-default {
+    background-color: #F8F9FA;
+}
+.btn-block {
+    width: 100px;
+    font-weight: bolder;
+}
+
 
 @media print {
     * {

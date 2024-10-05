@@ -29,12 +29,6 @@ document.addEventListener("DOMContentLoaded", function () {
     let active_el = document.getElementById('active')
     let no_active_el = document.getElementById('no-active')
 
-    //抓目前登入的使用者得到角色類型
-    // let user = sessionStorage.getItem('loginuser');
-    // if (user) {
-    //     let userData = JSON.parse(user);
-    //     userId = userData.userId;
-    // }
     //抓角色類型
     fetch(`/advertise/manage/getrole`, {
         })
@@ -63,8 +57,18 @@ document.addEventListener("DOMContentLoaded", function () {
                 getstoread(userid)
             } else if (totaluser.userTypeId === 3) {
                 getallads();
-            }
-        })
+            }else{
+                Swal.fire({
+                    title: '請登入商家或管理員',
+                    text: '請登入商家或管理員',
+                    icon: 'info'
+                })
+                    .then(() => {
+                        // 確認後跳轉到登入頁面或其他指定頁面
+                        window.location.href = 'backstageLogin.html';
+                    });
+                }
+            })
     //************************************依照角色類型抓資料-店家**********************
     function getstoread(userid){
         fetch(`/advertise/manage/${userid}`,{

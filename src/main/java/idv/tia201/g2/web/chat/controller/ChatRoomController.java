@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -23,7 +24,7 @@ public class ChatRoomController {
     TotalUserDao totalUserDao;
 
     @GetMapping()
-    public List<ChatRoom> getChatRoomData (HttpSession session){
+    public List<ChatRoom> getChatRoomData (HttpSession session) throws IOException {
         TotalUserDTO user = (TotalUserDTO) session.getAttribute("totalUserDTO");
         List<ChatRoom> chatRoomData = chatRoomService.getChatRoom(user);
         return chatRoomData;
