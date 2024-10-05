@@ -1,5 +1,7 @@
 package idv.tia201.g2.web.product.service.impl;
 
+import idv.tia201.g2.web.advertise.dao.AdsDao;
+import idv.tia201.g2.web.advertise.vo.Advertise;
 import idv.tia201.g2.web.product.dao.ProductCategoryDao;
 import idv.tia201.g2.web.product.dao.ProductDao;
 import idv.tia201.g2.web.product.dto.ProductCategoryDTO;
@@ -20,10 +22,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
+
 
 
 @Service
@@ -31,11 +35,12 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductDao productDao;
 
-    @Autowired
-    private StoreDao storeDao;
+   @Autowired
+   private AdsDao adsDao;
 
     @Autowired
     private ProductCategoryDao productCategoryDao;
+
 
 
     //找出全部的產品
@@ -48,6 +53,8 @@ public class ProductServiceImpl implements ProductService {
     //用分類id以及商品名稱查找
 
 
+
+
     @Override
     public Page<Product> getProducts(Pageable pageable) {
         return productDao.findAll(pageable);
@@ -58,10 +65,7 @@ public class ProductServiceImpl implements ProductService {
         return productDao.findByProductCategoryIdAndProductNameContaining(productCategoryId, productName);
     }
 
-    @Override
-    public List<ProductCategoryDTO> getProductsByCategory() {
-        return null;
-    }
+
 
     @Override
     public List<ProductDTO> getProductsByCategory(Integer ProductCategoryId) {
@@ -82,53 +86,56 @@ public class ProductServiceImpl implements ProductService {
     }
 
 
-    //新增
-    public boolean addProduct(ProductDTO productDTO,Integer userTypeId,Integer userId) throws IOException {
-        // 创建 Product 实体对象
-        Product product = new Product();
-        product.setProductName(productDTO.getProductName());
-       product.setProductPrice(productDTO.getProductPrice());
-        product.setSize(productDTO.getSize());
-        product.setProductStatus(productDTO.isProductStatus());
-        product.setProductCategoryId(productDTO.getProductCategoryId());
-        product.setProductStoreId(userId);
-        // 设置图片字节
-        product.setNormalIce(productDTO.isNormalIce());
-        product.setLessIce(productDTO.isLessIce());
-        product.setLightIce(productDTO.isLightIce());
-        product.setIceFree(productDTO.isIceFree());
-        product.setRoomTemperature(productDTO.isRoomTemperature());
-        product.setHot(productDTO.isHot());
-        product.setFullSugar(productDTO.isFullSugar());
-        product.setLessSugar(productDTO.isLessSugar());
-        product.setHalfSugar(productDTO.isHalfSugar());
-        product.setQuarterSugar(productDTO.isQuarterSugar());
-        product.setNoSugar(productDTO.isNoSugar());
-        product.setPearl(productDTO.isPearl());
-        product.setPudding(productDTO.isPudding());
-        product.setCoconutJelly(productDTO.isCoconutJelly());
-        product.setTaro(productDTO.isTaro());
-        product.setHerbalJelly(productDTO.isHerbalJelly());
-        product.setProductPicture(productDTO.getProductPicture().getBytes());
+    /**
+     *  新增 Product
+     * @param productDTO
+     * @param userTypeId
+     * @param userId
+     * @param blobImg
+     * @return boolean
+     * @throws IOException
+     */
+    public boolean addProduct(ProductDTO productDTO, Integer userTypeId, Integer userId, byte[] blobImg) throws IOException {
+        try {
+            // 查找现有产品
 
 
+            // 创建 Product 实体对象
+            Product product = new Product();
+            product.setProductName(productDTO.getProductName());
+            product.setProductPrice(productDTO.getProductPrice());
+            product.setSize(productDTO.getSize());
+            product.setProductStatus(productDTO.isProductStatus());
+            product.setProductCategoryId(productDTO.getProductCategoryId());
+            product.setProductStoreId(userId);
+            // 设置图片字节
+            product.setNormalIce(productDTO.isNormalIce());
+            product.setLessIce(productDTO.isLessIce());
+            product.setLightIce(productDTO.isLightIce());
+            product.setIceFree(productDTO.isIceFree());
+            product.setRoomTemperature(productDTO.isRoomTemperature());
+            product.setHot(productDTO.isHot());
+            product.setFullSugar(productDTO.isFullSugar());
+            product.setLessSugar(productDTO.isLessSugar());
+            product.setHalfSugar(productDTO.isHalfSugar());
+            product.setQuarterSugar(productDTO.isQuarterSugar());
+            product.setNoSugar(productDTO.isNoSugar());
+            product.setPearl(productDTO.isPearl());
+            product.setPudding(productDTO.isPudding());
+            product.setCoconutJelly(productDTO.isCoconutJelly());
+            product.setTaro(productDTO.isTaro());
+            product.setHerbalJelly(productDTO.isHerbalJelly());
+            product.setProductPicture(blobImg);// 圖片資料
 
-
-        productDao.save(product);
-
-
-        // 保存商品到数据库
-
-        return true;
+            productDao.save(product);// 保存商品到数据库
+            return true;
+        } catch (Exception exp) {
+            exp.getStackTrace();
+            System.out.println(exp.getMessage());
+        };
+        return false;
     }
 
-
-
-    public void updateProductImage(Integer productId, byte[] imageBytes) {
-        Product product = productDao.findByProductId(productId);
-        product.setProductPicture(imageBytes);
-        productDao.save(product);
-    }
 
     @Override
     public Page<Product> getProductByStoreId(Integer productStoreId, Pageable pageable) {
@@ -147,7 +154,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product saveImage(MultipartFile file) throws IOException {
         Product product=new Product();
-        product.setProductPicture(file.getBytes());
+        //product.setProductPicture(file.getBytes());
 
         return product; // 返回 product 以供后续处理;
     }
@@ -161,58 +168,60 @@ public class ProductServiceImpl implements ProductService {
     public byte[] getProductImage(Integer productId) {
         Product product = productDao.findByProductId(productId);
         return (product != null) ? product.getProductPicture() : null; // 返回圖片數據
+    }
 
+    @Override
+    public byte[] getFirstImageByUserId(Long adsTotalUserid) {
+        List<Advertise> ads=adsDao.findByAdsTotalUserid(adsTotalUserid);
+        // 檢查是否找到廣告
+        if (ads != null && !ads.isEmpty()) {
+            // 返回第一張圖片的 URL
+            return ads.get(0).getImgUrl(); // 假設 imageUrl 是存儲圖片的欄位
+        }
+        return null; // 如果沒有廣告，則返回 null
     }
 
 
-    public boolean updateProduct(Integer productId, ProductDTO productDTO,Integer userTypeId, Integer userId) {
+    public boolean updateProduct(Integer productId, ProductDTO productDTO,Integer userTypeId, Integer userId, byte[] blobImg) {
         try {
             // 查找现有产品
-            Product existingProduct = productDao.findByProductId(productId);
-            if (userTypeId == 1 && !existingProduct.getProductStoreId().equals(userId)) {
+            Product product = productDao.findByProductId(productId);
+            if (userTypeId == 1 && !product.getProductStoreId().equals(userId)) {
                 throw new IllegalAccessException("您無權操作該產品，因為它不屬於您的商店。");
-            };
-
-            Product existingProductName = productDao.findByProductName(productDTO.getProductName());
-
-            if (existingProduct == null) {
-                // 如果产品不存在，返回失败
-                return false;
             }
 
-            if (existingProductName !=null) {
-                // 如果产品不存在，返回失败
-                throw new IllegalArgumentException("產品名稱已經存在，請使用不同的名稱");
-
-            };
-
             // 更新产品的属性
-            existingProduct.setProductName(productDTO.getProductName());
-            existingProduct.setProductPrice(productDTO.getProductPrice());
-            existingProduct.setSize(productDTO.getSize());
-            existingProduct.setProductStatus(productDTO.isProductStatus());
-            existingProduct.setProductStoreId(productDTO.getProductStoreId());
-            existingProduct.setProductCategoryId(productDTO.getProductCategoryId());
-            existingProduct.setNormalIce(productDTO.isNormalIce());
-            existingProduct.setLessIce(productDTO.isLessIce());
-            existingProduct.setLightIce(productDTO.isLightIce());
-            existingProduct.setIceFree(productDTO.isIceFree());
-            existingProduct.setRoomTemperature(productDTO.isRoomTemperature());
-            existingProduct.setHot(productDTO.isHot());
-            existingProduct.setFullSugar(productDTO.isFullSugar());
-            existingProduct.setLessSugar(productDTO.isLessSugar());
-            existingProduct.setHalfSugar(productDTO.isHalfSugar());
-            existingProduct.setQuarterSugar(productDTO.isQuarterSugar());
-            existingProduct.setNoSugar(productDTO.isNoSugar());
-            existingProduct.setPearl(productDTO.isPearl());
-            existingProduct.setPudding(productDTO.isPudding());
-            existingProduct.setCoconutJelly(productDTO.isCoconutJelly());
-            existingProduct.setTaro(productDTO.isTaro());
-            existingProduct.setHerbalJelly(productDTO.isHerbalJelly());
-
+            // 创建 Product 实体对象
+            product.setProductName(productDTO.getProductName());
+            product.setProductPrice(productDTO.getProductPrice());
+            product.setSize(productDTO.getSize());
+            product.setProductStatus(productDTO.isProductStatus());
+            product.setProductCategoryId(productDTO.getProductCategoryId());
+            product.setNormalIce(productDTO.isNormalIce());
+            product.setLessIce(productDTO.isLessIce());
+            product.setLightIce(productDTO.isLightIce());
+            product.setIceFree(productDTO.isIceFree());
+            product.setRoomTemperature(productDTO.isRoomTemperature());
+            product.setHot(productDTO.isHot());
+            product.setFullSugar(productDTO.isFullSugar());
+            product.setLessSugar(productDTO.isLessSugar());
+            product.setHalfSugar(productDTO.isHalfSugar());
+            product.setQuarterSugar(productDTO.isQuarterSugar());
+            product.setNoSugar(productDTO.isNoSugar());
+            product.setPearl(productDTO.isPearl());
+            product.setPudding(productDTO.isPudding());
+            product.setCoconutJelly(productDTO.isCoconutJelly());
+            product.setTaro(productDTO.isTaro());
+            product.setHerbalJelly(productDTO.isHerbalJelly());
+            product.setProductPicture(blobImg);// 圖片資料
+            productDao.save(product);
             // 保存更新后的产品
-            productDao.save(existingProduct);
-
+//            if (product != null) {
+//
+//
+//            } else {
+//                throw new IllegalArgumentException("產品名稱不存在");
+//            }
             return true;
         } catch (Exception e) {
             // 捕捉并记录异常

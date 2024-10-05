@@ -12,6 +12,8 @@ import idv.tia201.g2.web.order.dao.OrderDao;
 import idv.tia201.g2.web.order.dao.OrderDetailDao;
 import idv.tia201.g2.web.order.dto.OrderDto;
 import idv.tia201.g2.web.order.service.DisputeService;
+import idv.tia201.g2.web.order.service.NotificationService;
+import idv.tia201.g2.web.order.service.OrderService;
 import idv.tia201.g2.web.order.util.OrderMappingUtil;
 import idv.tia201.g2.web.order.vo.DisputeOrder;
 import idv.tia201.g2.web.order.vo.OrderDetail;
@@ -44,6 +46,10 @@ public class DisputeServiceImpl implements DisputeService {
     private OrderMappingUtil orderMappingUtil;
     @Autowired
     private MemberService memberService;
+    @Autowired
+    private NotificationService notificationService;
+    @Autowired
+    private OrderService orderService;
 
     // -------- FINISH ---------------------------------
     // 前台 爭議表格 顯示
@@ -87,6 +93,11 @@ public class DisputeServiceImpl implements DisputeService {
         disputeDao.insert(disputeOrder);
         disputeOrder.setMessage("申請完成");
         disputeOrder.setSuccessful(true);
+
+        // 發送爭議通知
+        Orders order = orderDao.selectByOrderId(disputeOrder.getOrderId());
+        Integer storeId = order.getStoreId();
+        notificationService.addDisputeNotify(disputeOrder.getDisputeOrderId(), disputeOrder.getApplyDatetime(), storeId);
         return disputeOrder;
     }
 
