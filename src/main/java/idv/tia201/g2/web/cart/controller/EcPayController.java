@@ -17,23 +17,23 @@ public class EcPayController {
     EcPayService ecPayService;
 
     @PostMapping("/payment/createorder")
-    public ResponseEntity<String> createOrder(@RequestParam("TotalAmount") Integer totalAmount,HttpSession session) {
+    public ResponseEntity<String> createOrder(@RequestParam("TotalAmount") Integer totalAmount) {
         // 生成綠界支付表單
-        String aioCheckOutALLForm = ecPayService.ecpayCheckout(totalAmount,session);
+        String aioCheckOutALLForm = ecPayService.ecpayCheckout(totalAmount);
         // 返回支付表單
         return ResponseEntity.ok(aioCheckOutALLForm);
     }
 
     @PostMapping("/result")
-    public String handlePaymentResult(@RequestParam Map<String, String> allParams, HttpSession session) {
+    public String handlePaymentResult(@RequestParam Map<String, String> allParams) {
 
         // 列印所有參數，確認收到的資料
         allParams.forEach((key, value) -> System.out.println(key + ": " + value));
 
         //獲得比對的交易編號
-        String receivedMerchantTradeNo = allParams.get("MerchantTradeNo");
-        String storedMerchantTradeNo = (String) session.getAttribute("MerchantTradeNo");
-        System.out.println("Payment Result Session ID: " + session.getId());
+//        String receivedMerchantTradeNo = allParams.get("MerchantTradeNo");
+//        String storedMerchantTradeNo = (String) session.getAttribute("MerchantTradeNo");
+//        System.out.println("Payment Result Session ID: " + session.getId());
 
         // 根據 RtnCode及交易編號 判斷交易結果
 //        if (receivedMerchantTradeNo != null && receivedMerchantTradeNo.equals(storedMerchantTradeNo)) {
