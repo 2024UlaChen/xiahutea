@@ -38,4 +38,18 @@ public class CustomerCouponServiceImpl implements CustomerCouponService {
         return customerCouponDao.findByCustomerIdAndCouponQuantityGreaterThanAndCoupon_ExpiredDateGreaterThan(customerId,0,now);
     }
 
+    @Override
+    public CustomerCoupons addResgiterCoupon(Integer customerId) {
+        //檢查是否已經存在
+        if(customerCouponDao.findByCustomerIdAndCouponId(customerId,1) != null) {
+            return null;
+        }
+
+        CustomerCoupons ForResgiter = new CustomerCoupons();
+        ForResgiter.setCustomerId(customerId);
+        ForResgiter.setCouponId(1);
+        ForResgiter.setCouponQuantity(1);
+        return customerCouponDao.save(ForResgiter);
+    }
+
 }

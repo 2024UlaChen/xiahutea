@@ -244,7 +244,7 @@
             </div>
           </div>
         </div>
-        <div class="col">
+        <div class="col" id="searchBarLoyalty">
           <i class="fa-solid fa-crown"
             ><a href="./loyaltyCard.html">會員卡</a></i
           >
@@ -253,11 +253,11 @@
 
 
         
-        <div class="col">
+        <div class="col" id="searchBarOrder">
           <i class="fa-solid fa-rectangle-list"><a href="orderList.html">曾點過</a></i>
         </div>
 
-        <div class="col">
+        <div class="col" id="searchBarCoupon">
           <i class="fa-solid fa-tags"><a href="./coupon.html">優惠券</a></i>
         </div>
         <div class="col-3"></div>
@@ -481,9 +481,13 @@ let allSotre = document.querySelectorAll('.Heart');
               nowH = now.getHours();
               if(openH > nowH){
                   let icon = '<span style="color:red;font-weight:bold;text-decoration: underline ">尚未營業</span>';
-
+                  let non ='<span> &empty;</span>';
                   let parentTag = row.closest('.storeLinkCard');
                   parentTag.querySelector('a').insertAdjacentHTML('afterbegin',icon);
+              }else{
+                  let non ='<span> &nbsp;</span>';
+                  let parentTag = row.closest('.storeLinkCard');
+                  parentTag.querySelector('a').insertAdjacentHTML('afterbegin',non);
               }
           });
 
@@ -874,7 +878,10 @@ let allSotre = document.querySelectorAll('.Heart');
 
                 if (imgFormat) {
                     // 確保有對應的 img 元素
+
                     storeImage.src = `data:image/${imgFormat};base64,${base64Img}`;
+                }else{
+                    storeImage.src='../img/xiahutealogo.jpg';
                 }
 
 

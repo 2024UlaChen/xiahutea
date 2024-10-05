@@ -16,6 +16,8 @@ function getUser(){
                                 </a>
                             </li>`;
                 document.querySelector('.header-user-links').insertAdjacentHTML('afterbegin',str);
+                
+                $('.KunSpeedSearch').empty();
 
 
             }else{
