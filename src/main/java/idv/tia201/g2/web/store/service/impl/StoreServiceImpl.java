@@ -125,7 +125,8 @@ public class StoreServiceImpl implements StoreService {
     @Override
     public List<Store> findStoreByName(String name) {
         //模糊查詢並且大小寫不敏感
-        return storeDao.findByStoreNameContainingIgnoreCaseAndStoreStatus(name,1);
+        //return storeDao.findByStoreNameContainingIgnoreCaseAndStoreStatus(name,1);
+        return storeDao.SearchBarData(name);
     }
 
     @Override
