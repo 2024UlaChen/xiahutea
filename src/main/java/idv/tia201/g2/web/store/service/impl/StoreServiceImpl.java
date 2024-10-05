@@ -140,7 +140,7 @@ public class StoreServiceImpl implements StoreService {
     @Override
     public List<Store> findStoreByAddress(String address) {
         //模糊區域查詢
-        return storeDao.findByStoreAddressContaining(address);
+        return storeDao.findByStoreAddressContainingAndStoreStatus(address,1);
     }
 
     @Override
