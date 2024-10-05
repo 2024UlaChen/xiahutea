@@ -297,6 +297,15 @@
                           if(row.store.validStatus){
                               passday = '激活中';
                           }
+                          let cardStr =`
+            <div class="card border-success mb-3" style="max-width: 18rem;">
+  <div class="card-header bg-transparent border-success">${row.coupon.couponName}</div>
+  <div class="card-body text-success">
+    <h5 class="card-title">Success card title</h5>
+    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+  </div>
+  <div class="card-footer bg-transparent border-success">Footer</div>
+</div>`;
 
                           let str =`
                           <div class="col" data-bs-toggle="modal" data-bs-target="#exampleModal${row.loyaltyCardId}">
@@ -305,9 +314,7 @@
                   <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
                     <h4 class="display-8 pb-5 mb-5 lh-1 " style="color: black;">${row.store.storeName}</h4>
                     <ul class="d-flex list-unstyled mt-auto">
-                      <li class="me-auto">
-                        <img src="https://github.com/twbs.png" alt="Bootstrap" width="32" height="32" class="rounded-circle border border-white">
-                      </li>
+
                       <li class="d-flex align-items-center me-3">
                         <svg class="bi me-2" width="1em" height="1em"><use xlink:href="#geo-fill"></use></svg>
                         <small class="text-dark">效期:${passday}</small>
