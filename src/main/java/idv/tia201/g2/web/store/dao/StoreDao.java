@@ -15,7 +15,7 @@ public interface StoreDao extends JpaRepository<Store, Integer> {
     Store findByStoreId(Integer storeId);
     //模糊查詢店名  並且大小寫不敏感 並且只回傳使用中
     List<Store> findByStoreNameContainingIgnoreCaseAndStoreStatus(String name,Integer status);
-    @Query("SELECT s FROM Store s LEFT JOIN StoreCalendar sc ON s.storeId = sc.storeId LEFT JOIN Product p ON s.storeId = p.productStoreId WHERE (s.storeStatus = 1 AND sc.storeHoliday != current date) AND (s.storeName LIKE %:name% OR p.productName LIKE %:name%)")
+    @Query("SELECT s FROM Store s LEFT JOIN StoreCalendar sc ON s.storeId = sc.storeId LEFT JOIN Product p ON s.storeId = p.productStoreId WHERE (s.storeStatus = 1 AND (sc.storeHoliday != current date OR sc.storeHoliday IS NULL)) AND (s.storeName LIKE %:name% OR p.productName LIKE %:name%)")
     List<Store> SearchBarData(String name);
     //統編模糊查詢
     List<Store> findByVatContaining(String vat);
