@@ -35,7 +35,7 @@ public class CustomerCouponServiceImpl implements CustomerCouponService {
     @Override
     public List<CustomerCoupons> getCustomerCouponsForShow(Integer customerId) {
         Timestamp now = new Timestamp(System.currentTimeMillis());
-        return customerCouponDao.findByCustomerIdAndCouponQuantityGreaterThanAndCoupon_ExpiredDateGreaterThan(customerId,0,now);
+        return customerCouponDao.findByCustomerIdAndCouponQuantityGreaterThanAndCoupon_ExpiredDateGreaterThanAndCoupon_CouponStatus(customerId,0,now,true);
     }
 
     @Override
