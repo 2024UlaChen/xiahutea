@@ -17,7 +17,9 @@ function getUser(){
                             </li>`;
                 document.querySelector('.header-user-links').insertAdjacentHTML('afterbegin',str);
                 
-                $('.KunSpeedSearch').empty();
+                document.querySelector('#searchBarLoyalty').remove();
+                document.querySelector('#searchBarOrder').remove();
+                document.querySelector('#searchBarCoupon').remove();
 
 
             }else{
