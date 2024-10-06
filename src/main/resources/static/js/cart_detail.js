@@ -420,8 +420,7 @@ document.addEventListener("DOMContentLoaded",function(){
 
     //頁面跳轉
     btn_addtopurchase_el.addEventListener("click", function (e) {
-        window.history.back();
-        e.stopPropagation();
+        location.href=`productMenu.html?storeId=${storeId}`;
     })
 
     //進入下一頁、檢查欄位有無輸入
@@ -534,7 +533,10 @@ document.addEventListener("DOMContentLoaded",function(){
         },
         minDate: new Date(), // 設定不能選擇早於當前的日期
         timepicker: true, // 開啟時間選擇功能
-        minutesStep: 1 // 設定分鐘選擇間隔
+        minutesStep: 1, // 設定分鐘選擇間隔
+        minHours: 9,
+        maxHours: 20
+
     });
 
     //********************************************第二頁按鈕事件*************************************
@@ -987,9 +989,9 @@ document.addEventListener("DOMContentLoaded",function(){
             ordernote =text2store_el.value;
         }
         //若金額為0元為開立發票+2元但註記不進行請款
-        if(totalAmount ===0){
-            ordernote = (ordernote ? ordernote + "；" : "") + "僅開立發票用，不予請款";
-        }
+        // if(totalAmount ===0){
+        //     ordernote = (ordernote ? ordernote + "；" : "") + "僅開立發票用，不予請款";
+        // }
         const orderData = {
             orders: {
                 customerId: customerId,
@@ -1038,9 +1040,9 @@ document.addEventListener("DOMContentLoaded",function(){
                 //支付流程
                 const params = new URLSearchParams();
                 //若為0元，為開立發票+30元，不予用戶收款
-                if(last_totalAmount===0){
-                    last_totalAmount =30;
-                }
+                // if(last_totalAmount===0){
+                //     last_totalAmount =30;
+                // }
                 params.append('TotalAmount', last_totalAmount); // 交易金額
                 fetch('/payment/createorder', {
                     method: 'POST',
@@ -1760,65 +1762,74 @@ document.addEventListener("DOMContentLoaded",function(){
             })
     }
     //F20 計算訂單金額
-    function Calculatetotal(){
+    function Calculatetotal() {
         totalAmount = 0;
         totalquanity = 0;
+
         // 抓所有的商品明細項目，根據 data-type 屬性來取得價格和數量
         document.querySelectorAll('.item-content')
             .forEach(itemContent => {
-                // 找到該商品的價格元素和數量元素
                 let priceEl = itemContent.querySelector('div[data-type="price"]');
                 let quantityEl = itemContent.querySelector('div[data-type="buyNum"]');
-                // 從元素中提取價格和數量
                 let priceText = priceEl.textContent.trim();
                 let quantityText = quantityEl.textContent.trim();
-                // 去掉價格的符號和數量的文字，並轉換為數值型態
                 let price = parseFloat(priceText.replace('$', '').replace('/', ''));
                 let quantity = parseInt(quantityText.replace(' 杯', ''));
-                // 累加每個商品的總額及數量
+
                 totalquanity += quantity;
                 totalAmount += price * quantity;
-                productamount = totalAmount;
+                productamount = totalAmount; // 保存商品總額
             });
-        //商品總數與折扣前總價
-        product_unit_el.textContent=`商品X${totalquanity}`;
-        product_amount_el.textContent =`$${totalAmount}`;
-        //加平台費用
+
+        // 顯示商品總數與折扣前總價
+        product_unit_el.textContent = `商品X${totalquanity}`;
+        product_amount_el.textContent = `$${totalAmount}`;
+
+        // 加上平台費用
         PlatformfeeText = platform_fee_number_el.textContent.trim();
         PlatformAmount = parseFloat(PlatformfeeText.replace('$', ''));
         totalAmount += PlatformAmount;
-        //優惠券折抵
+
+        // 優惠券折抵
         CouponAmountText = coupon_minus_number_el.textContent.trim();
         CouponAmount = parseFloat(CouponAmountText.replace('$', ''));
         totalAmount -= CouponAmount;
-        if(totalAmount<0){
-            //使用的優惠券折扣金額大於訂單總額就將總額變為0元，優惠券不退還
-            totalAmount =0;
-        }
-        //會員卡折抵
+       
+
+        // 會員卡折抵
         MemberCardAmountText = membercard_minus_number_el.textContent.trim();
         MemberCardAmount = parseFloat(MemberCardAmountText.replace('$', ''));
         totalAmount -= MemberCardAmount;
-        if(totalAmount<0){
-            //使用的會員卡折扣金額大於訂單總額就將總額變為0元，會員點數一樣扣除
-            totalAmount =0;
+
+        // 檢查最低金額 30 元（平台費用），折扣後最低應為 30
+        if (totalAmount < 30) {
+            totalAmount = 30;
         }
 
-        //會員錢包折抵
-        MoneyBagAmountText = moneybag_minus_number_el.textContent.trim();
-        MoneyBagAmount = parseFloat(MoneyBagAmountText.replace('$', ''));
-        totalAmount -= MoneyBagAmount;
-        if(totalAmount<0){
-            //若使用的會員餘額多過於總金額就把數字加回去，再修正為訂單總額的會員點數使用
-            totalAmount += MoneyBagAmount;
-            moneybag_discount_number_el.value = totalAmount;
-            moneybag_minus_number_el.textContent=`$${totalAmount}`;
-            totalAmount =0;
+        // 會員錢包折抵部分邏輯
+        MoneyBagAmountText = moneybag_discount_number_el.value.trim(); // 抓取使用者輸入的金額
+        MoneyBagAmount = parseInt(MoneyBagAmountText.replace('$', ''));
+
+        if (!isNaN(MoneyBagAmount) && MoneyBagAmount > 0) {
+            totalAmount -= MoneyBagAmount;
+
+            // 如果錢包折抵後的總金額低於 30 元，調整錢包折抵金額
+            if (totalAmount < 30) {
+                let adjustAmount = 30 - totalAmount; // 多扣的金額
+                MoneyBagAmount -= adjustAmount; // 調整後的錢包折抵額
+                totalAmount = 30; // 確保總金額不低於 30 元
+                // 更新錢包折抵輸入框和顯示金額
+                moneybag_discount_number_el.value = MoneyBagAmount;
+                moneybag_minus_number_el.textContent = `$${MoneyBagAmount}`;
+            } else {
+                moneybag_minus_number_el.textContent = `$${MoneyBagAmount}`;
+            }
         }
-        //存總金額到變數
+        // 顯示總金額
         last_totalAmount = totalAmount;
         total_amount_el.textContent = `$${totalAmount}`;
     }
+
 })
 
 

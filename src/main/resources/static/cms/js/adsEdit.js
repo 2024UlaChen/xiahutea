@@ -45,8 +45,8 @@ document.addEventListener("DOMContentLoaded", function () {
             userid = totaluser.userId;
             roletypeid = totaluser.userTypeId;
 
-            // 檢查為管理員
-            if (totaluser.userTypeId !== 3) {
+            // 檢查為管理員或店家
+            if (totaluser.userTypeId === 0) {
                 Swal.fire({
                     title: '請登入管理員帳號',
                     text: '請登入商家或管理員',
