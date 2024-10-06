@@ -170,7 +170,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function showstoreads(ads) {
         tableBody_el.innerHTML = '';
         ads.forEach(ad => {
-            const adStatus = ad.isactive ? '啟用' : '未啟用';
+            const adStatus = ad.isactive ? '啟用' : '停用';
             const isdisplay = ad.homeDisplay ? '是' : '否';
             // 根據 ads_total_users_id 找到對應的 store
             let storeName = '無對應商家';
