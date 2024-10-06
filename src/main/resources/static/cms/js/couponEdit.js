@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded",function () {
     let couponId = urlParams.get('couponId');
     console.log("couponID:",couponId)
 
-    //********************************取得使用者類型及ID*************************
+    //********************************取得使用者類型及ID查看是否為管理員*************************
     fetch(`/coupon/manage/getrole`, {})
         .then(response => {
             if (!response.ok) {

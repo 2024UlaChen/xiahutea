@@ -10,6 +10,6 @@ public interface CouponDao extends JpaRepository<Coupon,Integer> {
     public Coupon findByCouponName(String couponName);
     @Query("SELECT c FROM Coupon c WHERE c.couponId IN " +
             "(SELECT cc.couponId" + " FROM CustomerCoupons cc " +
-            "WHERE cc.customerId = :customerId)")
+            "WHERE cc.customerId = :customerId AND cc.couponQuantity > 0)")
     public List<Coupon> findCouponIdsByCutomerId(Integer customerId);
 }

@@ -12,7 +12,7 @@
 <body>
 <h1>支付失敗!請再試一次!</h1>
 
-<p>8秒後跳轉至訂單明細....</p>
+<p>5秒後跳轉至訂單明細....</p>
 
 </body>
 <script>
@@ -21,6 +21,6 @@
     setTimeout(function() {
         window.location.href = `/orderDetail.html?orderId=${orderId}`;
         // window.location.href = "/homePage.html";  // 這裡設置跳轉的URL，例如首頁的路徑
-    }, 8000);
+    }, 5000);
 </script>
 </html>
