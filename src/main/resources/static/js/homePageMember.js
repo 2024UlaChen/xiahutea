@@ -119,9 +119,11 @@ function logOutSkip(){
         tag.addEventListener('click',function (){
             Swal.fire({
                 title: "確認登出?",
-                showDenyButton: true,
+                showCancelButton: true,
+                confirmButtonColor: "#73B4BA",
+                cancelButtonColor: "#6c757d",
                 confirmButtonText: "登出",
-                denyButtonText: "否"
+                cancelButtonText: "取消",
             }).then((result) => {
                 if (result.isConfirmed) {
                     fetch("member/logout")

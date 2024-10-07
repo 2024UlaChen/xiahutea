@@ -2,6 +2,7 @@ package idv.tia201.g2.web.member.service.impl;
 
 import idv.tia201.g2.core.util.EncrypSHA;
 import idv.tia201.g2.core.util.ValidateUtil;
+import idv.tia201.g2.web.coupon.service.impl.CustomerCouponServiceImpl;
 import idv.tia201.g2.web.member.dao.MemberAddrDao;
 import idv.tia201.g2.web.member.dao.MemberDao;
 import idv.tia201.g2.web.member.service.MemberService;
@@ -47,6 +48,9 @@ public class MemberServiceImpl implements MemberService {
 
     @Autowired
     private SendSmsService sendSmsService;
+
+    @Autowired
+    private CustomerCouponServiceImpl customerCouponService;
 
     Integer userType = 0;
     @Autowired
@@ -138,7 +142,7 @@ public class MemberServiceImpl implements MemberService {
             return member;
         }
         System.out.println(member.getValidStatus());
-        if(member.getValidStatus()){
+        if (member.getValidStatus()) {
             member = new Member();
             member.setMessage("帳號停權，請洽客服");
             member.setSuccessful(false);
@@ -299,6 +303,7 @@ public class MemberServiceImpl implements MemberService {
                 TotalUsers totalUser = new TotalUsers(null, userType, queryMember.getCustomerId());
                 totalUserDao.save(totalUser);
                 memberDao.updateMemberInfo(queryMember.getCustomerId(), true, queryMember.getCustomerRemark());
+                customerCouponService.addResgiterCoupon(queryMember.getCustomerId());
             } else {
                 String encodePwd = EncrypSHA.SHAEncrypt(member.getCustomerPassword());
                 queryMember.setCustomerPassword(encodePwd);
