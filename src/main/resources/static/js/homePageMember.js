@@ -16,6 +16,10 @@ function getUser(){
                                 </a>
                             </li>`;
                 document.querySelector('.header-user-links').insertAdjacentHTML('afterbegin',str);
+                
+                document.querySelector('#searchBarLoyalty').remove();
+                document.querySelector('#searchBarOrder').remove();
+                document.querySelector('#searchBarCoupon').remove();
 
 
             }else{

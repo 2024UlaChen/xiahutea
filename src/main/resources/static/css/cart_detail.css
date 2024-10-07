@@ -16,7 +16,6 @@
   justify-content: center;
   width: 100%;
   margin:60px 0;
-
 }
 
 .progress-list li{   
@@ -30,8 +29,11 @@
   border-radius: 50%;
   width: 120px;
   height: 120px;
-  background-image: linear-gradient(45deg, #5be48b, rgba(142, 182, 157, 0.36), #5be476);
+  background-image: linear-gradient(45deg, #73B4BA, #73B4BA, #73B4BA);
+  color: #ffffff;
   position: relative;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .progress-list li+li{    /* 兄弟節點間格 */
@@ -353,10 +355,10 @@ hr {
   text-align: center;
   width: 160px;
   height: 40px;
-  background-color: #F8F9FA;
-  border: 1px solid #73B4BA;
+  background-color: #73B4BA;
+  /*border: 1px solid #73B4BA;*/
   font-size: 16px;
-  color: #53a0a7;
+  color: #272727;
   border-radius: 5px;
 }
 
@@ -368,15 +370,15 @@ hr {
   width: 160px;
   height: 40px;
   background-color: #73B4BA;
-  border: 1px solid #73B4BA;
+  /*border: 1px solid #73B4BA;*/
   font-size: 16px;
-  color: white;
+  color: #272727;
   border-radius: 5px;
 }
 
 .btn-addtopurchase:hover,
 .btn-checkout:hover{
-  background-color: #b6c4b7; /* 悬停背景色 */
+  background-color: #DFF3F7; /* 悬停背景色 */
 }
 
 /*light燈箱for修改訂單*/
@@ -574,7 +576,7 @@ input.qtyminus {
   display: flex; /* 使用 Flexbox 佈局 */
   align-items: center; /* 垂直居中對齊 */
   padding: 10px 5px; /* 內邊距，用於內容和邊框之間的距離 */
-  background-color: orange; /* 背景色 */
+  background-color: #73B4BA; /* 背景色 */
   border: none; /* 邊框顏色和寬度 */
   border-radius: 5px; /* 圓角，如果需要直角可以設置為0 */
   margin: 10px; /* 外邊距，用於元素之間的距離 */
@@ -595,8 +597,8 @@ input.qtyminus {
   border-radius: 5px;
   align-items: center; /* 垂直居中 */
   justify-content: center; /* 水平居中 */
-  font-size:23px;
-  color: orange;
+  font-size:20px;
+  color: black;
 }
 
 .payable-price {
@@ -743,10 +745,10 @@ input.uniform-numbers{
   text-align: center;
   width: 160px;
   height: 40px;
-  background-color: #F8F9FA;
-  border: 1px solid #73B4BA;
+  background-color: #73B4BA;
+  /*border: 1px solid #73B4BA;*/
   font-size: 16px;
-  color: #53a0a7;
+  color: #272727;
   border-radius: 5px;
 }
 
@@ -758,15 +760,15 @@ input.uniform-numbers{
   width: 160px;
   height: 40px;
   background-color: #73B4BA;
-  border: 1px solid #73B4BA;
+  /*border: 1px solid #73B4BA;*/
   font-size: 16px;
-  color: white;
+  color: #272727;
   border-radius: 5px;
 }
 
 .btn-backto-last-page:hover,
 .btn-goto-next-page:hover{
-  background-color: #b6c4b7; /* 悬停背景色 */
+  background-color: #DFF3F7; /* 悬停背景色 */
 }
 
 /**************************************************** STEP3 ******************************************/
@@ -825,10 +827,10 @@ input.uniform-numbers{
   text-align: center;
   width: 160px;
   height: 40px;
-  background-color: #F8F9FA;
-  border: 1px solid #73B4BA;
+  background-color: #73B4BA;
+  /*border: 1px solid #73B4BA;*/
   font-size: 16px;
-  color: #53a0a7;
+  color: #272727;
   border-radius: 5px;
 }
 .btn-submit-order{
@@ -839,13 +841,13 @@ input.uniform-numbers{
   width: 160px;
   height: 40px;
   background-color: #73B4BA;
-  border: 1px solid #73B4BA;
+  /*border: 1px solid #73B4BA;*/
   font-size: 16px;
-  color: white;
+  color: #272727;
   border-radius: 5px;
 }
 
 .btn-backto-last-page2:hover,
 .btn-submit-order:hover{
-  background-color: #b6c4b7; /* 悬停背景色 */
+  background-color: #DFF3F7; /* 悬停背景色 */
 }

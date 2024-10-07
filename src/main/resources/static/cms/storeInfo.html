@@ -317,32 +317,14 @@
           async: false,
           success: function (data) {
 
-            console.log(data.successful);
+
             if(!data.successful){
               //登入失敗
               location.href = "./backstageLogin.html";
             }
 
 
-            fetch("/store/GetLoginType").then(resp => resp.json()).then(
-                    res => {
 
-                      console.log(res);
-                      document.querySelector('#userTypeId').value= res.userTypeId;
-
-                      if(res.userTypeId !== 3){
-
-                        document.querySelector('#storeListAsideLink').classList.add("d-none");
-                      }
-
-
-
-                      document.querySelector("#storeInfoAsideLink").href= location.href;
-                      document.querySelector("#storeLoyaltyCardAsideLink").href=`storeInfoEditLoyaltyCard.html?storeid=${sotreid.split("=")[1]}`;
-                      document.querySelector("#storePasswordAsideLink").href=`storeInfoEditPassword.html?storeid=${sotreid.split("=")[1]}`;
-
-                    }
-            );
             fetch(`/store/holidays/${sotreid.split("=")[1]}`).then(data => data.json()).then(
                     res =>{
                       res.forEach(function (day){
@@ -396,8 +378,7 @@
               data.registerDay.split("T")[0];
             document.querySelector("#storeAddress").value = data.storeAddress;
             document.querySelector("#storePhone").value = data.storePhone;
-            console.log(data.openingHours);
-            console.log(data.closingHours);
+
             document.querySelector("#openingHours").value = data.openingHours;
             document.querySelector("#closingHours").value = data.closingHours;
 
@@ -430,7 +411,7 @@
             document.querySelector("#loyaltyCardName").value =
               data.loyaltyCardName;
             document.querySelector("#exchangeRate").value = data.exchangeRate;
-            console.log(data.expiredDate);
+
 
             document.querySelector("#expiredDate").value = data.expiredDate!=null?
               data.expiredDate.split("T")[0]:  "激活中";

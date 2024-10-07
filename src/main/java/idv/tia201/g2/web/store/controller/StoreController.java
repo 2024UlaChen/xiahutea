@@ -198,8 +198,9 @@ public class StoreController {
 
     @GetMapping("/updateStoreStatus/{storeId}")
     public void EditStoreStatus(HttpSession session,@PathVariable Integer storeId){
+        TotalUserDTO data = (TotalUserDTO) session.getAttribute("totalUserDTO");
 
-        if(checkAdminLogin(session)){
+        if(data != null && data.getUserTypeId()==3){
             storeService.editStoreStatus(storeId);
         }
     }

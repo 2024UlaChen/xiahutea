@@ -302,20 +302,7 @@
               location.href = "./backstageLogin.html";
             }
 
-            fetch("/store/GetLoginType").then(data => data.json()).then(
-                    res => {
-                      if(res.userTypeId !== 3){
 
-                        document.querySelector('#storeListAsideLink').classList.add("d-none");
-                      }
-
-
-                      document.querySelector("#storeInfoAsideLink").href= `storeInfo.html?storeid=${sotreid.split("=")[1]}`;
-                      document.querySelector("#storeLoyaltyCardAsideLink").href=`storeInfoEditLoyaltyCard.html?storeid=${sotreid.split("=")[1]}`;
-                      document.querySelector("#storePasswordAsideLink").href=`storeInfoEditPassword.html?storeid=${sotreid.split("=")[1]}`;
-
-                    }
-            );
             //確認是否帳號違停權
             if(data.storeStatus === 2 ){
               Swal.fire({
@@ -388,8 +375,7 @@
               });
               return;
             }
-            console.log(openingtime);
-            console.log(openingtime + ":00");
+
 
             closingtime = document.querySelector("#closingtime").value;
             if(closingtime ===""){
@@ -412,8 +398,7 @@
               ? true
               : false;
             deliverymoney = document.querySelector("#deliverymoney").value;
-            console.log("瞧瞧");
-            console.log(deliverymoney);
+
             //檢查如果有外送 必須要有外送金
             if(isdelivery){
               if(deliverymoney === ""){
@@ -491,7 +476,7 @@
                 success: function (data) {
                   //處理公休日
                   if(document.querySelector('#holiday').value !==""){
-                    console.log(document.querySelector('#holiday').value);
+
                     let storeviewmodel = {
                       storeId : id,
                       holiday : document.querySelector('#holiday').value
@@ -503,15 +488,15 @@
                       dataType: "JSON",
                       data:JSON.stringify(storeviewmodel),
                       success:function (){
-                        console.log('成');
+
                       }
                     });//提交公休
 
                   }
-                  console.log(JSON.stringify(model));
+
                   //接著處理照片
                   if(newLogoImg.files.length> 0){
-                    console.log("進到if內了");
+
                     let formData = new FormData();
                     formData.append('storeId',data.storeId);
                     formData.append('img',newLogoImg.files[0]);

@@ -1158,11 +1158,14 @@ var productId;
                 updateTotalPrice();
             });
 
-            // 添加到購物車
-            document.getElementById('addToCartButton').addEventListener('click', function (e) {
+            function cart (e) {
                 e.preventDefault();
                 addToCart(productId, buyNum); // 傳入購買數量
-            });
+                document.getElementById('addToCartButton').removeEventListener("click",cart);
+            }
+
+            // 添加到購物車
+            document.getElementById('addToCartButton').addEventListener('click', cart);
 
             // 顯示模態框
             document.getElementById("lightbox").style.display = "block";
@@ -1170,6 +1173,8 @@ var productId;
             console.error('Error fetching product data:', error);
         }
     }
+
+
 
     // 添加選項的輔助函數
     function addOption(container, condition, text, type) {

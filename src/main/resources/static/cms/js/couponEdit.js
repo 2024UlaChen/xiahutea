@@ -22,6 +22,50 @@ document.addEventListener("DOMContentLoaded",function () {
     let couponId = urlParams.get('couponId');
     console.log("couponID:",couponId)
 
+    //********************************取得使用者類型及ID查看是否為管理員*************************
+    fetch(`/coupon/manage/getrole`, {})
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(errorData => {
+                    throw new Error(errorData.message);
+                });
+            }
+            return response.json();
+        })
+        .then(totaluser => {
+            if (totaluser == null) {
+                Swal.fire({
+                    title: '查無此使用者資料',
+                    text: '查無此使用者資料 ID=',
+                    icon: 'error'
+                }).then(() => {
+                    window.location.href = 'backstageLogin.html';
+                });
+            }
+            console.log('user Details:', totaluser);
+            userid = totaluser.userId;
+            roletypeid = totaluser.userTypeId;
+
+            // 檢查為管理員
+            if (totaluser.userTypeId !== 3) {
+                Swal.fire({
+                    title: '請登入管理員帳號',
+                    text: '請登入管理員帳號',
+                    icon: 'info'
+                }).then(() => {
+                    window.location.href = 'backstageLogin.html';
+                });
+            }
+        })
+        .catch(error => {
+            Swal.fire({
+                title: '用戶未登入管理員',
+                text: `錯誤訊息: ${error.message}`,
+                icon: 'error'
+            }).then(() => {
+                window.location.href = 'backstageLogin.html';
+            });
+        });
     //********************************確認是否為修改跳轉頁面**********************
     if (couponId) {
         // 發送 GET 請求獲取優惠券資料

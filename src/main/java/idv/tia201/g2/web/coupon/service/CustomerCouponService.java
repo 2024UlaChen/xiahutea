@@ -9,4 +9,6 @@ public interface CustomerCouponService {
     public void updateCouponQuantity(Integer customerId, Integer couponId, Integer newQuantity);
     public List<CustomerCoupons> getCustomerCoupons(Integer customerId);
     public List<CustomerCoupons> getCustomerCouponsForShow(Integer customerId);
+    public CustomerCoupons addResgiterCoupon(Integer customerId);
+    void SendCouponsToMembers(Integer couponId);
 }

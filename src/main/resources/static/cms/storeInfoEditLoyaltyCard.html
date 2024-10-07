@@ -132,18 +132,7 @@
               //登入失敗
               location.href = "./backstageLogin.html";
             }
-            fetch("/store/GetLoginType").then(resp => resp.json()).then(
-                    res => {
-                      if(res.userTypeId !== 3){
 
-                        document.querySelector('#storeListAsideLink').classList.add("d-none");
-                      }
-                      document.querySelector("#storeInfoAsideLink").href= `storeInfo.html?storeid=${sotreid.split("=")[1]}`;
-                      document.querySelector("#storeLoyaltyCardAsideLink").href=`storeInfoEditLoyaltyCard.html?storeid=${sotreid.split("=")[1]}`;
-                      document.querySelector("#storePasswordAsideLink").href=`storeInfoEditPassword.html?storeid=${sotreid.split("=")[1]}`;
-
-                    }
-            );
             //確認是否帳號違停權
             if(data.storeStatus === 2 ){
               Swal.fire({
@@ -160,8 +149,10 @@
 
               document.querySelector("#cardstatus").setAttribute("checked", "");
             } else {
+              let expiredDate = data.expiredDate.split(".")[0];
+              let expiredDateFormat = expiredDate.split("T")[0]+" "+(expiredDate.split("T")[1]).split(':')[0] +":"+(expiredDate.split("T")[1]).split(':')[1]
               document.querySelector("#passday").value =
-                data.expiredDate.split(".")[0];
+                      expiredDateFormat;
             }
           },
           err: function (data) {
@@ -179,11 +170,11 @@
 
             if (isChecked) {
               res = true;
-              console.log("開");
+
               // 你可以在这里处理开关被选中的逻辑
             } else {
               res = false;
-              console.log("關");
+
               // 你可以在这里处理开关未选中的逻辑
             }
           });
@@ -194,20 +185,16 @@
             e.preventDefault(); //阻止預設行為
 
             rate = document.querySelector("#rate").value;
-            console.log("提交比例");
-            console.log(rate);
+
             cardname = document.querySelector("#cardname").value;
-            console.log("提交卡片");
-            console.log(cardname);
-            console.log(id);
-            console.log(res);
+
             let model = {
               storeId: id,
               exchangeRate: rate,
               loyaltyCardName: cardname,
               validStatus: res,
             };
-            console.log(model);
+
             $.ajax({
               url: "/store/editcard",
               method: "post",
@@ -215,7 +202,7 @@
               contentType: "application/json",
               data: JSON.stringify(model),
               success: function () {
-                //console.log(data);
+
 
                 Swal.fire({
                   icon: "success",
