@@ -537,20 +537,18 @@
                     chatSessionId: message.chatId,
                     content: message.content,
                     senderId : message.senderId,
-                    timestamp : message.timestamp,
+                    timestamp : message.timestamp
                 })
             )
         }
     }
 
     actionHandlers.updateFile = async (selectedFile) =>{
-        console.log(selectedFile)
         let reader = new FileReader(); // 用來讀取檔案的物件
         reader.readAsDataURL(selectedFile); // 讀取檔案
         let imgMessage;
         reader.addEventListener("load", function () {
-            console.log(reader.result)
-            //要傳送的資料
+            // 1. 圖片訊息加入user聊天室
             let timestamp = new Date();
             imgMessage = {
                 chatId: chat.getActiveChatId(),
@@ -563,26 +561,43 @@
             }
             chat.updateChatListInfo(imgMessage.chatId,imgMessage);
             chat.appendMessage(imgMessage);
-            console.log("reader.result.length:", imgMessage.img.src);
 
-            // 檢查 WebSocket 連接
-            if (webSocket && webSocket.readyState === WebSocket.OPEN) {
-                webSocket.send(
-                    JSON.stringify({
-                        chatSessionId: imgMessage.chatId,
-                        content: imgMessage.content,
-                        senderId: imgMessage.senderId,
-                        timestamp: timestamp,
-                        img:{
-                            src:imgMessage.img.src
-                        }
-                    })
-                );
-            }
+            // 2. 將圖片訊息存入 DB
+            fetch("/chatmessagesdata/imgmessage",{
+                method:"POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    chatSessionId: imgMessage.chatId,
+                    content: imgMessage.content,
+                    senderId : imgMessage.senderId,
+                    timestamp : imgMessage.timestamp,
+                    img: {
+                        src:imgMessage.img.src
+                    }
+                })
+            }).then(res => res.json())
+                // 3. 存入後，再利用 Websocket 讓對方去資料庫取資料
+                .then(messageDto => {
+                    if(webSocket){
+                        webSocket.send(
+                            JSON.stringify({
+                                messageId:messageDto.messageId,
+                                chatSessionId: messageDto.chatSessionId,
+                                content: messageDto.content,
+                                senderId : messageDto.senderId,
+                                timestamp : messageDto.timestamp,
+                            })
+                        );
+                    }
+                }).catch(error => {
+                console.error("Error sending message:", error);
+            })
         });
     }
 
-    const handleSendMessage = e => {
+    const handleSendMessage = async  e =>  {
         let payload = JSON.parse(e.data);
         let message = {
             chatId : payload.chatSessionId,
@@ -591,12 +606,20 @@
             timestamp : payload.timestamp,
             img:payload.img
         }
+        if (payload.messageId != null) {
+            const messageDTO = await fetch(`/chatmessagesdata/message/${payload.messageId}`)
+                .then(res => res.json());
+            message.img = messageDTO.img;
+        }
+
         let activeChatId = chat.getActiveChatId();      //獲取這個聊天室的id
         chat.updateChatListInfo(message.chatId,message);  //更新聊天室側邊欄聊天室列表
         if(activeChatId === message.chatId){
-            chat.appendMessage(message) ;
+            chat.appendMessage(message);
         }
+
     }
+
 
     const chat = new WeienChat();
 

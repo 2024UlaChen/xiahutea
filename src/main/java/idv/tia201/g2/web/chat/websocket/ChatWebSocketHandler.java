@@ -60,30 +60,37 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 //        ObjectMapper objectMapper = new ObjectMapper();
         //將 JSON 字串 json 轉換為 TotalUsers 類型的 Java 對象。
         MessageDto messageDto = objectMapper.readValue(json, MessageDto.class);
+        System.out.println("ChatWebSocketHandler" + messageDto);
 
-        // 2. 從 messages 獲取 接收方的訊息
+        // 2. 從 messageDto 獲取 接收方的訊息
         HttpSession httpSession = (HttpSession) session.getAttributes().get("HTTP_SESSION");
         TotalUserDTO user = (TotalUserDTO) httpSession.getAttribute("totalUserDTO");
         Long recipientsId;
+        System.out.println("ChatWebSocketHandler 的 chatSessionId:" + messageDto.getChatSessionId());
         //管理員視角
         if (user.getUserTypeId() == 3) {
             recipientsId = chatSessionRepository.findAttenderIdByChatSessionId(messageDto.getChatSessionId());
+            System.out.println("管理員發送");
         //其他視角
         } else {
             recipientsId = chatSessionRepository.findAdministratorIdByChatSessionId(messageDto.getChatSessionId());
+            System.out.println("用戶發送");
+        }
+        System.out.println("ChatWebSocketHandler 中 recipientsId :  " + recipientsId);
+
+        // 3. 如果是文字訊息，就存入資料庫
+        if (messageDto.getMessageId() == null) {      //傳送的是文字
+            //存訊息
+            Messages message = messageService.saveMessage(messageDto);
+            //更新聊天室時間
+            chatRoomService.updateLastActivity(message);
         }
 
-        // 3. 接收方有連線，就傳遞訊息，否則移除 Map
-        WebSocketSession recipientSession = SESSIONS_MAP.get(recipientsId);
+        // 4. 接收方有連線，就傳遞訊息
+        WebSocketSession recipientSession = SESSIONS_MAP.get(recipientsId);     //接收方的websocketSesseion
         if (recipientSession != null && recipientSession.isOpen()) {
             SESSIONS_MAP.get(recipientsId).sendMessage(text);
         }
-
-        // 4. 將 messages 存到資料庫
-            //存訊息
-        Messages message = messageService.saveMessage(messageDto);
-            //更新聊天室時間
-        chatRoomService.updateLastActivity(message);
     }
 
     @Override
