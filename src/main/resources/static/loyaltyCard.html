@@ -296,6 +296,8 @@
                           let passday = row.store.expiredDate;
                           if(row.store.validStatus){
                               passday = '使用中';
+                          }else{
+                              passday = passday.split('T')[0];
                           }
                           let str =`
             <div class="border border-3  card mb-3 mx-2 shadow rounded-3" style=" max-width: 18rem;">

@@ -36,9 +36,9 @@ public class NotificationService {
         message.setId(disputeId);
         message.setCreateDatetime(creatDate);
 
-        System.out.println("----------------發送爭議通知--商店ID: " + storeId + "，---通知內容: " + message);
+        System.out.println("----------------發送爭議通知:管理員 " + "，---通知內容: " + message);
 
         // 發送訊息
-        messagingTemplate.convertAndSend("/store/notifications/" + storeId, message);
+        messagingTemplate.convertAndSend("/store/notifications" , message);
     }
 }
