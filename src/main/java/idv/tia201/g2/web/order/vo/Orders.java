@@ -59,7 +59,7 @@ public class Orders extends Core {
     private Integer productAmount; // 商品總金額
 
     @Column(name = "processing_fees", updatable = false)
-    private Integer processingFees = 10; // 訂單處理費
+    private Integer processingFees = 30; // 訂單處理費
 
     @Column(name = "payment_method", updatable = false)
     private Integer paymentMethod; // 付款方式
