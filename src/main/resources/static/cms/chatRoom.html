@@ -188,6 +188,9 @@
             timestamp : payload.timestamp,
             img:payload.img
         }
+
+        chat.updateChatListInfo(message.chatId,message);  //更新聊天室側邊欄聊天室列表
+
         if (payload.messageId != null) {
             const messageDTO = await fetch(`/chatmessagesdata/message/${payload.messageId}`)
                 .then(res => res.json());
@@ -195,7 +198,6 @@
         }
 
         let activeChatId = chat.getActiveChatId();      //獲取這個聊天室的id
-        chat.updateChatListInfo(message.chatId,message);  //更新聊天室側邊欄聊天室列表
         if(activeChatId === message.chatId){
             chat.appendMessage(message);
         }
