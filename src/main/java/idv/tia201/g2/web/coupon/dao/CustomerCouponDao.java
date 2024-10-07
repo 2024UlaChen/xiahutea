@@ -13,4 +13,5 @@ public interface CustomerCouponDao extends JpaRepository<CustomerCoupons,Integer
 
     List<CustomerCoupons> findByCustomerIdAndCouponQuantityGreaterThan(Integer customerId, Integer couponQuantity);
     List<CustomerCoupons> findByCustomerIdAndCouponQuantityGreaterThanAndCoupon_ExpiredDateGreaterThan(Integer customerId, Integer couponQuantity, Timestamp expiredDate);
+    List<CustomerCoupons> findByCustomerIdAndCouponQuantityGreaterThanAndCoupon_ExpiredDateGreaterThanAndCoupon_CouponStatus(Integer customerId, Integer couponQuantity, Timestamp expiredDate,boolean status);
 }
