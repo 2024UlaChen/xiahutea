@@ -3,6 +3,7 @@ package idv.tia201.g2.web.coupon.service.impl;
 import idv.tia201.g2.core.pojo.Core;
 import idv.tia201.g2.web.coupon.dao.CouponDao;
 import idv.tia201.g2.web.coupon.service.CouponService;
+import idv.tia201.g2.web.coupon.service.CustomerCouponService;
 import idv.tia201.g2.web.coupon.vo.Coupon;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,8 @@ import java.util.List;
 public class CouponServiceImpl implements CouponService {
     @Autowired
     private CouponDao couponDao;
+    @Autowired
+    private CustomerCouponService customerCouponService;
 
     @Override
     public Coupon saveCoupon(Coupon coupon) {
@@ -64,6 +67,8 @@ public class CouponServiceImpl implements CouponService {
         }
         coupon = couponDao.save(coupon);
         coupon.setSuccessful(true);
+//        System.out.println("couponID:"+coupon.getCouponId());
+        customerCouponService.SendCouponsToMembers(coupon.getCouponId());
         return coupon;
     }
 
