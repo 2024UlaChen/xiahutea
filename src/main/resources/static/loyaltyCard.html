@@ -296,6 +296,8 @@
                           let passday = row.store.expiredDate;
                           if(row.store.validStatus){
                               passday = '使用中';
+                          }else{
+                              passday = passday.split('T')[0];
                           }
                           let str =`
             <div class="border border-3  card mb-3 mx-2 shadow rounded-3" style=" max-width: 18rem;">
@@ -309,9 +311,9 @@
     <span>點數:${row.points}&nbsp;</span>
     <span>效期:${passday}</span>
 </div>
-<div>&nbsp;</div>
+
 <div>
-規則:點數十點折抵五十元
+規則:點數十點折抵五十元，該店消費滿${row.store.exchangeRate}元累積一點。
 </div>
   </div>
 
