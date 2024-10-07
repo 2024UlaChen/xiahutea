@@ -48,8 +48,8 @@ public class DisputeServiceImpl implements DisputeService {
     private MemberService memberService;
     @Autowired
     private NotificationService notificationService;
-    @Autowired
-    private OrderService orderService;
+//    @Autowired
+//    private OrderService orderService;
 
     // -------- FINISH ---------------------------------
     // 前台 爭議表格 顯示
@@ -96,8 +96,7 @@ public class DisputeServiceImpl implements DisputeService {
 
         // 發送爭議通知
         Orders order = orderDao.selectByOrderId(disputeOrder.getOrderId());
-        Integer storeId = order.getStoreId();
-        notificationService.addDisputeNotify(disputeOrder.getDisputeOrderId(), disputeOrder.getApplyDatetime(), storeId);
+        notificationService.addDisputeNotify(disputeOrder.getDisputeOrderId(), disputeOrder.getApplyDatetime());
         return disputeOrder;
     }
 
