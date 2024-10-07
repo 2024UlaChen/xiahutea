@@ -42,9 +42,6 @@
         }
 
 
-
-
-
     </style>
 
 
@@ -285,6 +282,36 @@
 
   <script>
         <!--顯示商品圖-->
+
+
+        // 使用 fetch 從後端獲取 TotalUserDTO
+        fetch('/totalusers', {
+            method: 'GET', // 請求方法是 GET
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json(); // 將返回的結果解析為 JSON 格式
+            })
+            .then(data => {
+                console.log('TotalUserDTO:', data); // 在控制台中顯示 TotalUserDTO
+
+                // 提取 userTypeId
+                var userTypeId = data.userTypeId;
+
+                // 根據獲取到的 TotalUserDTO 處理邏輯
+                if (userTypeId === 3) {
+
+                    document.getElementById("productPic").disabled = true;
+
+                }
+
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+            });
+
         var the_file = document.getElementById("productPic");
         the_file.addEventListener("change", function () {
             let ul_el = document.getElementsByClassName("picture_list")[0];
@@ -404,6 +431,7 @@
             // =========驗證===============
             document.getElementById('productForm').addEventListener('submit', function(event) {
                 event.preventDefault(); // 防止頁面刷新
+             
 
                 if (typeId !== 'E'){
                     const fileInput = document.getElementById('productPic');
@@ -420,8 +448,6 @@
                             // 圖片上傳成功後，調用提交產品數據的函數
                             submitProductData(base64String);  // 成功後的回應訊息
                         }
-                    } else {
-                        alert("請選擇圖片檔");
                     }
                 } else {
                     const fileInput = document.getElementById('productPic');
@@ -436,6 +462,8 @@
                         let base64String = '';
                         reader.onload = function () {
                             base64String = reader.result.split(',')[1];// 去掉前缀 "data:image/png;base64,"
+
+
                             const productData = {
                                 productId: Number(document.getElementById('productId').value),
                                 productName: document.getElementById('productName').value,
@@ -479,27 +507,25 @@
                                 })
                                 .then(data => {
                                     console.log('商品更新成功:', data);
-                                    alert('商品更新成功!');
+                                    Swal.fire({
+                                        text: "商品新增成功!",
+                                        icon: "success"
+                                    });
                                     // 可以在这里进行页面跳转或其他操作
                                 })
                                 .catch(error => {
                                     console.error('更新商品失败:', error);
-                                    alert('更新商品失败!');
+                                    Swal.fire({
+                                        icon: "error",
+                                        text: "分類新增錯誤",
+                                    });
                                 });
                         }
                     }
 
 
                 }
-
-
-
-
-
-
-              })
-
-
+            })
         /**
          *
          * @param base64String 圖片轉Base64的string型態
@@ -598,12 +624,19 @@
                     document.getElementById("productForm").reset();
                     const pictureList = document.querySelector(".picture_list");
                     pictureList.innerHTML = ""; // 清空內容
-                    alert('新增表單成功!!!');
+                    Swal.fire({
+                        text: "商品分類新增成功!",
+                        icon: "success"
+                    });
                 })
                 .then(data => {
                     console.log('產品提交成功:', data);
                 })
                 .catch(error => {
+                    Swal.fire({
+                        icon: "error",
+                        text: "分類新增錯誤",
+                    });
                     console.error('產品提交錯誤:', error);
                 });
         }
@@ -659,7 +692,7 @@
                             console.error('Error loading categories:', error);
                             categoryMessage.textContent = '加載失敗';
                         });
-                    fetchProductImage(productId);
+
                     // 冰塊
                     document.querySelector('input[name="normalIce"]').checked = product.normalIce;
                     document.querySelector('input[name="lessIce"]').checked = product.lessIce;
@@ -686,53 +719,53 @@
                 .catch(error => {
                     console.error('获取产品数据失败:', error);
                 });
-        } else {
-            console.error('未提供 productId 参数');
+        }          else {
+            // console.error('未提供 productId 参数');
         }
 
-
-        function fetchProductImage(productId) {
-            // Construct the URL for the image based on the product ID
-            const imgPreview = document.querySelector("img.preview");
-
-            const url = `/products/${productId}/image`; // Adjust the URL according to your API endpoint
-
-            // Use fetch to get the image
-            fetch(url)
-                .then(response => {
-                    if (response.ok) {
-                        return response.text(); // 將回應解析為文本，也就是Base64字符串
-                    } else {
-                        throw new Error('Image not found');
-                    }
-                })
-                .then(base64Image => {
-                    // 將Base64圖片插入到img標籤中
-                    var the_file = document.getElementById("productPic");
-                    the_file.addEventListener("change", function () {
-                        let ul_el = document.getElementsByClassName("picture_list")[0];
-                        ul_el.innerHTML = ""; // 清空現有的圖片列表
-
-                        let files = this.files;
-                        for (let i = 0; i < files.length; i++) {
-                            let reader = new FileReader();
-                            reader.readAsDataURL(files[i]);
-
-                            reader.addEventListener("load", function () {
-                                let li_str = '';
-                                li_str += '<li>';
-                                li_str += '<img src="' + base64Image + '" class="preview" style="max-width: 350px; max-height: 350px; margin: 5px;">';
-                                li_str += '</li>';
-                                ul_el.insertAdjacentHTML("beforeend", li_str);
-                            });
-                        }
-                    })
-                })
-                .catch(error => {
-                    console.error('Error fetching the image:', error);
-                });
-
-        }
+        //
+        // function fetchProductImage(productId) {
+        //     // Construct the URL for the image based on the product ID
+        //     const imgPreview = document.querySelector("img.preview");
+        //
+        //     const url = `/products/${productId}/image`; // Adjust the URL according to your API endpoint
+        //
+        //     // Use fetch to get the image
+        //     fetch(url)
+        //         .then(response => {
+        //             if (response.ok) {
+        //                 return response.text(); // 將回應解析為文本，也就是Base64字符串
+        //             } else {
+        //                 throw new Error('Image not found');
+        //             }
+        //         })
+        //         .then(base64Image => {
+        //             // 將Base64圖片插入到img標籤中
+        //             var the_file = document.getElementById("productPic");
+        //             the_file.addEventListener("change", function () {
+        //                 let ul_el = document.getElementsByClassName("picture_list")[0];
+        //                 ul_el.innerHTML = ""; // 清空現有的圖片列表
+        //
+        //                 let files = this.files;
+        //                 for (let i = 0; i < files.length; i++) {
+        //                     let reader = new FileReader();
+        //                     reader.readAsDataURL(files[i]);
+        //
+        //                     reader.addEventListener("load", function () {
+        //                         let li_str = '';
+        //                         li_str += '<li>';
+        //                         li_str += '<img src="' + base64Image + '" class="preview" style="max-width: 350px; max-height: 350px; margin: 5px;">';
+        //                         li_str += '</li>';
+        //                         ul_el.insertAdjacentHTML("beforeend", li_str);
+        //                     });
+        //                 }
+        //             })
+        //         })
+        //         .catch(error => {
+        //             console.error('Error fetching the image:', error);
+        //         });
+        //
+        // }
 
 
 

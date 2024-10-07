@@ -97,8 +97,11 @@ public class ProductServiceImpl implements ProductService {
      */
     public boolean addProduct(ProductDTO productDTO, Integer userTypeId, Integer userId, byte[] blobImg) throws IOException {
         try {
-            // 查找现有产品
 
+
+            if (productDTO.getProductName() == null || productDTO.getProductName().trim().isEmpty()) {
+                return false;
+            }
 
             // 创建 Product 实体对象
             Product product = new Product();
