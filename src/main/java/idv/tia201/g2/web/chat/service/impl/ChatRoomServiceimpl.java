@@ -31,11 +31,12 @@ public class ChatRoomServiceimpl implements ChatRoomService {
         Integer userType = user.getUserTypeId();            //會員種類
         Long userTotalUserId = user.getTotalUserId();       //全平台ID
         List<ChatRoom> chatRoomData = chatSessionDao.findChatRoomData(userType, userTotalUserId);
+
         if(chatRoomData.isEmpty()){
             addChatRoom(user);
-            getChatRoom(user);
+            chatRoomData = chatSessionDao.findChatRoomData(userType, userTotalUserId);
         }
-        if(user.getUserTypeId() != 3){
+        if(chatRoomData.size() > 0 && user.getUserTypeId() != 3){
             List<Participant> participants = chatRoomData.get(0).getParticipants();
             for (Participant p :participants){
                 if(p.getUserId() != user.getTotalUserId()){
