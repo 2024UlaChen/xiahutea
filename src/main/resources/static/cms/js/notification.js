@@ -15,7 +15,9 @@ document.addEventListener("DOMContentLoaded", function() {
             if(totalUserDTO.userTypeId === 1){
                 const storeId = totalUserDTO.userId;
                 // 店家權限檢視
-                initWebSocket(storeId);
+                initWebSocketStore(storeId);
+            }else if(totalUserDTO.userTypeId === 3){
+                initWebSocketAdmin();
             }
         })
         .catch((error) => {
@@ -23,17 +25,29 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     //----------------------------------------------------------
     // 連線WebSocket
-    function initWebSocket(storeId) {
+    function initWebSocketStore(storeId) {
         let socket = new SockJS(`/websocket-endpoint`);  // ←端⼝
         stompClient = Stomp.over(socket);
         stompClient.connect({}, () => {
-            // console.log("WebSocket 連接成功")
+            console.log("WebSocket 連接成功")
             stompClient.subscribe(`/store/notifications/${storeId}`, function (resp) {  // ←訊息交換器
                 const message = JSON.parse(resp.body);
                 // console.log("收到訂單通知:", message);  // 檢查收到的內容
                 if (message.type === 1) {
                     sendOrderNotification(message);
-                } else if (message.type === 2) {
+                }
+            });
+        });
+    }
+    function initWebSocketAdmin() {
+        let socket = new SockJS(`/websocket-endpoint`);  // ←端⼝
+        stompClient = Stomp.over(socket);
+        stompClient.connect({}, () => {
+            console.log("WebSocket 連接成功")
+            stompClient.subscribe(`/store/notifications`, function (resp) {  // ←訊息交換器
+                const message = JSON.parse(resp.body);
+                // console.log("收到訂單通知:", message);  // 檢查收到的內容
+                if (message.type === 2) {
                     sendDisputeNotification(message);
                 }
             });
@@ -114,7 +128,7 @@ function showOrder(data) {
     let notificationHtml = `
         <div class="dropdown-divider"></div>
         <a href="./storeOrderDetail.html?orderId=${data.id}" class="dropdown-item">
-            <i class="fas fa-envelope mr-2"></i> 新訂單 ${data.id}，請安排出單 
+            <i class="fas fa-envelope mr-2"></i> 新訂單 ${data.id}，請安排出貨 
             <span class="float-right text-muted text-sm">${new Date(data.createDatetime).toLocaleString()}</span>
         </a>
     `;
@@ -161,7 +175,7 @@ function showDispute(data) {
     // 訂單通知內容
     let notificationHtml = `
         <div class="dropdown-divider"></div>
-        <a href="./storeDisputeList.html" class="dropdown-item">
+        <a href="./storeDisputeDetial.html?disputeId=${data.id}" class="dropdown-item">
             <i class="fas fa-envelope mr-2"></i> 新爭議 ${data.id}，請進行確認 
             <span class="float-right text-muted text-sm">${new Date(data.createDatetime).toLocaleString()}</span>
         </a>

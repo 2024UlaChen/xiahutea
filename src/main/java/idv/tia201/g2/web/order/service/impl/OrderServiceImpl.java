@@ -248,6 +248,8 @@ public class OrderServiceImpl implements OrderService {
         // 存發票
         orderDao.saveInvoiceNo(order.getOrderId(), addInvoiceNo);
 
+        orderDto.setOrders(order);
+        orderDto.setOrderDetails(orderDetails);
         orderDto.setMessage("訂單新增成功");
         orderDto.setSuccessful(true);
         // 訂單新增時 增加集點卡點數

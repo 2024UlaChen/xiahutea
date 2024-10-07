@@ -45,8 +45,8 @@ document.addEventListener("DOMContentLoaded", function () {
             userid = totaluser.userId;
             roletypeid = totaluser.userTypeId;
 
-            // 檢查為管理員
-            if (totaluser.userTypeId !== 3) {
+            // 檢查為管理員或店家
+            if (totaluser.userTypeId === 0) {
                 Swal.fire({
                     title: '請登入管理員帳號',
                     text: '請登入商家或管理員',
@@ -130,21 +130,17 @@ document.addEventListener("DOMContentLoaded", function () {
     });
     //***********************************placeholder處理******************************
     title_el.addEventListener("focus", function () {
-        // 清空 placeholder
         title_el.placeholder = "";
     });
     title_el.addEventListener("blur", function () {
-        // 如果輸入框為空，恢復 placeholder
         if (title_el.value === "") {
             title_el.placeholder = "可輸入60字元單位";
         }
     });
     description_el.addEventListener("focus", function () {
-        // 清空 placeholder
         description_el.placeholder = "";
     });
     description_el.addEventListener("blur", function () {
-        // 如果輸入框為空，恢復 placeholder
         if (description_el.value === "") {
             description_el.placeholder = "可輸入255字元單位";
         }
@@ -169,6 +165,7 @@ document.addEventListener("DOMContentLoaded", function () {
     btn_remove_el.addEventListener("click",function (){
         preview_container_el.innerHTML="";
         file_input_el.value="";
+        base64img_el.value="";
     })
 
     //***********************************上傳表單******************************
