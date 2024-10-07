@@ -35,9 +35,11 @@ document.addEventListener("click", function (e) {
     if (e.target.classList.contains("logOut")) {
         Swal.fire({
             title: "確認登出?",
-            showDenyButton: true,
-            confirmButtonText: "登出",
-            DenyButtonText: "否"
+            showCancelButton: true,
+            confirmButtonColor: "#73B4BA",
+            cancelButtonColor: "#6c757d",
+            confirmButtonText: `<span class="sweetAlertFont">登出</span>`,
+            cancelButtonText: `<span class="sweetAlertFont">取消</span>`,
         }).then((result) => {
             if (result.isConfirmed) {
                 fetch("member/logout")

@@ -209,8 +209,6 @@ saveAddrBtn.addEventListener("click", function (e) {
     let finalAddr = saveCity + "-" + saveDistrict + "-" + saveDetailAddr;
     if (saveDetailAddr === "") {
         Swal.fire("詳細地址不可為空", "", "error");
-    } else if (!saveDetailAddr.includes("路")) {
-        Swal.fire("詳細地址必須包含路名", "", "error");
     } else {
         let sendDataAddressId = modalBody.getAttribute("data-addressId");
         let postData = {
@@ -228,7 +226,8 @@ saveAddrBtn.addEventListener("click", function (e) {
                 Swal.fire({
                     icon: "success",
                     title: data.message,
-                    timer: 1500
+                    confirmButtonColor: "#73B4BA",
+                    timer: 1500,
                 }).then(() => {
                     closeBtn.click();
                     getAddress(sessionDetail.data.customerId);
