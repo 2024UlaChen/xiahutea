@@ -1301,8 +1301,8 @@ document.addEventListener("DOMContentLoaded",function(){
                         const carryoutdefalut = document.createElement('div');
                         carryoutdefalut.className ='carry-out-default';
                         carryoutdefalut.innerHTML+=`
-                         <input class="carryout-default-input" type="radio" name="delivery">
-                         <label class="carryout-default-label" for="pick-up-label" style="padding-top: 10px">
+                         <input class="carryout-default-input" type="radio" name="delivery" id="carryout-default">
+                         <label class="carryout-default-label" for="carryout-default" style="padding-top: 10px">
                          外送(預設地址)
                          </label>
                     `;

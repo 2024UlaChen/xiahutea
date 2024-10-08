@@ -63,7 +63,7 @@
           <div class="recevier-method">
               <h4>取貨方式</h4>
               <div class="pick-up">
-                  <input class="pick-up-input" type="radio" name="delivery"  >
+                  <input class="pick-up-input" type="radio" name="delivery" id="pick-up-label" >
                   <label class="pick-up-label" for="pick-up-label" style="padding-top: 10px">
                       自取
                   </label>
@@ -78,7 +78,7 @@
           <div class="coupon-use">
               <h4>優惠使用</h4>
               <div class="select-coupon">
-                  <input class="select-coupon-input" type="radio" name="discount" >
+                  <input class="select-coupon-input" type="radio" name="discount" id="select-coupon-label">
                   <label class="select-coupon-label" for="select-coupon-label" style="padding-top: 10px">
                       優惠券
                   </label>
@@ -92,7 +92,7 @@
 <!--                  <input type="text" class="coupon-number" placeholder="請輸入優惠券序號" maxlength="50" disabled>-->
 <!--              </div>-->
               <div class="select-membercard">
-                  <input class="select-membercard-input" type="radio" name="discount">
+                  <input class="select-membercard-input" type="radio" name="discount" id="select-membercard-label">
                   <label class="select-membercard-label" for="select-membercard-label" style="padding-top: 10px">
                       會員卡
                   </label>
@@ -100,7 +100,7 @@
               </div>
               <div class="select-moneybag">
                   <div class="select-moneybag-detail">
-                  <input class="select-moneybag-input" type="radio" name="discount">
+                  <input class="select-moneybag-input" type="radio" name="discount" id="select-moneybag-label">
                   <label class="select-moneybag-label" for="select-moneybag-label" style="padding-top: 10px">
                       會員錢包
                   </label>
@@ -194,14 +194,14 @@
               <h3>聯絡電話</h3>
               <ul class="contact-selection">
                   <li>
-                      <input type="radio" class="select-cellphone" name="select-contact">
-                      <label for="option1" class="label-cellphone">手機</label>
+                      <input type="radio" class="select-cellphone" name="select-contact" id="label-cellphone-for">
+                      <label for="label-cellphone-for" class="label-cellphone">手機</label>
                       <span id="cellphone-error" style="color: red; display: none;">格式錯誤，請輸入正確台灣手機號碼</span>
                       <input type="text" class="input-cellphone" placeholder="EX:0912345678" maxlength="10" disabled>
                   </li>
                   <li>
-                      <input type="radio" class="select-phone" name="select-contact">
-                      <label for="option2" class="label-phone">市話</label>
+                      <input type="radio" class="select-phone" name="select-contact" id="label-phone-for">
+                      <label for="label-phone-for" class="label-phone">市話</label>
                       <span id="phone-zone-error" style="color: red; display: none;">請輸入有效的市話號碼</span>
                       <div class="input-phone">
                           <input type="text" class="input-phone-zone" placeholder="區碼" maxlength="2" disabled>
@@ -231,19 +231,19 @@
               <h3>開立發票</h3>
               <ul class="invoice-type-selection">
                   <li>
-                      <input type="radio" class="select-paper" name="select-invoice">
-                      <label for="option1" class="label-creditcard">電子發票</label>
+                      <input type="radio" class="select-paper" name="select-invoice" id="label-creditcard-for">
+                      <label for="label-creditcard-for" class="label-creditcard">電子發票</label>
                   </li>
                   <li>
-                      <input type="radio" class="select-paper-uniform" name="select-invoice">
-                      <label for="option2" class="label-uniform">電子發票(含統一編號)</label>
+                      <input type="radio" class="select-paper-uniform" name="select-invoice" id="label-uniform-for">
+                      <label for="label-uniform-for" class="label-uniform">電子發票(含統一編號)</label>
                       <span id="uniform-numbers-error" style="color: red; display: none;">請輸入有效的統編號碼</span>
                       <input type="text" class="uniform-numbers" placeholder="請輸入統編" maxlength="8" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 8)" disabled>
                   </li>
 
                   <li class="vehicle-detail">
-                      <input type="radio" class="select-vehicle" name="select-invoice">
-                      <label for="option3" class="label-vehicle">手機載具</label>
+                      <input type="radio" class="select-vehicle" name="select-invoice" id="label-vehicle-for">
+                      <label for="label-vehicle-for" class="label-vehicle">手機載具</label>
                       <span id="vehicle-number-error" style="color: red; display: none;">請輸入有效的載具號碼</span>
 <!--                      <input type="checkbox" class="checksava-vehicle" disabled>-->
 <!--                      <label for="save-default">儲存為預設</label>-->
