@@ -250,13 +250,7 @@ document.addEventListener("DOMContentLoaded",function(){
         document.body.style.overflow = 'auto';
         document.body.style.paddingRight = '0px';
     });
-    //時間選擇
-    // picker_el.addEventListener("focus", function () {
-    //   picker_el.classList.add("focus-border");
-    // })
-    // picker_el.addEventListener("blur", function () {
-    //   picker_el.classList.remove("focus-border");
-    // });
+
     //自取選項
     pick_up_input_el.addEventListener('click',function (){
         receiverMethod = 1;
@@ -378,25 +372,6 @@ document.addEventListener("DOMContentLoaded",function(){
             membercard_minus_number_el.textContent = '$0';
             moneyBagSelected = true;
         }
-        // moneybag_count_el.style.display = "flex";
-        // if(loginMember.customerMoney!=null){
-        //     if(loginMember.customerMoney === 0){
-        //         moneybag_count_el.textContent = `會員錢包餘額為 ${loginMember.customerMoney}元，無法扣除`
-        //     }else{
-        //         moneybag_count_el.textContent = `會員錢包餘額為 ${loginMember.customerMoney}元`
-        //         moneybag_discount_number_el.disabled =false;
-        //         moneybag_discount_number_el.focus();
-        //         moneybag_discount_number_el.max=loginMember.customerMoney;
-        //     }
-        // }else{
-        //     moneybag_count_el.textContent = '無資料....'
-        // }
-        // membercard_count_el.style.display = "none";
-        // //清除優惠券及會員卡優惠
-        // couponSelect_el.innerHTML = '<option disabled selected >請選擇優惠券</option>';
-        // couponSelect_el.disabled=true;
-        // coupon_minus_number_el.textContent = '$0';
-        // membercard_minus_number_el.textContent = '$0';
     })
     //會員錢包輸入框事件
     moneybag_discount_number_el.addEventListener("focus", function () {
@@ -1055,10 +1030,8 @@ document.addEventListener("DOMContentLoaded",function(){
                         // 創建一個空的 div 並將 HTML 表單插入
                         const formContainer = document.createElement('div');
                         formContainer.innerHTML = htmlForm;
-
                         // 將表單插入到當前頁面中
                         document.body.appendChild(formContainer);
-
                         // 自動提交表單
                         const form = formContainer.querySelector('form');
                         form.submit(); // 自動提交支付表單，跳轉到綠界
@@ -1135,7 +1108,7 @@ document.addEventListener("DOMContentLoaded",function(){
             .then(products => {
                 // 检查是否有返回商品
                 if (!products || products.length === 0) {
-                    throw new Error('無商品或對應的商品');
+                    throw new Error('購物車內無商品或可對應的商品');
                 }
                 console.log('Products:', products);
                 // 检查商品資料中是否包含商店ID
@@ -1184,7 +1157,7 @@ document.addEventListener("DOMContentLoaded",function(){
                 }
                 console.log('Store Details:', store);
                 nowstore = store;
-                //判斷現在是不是營業時間及是否接單(測試時可先註解)
+                //TODO 判斷現在是不是營業時間及是否接單(測試時可先註解)
                 //   if (!isinOpeningHours(store.openingHours, store.closingHours)
                 //       || !store.isTakeOrders) {
                 //       Swal.fire({
@@ -1434,8 +1407,6 @@ document.addEventListener("DOMContentLoaded",function(){
                     lightboxTitle.textContent = productName;
                     // 保存當前的 cartItem 到全局變數
                     currentCartItem = cartItem;
-                    //獲得商品選項(冰塊甜度加料選項 目前先用固定)
-
                     //處理燈箱編輯事件
                     btn_modal_close_el.removeEventListener('click',handlelightbox);
                     btn_modal_close_el.addEventListener('click',handlelightbox);
@@ -1795,7 +1766,6 @@ document.addEventListener("DOMContentLoaded",function(){
         CouponAmount = parseFloat(CouponAmountText.replace('$', ''));
         totalAmount -= CouponAmount;
        
-
         // 會員卡折抵
         MemberCardAmountText = membercard_minus_number_el.textContent.trim();
         MemberCardAmount = parseFloat(MemberCardAmountText.replace('$', ''));
