@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function() {
     fetch(`/totalusers`)
         .then(resp => resp.json())
         .then(totalUserDTO => {
-            // console.log(totalUserDTO)
+            console.log(totalUserDTO)
             if(totalUserDTO.userTypeId === 1){
                 const storeId = totalUserDTO.userId;
                 // 店家權限檢視
@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function() {
             console.log("WebSocket 連接成功")
             stompClient.subscribe(`/store/notifications/${storeId}`, function (resp) {  // ←訊息交換器
                 const message = JSON.parse(resp.body);
-                // console.log("收到訂單通知:", message);  // 檢查收到的內容
+                console.log("收到訂單通知:", message);  // 檢查收到的內容
                 if (message.type === 1) {
                     sendOrderNotification(message);
                 }
@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function() {
             console.log("WebSocket 連接成功")
             stompClient.subscribe(`/store/notifications`, function (resp) {  // ←訊息交換器
                 const message = JSON.parse(resp.body);
-                // console.log("收到訂單通知:", message);  // 檢查收到的內容
+                console.log("收到訂單通知:", message);  // 檢查收到的內容
                 if (message.type === 2) {
                     sendDisputeNotification(message);
                 }
