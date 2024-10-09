@@ -230,7 +230,10 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         // formData.append('imageUpload', adfile);  // 文件
-        formData.append('adsId', ads_ids_el.value);  // 其他表單字段
+        // 其他表單字段
+        if (ads_ids_el.value !== '') {
+            formData.append('adsId', ads_ids_el.value);
+        }
         formData.append('title', title_el.value);
         formData.append('description', description_el.value);
         formData.append('homeDisplay', ishomedisplay);
