@@ -25,9 +25,7 @@ function getUser(){
                 document.querySelector('#userLogo').src =`data:image/png;base64,${data.customerImg}`;
 
             }
-            document.querySelector('#searchBarLoyalty').remove();
-            document.querySelector('#searchBarOrder').remove();
-            document.querySelector('#searchBarCoupon').remove();
+
 
 
         }

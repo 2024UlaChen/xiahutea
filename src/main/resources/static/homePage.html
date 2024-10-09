@@ -164,6 +164,7 @@
     <div class="Container m-5" style="text-align: center"></div>
     <div class="Container m-5">
       <div class="row KunSpeedSearch">
+          <div class="col-5"></div>
 
         <div class="col text-center" id="localLog-Modal" data-bs-toggle="modal" data-bs-target="#localModal">
           <i class="fa-solid fa-map-location"><a href="#">找附近</a></i>
@@ -194,94 +195,9 @@
         </div>
 
         <!-- Modal -->
-        <div
-          class="modal fade"
-          id="exampleModal"
-          tabindex="-1"
-          aria-labelledby="exampleModalLabel"
-          aria-hidden="true"
-        >
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">找區域</h5>
-                <button
-                  type="button"
-                  class="btn-close"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                ></button>
-              </div>
-              <div class="modal-body">
-                <select
-                  class="form-select"
-                  id="PlaceSearch"
-                  aria-label="Default select example"
-                >
-                  <option selected>選擇縣市</option>
-                  <option value="新北市">新北市</option>
-                  <option value="台北市">台北市</option>
-                    <option value="基隆市">基隆市</option>
-                    <option value="桃園市">桃園市</option>
-                    <option value="台中市">台中市</option>
-                    <option value="台南市">台南市</option>
-                    <option value="高雄市">高雄市</option>
-                    <option value="新竹市">新竹市</option>
-                    <option value="新竹縣">新竹縣</option>
-                    <option value="苗栗縣">苗栗縣</option>
-                    <option value="彰化縣">彰化縣</option>
-                    <option value="南投縣">南投縣</option>
-                    <option value="雲林縣">雲林縣</option>
-                    <option value="嘉義市">嘉義市</option>
-                    <option value="嘉義縣">嘉義縣</option>
-                    <option value="屏東縣">屏東縣</option>
-                    <option value="台東縣">台東縣</option>
-                    <option value="花蓮縣">花蓮縣</option>
-                    <option value="宜蘭縣">宜蘭縣</option>
-                    <option value="澎湖縣">澎湖縣</option>
-                    <option value="金門縣">金門縣</option>
-                    <option value="連江縣">連江縣</option>
-
-                </select
-                ><br />
-
-                <select
-                  class="form-select"
-                  id="AreaSearch"
-                  aria-label="Default select example"
-                >
-                  <option selected>選擇區域</option>
-                </select>
-              </div>
-              <div class="modal-footer">
-                <button
-                  type="button"
-                  class="btn btn-secondary"
-                  data-bs-dismiss="modal"
-                >
-                  關閉
-                </button>
-                <button type="button" class="btn btn-primary" id="twoPlaceSearch" data-bs-dismiss="modal" >確認</button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col text-center" id="searchBarLoyalty">
-          <i class="fa-solid fa-crown"
-            ><a href="./loyaltyCard.html">會員卡</a></i
-          >
-        </div>
+        <div class="col-5"></div>
 
 
-
-        
-        <div class="col text-center" id="searchBarOrder">
-          <i class="fa-solid fa-rectangle-list"><a href="orderList.html">曾點過</a></i>
-        </div>
-
-        <div class="col text-center" id="searchBarCoupon">
-          <i class="fa-solid fa-tags"><a href="./coupon.html">優惠券</a></i>
-        </div>
 
       </div>
       <!-- 商家卡片呈現 -->
@@ -525,7 +441,7 @@ let allSotre = document.querySelectorAll('.Heart');
               let now = new Date();
               nowH = now.getHours();
               if(openH > nowH){
-                  let icon = '<span style="color:#FAC792;font-weight:bold; ">尚未營業</span>';
+                  let icon = '<span style="color:#FFA600;font-weight:bold; ">尚未營業</span>';
                   let non ='<span> &empty;</span>';
                   let parentTag = row.closest('.storeLinkCard');
                   parentTag.querySelector('a').insertAdjacentHTML('afterbegin',icon);
@@ -806,7 +722,7 @@ let allSotre = document.querySelectorAll('.Heart');
                 }
                 let isdelieve = '';
                 if (row.isDelivery) {
-                    isdelieve = '<i class="fa-2x fa-solid fa-truck"></i>';
+                    isdelieve = '<i class="fa-1.5x fa-solid fa-truck" style="color: #73B4BA"></i>';
                 } else {
                     isdelieve = '';
                 }
