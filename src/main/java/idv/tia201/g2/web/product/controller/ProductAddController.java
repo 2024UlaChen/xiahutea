@@ -53,16 +53,6 @@ public class ProductAddController {
     @Autowired
     private AdsService adsservice;
 
-//    @GetMapping("/{id}/image")
-//    public ResponseEntity<byte[]> getProductImage(@PathVariable Integer productId) {
-//        Product product = productService.getProductById(productId);
-//        if (product != null && product.getProductPicture() != null) {
-//            return ResponseEntity.ok()
-//                    .contentType(MediaType.IMAGE_JPEG) // 根據圖片類型設置
-//                    .body(product.getProductPicture());
-//        }
-//        return ResponseEntity.notFound().build();
-//    }
 
 
     @GetMapping("/products")

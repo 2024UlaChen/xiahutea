@@ -41,11 +41,12 @@ div#faq {
     padding: 20px 10px 0px 10px;
     background-color: white;
     border-radius: 5px;
+    font-weight:bold
 }
 
 #title-list li {
     height: 60px;
-    font-size: 18px;
+    font-size: 20px;
     text-align: left;
     list-style-type: none;
     color: black;
@@ -74,6 +75,7 @@ ul.faq-list > li > a.link_title {
     padding: 15px 0px;
     text-decoration: none;
     font-size: 16px;
+    font-weight:bold
 }
 
 ul.faq-list > li > a.link_title::after {
@@ -98,7 +100,7 @@ ul.faq-list > li > a.link_title button.switch_btn span.-minus {
 }
 
 ul.faq-list > li > div.inner_block {
-    font-size: 18px;
+    font-size: 16px;
     color: #4a4a4a;
     margin-top: 8px;
     padding: 0px 0px 10px 10px;
@@ -128,7 +130,7 @@ div.faq-card {
 }
 
 div.card-title {
-    font-size: 18px;
+    font-size: 20px;
     color: black;
     font-weight: bold;
 }
@@ -195,6 +197,7 @@ div.faq-card:last-child {
     div#title-list {
         border-bottom: 3px solid silver;
         padding: 0;
+
         /*z-index:999;*/
         /*position: relative*/
     }

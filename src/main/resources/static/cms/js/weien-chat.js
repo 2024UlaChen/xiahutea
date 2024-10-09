@@ -251,10 +251,17 @@ const textareaSettings = () => {
                     if (e.target === fileInput) return; //避免click事件遞迴
 
                     fileInput.click();
-                    fileInput.addEventListener('change', event => {
+                    const handleFileChange = (event) => {
                         const selectedFile = event.target.files[0];
                         actionHandlers.updateFile(selectedFile);
-                    })
+
+                        // 移除事件監聽器，避免多次觸發
+                        fileInput.removeEventListener('change', handleFileChange);
+                        fileInput.value = '';
+                    };
+
+                    // 綁定事件監聽器
+                    fileInput.addEventListener('change', handleFileChange);
                 }
             },
         ]
@@ -361,7 +368,7 @@ export const actionHandlers = {
         return [];
     },
     filterQuery: async (query) => {
-        // console.log(query);
+        console.log(query);
         // return [];  // 如果想做輸入篩選回傳陣列
     }
 };
@@ -1015,7 +1022,7 @@ export class WeienChat {
         if (message.value.img) {
             content = `<img src="${message.value.img.src}" alt="${message.value.img.alt}" style="margin-top: 3px"></img>`;
         }
-        content += `<p style="margin-top: 3px">${message.value.content}</p>`;
+        content += `<p style="margin-top: 3px">${message.value.content || ''}</p>`;
         messageCard.innerHTML = `
             <div class="chat-room-avatar">
                 <div class="weien-message-sender-name">${sender.name}</div>
@@ -1420,7 +1427,7 @@ export class WeienChat {
             </div>
             <div class="chat-room-overview">
                 <div class="chat-room-header">
-                    <div style="display: flex; align-items: center;">
+                    <div style="display: flex; align-items: center; flex: 1; max-width: calc(100% - 2.5em);">
                         <div class="chat-room-name"></div>
                         <div class="chat-room-participants"></div>
                     </div>
@@ -1461,7 +1468,7 @@ export class WeienChat {
                 } else if (len > 2) {
                     text = '會話群組';
                 } else if (len === 2) {
-                    text = chatingWith.name;
+                    text = this._getChatingWith(chat).name;
                 } else {
                     text = 'ERROR - 這個聊天室只有一個參與者';
                 }

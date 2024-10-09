@@ -11,4 +11,7 @@ import java.util.List;
 public interface MessageChatSessionRepository extends JpaRepository<Messages, Integer> {
     @Query(value = "from Messages m where m.chatSessionId = :chatSessionId ORDER BY m.sentAt DESC")
     List<Messages> findByChatSessionId(Integer chatSessionId);
+
+    @Query(value = "from Messages m where m.messageId = :messageId")
+    Messages findByMessageId(Long messageId);
 }

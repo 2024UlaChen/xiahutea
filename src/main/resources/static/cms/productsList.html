@@ -326,11 +326,37 @@
                 // 如果角色是 store，隱藏搜尋框
                 document.getElementById('searchInput2').style.display = 'none';
                 document.getElementById('label-searchInput2').style.display = 'none';
+                var tableHeaderRow = document.querySelector("#myTable thead tr");
+
+                // Create a new <th> element
+                var newTh = document.createElement("th");
+                newTh.style.width = "10%"; // Set width
+                newTh.textContent = "店家名稱"; // Set the text for the new column
+
+                // Get the current "商品編號" <th> element
+                var productNumberTh = tableHeaderRow.querySelector("th:nth-child(1)"); // Select the first <th>
+
+                // Insert the new <th> before "商品編號"
+                tableHeaderRow.insertBefore(newTh, productNumberTh);
+
+
             }
 
             if (data && data.userTypeId === 3) {
                 // 隱藏新增按鈕
                 document.getElementById('add').style.display = 'none';
+                var tableHeaderRow = document.querySelector("#myTable thead tr");
+
+                // Create a new <th> element
+                var newTh = document.createElement("th");
+                newTh.style.width = "10%"; // Set width
+                newTh.textContent = "店家名稱"; // Set the text for the new column
+
+                // Get the current "商品編號" <th> element
+                var productNumberTh = tableHeaderRow.querySelector("th:nth-child(1)"); // Select the first <th>
+
+                // Insert the new <th> before "商品編號"
+                tableHeaderRow.insertBefore(newTh, productNumberTh);
 
 
             }
@@ -356,31 +382,6 @@ function getCategoryNameById(categoryId) {
         });
 }
 
-    // function getStoreNameById(storeId) {
-    //     return fetch(`/store/getInfo/${storeId}`)  // 假设这是你的 API 路径
-    //         .then(response =>return response.json(); )
-    //         .then(store => store.storeName)  // 返回店铺名称
-    //         }).catch(error => {
-    //             console.error('获取店铺名称时出错:', error);
-    //             return '未知店铺';  // 如果出错返回默认值
-    //         });
-    // }
-
-    function getStoreNameById(storeId) {
-        // 假设你有一个 API 路径 '/api/stores/' 来获取店铺信息
-        return fetch(`/store/getInfo/${storeId}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('无法获取店铺信息');
-                }
-                return response.json(); // 假设 API 返回的是 JSON 格式
-            })
-            .then(storeData => storeData.storeName) // 假设返回的 JSON 中有 storeName 字段
-            .catch(error => {
-                console.error('获取店铺名称失败:', error);
-                return '未知店铺'; // 如果出错，返回一个默认值
-            });
-    }
 
 // =========獲取商品分類選項====
 let categoryOptions = document.querySelector('.productcategory');
@@ -390,7 +391,20 @@ fetch('/categories/all')
         if (response.ok) {
             return response.json();
         } else {
-            throw new Error('分類加載失敗');
+            throw new Error('分類加載失敗');function getStoreNameById(storeId) {
+                return fetch(`/store/getInfo/${storeId}`)  // 假设这是你的 API 路径
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('网络响应错误');
+                        }
+                        return response.json();  // 解析响应为 JSON
+                    })
+                    .then(store => store.storeName)  // 返回店铺名称
+                    .catch(error => {
+                        console.error('获取店铺名称时出错:', error);
+                        return '未知店铺';  // 如果出错返回默认值
+                    });
+            }
         }
     })
     .then(categories => {
@@ -428,6 +442,21 @@ fetch('/categories/all')
         }
     });
 
+
+    function getStoreNameById(storeId) {
+        return fetch(`/store/getInfo/${storeId}`)  // 假设这是你的 API 路径
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('网络响应错误');
+                }
+                return response.json();  // 解析响应为 JSON
+            })
+            .then(store => store.storeName)  // 返回店铺名称
+            .catch(error => {
+                console.error('获取店铺名称时出错:', error);
+                return '未知店铺';  // 如果出错返回默认值
+            });
+    }
 
     // Event listener for input in the product name search field
     productSearch.addEventListener("input", function() {
@@ -498,9 +527,12 @@ fetch('/categories/all')
         const productTableBody = document.querySelector('#myTable tbody');
         productTableBody.innerHTML = ''; // Clear table content
 
-
-        const promises = products.map(product =>
-            getCategoryNameById(product.productCategoryId).then(categoryName => {
+        products.map(product => {
+            // 使用 Promise.all 同時獲取分類名稱和店鋪名稱
+            return Promise.all([
+                getCategoryNameById(product.productCategoryId), // 獲取分類名稱
+                getStoreNameById(product.productStoreId) // 獲取店鋪名稱
+            ]).then(([categoryName, storeName]) => {
                 const newRow = document.createElement('tr');
 
                 const statusBadge = product.productStatus
@@ -508,29 +540,28 @@ fetch('/categories/all')
                     : `<span class="badge badge-danger off-shelf">下架</span>`;
 
                 newRow.innerHTML = `
-                <td>${product.productId}</td>
-                <td>${categoryName}</td>
-                <td>${product.productName}</td>
-                <td>$${product.productPrice}</td>
-                <td>${product.size}</td>
-                <td>
-                  ${statusBadge}
-                </td>
-                <td class="project-actions text-right">
-                    <a class="btn btn-edit btn-sm update_btn" href="addProducts.html?productId=${product.productId}&type=E" data-id="${product.productId}">
-                        <i class="fas fa-pencil-alt"></i> 編輯
-                    </a>
-                </td>
-            `;
+            <td>${storeName}</td> <!-- 店家名稱 -->
+            <td>${categoryName}</td> <!-- 類別名稱 -->
+            <td>${product.productId}</td>
+            <td>${product.productName}</td>
+            <td>$${product.productPrice}</td>
+            <td>${product.size}</td>
+            <td>${statusBadge}</td>
+            <td class="project-actions text-right">
+                <a class="btn btn-edit btn-sm update_btn" href="addProducts.html?productId=${product.productId}" data-id="${product.productId}">
+                    <i class="fas fa-pencil-alt"></i> 編輯
+                </a>
+            </td>
+        `;
                 productTableBody.appendChild(newRow);
-            })
-        );
-
-        Promise.all(promises).then(() => {
-            console.log('All product rows updated');
+            });
+        }).then(() => {
+            // 當所有 Promise 完成後，可以執行其他操作
         }).catch(error => {
             console.error('Error updating product table:', error);
         });
+
+
     }
 
     // Update pagination controls
