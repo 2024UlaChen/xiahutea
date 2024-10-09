@@ -1,6 +1,7 @@
 package idv.tia201.g2.web.store.service.impl;
 
 import idv.tia201.g2.core.pojo.Mail;
+import idv.tia201.g2.core.util.EncrypSHA;
 import idv.tia201.g2.core.util.MailUtil;
 import idv.tia201.g2.web.chat.service.ChatRoomService;
 import idv.tia201.g2.web.chat.service.impl.ChatRoomServiceimpl;
@@ -210,6 +211,8 @@ public class RegisterStoreServiceImpl implements RegisterStoreService {
             newData.setPassword(randomPassword);
             //寄信
             sendMail(newData);
+            String shaedEncrypt = EncrypSHA.SHAEncrypt(randomPassword);
+            newData.setPassword(shaedEncrypt);
 
 
             TotalUsers totalUser = new TotalUsers(null, userType, newData.getStoreId());

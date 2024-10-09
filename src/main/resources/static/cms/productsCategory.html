@@ -116,7 +116,12 @@
             background-color: #73B4BA;
             color:white;
         }
-        .btn-add {
+        .btn-add,.search {
+            background-color: #73B4BA;
+            border-color: #73B4BA;
+        }
+
+        .btn-add:hover,.search:hover {
             background-color: #73B4BA;
             border-color: #73B4BA;
         }
@@ -133,9 +138,8 @@
             color: white;
         }
 
-        .custom-label {
-            margin-right: 10px; /* 右侧间距 */
-        }
+
+
 
     </style>
 
@@ -272,8 +276,7 @@
                             <thead>
                                 <tr>
 <!--                                    <th style="width: 12%">-->
-                                    <th style="width: 12%" id="storeNameColumn" style="display: none;">店家ID</th> <!-- 店家名稱欄位，預設隱藏 -->
-<!--                                    </th>-->
+
 
                                     <th style="width: 25%">
                                         商品分類
@@ -380,11 +383,42 @@
                     // 如果角色是 store，隱藏搜尋框
                     document.getElementById('searchInput2').style.display = 'none';
                     document.getElementById('searchInput2-label').style.display = 'none';
+
+                    var tableHeaderRow = document.querySelector("#categoryTable thead tr");
+
+                    // Create a new <th> element
+                    var newTh = document.createElement("th");
+                    newTh.style.width = "15%"; // Set width
+                    newTh.textContent = "店家名稱"; // Set the text for the new column
+
+                    // Get the current "商品編號" <th> element
+                    var productNumberTh = tableHeaderRow.querySelector("th:nth-child(1)"); // Select the first <th>
+
+                    // Insert the new <th> before "商品編號"
+                    tableHeaderRow.insertBefore(newTh, productNumberTh);
+
+
+
                 }
 
                 if (userTypeId === 3) {
                     // 隱藏新增按鈕
                     document.getElementById('add').style.display = 'none';
+
+
+
+                    var tableHeaderRow = document.querySelector("#categoryTable thead tr");
+
+                    // Create a new <th> element
+                    var newTh = document.createElement("th");
+                    newTh.style.width = "15%"; // Set width
+                    newTh.textContent = "店家名稱"; // Set the text for the new column
+
+                    // Get the current "商品編號" <th> element
+                    var productNumberTh = tableHeaderRow.querySelector("th:nth-child(1)"); // Select the first <th>
+
+                    // Insert the new <th> before "商品編號"
+                    tableHeaderRow.insertBefore(newTh, productNumberTh);
 
                 }
 
@@ -570,12 +604,18 @@
                                     row.children[2].textContent = data.categorySort; // 更新分類排序
                                 }
                                 tdElt.textContent = editcategoryName.value;// 更新分類名稱
-                                alert('分類更新成功！');  // 顯示成功訊息
+                                Swal.fire({
+                                    text: "商品分類更新成功!",
+                                    icon: "success"
+                                });  // 顯示成功訊息
                                 return;
                             })
                             .catch(error => {
                                 console.error('更新分類時出錯：', error);
-                                alert(error.message); // 顯示錯誤消息
+                                Swal.fire({
+                                    icon: "error",
+                                    text: "分類新增錯誤",
+                                });
                             });
                     })
 
@@ -657,63 +697,64 @@
                     }
 
 
+        async function getStoreNameById(storeId) {
+            try {
+                const response = await fetch(`/store/getInfo/${storeId}`);
+                if (!response.ok) {
+                    throw new Error('网络响应错误');
+                }
+                const store = await response.json();
+                return store.storeName;  // 返回店铺名称
+            } catch (error) {
+                console.error('获取店铺名称时出错:', error);
+                return '未知店铺';  // 如果出错返回默认值
+            }
+        }
+
+        // 假设你已经有 storeId 列表或单个 storeId
+
 
                     // 更新表格的示例函數
-                    function updateCategoryTable(categories, userTypeId) {
-                        const categoryTableBody = document.querySelector('#categoryTable tbody');
-                        const storeNameColumn = document.getElementById('storeNameColumn');
 
-                        // 清空表格內容
-                        categoryTableBody.innerHTML = '';
+        function updateCategoryTable(categories) {
+            const categoryTableBody = document.querySelector('#categoryTable tbody');
 
-                        // 如果是管理員，顯示店家名稱欄位
-                        if (userTypeId === 3) {
-                            storeNameColumn.style.display = ''; // 顯示店家名稱欄位
-                        } else {
-                            storeNameColumn.style.display = 'none'; // 隱藏店家名稱欄位
-                        }
+            // 清空表格內容
+            categoryTableBody.innerHTML = '';
 
-                        categories.forEach(category => {
-                            const row = document.createElement('tr');
+            // 遍歷 categories 數組並生成表格列
+            categories.forEach(async category => {  // 用 async 來處理異步邏輯
+                const storeId = category.productStoreId;
+                const statusBadge = category.categoryStatus === true
+                    ? `<span class="badge badge-success on-shelf">啟用</span>`
+                    : `<span class="badge badge-danger off-shelf">停用</span>`;
 
-                            // 如果是管理員，顯示店家名稱
-                            if (userTypeId === 3) {
-                                const storeNameCell = document.createElement('td');
-                                storeNameCell.textContent = category.productStoreId; // 假設這裡存放的是店家名稱或 ID
-                                row.appendChild(storeNameCell);
-                            }
-
-                            // 其他欄位
-                            const nameCell = document.createElement('td');
-                            nameCell.textContent = category.categoryName;
-                            row.appendChild(nameCell);
-                            nameCell.id = 'categoryName_' + category.categoryId;
-
-                            const sortCell = document.createElement('td');
-                            sortCell.textContent = category.categorySort;
-                            row.appendChild(sortCell);
-
-                            const statusBadge = category.categoryStatus === true
-                                ? `<span class="badge badge-success on-shelf">啟用</span>`
-                                : `<span class="badge badge-danger off-shelf">停用</span>`;
-                            const statusCell = document.createElement('td');
-                            statusCell.innerHTML = statusBadge;
-                            row.appendChild(statusCell);
-
-                            const actionCell = document.createElement('td');
-                            actionCell.innerHTML = `
-            <a class="btn btn-sm btn-edit update_btn" href="#" data-id="${category.categoryId}">
-                <i class="fas fa-pencil-alt"></i> 編輯
-            </a>
+                // 建立表格列的 HTML，先顯示一個占位符
+                const rowHTML = `
+            <tr>
+                <td id="storeName_${category.categoryId}">加載中...</td> <!-- 顯示店家名稱或 ID -->
+                <td id="categoryName_${category.categoryId}">${category.categoryName}</td>
+                <td>${category.categorySort}</td>
+                <td>${statusBadge}</td>
+                <td>
+                    <a class="btn btn-sm btn-edit update_btn" href="#" data-id="${category.categoryId}">
+                        <i class="fas fa-pencil-alt"></i> 編輯
+                    </a>
+                </td>
+            </tr>
         `;
-                            row.appendChild(actionCell);
 
-                            categoryTableBody.appendChild(row);
-                        });
-                    }
+                // 將 HTML 插入表格
+                categoryTableBody.insertAdjacentHTML('beforeend', rowHTML);
+
+                // 獲取店家名稱並動態更新對應的表格單元格
+                const storeName = await getStoreNameById(storeId);  // 獲取店家名稱
+                document.getElementById(`storeName_${category.categoryId}`).textContent = storeName;  // 更新表格
+            });
+        }
 
 
-                    // 更新分頁控制的示例函數
+        // 更新分頁控制的示例函數
                     function updatePaginationControls(totalPages, currentPage) {
                         const paginationControls = document.getElementById('paginationControls');
                         paginationControls.innerHTML = ''; // Clear existing pagination controls
