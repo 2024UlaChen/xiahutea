@@ -284,9 +284,9 @@
         const btnSelect = document.getElementById("btn_select");
         btnSelect.addEventListener("click", function (e) {
             e.preventDefault();
-            let select_order_id = document.getElementsByClassName("select_order")[1]?.value.toLowerCase() || "";
-            let select_order_store = document.getElementsByClassName("select_order")[3]?.value.toLowerCase() || "";
-            let select_order_user = document.getElementsByClassName("select_order")[2]?.value.toLowerCase() || "";
+            let select_order_id = document.getElementsByClassName("select_order")[0]?.value.toLowerCase() || "";
+            let select_order_store = document.getElementsByClassName("select_order")[2]?.value.toLowerCase() || "";
+            let select_order_user = document.getElementsByClassName("select_order")[1]?.value.toLowerCase() || "";
             let select_order_status = document.getElementById("select_status").value || "";
             let select_order_date1 = document.getElementsByClassName("select_date")[0]?.value || "";
             let select_order_date2 = document.getElementsByClassName("select_date")[1]?.value || "";
@@ -327,7 +327,7 @@
         fetch(url)
             .then(response => response.json())
             .then(data => {
-                // console.log("----------data:"+JSON.stringify(data, null, 2))
+                console.log("----------data:"+JSON.stringify(data, null, 2))
                 totalPages = data.totalPages; // 更新總頁數
                 updatePagination();           // 更新分頁按鈕狀態
                 showDB(data);                 // 顯示資料
