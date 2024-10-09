@@ -31,7 +31,7 @@ public class AdsEditController {
                           @RequestParam("isActive") boolean isActive,
                           @RequestParam("startTime") String startTime,
                           @RequestParam("endTime") String endTime,
-                          @RequestParam("adsId") Integer adsId,
+                          @RequestParam(value="adsId",required = false) Integer adsId,
                           @RequestParam("adsTotalUserid") long adsTotalUserId,
                           @RequestParam("roleTypeId") Integer roleTypeId) {
         Advertise ad = new Advertise();

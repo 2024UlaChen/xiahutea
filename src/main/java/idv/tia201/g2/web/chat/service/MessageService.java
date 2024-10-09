@@ -11,4 +11,5 @@ public interface MessageService {
 
     List<MessageDto> getChatMessagesData(Integer chatId) throws IOException;
     Messages saveMessage ( MessageDto messageDto );
+    MessageDto getImgMessageDTO(Long messageId) throws IOException;
 }

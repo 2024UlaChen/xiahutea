@@ -136,16 +136,20 @@
                                                         <tr>
                                                             <td align="center" bgcolor="#ffffff" class="esd-block-text es-text-9837">
                                                                 <p class="es-text-mobile-size-18" style="color:#333333;helvetica neue&#39;,helvetica,sans-serif;font-size:18px;line-height:200% !important">
-                                                                    <strong><span style="background:transparent">嗨！ {0}您好,
-<br>
-<br>感謝您申請成為夏虎茶合作店家
-<br>
-<br>您已成功成為夏虎茶店家的一員，
-<br>
-<br>店家的臨時密碼為 : {1} <br>
-<br>請點擊下方按鈕登入您的會員帳號，
-<br>
-<br>並且更新店家資料，謝謝。</span></strong>
+                                                                    <strong><span style="background:transparent">
+                                                                        <br>嗨！ {0}您好,
+                                                                        <br>
+                                                                        <br>感謝您申請成為夏虎茶合作店家
+                                                                        <br>
+                                                                        <br>您已成功成為夏虎茶店家的一員，以下會提供您一組店家的帳號與密碼
+                                                                        <br>
+                                                                        <br>店家帳號為統一編號，
+                                                                        <br>
+                                                                        <br>店家的臨時密碼為 : {1}
+                                                                        <br>
+                                                                        <br>請點擊下方按鈕登入您的會員帳號，
+                                                                        <br>
+                                                                        <br>並且更新店家資料，謝謝。</span></strong>
                                                                 </p>
                                                                 <p class="es-text-mobile-size-18" style="font-size: 18px; line-height: 200% !important; color: #333333;helvetica neue&#39;,helvetica,sans-serif">
                                                                     <strong><span style="background: transparent"></span></strong>
@@ -155,7 +159,7 @@
                                                         <tr>
                                                             <td align="center" class="esd-block-button">
                                               <span class="es-button-border" style="background:#a2c4c9">
-                                                <a target="_blank" href="http://localhost:8080/cms/backstageLogin.html" class="es-button" style="background:#a2c4c9;mso-border-alt:10px solid #a2c4c9;color:#333333;font-weight:bold">
+                                                <a target="_blank" href="http://localhost:8080/cms/backstageLogin.html" class="es-button" style="background:#a2c4c9;mso-border-alt:10px solid #a2c4c9;color:#333333;font-weight:bold ;border: 20px;border-radius: 5px">
                                                   登入
                                                 </a>
                                               </span>

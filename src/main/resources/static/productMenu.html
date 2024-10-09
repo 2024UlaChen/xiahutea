@@ -31,6 +31,7 @@
     <link rel="stylesheet" href="assets/fonts/flaticon/flaticon.css">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="css/general.css">
+    <link rel="stylesheet" href="https://unpkg.com/sweetalert2@11/dist/sweetalert2.min.css">
 
 
     <style>
@@ -634,20 +635,20 @@
 
                 <div class="restaurant-text">
 
-                    <h4 class="storeName">藍彩茶所</h4>
+                    <h4 class="storeName"></h4>
                     <div class="rating">
-                        <span span id="storeRating">⭐⭐⭐⭐⭐</span>
-                        <span>(3)</span>
+                        <span span id="storeRating"></span>
+
                     </div>
                     <div class="hours">
                         <i class="fa-solid fa-business-time"></i><span id="openHours"></span>~<span id="closingHours"></span>
                     </div>
                     <div class="phone">
-                        <i class="fa-solid fa-phone"></i><span id="storePhone">02-27769858</span>
+                        <i class="fa-solid fa-phone"></i><span id="storePhone"></span>
                     </div>
                     <div class="address">
                         <i class="fa-sharp-duotone fa-solid fa-map-location-dot"></i>
-                        <span class="storeAddress">台北市大安區忠孝東路四段77巷34號</span>
+                        <span class="storeAddress"></span>
                     </div>
                 </div>
 
@@ -868,6 +869,8 @@
     <!--<script src="assets/js/newjs.js"></script>-->
     <script src="./js/general.js"></script>
 
+<script src="https://unpkg.com/sweetalert2@11"></script>
+
 
 
 
@@ -876,6 +879,12 @@
     const urlParams = new URLSearchParams(window.location.search);
     const storeId = urlParams.get('storeId'); // 这里获取的是 'storeId' 参数的值
     const storeIdNum = parseInt(storeId); // 将字符串转换为数字
+
+
+// 用 fetch 獲取 TotalUserDTO 並檢查用戶是否登入
+
+// 加入購物車的功能 (根據實際情況替換邏輯)
+
 
 
 if (isNaN(storeIdNum)) {
@@ -946,12 +955,7 @@ if (isNaN(storeIdNum)) {
         });
 
 
-
-
-
-
-
-    $('#add').on('click',function (){
+$('#add').on('click',function (){
         window.location.href="addProducts.html"
     })
 
@@ -1158,14 +1162,62 @@ var productId;
                 updateTotalPrice();
             });
 
-            function cart (e) {
-                e.preventDefault();
-                addToCart(productId, buyNum); // 傳入購買數量
-                document.getElementById('addToCartButton').removeEventListener("click",cart);
-            }
+            fetch('/totalusers', {
+    method: 'GET', // 請求方法是 GET
+})
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json(); // 將返回的結果解析為 JSON 格式
+    })
+    .then(data => {
+        console.log('TotalUserDTO:', data); // 在控制台中顯示 TotalUserDTO
 
-            // 添加到購物車
-            document.getElementById('addToCartButton').addEventListener('click', cart);
+        var userTypeId = data.userTypeId; // 假設 userTypeId 為 0 表示已登入，其他值表示未登入
+
+        // 監聽 "加入購物車" 按鈕的點擊事件
+        document.getElementById('addToCartButton').addEventListener('click', function(e) {
+            e.preventDefault();
+            if (userTypeId !== 0) {
+                Swal.fire({
+                    title: "請先登入",
+                    text: "您必須登入才能將商品加入購物車！",
+                    icon: "warning",
+                    confirmButtonText: "確定"
+                });
+
+                // 隱藏 Lightbox 彈窗
+                document.getElementById("lightbox").style.display = "none";
+
+
+            } else {
+                function cart (e) {
+                    e.preventDefault();
+                    addToCart(productId, buyNum); // 傳入購買數量
+                    document.getElementById('addToCartButton').removeEventListener("click",cart);
+                    document.getElementById("lightbox").style.display = "none";
+                }
+
+                // 添加到購物車
+                document.getElementById('addToCartButton').addEventListener('click', cart);
+            }
+        });
+    })
+    .catch(error => {
+        console.error('Fetch error:', error);
+    });
+
+
+            // function cart (e) {
+            //     e.preventDefault();
+            //     addToCart(productId, buyNum); // 傳入購買數量
+            //     document.getElementById('addToCartButton').removeEventListener("click",cart);
+            //     document.getElementById("lightbox").style.display = "none";
+            // }
+            //
+            // // 添加到購物車
+            // document.getElementById('addToCartButton').addEventListener('click', cart);
 
             // 顯示模態框
             document.getElementById("lightbox").style.display = "block";
@@ -1187,36 +1239,268 @@ var productId;
     }
 
     // 將商品加入購物車的函數
-    function addToCart(productId, buyNum) {
-        // 從 localStorage 獲取現有的購物車數據
-        let cart = JSON.parse(localStorage.getItem('cart')) || {};
+    // function addToCart(productId, buyNum) {
+    //     // 從 localStorage 獲取現有的購物車數據
+    //     let cart = JSON.parse(localStorage.getItem('cart')) || {};
+    //
+    //     // 確保該商品ID有對應的數據
+    //     if (!cart[productId]) {
+    //         cart[productId] = {};
+    //     }
+    //
+    //
+    //     // 獲取當前的選擇（從 localStorage 讀取尺寸、溫度、甜度等）
+    //     const selectedSize = localStorage.getItem('selectedSize');
+    //     const selectedTemperature = localStorage.getItem('selectedTemperature');
+    //     const selectedSweetness = localStorage.getItem('selectedSweetness');
+    //     const selectedToppings = localStorage.getItem('selectedToppings');
+    //
+    //     // 更新該商品ID的數據，並加上購買數量
+    //     // 如果選項未選，顯示警告並退出函數
+    //     if (!selectedSize || selectedSize === "null" || selectedSize === "") {
+    //         Swal.fire({
+    //             text: "請選擇尺寸！",
+    //             icon: "warning"
+    //         });
+    //         return;
+    //     }
+    //
+    //     if (!selectedTemperature || selectedTemperature === "null" || selectedTemperature === "") {
+    //         Swal.fire({
+    //             text: "請選擇溫度！",
+    //             icon: "warning"
+    //         });
+    //         return;
+    //     }
+    //
+    //     if (!selectedSweetness || selectedSweetness === "null" || selectedSweetness === "") {
+    //         Swal.fire({
+    //             text: "請選擇甜度！",
+    //             icon: "warning"
+    //         });
+    //         return;
+    //     }
+    //
+    //
+    //     // 更新該商品ID的數據，並加上購買數量
+    //     cart[productId] = {
+    //         size: selectedSize,
+    //         temperature: selectedTemperature,
+    //         sweetness: selectedSweetness,
+    //         toppings: selectedToppings || "",  // 加料可選
+    //         buyNum: buyNum  // 保存購買數量
+    //     };
+    //
+    //
+    //     // 保存更新的購物車數據到 localStorage
+    //     localStorage.setItem('cart', JSON.stringify(cart));
+    //
+    //     // 顯示提示訊息，確認商品已添加到購物車
+    //     Swal.fire({
+    //         text: "商品加入購物車成功!",
+    //         icon: "success"
+    //     });
+    //
+    //
+    // }
 
-        // 確保該商品ID有對應的數據
-        if (!cart[productId]) {
-            cart[productId] = {};
-        }
 
-        // 獲取當前的選擇（從 localStorage 讀取尺寸、溫度、甜度等）
-        const selectedSize = localStorage.getItem('selectedSize');
-        const selectedTemperature = localStorage.getItem('selectedTemperature');
-        const selectedSweetness = localStorage.getItem('selectedSweetness');
-        const selectedToppings = localStorage.getItem('selectedToppings');
+// function addToCart(productId, buyNum) {
+//     // 初始化選擇的值
+//     let selectedSize = null;
+//     let selectedTemperature = null;
+//     let selectedSweetness = null;
+//     let selectedToppings = null;
+//
+//     // 只有在 localStorage 有值時才讀取並賦值
+//     if (localStorage.getItem('selectedSize')) {
+//         selectedSize = localStorage.getItem('selectedSize');
+//     }
+//     if (localStorage.getItem('selectedTemperature')) {
+//         selectedTemperature = localStorage.getItem('selectedTemperature');
+//     }
+//     if (localStorage.getItem('selectedSweetness')) {
+//         selectedSweetness = localStorage.getItem('selectedSweetness');
+//     }
+//     if (localStorage.getItem('selectedToppings')) {
+//         selectedToppings = localStorage.getItem('selectedToppings');
+//     }
+//
+//     // 確認是否選擇了尺寸、溫度和甜度，沒有則提示用戶
+//     if (!selectedSize) {
+//         Swal.fire({
+//             text: "尺寸未選！",
+//             icon: "warning"
+//         });
+//         return;
+//     }
+//     if (!selectedTemperature) {
+//         Swal.fire({
+//             text: "溫度未選！",
+//             icon: "warning"
+//         });
+//         return;
+//     }
+//     if (!selectedSweetness) {
+//         Swal.fire({
+//             text: "甜度未選！",
+//             icon: "warning"
+//         });
+//         return;
+//     }
+//
+//     // 獲取購物車資料並更新
+//     let cart = JSON.parse(localStorage.getItem('cart')) || {};
+//     cart[productId] = {
+//         size: selectedSize,
+//         temperature: selectedTemperature,
+//         sweetness: selectedSweetness,
+//         toppings: selectedToppings || "未選擇加料",
+//         buyNum: buyNum
+//     };
+//
+//     // 更新購物車到 localStorage
+//     localStorage.setItem('cart', JSON.stringify(cart));
+//
+//     // 顯示成功提示
+//     Swal.fire({
+//         text: "商品加入購物車成功!",
+//         icon: "success"
+//     });
+// }
 
-        // 更新該商品ID的數據，並加上購買數量
-        cart[productId] = {
-            size: selectedSize || "未選擇尺寸", // 默認值 "未選擇尺寸"
-            temperature: selectedTemperature || "未選擇溫度",
-            sweetness: selectedSweetness || "未選擇甜度",
-            toppings: selectedToppings || "未選擇加料",
-            buyNum: buyNum  // 保存購買數量
-        };
 
-        // 保存更新的購物車數據到 localStorage
-        localStorage.setItem('cart', JSON.stringify(cart));
+// function addToCart(productId, buyNum) {
+//     // 初始化選擇的值
+//     let selectedSize = null;
+//     let selectedTemperature = null;
+//     let selectedSweetness = null;
+//     let selectedToppings = null;
+//
+//     // 只有在 localStorage 有值時才讀取並賦值
+//     const storedSize = localStorage.getItem('selectedSize');
+//     const storedTemperature = localStorage.getItem('selectedTemperature');
+//     const storedSweetness = localStorage.getItem('selectedSweetness');
+//     const storedToppings = localStorage.getItem('selectedToppings');
+//
+//     // 確保只在用戶實際選擇了時才賦值
+//     if (storedSize) {
+//         selectedSize = storedSize;
+//     }
+//     if (storedTemperature) {
+//         selectedTemperature = storedTemperature;
+//     }
+//     if (storedSweetness) {
+//         selectedSweetness = storedSweetness;
+//     }
+//     if (storedToppings) {
+//         selectedToppings = storedToppings;
+//     }
+//
+//     // 確認是否選擇了尺寸、溫度和甜度，沒有則提示用戶
+//     if (!selectedSize) {
+//         Swal.fire({
+//             text: "尺寸未選！",
+//             icon: "warning"
+//         });
+//         return; // 終止函數執行
+//     }
+//     if (!selectedTemperature) {
+//         Swal.fire({
+//             text: "溫度未選！",
+//             icon: "warning"
+//         });
+//         return; // 終止函數執行
+//     }
+//     if (!selectedSweetness) {
+//         Swal.fire({
+//             text: "甜度未選！",
+//             icon: "warning"
+//         });
+//         return; // 終止函數執行
+//     }
+//
+//     // 獲取購物車資料並更新
+//     let cart = JSON.parse(localStorage.getItem('cart')) || {};
+//     cart[productId] = {
+//         size: selectedSize,
+//         temperature: selectedTemperature,
+//         sweetness: selectedSweetness,
+//         toppings: selectedToppings || "未選擇加料", // 如果未選擇加料，使用預設值
+//         buyNum: buyNum
+//     };
+//
+//     // 更新購物車到 localStorage
+//     localStorage.setItem('cart', JSON.stringify(cart));
+//
+//     // 顯示成功提示
+//     Swal.fire({
+//         text: "商品加入購物車成功!",
+//         icon: "success"
+//     });
+// }
 
-        // 顯示提示訊息，確認商品已添加到購物車
-        alert('商品已成功加入購物車！');
+function getSelectedItem(key) {
+    const value = localStorage.getItem(key);
+    return value ? value : null; // 如果有值则返回，否则返回 null
+}
+
+// 使用封装的函数获取选项
+const storedSize = getSelectedItem('selectedSize');
+const storedTemperature = getSelectedItem('selectedTemperature');
+const storedSweetness = getSelectedItem('selectedSweetness');
+const storedToppings = getSelectedItem('selectedToppings');
+
+function addToCart(productId, buyNum) {
+    // 从 localStorage 获取现有的购物车数据
+    let cart = JSON.parse(localStorage.getItem('cart')) || {};
+
+    // 确保该商品ID有对应的数据
+    if (!cart[productId]) {
+        cart[productId] = {};
     }
+
+    // 获取当前的选择（尺寸、温度、甜度、加料）
+
+    // 检查用户是否选择了所有必需选项
+    if (!storedSize || !storedTemperature || !storedSweetness) {
+        Swal.fire({
+            text: "请確保所有選項都有選擇！",
+            icon: "warning"
+        });
+        return; // 终止函数执行
+    }
+
+    // 清除上一次的选项数据
+    localStorage.removeItem('selectedSize');
+    localStorage.removeItem('selectedTemperature');
+    localStorage.removeItem('selectedSweetness');
+    localStorage.removeItem('selectedToppings');
+
+    // 更新该商品ID的数据，并加上购买数量
+    cart[productId] = {
+        size: storedSize,
+        temperature: storedTemperature,
+        sweetness: storedSweetness,
+        toppings: storedToppings || "未选择加料",
+        buyNum: buyNum // 保存购买数量
+    };
+
+    // 保存更新的购物车数据到 localStorage
+    localStorage.setItem('cart', JSON.stringify(cart));
+
+    // 显示提示信息，确认商品已添加到购物车
+    Swal.fire({
+        text: "商品加入購物車成功!",
+        icon: "success"
+    });
+}
+
+
+
+
+
+
 
 
 
@@ -1260,7 +1544,7 @@ var productId;
             if (option === selectedOption) {
                 option.style.backgroundColor = '#fac792';
             } else {
-                option.style.color = '';
+                option.style.backgroundColor = '';
             }
         });
     }
