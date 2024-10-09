@@ -17,9 +17,6 @@ function getUser(){
                             </li>`;
                 document.querySelector('.header-user-links').insertAdjacentHTML('afterbegin',str);
                 
-                document.querySelector('#searchBarLoyalty').remove();
-                document.querySelector('#searchBarOrder').remove();
-                document.querySelector('#searchBarCoupon').remove();
 
 
             }else{
@@ -28,6 +25,10 @@ function getUser(){
                 document.querySelector('#userLogo').src =`data:image/png;base64,${data.customerImg}`;
 
             }
+            document.querySelector('#searchBarLoyalty').remove();
+            document.querySelector('#searchBarOrder').remove();
+            document.querySelector('#searchBarCoupon').remove();
+
 
         }
     });//取得登入

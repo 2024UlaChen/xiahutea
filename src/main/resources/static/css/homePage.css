@@ -130,7 +130,7 @@ div.header-message > h1 {
   }
   div.slick-slide {
     overflow: hidden;
-    background-color: rgb(221, 231, 235);
+    background-color: white;
     text-align: center;
   }
   .slick-slide img {
@@ -139,6 +139,7 @@ div.header-message > h1 {
   .KunSlickImg {
     /* width: 600px; */
     height: 300px;
+    width: 100%;
 /* 輪播照片大小 上船要限制長寬 */
     /* width: 50vw; */
     /* height: 30vh; */
