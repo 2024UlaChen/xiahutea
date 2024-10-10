@@ -126,7 +126,7 @@
 
                                     </div>
                                     <p class="productPic-message" style="color:red;"></p>
-
+                                    <img id="productPicImg" style="max-width: 100%; height: auto;"/>
 
                                     <div class="form-group">
                                         <label>商品分類</label>
@@ -360,8 +360,6 @@
                 item.checked=that.checked
 
             })
-
-
         })
 
         var itemtwo=document.querySelectorAll("input.itemtwo")
@@ -383,10 +381,8 @@
                 item.checked=that.checked
 
             })
-
-
         })
-        var itemthree=document.querySelectorAll("input.itemthree")
+        var itemthree = document.querySelectorAll("input.itemthree")
         itemtwo.forEach(function (item,i){
             item.addEventListener("click",function (){
                 var check_lenghtthree=document.querySelectorAll("input.itemthree:checked").length;
@@ -428,12 +424,34 @@
                 console.error('Error loading categories:', error);
                 categoryMessage.textContent = '加載失敗';
             });
+
             // =========驗證===============
             document.getElementById('productForm').addEventListener('submit', function(event) {
                 event.preventDefault(); // 防止頁面刷新
-             
+                const productName = document.getElementById('productName').value.trim();
+                const productPrice = document.getElementById('productPrice').value;
+                const category = document.querySelector('.category').value;
 
-                if (typeId !== 'E'){
+                // 驗證表單數據
+                if (!productName) {
+                    document.querySelector('.productName-message').textContent = '商品名稱不為空';
+                    return false;
+                }
+                document.querySelector('.productName-message').textContent = '';
+
+                if (!productPrice || isNaN(productPrice) || parseFloat(productPrice) <= 0) {
+                    document.querySelector('.productPrice-message').textContent = '請輸入有效的金額';
+                    return false;
+                }
+                document.querySelector('.productPrice-message').textContent = '';
+
+                if (!category || category === '選擇一個分類') {
+                    document.querySelector('.category-message').textContent = '請選擇分類';
+                    return false;
+                }
+                document.querySelector('.category-message').textContent = '';
+                // 新增商品
+                if (typeId !== 'E'){ // 新增商品
                     const fileInput = document.getElementById('productPic');
                     const file = fileInput.files[0];
                     if (file) {
@@ -448,114 +466,110 @@
                             // 圖片上傳成功後，調用提交產品數據的函數
                             submitProductData(base64String);  // 成功後的回應訊息
                         }
+                    } else {
+                        document.querySelector('.productPic-message').textContent = '未選擇圖片檔案';
+                        return false;
                     }
-                } else {
+                } else { // 編輯商品
                     const fileInput = document.getElementById('productPic');
                     const file = fileInput.files[0];
+
+                    const productData = {
+                        productId: Number(document.getElementById('productId').value),
+                        productName: document.getElementById('productName').value,
+                        productPrice: Number(document.getElementById('productPrice').value),
+                        size: document.getElementById('size').value,
+                        productStatus: document.getElementById('status').value === "0" ? false : true,
+                        productPictureFile:document.getElementById('productPic').files[0],
+                        productCategoryId: Number(document.querySelector('.category').value),
+                        normalIce: document.querySelector('input[name="normalIce"]').checked,
+                        lessIce: document.querySelector('input[name="lessIce"]').checked,
+                        lightIce: document.querySelector('input[name="lightIce"]').checked,
+                        iceFree: document.querySelector('input[name="iceFree"]').checked,
+                        roomTemperature: document.querySelector('input[name="roomTemperature"]').checked,
+                        hot: document.querySelector('input[name="hot"]').checked,
+                        fullSugar: document.querySelector('input[name="fullSugar"]').checked,
+                        lessSugar: document.querySelector('input[name="lessSugar"]').checked,
+                        halfSugar: document.querySelector('input[name="halfSugar"]').checked,
+                        quarterSugar: document.querySelector('input[name="quarterSugar"]').checked,
+                        noSugar: document.querySelector('input[name="noSugar"]').checked,
+                        pearl: document.querySelector('input[name="pearl"]').checked,
+                        pudding: document.querySelector('input[name="pudding"]').checked,
+                        coconutJelly: document.querySelector('input[name="coconutJelly"]').checked,
+                        taro: document.querySelector('input[name="taro"]').checked,
+                        herbalJelly: document.querySelector('input[name="herbalJelly"]').checked
+                    };
                     if (file) {
-
-                        const reader = new FileReader();
-
-                        // 读取文件并将其转换为 Base64
-                        reader.readAsDataURL(file);
-
-                        let base64String = '';
-                        reader.onload = function () {
-                            base64String = reader.result.split(',')[1];// 去掉前缀 "data:image/png;base64,"
-
-
-                            const productData = {
-                                productId: Number(document.getElementById('productId').value),
-                                productName: document.getElementById('productName').value,
-                                productPrice: Number(document.getElementById('productPrice').value),
-                                size: document.getElementById('size').value,
-                                productStatus: document.getElementById('status').value === "0" ? false : true,
-                                productPictureFile:document.getElementById('productPic').files[0],
-                                productCategoryId: Number(document.querySelector('.category').value),
-                                normalIce: document.querySelector('input[name="normalIce"]').checked,
-                                lessIce: document.querySelector('input[name="lessIce"]').checked,
-                                lightIce: document.querySelector('input[name="lightIce"]').checked,
-                                iceFree: document.querySelector('input[name="iceFree"]').checked,
-                                roomTemperature: document.querySelector('input[name="roomTemperature"]').checked,
-                                hot: document.querySelector('input[name="hot"]').checked,
-                                fullSugar: document.querySelector('input[name="fullSugar"]').checked,
-                                lessSugar: document.querySelector('input[name="lessSugar"]').checked,
-                                halfSugar: document.querySelector('input[name="halfSugar"]').checked,
-                                quarterSugar: document.querySelector('input[name="quarterSugar"]').checked,
-                                noSugar: document.querySelector('input[name="noSugar"]').checked,
-                                pearl: document.querySelector('input[name="pearl"]').checked,
-                                pudding: document.querySelector('input[name="pudding"]').checked,
-                                coconutJelly: document.querySelector('input[name="coconutJelly"]').checked,
-                                taro: document.querySelector('input[name="taro"]').checked,
-                                herbalJelly: document.querySelector('input[name="herbalJelly"]').checked,
-                                "productPicture": base64String,  // 這裡使用上傳圖片後返回的URL或ID
-                            };
-
-                            // 发起 PUT 请求更新商品
-                            fetch(`/products/update/${productId}`, {
-                                method: 'PUT',
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify(productData) // 发送 JSON 格式的商品数据
-                            })
-                                .then(response => {
-                                    if (!response.ok) {
-                                        throw new Error(`HTTP 错误! 状态: ${response.status}`);
-                                    }
-                                    // return response.text(); // 获取服务器返回的文本响应
-                                })
-                                .then(data => {
-                                    console.log('商品更新成功:', data);
-                                    Swal.fire({
-                                        text: "商品新增成功!",
-                                        icon: "success"
-                                    });
-                                    // 可以在这里进行页面跳转或其他操作
-                                })
-                                .catch(error => {
-                                    console.error('更新商品失败:', error);
-                                    Swal.fire({
-                                        icon: "error",
-                                        text: "分類新增錯誤",
-                                    });
-                                });
-                        }
+                        getBase64(file).then(base64String => {
+                            document.getElementById('productPicImg').src = '';
+                            productData.productPicture = base64String; //這裡使用上傳圖片後返回的URL或ID 设置 Base64 图片
+                            updateProductEdit(productData);
+                        });
+                    } else {
+                        productData.productPicture = '';// 設置為空字串
+                        updateProductEdit(productData);
                     }
-
-
                 }
             })
+
+        function updateProductEdit(productData){
+            // 发起 PUT 请求更新商品
+            fetch(`/products/update/${productId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(productData) // 发送 JSON 格式的商品数据
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP 错误! 状态: ${response.status}`);
+                    }
+                    // return response.text(); // 获取服务器返回的文本响应
+                })
+                .then(data => {
+                    console.log('商品更新成功:', data);
+                    Swal.fire({
+                        text: "商品更新成功!",
+                        icon: "success"
+                    });
+                    // 可以在这里进行页面跳转或其他操作
+                })
+                .catch(error => {
+                    console.error('更新商品失败:', error);
+                    Swal.fire({
+                        icon: "error",
+                        text: "分類新增錯誤",
+                    });
+                });
+        }
+        // 封装一个函数来返回一个 Promise，当文件读取完成时 resolve
+        function getBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+
+                reader.onload = function () {
+                    const base64String = reader.result.split(',')[1]; // 去掉前缀 "data:image/png;base64,"
+                    resolve(base64String);  // 成功后返回 Base64 字符串
+                };
+
+                reader.onerror = function (error) {
+                    reject(error);  // 如果读取出错，reject 错误
+                };
+            });
+        }
         /**
          *
          * @param base64String 圖片轉Base64的string型態
          * @returns {boolean}
          */
         function submitProductData(base64String) {
-            var productName = document.getElementById('productName').value.trim();
+            const productName = document.getElementById('productName').value.trim();
             var productPrice = document.getElementById('productPrice').value;
             var size = document.getElementById('size').value;
             var productStatus = document.getElementById('status').value;
             var category = document.querySelector('.category').value;
-
-            // 驗證表單數據
-            if (!productName) {
-                document.querySelector('.productName-message').textContent = '商品名稱不為空';
-                return false;
-            }
-            document.querySelector('.productName-message').textContent = '';
-
-            if (!productPrice || isNaN(productPrice) || parseFloat(productPrice) <= 0) {
-                document.querySelector('.productPrice-message').textContent = '請輸入有效的金額';
-                return false;
-            }
-            document.querySelector('.productPrice-message').textContent = '';
-
-            if (!category || category === '選擇一個分類') {
-                document.querySelector('.category-message').textContent = '請選擇分類';
-                return false;
-            }
-            document.querySelector('.category-message').textContent = '';
 
             if (!base64String) {
                 document.querySelector('.productPic-message').textContent = '圖片檔案寫入失敗';
@@ -625,7 +639,7 @@
                     const pictureList = document.querySelector(".picture_list");
                     pictureList.innerHTML = ""; // 清空內容
                     Swal.fire({
-                        text: "商品分類新增成功!",
+                        text: "商品新增成功!",
                         icon: "success"
                     });
                 })
@@ -645,7 +659,7 @@
         // 获取 URL 参数中的 productId
         const urlParams = new URLSearchParams(window.location.search);
         const productId = urlParams.get('productId');
-        var typeId = urlParams.get('type');
+        const typeId = urlParams.get('type');
         let statusSelect = document.getElementById('status');
 
         if (productId) {
@@ -663,6 +677,8 @@
                     document.getElementById('productName').value = product.productName;
                     document.getElementById('productPrice').value = product.productPrice;
                     document.getElementById('size').value = product.size;
+                    product.productPicture = 'data:image/png;base64,' + product.productPicture;
+                    document.getElementById('productPicImg').src = product.productPicture;
                     statusSelect.value = product.productStatus ? "1" : "0";
                     fetch('/categories/all')
                         .then(response => {
