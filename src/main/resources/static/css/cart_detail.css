@@ -92,8 +92,9 @@
 }
 
 .checkout-content-img img {
-  width: 150px; /* 設置圖片的寬度 */
-  height: 150px; /* 設置圖片的高度 */
+  width: 115x; /* 設置圖片的寬度 */
+  height: 115px; /* 設置圖片的高度 */
+
 }
 
 .store-name {
@@ -255,6 +256,7 @@
   box-sizing: border-box;
   width: 45%;
 }
+
 .coupon-dropdown {
   position: relative;
   max-width: 75%;
@@ -267,13 +269,23 @@
   width: 100%; /* 全寬 */
   padding: 10px;
   font-size: 16px;
-  border: 1px solid #ddd; /* 邊框 */
+  font-family: "Courier New", Courier, monospace;
+  /*border: 1px solid #ddd; !* 邊框 *!*/
   border-radius: 5px;
   background-color: #fff;
   -webkit-appearance: none;
   position: relative;
   padding-right: 40px; /* 給右邊留空間給自定義箭頭 */
-  cursor: pointer;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  color: #333;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  outline: none;
+}
+
+.coupon-select:disabled {
+  background-color: #e9e9e9;
 }
 
 /* 自定義箭頭 */
@@ -297,6 +309,34 @@
 .select-coupon, .coupon-number,
 .select-membercard, .select-moneybag{
   text-align: left;
+}
+
+/* 會員錢包折抵 */
+.moneybag-discount-number {
+  width: 45%;
+  padding: 2px;
+  font-size: 16px;
+  font-family: "Courier New", Courier, monospace;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  background-color: #f9f9f9;
+  color: #333;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  outline: none;
+}
+
+/* 當輸入框禁用時的樣式 */
+.moneybag-discount-number:disabled {
+  background-color: #e9e9e9;
+  color: #999;
+  /*border-color: #ccc;*/
+}
+
+/* 當輸入框獲得焦點時的樣式 */
+.moneybag-discount-number:focus {
+  border-color: #4a90e2;
+  box-shadow: 0 0 5px rgba(74, 144, 226, 0.5);
 }
 
 /*.coupon-number {*/

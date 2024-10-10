@@ -98,9 +98,7 @@
                                             <span>[ 取餐資訊 ] 門市的營業時間/電話/地址/外送限制/取餐方式/支付方式/金額上限</span>
                                         </a>
                                         <div class="inner_block">
-                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad adipisci
-                                            commodi eveniet exercitationem illum libero modi nostrum saepe tempore
-                                            temporibus. Atque consequatur ducimus enim ex id porro, quam rerum soluta!
+                                            請查看菜單上的店家資訊顯示該店家詳細營運資料
                                         </div>
                                     </li>
 
@@ -113,9 +111,7 @@
                                             <span>[ 優惠券 ] 如何使用優惠券享有折扣？</span>
                                         </a>
                                         <div class="inner_block">
-                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad adipisci
-                                            commodi eveniet exercitationem illum libero modi nostrum saepe tempore
-                                            temporibus. Atque consequatur ducimus enim ex id porro, quam rerum soluta!
+                                            結帳頁面可於優惠使用功能-優惠券，根據使用者擁有優惠券進行選用折抵。
                                         </div>
                                     </li>
                                 </ul>
@@ -200,10 +196,7 @@
                                         </a>
 
                                         <div class="inner_block">
-                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci aperiam
-                                            consectetur debitis deserunt dolores eaque eius, est fugiat impedit ipsam
-                                            itaque non obcaecati praesentium quo reprehenderit sunt suscipit veniam
-                                            vero.
+                                            外送服務請查看菜單上的店家資訊，有說明是否提供外送
                                         </div>
 
                                     </li>
@@ -217,10 +210,13 @@
                                             <span>[ 訂購資訊 ] 收到的商品品項有誤</span>
                                         </a>
                                         <div class="inner_block">
-                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci aperiam
-                                            consectetur debitis deserunt dolores eaque eius, est fugiat impedit ipsam
-                                            itaque non obcaecati praesentium quo reprehenderit sunt suscipit veniam
-                                            vero.
+                                            若收到商品內容錯誤時(商品錯誤或有遺漏商品..等問題)，請點選訂單管理，選擇商品有誤的訂單，進入訂單明細。<br>
+                                            <br>
+                                            可於訂單明細內，提出申請爭議。<br>
+                                            <br>
+                                            夏虎茶確認爭議內容後，將於聊天室與您進一步確認。<br>
+                                            <br>
+                                            再請您留意聊天室訊息，謝謝。<br>
                                         </div>
                                     </li>
 
@@ -311,9 +307,7 @@
                                             <span>[ 優惠券 ] 如何使用優惠券?</span>
                                         </a>
                                         <div class="inner_block">
-                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad adipisci
-                                            commodi eveniet exercitationem illum libero modi nostrum saepe tempore
-                                            temporibus. Atque consequatur ducimus enim ex id porro, quam rerum soluta!
+                                            結帳頁面可於優惠使用功能-優惠券，根據使用者擁有優惠券進行選用折抵。
                                         </div>
                                     </li>
 
@@ -326,10 +320,7 @@
                                             <span>[ 優惠券 ] 如何知道我的券夾裡有什麼優惠券以及優惠券使用期限呢？</span>
                                         </a>
                                         <div class="inner_block">
-                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab accusamus
-                                            architecto asperiores consectetur cum delectus dolorum earum facere in
-                                            minima necessitatibus obcaecati pariatur porro provident quae quis suscipit
-                                            unde, ut.
+                                            可在右上角會員中心點選優惠券，查看擁有的優惠券
                                         </div>
                                     </li>
                                     <li>
@@ -353,28 +344,10 @@
                                                 <span class="-plus">+</span>
                                                 <span class="-minus">-</span>
                                             </button>
-                                            <span>[ 集點卡 ] 我該如何知道店家的集點卡規則？</span>
-                                        </a>
-                                        <div class="inner_block">
-                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. A accusamus alias
-                                            aliquid commodi consectetur doloribus error esse eveniet inventore, ipsum
-                                            laboriosam mollitia natus nobis quasi rerum sapiente sunt. Omnis, sapiente!
-                                        </div>
-                                    </li>
-
-                                    <li>
-                                        <a class="link_title" href="#">
-                                            <button class="switch_btn" type="button">
-                                                <span class="-plus">+</span>
-                                                <span class="-minus">-</span>
-                                            </button>
                                             <span>[ 集點卡 ] 如何進行點數兌換?</span>
                                         </a>
                                         <div class="inner_block">
-                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. A consectetur
-                                            cumque fugiat magnam quas repellat? Autem consequatur deleniti dolorum error
-                                            exercitationem fugit minima obcaecati, officiis optio quasi sapiente
-                                            voluptates voluptatum!
+                                            結帳頁面可於使用功能-會員卡，根據使用者於該店面會員點數進行累點折抵。
                                         </div>
                                     </li>
 
@@ -569,20 +542,18 @@
                     chatSessionId: message.chatId,
                     content: message.content,
                     senderId : message.senderId,
-                    timestamp : message.timestamp,
+                    timestamp : message.timestamp
                 })
             )
         }
     }
 
     actionHandlers.updateFile = async (selectedFile) =>{
-        console.log(selectedFile)
         let reader = new FileReader(); // 用來讀取檔案的物件
         reader.readAsDataURL(selectedFile); // 讀取檔案
         let imgMessage;
         reader.addEventListener("load", function () {
-            console.log(reader.result)
-            //要傳送的資料
+            // 1. 圖片訊息加入user聊天室
             let timestamp = new Date();
             imgMessage = {
                 chatId: chat.getActiveChatId(),
@@ -595,26 +566,43 @@
             }
             chat.updateChatListInfo(imgMessage.chatId,imgMessage);
             chat.appendMessage(imgMessage);
-            console.log("reader.result.length:", imgMessage.img.src);
 
-            // 檢查 WebSocket 連接
-            if (webSocket && webSocket.readyState === WebSocket.OPEN) {
-                webSocket.send(
-                    JSON.stringify({
-                        chatSessionId: imgMessage.chatId,
-                        content: imgMessage.content,
-                        senderId: imgMessage.senderId,
-                        timestamp: timestamp,
-                        img:{
-                            src:imgMessage.img.src
-                        }
-                    })
-                );
-            }
+            // 2. 將圖片訊息存入 DB
+            fetch("/chatmessagesdata/imgmessage",{
+                method:"POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    chatSessionId: imgMessage.chatId,
+                    content: imgMessage.content,
+                    senderId : imgMessage.senderId,
+                    timestamp : imgMessage.timestamp,
+                    img: {
+                        src:imgMessage.img.src
+                    }
+                })
+            }).then(res => res.json())
+                // 3. 存入後，再利用 Websocket 讓對方去資料庫取資料
+                .then(messageDto => {
+                    if(webSocket){
+                        webSocket.send(
+                            JSON.stringify({
+                                messageId:messageDto.messageId,
+                                chatSessionId: messageDto.chatSessionId,
+                                content: messageDto.content,
+                                senderId : messageDto.senderId,
+                                timestamp : messageDto.timestamp,
+                            })
+                        );
+                    }
+                }).catch(error => {
+                console.error("Error sending message:", error);
+            })
         });
     }
 
-    const handleSendMessage = e => {
+    const handleSendMessage = async  e =>  {
         let payload = JSON.parse(e.data);
         let message = {
             chatId : payload.chatSessionId,
@@ -623,12 +611,20 @@
             timestamp : payload.timestamp,
             img:payload.img
         }
+        if (payload.messageId != null) {
+            const messageDTO = await fetch(`/chatmessagesdata/message/${payload.messageId}`)
+                .then(res => res.json());
+            message.img = messageDTO.img;
+        }
+
         let activeChatId = chat.getActiveChatId();      //獲取這個聊天室的id
         chat.updateChatListInfo(message.chatId,message);  //更新聊天室側邊欄聊天室列表
         if(activeChatId === message.chatId){
-            chat.appendMessage(message) ;
+            chat.appendMessage(message);
         }
+
     }
+
 
     const chat = new WeienChat();
 

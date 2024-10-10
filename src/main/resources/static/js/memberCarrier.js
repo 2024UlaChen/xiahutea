@@ -14,6 +14,7 @@ function getMemberId() {
     const sessionDetail = JSON.parse(sessionStorage.getItem("memberData"));
     return parseInt(sessionDetail.data.customerId);
 }
+
 function nullToEmpty(data) {
     return (data == null) ? "" : data;
 }
@@ -63,7 +64,11 @@ function updateCarrier(newCarrierTxt, memberId, type) {
         }),
     }).then(res => res.json()).then(data => {
         if (data.successful) {
-            Swal.fire("已更新載具", "", "success");
+            Swal.fire({
+                title: '已更新載具',
+                icon: 'success',
+                confirmButtonColor: '#73B4BA' // 設定確認按鈕顏色
+            });
             getCarrier(getMemberId());
         } else {
             Swal.fire({
@@ -84,6 +89,7 @@ carrierEditBtn.addEventListener("click", function () {
         inputPlaceholder: "/1234567",
         showCancelButton: true,
         width: 350,
+        confirmButtonColor: "#73B4BA",
         confirmButtonText: `<span class="sweetAlertFont">更新載具</span>`,
         cancelButtonText: `<span class="sweetAlertFont">取消修改</span>`,
         customClass: {

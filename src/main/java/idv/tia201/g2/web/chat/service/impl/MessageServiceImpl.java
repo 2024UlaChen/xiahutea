@@ -57,7 +57,6 @@ public class MessageServiceImpl implements MessageService {
         message.setMessageContent(messageDto.getContent());
         if(messageDto.getImg() != null && messageDto.getImg().getSrc() != null){
             String src = messageDto.getImg().getSrc();
-            System.out.println(src);
             // 檢查是否包含 "data:image" 前綴，並去除它
             if (src.startsWith("data:image")) {
                 src = src.substring(src.indexOf(",") + 1);
@@ -74,5 +73,11 @@ public class MessageServiceImpl implements MessageService {
         message.setSenderId(messageDto.getSenderId());
         message.setSentAt(messageDto.getTimestamp());
         return messageChatSessionRepository.save(message);
+    }
+
+    @Override
+    public MessageDto getImgMessageDTO(Long messageId) throws IOException {
+        Messages message = messageChatSessionRepository.findByMessageId(messageId);
+        return MessagesToMessageDto(message);
     }
 }

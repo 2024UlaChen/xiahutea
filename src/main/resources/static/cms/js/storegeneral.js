@@ -32,23 +32,27 @@ $(function () {
                 $.each(showAdmin, function (index, item) {
                     $(item).addClass("d-none")
                 })
+                let imgformat = getImgFormatByBase64(data.logo)
+                $("#userimg").attr("src",`data:image/${imgformat};base64,${data.logo}`);
+                $("#username").text(data.data);
+                console.log(data.data)
+
             } else {
                 $(".sidebar").eq(0).addClass("d-none")
-                console.log($("div.storeaside").next())
                 let containEle = $("div.storeaside").next().children();
                 $.each(containEle,function (index,item){
                     $(item).addClass("d-none")
                 })
             }
         })
-        .catch(error => {
-            $(".sidebar").eq(0).addClass("d-none")
-            console.log($("div.storeaside").next())
-            let containEle = $("div.storeaside").next().children();
-            $.each(containEle,function (index,item){
-                $(item).addClass("d-none")
-            })
-        });
+        // .catch(error => {
+        //     $(".sidebar").eq(0).addClass("d-none")
+        //     console.log($("div.storeaside").next())
+        //     let containEle = $("div.storeaside").next().children();
+        //     $.each(containEle,function (index,item){
+        //         $(item).addClass("d-none")
+        //     })
+        // });
 })
 
 $("li#logout").on("click", e => {
@@ -66,6 +70,30 @@ $("li#logout").on("click", e => {
         }
     });
 })
+
+function getImgFormatByBase64(base64Img){
+    if(base64Img !=null){
+        let imgFormat;
+        if (base64Img.startsWith("iVBORw0KGgo")) {
+            imgFormat = "png"; // PNG 圖片的 base64 開頭
+        } else if (base64Img.startsWith("/9j/")) {
+            imgFormat = "jpeg"; // JPEG 圖片的 base64 開頭
+        }else if (base64Img.startsWith("R0lGODlh")) {
+            imgFormat = "gif"; // JPEG 圖片的 base64 開頭
+        }else if (base64Img.startsWith("Qk0")) {
+            imgFormat = "bmp"; // JPEG 圖片的 base64 開頭
+        }else if (base64Img.startsWith("UklGR")) {
+            imgFormat = "webp"; // JPEG 圖片的 base64 開頭
+        }else if (base64Img.startsWith("PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmci")) {
+            imgFormat = "svg+xml"; // JPEG 圖片的 base64 開頭
+        }
+        else {
+            console.error("不支持的圖片格式");
+        }
+        return imgFormat;
+    }
+
+}
 
 
 

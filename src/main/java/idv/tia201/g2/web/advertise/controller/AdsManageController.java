@@ -37,7 +37,7 @@ public class AdsManageController {
     public List<Advertise> getAdvertises() {
         return adsService.findAllAdvertises();
     }
-    //若為廣裡員拿全部商店資料
+    //若為管裡員拿全部商店資料
     @PostMapping("/findstore")
     public List<Store> getallstore(@RequestBody List<Integer> userids ){
         return adsService.findByids(userids);

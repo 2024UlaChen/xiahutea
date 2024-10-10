@@ -17,9 +17,6 @@ function getUser(){
                             </li>`;
                 document.querySelector('.header-user-links').insertAdjacentHTML('afterbegin',str);
                 
-                document.querySelector('#searchBarLoyalty').remove();
-                document.querySelector('#searchBarOrder').remove();
-                document.querySelector('#searchBarCoupon').remove();
 
 
             }else{
@@ -28,6 +25,8 @@ function getUser(){
                 document.querySelector('#userLogo').src =`data:image/png;base64,${data.customerImg}`;
 
             }
+
+
 
         }
     });//取得登入
@@ -119,9 +118,11 @@ function logOutSkip(){
         tag.addEventListener('click',function (){
             Swal.fire({
                 title: "確認登出?",
-                showDenyButton: true,
+                showCancelButton: true,
+                confirmButtonColor: "#73B4BA",
+                cancelButtonColor: "#6c757d",
                 confirmButtonText: "登出",
-                denyButtonText: "否"
+                cancelButtonText: "取消",
             }).then((result) => {
                 if (result.isConfirmed) {
                     fetch("member/logout")
