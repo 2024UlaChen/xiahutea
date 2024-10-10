@@ -24,6 +24,7 @@ $(function () {
         .then(res => res.json())
         .then(data => {
             userTypeId = data.userTypeId;
+            userId = data.userId;
             if (userTypeId === 3) {
                 $.each(showStore, function (index, item) {
                     $(item).addClass("d-none")
@@ -35,6 +36,10 @@ $(function () {
                 let imgformat = getImgFormatByBase64(data.logo)
                 $("#userimg").attr("src",`data:image/${imgformat};base64,${data.logo}`);
                 $("#username").text(data.data);
+                $("#storeInfo").attr("href","./storeInfo.html?storeid=" + userId);
+                $("#storeInfoEditLoyaltyCard").attr("href","./storeInfoEditLoyaltyCard.html?storeid=" + userId);
+                $("#storeInfoEditPassword").attr("href","./storeInfoEditPassword.html?storeid=" + userId);
+
                 console.log(data.data)
 
             } else {
