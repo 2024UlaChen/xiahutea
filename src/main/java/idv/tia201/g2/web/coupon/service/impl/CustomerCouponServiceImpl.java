@@ -46,10 +46,7 @@ public class CustomerCouponServiceImpl implements CustomerCouponService {
 
     @Override
     public CustomerCoupons addResgiterCoupon(Integer customerId) {
-        //檢查是否已經存在
-        if(customerCouponDao.findByCustomerIdAndCouponId(customerId,1) != null) {
-            return null;
-        }
+        
 
         CustomerCoupons ForResgiter = new CustomerCoupons();
         ForResgiter.setCustomerId(customerId);
