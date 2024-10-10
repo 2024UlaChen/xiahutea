@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ProductCategoryDao extends JpaRepository<ProductCategory, Integer> {
+public interface ProductCategoryRepository extends JpaRepository<ProductCategory, Integer>,ProductCategoryOperation {
 
     ProductCategory findByCategorySort(Integer categorySort);
     // 根據分類排序和店家 ID 查詢商品分類
