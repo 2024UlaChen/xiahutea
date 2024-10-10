@@ -509,14 +509,19 @@ let allSotre = document.querySelectorAll('.Heart');
           document.querySelectorAll('.workTime').forEach(function (row){
 
               let openH = parseInt(row.textContent.split(':')[0]);
+              let openM = parseInt(row.textContent.split(':')[1]);
               let now = new Date();
               nowH = now.getHours();
-              if(openH > nowH){
+              nowM = now.getMinutes();
+
+              if(openH > nowH || (openH === nowH && openM > nowM)){
                   let icon = '<span style="color:#FFA600;font-weight:bold; ">尚未營業</span>';
                   let non ='<span> &empty;</span>';
                   let parentTag = row.closest('.storeLinkCard');
                   parentTag.querySelector('a').insertAdjacentHTML('afterbegin',icon);
-              }else{
+              }
+
+              else{
                   let non ='<span> &nbsp;</span>';
                   let parentTag = row.closest('.storeLinkCard');
                   parentTag.querySelector('a').insertAdjacentHTML('afterbegin',non);
