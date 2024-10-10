@@ -221,12 +221,14 @@ public class OrderServiceImpl implements OrderService {
         }
 
         // 會員使用點數
-        if(order.getCustomerMoneyDiscount() < 0 || order.getCustomerMoneyDiscount() > member.getCustomerMoney()){
-            orderDto.setMessage("會員錢包折抵金額錯誤");
-            orderDto.setSuccessful(false);
-            return orderDto;
+        if(!isEmpty(order.getCustomerMoneyDiscount()) ){
+            if(order.getCustomerMoneyDiscount() < 0 || order.getCustomerMoneyDiscount() > member.getCustomerMoney()){
+                orderDto.setMessage("會員錢包折抵金額錯誤");
+                orderDto.setSuccessful(false);
+                return orderDto;
+            }
+            memberService.updateMemberMoneyById(customerId, (- order.getCustomerMoneyDiscount()));
         }
-        memberService.updateMemberMoneyById(customerId, (- order.getCustomerMoneyDiscount()));
 
         order.setOrderStatus(1);
         order.setOrderCreateDatetime(new Timestamp(System.currentTimeMillis()));
