@@ -408,13 +408,17 @@
 
             document.querySelector("#storeStatus").value = data.storeStatus;
             document.querySelector("#owner").value = data.owner;
-            document.querySelector("#loyaltyCardName").value =
-              data.loyaltyCardName;
-            document.querySelector("#exchangeRate").value = data.exchangeRate;
 
 
-            document.querySelector("#expiredDate").value = data.expiredDate!=null?
-              data.expiredDate.split("T")[0]:  "使用中";
+            if(!data.loyaltyCardName){
+              document.querySelector("#loyaltyCardName").value ="尚未設置集點卡";
+              document.querySelector("#exchangeRate").value = "尚未設置集點卡";
+              document.querySelector("#expiredDate").value ="尚未設置集點卡"
+            }else{
+              document.querySelector("#expiredDate").value = data.expiredDate!=null?
+                      data.expiredDate.split("T")[0]:  "使用中";
+            }
+
 
             const base64image = data.logo;
 
