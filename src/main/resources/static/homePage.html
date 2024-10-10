@@ -591,8 +591,11 @@ let allSotre = document.querySelectorAll('.Heart');
             const drinkAddressTags = document.querySelectorAll(".drinkAddress"); // 飲料店地址
 
             function error() {
+                if(status === 1){
+                    swal.fire({text:"瀏覽器不支援定位"});
+                }
 
-                swal.fire({text:"瀏覽器不支援定位"});
+
             }
 
             function success(position) {
@@ -709,6 +712,14 @@ let allSotre = document.querySelectorAll('.Heart');
 
 
               getDistance();
+              //檢查結果
+              setTimeout(function (){
+                  if(!document.querySelector('.storeLinkCard')){
+                      Swal.fire({
+                          text:"該區域方圓十公里內沒有店家"
+                      });
+                  }
+              },1000);
           });
       }
 
