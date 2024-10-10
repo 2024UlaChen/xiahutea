@@ -143,7 +143,7 @@ public class ProductCategoryController {
    }
 
    @GetMapping("/paginated")
-   public ResponseEntity<Page<ProductCategory>> getCategoriesPaginated(
+   public ResponseEntity<Page<ProductCategoryDTO>> getCategoriesPaginated(
            @RequestParam(defaultValue = "0") int page,
            @RequestParam(defaultValue = "10") int size, HttpSession session) {
 
@@ -160,7 +160,8 @@ public class ProductCategoryController {
       Integer userId = totalUserDTO.getUserId(); // 商家的ID
 
       Pageable pageable = PageRequest.of(page, size);
-      Page<ProductCategory> categories;
+      Page<ProductCategoryDTO> categories;
+
 
       // 根據用戶角色篩選產品分類
       if (userTypeId == 3) {
