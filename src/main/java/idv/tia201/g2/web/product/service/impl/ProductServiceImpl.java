@@ -11,6 +11,7 @@ import idv.tia201.g2.web.product.vo.Product;
 import idv.tia201.g2.web.product.vo.ProductCategory;
 import idv.tia201.g2.web.store.dao.StoreDao;
 import idv.tia201.g2.web.store.vo.Store;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -282,6 +283,8 @@ public class ProductServiceImpl implements ProductService {
         dto.setCoconutJelly(product.isCoconutJelly());
         dto.setTaro(product.isTaro());
         dto.setHerbalJelly(product.isHerbalJelly());
+        String base64Image = Base64.getEncoder().encodeToString(product.getProductPicture());
+        dto.setProductPicture(base64Image);// 圖片資料
         return dto;
     }
 
