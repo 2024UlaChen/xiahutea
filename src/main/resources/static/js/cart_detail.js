@@ -1729,32 +1729,46 @@ document.addEventListener("DOMContentLoaded",function(){
     //F16 獲得會員卡餘額及相關事件綁定
     function GetMemberCardPoint(storeId,customerId){
         fetch(`/cart/checkoutlist/getMemberCard/${storeId}/${customerId}`)
-            .then(response=>{
-                if (!response.ok) {
-                    return response.json().then(errorData => {
-                        throw new Error(errorData.message);
-                    });
-                }
-                return response.json();
-            })
+            .then(response => {
+            // 檢查是否有錯誤
+            if (!response.ok) {
+                return response.json().then(errorData => {
+                    throw new Error(errorData.message);
+                });
+            }
+            // 如果狀態碼是 204（No Content），或者回應中沒有內容，返回 null
+            if (response.status === 204) {
+                return null;
+            }
+            // 返回 JSON 解析結果
+            return response.json();
+        })
             .then(data=>{
-                console.log("membercard:",data)
-                console.log("會員卡積分:", data.points);
-                if(data.points<10){
-                    membercard_count_el.textContent=`會員點數為${data.points} 點，會員點數不足`;
+                console.log("membercard:", data);
+                // 檢查是否有返回會員卡資料
+                if (!data || Object.keys(data).length === 0) {
+                    // 如果資料為空，顯示 "無會員卡資料"
+                    membercard_count_el.textContent = "無會員卡資料";
                     membercard_minus_number_el.textContent = "$0";
-                }else if(data.points>=10){
-                    membercard_count_el.textContent=`會員點數為${data.points} 點，10點可折抵50元`;
-                    membercard_minus_number_el.textContent = "$50";
-                    loyaltyCardId = data.loyaltyCardId;
-                }else{
-                    membercard_count_el.textContent="無會員卡資料";
-                    membercard_minus_number_el.textContent = "$0";
+                } else {
+                    // 正常處理有資料的情況
+                    console.log("會員卡積分:", data.points);
+
+                    if (data.points < 10) {
+                        membercard_count_el.textContent = `會員點數為${data.points} 點，會員點數不足`;
+                        membercard_minus_number_el.textContent = "$0";
+                    } else if (data.points >= 10) {
+                        membercard_count_el.textContent = `會員點數為${data.points} 點，10點可折抵50元`;
+                        membercard_minus_number_el.textContent = "$50";
+                        loyaltyCardId = data.loyaltyCardId;
+                    }
                 }
                 Calculatetotal();
             })
             .catch(error=>{
                 console.error('Error loading coupons:', error);
+                membercard_count_el.textContent = "無此店家會員卡";
+                membercard_minus_number_el.textContent = "$0";
             })
     }
     //F20 計算訂單金額
