@@ -10,6 +10,7 @@ import idv.tia201.g2.web.store.vo.Store;
 import idv.tia201.g2.web.user.dao.TotalUserDao;
 import idv.tia201.g2.web.user.vo.TotalUsers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -74,7 +75,7 @@ public class AdsServiceImpl implements AdsService {
 
     @Override
     public List<Advertise> findAllAdvertises() {
-        return adsDao.findAll();
+        return adsDao.findAll(Sort.by(Sort.Direction.DESC, "adsId"));
     }
 
     @Override
@@ -95,7 +96,9 @@ public class AdsServiceImpl implements AdsService {
 
     @Override
     public List<Advertise> findstoreAdvertises(Long userid) {
-        return adsDao.findByAdsTotalUserid(userid);
+        List<Advertise> advertises = adsDao.findByAdsTotalUserid(userid);
+        advertises.sort((ad1, ad2) -> ad2.getAdsId().compareTo(ad1.getAdsId()));
+        return advertises;
     }
 
     @Override
