@@ -2,6 +2,7 @@ package idv.tia201.g2.web.cart.controller;
 
 import idv.tia201.g2.web.cart.service.CartService;
 import idv.tia201.g2.web.coupon.vo.Coupon;
+import idv.tia201.g2.web.coupon.vo.CustomerCoupons;
 import idv.tia201.g2.web.member.vo.Member;
 import idv.tia201.g2.web.member.vo.MemberAddress;
 import idv.tia201.g2.web.product.vo.Product;
@@ -37,6 +38,11 @@ public class CartController  {
     @GetMapping("/getCoupon/{customerId}")
     public List<Coupon> getCoupons(@PathVariable int customerId){
         return cartService.findCouponsByCustomerId(customerId);
+    }
+    // GET 請求：取得使用者的使用者優惠券ID
+    @GetMapping("/getCustomerCoupon/{customerId}/{couponId}")
+    public CustomerCoupons getCustomerCoupons(@PathVariable Integer customerId,@PathVariable Integer couponId){
+        return cartService.findCustomerCoupons(customerId,couponId);
     }
 
     // POST 請求：獲取商品資料

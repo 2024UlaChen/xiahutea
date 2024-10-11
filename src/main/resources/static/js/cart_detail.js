@@ -19,6 +19,7 @@ document.addEventListener("DOMContentLoaded",function(){
     let storeId;
     let nowstore;
     let customerCouponsId;
+    let customerCoupon;
     let loyaltyCardId;
     let orderloyaltyCardId
     let ordernote;
@@ -297,7 +298,7 @@ document.addEventListener("DOMContentLoaded",function(){
     couponSelect_el.addEventListener('change',function (){
         let selectedOption = couponSelect_el.options[couponSelect_el.selectedIndex];
         let discount = selectedOption.getAttribute('data-discount');
-        customerCouponsId = selectedOption.value;
+        customerCouponsId = selectedOption.getAttribute('data-customercouonid');
         coupon_minus_number_el.textContent = `$${discount}`;
     })
 
@@ -1677,31 +1678,55 @@ document.addEventListener("DOMContentLoaded",function(){
     }
 
     //F14 獲得的優惠券動態生成選項
-    function getcoupons(customerId){
-        fetch(`/cart/getCoupon/${customerId}`)
-            .then(response=>{
-                if (!response.ok) {
-                    return response.json().then(errorData => {
-                        throw new Error(errorData.message);
-                    });
-                }
-                return response.json();
-            })
-            .then(coupons => {
-                console.log("coupons : ",coupons)
-                let options = couponSelect_el.querySelectorAll('option:not([disabled])');
-                options.forEach(option => option.remove());
-                coupons.forEach(coupon => {
+    async function getcoupons(customerId) {
+        try {
+            const response = await fetch(`/cart/getCoupon/${customerId}`);
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message);
+            }
+            const coupons = await response.json();
+            console.log("coupons : ", coupons);
+
+            // 清除現有選項
+            let options = couponSelect_el.querySelectorAll('option:not([disabled])');
+            options.forEach(option => option.remove());
+
+            // 迭代每個優惠券
+            for (const coupon of coupons) {
+                const customerCoupon = await getcustomercouponID(customerId, coupon.couponId); // 等待 getcustomercouponID 完成
+                console.log("customercoupon:", customerCoupon);
+
+                if (customerCoupon) { // 確認 customerCoupon 有資料後再添加選項
                     let option = document.createElement('option');
                     option.value = coupon.couponId;
                     option.textContent = coupon.couponName;
                     option.setAttribute('data-discount', coupon.discount);
+                    option.setAttribute('data-customercouonid', customerCoupon.customerCouponsId); // 使用返回的 customerCouponsId
                     couponSelect_el.appendChild(option);
-                });
-            })
-            .catch(error => console.error('Error loading coupons:', error));
+                }
+            }
+        } catch (error) {
+            console.error('Error loading coupons:', error);
+        }
     }
-    //F15 獲得會員卡餘額及相關事件綁定
+    //F15 從使用者ID和優惠券ID抓customercouponID
+    async function getcustomercouponID(customerId, couponId) {
+        try {
+            const response = await fetch(`/cart/getCustomerCoupon/${customerId}/${couponId}`);
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message);
+            }
+            const customerCoupon = await response.json(); // 等 fetch 完成後回傳結果
+            // console.log("function customercoupon:", customerCoupon);
+            return customerCoupon; // 回傳 customerCoupon 給呼叫的地方使用
+        } catch (error) {
+            console.error('Error loading customercoupons:', error);
+            return null; // 如果出錯，返回 null
+        }
+    }
+    //F16 獲得會員卡餘額及相關事件綁定
     function GetMemberCardPoint(storeId,customerId){
         fetch(`/cart/checkoutlist/getMemberCard/${storeId}/${customerId}`)
             .then(response=>{
