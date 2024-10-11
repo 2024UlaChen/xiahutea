@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>後台 | 訂單爭議管理</title>
+    <title>後台 | 爭議管理</title>
 
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -105,12 +105,12 @@
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1>訂單爭議管理</h1>
+                            <h1>爭議管理</h1>
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                <li class="breadcrumb-item active">訂單爭議管理</li>
+                                <li class="breadcrumb-item active">爭議管理</li>
                             </ol>
                         </div>
                     </div>
@@ -285,10 +285,10 @@
         const btnSelect = document.getElementById("btn_select");
         btnSelect.addEventListener("click", function (e) {
             e.preventDefault();
-            let select_dispute_id = document.getElementsByClassName("select_order")[0]?.value.toLowerCase() || "";
-            let select_order_id = document.getElementsByClassName("select_order")[1]?.value.toLowerCase() || "";
-            let select_order_store = document.getElementsByClassName("select_order")[3]?.value.toLowerCase() || "";
-            let select_order_user = document.getElementsByClassName("select_order")[2]?.value.toLowerCase() || "";
+            let select_dispute_id = document.getElementsByClassName("select_order")[0]?.value.toLowerCase().trim() || "";
+            let select_order_id = document.getElementsByClassName("select_order")[1]?.value.toLowerCase().trim() || "";
+            let select_order_store = document.getElementsByClassName("select_order")[3]?.value.toLowerCase().trim() || "";
+            let select_order_user = document.getElementsByClassName("select_order")[2]?.value.toLowerCase().trim() || "";
             let select_dispute_status = document.getElementById("select_status").value || "";
             let select_dispute_date1 = document.getElementsByClassName("select_date")[0]?.value || "";
             let select_dispute_date2 = document.getElementsByClassName("select_date")[1]?.value || "";

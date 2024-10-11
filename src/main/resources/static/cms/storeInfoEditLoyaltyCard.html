@@ -145,14 +145,20 @@
             document.querySelector("#rate").value = data.exchangeRate;
             if (data.validStatus) {
               //集點卡有效
-              document.querySelector("#passday").value = "激活中";
+              document.querySelector("#passday").value = "使用中";
 
               document.querySelector("#cardstatus").setAttribute("checked", "");
             } else {
-              let expiredDate = data.expiredDate.split(".")[0];
-              let expiredDateFormat = expiredDate.split("T")[0]+" "+(expiredDate.split("T")[1]).split(':')[0] +":"+(expiredDate.split("T")[1]).split(':')[1]
-              document.querySelector("#passday").value =
-                      expiredDateFormat;
+              if(!data.loyaltyCardName){
+                document.querySelector("#passday").value =
+                        "";
+              }else{
+                let expiredDate = data.expiredDate.split(".")[0];
+                let expiredDateFormat = expiredDate.split("T")[0]+" "+(expiredDate.split("T")[1]).split(':')[0] +":"+(expiredDate.split("T")[1]).split(':')[1]
+                document.querySelector("#passday").value =
+                        expiredDateFormat;
+              }
+
             }
           },
           err: function (data) {
