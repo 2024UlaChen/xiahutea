@@ -1,0 +1,583 @@
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    /*background-color: #d1eced;*/
+    background: #F5F5F5;
+
+
+}
+
+.bigcontainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.restaurant-info-container,
+.menu-container {
+    width: 80%;
+    margin-bottom: 20px;
+
+
+}
+
+
+.restaurant-info-container {
+
+    box-shadow: 0px 2px 4px -1px rgb(227, 219, 219);
+    margin-top: 10px;
+    border-radius: 10px;
+    background-color: #ffffff;
+
+
+}
+
+@media (max-width: 992px) {
+    .restaurant-info-container {
+
+        width: 800px;
+
+    }
+}
+
+.restaurant-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.restaurant-details {
+    display: flex;
+    flex-direction: column;
+
+    border-radius: 10px;
+
+
+}
+
+.rating,
+.hours,
+.phone,
+.address {
+    margin-top: 5px;
+}
+
+.restaurant-text {
+    display: flex;
+    flex-direction: column;
+
+}
+
+.restaurant-actions {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 50px;
+
+
+}
+
+.action {
+    /* display: inline-block; */
+    margin-top: 10px;
+
+
+}
+
+.restaurant-logo-big {
+    text-align: center;
+}
+
+div.menu-section {
+
+    width: 30%;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0px 2px 4px -1px rgb(227, 219, 219);
+    border: 1px solid #00000020;
+    background-color: #ffffff;
+    flex-grow: 1;
+}
+
+.menu-container {
+    display: flex;
+    flex-wrap: wrap;
+    text-align: left;
+    gap: 37px;
+
+
+    /* 使整個 menu-container 的內容靠左對齊 */
+}
+
+@media (max-width: 992px) {
+    .menu-container {
+
+        width: 800px;
+
+    }
+}
+
+
+.menu-section ul {
+    list-style: none;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 5px;
+
+
+}
+
+.menu-section li {
+    margin-bottom: 10px;
+    border-bottom: 1px dotted #ccc;
+    color: #0a0601;
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+h2 {
+
+    color: #73B4BA;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+
+.restaurant-info-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.restaurant-details {
+    flex: 1;
+    min-width: 300px;
+    padding: 20px;
+}
+
+
+.carousel-inner img {
+    width: 100%;
+    height: auto;
+}
+
+
+div.orderinfo,
+div.question {
+
+    background-color: #fac792;
+    border-radius: 10px;
+    width: 100px;
+    height: 50px;
+    box-shadow: 0px 2px 4px -1px rgb(232, 196, 196);
+    cursor: pointer;
+    display: flex;
+    /* 水平置中 */
+    justify-content: center;
+    /* 垂直置中 */
+    align-items: center;
+
+
+}
+
+
+div.orderinfo:hover {
+    background-color: #73B4BA;
+}
+
+div.question:hover {
+    background-color: #73B4BA;
+
+}
+
+
+/* 燈箱 */
+#lightbox {
+    /*   border: 1px solid red; */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: hsla(0, 0%, 0%, .5);
+
+
+    display: none;
+}
+
+/* 元素 article 置中及基本樣式 */
+#lightbox > article {
+
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+
+    max-width: 380px;
+
+}
+
+
+div.title {
+    /* padding: 15px; */
+    /* font-weight: bold; */
+    background-color: #ffffff;
+    text-align: center;
+
+
+}
+
+div.content {
+    /* padding: 15px; */
+    overflow: auto;
+    flex-grow: 1;
+    height: 400px;
+
+    /* 讓中間部分填充剩餘空間 */
+}
+
+div.bottom {
+    padding: 10px;
+    background-color: #f8f8f8;
+
+}
+
+.content::-webkit-scrollbar {
+    display: none;
+}
+
+
+div.options div.temperature, div.sweetness, div.topping, div.size {
+
+    border-radius: 5px;
+    border: solid #fac792 1px;
+}
+
+
+div.options {
+    margin-left: 10px;
+
+
+}
+
+div.temperature {
+    display: flex;
+    width: 90px;
+    height: 30px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    /* 水平置中 */
+    justify-content: center;
+    /* 垂直置中 */
+    align-items: center;
+    cursor: pointer;
+
+}
+
+
+div.sweetness {
+    display: flex;
+    width: 90px;
+    height: 30px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    /* 水平置中 */
+    justify-content: center;
+    /* 垂直置中 */
+    align-items: center;
+    cursor: pointer;
+
+}
+
+div.topping {
+    display: flex;
+    width: 90px;
+    height: 30px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    /* 水平置中 */
+    justify-content: center;
+    /* 垂直置中 */
+    align-items: center;
+    cursor: pointer;
+
+}
+
+div.size {
+
+    display: flex;
+    width: 90px;
+    height: 30px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    /* 水平置中 */
+    justify-content: center;
+    /* 垂直置中 */
+    align-items: center;
+    cursor: pointer;
+
+
+}
+
+
+.section {
+
+    margin-bottom: 20px;
+    justify-content: center;
+    margin: 10px;
+
+}
+
+.section label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.options {
+    display: flex;
+
+    flex-wrap: wrap;
+}
+
+/* 字體顏色 */
+div.ice {
+    color: rgb(69, 64, 64);
+    font-size: x-small;
+}
+
+
+/* 數量 */
+/* selector */
+input.minus,
+input.plus {
+    width: 40px;
+    height: 32px;
+    border: solid #fac792 1px;
+    /* 水平置中 */
+    justify-content: center;
+    /* 垂直置中 */
+    align-items: center;
+    display: flex;
+    background-color: #fff;
+
+
+}
+
+.minus {
+    border-radius: 5px 0px 0px 5px;
+}
+
+.plus {
+    border-radius: 0px 5px 5px 0px;
+}
+
+div.selector {
+    border: solid #fac792 1px;
+    width: 87px;
+    height: 32px;
+
+}
+
+div.quantity {
+    display: flex;
+    justify-content: flex-start;
+}
+
+input.number {
+    width: 85px;
+    height: 25px;
+    outline: none;
+    text-align: center;
+
+}
+
+/* 訂購人 */
+input.person {
+    border: solid #fac792 1px;
+    border-radius: 5px;
+    width: 200px;
+    height: 30px;
+
+}
+
+
+/* .myclassa {
+    border: 1px solid black;
+    display: inline-block;
+}
+
+.myclassa img {
+    border: 1px solid blue;
+} */
+
+.bottom {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.bottom button[type="submit"] {
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 20px;
+    /* display: inline; */
+    align-items: center;
+
+
+}
+
+.bottom button[type="submit"]:hover {
+    background-color: #218838;
+}
+
+
+div.pic {
+    width: 350px;
+    height: 300px;
+    /* border: solid red 1px; */
+}
+
+div.pic img {
+
+    /* width: 100%;
+    height: 100%; */
+    vertical-align: bottom;
+    width: 100%;
+}
+
+/* 訂購資訊modal */
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 70%;
+    max-width: 500px;
+    border-radius: 5px;
+
+}
+
+/* Close Button */
+.close {
+    color: grey;
+    margin-left: auto;
+    padding-right: 4px;
+
+    font-size: 28px;
+    font-weight: bold;
+
+}
+
+.close:hover, .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Modal Header */
+.modal-header {
+    display: flex;
+    justify-content: flex-start;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 5px;
+}
+
+/* Modal Tabs */
+.modal-tabs {
+    display: flex;
+    /*justify-content: flex-start;*/
+    margin-bottom: 10px;
+}
+
+.modal-tabs div {
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    display: block;
+}
+
+.modal-tabs div.active {
+    border-bottom: 2px solid #fac792;
+    font-weight: bold;
+}
+
+/* Modal Sections */
+.modal-section {
+    display: none;
+}
+
+.modal-section.active {
+    display: block;
+}
+
+/* Delivery Options */
+.delivery-options {
+    margin-top: 20px;
+}
+
+.delivery-options ul {
+    list-style-type: none;
+    padding: 0;
+
+}
+
+.delivery-options li {
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.section-content {
+    margin-bottom: 20px;
+}
+
+#deliveryOptions h5 {
+    font-size: 16px;
+    margin-bottom: 10px;
+    color: #ff6600;
+}
+
+#adImage {
+    max-width: 100%; /* 使图像自适应父元素宽度 */
+    height: auto; /* 保持宽高比 */
+}
+
+div.pic {
+    width: 100%;
+    height: 50%;
+
+}
+
+#productImage {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
