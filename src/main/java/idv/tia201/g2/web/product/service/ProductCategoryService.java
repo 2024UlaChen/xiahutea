@@ -1,7 +1,6 @@
 package idv.tia201.g2.web.product.service;
 
 import idv.tia201.g2.web.product.dto.ProductCategoryDTO;
-import idv.tia201.g2.web.product.vo.Product;
 import idv.tia201.g2.web.product.vo.ProductCategory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,9 +15,11 @@ public interface ProductCategoryService {
     boolean deleteCategory(Integer categoryId);
     List<ProductCategory> getCategoriesByName(String categoryName);
     Page<ProductCategoryDTO> getCategories(Pageable pageable);
-    boolean checkStoreOwnership(Integer userId, Integer storeId);
     Page<ProductCategoryDTO> getProductCategoryByStoreId(Integer productStoreId, Pageable pageable);
     List<ProductCategory> getCategoriesByNameAndStoreId(String categoryName, Integer storeId);
     List<ProductCategory>getProductCategoryByStoreId(Integer productStoreId);
     List<ProductCategory> getCategoriesByStore(Integer storeId);
+
+    Page<ProductCategoryDTO> serchCategories(ProductCategoryDTO productCategoryDTO, Pageable pageable);
+
 }

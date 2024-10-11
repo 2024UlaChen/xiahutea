@@ -1,26 +1,21 @@
 package idv.tia201.g2.web.product.controller;
 
 
-
 import idv.tia201.g2.web.product.dto.ProductCategoryDTO;
 import idv.tia201.g2.web.product.service.ProductCategoryService;
-
 import idv.tia201.g2.web.product.vo.ProductCategory;
 import idv.tia201.g2.web.user.dto.TotalUserDTO;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
 import org.springframework.web.bind.annotation.*;
 
-
 import java.util.ArrayList;
-
 import java.util.List;
 
 
@@ -142,48 +137,42 @@ public class ProductCategoryController {
       return productCategoryService.deleteCategory(categoryId);
    }
 
-   @GetMapping("/paginated")
+   @GetMapping()
    public ResponseEntity<Page<ProductCategoryDTO>> getCategoriesPaginated(
            @RequestParam(defaultValue = "0") int page,
            @RequestParam(defaultValue = "10") int size,
            @RequestParam(required = false) String storeName,
            @RequestParam(required = false) String categoryName,
            HttpSession session) {
-      
+
+
       // 從 session 中獲取 totalUserDTO
       TotalUserDTO totalUserDTO = (TotalUserDTO) session.getAttribute("totalUserDTO");
-      ProductCategoryDTO productCategoryDTO = new ProductCategoryDTO();
-      // 管理員 => 搜尋全部
-      if(totalUserDTO.getUserTypeId() == 3 && storeName == null){
-         
-      }
-      
-
       // 如果 session 中沒有 totalUserDTO，返回 403 未授權
       if (totalUserDTO == null) {
          return new ResponseEntity<>(HttpStatus.FORBIDDEN);
       }
 
-      // 獲取用戶類型和用戶ID
-      Integer userTypeId = totalUserDTO.getUserTypeId(); // 1: 商家, 3: 管理員
-      Integer userId = totalUserDTO.getUserId(); // 商家的ID
-
-      Pageable pageable = PageRequest.of(page, size);
+      Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.asc("productStoreId"), Sort.Order.desc("productCategoryStatus"), Sort.Order.asc("categorySort")));
       Page<ProductCategoryDTO> categories;
 
+      ProductCategoryDTO productCategoryDTO = new ProductCategoryDTO();
+      productCategoryDTO.setCategoryName(categoryName);
 
-      // 根據用戶角色篩選產品分類
-      if (userTypeId == 3) {
-         // 管理員，返回所有店家產品分類資料
-         categories = productCategoryService.getCategories(pageable);
-      } else if (userTypeId == 1) {
+      // 1: 商家, 3: 管理員
+      //店家只能搜尋自己的分類
+      if (totalUserDTO.getUserTypeId() == 1) {
          // 商家，過濾返回該商家的產品分類
-         categories = productCategoryService.getProductCategoryByStoreId(userId, pageable);
+         productCategoryDTO.setProductStoreId(totalUserDTO.getUserId());
+         productCategoryDTO.setStoreName((String) totalUserDTO.getData());
+      } else if (totalUserDTO.getUserTypeId() == 3) {
+         productCategoryDTO.setStoreName(storeName);
       } else {
          // 非商家或管理員角色，返回 403 未授權
          return new ResponseEntity<>(HttpStatus.FORBIDDEN);
       }
 
+      categories = productCategoryService.serchCategories(productCategoryDTO, pageable);
       // 返回分頁結果
       return new ResponseEntity<>(categories, HttpStatus.OK);
    }

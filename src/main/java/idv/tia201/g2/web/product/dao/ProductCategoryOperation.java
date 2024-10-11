@@ -10,4 +10,10 @@ public interface ProductCategoryOperation {
 
     Page<ProductCategoryDTO> findProductCategoryDTO(Pageable pageable);
 
+    Page<ProductCategoryDTO> findProductCategoryDTOByStoreName(String storeName, Pageable pageable);
+
+    Page<ProductCategoryDTO> findProductCategoryDTOByCategoryName(String categoryName, Pageable pageable);
+
+    Page<ProductCategoryDTO> findProductCategoryDTOByCategoryNameAndStoreName(String categoryName, String storeName, Pageable pageable);
+
 }

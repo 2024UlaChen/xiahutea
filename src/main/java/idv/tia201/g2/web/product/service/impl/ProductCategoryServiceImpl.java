@@ -1,15 +1,11 @@
 package idv.tia201.g2.web.product.service.impl;
 
 import idv.tia201.g2.web.product.dao.ProductCategoryRepository;
-
 import idv.tia201.g2.web.product.dto.ProductCategoryDTO;
 import idv.tia201.g2.web.product.service.ProductCategoryService;
-
 import idv.tia201.g2.web.product.service.ProductService;
 import idv.tia201.g2.web.product.vo.ProductCategory;
 import idv.tia201.g2.web.store.dao.StoreDao;
-import idv.tia201.g2.web.store.vo.Store;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -116,14 +112,6 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
         return productCategoryRepository.findProductCategoryDTO(pageable);
     }
 
-
-    @Override
-    public boolean checkStoreOwnership(Integer userId,Integer storeId) {
-        // 调用 StoreDAO 检查该用户是否为 storeId 对应店铺的拥有者
-        Store store =storeDao.findByStoreId(storeId);
-        return store != null && store.getStoreId().equals(userId);
-    }
-
     @Override
     public Page<ProductCategoryDTO> getProductCategoryByStoreId(Integer productStoreId, Pageable pageable) {
          return productCategoryRepository.findProductCategoryDTOByStoreId(productStoreId, pageable);
@@ -144,7 +132,31 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
         return productCategoryRepository.findByProductStoreId(storeId);
     }
 
-    ;
+    @Override
+    public Page<ProductCategoryDTO> serchCategories(ProductCategoryDTO productCategoryDTO, Pageable pageable) {
+        String storeName = productCategoryDTO.getStoreName();
+        String categoryName = productCategoryDTO.getCategoryName();
+
+        // 搜尋全部分類
+        if (categoryName == null && storeName == null) {
+            return productCategoryRepository.findProductCategoryDTO(pageable);
+        }
+
+        // 依店家名稱搜尋
+        if (categoryName == null && !(storeName == null)) {
+            return productCategoryRepository.findProductCategoryDTOByStoreName(storeName, pageable);
+        }
+
+        // 依分類名稱搜尋
+        if (!(categoryName == null) && storeName == null) {
+            return productCategoryRepository.findProductCategoryDTOByCategoryName(categoryName, pageable);
+        }
+
+        // 依分類 & 店家名稱搜尋
+        return productCategoryRepository.findProductCategoryDTOByCategoryNameAndStoreName(categoryName, storeName, pageable);
+
+
+    }
 
 
 }
