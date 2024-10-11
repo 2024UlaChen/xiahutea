@@ -23,11 +23,9 @@ const adImg = document.getElementById('adImage');
 const productImage = document.getElementById('productImage');
 const totalAmt = document.getElementById("totalAmt");
 const buyNumInput = document.getElementById("buyNum");
+const sizeOption = document.querySelector('.size');
+
 let targetProductId;
-let storedSize;
-let storedTemperature;
-let storedSweetness;
-let storedToppings;
 
 //
 document.querySelector('.close').onclick = function () {
@@ -302,10 +300,12 @@ async function showProductModal(productId) {
 
         // 設置標題、價格和 size
         document.getElementById('productTitle').textContent = product.productName;
-        document.querySelector('div.size').textContent = product.size;
+        sizeOption.textContent = product.size;
+        sizeOption.style.backgroundColor = '#fac792';
+        sizeOption.classList.add("chosen");
+
 
         setModalDetail(product);
-        attachOptionEventHandlers();
         updateAmt(buyNum, unitPrice);
         // 顯示模態框
         document.getElementById("lightbox").style.display = "block";
@@ -335,13 +335,7 @@ document.getElementById('addToCartButton').addEventListener('click', function (e
                 // 隱藏 Lightbox 彈窗
                 document.getElementById("lightbox").style.display = "none";
             } else {
-                const success = addToCart(targetProductId, buyNumInput.value, storeIdNum); // 傳入購買數量
-
-                // 如果成功，則移除事件監聽器並隱藏光箱
-                if (success) {
-                    // clearSelectedOptions();
-                    document.getElementById("lightbox").style.display = "none"; // 隱藏光箱
-                }
+                addToCart(targetProductId, buyNumInput.value, storeIdNum); // 傳入購買數量
             }
 
         })
@@ -387,153 +381,149 @@ function updateAmt(buyNum, unitPrice) {
 
 // 添加選項的輔助函數
 
+console.log(localStorage.getItem("cart"));
 
 function addToCart(productId, buyNum, storeIdNum) {
-    console.log('店家信息:', storeIdNum);
 
-    console.log("addToCart");
-    console.log('localStorage before addToCart:', localStorage);
+    console.log("========================addToCart========================");
+    let cartNewItem = Number(new Date().getTime());
+    let cart = {"cartStoreId": storeIdNum, "cartDetail": []};
+    let cartTemperature, cartSweetness, cartToppings;
 
-    if (localStorage.getItem("cart") == null) {
+    document.querySelectorAll(".temperature").forEach(item => {
+        if (item.classList.contains("chosen")) {
+            cartTemperature = item.textContent;
+        }
+    });
+    document.querySelectorAll(".sweetness").forEach(item => {
+        if (item.classList.contains("chosen")) {
+            cartSweetness = item.textContent;
+        }
+    });
+    document.querySelectorAll(".topping").forEach(item => {
+        if (item.classList.contains("chosen")) {
+            cartToppings = item.textContent;
+        }
+    });
+    console.log(cartTemperature + " / " + cartSweetness + " / " + cartToppings);
 
-    } else {
-
-    }
-
-
-    // 读取并赋值
-    let storedSize = localStorage.getItem('selectedSize');
-    let storedTemperature = localStorage.getItem('selectedTemperature');
-    let storedSweetness = localStorage.getItem('selectedSweetness');
-    let storedToppings = localStorage.getItem('selectedToppings');
-
-    console.log('Size:', storedSize);
-    console.log('Temperature:', storedTemperature);
-    console.log('Sweetness:', storedSweetness);
-    console.log('Toppings:', storedToppings);
-
-    // 确保选择的尺寸、温度和甜度有值
-    let selectedSize = (storedSize && storedSize.trim()) || null;
-    let selectedTemperature = (storedTemperature && storedTemperature.trim()) || null;
-    let selectedSweetness = (storedSweetness && storedSweetness.trim()) || null;
-    let selectedToppings = (storedToppings && storedToppings.trim()) || null;
-
-    // 确认是否选择了所有必需选项
-    if (!selectedSize) {
-        Swal.fire({
-            text: "尺寸未选！",
-            icon: "warning"
-        });
-        return false; // 返回 false 以表示失败
-    }
-
-    if (!selectedTemperature) {
+    if (!cartTemperature) {
         Swal.fire({
             text: "温度未选！",
             icon: "warning"
         });
-        return false; // 返回 false 以表示失败
-    }
-
-    if (!selectedSweetness) {
+    } else if (!cartSweetness) {
         Swal.fire({
             text: "甜度未选！",
             icon: "warning"
         });
-        return false; // 返回 false 以表示失败
+    } else {
+        //localStorage有資料
+        if (localStorage.getItem("cart") != null) {
+            // 判斷商店是否相同
+            if (parseInt(JSON.parse(localStorage.getItem("cart")).cartStoreId) !== parseInt(storeIdNum)) {
+                Swal.fire({
+                    title: "購物車有其他店家商品" + "\n" + "請確認是否刪除?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#73B4BA",
+                    cancelButtonColor: "#6c757d",
+                    confirmButtonText: `<span class="sweetAlertFont">確定刪除</span>`,
+                    cancelButtonText: `<span class="sweetAlertFont">否</span>`,
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        localStorage.removeItem("cart");
+                        cart.cartDetail.push({
+                            cartItemNum: cartNewItem,
+                            size: sizeOption.textContent,
+                            temperature: cartTemperature,
+                            sweetness: cartSweetness,
+                            toppings:cartToppings,
+                            productQty: buyNumInput.value
+                        });
+                        localStorage.setItem('cart', JSON.stringify(cart));
+
+                        Swal.fire({
+                            title: `<span class="sweetAlertFont">商品加入購物車成功</span>`,
+                            icon: "success",
+                            timer: 1000
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: "warning",
+                            title: "請至購物車結帳",
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                    }
+                });
+            } else {
+                // 相同可直接加入購物車，且localStorage有值
+                let oldCart = JSON.parse(localStorage.getItem("cart"));
+                oldCart.cartDetail.push({
+                    cartItemNum: cartNewItem,
+                    size: sizeOption.textContent,
+                    temperature: cartTemperature,
+                    sweetness: cartSweetness,
+                    toppings:cartToppings,
+                    productQty: buyNumInput.value
+                });
+                localStorage.setItem('cart', JSON.stringify(oldCart));
+                console.log("相同可直接加入購物車，且localStorage有值");
+                console.log(localStorage.getItem("cart"));
+                Swal.fire({
+                    title: `<span class="sweetAlertFont">商品加入購物車成功</span>`,
+                    icon: "success",
+                    timer: 1000
+                });
+            }
+        } else {
+            // localStorage無資料
+            cart.cartDetail.push({
+                cartItemNum: cartNewItem,
+                size: sizeOption.textContent,
+                temperature: cartTemperature,
+                sweetness: cartSweetness,
+                toppings:cartToppings,
+                productQty: buyNumInput.value
+            });
+            localStorage.setItem('cart', JSON.stringify(cart));
+            Swal.fire({
+                title: `<span class="sweetAlertFont">商品加入購物車成功</span>`,
+                icon: "success",
+                timer: 1000
+            });
+        }
+        document.getElementById("lightbox").style.display = "none"; // 隱藏光箱
     }
 
-    // 获取购物车数据并更新
-    let cart = JSON.parse(localStorage.getItem('cart')) || {};
-    cart[productId] = {
-        storeId: storeIdNum,
-        size: selectedSize,
-        temperature: selectedTemperature,
-        sweetness: selectedSweetness,
-        toppings: selectedToppings || "未选择加料", // 如果未选择加料，使用默认值
-        buyNum: buyNum
-    };
 
-    // 更新购物车到 localStorage
-    localStorage.setItem('cart', JSON.stringify(cart));
-
-    // 显示成功提示
-    Swal.fire({
-        text: "商品加入購物車成功!",
-        icon: "success"
-    });
-    return true; // 添加成功，返回 true
 }
-
-
-// 為選項添加事件處理器
-attachOptionEventHandlers();
 
 // 設置選項事件處理的函數，與之前的一致
-function attachOptionEventHandlers() {
-    const sizeOption = document.querySelector('#sizeOptions .size');
 
-    sizeOption.addEventListener('click', function () {
-        sizeOption.style.backgroundColor = '#fac792';
-        localStorage.setItem('selectedSize', sizeOption.textContent);
-        // 改變背景顏色
-    });
+document.addEventListener("click", function (e) {
+    chooseProductDetail(e.target, "temperature");
+    chooseProductDetail(e.target, "sweetness");
+    chooseProductDetail(e.target, "topping");
+})
 
-
-    document.querySelectorAll('#temperatureOptions .temperature').forEach(option => {
-        option.addEventListener('click', () => {
-            updateTemperatureColors(option);
-            localStorage.setItem('selectedTemperature', option.textContent);
+function chooseProductDetail(target, targetBlock) {
+    if (target.classList.value === targetBlock) {
+        document.querySelectorAll(`.${targetBlock}`).forEach((item, index) => {
+            if (item === target) {
+                item.style.backgroundColor = '#fac792';
+                item.classList.add("chosen");
+            } else {
+                item.style.backgroundColor = '';
+                item.classList.remove("chosen");
+            }
         });
-    });
-    document.querySelectorAll('#sweetnessOptions .sweetness').forEach(option => {
-        option.addEventListener('click', () => {
-            updateSweetnessColors(option);
-            localStorage.setItem('selectedSweetness', option.textContent);
-        });
-    });
-    document.querySelectorAll('#toppingsOptions .topping').forEach(option => {
-        option.addEventListener('click', () => {
-            updateToppingsColors(option);
-            localStorage.setItem('selectedToppings', option.textContent);
-        });
-    });
+    }
 }
 
 
-// 改變選項顏色的函數 (與之前相同)
-function updateTemperatureColors(selectedOption) {
-    document.querySelectorAll('#temperatureOptions .temperature').forEach(option => {
-        if (option === selectedOption) {
-            option.style.backgroundColor = '#fac792';
-        } else {
-            option.style.backgroundColor = '';
-        }
-    });
-}
 
-function updateSweetnessColors(selectedOption) {
-    console.log(selectedOption);
-
-    document.querySelectorAll('#sweetnessOptions .sweetness').forEach(option => {
-        if (option === selectedOption) {
-            option.style.backgroundColor = '#fac792';
-        } else {
-            option.style.backgroundColor = '';
-        }
-    });
-}
-
-
-function updateToppingsColors(selectedOption) {
-    document.querySelectorAll('#toppingsOptions .topping').forEach(option => {
-        if (option === selectedOption) {
-            option.style.backgroundColor = '#fac792';
-        } else {
-            option.style.backgroundColor = '';
-        }
-    });
-}
 
 
 
