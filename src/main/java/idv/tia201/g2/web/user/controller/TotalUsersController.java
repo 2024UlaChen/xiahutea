@@ -25,6 +25,7 @@ public class TotalUsersController {
         TotalUserDTO user = (TotalUserDTO) session.getAttribute("totalUserDTO");
         if (user == null){
             user = new TotalUserDTO();
+            user.setSuccessful(false);
             return user;
         }
         if(user.getUserTypeId() == 1){
@@ -33,6 +34,7 @@ public class TotalUsersController {
                 user.setData(storeById.getStoreName());
             }
         }
+        user.setSuccessful(true);
         return user;
     }
 

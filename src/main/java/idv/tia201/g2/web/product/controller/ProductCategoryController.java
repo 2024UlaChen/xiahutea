@@ -145,10 +145,19 @@ public class ProductCategoryController {
    @GetMapping("/paginated")
    public ResponseEntity<Page<ProductCategoryDTO>> getCategoriesPaginated(
            @RequestParam(defaultValue = "0") int page,
-           @RequestParam(defaultValue = "10") int size, HttpSession session) {
-
+           @RequestParam(defaultValue = "10") int size,
+           @RequestParam(required = false) String storeName,
+           @RequestParam(required = false) String categoryName,
+           HttpSession session) {
+      
       // 從 session 中獲取 totalUserDTO
       TotalUserDTO totalUserDTO = (TotalUserDTO) session.getAttribute("totalUserDTO");
+      ProductCategoryDTO productCategoryDTO = new ProductCategoryDTO();
+      // 管理員 => 搜尋全部
+      if(totalUserDTO.getUserTypeId() == 3 && storeName == null){
+         
+      }
+      
 
       // 如果 session 中沒有 totalUserDTO，返回 403 未授權
       if (totalUserDTO == null) {

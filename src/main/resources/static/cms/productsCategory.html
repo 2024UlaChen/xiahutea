@@ -538,7 +538,7 @@
             }
         });
 
-        //修改表單
+        //修改表單送出
         document.getElementById('editCategoryForm').addEventListener('submit', function (event) {
             event.preventDefault();
 
@@ -611,11 +611,14 @@
         var paginationControls = document.getElementById('paginationControls');
         var searchButton = document.getElementById('searchButton');
         var searchInput = document.getElementById('searchInput');
+        var categoryStoreNameEle = document.getElementById('searchInput2');
+
 
 // 當搜尋按鈕被點擊時觸發的事件處理器
         searchButton.addEventListener('click', function () {
             const categoryName = searchInput.value.trim();
-            if (categoryName) {
+            const categoryStoreName = categoryStoreNameEle.value.trim();
+            if (categoryName || categoryStoreName) {
                 // 如果有搜尋字串，進行搜尋請求
                 searchfetchCategories(categoryName);
             } else {
@@ -623,6 +626,7 @@
                 fetchCategories('', 0);
             }
         });
+
         searchInput.addEventListener('keyup', function (e) {
             const categoryName = searchInput.value.trim();
             if (e.which == 13) {
@@ -639,7 +643,7 @@
             }
         });
 
-// 搜尋分類，根據名稱進行查詢
+        // 搜尋分類，根據名稱進行查詢
         function searchfetchCategories(query) {
             const url = `/categories/findByName?categoryName=${encodeURIComponent(query)}`;
 
