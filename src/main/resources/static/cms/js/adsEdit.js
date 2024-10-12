@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let ads_ids_el = document.getElementById('ads-ids')
     let base64img_el = document.getElementById('base64Image')
     let display_homepage_el = document.getElementsByClassName('display-homepage')[0]
+    let ads_h1_el = document.getElementById('ads-h1')
     let ishomedisplay;
     let isActive;
     let userid;
@@ -72,6 +73,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     //********************************確認是否為修改跳轉頁面**********************
     if (adId) {
+        ads_h1_el.textContent = "廣告修改"
         // 發送 GET 請求獲取優惠券資料
         fetch(`/advertise/edit/${adId}`,{
         })
@@ -122,6 +124,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     icon: 'error'
                 });
             });
+    }else{
+        ads_h1_el.textContent="廣告新增"
     }
     //***********************************日期選擇限制******************************
     start_date_el.addEventListener('change', function () {
