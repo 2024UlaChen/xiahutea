@@ -1,18 +1,12 @@
 package idv.tia201.g2.web.product.dto;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Lob;
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.Map;
+import lombok.NoArgsConstructor;
 
 @Data
-
-
+@AllArgsConstructor
+@NoArgsConstructor
 public class ProductDTO {
         private Integer productId;
         private String productName;
@@ -38,10 +32,10 @@ public class ProductDTO {
         private boolean coconutJelly;
         private boolean taro;
         private boolean herbalJelly;
+        private String storeName;
+        private String productCategoryName;
 
         // Getters and Setters
-
-
 
     }
 

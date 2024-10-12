@@ -149,10 +149,16 @@
 
               document.querySelector("#cardstatus").setAttribute("checked", "");
             } else {
-              let expiredDate = data.expiredDate.split(".")[0];
-              let expiredDateFormat = expiredDate.split("T")[0]+" "+(expiredDate.split("T")[1]).split(':')[0] +":"+(expiredDate.split("T")[1]).split(':')[1]
-              document.querySelector("#passday").value =
-                      expiredDateFormat;
+              if(!data.loyaltyCardName){
+                document.querySelector("#passday").value =
+                        "";
+              }else{
+                let expiredDate = data.expiredDate.split(".")[0];
+                let expiredDateFormat = expiredDate.split("T")[0]+" "+(expiredDate.split("T")[1]).split(':')[0] +":"+(expiredDate.split("T")[1]).split(':')[1]
+                document.querySelector("#passday").value =
+                        expiredDateFormat;
+              }
+
             }
           },
           err: function (data) {

@@ -23,12 +23,18 @@ public class TotalUsersController {
     @GetMapping
     public TotalUserDTO getTotalUser(HttpSession session){
         TotalUserDTO user = (TotalUserDTO) session.getAttribute("totalUserDTO");
+        if (user == null){
+            user = new TotalUserDTO();
+            user.setSuccessful(false);
+            return user;
+        }
         if(user.getUserTypeId() == 1){
             Store storeById = storeService.findStoreById(user.getUserId());
             if(storeById != null){
                 user.setData(storeById.getStoreName());
             }
         }
+        user.setSuccessful(true);
         return user;
     }
 

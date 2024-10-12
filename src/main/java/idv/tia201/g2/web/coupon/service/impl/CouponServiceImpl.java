@@ -7,6 +7,7 @@ import idv.tia201.g2.web.coupon.service.CustomerCouponService;
 import idv.tia201.g2.web.coupon.vo.Coupon;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -65,16 +66,23 @@ public class CouponServiceImpl implements CouponService {
             coupon.setSuccessful(false);
             return coupon;
         }
-        coupon = couponDao.save(coupon);
-        coupon.setSuccessful(true);
 //        System.out.println("couponID:"+coupon.getCouponId());
-        customerCouponService.SendCouponsToMembers(coupon.getCouponId());
+        if (coupon.getCouponId() == null){
+//            System.out.println("進入新增");
+            coupon = couponDao.save(coupon);
+            coupon.setSuccessful(true);
+            customerCouponService.SendCouponsToMembers(coupon.getCouponId());
+        }else{
+//            System.out.println("進入編輯");
+            coupon = couponDao.save(coupon);
+            coupon.setSuccessful(true);
+        }
         return coupon;
     }
 
     @Override
     public List<Coupon> findAllCoupons() {
-        return couponDao.findAll();
+        return couponDao.findAll(Sort.by(Sort.Direction.DESC, "couponId"));
     }
 
     @Override
@@ -85,13 +93,4 @@ public class CouponServiceImpl implements CouponService {
                 .orElse(new Coupon());
     }
 
-//    @Override
-//    public boolean removeCoupon(Integer couponId) {
-//            Coupon coupon = findCouponById(couponId);
-//            if(coupon==null){
-//                return false;
-//            }
-//            couponDao.deleteById(couponId);
-//            return true;
-//        }
-    }
+}
