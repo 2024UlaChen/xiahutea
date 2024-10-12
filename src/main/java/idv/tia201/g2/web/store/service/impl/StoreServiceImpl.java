@@ -383,8 +383,8 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public List<Store> getStoreListForHome(Date today) throws ParseException {
-        return storeCalendarRepository.findByStoreHolidayAndStoreStatus(today);
+    public List<Store> getStoreListForHome()  {
+        return storeCalendarRepository.findByStoreHolidayAndStoreStatus();
     }
 
     @Override
