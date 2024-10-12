@@ -75,14 +75,14 @@ function getStoreInfo(storeIdNum) {
                         <span id="storeRating"></span>
                     </div>
                     <div class="hours">
-                        <i class="fa-solid fa-business-time"></i>
+                        <i class="fa-solid fa-business-time"></i> 
                         <span id="openHours">${store.openingHours}</span>~<span id="closingHours">${store.closingHours}</span>
                     </div>
                     <div class="phone">
-                        <i class="fa-solid fa-phone"></i><span id="storePhone">${store.storePhone}</span>
+                        <i class="fa-solid fa-phone"></i> <span id="storePhone">${store.storePhone}</span>
                     </div>
                     <div class="address">
-                        <i class="fa-sharp-duotone fa-solid fa-map-location-dot"></i>
+                        <i class="fa-sharp-duotone fa-solid fa-map-location-dot"></i> 
                         <span class="storeAddress">${store.storeAddress}</span>
                     </div>
                 `;
@@ -123,8 +123,8 @@ function getStoreInfo(storeIdNum) {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-    getStoreInfo(storeIdNum);
     getStoreAdImg(storeIdNum);
+    getStoreInfo(storeIdNum);
     fetchProductsAndCategories(storeIdNum); // 调用函数以获取产品和类别信息
 })
 
@@ -325,6 +325,7 @@ document.getElementById('addToCartButton').addEventListener('click', function (e
             return response.json(); // 將返回的結果解析為 JSON 格式
         })
         .then(data => {
+            console.log(data);
             if (!data.successful) {
                 Swal.fire({
                     title: "請先登入",

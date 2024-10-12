@@ -21,41 +21,50 @@ body {
 .menu-container {
     width: 80%;
     margin-bottom: 20px;
-
-
 }
 
 
 .restaurant-info-container {
-
     box-shadow: 0px 2px 4px -1px rgb(227, 219, 219);
-    margin-top: 10px;
+    margin-top: 2%;
+    margin-bottom: 1%;
     border-radius: 10px;
     background-color: #ffffff;
-
-
 }
 
 @media (max-width: 992px) {
     .restaurant-info-container {
-
         width: 800px;
-
     }
 }
 
 .restaurant-info {
+    height: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border-radius: 50px;
 }
 
 .restaurant-details {
+    margin-left: 3%;
     display: flex;
+    min-width: 350px;
+    padding: 20px;
     flex-direction: column;
-
     border-radius: 10px;
+}
 
+.myclass {
+    width: 70%;
+    height: 350px;
+    border-radius: 50px;
+}
+
+#adImage {
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
 
 }
 
@@ -74,10 +83,8 @@ body {
 
 .restaurant-actions {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     margin-top: 50px;
-
-
 }
 
 .action {
@@ -95,7 +102,7 @@ div.menu-section {
 
     width: 30%;
     border-radius: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     box-shadow: 0px 2px 4px -1px rgb(227, 219, 219);
     border: 1px solid #00000020;
     background-color: #ffffff;
@@ -106,7 +113,7 @@ div.menu-section {
     display: flex;
     flex-wrap: wrap;
     text-align: left;
-    gap: 37px;
+    gap: 20px;
 
 
     /* 使整個 menu-container 的內容靠左對齊 */
@@ -147,18 +154,6 @@ h2 {
 }
 
 
-.restaurant-info-container {
-    display: flex;
-    flex-wrap: wrap;
-}
-
-.restaurant-details {
-    flex: 1;
-    min-width: 300px;
-    padding: 20px;
-}
-
-
 .carousel-inner img {
     width: 100%;
     height: auto;
@@ -179,8 +174,6 @@ div.question {
     justify-content: center;
     /* 垂直置中 */
     align-items: center;
-
-
 }
 
 
@@ -203,8 +196,7 @@ div.question:hover {
     width: 100%;
     height: 100vh;
     background-color: hsla(0, 0%, 0%, .5);
-
-
+    z-index: 1;
     display: none;
 }
 
@@ -325,8 +317,6 @@ div.size {
     /* 垂直置中 */
     align-items: center;
     cursor: pointer;
-
-
 }
 
 
@@ -412,22 +402,13 @@ input.person {
 }
 
 
-/* .myclassa {
-    border: 1px solid black;
-    display: inline-block;
-}
-
-.myclassa img {
-    border: 1px solid blue;
-} */
-
 .bottom {
     display: flex;
     justify-content: space-around;
     align-items: center;
 }
 
-.bottom button[type="submit"] {
+.bottom button {
     background-color: #28a745;
     color: #fff;
     border: none;
@@ -438,10 +419,9 @@ input.person {
     /* display: inline; */
     align-items: center;
 
-
 }
 
-.bottom button[type="submit"]:hover {
+.bottom button:hover {
     background-color: #218838;
 }
 
@@ -562,11 +542,6 @@ div.pic img {
     font-size: 16px;
     margin-bottom: 10px;
     color: #ff6600;
-}
-
-#adImage {
-    max-width: 100%; /* 使图像自适应父元素宽度 */
-    height: auto; /* 保持宽高比 */
 }
 
 div.pic {
