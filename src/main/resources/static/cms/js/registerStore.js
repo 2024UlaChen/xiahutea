@@ -103,7 +103,7 @@ $(function () {
 
 //依條件搜尋
 $(submitEle).on("click", e => {
-    e.preventDefault();
+    // e.preventDefault();
     let url = "/registerstore/registerstorelist?";
     url += "page=0";
     // 依店家狀態查詢

@@ -347,7 +347,7 @@ public class ProductDtoDaoImpl implements ProductDtoDao {
     public Page<ProductDTO> findProductDTOListByProductCategoryNameAndProductName(String productCategoryName, String productName, Pageable pageable) {
         // 計算總頁數
         String countJpql =
-                "SELECT COUNT(*) FROM product p" +
+                "SELECT COUNT(*) FROM product p " +
                         "LEFT JOIN product_category pc ON p.product_category_id = pc.product_category_id " +
                         "WHERE pc.product_category LIKE ? AND p.product_name LIKE ? ";
         jakarta.persistence.Query countQuery = em.createNativeQuery(countJpql)
