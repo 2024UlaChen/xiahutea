@@ -692,7 +692,7 @@
             <div class="modal-header">
                 <div class="modal-tabs">
                     <div class="active">店家資訊</div>
-                    <div>怎取貨</div>
+                    <div>取貨方式</div>
 
                 </div>
 
@@ -702,7 +702,7 @@
             <div id="storeInfo" class="modal-section active">
 
                 <div class="storeName">康青龍 新店寶強店</div>
-                <span>⭐⭐⭐⭐⭐</span><span class="score"></span>
+                <span>⭐</span><span class="score"></span>
 
                 <div><i class="fa-solid fa-business-time"></i><span class="open"></span>~<span class="closing"></span></div>
                 <div><i class="fa-solid fa-phone"></i><span class="phone">02-2914-8066</span></div>
@@ -712,7 +712,7 @@
 
             </div>
             <div id="deliveryOptions" class="modal-section">
-                <h5>訂購說明</h5>
+                <h5 class="orderClarify">訂購說明</h5>
                 <div class="section-content">
                    滿 <span class="delivery"></span>可外送
                 </div>
@@ -835,14 +835,14 @@
                         </div>
 
                         <div class="quantity">
-<!--                            <button class="minus"><i class="fa-solid fa-minus"></i></button>-->
+
                             <input type="button" value="-" class="minus">
                             <div class="selector">
                                 <input type="number" class="number" min="1" id="buyNum" max="999" value="1"
                                        style="border: none;">
                             </div>
                                 <input type="button" value="+" class="plus">
-<!--                            <button type="button" class="plus"><i class="fa-solid fa-plus"></i></button>-->
+
                             </div>
                     </div>
                     <div class="test">
@@ -892,9 +892,6 @@
     const storeIdNum = parseInt(storeId); // 将字符串转换为数字
 
 
-// 用 fetch 獲取 TotalUserDTO 並檢查用戶是否登入
-
-// 加入購物車的功能 (根據實際情況替換邏輯)
 
 
 
@@ -930,6 +927,9 @@ if (isNaN(storeIdNum)) {
                 isDelivery.textContent = "此商品可提供外送服務";
             } else {
                 isDelivery.textContent = "此商品不提供外送服務";
+                document.querySelector('.section-content').style.display = 'none';
+                document.querySelector('.orderClarify').style.display='none';
+
             }
         })
         .catch(error => {
@@ -1046,6 +1046,13 @@ var productId;
     function displayProducts(categoryName, products) {
         const menuContainer = document.querySelector('.menu-container');
 
+        const validProducts = products.filter(product => product.productStatus);
+
+        // 如果該分類下沒有有效的商品，則不顯示分類
+        if (validProducts.length === 0) {
+            return; // 直接返回，不創建 section
+        }
+
         // 創建 menu section
         const section = document.createElement('div');
         section.classList.add('menu-section');
@@ -1078,9 +1085,12 @@ var productId;
 
                 // 綁定點擊事件，點擊 li 後顯示模態框
                 li.addEventListener('click', () => {
+
                     productId = product.productId;
                     fetchProductImage(product.productId);
                     showProductModal(product.productId);
+                    clearSelectedOptions();
+
                 });
 
                 // 將 li 添加到 ul 中
@@ -1096,168 +1106,158 @@ var productId;
     }
 
     // 顯示模態框並顯示產品信息
-    async function showProductModal(productId) {
-        try {
-            // 獲取產品詳細信息
-            const response = await fetch(`/products/${productId}`);
-
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-
-            const product = await response.json();
-
-            const buyNumInput = document.getElementById("buyNum");
-            let buyNum = 1; // 默認購買數量為1
-            buyNumInput.value = buyNum;
-
-            // 設置單價和總價
-            const unitPrice = Number.parseInt(product.productPrice); // 獲取產品單價
-            document.getElementById("totalAmt").textContent = unitPrice; // 顯示單價
-
-            // 設置標題、價格和 size
-            document.getElementById('productTitle').textContent = product.productName;
-            document.querySelector('div.size').textContent = product.size;
-
-            // 模態框的選項設置
-            const temperatureOptions = document.getElementById("temperatureOptions");
-            const sweetnessOptions = document.getElementById("sweetnessOptions");
-            const toppingsOptions = document.getElementById("toppingsOptions");
-
-            // 清空之前的內容
-            temperatureOptions.innerHTML = '';
-            sweetnessOptions.innerHTML = '';
-            toppingsOptions.innerHTML = '';
-
-            // 溫度選項映射
-            addOption(temperatureOptions, product.normalIce, "正常冰", "temperature");
-            addOption(temperatureOptions, product.lessIce, "少冰", "temperature");
-            addOption(temperatureOptions, product.iceFree, "去冰", "temperature");
-            addOption(temperatureOptions, product.lightIce, "微冰", "temperature");
-            addOption(temperatureOptions, product.roomTemperature, "常溫", "temperature");
-            addOption(temperatureOptions, product.hot, "熱", "temperature");
-
-            // 甜度選項映射
-            addOption(sweetnessOptions, product.fullSugar, "全糖", "sweetness");
-            addOption(sweetnessOptions, product.lessSugar, "少糖", "sweetness");
-            addOption(sweetnessOptions, product.halfSugar, "半糖", "sweetness");
-            addOption(sweetnessOptions, product.quarterSugar, "微糖", "sweetness");
-            addOption(sweetnessOptions, product.noSugar, "無糖", "sweetness");
-
-            // 加料選項映射
-            addOption(toppingsOptions, product.pearl, "珍珠", "topping");
-            addOption(toppingsOptions, product.pudding, "布丁", "topping");
-            addOption(toppingsOptions, product.coconutJelly, "椰果", "topping");
-            addOption(toppingsOptions, product.taro, "芋園", "topping");
-            addOption(toppingsOptions, product.herbalJelly, "仙草", "topping");
-
-            attachOptionEventHandlers();
-
-            // 更新總價的函數
-            const updateTotalPrice = () => {
-                const totalPrice = unitPrice * buyNum;
-                document.getElementById("totalAmt").textContent = totalPrice;
-            };
-
-            // 增加數量
-            document.querySelector(".plus").addEventListener("click", function () {
-                buyNum = Math.min(buyNum + 1, 999); // 最大值999
-                buyNumInput.value = buyNum;
-                updateTotalPrice();
-            });
-
-            // 減少數量
-            document.querySelector(".minus").addEventListener("click", function () {
-                buyNum = Math.max(buyNum - 1, 1); // 最小值1
-                buyNumInput.value = buyNum;
-                updateTotalPrice();
-            });
-
-            fetch('/totalusers', {
-    method: 'GET', // 請求方法是 GET
-})
-    .then(response => {
+async function showProductModal(productId) {
+    try {
+        // 獲取產品詳細信息
+        const response = await fetch(`/products/${productId}`);
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
-        return response.json(); // 將返回的結果解析為 JSON 格式
-    })
-    .then(data => {
-        console.log('TotalUserDTO:', data); // 在控制台中顯示 TotalUserDTO
+        const product = await response.json();
 
-        var userTypeId = data.userTypeId; // 假設 userTypeId 為 0 表示已登入，其他值表示未登入
+        // 初始化購買數量
+        const buyNumInput = document.getElementById("buyNum");
+        let buyNum = 1; // 默認購買數量為1
+        buyNumInput.value = buyNum;
 
-        // 監聽 "加入購物車" 按鈕的點擊事件
-        document.getElementById('addToCartButton').addEventListener('click', function(e) {
-            e.preventDefault();
-            if (userTypeId !== 0) {
-                Swal.fire({
-                    title: "請先登入",
-                    text: "您必須登入才能將商品加入購物車！",
-                    icon: "warning",
-                    confirmButtonText: "確定"
-                });
+        // 設置單價和總價
+        const unitPrice = Number.parseInt(product.productPrice); // 獲取產品單價
+        document.getElementById("totalAmt").textContent = unitPrice; // 顯示單價
 
-                // 隱藏 Lightbox 彈窗
-                document.getElementById("lightbox").style.display = "none";
+        // 設置標題、價格和 size
+        document.getElementById('productTitle').textContent = product.productName;
+        document.querySelector('div.size').textContent = product.size;
 
+        // 模態框的選項設置
+        const temperatureOptions = document.getElementById("temperatureOptions");
+        const sweetnessOptions = document.getElementById("sweetnessOptions");
+        const toppingsOptions = document.getElementById("toppingsOptions");
 
-            } else {
-                // document.getElementById('addToCartButton').addEventListener('click', cart);
-                // function cart (e) {
-                //     e.preventDefault();
-                //     addToCart(productId, buyNum,storeIdNum); // 傳入購買數量
-                //     document.getElementById('addToCartButton').removeEventListener("click",cart);
-                //     document.getElementById("lightbox").style.display = "none";
-                // }
-
-                // 添加到購物車
-
-                document.getElementById('addToCartButton').addEventListener('click', function (e){
-                    e.preventDefault();
-                    const success = addToCart(productId, buyNum, storeIdNum); // 傳入購買數量
-
-                    // 如果成功，則移除事件監聽器並隱藏光箱
-                    if (success) {
-                        // clearSelectedOptions();
-                        document.getElementById("lightbox").style.display = "none"; // 隱藏光箱
-                    }
+        // 清空之前的內容
+        temperatureOptions.innerHTML = '';
+        sweetnessOptions.innerHTML = '';
+        toppingsOptions.innerHTML = '';
 
 
-                });
 
-                // function cart(e) {
-                //     e.preventDefault(); // 防止默認表單提交
-                //
-                //     // 獲取 addToCart 的返回值
-                //     const success = addToCart(productId, buyNum, storeIdNum); // 傳入購買數量
-                //
-                //     // 如果成功，則移除事件監聽器並隱藏光箱
-                //     if (success) {
-                //         // clearSelectedOptions();
-                //         document.getElementById("lightbox").style.display = "none"; // 隱藏光箱
-                //     }
-                //
-                //
-                // }
+        // 溫度選項映射
+        const temperatureChoices = [
+            { value: product.normalIce, label: "正常冰" },
+            { value: product.lessIce, label: "少冰" },
+            { value: product.iceFree, label: "去冰" },
+            { value: product.lightIce, label: "微冰" },
+            { value: product.roomTemperature, label: "常溫" },
+            { value: product.hot, label: "熱" }
+        ];
 
-            }
+        const sweetnessChoices = [
+            { value: product.fullSugar, label: "全糖" },
+            { value: product.lessSugar, label: "少糖" },
+            { value: product.halfSugar, label: "半糖" },
+            { value: product.quarterSugar, label: "微糖" },
+            { value: product.noSugar, label: "無糖" }
+        ];
+
+        const toppingsChoices = [
+            { value: product.pearl, label: "珍珠" },
+            { value: product.pudding, label: "布丁" },
+            { value: product.coconutJelly, label: "椰果" },
+            { value: product.taro, label: "芋圓" },
+            { value: product.herbalJelly, label: "仙草" }
+        ];
+
+        temperatureChoices.forEach(choice => addOption(temperatureOptions, choice.value, choice.label, "temperature"));
+        sweetnessChoices.forEach(choice => addOption(sweetnessOptions, choice.value, choice.label, "sweetness"));
+        toppingsChoices.forEach(choice => addOption(toppingsOptions, choice.value, choice.label, "topping"));
+
+        attachOptionEventHandlers();
+
+        // 更新總價的函數
+        const updateTotalPrice = () => {
+            const totalPrice = unitPrice * buyNum;
+            document.getElementById("totalAmt").textContent = totalPrice;
+        };
+
+        // 增加數量
+        document.querySelector(".plus").addEventListener("click", function () {
+            buyNum = Math.min(buyNum + 1, 999); // 最大值999
+            buyNumInput.value = buyNum;
+            updateTotalPrice();
         });
-    })
-    .catch(error => {
-        console.error('Fetch error:', error);
-    });
+
+        // 減少數量
+        document.querySelector(".minus").addEventListener("click", function () {
+            buyNum = Math.max(buyNum - 1, 1); // 最小值1
+            buyNumInput.value = buyNum;
+            updateTotalPrice();
+        });
+
+
+        try {
+            const userResponse = await fetch('/totalusers');
+
+            const userData = await userResponse.json();
+            console.log('TotalUserDTO:', userData); // 在控制台中顯示 TotalUserDTO
+
+            const userTypeId = userData.userTypeId; // 假設 userTypeId 為 0 表示已登入，其他值表示未登入
+
+            // 確保 "加入購物車" 按鈕存在
+            const addToCartButton = document.getElementById('addToCartButton');
+
+            // 定義按鈕點擊事件處理函數
+            function handleAddToCartClick(e) {
+                e.preventDefault();
+
+                // 檢查用戶是否已登入
+                if (userTypeId !== 0) {
+                    Swal.fire({
+                        title: "請先登入",
+                        text: "您必須登入才能將商品加入購物車！",
+                        icon: "warning",
+                        confirmButtonText: "確定"
+                    });
+
+                    // 隱藏 Lightbox 彈窗
+                    document.getElementById("lightbox").style.display = "none";
+                } else {
+                    // 確保 productId, buyNum 和 storeIdNum 已定義
+                    if (typeof productId !== 'undefined' && typeof buyNum !== 'undefined' && typeof storeIdNum !== 'undefined') {
+                        const success = addToCart(productId, buyNum, storeIdNum); // 傳入購買數量
+
+                        // 如果成功，則隱藏光箱
+                        if (success) {
+                            document.getElementById("lightbox").style.display = "none"; // 隱藏光箱
+
+                            // 移除事件監聽器
+                            addToCartButton.removeEventListener('click', handleAddToCartClick);
+                        }
+                    } else {
+                        console.error('Product ID, buy number, or store ID is not defined.');
+                    }
+                }
+            }
+
+            if (addToCartButton) {
+                // 監聽 "加入購物車" 按鈕的點擊事件
+                addToCartButton.addEventListener('click', handleAddToCartClick);
+            }
 
             // 顯示模態框
             document.getElementById("lightbox").style.display = "block";
+
         } catch (error) {
             console.error('Error fetching product data:', error);
         }
+
+
+    } catch (error) {
+        console.error('Error fetching product data:', error);
     }
+}
 
 
 
-    // 添加選項的輔助函數
+// 添加選項的輔助函數
     function addOption(container, condition, text, type) {
         if (condition) {
             const div = document.createElement("div");
@@ -1267,159 +1267,132 @@ var productId;
         }
     }
 
-// function addToCart(productId, buyNum, storeIdNum) {
-//
-//
-//
-//
-//     // 只有在 localStorage 有值時才讀取並賦值
-//     let storedSize = localStorage.getItem('selectedSize');
-//     let storedTemperature = localStorage.getItem('selectedTemperature');
-//     let storedSweetness = localStorage.getItem('selectedSweetness');
-//     let storedToppings = localStorage.getItem('selectedToppings');
-//
-//     console.log('Size:', storedSize);
-//     console.log('Temperature:', storedTemperature);
-//     console.log('Sweetness:', storedSweetness);
-//     console.log('Toppings:', storedToppings);
-//
-//     // 確保選擇的尺寸、溫度和甜度有值，強制轉換為字串
-//     let selectedSize = (storedSize && storedSize.trim()) || null;
-//     let selectedTemperature = (storedTemperature && storedTemperature.trim()) || null;
-//     let selectedSweetness = (storedSweetness && storedSweetness.trim()) || null;
-//     let selectedToppings = (storedToppings && storedToppings.trim()) || null;
-//
-//     // 確認是否選擇了尺寸、溫度和甜度，沒有則提示用戶
-//     if (!selectedSize) {
-//         Swal.fire({
-//             text: "尺寸未選！",
-//             icon: "warning"
-//         });
-//         return false; // 返回 false 以表示失敗
-//     }
-//
-//     if (!selectedTemperature) {
-//         Swal.fire({
-//             text: "溫度未選！",
-//             icon: "warning"
-//         });
-//         return false; // 返回 false 以表示失敗
-//     }
-//
-//     if (!selectedSweetness) {
-//         Swal.fire({
-//             text: "甜度未選！",
-//             icon: "warning"
-//         });
-//         return false; // 返回 false 以表示失敗
-//     }
-//
-//     // 獲取購物車資料並更新
-//     let cart = JSON.parse(localStorage.getItem('cart')) || {};
-//     cart[productId] = {
-//         storeId: storeIdNum,
-//         size: selectedSize,
-//         temperature: selectedTemperature,
-//         sweetness: selectedSweetness,
-//         toppings: selectedToppings || "未選擇加料", // 如果未選擇加料，使用預設值
-//         buyNum: buyNum
-//     };
-//
-//     // 更新購物車到 localStorage
-//     localStorage.setItem('cart', JSON.stringify(cart));
-//
-//     // 顯示成功提示
-//     Swal.fire({
-//         text: "商品加入購物車成功!",
-//         icon: "success"
-//     });
-//
-//     // 清除上一次的選項數據
-//     localStorage.removeItem('selectedSize');
-//     localStorage.removeItem('selectedTemperature');
-//     localStorage.removeItem('selectedSweetness');
-//     localStorage.removeItem('selectedToppings');
-//
-//     return true; // 添加成功，返回 true
-// }
-//
 
 
 function addToCart(productId, buyNum, storeIdNum) {
-    console.log('localStorage before addToCart:', localStorage);
+    console.log('localStorage 在加入購物車前:', localStorage);
 
-    // 读取并赋值
+    // 從 localStorage 取得選項
     let storedSize = localStorage.getItem('selectedSize');
     let storedTemperature = localStorage.getItem('selectedTemperature');
     let storedSweetness = localStorage.getItem('selectedSweetness');
     let storedToppings = localStorage.getItem('selectedToppings');
 
-    console.log('Size:', storedSize);
-    console.log('Temperature:', storedTemperature);
-    console.log('Sweetness:', storedSweetness);
-    console.log('Toppings:', storedToppings);
+    console.log('尺寸:', storedSize);
+    console.log('溫度:', storedTemperature);
+    console.log('甜度:', storedSweetness);
+    console.log('加料:', storedToppings);
 
-    // 确保选择的尺寸、温度和甜度有值
+    // 修剪和驗證選項
     let selectedSize = (storedSize && storedSize.trim()) || null;
     let selectedTemperature = (storedTemperature && storedTemperature.trim()) || null;
     let selectedSweetness = (storedSweetness && storedSweetness.trim()) || null;
-    let selectedToppings = (storedToppings && storedToppings.trim()) || null;
+    let selectedToppings = (storedToppings && storedToppings.trim()) || "未選擇加料";
 
-    // 确认是否选择了所有必需选项
+    // 確保必需的選項已被選擇
     if (!selectedSize) {
         Swal.fire({
-            text: "尺寸未选！",
+            text: "請選擇尺寸！",
             icon: "warning"
         });
-        return false; // 返回 false 以表示失败
+        return false; // 返回 false 以表示失敗
     }
 
     if (!selectedTemperature) {
         Swal.fire({
-            text: "温度未选！",
+            text: "請選擇溫度！",
             icon: "warning"
         });
-        return false; // 返回 false 以表示失败
+        return false; // 返回 false 以表示失敗
     }
 
     if (!selectedSweetness) {
         Swal.fire({
-            text: "甜度未选！",
+            text: "請選擇甜度！",
             icon: "warning"
         });
-        return false; // 返回 false 以表示失败
+        return false; // 返回 false 以表示失敗
     }
 
-    // 获取购物车数据并更新
+    // 從 localStorage 取得現有的購物車資料，若無則初始化為空物件
     let cart = JSON.parse(localStorage.getItem('cart')) || {};
-    cart[productId] = {
-        storeId: storeIdNum,
-        size: selectedSize,
-        temperature: selectedTemperature,
-        sweetness: selectedSweetness,
-        toppings: selectedToppings || "未选择加料", // 如果未选择加料，使用默认值
-        buyNum: buyNum
-    };
 
-    // 更新购物车到 localStorage
+    // 檢查購物車中是否已有商品，並取得商品所屬的商店 ID
+    let cartStoreId = null;
+    for (let item in cart) {
+        if (cart[item].variations && cart[item].variations.length > 0) {
+            cartStoreId = cart[item].variations[0].storeId; // 假設所有商品來自同一商店
+            break;
+        }
+    }
+
+    // 若購物車中已有商品，且商店 ID 不同，則顯示錯誤提示並退出
+    if (cartStoreId && cartStoreId !== storeIdNum) {
+        Swal.fire({
+            text: "購物車中的商品來自不同商店，請清空購物車後再試！",
+            icon: "error"
+        });
+        return false; // 返回 false 以表示失敗
+    }
+
+    // 如果購物車中還沒有這個商品，則初始化該商品
+    if (!cart[productId]) {
+        cart[productId] = {
+            variations: [] // 用於存放不同選項
+        };
+    }
+
+    // 檢查該商品的選項列表中是否已有相同的選項
+    let existingVariation = cart[productId].variations.find(variation =>
+        variation.size === selectedSize &&
+        variation.temperature === selectedTemperature &&
+        variation.sweetness === selectedSweetness &&
+        variation.toppings === selectedToppings
+    );
+
+    if (existingVariation) {
+        // 如果已有相同選項，則增加購買數量
+        existingVariation.buyNum += buyNum;
+    } else {
+        // 否則新增該選項作為新條目
+        cart[productId].variations.push({
+            storeId: storeIdNum,
+            size: selectedSize,
+            temperature: selectedTemperature,
+            sweetness: selectedSweetness,
+            toppings: selectedToppings,
+            buyNum: buyNum
+        });
+    }
+
+    // 將更新後的購物車資料存回 localStorage
     localStorage.setItem('cart', JSON.stringify(cart));
 
-    // 显示成功提示
+    // 顯示成功提示
     Swal.fire({
-        text: "商品加入購物車成功!",
+        text: "商品成功加入購物車!",
         icon: "success"
+    }).then(() => {
+        // 成功後清空購買數量
+        document.getElementById('buyNum').value = 0;
     });
 
-    // 清除上一次的选项数据
- // 调用新函数清除选项数据
-  // 清空所有存储的数据
+    console.log('localStorage 在加入購物車後:', localStorage);
 
-
-    return true; // 添加成功，返回 true
+    return true; // 返回 true 以表示成功
 }
 
 
+function clearSelectedOptions() {
+    // 移除選擇的尺寸、溫度、甜度和加料的資料
+    localStorage.removeItem('selectedSize');
+    localStorage.removeItem('selectedTemperature');
+    localStorage.removeItem('selectedSweetness');
+    localStorage.removeItem('selectedToppings');
 
+
+    console.log('選項資料已被清除');
+}
 
 
 

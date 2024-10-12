@@ -31,19 +31,22 @@ function init() {
             if (data && data.userTypeId === 1) {
                 // 如果角色是 store，隱藏搜尋框
                 document.getElementById('searchInput2').style.display = 'none';
-                document.getElementById('label-searchInput2').style.display = 'none';
+                // document.getElementById('label-searchInput2').style.display = 'none';
                 var tableHeaderRow = document.querySelector("#myTable thead tr");
 
-                // Create a new <th> element
-                var newTh = document.createElement("th");
-                newTh.style.width = "10%"; // Set width
-                newTh.textContent = "店家名稱"; // Set the text for the new column
-
-                // Get the current "商品編號" <th> element
-                var productNumberTh = tableHeaderRow.querySelector("th:nth-child(1)"); // Select the first <th>
-
-                // Insert the new <th> before "商品編號"
-                tableHeaderRow.insertBefore(newTh, productNumberTh);
+                // // Create a new <th> element
+                // var newTh = document.createElement("th");
+                // newTh.style.width = "10%"; // Set width
+                // newTh.textContent = "店家名稱"; // Set the text for the new column
+                //
+                // // Get the current "商品編號" <th> element
+                // var productNumberTh = tableHeaderRow.querySelector("th:nth-child(1)"); // Select the first <th>
+                //
+                // // Get the current "商品編號" <th> element
+                // var productNumberTh = tableHeaderRow.querySelector("th:nth-child(1)"); // Select the first <th>
+                //
+                // // Insert the new <th> before "商品編號"
+                // tableHeaderRow.insertBefore(newTh, productNumberTh);
             }
 
             if (data && data.userTypeId === 3) {
@@ -51,16 +54,16 @@ function init() {
                 document.getElementById('add').style.display = 'none';
                 var tableHeaderRow = document.querySelector("#myTable thead tr");
 
-                // Create a new <th> element
-                var newTh = document.createElement("th");
-                newTh.style.width = "10%"; // Set width
-                newTh.textContent = "店家名稱"; // Set the text for the new column
-
-                // Get the current "商品編號" <th> element
-                var productNumberTh = tableHeaderRow.querySelector("th:nth-child(1)"); // Select the first <th>
-
-                // Insert the new <th> before "商品編號"
-                tableHeaderRow.insertBefore(newTh, productNumberTh);
+                // // Create a new <th> element
+                // var newTh = document.createElement("th");
+                // newTh.style.width = "10%"; // Set width
+                // newTh.textContent = "店家名稱"; // Set the text for the new column
+                //
+                // // Get the current "商品編號" <th> element
+                // var productNumberTh = tableHeaderRow.querySelector("th:nth-child(1)"); // Select the first <th>
+                //
+                // // Insert the new <th> before "商品編號"
+                // tableHeaderRow.insertBefore(newTh, productNumberTh);
             }
         })
         .catch(error => {
