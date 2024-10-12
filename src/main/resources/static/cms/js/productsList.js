@@ -25,7 +25,7 @@ function init() {
             return response.json(); // 將返回的結果解析為 JSON 格式
         })
         .then(data => {
-            console.log('TotalUserDTO:', data); // 在控制台中顯示 TotalUserDTO
+            //console.log('TotalUserDTO:', data); // 在控制台中顯示 TotalUserDTO
 
             // 根據獲取到的 TotalUserDTO 處理邏輯
             if (data && data.userTypeId === 1) {
@@ -76,7 +76,7 @@ function searchProductsList(url) {
     fetch(url)
         .then(res => res.json())
         .then(data => {
-            console.log(data)
+            // console.log(data)
             if (data.content.length === 0) {
                 //sweetAlert
                 swal.fire("查無資料!", "請確認查詢資訊", "warning");
