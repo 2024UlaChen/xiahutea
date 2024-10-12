@@ -30,6 +30,8 @@ public interface StoreDao extends JpaRepository<Store, Integer> {
     //區域模糊查詢
     List<Store> findByStoreAddressContaining(String address);
     List<Store> findByStoreAddressContainingAndStoreStatus(String address, Integer storeStatus);
+    @Query("FROM Store s LEFT JOIN StoreCalendar sc ON s.storeId = sc.storeId WHERE s.storeId NOT IN(SELECT sc2.storeId FROM StoreCalendar sc2 WHERE sc2.storeHoliday = current date ) AND s.storeAddress LIKE %:place% AND s.storeStatus = 1")
+    List<Store> SearchDataByPlaceNotHoliday(String place);
     //根據區域 和店名 模糊查詢
     List<Store> findByStoreNameContainingOrStoreAddressContaining(String name, String address);
     //登入用
