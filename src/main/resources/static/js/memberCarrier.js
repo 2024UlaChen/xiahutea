@@ -83,7 +83,7 @@ function updateCarrier(newCarrierTxt, memberId, type) {
 carrierEditBtn.addEventListener("click", function () {
     let inputValueTxt = (memberCarrierText.innerText === "未設定" ? "" : memberCarrierText.innerText);
     Swal.fire({
-        title: "請輸入載具條碼，輸入確認後會自動產生條碼",
+        title: "請輸入載具條碼" + "\n" + "輸入確認後會自動產生條碼",
         input: "text",
         inputValue: inputValueTxt,
         inputPlaceholder: "/1234567",
