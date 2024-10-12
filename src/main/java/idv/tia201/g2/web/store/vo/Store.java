@@ -73,8 +73,8 @@ public class Store extends Core {
     @Column(name = "is_take_orders")
     private Boolean isTakeOrders;//是否接單
 
-    @Column(name = "score")
-    private Float score;//評分
+    @Column(columnDefinition = "float default 0")
+    private Float score = 0f;;//評分
 
 
     @Column(name = "vat", nullable = false, length = 8, unique = true)
