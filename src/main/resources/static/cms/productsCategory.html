@@ -751,11 +751,11 @@
 
             //依頁數
             if ($(this).closest("li").is(":first-child")) {
-                url += "page=" + (newPage - 1 - 1);
+                url += "&page=" + (newPage - 1 - 1);
             } else if ($(this).closest("li").is(":last-child")) {
-                url += "page=" + (newPage - 1 + 1);
+                url += "&page=" + (newPage - 1 + 1);
             } else {
-                url += "page=" + (jumpPage - 1);
+                url += "&page=" + (jumpPage - 1);
             }
 
             searchCategories(url);
