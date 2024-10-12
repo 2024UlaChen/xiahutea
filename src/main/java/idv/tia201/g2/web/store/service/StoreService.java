@@ -48,5 +48,7 @@ public interface StoreService {
 
     Store updateStoreRank(Integer storeId,Float score);
 
+    Boolean IsTakeOrder(Integer storeId);
+
 
 }
