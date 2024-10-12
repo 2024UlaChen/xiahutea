@@ -415,7 +415,8 @@ public class StoreServiceImpl implements StoreService {
                 LocalTime closeT = store.getClosingHours().toLocalTime();
                 LocalTime now = LocalTime.now();
                 if(now.isAfter(openT) && now.isBefore(closeT)){
-                    return true;
+                    return store.getIsTakeOrders() != null && store.getIsTakeOrders().equals(true);
+
                 }
             }
         }
