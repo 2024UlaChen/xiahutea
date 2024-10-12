@@ -15,25 +15,28 @@
     <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/sweetalert2@11/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="plugins/sweetalert2/sweetalert2.css">
 
     <style>
-
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgb(0, 0, 0);
-            background-color: rgba(0, 0, 0, 0.4);
-            padding-top: 60px;
+        .page-item.active .page-link{
+            z-index: 0;
         }
 
-        /* Modal Content */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgb(0, 0, 0);
+        background-color: rgba(0, 0, 0, 0.4);
+        padding-top: 60px;
+    }
+
+    /* Modal Content */
         .modal-content {
             background-color: #fefefe;
             margin: 5% auto;
@@ -153,7 +156,7 @@
         <div class="storeaside"></div>
 
         <div class="content-wrapper">
-
+<!--            標題-->
             <section class="content-header">
                 <div class="container-fluid">
                     <div class="row mb-2">
@@ -173,14 +176,14 @@
             <!-- Main content -->
             <section class="content">
 
-                <!-- Default box -->
+                <!-- Default box 新增 & 搜尋 -->
                 <div class="card-header">
                     <button type="button" class="btn btn-primary btn-add" id="add">新增分類</button>
 
                     <div class="card-tools">
                         <div class="input-group">
 
-                            <label for="searchInput2" class="mr-2" id="searchInput2-label">搜尋商店名稱:</label>
+<!--                            <label for="searchInput2" class="mr-2" id="searchInput2-label">搜尋商店名稱:</label>-->
                             <input type="search" id="searchInput2" class="form-control mr-2" placeholder="搜尋商店名稱">
 
                             <input type="search" id="searchInput" class="form-control" placeholder="搜尋商品分類">
@@ -191,19 +194,10 @@
                             </div>
                         </div>
                     </div>
-
-
-
-
                 </div>
 
-
-
-
-
+                <!-- Modal content 新增燈箱 -->
                 <div id="myModal" class="modal">
-
-                    <!-- Modal content -->
                     <form id="categoryForm">
                         <div class="modal-content">
                             <span class="close">&times;</span>
@@ -233,6 +227,7 @@
                     </form>
                 </div>
 
+                <!-- 修改燈箱-->
                 <div id="editModal" class="modal">
 
                     <!-- Modal content -->
@@ -266,22 +261,16 @@
                     </form>
                 </div>
 
-
-
+                <!--表格-->
                 <div class="card">
-
-
                     <div class="card-body p-0">
                         <table class="table table-striped projects" id="categoryTable">
                             <thead>
                                 <tr>
 <!--                                    <th style="width: 12%">-->
-
-
                                     <th style="width: 25%">
                                         商品分類
                                     </th>
-
 
                                     <th style="width: 25%">
                                         顯示順序
@@ -303,37 +292,21 @@
                         </table>
                     </div>
                 </div>
-                <div>
-                    <div>
-                        <div class="btn-group pagination-control" id="paginationControls">
-                            <!-- /.card -->
-                            <p id="page-info"></p>
-                            <nav aria-label="Page navigation example">
-                                <ul class="pagination justify-content-end">
-                                    <li class="page-item">
-                                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true" id="prev">Previous</a>
-                                    </li>
-                                    <!-- 分页按钮会在这里动态插入 -->
-                                    <li class="page-item">
-                                        <a class="page-link" href="#">1</a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#">2</a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#">3</a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#" id="next">Next</a>
-                                    </li>
-                                </ul>
-                            </nav>
-                        </div>
 
+                <div class="row">
+                    <div class="col-sm-12 col-md-5">
+                    </div>
+                    <div class="col-sm-12 col-md-7">
+                        <div class="dataTables_paginate paging_simple_numbers" id="example2_paginate">
+                            <ul class="pagination" id="paginate" >
+                            </ul>
+                        </div>
                     </div>
                 </div>
+
             </section>
         </div>
+
         <div class="storefooter"></div>
     </div>
 
@@ -357,475 +330,606 @@
 
     <script src="dist/js/adminlte.js"></script>
     <script src="dist/js/demo.js"></script>
-    <script src="https://unpkg.com/sweetalert2@11"></script>
+    <script src="plugins/sweetalert2/sweetalert2.all.js"></script>
 
     <script>
 
+        // 依 user 渲染畫面
+        function init(){
+            // 使用 fetch 從後端獲取 TotalUserDTO
+            fetch('/totalusers')
+                .then(response => {
+                    if (response === null) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json(); // 將返回的結果解析為 JSON 格式
+                })
+                .then(data => {
 
-        // 使用 fetch 從後端獲取 TotalUserDTO
-        fetch('/totalusers', {
-            method: 'GET', // 請求方法是 GET
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json(); // 將返回的結果解析為 JSON 格式
-            })
-            .then(data => {
-                console.log('TotalUserDTO:', data); // 在控制台中顯示 TotalUserDTO
+                    // 提取 userTypeId
+                    var userTypeId = data.userTypeId;
 
-                // 提取 userTypeId
-                var userTypeId = data.userTypeId;
+                    // 根據獲取到的 TotalUserDTO 處理邏輯
+                    if (userTypeId === 1) {
+                        // 如果角色是 store，隱藏搜尋框
+                        document.getElementById('searchInput2').style.display = 'none';
+                        // document.getElementById('searchInput2-label').style.display = 'none';
 
-                // 根據獲取到的 TotalUserDTO 處理邏輯
-                if (userTypeId === 1) {
-                    // 如果角色是 store，隱藏搜尋框
-                    document.getElementById('searchInput2').style.display = 'none';
-                    document.getElementById('searchInput2-label').style.display = 'none';
+                        var tableHeaderRow = document.querySelector("#categoryTable thead tr");
 
-                    var tableHeaderRow = document.querySelector("#categoryTable thead tr");
+                        // Create a new <th> element
+                        var newTh = document.createElement("th");
+                        newTh.style.width = "15%"; // Set width
+                        newTh.textContent = "店家名稱"; // Set the text for the new column
 
-                    // Create a new <th> element
-                    var newTh = document.createElement("th");
-                    newTh.style.width = "15%"; // Set width
-                    newTh.textContent = "店家名稱"; // Set the text for the new column
+                        // Get the current "商品編號" <th> element
+                        var productNumberTh = tableHeaderRow.querySelector("th:nth-child(1)"); // Select the first <th>
 
-                    // Get the current "商品編號" <th> element
-                    var productNumberTh = tableHeaderRow.querySelector("th:nth-child(1)"); // Select the first <th>
-
-                    // Insert the new <th> before "商品編號"
-                    tableHeaderRow.insertBefore(newTh, productNumberTh);
-
-
-
-                }
-
-                if (userTypeId === 3) {
-                    // 隱藏新增按鈕
-                    document.getElementById('add').style.display = 'none';
-
-
-
-                    var tableHeaderRow = document.querySelector("#categoryTable thead tr");
-
-                    // Create a new <th> element
-                    var newTh = document.createElement("th");
-                    newTh.style.width = "15%"; // Set width
-                    newTh.textContent = "店家名稱"; // Set the text for the new column
-
-                    // Get the current "商品編號" <th> element
-                    var productNumberTh = tableHeaderRow.querySelector("th:nth-child(1)"); // Select the first <th>
-
-                    // Insert the new <th> before "商品編號"
-                    tableHeaderRow.insertBefore(newTh, productNumberTh);
-
-                }
-
-            })
-            .catch(error => {
-                console.error('Fetch error:', error);
-            });
-
-
-                    const categoryadd = document.querySelector('#add');
-                    const modal = document.querySelector('#myModal');
-                    const closebtn = document.querySelector('.close');
-                    const categoryform = document.querySelector('#categoryForm');
-                    const resultMessage = document.querySelector('#resultMessage');
-
-                    categoryadd.addEventListener('click', () => {
-                        modal.style.display = 'block';
-                    });
-
-                    // Add event listener for closing the modal
-                    closebtn.addEventListener('click', () => {
-                        modal.style.display = 'none';
-                    });
-
-                    // Handle form submission for adding a new category
-                    categoryform.addEventListener('submit', async (event) => {
-                        event.preventDefault();
-
-                        const selectedStatus = document.querySelector('input[name="categoryStatus"]:checked').value;
-                        const categoryName = document.querySelector('#categoryName').value.trim();
-                        const categorySort = document.querySelector('#categorySort').value.trim();
-
-                        if (!categoryName || !categorySort) {
-                            resultMessage.textContent = '所有字段都是必填的。';
-                            return;
-                        }
-
-                        const validPattern = /^[a-zA-Z\u4e00-\u9fa5\s]+$/;
-
-                        // 验证分类名称是否符合要求
-                        if (!validPattern.test(categoryName)) {
-                            resultMessage.textContent = '分類名稱只能包含英文和中文';
-                            return;
-                        } else {
-                            resultMessage.textContent = '';
-                        }
-
-                        const isEnabled = selectedStatus === '1';
-
-                        const data = {
-                            "categoryName": categoryName,
-                            "categorySort": Number.parseInt(categorySort),
-                            "categoryStatus": isEnabled
-                        };
-
-                        try {
-                            // 发送请求
-                            const response = fetch('/categories/save', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify(data)  // 将数据转换为JSON格式
-                            }).then(response => {
-                                // 检查响应状态是否表示错误
-                                if (!response.ok) {
-                                    throw new Error(`HTTP错误！状态: ${response.status}`);
-                                }
-                            }).then(data => {
-                                console.log('分類提交成功:', data);
-                                // 显示成功消息
-                                Swal.fire({
-                                    text: "商品分類新增成功!",
-                                    icon: "success"
-                                });
-                                // 关闭模态窗口
-                                modal.style.display = 'none';
-                            });
-                        } catch (error) {
-                            Swal.fire({
-                                icon: "error",
-                                text: "分類新增錯誤",
-                            });
-                        }
-                    })
-
-                    function closeEdit() {
-                        let editModal = document.getElementById('editModal');
-                        const editClose = document.querySelector('span.editclose');
-                        // 监听关闭按钮点击事件
-                        editClose.addEventListener('click', function () {
-                            editModal.style.display = 'none'; // 隐藏模态窗口
-                        });
+                        // Insert the new <th> before "商品編號"
+                        tableHeaderRow.insertBefore(newTh, productNumberTh);
                     }
 
-// 在点击更新按钮时执行
-                    var eVal;
-                    document.getElementById("categoryTable").addEventListener('click', function (e) {
-                        if (e.target && e.target.classList.contains('update_btn')) {
-                            eVal = e;
-                            const updateBtn = e.target;
-                            const categoryId = updateBtn.getAttribute('data-id');
-                            closeEdit();
+                    if (userTypeId === 3) {
+                        // 隱藏新增按鈕
+                        document.getElementById('add').style.display = 'none';
+                        var tableHeaderRow = document.querySelector("#categoryTable thead tr");
+                        // Create a new <th> element
+                        var newTh = document.createElement("th");
+                        newTh.style.width = "15%"; // Set width
+                        newTh.textContent = "店家名稱"; // Set the text for the new column
+                        // Get the current "商品編號" <th> element
+                        var productNumberTh = tableHeaderRow.querySelector("th:nth-child(1)"); // Select the first <th>
+                        // Insert the new <th> before "商品編號"
+                        tableHeaderRow.insertBefore(newTh, productNumberTh);
+                    }
+                })
+                .catch(error => {
+                    console.error('Fetch error:', error);
+                });
+        }
 
+        // 搜尋店家
+        function searchCategories(url) {
+            fetch(url).then(res => res.json())
+                .then(data => {
+                    console.log(data)
+                    const categoryTableBody = document.querySelector('#categoryTable tbody');
 
-                            // 使用 fetch 从服务器获取类别数据
-                            fetch(`/categories/${categoryId}`)
-                                .then(response => {
-                                    // 检查响应是否成功
-                                    if (!response.ok) {
-                                        throw new Error('Network response was not ok');
-                                    }
-                                    return response.json(); // 将响应体解析为 JSON
-                                })
-                                .then(data => {
-                                    // 填充表单字段
+                    // 清空表格內容
+                    categoryTableBody.innerHTML = '';
 
-                                    document.getElementById('editcategoryName').value = data.categoryName;
-                                    document.getElementById('editcategorySort').value = data.categorySort;
-                                    // 根据 categoryStatus 设置启用或停用的单选按钮
-                                    if (data.categoryStatus === true) {
-                                        document.querySelector('input[name="editStatus"][value="1"]').checked = true; // 启用
-                                        document.querySelector('input[name="editStatus"][value="0"]').checked = false; // 确保停用状态未勾选
-                                    } else {
-                                        document.querySelector('input[name="editStatus"][value="1"]').checked = false; // 确保启用状态未勾选
-                                        document.querySelector('input[name="editStatus"][value="0"]').checked = true; // 停用
-                                    }
+                    // 遍歷 data.content 數組並生成表格列
+                    categories = data.content;
+                    categories.forEach(category => {  // 用 async 來處理異步邏輯
+                        const storeId = category.productStoreId;
+                        const statusBadge = category.categoryStatus === true
+                            ? `<span class="badge badge-success on-shelf">啟用</span>`
+                            : `<span class="badge badge-danger off-shelf">停用</span>`;
 
-                                    document.getElementById('editModal').style.display = 'block';
-                                })
-                                .catch(error => console.error('Error fetching category data:', error));
-                        }
-                    });
+                        // 建立表格列的 HTML，先顯示一個占位符
+                        const rowHTML = `
+                            <tr>
+                                <td id="storeName_${category.categoryId}">${category.storeName}</td> <!-- 顯示店家名稱或 ID -->
+                                <td id="categoryName_${category.categoryId}">${category.categoryName}</td>
+                                <td>${category.categorySort}</td>
+                                <td>${statusBadge}</td>
+                                <td>
+                                    <a class="btn btn-sm btn-edit update_btn" href="#" data-id="${category.categoryId}">
+                                        <i class="fas fa-pencil-alt"></i> 編輯
+                                    </a>
+                                </td>
+                            </tr>
+                            `;
 
-                    document.getElementById('editCategoryForm').addEventListener('submit', function (event) {
-                        event.preventDefault();
-
-                        // 防止表单默认提交行为
-
-                        const updateBtn = eVal.target;
-                        const categoryId = updateBtn.getAttribute('data-id');
-                        const editcategoryName = document.getElementById('editcategoryName');
-                        const editcategorySort = document.getElementById('editcategorySort');
-                        let editStatus = document.querySelector('input[name="editStatus"]:checked').value;
-                        let selectStatus = editStatus === "1";
-
-                        let editModal = document.getElementById('editModal');
-
-                        if (!editcategoryName.value || !editcategorySort.value) {
-                            editresultMessage.textContent = '所有字段都是必填的。';
-                            return;
-                        }
-
-                        // 提交编辑数据
-
-                        let categoryData = {
-                            categoryName: editcategoryName.value,
-                            categorySort: parseInt(editcategorySort.value),
-                            categoryStatus: selectStatus
-                        };
-                        editModal.style.display = 'none'; // 隐藏模态窗口
-                        fetch(`/categories/update/${categoryId}`, {
-                            method: 'PUT',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify(categoryData),
-                        })
-                            .then(response => {
-                                if (!response.ok) {
-                                    // 假設伺服器返回的錯誤消息不是 JSON 格式
-                                    response.text().then(text => {
-                                        throw new Error(`錯誤：${text}`); // 抛出文本作為錯誤消息
-                                    });
-                                }
-                            })
-                            .then(data => {
-                                console.log('分類更新成功：', data);
-                                const tdElt = document.getElementById('categoryName_' + categoryId);
-                                const row = document.querySelector(`tr[data-id="${categoryId}"]`);
-                                if (row) {
-                                    row.children[1].textContent = data.categoryName; // 更新分類名稱
-                                    row.children[2].textContent = data.categorySort; // 更新分類排序
-                                }
-                                tdElt.textContent = editcategoryName.value;// 更新分類名稱
-                                Swal.fire({
-                                    text: "商品分類更新成功!",
-                                    icon: "success"
-                                });  // 顯示成功訊息
-                                return;
-                            })
-                            .catch(error => {
-                                console.error('更新分類時出錯：', error);
-                                Swal.fire({
-                                    icon: "error",
-                                    text: "分類新增錯誤",
-                                });
-                            });
+                        // 將 HTML 插入表格
+                        categoryTableBody.insertAdjacentHTML('beforeend', rowHTML);
                     })
+
+                    // 分頁
+                    let pageHtml = ``;
+                    let i = 0;
+                    pageHtml +=
+                        `<li class="paginate_button page-item previous disabled" id="example2_previous">
+                        <a href="#" data-dt-idx="0" tabindex="0" class="page-link">Previous</a>
+                    </li>`
+                    for (i; i < data.totalPages; i++) {
+                        if (data.number == i) {
+                            pageHtml += `
+                        <li class="paginate_button page-item active">
+                            <a href="#" data-dt-idx="${i + 1}" tabindex="0" class="page-link">
+                                ${i + 1}
+                            </a>
+                        </li>
+                        `
+                        } else {
+                            pageHtml += `
+                            <li class="paginate_button page-item">
+                                <a href="#" data-dt-idx="${i + 1}" tabindex="0" class="page-link">
+                                    ${i + 1}
+                                </a>
+                            </li>
+                            `
+                        }
+                    }
+                    pageHtml +=
+                        `<li class="paginate_button page-item next" id="example2_next">
+                            <a href="#" data-dt-idx="${i}" tabindex="0" class="page-link">
+                                Next
+                            </a>
+                     </li>`
+
+
+                    if (data.totalPages > 0) {
+                        //如果有資料，才會顯示分頁按鈕
+                        $(".pagination").eq(0).html(pageHtml);
+
+                        //依所在頁數限制 previous & next 按鈕能不能點擊
+                        if (data.number - 1 < 0) {
+                            $("#example2_previous").add("disabled");
+                        } else {
+                            $("#example2_previous").removeClass("disabled");
+                        }
+                        if (data.number + 1 == i) {
+                            $("#example2_next").addClass("disabled");
+                        } else {
+                            $("#example2_next").removeClass("disabled");
+                        }
+                    } else {
+                        //如果沒資料，不會顯示分頁按鈕
+                        $(".pagination").eq(0).html("");
+                    }
+
+
+                })
+        }
+
+
+        document.addEventListener("DOMContentLoaded", function(){
+            init();
+            searchCategories("/categories");
+        });
+
+
+        const categoryadd = document.querySelector('#add');             //新增分類(btn)
+        const modal = document.querySelector('#myModal');               //新增燈箱
+        const closebtn = document.querySelector('.close');              //新增燈箱關閉(btn)
+        const categoryform = document.querySelector('#categoryForm');   //新增表單
+        const resultMessage = document.querySelector('#resultMessage'); //新增燈箱的回應 message
+
+        categoryadd.addEventListener('click', () => {
+            modal.style.display = 'block';
+        });
+
+        // Add event listener for closing the modal
+        closebtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        // Handle form submission for adding a new category
+        categoryform.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const selectedStatus = document.querySelector('input[name="categoryStatus"]:checked').value;
+            const categoryName = document.querySelector('#categoryName').value.trim();
+            const categorySort = document.querySelector('#categorySort').value.trim();
+
+            if (!categoryName || !categorySort) {
+                resultMessage.textContent = '所有字段都是必填的。';
+                return;
+            }
+
+            const validPattern = /^[a-zA-Z\u4e00-\u9fa5\s]+$/;
+
+            // 验证分类名称是否符合要求
+            if (!validPattern.test(categoryName)) {
+                resultMessage.textContent = '分類名稱只能包含英文和中文';
+                return;
+            } else {
+                resultMessage.textContent = '';
+            }
+
+            const isEnabled = selectedStatus === '1';
+
+            const data = {
+                "categoryName": categoryName,
+                "categorySort": Number.parseInt(categorySort),
+                "categoryStatus": isEnabled
+            };
+
+            // 发送请求
+            fetch('/categories/save', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)  // 将数据转换为JSON格式
+            }).then(response => {
+                // 检查响应状态是否表示错误
+                if (!response.ok) {
+                    throw new Error(`HTTP错误！状态: ${response.status}`);
+                }
+            }).then(data => {
+                console.log('分類提交成功:', data);
+                // 显示成功消息
+                Swal.fire({
+                    text: "商品分類新增成功!",
+                    icon: "success"
+                });
+                // 关闭模态窗口
+                history.go(0);
+                modal.style.display = 'none';
+
+            }).catch(e =>{
+                Swal.fire({
+                    icon: "error",
+                    text: "分類新增錯誤",
+                });
+            })
+        })
+
+        function closeEdit() {
+            let editModal = document.getElementById('editModal');
+            const editClose = document.querySelector('span.editclose');         //修改燈箱關閉(btn)
+            // 监听关闭按钮点击事件
+            editClose.addEventListener('click', function () {
+                editModal.style.display = 'none'; // 隐藏模态窗口
+
+            });
+        }
+
+// 在点击更新按钮时执行
+        var eVal;
+        // 點選表格中的編輯，依categoryId選染修改燈箱
+        document.getElementById("categoryTable").addEventListener('click', function (e) {
+            if (e.target && e.target.classList.contains('update_btn')) {
+                eVal = e;
+                const updateBtn = e.target;
+                const categoryId = updateBtn.getAttribute('data-id');
+                closeEdit();
+
+
+                // 使用 fetch 从服务器获取类别数据
+                fetch(`/categories/${categoryId}`)
+                    .then(response => {
+                        // 检查响应是否成功
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json(); // 将响应体解析为 JSON
+                    })
+                    .then(data => {
+                        // 填充表单字段
+
+                        document.getElementById('editcategoryName').value = data.categoryName;
+                        document.getElementById('editcategorySort').value = data.categorySort;
+                        // 根据 categoryStatus 设置启用或停用的单选按钮
+                        if (data.categoryStatus === true) {
+                            document.querySelector('input[name="editStatus"][value="1"]').checked = true; // 启用
+                            document.querySelector('input[name="editStatus"][value="0"]').checked = false; // 确保停用状态未勾选
+                        } else {
+                            document.querySelector('input[name="editStatus"][value="1"]').checked = false; // 确保启用状态未勾选
+                            document.querySelector('input[name="editStatus"][value="0"]').checked = true; // 停用
+                        }
+
+                        document.getElementById('editModal').style.display = 'block';
+                    })
+                    .catch(error => console.error('Error fetching category data:', error));
+            }
+        });
+
+        //修改表單送出
+        document.getElementById('editCategoryForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            // 防止表单默认提交行为
+
+            const updateBtn = eVal.target;
+            const categoryId = updateBtn.getAttribute('data-id');
+            const editcategoryName = document.getElementById('editcategoryName');
+            const editcategorySort = document.getElementById('editcategorySort');
+            let editStatus = document.querySelector('input[name="editStatus"]:checked').value;
+            let selectStatus = editStatus === "1";
+
+            let editModal = document.getElementById('editModal');
+
+            if (!editcategoryName.value || !editcategorySort.value) {
+                editresultMessage.textContent = '所有字段都是必填的。';
+                return;
+            }
+
+            // 提交编辑数据
+
+            let categoryData = {
+                categoryName: editcategoryName.value,
+                categorySort: parseInt(editcategorySort.value),
+                categoryStatus: selectStatus
+            };
+            editModal.style.display = 'none'; // 隐藏模态窗口
+            fetch(`/categories/update/${categoryId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(categoryData),
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        // 假設伺服器返回的錯誤消息不是 JSON 格式
+                        response.text().then(text => {
+                            throw new Error(`錯誤：${text}`); // 抛出文本作為錯誤消息
+                        });
+                    }
+                })
+                .then(data => {
+                    console.log('分類更新成功：', data);
+                    const tdElt = document.getElementById('categoryName_' + categoryId);
+                    const row = document.querySelector(`tr[data-id="${categoryId}"]`);
+                    if (row) {
+                        row.children[1].textContent = data.categoryName; // 更新分類名稱
+                        row.children[2].textContent = data.categorySort; // 更新分類排序
+                    }
+                    tdElt.textContent = editcategoryName.value;// 更新分類名稱
+                    history.go(0);
+                    Swal.fire({
+                        text: "商品分類更新成功!",
+                        icon: "success"
+                    });  // 顯示成功訊息
+                    return;
+                })
+                .catch(error => {
+                    console.error('更新分類時出錯：', error);
+                    Swal.fire({
+                        icon: "error",
+                        text: "分類新增錯誤",
+                    });
+                });
+        })
 
 
 // =============================================
-                    var paginationControls = document.getElementById('paginationControls');
-                    var searchButton = document.getElementById('searchButton');
-                    var searchInput = document.getElementById('searchInput');
+        var paginationControls = document.getElementById('paginationControls');
+        var searchButton = document.getElementById('searchButton');
+        var searchInput = document.getElementById('searchInput');
+        var categoryStoreNameEle = document.getElementById('searchInput2');
+        // var
+
 
 // 當搜尋按鈕被點擊時觸發的事件處理器
-                    searchButton.addEventListener('click', function () {
-                        const categoryName = searchInput.value.trim();
-                        if (categoryName) {
-                            // 如果有搜尋字串，進行搜尋請求
-                            searchfetchCategories(categoryName);
-                        } else {
-                            // 如果搜尋欄為空，返回第一頁所有分類
-                            fetchCategories('', 0);
-                        }
-                    });
-                    searchInput.addEventListener('keyup', function (e) {
-                        const categoryName = searchInput.value.trim();
-                        if (e.which == 13) {
-                            e.preventDefault(); // 防止表單提交或其他預設行為
-                            searchfetchCategories(categoryName); // 呼叫搜尋函數
-                        }
-                    });
+        searchButton.addEventListener('click', function () {
+            let url = "/categories"
+            const categoryName = searchInput.value.trim();
+            const categoryStoreName = categoryStoreNameEle.value.trim();
+            if (categoryName && categoryStoreName) {
+                url += "?storeName=" + categoryStoreName +"&categoryName=" + categoryName;
+            }
+            if (categoryName && !categoryStoreName){
+                url += "?categoryName=" + categoryName;
+            }
+            if (!categoryName && categoryStoreName){
+                url += "?storeName=" + categoryStoreName;
+            }
+            // 如果搜尋欄為空，返回第一頁所有分類
+            searchCategories(url);
 
-                    searchInput.addEventListener('input', function () {
-                        const categoryName = searchInput.value.trim();
-                        if (!categoryName) {
-                            // 當輸入框清空時，回到第一頁
-                            fetchCategories('', 0);
-                        }
-                    });
+        });
 
-// 搜尋分類，根據名稱進行查詢
-                    function searchfetchCategories(query) {
-                        const url = `/categories/findByName?categoryName=${encodeURIComponent(query)}`;
+        document.querySelectorAll(".form-control").forEach(function (element) {
+            element.addEventListener('keyup', function (e) {
+                if (e.which == 13) {
+                    e.preventDefault(); // 防止表單提交或其他預設行為
+                    searchButton.click(); // 呼叫搜尋函數
+                }
+            });
+        });
 
-                        fetch(url)
-                            .then(response => {
-                                if (!response.ok) {
-                                    throw new Error('Network response was not ok');
-                                }
-                                return response.json(); // 解析 JSON 格式的響應體
-                            })
-                            .then(data => {
-                                if (data.length === 0) {
-                                    console.log('未找到匹配的分類');
-                                } else {
-                                    updateCategoryTable(data); // 更新表格顯示搜尋結果
-                                }
-                                paginationControls.innerHTML = ''; // 搜尋結果不顯示分頁
-                            })
-                            .catch(error => {
-                                console.error('Fetch error:', error);
-                            });
-                    }
+
+        // searchInput.addEventListener('input', function () {
+        //     const categoryName = searchInput.value.trim();
+        //     if (!categoryName) {
+        //         // 當輸入框清空時，回到第一頁
+        //         searchCategories("/categories");
+        //     }
+        // });
+
+        $(document).on("click", "a.page-link", function (e) {
+            e.preventDefault();
+            let newPage = $(".paginate_button.page-item.active").children("a").attr("data-dt-idx");
+            let jumpPage = $(this).attr("data-dt-idx");
+
+            let url = "/categories"
+            const categoryName = searchInput.value.trim();
+            const categoryStoreName = categoryStoreNameEle.value.trim();
+            if (categoryName && categoryStoreName) {
+                url += "?storeName=" + categoryStoreName +"&categoryName=" + categoryName;
+            }
+            if (categoryName && !categoryStoreName){
+                url += "?categoryName=" + categoryName;
+            }
+            if (!categoryName && categoryStoreName){
+                url += "?storeName=" + categoryStoreName;
+            }
+            if(!categoryName && !categoryStoreName){
+                url += "?";
+            }
+
+            //依頁數
+            if ($(this).closest("li").is(":first-child")) {
+                url += "&page=" + (newPage - 1 - 1);
+            } else if ($(this).closest("li").is(":last-child")) {
+                url += "&page=" + (newPage - 1 + 1);
+            } else {
+                url += "&page=" + (jumpPage - 1);
+            }
+
+            searchCategories(url);
+        })
+
+        // // 搜尋分類，根據名稱進行查詢
+        // function searchfetchCategories(query) {
+        //     const url = `/categories/findByName?categoryName=${encodeURIComponent(query)}`;
+        //
+        //     fetch(url)
+        //         .then(response => {
+        //             if (!response.ok) {
+        //                 throw new Error('Network response was not ok');
+        //             }
+        //             return response.json(); // 解析 JSON 格式的響應體
+        //         })
+        //         .then(data => {
+        //             if (data.length === 0) {
+        //                 console.log('未找到匹配的分類');
+        //             } else {
+        //                 updateCategoryTable(data); // 更新表格顯示搜尋結果
+        //             }
+        //             paginationControls.innerHTML = ''; // 搜尋結果不顯示分頁
+        //         })
+        //         .catch(error => {
+        //             console.error('Fetch error:', error);
+        //         });
+        // }
 
 // 分頁功能，請求指定頁碼的數據，每頁顯示 10 筆
-                    function fetchCategories(query, page) {
-                        const url = `/categories/paginated?page=${page}&size=10${query ? `&categoryName=${encodeURIComponent(query)}` : ''}`;
+//         function fetchCategories(query, page) {
+//             const url = `/categories/paginated?page=${page}&size=10${query ? `&categoryName=${encodeURIComponent(query)}` : ''}`;
+//
+//             fetch(url)
+//                 .then(response => {
+//                     if (!response.ok) {
+//                         throw new Error('Network response was not ok');
+//                     }
+//                     return response.json(); // 解析 JSON 格式的響應體
+//                 })
+//                 .then(data => {
+//                     updateCategoryTable(data.content); // 更新表格數據
+//                     updatePaginationControls(data.totalPages, page); // 更新分頁按鈕
+//                 })
+//                 .catch(error => {
+//                     console.error('Fetch error:', error);
+//                 });
+//         }
 
-                        fetch(url)
-                            .then(response => {
-                                if (!response.ok) {
-                                    throw new Error('Network response was not ok');
-                                }
-                                return response.json(); // 解析 JSON 格式的響應體
-                            })
-                            .then(data => {
-                                updateCategoryTable(data.content); // 更新表格數據
-                                updatePaginationControls(data.totalPages, page); // 更新分頁按鈕
-                            })
-                            .catch(error => {
-                                console.error('Fetch error:', error);
-                            });
-                    }
 
-
-        async function getStoreNameById(storeId) {
-            try {
-                const response = await fetch(`/store/getInfo/${storeId}`);
-                if (!response.ok) {
-                    throw new Error('网络响应错误');
-                }
-                const store = await response.json();
-                return store.storeName;  // 返回店铺名称
-            } catch (error) {
-                console.error('获取店铺名称时出错:', error);
-                return '未知店铺';  // 如果出错返回默认值
-            }
-        }
+        // async function getStoreNameById(storeId) {
+        //     try {
+        //         const response = await fetch(`/store/getInfo/${storeId}`);
+        //         if (!response.ok) {
+        //             throw new Error('网络响应错误');
+        //         }
+        //         const store = await response.json();
+        //         return store.storeName;  // 返回店铺名称
+        //     } catch (error) {
+        //         console.error('获取店铺名称时出错:', error);
+        //         return '未知店铺';  // 如果出错返回默认值
+        //     }
+        // }
 
         // 假设你已经有 storeId 列表或单个 storeId
 
 
                     // 更新表格的示例函數
 
-        function updateCategoryTable(categories) {
-            const categoryTableBody = document.querySelector('#categoryTable tbody');
-
-            // 清空表格內容
-            categoryTableBody.innerHTML = '';
-
-            // 遍歷 categories 數組並生成表格列
-            categories.forEach(async category => {  // 用 async 來處理異步邏輯
-                const storeId = category.productStoreId;
-                const statusBadge = category.categoryStatus === true
-                    ? `<span class="badge badge-success on-shelf">啟用</span>`
-                    : `<span class="badge badge-danger off-shelf">停用</span>`;
-
-                // 建立表格列的 HTML，先顯示一個占位符
-                const rowHTML = `
-            <tr>
-                <td id="storeName_${category.categoryId}">加載中...</td> <!-- 顯示店家名稱或 ID -->
-                <td id="categoryName_${category.categoryId}">${category.categoryName}</td>
-                <td>${category.categorySort}</td>
-                <td>${statusBadge}</td>
-                <td>
-                    <a class="btn btn-sm btn-edit update_btn" href="#" data-id="${category.categoryId}">
-                        <i class="fas fa-pencil-alt"></i> 編輯
-                    </a>
-                </td>
-            </tr>
-        `;
-
-                // 將 HTML 插入表格
-                categoryTableBody.insertAdjacentHTML('beforeend', rowHTML);
-
-                // 獲取店家名稱並動態更新對應的表格單元格
-                const storeName = await getStoreNameById(storeId);  // 獲取店家名稱
-                document.getElementById(`storeName_${category.categoryId}`).textContent = storeName;  // 更新表格
-            });
-        }
+        // function updateCategoryTable(categories) {
+        //     const categoryTableBody = document.querySelector('#categoryTable tbody');
+        //
+        //     // 清空表格內容
+        //     categoryTableBody.innerHTML = '';
+        //
+        //     // 遍歷 categories 數組並生成表格列
+        //     categories.forEach(async category => {  // 用 async 來處理異步邏輯
+        //         const storeId = category.productStoreId;
+        //         const statusBadge = category.categoryStatus === true
+        //             ? `<span class="badge badge-success on-shelf">啟用</span>`
+        //             : `<span class="badge badge-danger off-shelf">停用</span>`;
+        //
+        //         // 建立表格列的 HTML，先顯示一個占位符
+        //         const rowHTML = `
+        //     <tr>
+        //         <td id="storeName_${category.categoryId}">${category.storeName}</td> <!-- 顯示店家名稱或 ID -->
+        //         <td id="categoryName_${category.categoryId}">${category.categoryName}</td>
+        //         <td>${category.categorySort}</td>
+        //         <td>${statusBadge}</td>
+        //         <td>
+        //             <a class="btn btn-sm btn-edit update_btn" href="#" data-id="${category.categoryId}">
+        //                 <i class="fas fa-pencil-alt"></i> 編輯
+        //             </a>
+        //         </td>
+        //     </tr>
+        // `;
+        //         // 將 HTML 插入表格
+        //         categoryTableBody.insertAdjacentHTML('beforeend', rowHTML);
+        //     });
+        //
+        //
+        // }
 
 
         // 更新分頁控制的示例函數
-                    function updatePaginationControls(totalPages, currentPage) {
-                        const paginationControls = document.getElementById('paginationControls');
-                        paginationControls.innerHTML = ''; // Clear existing pagination controls
-
-                        // Create the pagination nav
-                        const nav = document.createElement('nav');
-                        nav.setAttribute('aria-label', 'Page navigation example');
-
-                        // Create the ul element for pagination
-                        const ul = document.createElement('ul');
-                        ul.className = 'pagination justify-content-end';
-
-                        // Previous button
-                        const prevLi = document.createElement('li');
-                        prevLi.className = 'page-item ' + (currentPage === 0 ? 'disabled' : '');
-                        const prevLink = document.createElement('a');
-                        prevLink.className = 'page-link';
-                        prevLink.href = '#';
-                        prevLink.setAttribute('tabindex', '-1');
-                        prevLink.setAttribute('aria-disabled', 'true');
-                        prevLink.id = 'prev';
-                        prevLink.textContent = 'Previous';
-                        if (currentPage > 0) {
-                            prevLink.addEventListener('click', () => {
-                                fetchCategories(searchInput.value.trim(), currentPage - 1); // Load previous page
-                            });
-                        }
-                        prevLi.appendChild(prevLink);
-                        ul.appendChild(prevLi);
-
-                        // Page buttons
-                        for (let i = 0; i < totalPages; i++) {
-                            const li = document.createElement('li');
-                            li.className = 'page-item ' + (i === currentPage ? 'active' : '');
-                            const link = document.createElement('a');
-                            link.className = 'page-link';
-                            link.href = '#';
-                            link.textContent = i + 1;
-                            link.addEventListener('click', () => {
-                                fetchCategories(searchInput.value.trim(), i); // Load page i
-                            });
-                            li.appendChild(link);
-                            ul.appendChild(li);
-                        }
-
-                        // Next button
-                        const nextLi = document.createElement('li');
-                        nextLi.className = 'page-item ' + (currentPage === totalPages - 1 ? 'disabled' : '');
-                        const nextLink = document.createElement('a');
-                        nextLink.className = 'page-link';
-                        nextLink.href = '#';
-                        nextLink.id = 'next';
-                        nextLink.textContent = 'Next';
-                        if (currentPage < totalPages - 1) {
-                            nextLink.addEventListener('click', () => {
-                                fetchCategories(searchInput.value.trim(), currentPage + 1); // Load next page
-                            });
-                        }
-                        nextLi.appendChild(nextLink);
-                        ul.appendChild(nextLi);
-
-                        // Append ul to nav, and nav to paginationControls
-                        nav.appendChild(ul);
-                        paginationControls.appendChild(nav);
-                    }
-
-// 初次載入所有分類，默認加載第 0 頁，每頁顯示 10 筆資料
-                    fetchCategories('', 0); // 默認加載第 0 頁
-
-
-
-
+        // function updatePaginationControls(totalPages, currentPage) {
+        //     const paginationControls = document.getElementById('paginationControls');
+        //     paginationControls.innerHTML = ''; // Clear existing pagination controls
+        //
+        //     // Create the pagination nav
+        //     const nav = document.createElement('nav');
+        //     nav.setAttribute('aria-label', 'Page navigation example');
+        //
+        //     // Create the ul element for pagination
+        //     const ul = document.createElement('ul');
+        //     ul.className = 'pagination justify-content-end';
+        //
+        //     // Previous button
+        //     const prevLi = document.createElement('li');
+        //     prevLi.className = 'page-item ' + (currentPage === 0 ? 'disabled' : '');
+        //     const prevLink = document.createElement('a');
+        //     prevLink.className = 'page-link';
+        //     prevLink.href = '#';
+        //     prevLink.setAttribute('tabindex', '-1');
+        //     prevLink.setAttribute('aria-disabled', 'true');
+        //     prevLink.id = 'prev';
+        //     prevLink.textContent = 'Previous';
+        //     if (currentPage > 0) {
+        //         prevLink.addEventListener('click', () => {
+        //             fetchCategories(searchInput.value.trim(), currentPage - 1); // Load previous page
+        //         });
+        //     }
+        //     prevLi.appendChild(prevLink);
+        //     ul.appendChild(prevLi);
+        //
+        //     // Page buttons
+        //     for (let i = 0; i < totalPages; i++) {
+        //         const li = document.createElement('li');
+        //         li.className = 'page-item ' + (i === currentPage ? 'active' : '');
+        //         const link = document.createElement('a');
+        //         link.className = 'page-link';
+        //         link.href = '#';
+        //         link.textContent = i + 1;
+        //         link.addEventListener('click', () => {
+        //             fetchCategories(searchInput.value.trim(), i); // Load page i
+        //         });
+        //         li.appendChild(link);
+        //         ul.appendChild(li);
+        //     }
+        //
+        //     // Next button
+        //     const nextLi = document.createElement('li');
+        //     nextLi.className = 'page-item ' + (currentPage === totalPages - 1 ? 'disabled' : '');
+        //     const nextLink = document.createElement('a');
+        //     nextLink.className = 'page-link';
+        //     nextLink.href = '#';
+        //     nextLink.id = 'next';
+        //     nextLink.textContent = 'Next';
+        //     if (currentPage < totalPages - 1) {
+        //         nextLink.addEventListener('click', () => {
+        //             fetchCategories(searchInput.value.trim(), currentPage + 1); // Load next page
+        //         });
+        //     }
+        //     nextLi.appendChild(nextLink);
+        //     ul.appendChild(nextLi);
+        //
+        //     // Append ul to nav, and nav to paginationControls
+        //     nav.appendChild(ul);
+        //     paginationControls.appendChild(nav);
+        //
+        // }
 
     </script>
+</body>

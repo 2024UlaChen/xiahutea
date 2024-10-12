@@ -23,12 +23,10 @@ public class HomePageController {
     }
 
     @GetMapping("/home")
-    public List<Store> GetStoreList() throws ParseException {
+    public List<Store> GetStoreList()  {
         //取得今天有上班的店家
 
-        Date today = new Date();
-
-        return storeService.getStoreListForHome(today);
+        return storeService.getStoreListForHome();
 
     }
 

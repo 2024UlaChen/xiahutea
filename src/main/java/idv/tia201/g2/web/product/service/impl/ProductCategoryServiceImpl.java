@@ -1,29 +1,21 @@
 package idv.tia201.g2.web.product.service.impl;
 
-import idv.tia201.g2.web.product.dao.ProductCategoryDao;
-
+import idv.tia201.g2.web.product.dao.ProductCategoryRepository;
 import idv.tia201.g2.web.product.dto.ProductCategoryDTO;
 import idv.tia201.g2.web.product.service.ProductCategoryService;
-
 import idv.tia201.g2.web.product.service.ProductService;
 import idv.tia201.g2.web.product.vo.ProductCategory;
 import idv.tia201.g2.web.store.dao.StoreDao;
-import idv.tia201.g2.web.store.vo.Store;
-
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 @Service
 public class ProductCategoryServiceImpl implements ProductCategoryService {
     @Autowired
-    private ProductCategoryDao productCategoryDao;
+    private ProductCategoryRepository productCategoryRepository;
 
     @Autowired
     private StoreDao storeDao;
@@ -35,26 +27,26 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     @Override
     public List<ProductCategory> getAllCategories() {
 
-        return productCategoryDao.findAllByOrderByCategorySortAsc();
+        return productCategoryRepository.findAllByOrderByCategorySortAsc();
     }
 
     @Override
     public ProductCategory getProductCategoryById(Integer categoryId) {
 
-        return productCategoryDao.findByCategoryId(categoryId);
+        return productCategoryRepository.findByCategoryId(categoryId);
     }
 
 
     public ProductCategory update(Integer categoryId, ProductCategoryDTO updatedCategoryDTO, Integer userTypeId, Integer userId) {
         // 根据 categoryId 查找现有分类
-        ProductCategory existingCategory = productCategoryDao.findByCategoryId(categoryId);
+        ProductCategory existingCategory = productCategoryRepository.findByCategoryId(categoryId);
 
         // 如果用戶是商家，驗證該分類是否屬於該商家
         if (userTypeId == 1 && !existingCategory.getProductStoreId().equals(userId)) {
            return null;
         }
 
-        List<ProductCategory> duplicateCategories = productCategoryDao.findByCategoryNameAndProductStoreId(updatedCategoryDTO.getCategoryName(), userId);
+        List<ProductCategory> duplicateCategories = productCategoryRepository.findByCategoryNameAndProductStoreId(updatedCategoryDTO.getCategoryName(), userId);
 
 // 檢查是否存在不同 ID 的重複分類
         if (!duplicateCategories.isEmpty()) {
@@ -73,7 +65,7 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
             existingCategory.setCategoryStatus(updatedCategoryDTO.getCategoryStatus());
 
             // 保存更新后的分类
-            return productCategoryDao.save(existingCategory);
+            return productCategoryRepository.save(existingCategory);
         } else {
             // 分类不存在的情况
             return null;
@@ -96,7 +88,7 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
         category.setProductStoreId(userId);
 
         // 保存分类
-        productCategoryDao.save(category);
+        productCategoryRepository.save(category);
 
         return "分类添加成功";
     }
@@ -104,51 +96,67 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
 
     @Override
     public boolean deleteCategory(Integer categoryId) {
-        productCategoryDao.deleteById(categoryId);
+        productCategoryRepository.deleteById(categoryId);
 
         return true;
     }
 
     @Override
     public List<ProductCategory> getCategoriesByName(String categoryName) {
-        return productCategoryDao.findByCategoryNameContaining(categoryName);
+        return productCategoryRepository.findByCategoryNameContaining(categoryName);
     }
 
     @Override
-    public Page<ProductCategory> getCategories(Pageable pageable) {
+    public Page<ProductCategoryDTO> getCategories(Pageable pageable) {
 
-        return productCategoryDao.findAll(pageable);
-    }
-
-
-    @Override
-    public boolean checkStoreOwnership(Integer userId,Integer storeId) {
-        // 调用 StoreDAO 检查该用户是否为 storeId 对应店铺的拥有者
-        Store store =storeDao.findByStoreId(storeId);
-        return store != null && store.getStoreId().equals(userId);
+        return productCategoryRepository.findProductCategoryDTO(pageable);
     }
 
     @Override
-    public Page<ProductCategory> getProductCategoryByStoreId(Integer productStoreId, Pageable pageable) {
-         return productCategoryDao.findByProductStoreId(productStoreId, pageable);
+    public Page<ProductCategoryDTO> getProductCategoryByStoreId(Integer productStoreId, Pageable pageable) {
+         return productCategoryRepository.findProductCategoryDTOByStoreId(productStoreId, pageable);
     }
 
     @Override
     public List<ProductCategory> getCategoriesByNameAndStoreId(String categoryName, Integer storeId) {
-        return productCategoryDao.findByCategoryNameAndProductStoreId(categoryName, storeId);
+        return productCategoryRepository.findByCategoryNameAndProductStoreId(categoryName, storeId);
     }
 
     @Override
     public List<ProductCategory> getProductCategoryByStoreId(Integer storeId) {
-        return productCategoryDao.findByProductStoreIdOrderByCategorySortAsc(storeId);
+        return productCategoryRepository.findByProductStoreIdOrderByCategorySortAsc(storeId);
     }
 
     @Override
     public List<ProductCategory> getCategoriesByStore(Integer storeId) {
-        return productCategoryDao.findByProductStoreId(storeId);
+        return productCategoryRepository.findByProductStoreId(storeId);
     }
 
-    ;
+    @Override
+    public Page<ProductCategoryDTO> serchCategories(ProductCategoryDTO productCategoryDTO, Pageable pageable) {
+        String storeName = productCategoryDTO.getStoreName();
+        String categoryName = productCategoryDTO.getCategoryName();
+
+        // 搜尋全部分類
+        if (categoryName == null && storeName == null) {
+            return productCategoryRepository.findProductCategoryDTO(pageable);
+        }
+
+        // 依店家名稱搜尋
+        if (categoryName == null && !(storeName == null)) {
+            return productCategoryRepository.findProductCategoryDTOByStoreName(storeName, pageable);
+        }
+
+        // 依分類名稱搜尋
+        if (!(categoryName == null) && storeName == null) {
+            return productCategoryRepository.findProductCategoryDTOByCategoryName(categoryName, pageable);
+        }
+
+        // 依分類 & 店家名稱搜尋
+        return productCategoryRepository.findProductCategoryDTOByCategoryNameAndStoreName(categoryName, storeName, pageable);
+
+
+    }
 
 
 }

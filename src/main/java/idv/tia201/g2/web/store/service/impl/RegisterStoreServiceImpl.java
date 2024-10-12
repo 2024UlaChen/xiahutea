@@ -4,7 +4,6 @@ import idv.tia201.g2.core.pojo.Mail;
 import idv.tia201.g2.core.util.EncrypSHA;
 import idv.tia201.g2.core.util.MailUtil;
 import idv.tia201.g2.web.chat.service.ChatRoomService;
-import idv.tia201.g2.web.chat.service.impl.ChatRoomServiceimpl;
 import idv.tia201.g2.web.store.dao.StoreDao;
 import idv.tia201.g2.web.store.dto.RegisterStoreDTO;
 import idv.tia201.g2.web.store.service.RegisterStoreService;
@@ -213,6 +212,9 @@ public class RegisterStoreServiceImpl implements RegisterStoreService {
             sendMail(newData);
             String shaedEncrypt = EncrypSHA.SHAEncrypt(randomPassword);
             newData.setPassword(shaedEncrypt);
+
+            //評分為0
+            newData.setScore(0f);
 
 
             TotalUsers totalUser = new TotalUsers(null, userType, newData.getStoreId());
