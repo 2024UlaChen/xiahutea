@@ -70,7 +70,7 @@ function getStoreInfo(storeIdNum) {
                 console.log('店家信息:', store);
                 let storeSimpleInfoData = "";
                 storeSimpleInfoData += `
-                    <h4 class="storeName">${store.storeName}</h4>
+                    <h3 class="storeName">${store.storeName}</h3>
                     <div class="rating">
                         <span id="storeRating"></span>
                     </div>

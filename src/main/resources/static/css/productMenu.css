@@ -56,7 +56,7 @@ body {
 }
 
 .myclass {
-    width: 70%;
+    width: 67%;
     height: 350px;
     border-radius: 50px;
 }
@@ -84,7 +84,7 @@ body {
 .restaurant-actions {
     display: flex;
     justify-content: space-between;
-    margin-top: 50px;
+    margin-top: 30px;
 }
 
 .action {
@@ -162,12 +162,13 @@ h2 {
 
 div.orderinfo,
 div.question {
-
-    background-color: #fac792;
+    background-color: #FAC792;
+    border: 1px solid #FAC792;
+    outline: 1px solid #FAC792;
+    color: white;
     border-radius: 10px;
     width: 100px;
     height: 50px;
-    box-shadow: 0px 2px 4px -1px rgb(232, 196, 196);
     cursor: pointer;
     display: flex;
     /* 水平置中 */
@@ -177,13 +178,11 @@ div.question {
 }
 
 
-div.orderinfo:hover {
-    background-color: #73B4BA;
-}
-
+div.orderinfo:hover,
 div.question:hover {
-    background-color: #73B4BA;
-
+    background-color: white;
+    border: 1px solid #FAC792;
+    color: #f38f27;
 }
 
 
@@ -408,8 +407,8 @@ input.person {
     align-items: center;
 }
 
-.bottom button {
-    background-color: #28a745;
+#addToCartButton {
+    background-color: #73B4BA;
     color: #fff;
     border: none;
     padding: 10px;
@@ -421,8 +420,10 @@ input.person {
 
 }
 
-.bottom button:hover {
-    background-color: #218838;
+#addToCartButton:hover {
+    background-color: white;
+    border: 1px solid #73B4BA;
+    color: #73B4BA;
 }
 
 
@@ -466,7 +467,7 @@ div.pic img {
 }
 
 /* Close Button */
-.close {
+.close, .infoClose {
     color: grey;
     margin-left: auto;
     padding-right: 4px;
@@ -476,7 +477,7 @@ div.pic img {
 
 }
 
-.close:hover, .close:focus {
+.close:hover, .close:focus, .infoClose:hover, .infoClose:focus {
     color: black;
     text-decoration: none;
     cursor: pointer;
@@ -487,18 +488,20 @@ div.pic img {
     display: flex;
     justify-content: flex-start;
     border-bottom: 1px solid #ddd;
-    padding-bottom: 5px;
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-left: 0;
 }
 
 /* Modal Tabs */
 .modal-tabs {
     display: flex;
-    /*justify-content: flex-start;*/
     margin-bottom: 10px;
 }
 
 .modal-tabs div {
     padding: 10px;
+    padding-left: 0;
     cursor: pointer;
     border-bottom: 2px solid transparent;
     display: block;
@@ -515,6 +518,7 @@ div.pic img {
 }
 
 .modal-section.active {
+    margin-top: 1%;
     display: block;
 }
 
@@ -540,8 +544,8 @@ div.pic img {
 
 #deliveryOptions h5 {
     font-size: 16px;
-    margin-bottom: 10px;
-    color: #ff6600;
+    margin-bottom: 5px;
+    color: #73B4BA;
 }
 
 div.pic {
@@ -556,3 +560,6 @@ div.pic {
     overflow: hidden;
 }
 
+#storeInfo div {
+    margin-bottom: 2%;
+}
