@@ -539,6 +539,7 @@
                         text: "商品更新成功!",
                         icon: "success"
                     });
+                    history.go(-1)
                     // 可以在这里进行页面跳转或其他操作
                 })
                 .catch(error => {
@@ -547,6 +548,7 @@
                         icon: "error",
                         text: "分類新增錯誤",
                     });
+                    history.go(-1)
                 });
         }
         // 封装一个函数来返回一个 Promise，当文件读取完成时 resolve
@@ -651,14 +653,18 @@
                 })
                 .then(data => {
                     console.log('產品提交成功:', data);
+                    history.go(-1)
                 })
                 .catch(error => {
                     Swal.fire({
                         icon: "error",
                         text: "分類新增錯誤",
                     });
+
+                    history.go(-1)
                     console.error('產品提交錯誤:', error);
                 });
+
         }
 
 
