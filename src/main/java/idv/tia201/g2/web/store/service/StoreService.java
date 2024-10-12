@@ -44,7 +44,7 @@ public interface StoreService {
     List<Date> GetStoreHolidays(Integer StoreId);
 
     Page<Store> searchStore(StoreViewModel store, Integer page);
-    List<Store> getStoreListForHome(Date today) throws ParseException;
+    List<Store> getStoreListForHome();
 
     Store updateStoreRank(Integer storeId,Float score);
 
