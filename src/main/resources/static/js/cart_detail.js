@@ -19,6 +19,7 @@ document.addEventListener("DOMContentLoaded",function(){
     let storeId;
     let nowstore;
     let customerCouponsId;
+    let customerCoupon;
     let loyaltyCardId;
     let orderloyaltyCardId
     let ordernote;
@@ -297,7 +298,7 @@ document.addEventListener("DOMContentLoaded",function(){
     couponSelect_el.addEventListener('change',function (){
         let selectedOption = couponSelect_el.options[couponSelect_el.selectedIndex];
         let discount = selectedOption.getAttribute('data-discount');
-        customerCouponsId = selectedOption.value;
+        customerCouponsId = selectedOption.getAttribute('data-customercouonid');
         coupon_minus_number_el.textContent = `$${discount}`;
     })
 
@@ -1677,59 +1678,97 @@ document.addEventListener("DOMContentLoaded",function(){
     }
 
     //F14 獲得的優惠券動態生成選項
-    function getcoupons(customerId){
-        fetch(`/cart/getCoupon/${customerId}`)
-            .then(response=>{
-                if (!response.ok) {
-                    return response.json().then(errorData => {
-                        throw new Error(errorData.message);
-                    });
-                }
-                return response.json();
-            })
-            .then(coupons => {
-                console.log("coupons : ",coupons)
-                let options = couponSelect_el.querySelectorAll('option:not([disabled])');
-                options.forEach(option => option.remove());
-                coupons.forEach(coupon => {
+    async function getcoupons(customerId) {
+        try {
+            const response = await fetch(`/cart/getCoupon/${customerId}`);
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message);
+            }
+            const coupons = await response.json();
+            console.log("coupons : ", coupons);
+
+            // 清除現有選項
+            let options = couponSelect_el.querySelectorAll('option:not([disabled])');
+            options.forEach(option => option.remove());
+
+            // 迭代每個優惠券
+            for (const coupon of coupons) {
+                const customerCoupon = await getcustomercouponID(customerId, coupon.couponId); // 等待 getcustomercouponID 完成
+                console.log("customercoupon:", customerCoupon);
+
+                if (customerCoupon) { // 確認 customerCoupon 有資料後再添加選項
                     let option = document.createElement('option');
                     option.value = coupon.couponId;
                     option.textContent = coupon.couponName;
                     option.setAttribute('data-discount', coupon.discount);
+                    option.setAttribute('data-customercouonid', customerCoupon.customerCouponsId); // 使用返回的 customerCouponsId
                     couponSelect_el.appendChild(option);
-                });
-            })
-            .catch(error => console.error('Error loading coupons:', error));
+                }
+            }
+        } catch (error) {
+            console.error('Error loading coupons:', error);
+        }
     }
-    //F15 獲得會員卡餘額及相關事件綁定
+    //F15 從使用者ID和優惠券ID抓customercouponID
+    async function getcustomercouponID(customerId, couponId) {
+        try {
+            const response = await fetch(`/cart/getCustomerCoupon/${customerId}/${couponId}`);
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message);
+            }
+            const customerCoupon = await response.json(); // 等 fetch 完成後回傳結果
+            // console.log("function customercoupon:", customerCoupon);
+            return customerCoupon; // 回傳 customerCoupon 給呼叫的地方使用
+        } catch (error) {
+            console.error('Error loading customercoupons:', error);
+            return null; // 如果出錯，返回 null
+        }
+    }
+    //F16 獲得會員卡餘額及相關事件綁定
     function GetMemberCardPoint(storeId,customerId){
         fetch(`/cart/checkoutlist/getMemberCard/${storeId}/${customerId}`)
-            .then(response=>{
-                if (!response.ok) {
-                    return response.json().then(errorData => {
-                        throw new Error(errorData.message);
-                    });
-                }
-                return response.json();
-            })
+            .then(response => {
+            // 檢查是否有錯誤
+            if (!response.ok) {
+                return response.json().then(errorData => {
+                    throw new Error(errorData.message);
+                });
+            }
+            // 如果狀態碼是 204（No Content），或者回應中沒有內容，返回 null
+            if (response.status === 204) {
+                return null;
+            }
+            // 返回 JSON 解析結果
+            return response.json();
+        })
             .then(data=>{
-                console.log("membercard:",data)
-                console.log("會員卡積分:", data.points);
-                if(data.points<10){
-                    membercard_count_el.textContent=`會員點數為${data.points} 點，會員點數不足`;
+                console.log("membercard:", data);
+                // 檢查是否有返回會員卡資料
+                if (!data || Object.keys(data).length === 0) {
+                    // 如果資料為空，顯示 "無會員卡資料"
+                    membercard_count_el.textContent = "無會員卡資料";
                     membercard_minus_number_el.textContent = "$0";
-                }else if(data.points>=10){
-                    membercard_count_el.textContent=`會員點數為${data.points} 點，10點可折抵50元`;
-                    membercard_minus_number_el.textContent = "$50";
-                    loyaltyCardId = data.loyaltyCardId;
-                }else{
-                    membercard_count_el.textContent="無會員卡資料";
-                    membercard_minus_number_el.textContent = "$0";
+                } else {
+                    // 正常處理有資料的情況
+                    console.log("會員卡積分:", data.points);
+
+                    if (data.points < 10) {
+                        membercard_count_el.textContent = `會員點數為${data.points} 點，會員點數不足`;
+                        membercard_minus_number_el.textContent = "$0";
+                    } else if (data.points >= 10) {
+                        membercard_count_el.textContent = `會員點數為${data.points} 點，10點可折抵50元`;
+                        membercard_minus_number_el.textContent = "$50";
+                        loyaltyCardId = data.loyaltyCardId;
+                    }
                 }
                 Calculatetotal();
             })
             .catch(error=>{
                 console.error('Error loading coupons:', error);
+                membercard_count_el.textContent = "無此店家會員卡";
+                membercard_minus_number_el.textContent = "$0";
             })
     }
     //F20 計算訂單金額

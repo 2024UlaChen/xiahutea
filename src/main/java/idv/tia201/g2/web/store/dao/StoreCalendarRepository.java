@@ -31,7 +31,9 @@
         List<Date> findStoreCalendarsByStoreId(@Param("sotreId") Integer storeId);
 
 
-        @Query("SELECT s FROM Store s LEFT JOIN StoreCalendar sc ON s.storeId = sc.storeId WHERE (sc.storeHoliday != :date OR sc.storeHoliday IS NULL) AND s.storeStatus = 1")
-        List<Store> findByStoreHolidayAndStoreStatus(@Param("date") Date date);
+        @Query("SELECT s FROM Store s LEFT JOIN StoreCalendar sc ON s.storeId = sc.storeId WHERE s.storeId NOT IN(SELECT sc2.storeId FROM StoreCalendar sc2 WHERE sc2.storeHoliday = CURRENT DATE )  AND s.storeStatus = 1")
+        List<Store> findByStoreHolidayAndStoreStatus();
+
+
 
     }

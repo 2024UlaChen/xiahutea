@@ -15,8 +15,14 @@ const addrModalBody = document.querySelector("#addrModalBody");
 
 const newAddrBtn = document.querySelector(".newAddr");
 const saveAddrBtn = document.querySelector(".saveAddr");
+// MODAL
+const addrModalTitle = document.querySelector("#addrModalTitle");
+
+
 
 const sessionDetail = JSON.parse(sessionStorage.getItem("memberData"));
+
+
 
 function getAddress(memberId) {
     memberAddressUl.innerHTML = "";
@@ -76,6 +82,7 @@ function getDefaultDistrict(city) {
 
 // 編輯現有地址
 function editAddr(target) {
+    addrModalTitle.textContent="編輯地址";
     let dataAddressId = target.closest("li").getAttribute("data-addressId");
     let nowAddr = target.closest("li").querySelector("span").innerText;
     let addrList = nowAddr.split("-");
@@ -176,6 +183,7 @@ function delAttr(target) {
 
 // 新增地址
 newAddrBtn.addEventListener("click", function () {
+    addrModalTitle.textContent="新增地址";
     let modalBodyData = "";
     modalBodyData += `
             <span class="form-label"><span class="warn">*</span> 縣市區域 </span>
