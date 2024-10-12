@@ -10,7 +10,7 @@
           href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
     <link rel="stylesheet" href="dist/css/adminlte.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/sweetalert2@11/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="plugins/sweetalert2/sweetalert2.css">
     <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
@@ -22,12 +22,17 @@
         padding-top: 10px;
     }
 
+    #searchBtn{
+        background-color: #F8F9FA;
+        border-color: #ddd;
+        color: #212529;
+    }
 
-    .btn-add {
-
-            background-color: #73B4BA;
-            border-color: #73B4BA;
-
+    #add {
+        background-color: #73B4BA;
+        border-color: #73B4BA;
+        margin-bottom: -.3rem;
+        margin-top: -.3rem;
     }
 
     .btn-edit {
@@ -87,24 +92,21 @@
                     <div class="col-md-12">
                         <div>
                             <div class="card-header">
+
                                 <button type="button" class="btn btn-primary btn_add" id="add">新增商品</button>
 
-
                                 <div class="card-tools">
+
                                     <div class="input-group">
-                                        <label for="searchInput2" class="mr-2" id="label-searchInput2">搜尋商店名稱:</label>
+                                        <!--                                        <label for="searchInput2" class="mr-2" id="label-searchInput2">搜尋商店名稱:</label>-->
 
                                         <input type="search" id="searchInput2" class="form-control mr-2" placeholder="搜尋商店名稱">
-                                        <select class="form-control select2 productcategory" style="width:5%;">
-                                            <option selected="selected">奶茶類</option>
-                                            <option>奶茶類</option>
-                                            <option>奶茶類</option>
-                                            <option>奶茶類</option>
-                                            <option>奶茶類</option>
-                                            <option>奶茶類</option>
-                                            <option>奶茶類</option>
-                                        </select>
-                                        <input type="search" class="form-control" placeholder="搜尋商品名稱" id="productNameInput" >
+
+                                        <input type="search" id="searchCategory" class="form-control mr-2"
+                                               placeholder="搜尋分類">
+
+                                        <input type="search" class="form-control mr-2" placeholder="搜尋商品名稱"
+                                               id="productNameInput">
                                         <div class="input-group-append">
                                             <div class="btn btn-primary search btn_add" id="searchBtn">
                                                 <i class="fas fa-search"></i>
@@ -114,12 +116,18 @@
                                 </div>
                                 <!-- /.card-tools -->
                             </div>
+
+
                             <div class="card">
 
                                 <div class="card-body p-0">
                                     <table class="table table-striped projects" id="myTable">
                                         <thead>
                                             <tr>
+                                                <th style="width: 10%">
+                                                    店家名稱
+                                                </th>
+
                                                 <th style="width: 15%">
                                                     商品編號
                                                 </th>
@@ -148,135 +156,27 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>
-                                                    01
-                                                </td>
-                                                <td>
-                                                    奶茶類
-                                                </td>
-                                                <td>
-                                                    珍珠奶茶
-                                                </td>
-                                                <td>
-                                                    $65
-                                                </td>
-                                                <td>
-                                                    M
-                                                </td>
-                                                <td>
-                                                    <span class="badge badge-success on-shelf">上架</span>
-                                                </td>
-                                                <td class="project-actions text-right">
-                                                    <a class="btn btn-edit btn-sm update_btn" href="#">
-                                                        <i class="fas fa-pencil-alt">
-                                                        </i>
-                                                        編輯
-                                                    </a>
-                                                    <a class="btn btn-danger btn-sm delete_btn" href="#">
-                                                        <i class="fas fa-trash">
-                                                        </i>
-                                                        刪除
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    02
-                                                </td>
-                                                <td>
-                                                    奶茶類
-                                                </td>
-                                                <td>
-                                                    紅茶拿鐵
-                                                </td>
-                                                <td>
-                                                   $65
-                                                </td>
-                                                <td>
-                                                    M
-                                                </td>
-                                                <td>
-                                                    <span class="badge badge-success off-shelf"
-                                                        >下架</span>
-                                                </td>
-                                                <td class="project-actions text-right">
-                                                    <a class="btn btn-edit btn-sm update_btn" href="#">
-                                                        <i class="fas fa-pencil-alt">
-                                                        </i>
-                                                        編輯
-                                                    </a>
-                                                    <a class="btn btn-danger btn-sm delete_btn" href="#">
-                                                        <i class="fas fa-trash">
-                                                        </i>
-                                                        刪除
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    02
-                                                </td>
-                                                <td>
-                                                    奶茶類
-                                                </td>
-                                                <td>
-                                                    紅茶拿鐵
-                                                </td>
-                                                <td>
-                                                    $65
-                                                </td>
-                                                <td>
-                                                    M
-                                                </td>
-                                                <td>
-                                                    <span class="badge badge-success off-shelf"
-                                                        >下架</span>
-                                                </td>
-                                                <td class="project-actions text-right">
-                                                    <a class="btn btn-edit btn-sm" href="#" id="update_btn">
-                                                        <i class="fas fa-pencil-alt">
-                                                        </i>
-                                                        編輯
-                                                    </a>
-
-                                                </td>
-                                            </tr>
+                                        <!--                                           插入表格-->
                                         </tbody>
                                     </table>
                                 </div>
                                 <!-- /.card-body -->
 
                             </div>
-                            <!-- /.card -->
-                            <div class="btn-group pagination-control" id="paginationControls">
-                                <!-- /.card -->
-                                <p id="page-info"></p>
-                                <nav aria-label="Page navigation example">
-                                    <ul class="pagination justify-content-end">
-                                        <li class="page-item">
-                                            <a class="page-link" href="#" tabindex="-1" aria-disabled="true" id="prev">Previous</a>
-                                        </li>
-                                        <!-- 分页按钮会在这里动态插入 -->
-                                        <li class="page-item">
-                                            <a class="page-link" href="#">1</a>
-                                        </li>
-                                        <li class="page-item">
-                                            <a class="page-link" href="#">2</a>
-                                        </li>
-                                        <li class="page-item">
-                                            <a class="page-link" href="#">3</a>
-                                        </li>
-                                        <li class="page-item">
-                                            <a class="page-link" href="#" id="next">Next</a>
-                                        </li>
-                                    </ul>
-                                </nav>
-                            </div>
+                            <!--                             /.card-->
 
 
+                        </div>
+                    </div>
+                </div>
 
-
+                <div class="row">
+                    <div class="col-sm-12 col-md-5">
+                    </div>
+                    <div class="col-sm-12 col-md-7">
+                        <div class="dataTables_paginate paging_simple_numbers" id="example2_paginate">
+                            <ul class="pagination" id="paginate">
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -302,338 +202,330 @@
     <script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
     <script src="plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
     <script src="plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-    <script src="https://unpkg.com/sweetalert2@11"></script>
+    <script src="plugins/sweetalert2/sweetalert2.all.js"></script>
     <script src="dist/js/adminlte.js"></script>
     <script src="dist/js/demo.js"></script>
+    <script src="js/productsList.js"></script>
 
-<script>
+    <!--<script>-->
 
-    // 使用 fetch 從後端獲取 TotalUserDTO
-    fetch('/totalusers', {
-        method: 'GET', // 請求方法是 GET
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json(); // 將返回的結果解析為 JSON 格式
-        })
-        .then(data => {
-            console.log('TotalUserDTO:', data); // 在控制台中顯示 TotalUserDTO
+    <!--    // 使用 fetch 從後端獲取 TotalUserDTO-->
+    <!--    fetch('/totalusers', {-->
+    <!--        method: 'GET', // 請求方法是 GET-->
+    <!--    })-->
+    <!--        .then(response => {-->
+    <!--            if (!response.ok) {-->
+    <!--                throw new Error('Network response was not ok');-->
+    <!--            }-->
+    <!--            return response.json(); // 將返回的結果解析為 JSON 格式-->
+    <!--        })-->
+    <!--        .then(data => {-->
+    <!--            console.log('TotalUserDTO:', data); // 在控制台中顯示 TotalUserDTO-->
 
-            // 根據獲取到的 TotalUserDTO 處理邏輯
-            if (data && data.userTypeId === 1) {
-                // 如果角色是 store，隱藏搜尋框
-                document.getElementById('searchInput2').style.display = 'none';
-                document.getElementById('label-searchInput2').style.display = 'none';
-                var tableHeaderRow = document.querySelector("#myTable thead tr");
+    <!--            // 根據獲取到的 TotalUserDTO 處理邏輯-->
+    <!--            if (data && data.userTypeId === 1) {-->
+    <!--                // 如果角色是 store，隱藏搜尋框-->
+    <!--                document.getElementById('searchInput2').style.display = 'none';-->
+    <!--                document.getElementById('label-searchInput2').style.display = 'none';-->
+    <!--                var tableHeaderRow = document.querySelector("#myTable thead tr");-->
 
-                // Create a new <th> element
-                var newTh = document.createElement("th");
-                newTh.style.width = "10%"; // Set width
-                newTh.textContent = "店家名稱"; // Set the text for the new column
+    <!--                // Create a new <th> element-->
+    <!--                var newTh = document.createElement("th");-->
+    <!--                newTh.style.width = "10%"; // Set width-->
+    <!--                newTh.textContent = "店家名稱"; // Set the text for the new column-->
 
-                // Get the current "商品編號" <th> element
-                var productNumberTh = tableHeaderRow.querySelector("th:nth-child(1)"); // Select the first <th>
+    <!--                // Get the current "商品編號" <th> element-->
+    <!--                var productNumberTh = tableHeaderRow.querySelector("th:nth-child(1)"); // Select the first <th>-->
 
-                // Insert the new <th> before "商品編號"
-                tableHeaderRow.insertBefore(newTh, productNumberTh);
-
-
-            }
-
-            if (data && data.userTypeId === 3) {
-                // 隱藏新增按鈕
-                document.getElementById('add').style.display = 'none';
-                var tableHeaderRow = document.querySelector("#myTable thead tr");
-
-                // Create a new <th> element
-                var newTh = document.createElement("th");
-                newTh.style.width = "10%"; // Set width
-                newTh.textContent = "店家名稱"; // Set the text for the new column
-
-                // Get the current "商品編號" <th> element
-                var productNumberTh = tableHeaderRow.querySelector("th:nth-child(1)"); // Select the first <th>
-
-                // Insert the new <th> before "商品編號"
-                tableHeaderRow.insertBefore(newTh, productNumberTh);
+    <!--                // Insert the new <th> before "商品編號"-->
+    <!--                tableHeaderRow.insertBefore(newTh, productNumberTh);-->
 
 
-            }
-        })
-        .catch(error => {
-            console.error('Fetch error:', error);
-        });
+    <!--            }-->
+
+    <!--            if (data && data.userTypeId === 3) {-->
+    <!--                // 隱藏新增按鈕-->
+    <!--                document.getElementById('add').style.display = 'none';-->
+    <!--                var tableHeaderRow = document.querySelector("#myTable thead tr");-->
+
+    <!--                // Create a new <th> element-->
+    <!--                var newTh = document.createElement("th");-->
+    <!--                newTh.style.width = "10%"; // Set width-->
+    <!--                newTh.textContent = "店家名稱"; // Set the text for the new column-->
+
+    <!--                // Get the current "商品編號" <th> element-->
+    <!--                var productNumberTh = tableHeaderRow.querySelector("th:nth-child(1)"); // Select the first <th>-->
+
+    <!--                // Insert the new <th> before "商品編號"-->
+    <!--                tableHeaderRow.insertBefore(newTh, productNumberTh);-->
 
 
+    <!--            }-->
+    <!--        })-->
+    <!--        .catch(error => {-->
+    <!--            console.error('Fetch error:', error);-->
+    <!--        });-->
 
 
-    $('#add').on('click',function (){
-      window.location.href="addProducts.html"
-    })
+    <!--    $('#add').on('click',function (){-->
+    <!--      window.location.href="addProducts.html"-->
+    <!--    })-->
 
-function getCategoryNameById(categoryId) {
-    return fetch(`/categories/${categoryId}`)
-        .then(response => response.json())
-        .then(category => category.categoryName)
-        .catch(error => {
-            console.error('获取分类名称时出错:', error);
-            return '未知分类'; // 如果出错，返回一个默认值
-        });
-}
-
-
-// =========獲取商品分類選項====
-let categoryOptions = document.querySelector('.productcategory');
-
-fetch('/categories/all')
-    .then(response => {
-        if (response.ok) {
-            return response.json();
-        } else {
-            throw new Error('分類加載失敗');function getStoreNameById(storeId) {
-                return fetch(`/store/getInfo/${storeId}`)  // 假设这是你的 API 路径
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('网络响应错误');
-                        }
-                        return response.json();  // 解析响应为 JSON
-                    })
-                    .then(store => store.storeName)  // 返回店铺名称
-                    .catch(error => {
-                        console.error('获取店铺名称时出错:', error);
-                        return '未知店铺';  // 如果出错返回默认值
-                    });
-            }
-        }
-    })
-    .then(categories => {
-        // Clear existing options
-        categoryOptions.innerHTML = '';
-
-        categories.forEach(category => {
-            const option = document.createElement('option');
-            option.value = category.categoryId;
-            option.text = category.categoryName;
-            categoryOptions.appendChild(option);  // Fix here
-        });
-    })
-    .catch(error => {
-        console.error('Error loading categories:', error);
+    <!--function getCategoryNameById(categoryId) {-->
+    <!--    return fetch(`/categories/${categoryId}`)-->
+    <!--        .then(response => response.json())-->
+    <!--        .then(category => category.categoryName)-->
+    <!--        .catch(error => {-->
+    <!--            console.error('获取分类名称时出错:', error);-->
+    <!--            return '未知分类'; // 如果出错，返回一个默认值-->
+    <!--        });-->
+    <!--}-->
 
 
-    });
+    <!--// =========獲取商品分類選項====-->
+    <!--let categoryOptions = document.querySelector('.productcategory');-->
+
+    <!--fetch('/categories/all')-->
+    <!--    .then(response => {-->
+    <!--        if (response.ok) {-->
+    <!--            return response.json();-->
+    <!--        } else {-->
+    <!--            throw new Error('分類加載失敗');function getStoreNameById(storeId) {-->
+    <!--                return fetch(`/store/getInfo/${storeId}`)  // 假设这是你的 API 路径-->
+    <!--                    .then(response => {-->
+    <!--                        if (!response.ok) {-->
+    <!--                            throw new Error('网络响应错误');-->
+    <!--                        }-->
+    <!--                        return response.json();  // 解析响应为 JSON-->
+    <!--                    })-->
+    <!--                    .then(store => store.storeName)  // 返回店铺名称-->
+    <!--                    .catch(error => {-->
+    <!--                        console.error('获取店铺名称时出错:', error);-->
+    <!--                        return '未知店铺';  // 如果出错返回默认值-->
+    <!--                    });-->
+    <!--            }-->
+    <!--        }-->
+    <!--    })-->
+    <!--    .then(categories => {-->
+    <!--        // Clear existing options-->
+    <!--        categoryOptions.innerHTML = '';-->
+
+    <!--        categories.forEach(category => {-->
+    <!--            const option = document.createElement('option');-->
+    <!--            option.value = category.categoryId;-->
+    <!--            option.text = category.categoryName;-->
+    <!--            categoryOptions.appendChild(option);  // Fix here-->
+    <!--        });-->
+    <!--    })-->
+    <!--    .catch(error => {-->
+    <!--        console.error('Error loading categories:', error);-->
 
 
-    // Cache DOM elements
-    var searchBtn = document.getElementById('searchBtn');
-    var productSearch = document.getElementById('productNameInput');
-    var paginationControls = document.getElementById('paginationControls');
-
-    // Event listener for search button click
-    searchBtn.addEventListener("click", function() {
-        var productCategoryId = document.querySelector('.productcategory').value;
-        var productName = productSearch.value.trim();
-
-        if (productName) {
-            searchfetchProducts(productCategoryId, productName);
-        } else {
-            fetchProducts(productCategoryId, '', 0); // Fetch by category only if no product name
-        }
-    });
+    <!--    });-->
 
 
-    function getStoreNameById(storeId) {
-        return fetch(`/store/getInfo/${storeId}`)  // 假设这是你的 API 路径
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('网络响应错误');
-                }
-                return response.json();  // 解析响应为 JSON
-            })
-            .then(store => store.storeName)  // 返回店铺名称
-            .catch(error => {
-                console.error('获取店铺名称时出错:', error);
-                return '未知店铺';  // 如果出错返回默认值
-            });
-    }
+    <!--    // Cache DOM elements-->
+    <!--    var searchBtn = document.getElementById('searchBtn');-->
+    <!--    var productSearch = document.getElementById('productNameInput');-->
+    <!--    var paginationControls = document.getElementById('paginationControls');-->
 
-    // Event listener for input in the product name search field
-    productSearch.addEventListener("input", function() {
-        var productName = productSearch.value.trim();
-        if (!productName) {
-            fetchProducts('', '', 0); // Clear search and show all products
-        }
-    });
+    <!--    // Event listener for search button click-->
+    <!--    searchBtn.addEventListener("click", function() {-->
+    <!--        var productCategoryId = document.querySelector('.productcategory').value;-->
+    <!--        var productName = productSearch.value.trim();-->
+
+    <!--        if (productName) {-->
+    <!--            searchfetchProducts(productCategoryId, productName);-->
+    <!--        } else {-->
+    <!--            fetchProducts(productCategoryId, '', 0); // Fetch by category only if no product name-->
+    <!--        }-->
+    <!--    });-->
 
 
-    productSearch.addEventListener('keyup', function(e) {
-        var productCategoryId = document.querySelector('.productcategory').value;
-        var productName = productSearch.value.trim();
-        if (e.which == 13) {
-            e.preventDefault(); // 防止表單提交或其他預設行為
-            searchfetchProducts(productCategoryId, productName);// 呼叫搜尋函數
-        }
-    });
+    <!--    function getStoreNameById(storeId) {-->
+    <!--        return fetch(`/store/getInfo/${storeId}`)  // 假设这是你的 API 路径-->
+    <!--            .then(response => {-->
+    <!--                if (!response.ok) {-->
+    <!--                    throw new Error('网络响应错误');-->
+    <!--                }-->
+    <!--                return response.json();  // 解析响应为 JSON-->
+    <!--            })-->
+    <!--            .then(store => store.storeName)  // 返回店铺名称-->
+    <!--            .catch(error => {-->
+    <!--                console.error('获取店铺名称时出错:', error);-->
+    <!--                return '未知店铺';  // 如果出错返回默认值-->
+    <!--            });-->
+    <!--    }-->
 
-    // Fetch search results by category and product name
-    function searchfetchProducts(queryId, queryName) {
-        const url = `/products/search?productCategoryId=${encodeURIComponent(queryId)}&productName=${encodeURIComponent(queryName)}`;
-
-        fetch(url)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json(); // Parse JSON
-            })
-            .then(data => {
-                if (data.length === 0) {
-                    console.log('No matching products found');
-                } else {
-                    updateProductTable(data);
-                }
-                paginationControls.innerHTML = ''; // Hide pagination on search results
-            })
-            .catch(error => {
-                console.error('Fetch error:', error);
-            });
-    }
-
-    // Fetch products with pagination
-    function fetchProducts(productCategoryId, productName, page) {
-        const url = `/products/paginated?page=${page}&size=10` +
-            `${productCategoryId ? `&categoryId=${encodeURIComponent(productCategoryId)}` : ''}` +
-            `${productName ? `&productName=${encodeURIComponent(productName)}` : ''}`;
-
-        fetch(url)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json(); // Parse JSON
-            })
-            .then(data => {
-                updateProductTable(data.content); // Update table data
-                updatePageControls(data.totalPages, page); // Update pagination
-            })
-            .catch(error => {
-                console.error('Fetch error:', error);
-            });
-    }
-
-    // Update the product table
-    function updateProductTable(products) {
-        const productTableBody = document.querySelector('#myTable tbody');
-        productTableBody.innerHTML = ''; // Clear table content
-
-        products.map(product => {
-            // 使用 Promise.all 同時獲取分類名稱和店鋪名稱
-            return Promise.all([
-                getCategoryNameById(product.productCategoryId), // 獲取分類名稱
-                getStoreNameById(product.productStoreId) // 獲取店鋪名稱
-            ]).then(([categoryName, storeName]) => {
-                const newRow = document.createElement('tr');
-
-                const statusBadge = product.productStatus
-                    ? `<span class="badge badge-success on-shelf">上架</span>`
-                    : `<span class="badge badge-danger off-shelf">下架</span>`;
-
-                newRow.innerHTML = `
-            <td>${storeName}</td> <!-- 店家名稱 -->
-            <td>${categoryName}</td> <!-- 類別名稱 -->
-            <td>${product.productId}</td>
-            <td>${product.productName}</td>
-            <td>$${product.productPrice}</td>
-            <td>${product.size}</td>
-            <td>${statusBadge}</td>
-            <td class="project-actions text-right">
-                <a class="btn btn-edit btn-sm update_btn" href="addProducts.html?productId=${product.productId}&type=E" data-id="${product.productId}">
-                    <i class="fas fa-pencil-alt"></i> 編輯
-                </a>
-            </td>
-        `;
-                productTableBody.appendChild(newRow);
-            });
-        }).then(() => {
-            // 當所有 Promise 完成後，可以執行其他操作
-        }).catch(error => {
-            console.error('Error updating product table:', error);
-        });
+    <!--    // Event listener for input in the product name search field-->
+    <!--    productSearch.addEventListener("input", function() {-->
+    <!--        var productName = productSearch.value.trim();-->
+    <!--        if (!productName) {-->
+    <!--            fetchProducts('', '', 0); // Clear search and show all products-->
+    <!--        }-->
+    <!--    });-->
 
 
-    }
+    <!--    productSearch.addEventListener('keyup', function(e) {-->
+    <!--        var productCategoryId = document.querySelector('.productcategory').value;-->
+    <!--        var productName = productSearch.value.trim();-->
+    <!--        if (e.which == 13) {-->
+    <!--            e.preventDefault(); // 防止表單提交或其他預設行為-->
+    <!--            searchfetchProducts(productCategoryId, productName);// 呼叫搜尋函數-->
+    <!--        }-->
+    <!--    });-->
 
-    // Update pagination controls
-    function updatePageControls(totalPages, currentPage) {
-        paginationControls.innerHTML = ''; // Clear existing pagination controls
+    <!--    // Fetch search results by category and product name-->
+    <!--    function searchfetchProducts(queryId, queryName) {-->
+    <!--        const url = `/products/search?productCategoryId=${encodeURIComponent(queryId)}&productName=${encodeURIComponent(queryName)}`;-->
 
-        const nav = document.createElement('nav');
-        nav.setAttribute('aria-label', 'Page navigation example');
-        const ul = document.createElement('ul');
-        ul.className = 'pagination justify-content-end';
+    <!--        fetch(url)-->
+    <!--            .then(response => {-->
+    <!--                if (!response.ok) {-->
+    <!--                    throw new Error('Network response was not ok');-->
+    <!--                }-->
+    <!--                return response.json(); // Parse JSON-->
+    <!--            })-->
+    <!--            .then(data => {-->
+    <!--                if (data.length === 0) {-->
+    <!--                    console.log('No matching products found');-->
+    <!--                } else {-->
+    <!--                    updateProductTable(data);-->
+    <!--                }-->
+    <!--                paginationControls.innerHTML = ''; // Hide pagination on search results-->
+    <!--            })-->
+    <!--            .catch(error => {-->
+    <!--                console.error('Fetch error:', error);-->
+    <!--            });-->
+    <!--    }-->
 
-        // Previous button
-        const prevLi = document.createElement('li');
-        prevLi.className = 'page-item ' + (currentPage === 0 ? 'disabled' : '');
-        const prevLink = document.createElement('a');
-        prevLink.className = 'page-link';
-        prevLink.href = '#';
-        prevLink.textContent = 'Previous';
-        if (currentPage > 0) {
-            prevLink.addEventListener('click', () => {
-                fetchProducts(document.querySelector('.productcategory').value, productSearch.value.trim(), currentPage - 1); // Load previous page
-            });
-        }
-        prevLi.appendChild(prevLink);
-        ul.appendChild(prevLi);
+    <!--    // Fetch products with pagination-->
+    <!--    function fetchProducts(productCategoryId, productName, page) {-->
+    <!--        const url = `/products/paginated?page=${page}&size=10` +-->
+    <!--            `${productCategoryId ? `&categoryId=${encodeURIComponent(productCategoryId)}` : ''}` +-->
+    <!--            `${productName ? `&productName=${encodeURIComponent(productName)}` : ''}`;-->
 
-        // Page number buttons
-        for (let i = 0; i < totalPages; i++) {
-            const li = document.createElement('li');
-            li.className = 'page-item ' + (i === currentPage ? 'active' : '');
-            const link = document.createElement('a');
-            link.className = 'page-link';
-            link.href = '#';
-            link.textContent = i + 1;
-            link.addEventListener('click', () => {
-                fetchProducts(document.querySelector('.productcategory').value, productSearch.value.trim(), i); // Load specific page
-            });
-            li.appendChild(link);
-            ul.appendChild(li);
-        }
+    <!--        fetch(url)-->
+    <!--            .then(response => {-->
+    <!--                if (!response.ok) {-->
+    <!--                    throw new Error('Network response was not ok');-->
+    <!--                }-->
+    <!--                return response.json(); // Parse JSON-->
+    <!--            })-->
+    <!--            .then(data => {-->
+    <!--                updateProductTable(data.content); // Update table data-->
+    <!--                updatePageControls(data.totalPages, page); // Update pagination-->
+    <!--            })-->
+    <!--            .catch(error => {-->
+    <!--                console.error('Fetch error:', error);-->
+    <!--            });-->
+    <!--    }-->
 
-        // Next button
-        const nextLi = document.createElement('li');
-        nextLi.className = 'page-item ' + (currentPage === totalPages - 1 ? 'disabled' : '');
-        const nextLink = document.createElement('a');
-        nextLink.className = 'page-link';
-        nextLink.href = '#';
-        nextLink.textContent = 'Next';
-        if (currentPage < totalPages - 1) {
-            nextLink.addEventListener('click', () => {
-                fetchProducts(document.querySelector('.productcategory').value, productSearch.value.trim(), currentPage + 1); // Load next page
-            });
-        }
-        nextLi.appendChild(nextLink);
-        ul.appendChild(nextLi);
+    <!--    // Update the product table-->
+    <!--    function updateProductTable(products) {-->
+    <!--        const productTableBody = document.querySelector('#myTable tbody');-->
+    <!--        productTableBody.innerHTML = ''; // Clear table content-->
 
-        nav.appendChild(ul);
-        paginationControls.appendChild(nav);
-    }
+    <!--        products.map(product => {-->
+    <!--            // 使用 Promise.all 同時獲取分類名稱和店鋪名稱-->
+    <!--            return Promise.all([-->
+    <!--                getCategoryNameById(product.productCategoryId), // 獲取分類名稱-->
+    <!--                getStoreNameById(product.productStoreId) // 獲取店鋪名稱-->
+    <!--            ]).then(([categoryName, storeName]) => {-->
+    <!--                const newRow = document.createElement('tr');-->
 
-    // Load the first page of products on initial page load
-    fetchProducts('', '', 0);
+    <!--                const statusBadge = product.productStatus-->
+    <!--                    ? `<span class="badge badge-success on-shelf">上架</span>`-->
+    <!--                    : `<span class="badge badge-danger off-shelf">下架</span>`;-->
+
+    <!--                newRow.innerHTML = `-->
+    <!--            <td>${storeName}</td> &lt;!&ndash; 店家名稱 &ndash;&gt;-->
+    <!--            <td>${categoryName}</td> &lt;!&ndash; 類別名稱 &ndash;&gt;-->
+    <!--            <td>${product.productId}</td>-->
+    <!--            <td>${product.productName}</td>-->
+    <!--            <td>$${product.productPrice}</td>-->
+    <!--            <td>${product.size}</td>-->
+    <!--            <td>${statusBadge}</td>-->
+    <!--            <td class="project-actions text-right">-->
+    <!--                <a class="btn btn-edit btn-sm update_btn" href="addProducts.html?productId=${product.productId}&type=E" data-id="${product.productId}">-->
+    <!--                    <i class="fas fa-pencil-alt"></i> 編輯-->
+    <!--                </a>-->
+    <!--            </td>-->
+    <!--        `;-->
+    <!--                productTableBody.appendChild(newRow);-->
+    <!--            });-->
+    <!--        }).then(() => {-->
+    <!--            // 當所有 Promise 完成後，可以執行其他操作-->
+    <!--        }).catch(error => {-->
+    <!--            console.error('Error updating product table:', error);-->
+    <!--        });-->
 
 
+    <!--    }-->
+
+    <!--    // Update pagination controls-->
+    <!--    function updatePageControls(totalPages, currentPage) {-->
+    <!--        paginationControls.innerHTML = ''; // Clear existing pagination controls-->
+
+    <!--        const nav = document.createElement('nav');-->
+    <!--        nav.setAttribute('aria-label', 'Page navigation example');-->
+    <!--        const ul = document.createElement('ul');-->
+    <!--        ul.className = 'pagination justify-content-end';-->
+
+    <!--        // Previous button-->
+    <!--        const prevLi = document.createElement('li');-->
+    <!--        prevLi.className = 'page-item ' + (currentPage === 0 ? 'disabled' : '');-->
+    <!--        const prevLink = document.createElement('a');-->
+    <!--        prevLink.className = 'page-link';-->
+    <!--        prevLink.href = '#';-->
+    <!--        prevLink.textContent = 'Previous';-->
+    <!--        if (currentPage > 0) {-->
+    <!--            prevLink.addEventListener('click', () => {-->
+    <!--                fetchProducts(document.querySelector('.productcategory').value, productSearch.value.trim(), currentPage - 1); // Load previous page-->
+    <!--            });-->
+    <!--        }-->
+    <!--        prevLi.appendChild(prevLink);-->
+    <!--        ul.appendChild(prevLi);-->
+
+    <!--        // Page number buttons-->
+    <!--        for (let i = 0; i < totalPages; i++) {-->
+    <!--            const li = document.createElement('li');-->
+    <!--            li.className = 'page-item ' + (i === currentPage ? 'active' : '');-->
+    <!--            const link = document.createElement('a');-->
+    <!--            link.className = 'page-link';-->
+    <!--            link.href = '#';-->
+    <!--            link.textContent = i + 1;-->
+    <!--            link.addEventListener('click', () => {-->
+    <!--                fetchProducts(document.querySelector('.productcategory').value, productSearch.value.trim(), i); // Load specific page-->
+    <!--            });-->
+    <!--            li.appendChild(link);-->
+    <!--            ul.appendChild(li);-->
+    <!--        }-->
+
+    <!--        // Next button-->
+    <!--        const nextLi = document.createElement('li');-->
+    <!--        nextLi.className = 'page-item ' + (currentPage === totalPages - 1 ? 'disabled' : '');-->
+    <!--        const nextLink = document.createElement('a');-->
+    <!--        nextLink.className = 'page-link';-->
+    <!--        nextLink.href = '#';-->
+    <!--        nextLink.textContent = 'Next';-->
+    <!--        if (currentPage < totalPages - 1) {-->
+    <!--            nextLink.addEventListener('click', () => {-->
+    <!--                fetchProducts(document.querySelector('.productcategory').value, productSearch.value.trim(), currentPage + 1); // Load next page-->
+    <!--            });-->
+    <!--        }-->
+    <!--        nextLi.appendChild(nextLink);-->
+    <!--        ul.appendChild(nextLi);-->
+
+    <!--        nav.appendChild(ul);-->
+    <!--        paginationControls.appendChild(nav);-->
+    <!--    }-->
+
+    <!--    // Load the first page of products on initial page load-->
+    <!--    fetchProducts('', '', 0);-->
 
 
-
-
-
-
-
-</script>
+    <!--</script>-->
 
 </body>
 

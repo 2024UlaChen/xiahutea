@@ -1,36 +1,24 @@
 package idv.tia201.g2.web.product.controller;
 
 
-
 import idv.tia201.g2.web.advertise.service.AdsService;
-import idv.tia201.g2.web.product.dto.ProductCategoryDTO;
+import idv.tia201.g2.web.product.dto.ProductDTO;
 import idv.tia201.g2.web.product.service.ProductService;
 import idv.tia201.g2.web.product.vo.Product;
-
 import idv.tia201.g2.web.store.service.StoreService;
-import idv.tia201.g2.web.store.vo.Store;
 import idv.tia201.g2.web.user.dto.TotalUserDTO;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import idv.tia201.g2.web.product.dto.ProductDTO;
 import org.springframework.web.multipart.MultipartFile;
 
-
-import javax.sql.rowset.serial.SerialBlob;
 import java.io.IOException;
-import java.nio.file.Paths;
-import java.sql.Blob;
 import java.util.Base64;
 import java.util.List;
 
@@ -275,6 +263,37 @@ public ResponseEntity<String> getProductImage(@PathVariable Integer id) {
         }
     }
 
+
+    @GetMapping("/searchproductlist")
+    public Page<ProductDTO> searchProductList(
+            @RequestParam int page,
+            @RequestParam(required = false) String storeName,
+            @RequestParam(required = false) String categoryName,
+            @RequestParam(required = false) String productName,
+            HttpSession session
+    ) {
+        TotalUserDTO totalUserDTO = (TotalUserDTO) session.getAttribute("totalUserDTO");
+        ProductDTO productDTO = new ProductDTO();
+
+        // 依角色權限搜尋店家
+        if (totalUserDTO.getUserTypeId() == 1) {
+            //使用者是店家
+            productDTO.setStoreName((String) totalUserDTO.getData());
+        } else if (totalUserDTO.getUserTypeId() == 3) {
+            //使用者是管理員
+            productDTO.setStoreName(storeName);
+        } else {
+            //沒有權限
+            return new PageImpl<>(null);
+        }
+        productDTO.setProductCategoryName(categoryName);    //搜尋分類
+        productDTO.setProductName(productName);             // 搜尋商品名
+
+        Page<ProductDTO> productDTOSList = productService.getProductList(productDTO, page);
+
+        return productDTOSList;
+
+    }
 
 
 }

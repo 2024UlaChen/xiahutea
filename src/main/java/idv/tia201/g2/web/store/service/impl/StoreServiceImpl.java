@@ -23,9 +23,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 import java.io.IOException;
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -127,9 +129,8 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     public List<Store> findStoreByName(String name) {
-        //模糊查詢並且大小寫不敏感
-        //return storeDao.findByStoreNameContainingIgnoreCaseAndStoreStatus(name,1);
-        return storeDao.SearchBarData(name);
+
+        return storeDao.SearchBarDataNotHoliday(name);
     }
 
     @Override
@@ -144,7 +145,7 @@ public class StoreServiceImpl implements StoreService {
     @Override
     public List<Store> findStoreByAddress(String address) {
         //模糊區域查詢
-        return storeDao.findByStoreAddressContainingAndStoreStatus(address,1);
+        return storeDao.SearchDataByPlaceNotHoliday(address);
     }
 
     @Override
@@ -383,8 +384,8 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public List<Store> getStoreListForHome(Date today) throws ParseException {
-        return storeCalendarRepository.findByStoreHolidayAndStoreStatus(today);
+    public List<Store> getStoreListForHome()  {
+        return storeCalendarRepository.findByStoreHolidayAndStoreStatus();
     }
 
     @Override
@@ -402,7 +403,24 @@ public class StoreServiceImpl implements StoreService {
 
     }
 
+    @Override
+    public Boolean IsTakeOrder(Integer storeId) {
+        //未休假
+        List<Store> storeList = getStoreListForHome();
+        for(Store store : storeList){
+            if(store.getStoreId().equals(storeId)){
+                //檢查營業時間
+                LocalTime openT = store.getOpeningHours().toLocalTime();
+                LocalTime closeT = store.getClosingHours().toLocalTime();
+                LocalTime now = LocalTime.now();
+                if(now.isAfter(openT) && now.isBefore(closeT)){
+                    return store.getIsTakeOrders() != null && store.getIsTakeOrders().equals(true);
 
+                }
+            }
+        }
+        return false;
+    }
 
 
 }
