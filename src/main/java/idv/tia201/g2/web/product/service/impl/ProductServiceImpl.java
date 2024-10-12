@@ -2,29 +2,18 @@ package idv.tia201.g2.web.product.service.impl;
 
 import idv.tia201.g2.web.advertise.dao.AdsDao;
 import idv.tia201.g2.web.advertise.vo.Advertise;
-import idv.tia201.g2.web.product.dao.ProductCategoryDao;
+import idv.tia201.g2.web.product.dao.ProductCategoryRepository;
 import idv.tia201.g2.web.product.dao.ProductDao;
-import idv.tia201.g2.web.product.dto.ProductCategoryDTO;
 import idv.tia201.g2.web.product.dto.ProductDTO;
 import idv.tia201.g2.web.product.service.ProductService;
 import idv.tia201.g2.web.product.vo.Product;
-import idv.tia201.g2.web.product.vo.ProductCategory;
-import idv.tia201.g2.web.store.dao.StoreDao;
-import idv.tia201.g2.web.store.vo.Store;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.sql.Blob;
-import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -40,7 +29,7 @@ public class ProductServiceImpl implements ProductService {
    private AdsDao adsDao;
 
     @Autowired
-    private ProductCategoryDao productCategoryDao;
+    private ProductCategoryRepository productCategoryRepository;
 
 
 

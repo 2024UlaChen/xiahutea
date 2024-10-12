@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let ads_form_el = document.getElementById('ads-form')
     let ads_ids_el = document.getElementById('ads-ids')
     let base64img_el = document.getElementById('base64Image')
+    let display_homepage_el = document.getElementsByClassName('display-homepage')[0]
     let ishomedisplay;
     let isActive;
     let userid;
@@ -54,6 +55,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 }).then(() => {
                     window.location.href = 'backstageLogin.html';
                 });
+            }
+            if (totaluser.userTypeId === 1){
+                display_homepage_el.style.display = "none";
             }
         })
         .catch(error => {

@@ -1,6 +1,7 @@
 package idv.tia201.g2.web.cart.service;
 
 import idv.tia201.g2.web.coupon.vo.Coupon;
+import idv.tia201.g2.web.coupon.vo.CustomerCoupons;
 import idv.tia201.g2.web.member.vo.Cart;
 import idv.tia201.g2.web.member.vo.Member;
 import idv.tia201.g2.web.member.vo.MemberAddress;
@@ -23,5 +24,6 @@ public interface CartService {
     public Member findmemberById(Integer customerId);
     public List<MemberAddress> findAddressbyId(Integer customerId);
     public List<Coupon> findCouponsByCustomerId(Integer customerId);
+    public CustomerCoupons findCustomerCoupons(Integer customerId,Integer couponId);
     public CustomerLoyaltyCard findMemberLoyalCardById(Integer storeId, Integer customerId);
 }
