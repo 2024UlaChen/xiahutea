@@ -1,15 +1,12 @@
 package idv.tia201.g2.web.product.service;
 
-import idv.tia201.g2.web.product.dto.ProductCategoryDTO;
 import idv.tia201.g2.web.product.dto.ProductDTO;
 import idv.tia201.g2.web.product.vo.Product;
-import idv.tia201.g2.web.product.vo.ProductCategory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.sql.Blob;
 import java.util.List;
 
 public interface ProductService {
@@ -34,5 +31,7 @@ public interface ProductService {
     List<Product> findProductsByStoreId(Integer storeId);
     public byte[] getProductImage(Integer productId);
     public byte[] getFirstImageByUserId(Long adsTotalUserid);
+
+    Page<ProductDTO> getProductList(ProductDTO productDTO, Integer page);
 }
 

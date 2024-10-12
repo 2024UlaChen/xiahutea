@@ -4,12 +4,17 @@ import idv.tia201.g2.web.advertise.dao.AdsDao;
 import idv.tia201.g2.web.advertise.vo.Advertise;
 import idv.tia201.g2.web.product.dao.ProductCategoryRepository;
 import idv.tia201.g2.web.product.dao.ProductDao;
+import idv.tia201.g2.web.product.dao.ProductDtoDao;
 import idv.tia201.g2.web.product.dto.ProductDTO;
 import idv.tia201.g2.web.product.service.ProductService;
 import idv.tia201.g2.web.product.vo.Product;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,11 +27,16 @@ import java.util.stream.Collectors;
 
 @Service
 public class ProductServiceImpl implements ProductService {
+    private static final Logger log = LoggerFactory.getLogger(ProductServiceImpl.class);
+
     @Autowired
     private ProductDao productDao;
 
-   @Autowired
-   private AdsDao adsDao;
+    @Autowired
+    private AdsDao adsDao;
+
+    @Autowired
+    private ProductDtoDao productDtoDao;
 
     @Autowired
     private ProductCategoryRepository productCategoryRepository;
@@ -172,6 +182,57 @@ public class ProductServiceImpl implements ProductService {
             return ads.get(0).getImgUrl(); // 假設 imageUrl 是存儲圖片的欄位
         }
         return null; // 如果沒有廣告，則返回 null
+    }
+
+    @Override
+    public Page<ProductDTO> getProductList(ProductDTO productDTO, Integer page) {
+
+        Pageable pageable = PageRequest.of(page, 10,
+                Sort.by(Sort.Order.desc("productStoreId"),
+                        (Sort.Order.asc("productId"))));
+
+        String storeName = productDTO.getStoreName();
+        String productCategoryName = productDTO.getProductCategoryName();
+        String productName = productDTO.getProductName();
+
+        // 全部產品
+        if (storeName == null && productCategoryName == null && productName == null) {
+            Page<ProductDTO> productDTOList = productDtoDao.findProductDTOList(pageable);
+            return productDTOList;
+        }
+
+        // 依產品名搜尋
+        if (storeName == null && productCategoryName == null && productName != null) {
+            return productDtoDao.findProductDTOListByProductName(productName, pageable);
+        }
+
+        // 依分類搜尋
+        if (storeName == null && productCategoryName != null && productName == null) {
+            return productDtoDao.findProductDTOListByProductCategoryName(productCategoryName, pageable);
+        }
+
+        // 依店家搜尋
+        if (storeName != null && productCategoryName == null && productName == null) {
+            return productDtoDao.findProductDTOListByStoreName(storeName, pageable);
+        }
+
+        // 依店家 & 產品分類搜尋
+        if (storeName != null && productCategoryName != null && productName == null) {
+            return productDtoDao.findProductDTOListByStoreNameAndProductCategoryName(storeName, productCategoryName, pageable);
+        }
+
+        // 依店家 & 產品名稱搜尋
+        if (storeName != null && productCategoryName == null && productName != null) {
+            return productDtoDao.findProductDTOListByStoreNameAndProductName(storeName, productName, pageable);
+        }
+
+        // 依產品分類 & 產品分類搜尋
+        if (storeName == null && productCategoryName != null && productName != null) {
+            return productDtoDao.findProductDTOListByProductCategoryNameAndProductName(productCategoryName, productName, pageable);
+        }
+
+        // 依產品分類 & 產品分類 & 店家名稱搜尋
+        return productDtoDao.findProductDTOListByProductCategoryNameAndProductNameAndStoreName(productCategoryName, productName, storeName, pageable);
     }
 
 
