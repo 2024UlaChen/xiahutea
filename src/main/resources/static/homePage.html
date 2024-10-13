@@ -809,10 +809,22 @@ let allSotre = document.querySelectorAll('.Heart');
                 }
                 let isdelieve = '';
                 if (row.isDelivery) {
-                    isdelieve = '<i class="fa-1.5x fa-solid fa-truck" style="color: #73B4BA"></i>';
+                    isdelieve = '<i class="fa fa-solid fa-truck" style="color: #73B4BA"></i>';
                 } else {
-                    isdelieve = '';
+                    isdelieve = `<span class="fa-stack">
+  <i class="fa fa-solid fa-truck fa-stack-1x" style="color: #73B4BA"></i>
+  <i class="fa-solid fa-xmark fa-stack-2x" style="color: #FFA600"></i>
+</span>`;
                 }
+                let cart= `<span class="fa-stack">
+  <i class="fa-solid fa-cart-shopping fa-stack-1x" style="color: #73B4BA"></i>
+  <i class="fa-solid fa-xmark fa-stack-2x" style="color: #FFA600"></i>
+</span>
+`;
+                if(row.isTakeOrders){
+                    cart ='<i class="fa-solid fa-cart-shopping" style="color: #73B4BA"></i>';
+                }
+
 
                 let str = `
 <figure class="col-3 figure my-5 Heart storeLinkCard shadow mx-3 bg-body rounded" >
@@ -833,7 +845,7 @@ let allSotre = document.querySelectorAll('.Heart');
              ${row.storeName}
             </figcaption>
             <figcaption class="figure-caption col">
-              ${isdelieve}
+              ${cart}&nbsp;${isdelieve}
             </figcaption>
             <figcaption class="figure-caption col-12 footer2">
               <i class="KunStar fa-solid fa-star"></i

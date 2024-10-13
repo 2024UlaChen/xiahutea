@@ -261,6 +261,12 @@ public class StoreController {
     }
 
 
+    @GetMapping("storeOrderStatus/{storeId}")
+    public boolean isTakeOrder(@PathVariable Integer storeId){
+        return storeService.IsTakeOrder(storeId);
+    }
+
+
 
 
 

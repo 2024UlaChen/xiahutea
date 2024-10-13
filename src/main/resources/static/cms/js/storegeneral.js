@@ -40,7 +40,7 @@ $(function () {
                 $("#storeInfoEditLoyaltyCard").attr("href","./storeInfoEditLoyaltyCard.html?storeid=" + userId);
                 $("#storeInfoEditPassword").attr("href","./storeInfoEditPassword.html?storeid=" + userId);
 
-                console.log(data.data)
+                // console.log(data.data)
 
             } else {
                 $(".sidebar").eq(0).addClass("d-none")

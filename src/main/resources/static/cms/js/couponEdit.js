@@ -14,6 +14,7 @@ document.addEventListener("DOMContentLoaded",function () {
     let coupon_detail_el = document.getElementById("coupon-detail")
     let coupon_form_el = document.getElementById("coupon-form")
     let response_message_el = document.getElementById('response-message')
+    let coupon_h1_el = document.getElementById('coupon-h1')
     let couponStatus;
     let startDate;
     let endDate;
@@ -68,6 +69,7 @@ document.addEventListener("DOMContentLoaded",function () {
         });
     //********************************確認是否為修改跳轉頁面**********************
     if (couponId) {
+        coupon_h1_el.textContent="優惠券修改"
         // 發送 GET 請求獲取優惠券資料
         fetch(`/coupon/edit/${couponId}`)
             .then(response => {
@@ -105,6 +107,8 @@ document.addEventListener("DOMContentLoaded",function () {
                     icon: 'error'
                 });
             });
+    }else{
+        coupon_h1_el.textContent = "優惠券新增"
     }
     //***********************************檢查placeholder*********************
     coupon_detail_el.addEventListener('input', checkDetailContent);
