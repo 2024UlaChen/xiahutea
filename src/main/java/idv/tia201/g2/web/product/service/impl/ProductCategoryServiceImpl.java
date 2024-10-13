@@ -129,7 +129,7 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
 
     @Override
     public List<ProductCategory> getCategoriesByStore(Integer storeId) {
-        return productCategoryRepository.findByProductStoreId(storeId);
+        return productCategoryRepository.findByProductStoreIdOrderByCategorySortAsc(storeId);
     }
 
     @Override
