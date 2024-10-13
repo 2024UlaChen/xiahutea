@@ -35,63 +35,61 @@ function searchRegisterStore(url) {
             });
             $("tbody").html(tbodyHtml);
 
-            //分頁
-
+            // 分頁
             let pageHtml = ``;
-            let i = 0;
+            let currentPage = data.number; // 當前頁數（從0開始）
+            let totalPages = data.totalPages;
+            let maxVisiblePages = 10; // 每次最多顯示10個頁數按鈕
+
+            // 計算顯示的頁碼範圍
+            let startPage = Math.max(0, currentPage - Math.floor(maxVisiblePages / 2));
+            let endPage = Math.min(totalPages, startPage + maxVisiblePages);
+
+            if (endPage - startPage < maxVisiblePages) {
+                startPage = Math.max(0, endPage - maxVisiblePages);
+            }
+
             pageHtml +=
-                `<li class="paginate_button page-item previous disabled" id="example2_previous">
-                        <a href="#" data-dt-idx="0" tabindex="0" class="page-link">Previous</a>
+                `<li class="paginate_button page-item previous ${currentPage === 0 ? 'disabled' : ''}" id="example2_previous">
+                        <a href="#" data-dt-idx="${currentPage - 1}" tabindex="0" class="page-link">Previous</a>
                     </li>`
-            for (i; i < core.data.totalPages; i++) {
-                if (core.data.number == i) {
+
+            for (let i = startPage; i < endPage; i++) {
+                if (currentPage === i) {
                     pageHtml += `
-                        <li class="paginate_button page-item active">
-                            <a href="#" data-dt-idx="${i + 1}" tabindex="0" class="page-link">
-                                ${i + 1}
-                            </a>
-                        </li>
-                        `
+                            <li class="paginate_button page-item active">
+                                <a href="#" data-dt-idx="${i + 1}" tabindex="0" class="page-link">${i + 1}</a>
+                            </li>
+                        `;
                 } else {
                     pageHtml += `
                             <li class="paginate_button page-item">
-                                <a href="#" data-dt-idx="${i + 1}" tabindex="0" class="page-link">
-                                    ${i + 1}
-                                </a>
+                                <a href="#" data-dt-idx="${i + 1}" tabindex="0" class="page-link">${i + 1}</a>
                             </li>
-                            `
+                        `;
                 }
             }
+
             pageHtml +=
-                `<li class="paginate_button page-item next" id="example2_next">
-                            <a href="#" data-dt-idx="${i}" tabindex="0" class="page-link">
-                                Next
-                            </a>
-                     </li>`
+                `<li class="paginate_button page-item next ${currentPage === totalPages - 1 ? 'disabled' : ''}" id="example2_next">
+                        <a href="#" data-dt-idx="${currentPage + 1}" tabindex="0" class="page-link">Next</a>
+                    </li>`
 
-
-            if (core.data.totalPages > 0) {
-                //如果有資料，才會顯示分頁按鈕
+            if (totalPages > 0) {
+                // 如果有資料，才會顯示分頁按鈕
                 $(".pagination").eq(0).html(pageHtml);
 
-                //依所在頁數限制 previous & next 按鈕能不能點擊
-                if (core.data.number - 1 < 0) {
-                    $("#example2_previous").add("disabled");
-                } else {
-                    $("#example2_previous").removeClass("disabled");
-                }
-                if (core.data.number + 1 == i) {
-                    $("#example2_next").addClass("disabled");
-                } else {
-                    $("#example2_next").removeClass("disabled");
-                }
             } else {
-                //如果沒資料，不會顯示分頁按鈕
+                // 如果沒資料，不會顯示分頁按鈕
                 $(".pagination").eq(0).html("");
             }
 
-
         })
+        .catch(error => {
+            console.error('Error fetching product list:', error);
+            reject(error); // 如果有错误，拒绝 promise
+        });
+
 }
 
 //進入頁面就先搜尋全部
