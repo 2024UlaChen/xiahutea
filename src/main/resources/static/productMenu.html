@@ -150,6 +150,7 @@
 
 
 
+
             /* 使整個 menu-container 的內容靠左對齊 */
         }
 
@@ -617,7 +618,7 @@
         }
 
         div.pic {
-         width: 350px;
+         width: 400px;
             height: 400px;
 
         }
@@ -1009,6 +1010,7 @@ $('#add').on('click',function (){
             .then(response => response.json())
             .then(categories => {
                 // 遍歷每個分類，獲取相應的產品
+                categories.sort((a, b) => a.categorySort - b.categorySort);
                 categories.forEach(category => {
 
                     if (category.categoryStatus === false) { // 如果分类状态为'下架'
@@ -1034,9 +1036,12 @@ $('#add').on('click',function (){
 
 
 
-
-
 var productId;
+
+
+
+
+
     // 顯示產品的函數
     function displayProducts(categoryName, products) {
         const menuContainer = document.querySelector('.menu-container');
@@ -1190,7 +1195,6 @@ async function showProductModal(productId) {
 
         try {
             const userResponse = await fetch('/totalusers');
-
             const userData = await userResponse.json();
             console.log('TotalUserDTO:', userData); // 在控制台中顯示 TotalUserDTO
 
@@ -1200,7 +1204,7 @@ async function showProductModal(productId) {
             const addToCartButton = document.getElementById('addToCartButton');
 
             // 定義按鈕點擊事件處理函數
-            function handleAddToCartClick(e) {
+            async function handleAddToCartClick(e) {
                 e.preventDefault();
 
                 // 檢查用戶是否已登入
@@ -1215,19 +1219,37 @@ async function showProductModal(productId) {
                     // 隱藏 Lightbox 彈窗
                     document.getElementById("lightbox").style.display = "none";
                 } else {
-                    // 確保 productId, buyNum 和 storeIdNum 已定義
-                    if (typeof productId !== 'undefined' && typeof buyNum !== 'undefined' && typeof storeIdNum !== 'undefined') {
-                        const success = addToCart(productId, buyNum, storeIdNum); // 傳入購買數量
+                    // 檢查店家是否能接單
+                    const storeId = storeIdNum; // 假設你有 `storeIdNum` 變數
+                    const storeStatusResponse = await fetch(`store/storeOrderStatus/${storeId}`);
+                    const canTakeOrder = await storeStatusResponse.json(); // 這會回傳布林值 true 或 false
 
-                        // 如果成功，則隱藏光箱
-                        if (success) {
-                            document.getElementById("lightbox").style.display = "none"; // 隱藏光箱
+                    if (!canTakeOrder) {
+                        // 店家無法接單，顯示 SweetAlert 提示
+                        Swal.fire({
+                            title: "目前無法接單",
+                            text: "此店家目前無法接單喔！",
+                            icon: "warning",
+                            confirmButtonText: "確定"
+                        });
 
-                            // 移除事件監聽器
-                            addToCartButton.removeEventListener('click', handleAddToCartClick);
-                        }
+                        // 隱藏 Lightbox 彈窗
+                        document.getElementById("lightbox").style.display = "none";
                     } else {
-                        console.error('Product ID, buy number, or store ID is not defined.');
+                        // 如果店家可接單，繼續加入購物車邏輯
+                        if (typeof productId !== 'undefined' && typeof buyNum !== 'undefined' && typeof storeIdNum !== 'undefined') {
+                            const success = addToCart(productId, buyNum, storeIdNum); // 傳入購買數量
+
+                            // 如果成功，則隱藏光箱
+                            if (success) {
+                                document.getElementById("lightbox").style.display = "none"; // 隱藏光箱
+
+                                // 移除事件監聽器
+                                addToCartButton.removeEventListener('click', handleAddToCartClick);
+                            }
+                        } else {
+                            console.error('Product ID, buy number, or store ID is not defined.');
+                        }
                     }
                 }
             }
