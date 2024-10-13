@@ -273,7 +273,9 @@ public class ProductServiceImpl implements ProductService {
             product.setCoconutJelly(productDTO.isCoconutJelly());
             product.setTaro(productDTO.isTaro());
             product.setHerbalJelly(productDTO.isHerbalJelly());
-            product.setProductPicture(blobImg);// 圖片資料
+            if(blobImg!=null && blobImg.length>0){
+                product.setProductPicture(blobImg);// 圖片資料
+            }
             productDao.save(product);
             // 保存更新后的产品
 //            if (product != null) {
