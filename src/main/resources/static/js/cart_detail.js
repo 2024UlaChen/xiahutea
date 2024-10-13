@@ -1044,21 +1044,45 @@ document.addEventListener("DOMContentLoaded",function(){
     })
     //******** ************************************function區****************************************
     //F00 將cart 資料轉換
-    function reverseCartItems(cart){
-        const newcart = [];
-        Object.keys(cart).forEach(productID=>{
-            let product = cart[productID];
-            newcart.push({
-                productId: parseInt(productID),
-                temperature: product.temperature,
-                sweetness: product.sweetness,
-                toppings: product.toppings,
-                size: product.size,
-                buyNum: product.buyNum
-            })
-        })
-        console.log("new cart:",newcart)
-        sortCartItems(newcart)
+    // function reverseCartItems(cart){
+    //     const newcart = [];
+    //     Object.keys(cart).forEach(productID=>{
+    //         let product = cart[productID];
+    //         newcart.push({
+    //             productId: parseInt(productID),
+    //             temperature: product.temperature,
+    //             sweetness: product.sweetness,
+    //             toppings: product.toppings,
+    //             size: product.size,
+    //             buyNum: product.buyNum
+    //         })
+    //     })
+    //     console.log("new cart:",newcart)
+    //     sortCartItems(newcart)
+    // }
+    //F00(新)
+    function reverseCartItems(cart) {
+        const newCart = [];
+
+        // 遍歷 cart 物件中的每個商品 ID
+        Object.keys(cart).forEach(productID => {
+            const product = cart[productID];
+
+            // 直接遍歷 variations
+            product.variations.forEach(variation => {
+                newCart.push({
+                    productId: parseInt(productID), // 解析 product ID
+                    storeId: variation.storeId || null, // 可選的 storeId
+                    size: variation.size,
+                    temperature: variation.temperature,
+                    sweetness: variation.sweetness,
+                    toppings: variation.toppings,
+                    buyNum: variation.buyNum
+                });
+            });
+        });
+        console.log("new cart:", newCart);
+        sortCartItems(newCart); // 可以選擇是否排序或進行額外處理
     }
 
     //F01 localstorage購物車資料分類
@@ -1482,7 +1506,7 @@ document.addEventListener("DOMContentLoaded",function(){
             const itemIce = item.closest(".item-content").querySelector('[data-type="temperature"]').textContent.trim().replace(/ \/$/, '');
             const itemSugar = item.closest(".item-content").querySelector('[data-type="sweetness"]').textContent.trim().replace(/ \/$/, '');
             const itemMaterials = item.closest(".item-content").querySelector('[data-type="toppings"]').textContent.trim().replace(/ \/$/, '');
-            const itemSize = item.closest(".item-content").querySelector('[data-type="size"]').textContent.trim().replace(/ \/$/, '');
+            // const itemSize = item.closest(".item-content").querySelector('[data-type="size"]').textContent.trim().replace(/ \/$/, '');
 
             // 檢查品名、冰塊、甜度、加料、尺寸是否相同
             if (
@@ -1490,13 +1514,11 @@ document.addEventListener("DOMContentLoaded",function(){
                 currentProduct.ice === itemIce &&
                 currentProduct.sugar === itemSugar &&
                 currentProduct.materials === itemMaterials &&
-                currentProduct.size === itemSize &&
+                // currentProduct.size === itemSize &&
                 // 確保不是當前修改的商品(遍歷尋找的購物車商品和當前點擊的商品
                 item !== currentCartItem
             ){
                 const existingQuantity = parseInt(item.closest(".item-content").querySelector('[data-type="buyNum"]').textContent);
-                // console.log("existingQuantity : ",existingQuantity)
-                // console.log("newQuantity : ",newQuantity)
                 const totalQuantity = existingQuantity + newQuantity;
                 //更新當前購物車一模一樣品項的數項
                 item.closest(".item-content").querySelector('[data-type="buyNum"]').textContent = `${totalQuantity} 杯`;
@@ -1506,6 +1528,7 @@ document.addEventListener("DOMContentLoaded",function(){
         })
         //編輯過商品同步修改localstorage
         updateLocalStorage();
+
         lightbox_el.style.display = "none";
         document.body.style.overflow = 'auto';
         document.body.style.paddingRight = '0px';
@@ -1612,7 +1635,7 @@ document.addEventListener("DOMContentLoaded",function(){
 
         const noAddOnLabel = document.createElement('label');
         noAddOnLabel.setAttribute('for', 'no_add_ons');
-        noAddOnLabel.textContent = '無加料';
+        noAddOnLabel.textContent = '未選擇加料';
 
         // 將「無加料」選項添加到容器中
         addOnsContainer.appendChild(noAddOnInput);
@@ -1658,22 +1681,35 @@ document.addEventListener("DOMContentLoaded",function(){
             });
         }
         const typeOneData = {};
-        //每個抓到商品ID，甜度冰塊尺寸杯數等資訊存到陣列中
+
+        // 遍歷每個商品並抓取商品資訊
         cartItems.forEach(product => {
             const productDetail = product.closest(".item-content").querySelector(".product-detail");
             const productId = product.dataset.productId;
-            const buynum = productDetail.querySelector('[data-type="buyNum"]').textContent.match(/\d+/)[0];
-            parseInt(buynum)
-            const itemdata ={
-                temperature:productDetail.querySelector('[data-type="temperature"]').textContent.trim().replace(/ \/$/, ''),
-                sweetness:productDetail.querySelector('[data-type="sweetness"]').textContent.trim().replace(/ \/$/, ''),
-                toppings:productDetail.querySelector('[data-type="toppings"]').textContent.trim().replace(/ \/$/, ''),
-                size:productDetail.querySelector('[data-type="size"]').textContent.trim().replace(/ \/$/, ''),
-                buyNum:buynum
+            const buynum = parseInt(productDetail.querySelector('[data-type="buyNum"]').textContent.match(/\d+/)[0]);
+
+            // 定義當前商品的變體資料
+            const itemdata = {
+                storeId: storeId,
+                temperature: productDetail.querySelector('[data-type="temperature"]').textContent.trim().replace(/ \/$/, ''),
+                sweetness: productDetail.querySelector('[data-type="sweetness"]').textContent.trim().replace(/ \/$/, ''),
+                toppings: productDetail.querySelector('[data-type="toppings"]').textContent.trim().replace(/ \/$/, ''),
+                size: productDetail.querySelector('[data-type="size"]').textContent.trim().replace(/ \/$/, ''),
+                buyNum: buynum
+            };
+
+            // 如果此 productId 尚不存在於 typeOneData 中，則初始化它
+            if (!typeOneData[productId]) {
+                typeOneData[productId] = {
+                    variations: []
+                };
             }
-            typeOneData[productId] = itemdata;
+
+            // 將當前商品的變體資料推入 variations 陣列
+            typeOneData[productId].variations.push(itemdata);
         });
-        //覆蓋現在localstorage資料
+
+        // 將資料存回 localStorage
         localStorage.setItem('cart', JSON.stringify(typeOneData));
     }
 
