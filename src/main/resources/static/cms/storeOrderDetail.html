@@ -515,7 +515,7 @@
                 return nullValue != null ? nullValue : "";
             }
             function nullMoney(moneyValue){
-                return moneyValue === 0 ? moneyValue : "";
+                return moneyValue != null ? moneyValue : 0;
             }
             //-----------------------------------------------------------------------
             // btn 回上一頁
