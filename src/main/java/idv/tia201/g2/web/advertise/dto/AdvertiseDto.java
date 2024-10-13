@@ -23,4 +23,6 @@ public class AdvertiseDto {
     private Timestamp endTime;            // 結束時間
     private Boolean homeDisplay;          // 是否在首頁顯示
     private Boolean isactive;              // 廣告是否啟用
+    private long adsTotalUserId;
+    private Integer roleTypeId;
 }

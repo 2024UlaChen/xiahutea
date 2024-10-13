@@ -18,6 +18,8 @@ document.addEventListener("DOMContentLoaded", function () {
     let isActive;
     let userid;
     let roletypeid;
+    // let nowloginuserid;
+    // let nowloginroletypeid;
 
     // 取得 URL 中的 adId 參數
     let urlParams = new URLSearchParams(window.location.search);
@@ -44,9 +46,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
             }
             console.log('user Details:', totaluser);
-            userid = totaluser.userId;
-            roletypeid = totaluser.userTypeId;
-
+            userid=totaluser.userId;
+            roletypeid=totaluser.userTypeId;
+            console.log('userid:',userid)
+            console.log('roletypeid:',roletypeid)
             // 檢查為管理員或店家
             if (totaluser.userTypeId === 0) {
                 Swal.fire({
@@ -100,6 +103,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 description_el.textContent = data.description;
                 start_date_el.value = formatToDatetimeLocal(data.startTime);
                 end_date_el.value = formatToDatetimeLocal(data.endTime);
+                userid = data.adsTotalUserId;
+                roletypeid = data.roleTypeId;
+                console.log("userid:",userid)
+                console.log("roletypeid:",roletypeid)
+
                 if(data.homeDisplay === true){
                     check_homedisplay_el.checked = true;
                 }
@@ -126,6 +134,7 @@ document.addEventListener("DOMContentLoaded", function () {
             });
     }else{
         ads_h1_el.textContent="廣告新增"
+
     }
     //***********************************日期選擇限制******************************
     start_date_el.addEventListener('change', function () {
@@ -248,8 +257,8 @@ document.addEventListener("DOMContentLoaded", function () {
         formData.append('isActive', isActive);
         formData.append('startTime', formatToBackendFormat(start_date_el.value));
         formData.append('endTime', formatToBackendFormat(end_date_el.value));
-        formData.append('adsTotalUserid',userid); //先用假的
-        formData.append('roleTypeId',roletypeid);
+        formData.append('adsTotalUserid',userid); //依據新增和修改會有不同值
+        formData.append('roleTypeId',roletypeid); //依據新增和修改會有不同值
         console.log("formDate",formData)
 
         fetch('/advertise/save',{
