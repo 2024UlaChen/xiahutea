@@ -751,58 +751,7 @@
             // console.error('未提供 productId 参数');
         }
 
-        //
-        // function fetchProductImage(productId) {
-        //     // Construct the URL for the image based on the product ID
-        //     const imgPreview = document.querySelector("img.preview");
-        //
-        //     const url = `/products/${productId}/image`; // Adjust the URL according to your API endpoint
-        //
-        //     // Use fetch to get the image
-        //     fetch(url)
-        //         .then(response => {
-        //             if (response.ok) {
-        //                 return response.text(); // 將回應解析為文本，也就是Base64字符串
-        //             } else {
-        //                 throw new Error('Image not found');
-        //             }
-        //         })
-        //         .then(base64Image => {
-        //             // 將Base64圖片插入到img標籤中
-        //             var the_file = document.getElementById("productPic");
-        //             the_file.addEventListener("change", function () {
-        //                 let ul_el = document.getElementsByClassName("picture_list")[0];
-        //                 ul_el.innerHTML = ""; // 清空現有的圖片列表
-        //
-        //                 let files = this.files;
-        //                 for (let i = 0; i < files.length; i++) {
-        //                     let reader = new FileReader();
-        //                     reader.readAsDataURL(files[i]);
-        //
-        //                     reader.addEventListener("load", function () {
-        //                         let li_str = '';
-        //                         li_str += '<li>';
-        //                         li_str += '<img src="' + base64Image + '" class="preview" style="max-width: 350px; max-height: 350px; margin: 5px;">';
-        //                         li_str += '</li>';
-        //                         ul_el.insertAdjacentHTML("beforeend", li_str);
-        //                     });
-        //                 }
-        //             })
-        //         })
-        //         .catch(error => {
-        //             console.error('Error fetching the image:', error);
-        //         });
-        //
-        // }
 
-
-
-
-        // document.getElementById('productForm').addEventListener('submit', function (event) {
-        //     event.preventDefault(); // 阻止表单默认提交行为
-        //
-        //
-        // });
 
 
 
