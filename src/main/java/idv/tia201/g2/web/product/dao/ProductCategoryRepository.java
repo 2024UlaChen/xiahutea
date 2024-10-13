@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -38,7 +39,9 @@ public interface ProductCategoryRepository extends JpaRepository<ProductCategory
     Page<ProductCategory> findByProductStoreId(Integer productStoreId, Pageable pageable);
 
     List<ProductCategory> findByProductStoreId(Integer productStoreId);
-    List<ProductCategory> findByProductStoreIdOrderByCategorySortAsc(Integer productStoreId);
+
+    @Query("SELECT pc FROM ProductCategory pc WHERE pc.productStoreId = :storeId ORDER BY pc.categorySort ASC")
+    List<ProductCategory> findByProductStoreIdOrderByCategorySortAsc(@Param("storeId")Integer productStoreId);
 
 
 }
