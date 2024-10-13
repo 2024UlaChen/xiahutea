@@ -155,7 +155,7 @@
                                             </div>
                                             <div class="form-check">
                                                 <input class="item" type="checkbox" name="normalIce"
-                                                    value="1" checked>
+                                                    value="1">
                                                 <label class="form-check-label">正常冰</label>
                                             </div>
                                             <div class="form-check">
@@ -195,7 +195,7 @@
                                                 <label class="form-check-label">全選</label>
                                             </div>
                                             <div class="form-check">
-                                                <input class="itemtwo" type="checkbox" name="fullSugar" value="1" checked>
+                                                <input class="itemtwo" type="checkbox" name="fullSugar" value="1">
                                                 <label class="form-check-label">全糖</label>
                                             </div>
                                             <div class="form-check">
@@ -334,6 +334,7 @@
                     li_str += '<img src="' + reader.result + '" class="preview" style="max-width: 350px; max-height: 350px; margin: 5px;">';
                     li_str += '</li>';
                     ul_el.insertAdjacentHTML("beforeend", li_str);
+                    document.getElementById('productPicImg').src = '';
                 });
             }
         })
@@ -518,38 +519,43 @@
                 }
             })
 
-        function updateProductEdit(productData){
-            // 发起 PUT 请求更新商品
-            fetch(`/products/update/${productId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(productData) // 发送 JSON 格式的商品数据
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP 错误! 状态: ${response.status}`);
-                    }
-                    // return response.text(); // 获取服务器返回的文本响应
-                })
-                .then(data => {
-                    console.log('商品更新成功:', data);
-                    Swal.fire({
-                        text: "商品更新成功!",
-                        icon: "success"
-                    });
-                    history.go(-1)
-                    // 可以在这里进行页面跳转或其他操作
-                })
-                .catch(error => {
-                    console.error('更新商品失败:', error);
-                    Swal.fire({
-                        icon: "error",
-                        text: "分類新增錯誤",
-                    });
-                    history.go(-1)
+        async function updateProductEdit(productData) {
+            try {
+                // 发起 PUT 请求更新商品
+                const response = await fetch(`/products/update/${productId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(productData) // 发送 JSON 格式的商品数据
                 });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP 错误! 状态: ${response.status}`);
+                }
+
+                const data = await response.text(); // 获取服务器返回的文本响应
+                console.log('商品更新成功:', data);
+
+                const result = await Swal.fire({
+                    text: "商品更新成功!",
+                    icon: "success"
+                });
+
+                if (result.isConfirmed) {
+                    // 如果用户点击确认，回到上一页并刷新页面
+                    window.location.href = document.referrer
+                }
+
+
+            } catch (error) {
+                console.error('更新商品失败:', error);
+                Swal.fire({
+                    icon: "error",
+                    text: "更新商品失败",
+                });
+
+            }
         }
         // 封装一个函数来返回一个 Promise，当文件读取完成时 resolve
         function getBase64(file) {
@@ -572,7 +578,7 @@
          * @param base64String 圖片轉Base64的string型態
          * @returns {boolean}
          */
-        function submitProductData(base64String) {
+        async function submitProductData(base64String) {
             const productName = document.getElementById('productName').value.trim();
             var productPrice = document.getElementById('productPrice').value;
             var size = document.getElementById('size').value;
@@ -632,39 +638,38 @@
             };
 
             // 將產品數據以JSON格式發送到後端
-            fetch('/products/add', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(productData)
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('网络响应不正常');
-                    }
-                    document.getElementById("productForm").reset();
-                    const pictureList = document.querySelector(".picture_list");
-                    pictureList.innerHTML = ""; // 清空內容
-                    Swal.fire({
-                        text: "商品新增成功!",
-                        icon: "success"
-                    });
-                })
-                .then(data => {
-                    console.log('產品提交成功:', data);
-                    history.go(-1)
-                })
-                .catch(error => {
-                    Swal.fire({
-                        icon: "error",
-                        text: "分類新增錯誤",
-                    });
-
-                    history.go(-1)
-                    console.error('產品提交錯誤:', error);
+            try {
+                const response = await fetch('/products/add', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(productData)
                 });
 
+                if (!response.ok) {
+                    throw new Error('网络响应不正常');
+                }
+
+                document.getElementById("productForm").reset();
+                const pictureList = document.querySelector(".picture_list");
+                pictureList.innerHTML = ""; // 清空內容
+
+                const result = Swal.fire({
+                    text: "商品新增成功!",
+                    icon: "success"
+                })
+
+                if (result) {
+                    window.location.href = document.referrer;
+                }
+            }catch (error) {
+                console.error('提交商品數據失敗:', error);
+                Swal.fire({
+                    icon: "error",
+                    text: "商品新增失敗，請稍後再試。"
+                });
+            }
         }
 
 
@@ -751,58 +756,7 @@
             // console.error('未提供 productId 参数');
         }
 
-        //
-        // function fetchProductImage(productId) {
-        //     // Construct the URL for the image based on the product ID
-        //     const imgPreview = document.querySelector("img.preview");
-        //
-        //     const url = `/products/${productId}/image`; // Adjust the URL according to your API endpoint
-        //
-        //     // Use fetch to get the image
-        //     fetch(url)
-        //         .then(response => {
-        //             if (response.ok) {
-        //                 return response.text(); // 將回應解析為文本，也就是Base64字符串
-        //             } else {
-        //                 throw new Error('Image not found');
-        //             }
-        //         })
-        //         .then(base64Image => {
-        //             // 將Base64圖片插入到img標籤中
-        //             var the_file = document.getElementById("productPic");
-        //             the_file.addEventListener("change", function () {
-        //                 let ul_el = document.getElementsByClassName("picture_list")[0];
-        //                 ul_el.innerHTML = ""; // 清空現有的圖片列表
-        //
-        //                 let files = this.files;
-        //                 for (let i = 0; i < files.length; i++) {
-        //                     let reader = new FileReader();
-        //                     reader.readAsDataURL(files[i]);
-        //
-        //                     reader.addEventListener("load", function () {
-        //                         let li_str = '';
-        //                         li_str += '<li>';
-        //                         li_str += '<img src="' + base64Image + '" class="preview" style="max-width: 350px; max-height: 350px; margin: 5px;">';
-        //                         li_str += '</li>';
-        //                         ul_el.insertAdjacentHTML("beforeend", li_str);
-        //                     });
-        //                 }
-        //             })
-        //         })
-        //         .catch(error => {
-        //             console.error('Error fetching the image:', error);
-        //         });
-        //
-        // }
 
-
-
-
-        // document.getElementById('productForm').addEventListener('submit', function (event) {
-        //     event.preventDefault(); // 阻止表单默认提交行为
-        //
-        //
-        // });
 
 
 

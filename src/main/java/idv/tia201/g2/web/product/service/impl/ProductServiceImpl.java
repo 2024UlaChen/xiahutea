@@ -103,6 +103,12 @@ public class ProductServiceImpl implements ProductService {
                 return false;
             }
 
+            Product existingProduct = productDao.findByProductName(productDTO.getProductName());
+            if (existingProduct != null) {  // 如果查询结果不为 null，表示商品名称已经存在
+                System.out.println("商品名称已存在：" + productDTO.getProductName());
+                return false; // 如果商品名称已存在，则返回 false
+            }
+
             // 创建 Product 实体对象
             Product product = new Product();
             product.setProductName(productDTO.getProductName());
@@ -267,7 +273,9 @@ public class ProductServiceImpl implements ProductService {
             product.setCoconutJelly(productDTO.isCoconutJelly());
             product.setTaro(productDTO.isTaro());
             product.setHerbalJelly(productDTO.isHerbalJelly());
-            product.setProductPicture(blobImg);// 圖片資料
+            if(blobImg!=null && blobImg.length>0){
+                product.setProductPicture(blobImg);// 圖片資料
+            }
             productDao.save(product);
             // 保存更新后的产品
 //            if (product != null) {

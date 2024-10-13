@@ -77,10 +77,12 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     public Store loginStore(Store userData) {
+        Store falseData = new Store();
+        falseData.setMessage("使用者名稱或密碼錯誤");
 
-        if(userData.getVat() == null || userData.getPassword() ==null) {return null;}
+        if(userData.getVat() == null || userData.getPassword() ==null) {return falseData;}
         Store data = storeDao.findByVat(userData.getVat());
-        if( data == null  ) {return null;}
+        if( data == null  ) {return falseData;}
         String ShaPassword = SHAEncrypt(userData.getPassword());
         if(data.getPassword().equals(ShaPassword)){
             //密碼正確 登入成功
@@ -88,7 +90,7 @@ public class StoreServiceImpl implements StoreService {
             data.setSuccessful(true);
             return data;
         }
-        return null;
+        return falseData;
     }
 
 
