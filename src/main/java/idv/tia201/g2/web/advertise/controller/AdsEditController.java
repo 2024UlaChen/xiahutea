@@ -101,6 +101,8 @@ public class AdsEditController {
         adDto.setIsactive(ad.getIsactive());
         adDto.setStartTime(ad.getStartTime());
         adDto.setEndTime(ad.getEndTime());
+        adDto.setAdsTotalUserId(ad.getAdsTotalUserid());
+        adDto.setRoleTypeId(ad.getRoleTypeId());
 //        System.out.println("Timestamp: " + adDto.getStartTime());
 //        System.out.println("Timestamp: " + adDto.getEndTime());
         // 將圖片的 byte[] 轉換為 Base64 字串
