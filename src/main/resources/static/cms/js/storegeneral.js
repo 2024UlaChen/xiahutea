@@ -61,18 +61,26 @@ $(function () {
 })
 
 $("li#logout").on("click", e => {
-    Swal.fire({
-        title: "登出",
-        text: "請確認是否登出",
-        showCancelButton: true
-    }).then(function(result) {
-        if (result.value) {
-            fetch("/store/logout")
-            location.href = "./backstageLogin.html"
-        }
-        else {
+    fetch("/totalusers")
+        .then(res => res.json())
+        .then( totalUser => {
+            let userTypeId = totalUser.userTypeId;
+            console.log(totalUser);
+            if(userTypeId !== 1 && userTypeId !== 3){
+                location.href = "./backstageLogin.html"
+                return
+            }
+            Swal.fire({
+                title: "登出",
+                text: "請確認是否登出",
+                showCancelButton: true
+            }).then(function(result) {
+                if (result.value) {
+                    fetch("/store/logout")
+                }
+            })
 
-        }
+
     });
 })
 
