@@ -312,7 +312,7 @@ public class ProductDtoDaoImpl implements ProductDtoDao {
                         "p.product_status " +
                         "FROM product p LEFT JOIN store s ON p.product_store_id = s.store_id " +
                         "LEFT JOIN product_category pc ON p.product_category_id = pc.product_category_id " +
-                        "WHERE s.store_name LIKE ? AND pc.product_category LIKE ? " +
+                        "WHERE s.store_name LIKE ? AND p.product_name LIKE ? " +
                         "order by p.product_store_id DESC, p.product_id " +
                         "LIMIT 10 OFFSET ?";
         jakarta.persistence.Query query = em.createNativeQuery(jpql)
@@ -347,7 +347,7 @@ public class ProductDtoDaoImpl implements ProductDtoDao {
     public Page<ProductDTO> findProductDTOListByProductCategoryNameAndProductName(String productCategoryName, String productName, Pageable pageable) {
         // 計算總頁數
         String countJpql =
-                "SELECT COUNT(*) FROM product p" +
+                "SELECT COUNT(*) FROM product p " +
                         "LEFT JOIN product_category pc ON p.product_category_id = pc.product_category_id " +
                         "WHERE pc.product_category LIKE ? AND p.product_name LIKE ? ";
         jakarta.persistence.Query countQuery = em.createNativeQuery(countJpql)

@@ -21,20 +21,22 @@
         img.preview {
             width: 300px;
             height: 350px;
+            /*margin-top: 30px;*/
         }
 
-        ul {
+        #picture_list {
             list-style: none;
-            margin: 0;
+            margin-top: 50px;
             padding: 0;
         }
 
-        ul>li {
+        #picture_list>li {
             display: inline-block;
             vertical-align: top;
         }
-
-
+        #productPic{
+            visibility: hidden;
+        }
 
         .btn-info{
             background-color: #73B4BA;
@@ -81,6 +83,17 @@
                             <!-- form start -->
                             <form id="productForm"  enctype="multipart/form-data" >
                                 <div class="card-body">
+                                    <div class="form-group">
+                                        <label>商品分類</label><span style="color: red">*</span>
+
+                                        <span class="category-message" style="color: red ; display: inline" ></span>
+
+                                        <select class="form-control category" name="productCategoryId" id="category">
+
+                                        </select>
+
+                                    </div>
+
                                     <input type="hidden" id="productId" name="productId">
                                     <div class="form-group">
                                         <label for="productName">商品名稱</label> <span style="color: red">*</span>
@@ -89,24 +102,24 @@
                                     <p class="productName-message" style="color: red"></p>
                                     <div class="form-group">
                                         <label for="productPrice">商品價格(請填台幣)</label><span style="color: red">*</span>
-                                        <input type="number" class="form-control" id="productPrice" placeholder="65" name="productPrice" min="1" max="999">
+                                        <input class="form-control" id="productPrice" name="productPrice" placeholder="請輸入商品價格">
                                     </div>
                                     <p class="productPrice-message" style="color: red"></p>
 
                                         <div class="form-group">
-                                            <label for="size">商品尺寸</label>
-                                            <select class="custom-select rounded-0" id="size" name="productsize">
-                                            <option value="S">S</option>
-                                            <option value="M">M</option>
-                                            <option value="L">L</option>
-                                        </select>
+                                            <label for="size">商品尺寸</label><span style="color: red">*</span>
+                                            <select class="form-control category" id="size" name="productsize">
+                                                <option value="S">S</option>
+                                                <option value="M">M</option>
+                                                <option value="L">L</option>
+                                            </select>
 
                                     </div>
 
                                     <div class="form-group">
                                         <label for="status">商品狀態</label>
                                         <span class="status-message" style="color: red"></span>
-                                        <select class="custom-select rounded-0" id="status" name="productStatus">
+                                        <select class="form-control category" id="status" name="productStatus">
                                             <option value="1" th:selected="${productStatus} ? 'selected' : ''">上架</option>
                                             <option value="0" th:selected="${!productStatus} ? 'selected' : ''">下架</option>
                                         </select>
@@ -117,7 +130,7 @@
                                         <label for="productPic">商品圖片</label>
 
                                         <div class="custom-file">
-                                            <ul class="picture_list">
+                                            <ul class="picture_list" id="picture_list">
 
                                             </ul>
                                             <input type="file" class="custom-file-input" id="productPic" name="productPicture" >
@@ -128,13 +141,6 @@
                                     <p class="productPic-message" style="color:red;"></p>
                                     <img id="productPicImg" style="max-width: 100%; height: auto;"/>
 
-                                    <div class="form-group">
-                                        <label>商品分類</label>
-                                        <span class="category-message" style="color: red"></span>
-                                        <select class="category" name="productCategoryId">
-
-                                        </select>
-                                    </div>
                                     <p class="category-message" style="color: red"></p>
                                     <div class="row">
                                         <span for="name" class="ice-message" style="color: red"></span>
@@ -533,6 +539,7 @@
                         text: "商品更新成功!",
                         icon: "success"
                     });
+                    history.go(-1)
                     // 可以在这里进行页面跳转或其他操作
                 })
                 .catch(error => {
@@ -541,6 +548,7 @@
                         icon: "error",
                         text: "分類新增錯誤",
                     });
+                    history.go(-1)
                 });
         }
         // 封装一个函数来返回一个 Promise，当文件读取完成时 resolve
@@ -645,14 +653,18 @@
                 })
                 .then(data => {
                     console.log('產品提交成功:', data);
+                    history.go(-1)
                 })
                 .catch(error => {
                     Swal.fire({
                         icon: "error",
                         text: "分類新增錯誤",
                     });
+
+                    history.go(-1)
                     console.error('產品提交錯誤:', error);
                 });
+
         }
 
 

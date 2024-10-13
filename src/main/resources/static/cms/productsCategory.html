@@ -18,6 +18,11 @@
     <link rel="stylesheet" href="plugins/sweetalert2/sweetalert2.css">
 
     <style>
+        #searchButton{
+            background-color: #F8F9FA;
+            border-color: #ddd;
+            color: #212529;
+        }
         .page-item.active .page-link{
             z-index: 0;
         }
@@ -392,7 +397,7 @@
         function searchCategories(url) {
             fetch(url).then(res => res.json())
                 .then(data => {
-                    console.log(data)
+                    // console.log(data)
                     const categoryTableBody = document.querySelector('#categoryTable tbody');
 
                     // 清空表格內容

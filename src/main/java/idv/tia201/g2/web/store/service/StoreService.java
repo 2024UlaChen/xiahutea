@@ -19,11 +19,11 @@ public interface StoreService {
     List<Store> findAll();
     List<Store> GetStoreList();
     List<Store> findAll(Pageable pageable);
-    //搜尋店家 只要特定字
+
     List<Store> findStoreByName(String name);
     List<StoreViewModel> GetStoreViewModels();
     Store loginStore(Store data);
-    //用於查修 準確指定
+
     Store findStoreById(Integer id);
 
     List<Store> findStoreByAddress(String address);

@@ -77,10 +77,12 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     public Store loginStore(Store userData) {
+        Store falseData = new Store();
+        falseData.setMessage("使用者名稱或密碼錯誤");
 
-        if(userData.getVat() == null || userData.getPassword() ==null) {return null;}
+        if(userData.getVat() == null || userData.getPassword() ==null) {return falseData;}
         Store data = storeDao.findByVat(userData.getVat());
-        if( data == null  ) {return null;}
+        if( data == null  ) {return falseData;}
         String ShaPassword = SHAEncrypt(userData.getPassword());
         if(data.getPassword().equals(ShaPassword)){
             //密碼正確 登入成功
@@ -88,7 +90,7 @@ public class StoreServiceImpl implements StoreService {
             data.setSuccessful(true);
             return data;
         }
-        return null;
+        return falseData;
     }
 
 
@@ -129,9 +131,8 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     public List<Store> findStoreByName(String name) {
-        //模糊查詢並且大小寫不敏感
-        //return storeDao.findByStoreNameContainingIgnoreCaseAndStoreStatus(name,1);
-        return storeDao.SearchBarData(name);
+
+        return storeDao.SearchBarDataNotHoliday(name);
     }
 
     @Override
@@ -146,7 +147,7 @@ public class StoreServiceImpl implements StoreService {
     @Override
     public List<Store> findStoreByAddress(String address) {
         //模糊區域查詢
-        return storeDao.findByStoreAddressContainingAndStoreStatus(address,1);
+        return storeDao.SearchDataByPlaceNotHoliday(address);
     }
 
     @Override
