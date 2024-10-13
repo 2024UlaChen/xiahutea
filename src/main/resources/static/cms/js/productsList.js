@@ -11,6 +11,7 @@ let tbInnerHTML = productTableBody.innerHTML;
 
 document.addEventListener("DOMContentLoaded", function () {
     init()
+    // searchBtn.click();
     searchProductsList("/products/searchproductlist?page=0");
 })
 
