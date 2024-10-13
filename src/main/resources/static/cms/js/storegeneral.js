@@ -76,7 +76,8 @@ $("li#logout").on("click", e => {
                 showCancelButton: true
             }).then(function(result) {
                 if (result.value) {
-                    fetch("/store/logout")
+                    fetch("/store/logout");
+                    location.href = "./backstageLogin.html"
                 }
             })
 
