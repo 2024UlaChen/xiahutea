@@ -126,7 +126,7 @@ public class ProductAddController {
         // 调用 Service 层进行处理
         TotalUserDTO totalUserDTO = (TotalUserDTO)session.getAttribute("totalUserDTO");
         Integer userTypeId = totalUserDTO.getUserTypeId(); // 1 : 商家 、 3 : 管理員
-        Integer userId = totalUserDTO.getUserId();// storeId 或 adminId
+        Integer userId = totalUserDTO.getUserId();// storeId 或 adminId(管理員沒有新增商品功能)
 
         try {
             // 将 Base64 数据解码为字节数组
