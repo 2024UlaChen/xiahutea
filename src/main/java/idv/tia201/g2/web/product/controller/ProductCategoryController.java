@@ -1,6 +1,7 @@
 package idv.tia201.g2.web.product.controller;
 
 
+import idv.tia201.g2.core.pojo.Core;
 import idv.tia201.g2.web.product.dto.ProductCategoryDTO;
 import idv.tia201.g2.web.product.service.ProductCategoryService;
 import idv.tia201.g2.web.product.vo.ProductCategory;
@@ -93,42 +94,44 @@ public class ProductCategoryController {
 
    // 添加新分类
    @PostMapping("/save")
-   public ResponseEntity<String> saveCategory(@RequestBody ProductCategoryDTO categoryDTO, HttpSession session) {
+   public ResponseEntity<Core> saveCategory(@RequestBody ProductCategoryDTO categoryDTO, HttpSession session) {
+      Core core = new Core();
+      core.setSuccessful(false);
       TotalUserDTO totalUserDTO = (TotalUserDTO) session.getAttribute("totalUserDTO");
 
       // 确保 session 中的用户信息存在
       if (totalUserDTO == null) {
-         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("用户未登录");
+         core.setMessage("用户未登入");
+         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(core);
       }
 
       Integer userTypeId = totalUserDTO.getUserTypeId(); // 1: 商家, 3: 管理员
       Integer userId = totalUserDTO.getUserId(); // storeId 或 adminId
 
+      Core save = productCategoryService.saveCategory(categoryDTO, userId, userTypeId);
 
-
-      productCategoryService.saveCategory(categoryDTO, userId, userTypeId);
-
-      return ResponseEntity.ok("加入成功");
+      return ResponseEntity.ok(save);
    }
 
 
    @PutMapping("/update/{categoryId}")
-   public ResponseEntity<String> updateCategory(@PathVariable Integer categoryId, @RequestBody ProductCategoryDTO updatedProductCategoryDTO,HttpSession session) {
+   public ResponseEntity<Core> updateCategory(@PathVariable Integer categoryId, @RequestBody ProductCategoryDTO updatedProductCategoryDTO,HttpSession session) {
+      Core core = new Core();
+      core.setSuccessful(false);
+      core.setMessage("失敗");
+
       TotalUserDTO totalUserDTO = (TotalUserDTO) session.getAttribute("totalUserDTO");
       if (totalUserDTO == null) {
-         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("未授權的用戶");
+         core.setMessage("未授權的用戶");
+         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(core);
       }
       Integer userTypeId = totalUserDTO.getUserTypeId(); // 1: 商家, 3: 管理员
       Integer userId = totalUserDTO.getUserId(); // storeId 或 adminId
 
 
-      ProductCategory updatedCategory = productCategoryService.update(categoryId, updatedProductCategoryDTO, userTypeId, userId);
+      Core update = productCategoryService.update(categoryId, updatedProductCategoryDTO, userTypeId, userId);
 
-      if (updatedCategory != null) {
-         return ResponseEntity.ok("分类修改成功！");
-      } else {
-         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("修改失败，可能分类排序不唯一或分类不存在。");
-      }
+      return ResponseEntity.ok(update);
    }
 
    // 删除分类

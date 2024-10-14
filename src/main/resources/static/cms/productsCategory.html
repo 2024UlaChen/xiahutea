@@ -541,35 +541,39 @@
                 "categoryStatus": isEnabled
             };
 
-            // 发送请求
-            fetch('/categories/save', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)  // 将数据转换为JSON格式
-            }).then(response => {
-                // 检查响应状态是否表示错误
+            try {
+                const response = await fetch('/categories/save', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)  // 将数据转换为JSON格式
+                })
+
                 if (!response.ok) {
                     throw new Error(`HTTP错误！状态: ${response.status}`);
                 }
-            }).then(data => {
-                console.log('分類提交成功:', data);
-                // 显示成功消息
-                Swal.fire({
-                    text: "商品分類新增成功!",
-                    icon: "success"
-                });
-                // 关闭模态窗口
-                history.go(0);
-                modal.style.display = 'none';
 
-            }).catch(e =>{
+                const responseData = await response.json();
+                console.log(response)
+
+                const result = await Swal.fire({
+                    text: responseData.message,
+                    icon: responseData.successful ? 'success' : 'error'
+                });
+
+                if (result.isConfirmed) {
+                    modal.style.display = 'none';
+                    history.go(0);
+                }
+                document.querySelector('#categoryName').value = '';
+
+            }catch (e) {
                 Swal.fire({
                     icon: "error",
                     text: "分類新增錯誤",
                 });
-            })
+            }
         })
 
         function closeEdit() {
@@ -623,7 +627,7 @@
         });
 
         //修改表單送出
-        document.getElementById('editCategoryForm').addEventListener('submit', function (event) {
+        document.getElementById('editCategoryForm').addEventListener('submit',async function (event) {
             event.preventDefault();
 
             // 防止表单默认提交行为
@@ -645,49 +649,57 @@
             // 提交编辑数据
 
             let categoryData = {
-                categoryName: editcategoryName.value,
+                categoryName: editcategoryName.value.trim(),
                 categorySort: parseInt(editcategorySort.value),
                 categoryStatus: selectStatus
             };
+
             editModal.style.display = 'none'; // 隐藏模态窗口
-            fetch(`/categories/update/${categoryId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(categoryData),
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        // 假設伺服器返回的錯誤消息不是 JSON 格式
-                        response.text().then(text => {
-                            throw new Error(`錯誤：${text}`); // 抛出文本作為錯誤消息
-                        });
-                    }
+
+            try {
+                const response = await fetch(`/categories/update/${categoryId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(categoryData),
                 })
-                .then(data => {
-                    console.log('分類更新成功：', data);
-                    const tdElt = document.getElementById('categoryName_' + categoryId);
-                    const row = document.querySelector(`tr[data-id="${categoryId}"]`);
-                    if (row) {
-                        row.children[1].textContent = data.categoryName; // 更新分類名稱
-                        row.children[2].textContent = data.categorySort; // 更新分類排序
-                    }
-                    tdElt.textContent = editcategoryName.value;// 更新分類名稱
-                    history.go(0);
-                    Swal.fire({
-                        text: "商品分類更新成功!",
-                        icon: "success"
-                    });  // 顯示成功訊息
-                    return;
-                })
-                .catch(error => {
+
+                if (!response.ok) {
+                    // 假設伺服器返回的錯誤消息不是 JSON 格式
+                    response.text().then(text => {
+                        throw new Error(`錯誤：${text}`); // 抛出文本作為錯誤消息
+                    });
+                }
+
+                const responseData = await response.json();
+
+                // const tdElt = document.getElementById('categoryName_' + categoryId);
+                // const row = document.querySelector(`tr[data-id="${categoryId}"]`);
+                // if (row) {
+                //     row.children[1].textContent = data.categoryName; // 更新分類名稱
+                //     row.children[2].textContent = data.categorySort; // 更新分類排序
+                // }
+                // tdElt.textContent = editcategoryName.value;// 更新分類名稱
+
+
+                const result = await Swal.fire({  // 需要使用 await 来等待 Promise 的解析
+                    text: responseData.message,
+                    icon: responseData.successful ? 'success' : 'error'
+                });
+
+                if (result.isConfirmed) {
+                    history.go(0)
+                }
+
+
+            }catch(error) {
                     console.error('更新分類時出錯：', error);
                     Swal.fire({
                         icon: "error",
                         text: "分類新增錯誤",
                     });
-                });
+                };
         })
 
 
