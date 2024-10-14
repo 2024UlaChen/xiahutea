@@ -670,7 +670,7 @@
                 console.log(result.isConfirmed)
 
                 if (result.isConfirmed) {
-                    window.location.href = document.referrer;
+                    history.go(0);
                 }
 
             }catch (error) {

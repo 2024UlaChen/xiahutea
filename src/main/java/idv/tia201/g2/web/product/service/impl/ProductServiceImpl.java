@@ -107,7 +107,7 @@ public class ProductServiceImpl implements ProductService {
             }
 
 //            Product existingProduct = productDao.findByProductName(productDTO.getProductName());
-            Product existingProduct = productDao.findByProductNameAndProductStoreIdAndSize(productDTO.getProductName(),userId,productDTO.getSize());
+            Product existingProduct = productDao.findByProductNameAndProductStoreIdAndSizeAndProductCategoryId(productDTO.getProductName(),userId,productDTO.getSize(),productDTO.getProductCategoryId());
 
             if (existingProduct != null) {  // 如果查询结果不为 null，表示商品名称已经存在
                 core.setMessage("商品已存在");
@@ -264,7 +264,7 @@ public class ProductServiceImpl implements ProductService {
                 return core;
             }
 
-            Product repeat = productDao.findByProductNameAndProductStoreIdAndSize(productDTO.getProductName(), storeId, productDTO.getSize());
+            Product repeat = productDao.findByProductNameAndProductStoreIdAndSizeAndProductCategoryId(productDTO.getProductName(), storeId, productDTO.getSize(),productDTO.getProductCategoryId());
             if (repeat != null && !(repeat.getProductId().equals(productId))){
                 core.setMessage("商品重複，請重新確認");
                 return core;
