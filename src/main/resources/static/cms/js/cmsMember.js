@@ -275,3 +275,44 @@ pageNextBtn.addEventListener("click", function (e) {
         getQueryData(parseInt(nowPage) + 1);
     }
 })
+
+downloadBtn.addEventListener("click", function () {
+    const workbook = new ExcelJS.Workbook();
+// 建立活頁簿1
+    const worksheet = workbook.addWorksheet('members');
+
+// 設定工作表屬性
+    workbook.creator = 'XiaHuTea';
+    workbook.created = new Date();
+
+
+    worksheet.columns = [
+        { letter: 'A', header: 'ID', key: 'id' },
+        { letter: 'B', header: 'NAME', key: 'name' },
+        { letter: 'C', header: 'SEX', key: 'sex' },
+        { letter: 'D', header: 'BIRTHDAY', key: 'birthday' },
+        { letter: 'E', header: 'CARRIER', key: 'carrier' },
+        { letter: 'F', header: 'EMAIL', key: 'email' },
+        { letter: 'G', header: 'MEMBER_CREATE_DATE', key: 'createDate' },
+        { letter: 'H', header: 'MEMBER_UPDATE_DATE', key: 'updateDate' },
+        { letter: 'I', header: 'VALID_STATUS', key: 'validStatus' },
+        { letter: 'J', header: 'ALIVE_STATUS', key: 'aliveStatus' },
+        { letter: 'K', header: 'NAME', key: 'NAME' },
+        { letter: 'M', header: 'MEMBER_MONEY', key: 'money' }
+    ];
+
+    const rows = [
+        { id: 1, NAME: 'A' }
+    ];
+    worksheet.addRows(rows);
+
+    workbook.xlsx.writeBuffer().then((content) => {
+        const link = document.createElement('a')
+        const blobData = new Blob([content], {
+            type: 'application/octet-stream;charset=utf-8;',
+        })
+        link.download = `mamberData_${new Date().toLocaleString().substring(0,10)}.xlsx`
+        link.href = URL.createObjectURL(blobData)
+        link.click()
+    })
+})
