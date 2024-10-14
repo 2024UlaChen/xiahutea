@@ -242,6 +242,8 @@ public class OrderServiceImpl implements OrderService {
         // 傳送發票參數給綠界
         String addInvoiceNo = invoiceService.createInvoice(order);
         if(isEmpty(addInvoiceNo)){
+            order.setOrderStatus(5);
+            orderDao.insert(order);
             orderDto.setMessage("開立發票失敗");
             orderDto.setSuccessful(false);
             return orderDto;

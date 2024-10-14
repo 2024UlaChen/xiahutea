@@ -189,7 +189,9 @@
         div.one_order_status.complete{
             background-color: #73B4BA;
         }
-
+        div.one_order_status.cancel{
+            background-color: #9c9c9c;
+        }
     </style>
 </head>
 
@@ -362,6 +364,9 @@
                     case "訂單完成":
                         statusClass = "complete";  // 藍色
                         break;
+                    case "訂單不成立":
+                        statusClass = "cancel";  // 藍色
+                        break;
                 }
 
                 // 有爭議訂單時，則顯示爭議狀態文字
@@ -473,6 +478,7 @@
             case 2 : return "準備完成";
             case 3 : return "正在外送";
             case 4 : return "訂單完成";
+            case 5 : return "訂單不成立";
         }
     }
     function disputeStatusText(statusNum) {
