@@ -103,7 +103,9 @@ public class ProductServiceImpl implements ProductService {
                 return false;
             }
 
-            Product existingProduct = productDao.findByProductName(productDTO.getProductName());
+//            Product existingProduct = productDao.findByProductName(productDTO.getProductName());
+            Product existingProduct = productDao.findByProductNameAndProductStoreIdAndSize(productDTO.getProductName(),productDTO.getProductStoreId(),productDTO.getSize());
+
             if (existingProduct != null) {  // 如果查询结果不为 null，表示商品名称已经存在
                 System.out.println("商品名称已存在：" + productDTO.getProductName());
                 return false; // 如果商品名称已存在，则返回 false
