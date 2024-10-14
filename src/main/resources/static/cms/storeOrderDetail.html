@@ -69,8 +69,8 @@
         /* select狀態  */
         #select_status{
             border-radius: 4px;
-            max-width: 100px;
-            width: 100px;
+            max-width: 120px;
+            width: 120px;
             height: 30px;
             text-align:center;
         }
@@ -138,6 +138,7 @@
                                                 <option value="2">準備完成</option>
                                                 <option value="3">正在外送</option>
                                                 <option value="4">訂單完成</option>
+                                                <option value="5" disabled >訂單不成立</option>
                                             </select>
                                         </label>
                                     </div>
@@ -444,7 +445,7 @@
                     detail_el.innerHTML = detailHtml;
 
                     let status_text = document.getElementById("status_text");
-                    if (status_text.innerText === "訂單完成") {
+                    if (status_text.innerText === "訂單完成" || status_text.innerText === "訂單不成立") {
                         btn_order_save.setAttribute("disabled", "disabled");
                         select_status.setAttribute("disabled", "disabled");
                     }
@@ -509,6 +510,7 @@
                     case 2 : return "準備完成";
                     case 3 : return "正在外送";
                     case 4 : return "訂單完成";
+                    case 5 : return "訂單不成立";
                 }
             }
             function nullText(nullValue){
