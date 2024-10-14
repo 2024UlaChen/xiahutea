@@ -710,7 +710,9 @@
             <div id="deliveryOptions" class="modal-section">
                 <h5 class="orderClarify">訂購說明</h5>
                 <div class="section-content">
-                   滿 <span class="delivery"></span>可外送
+                   滿$ <span class="delivery"></span>可外送<span class="distance"></span>公里以內
+
+
                 </div>
 
 
@@ -864,7 +866,6 @@
     <script src="assets/js/jquery-ui.min.js"></script>
     <script src="assets/js/mobile-menu.js"></script>
     <script src="assets/js/chosen.min.js"></script>
-<!--    <script src="assets/js/slick.js"></script>-->
     <script src="assets/js/jquery.elevateZoom.min.js"></script>
     <script src="assets/js/jquery.actual.min.js"></script>
     <script src="assets/js/fancybox/source/jquery.fancybox.js"></script>
@@ -873,7 +874,6 @@
     <script src="assets/js/jquery.scrollbar.min.js"></script>
     <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyC3nDHy1dARR-Pa_2jjPCjvsOR4bcILYsM'></script>
     <script src="assets/js/frontend-plugin.js"></script>
-    <!--<script src="assets/js/newjs.js"></script>-->
     <script src="./js/general.js"></script>
 
 <script src="https://unpkg.com/sweetalert2@11"></script>
@@ -917,6 +917,7 @@ if (isNaN(storeIdNum)) {
             document.querySelector('span.address').textContent=store.storeAddress;
             document.querySelector('span.delivery').textContent=store.deliveryMoney;
             document.querySelector('.vat').textContent=store.vat;
+            document.querySelector('.distance').textContent=store.deliveryDistance;
 
             const isDelivery = document.querySelector('.isdelivery');
             if (store.isDelivery) {
@@ -938,7 +939,7 @@ if (isNaN(storeIdNum)) {
 
 
 
-    // Construct the URL for the image based on the product ID
+
     const img = document.getElementById('adImage');
     img.src ='';
 
@@ -1217,7 +1218,9 @@ async function showProductModal(productId) {
                     });
 
                     // 隱藏 Lightbox 彈窗
+
                     document.getElementById("lightbox").style.display = "none";
+                    addToCartButton.removeEventListener('click', handleAddToCartClick);
                 } else {
                     // 檢查店家是否能接單
                     const storeId = storeIdNum; // 假設你有 `storeIdNum` 變數
@@ -1233,8 +1236,10 @@ async function showProductModal(productId) {
                             confirmButtonText: "確定"
                         });
 
+
                         // 隱藏 Lightbox 彈窗
                         document.getElementById("lightbox").style.display = "none";
+                        addToCartButton.removeEventListener('click', handleAddToCartClick);
                     } else {
                         // 如果店家可接單，繼續加入購物車邏輯
                         if (typeof productId !== 'undefined' && typeof buyNum !== 'undefined' && typeof storeIdNum !== 'undefined') {
@@ -1312,7 +1317,7 @@ function addToCart(productId, buyNum, storeIdNum) {
             text: "請選擇尺寸！",
             icon: "warning"
         });
-        return false; // 返回 false 以表示失敗
+        return false;
     }
 
     if (!selectedTemperature) {
@@ -1320,7 +1325,7 @@ function addToCart(productId, buyNum, storeIdNum) {
             text: "請選擇溫度！",
             icon: "warning"
         });
-        return false; // 返回 false 以表示失敗
+        return false;
     }
 
     if (!selectedSweetness) {
@@ -1328,7 +1333,7 @@ function addToCart(productId, buyNum, storeIdNum) {
             text: "請選擇甜度！",
             icon: "warning"
         });
-        return false; // 返回 false 以表示失敗
+        return false;
     }
 
     // 從 localStorage 取得現有的購物車資料，若無則初始化為空物件
@@ -1338,20 +1343,37 @@ function addToCart(productId, buyNum, storeIdNum) {
     let cartStoreId = null;
     for (let item in cart) {
         if (cart[item].variations && cart[item].variations.length > 0) {
-            cartStoreId = cart[item].variations[0].storeId; // 假設所有商品來自同一商店
+            cartStoreId = cart[item].variations[0].storeId;
             break;
         }
     }
 
-    // 若購物車中已有商品，且商店 ID 不同，則顯示錯誤提示並退出
+    // 若購物車中已有商品，且商店 ID 不同，則提示是否清空購物車
     if (cartStoreId && cartStoreId !== storeIdNum) {
         Swal.fire({
-            text: "購物車中的商品來自不同商店，請清空購物車後再試！",
-            icon: "error"
+            text: "購物車中的商品來自不同商店，是否清空購物車並加入新商品？",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "清空購物車",
+            cancelButtonText: "取消"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // 清空購物車
+                cart = {};
+                addNewItemToCart(cart, productId, buyNum, storeIdNum, selectedSize, selectedTemperature, selectedSweetness, selectedToppings);
+            } else {
+                return false;
+            }
         });
-        return false; // 返回 false 以表示失敗
+    } else {
+        // 如果是同一家店，直接加入商品
+        addNewItemToCart(cart, productId, buyNum, storeIdNum, selectedSize, selectedTemperature, selectedSweetness, selectedToppings);
     }
 
+    return true; // 返回 true 以表示成功
+}
+
+function addNewItemToCart(cart, productId, buyNum, storeIdNum, size, temperature, sweetness, toppings) {
     // 如果購物車中還沒有這個商品，則初始化該商品
     if (!cart[productId]) {
         cart[productId] = {
@@ -1361,10 +1383,10 @@ function addToCart(productId, buyNum, storeIdNum) {
 
     // 檢查該商品的選項列表中是否已有相同的選項
     let existingVariation = cart[productId].variations.find(variation =>
-        variation.size === selectedSize &&
-        variation.temperature === selectedTemperature &&
-        variation.sweetness === selectedSweetness &&
-        variation.toppings === selectedToppings
+        variation.size === size &&
+        variation.temperature === temperature &&
+        variation.sweetness === sweetness &&
+        variation.toppings === toppings
     );
 
     if (existingVariation) {
@@ -1374,10 +1396,10 @@ function addToCart(productId, buyNum, storeIdNum) {
         // 否則新增該選項作為新條目
         cart[productId].variations.push({
             storeId: storeIdNum,
-            size: selectedSize,
-            temperature: selectedTemperature,
-            sweetness: selectedSweetness,
-            toppings: selectedToppings,
+            size: size,
+            temperature: temperature,
+            sweetness: sweetness,
+            toppings: toppings,
             buyNum: buyNum
         });
     }
@@ -1395,9 +1417,8 @@ function addToCart(productId, buyNum, storeIdNum) {
     });
 
     console.log('localStorage 在加入購物車後:', localStorage);
-
-    return true; // 返回 true 以表示成功
 }
+
 
 
 function clearSelectedOptions() {
