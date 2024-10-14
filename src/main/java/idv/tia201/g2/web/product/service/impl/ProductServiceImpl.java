@@ -1,5 +1,6 @@
 package idv.tia201.g2.web.product.service.impl;
 
+import idv.tia201.g2.core.pojo.Core;
 import idv.tia201.g2.web.advertise.dao.AdsDao;
 import idv.tia201.g2.web.advertise.vo.Advertise;
 import idv.tia201.g2.web.product.dao.ProductCategoryRepository;
@@ -95,20 +96,22 @@ public class ProductServiceImpl implements ProductService {
      * @return boolean
      * @throws IOException
      */
-    public boolean addProduct(ProductDTO productDTO, Integer userTypeId, Integer userId, byte[] blobImg) throws IOException {
+    public Core addProduct(ProductDTO productDTO, Integer userTypeId, Integer userId, byte[] blobImg) throws IOException {
+
+        Core core = new Core();
+
         try {
-
-
             if (productDTO.getProductName() == null || productDTO.getProductName().trim().isEmpty()) {
-                return false;
+                core.setMessage("請輸入產品名稱");
+                return core;
             }
 
 //            Product existingProduct = productDao.findByProductName(productDTO.getProductName());
-            Product existingProduct = productDao.findByProductNameAndProductStoreIdAndSize(productDTO.getProductName(),productDTO.getProductStoreId(),productDTO.getSize());
+            Product existingProduct = productDao.findByProductNameAndProductStoreIdAndSize(productDTO.getProductName(),userId,productDTO.getSize());
 
             if (existingProduct != null) {  // 如果查询结果不为 null，表示商品名称已经存在
-                System.out.println("商品名称已存在：" + productDTO.getProductName());
-                return false; // 如果商品名称已存在，则返回 false
+                core.setMessage("商品已存在");
+                return core;
             }
 
             // 创建 Product 实体对象
@@ -138,13 +141,16 @@ public class ProductServiceImpl implements ProductService {
             product.setHerbalJelly(productDTO.isHerbalJelly());
             product.setProductPicture(blobImg);// 圖片資料
 
-            productDao.save(product);// 保存商品到数据库
-            return true;
+            Product save = productDao.save(product);// 保存商品到数据库
+            core.setData(save);
+            core.setSuccessful(true);
+            core.setMessage("商品加入成功");
+            return core;
         } catch (Exception exp) {
             exp.getStackTrace();
             System.out.println(exp.getMessage());
         };
-        return false;
+        return core;
     }
 
 
@@ -244,12 +250,24 @@ public class ProductServiceImpl implements ProductService {
     }
 
 
-    public boolean updateProduct(Integer productId, ProductDTO productDTO,Integer userTypeId, Integer userId, byte[] blobImg) {
+    public Core updateProduct(Integer productId, ProductDTO productDTO,Integer userTypeId, Integer userId, byte[] blobImg) {
+
+        Core core = new Core();
+
+
         try {
             // 查找现有产品
             Product product = productDao.findByProductId(productId);
+            Integer storeId = product.getProductStoreId();
             if (userTypeId == 1 && !product.getProductStoreId().equals(userId)) {
-                throw new IllegalAccessException("您無權操作該產品，因為它不屬於您的商店。");
+                core.setMessage("您無權操作該產品，因為它不屬於您的商店。");
+                return core;
+            }
+
+            Product repeat = productDao.findByProductNameAndProductStoreIdAndSize(productDTO.getProductName(), storeId, productDTO.getSize());
+            if (repeat != null && !(repeat.getProductId().equals(productId))){
+                core.setMessage("商品重複，請重新確認");
+                return core;
             }
 
             // 更新产品的属性
@@ -278,19 +296,16 @@ public class ProductServiceImpl implements ProductService {
             if(blobImg!=null && blobImg.length>0){
                 product.setProductPicture(blobImg);// 圖片資料
             }
-            productDao.save(product);
-            // 保存更新后的产品
-//            if (product != null) {
-//
-//
-//            } else {
-//                throw new IllegalArgumentException("產品名稱不存在");
-//            }
-            return true;
+            Product save = productDao.save(product);
+            core.setMessage("修改成功");
+            core.setSuccessful(true);
+            core.setData(save);
+            return core;
         } catch (Exception e) {
             // 捕捉并记录异常
             e.printStackTrace();
-            return false;
+            core.setMessage("請聯繫管理員");
+            return core;
         }
     }
 
