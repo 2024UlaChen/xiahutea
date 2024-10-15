@@ -189,11 +189,11 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public byte[] getFirstImageByUserId(Long adsTotalUserid) {
-        List<Advertise> ads=adsDao.findByAdsTotalUserid(adsTotalUserid);
+        Advertise ads = adsDao.findFirstActiveAdByUserId(adsTotalUserid);
         // 檢查是否找到廣告
-        if (ads != null && !ads.isEmpty()) {
+        if (ads != null) {
             // 返回第一張圖片的 URL
-            return ads.get(0).getImgUrl(); // 假設 imageUrl 是存儲圖片的欄位
+            return ads.getImgUrl(); // 假設 imageUrl 是存儲圖片的欄位
         }
         return null; // 如果沒有廣告，則返回 null
     }
