@@ -3,7 +3,11 @@ package idv.tia201.g2.web.order.controller;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.List;
+
+import idv.tia201.g2.core.pojo.Core;
+import idv.tia201.g2.web.order.dao.OrderDao;
 import idv.tia201.g2.web.order.dto.OrderDto;
+import idv.tia201.g2.web.order.service.InvoiceService;
 import idv.tia201.g2.web.order.service.OrderService;
 import idv.tia201.g2.web.order.vo.OrderDetail;
 import idv.tia201.g2.web.order.vo.Orders;
@@ -12,23 +16,41 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import static org.springframework.util.ObjectUtils.isEmpty;
 
+@Transactional
 @RestController
 @RequestMapping("order")
 public class OrderController {
 
     @Autowired
     private OrderService orderService;
-
+    @Autowired
+    private InvoiceService invoiceService;
+    @Autowired
+    private OrderDao orderDao;
     // -------- FINISH ---------------------------------
     // 前台 新增資料
+    // 前台 訂單列表 顯示
+
     @PostMapping("addOrder")
     public OrderDto addNewOrder(@RequestBody OrderDto orderDto) {
-        return orderService.addOrder(orderDto.getOrders(), orderDto.getOrderDetails());
-    }
+        OrderDto rtnOrderDto = orderService.addOrder(orderDto.getOrders(), orderDto.getOrderDetails());
 
-    // 前台 訂單列表 顯示
+        // 傳送發票參數給綠界
+        Orders order = orderDto.getOrders();
+        if( rtnOrderDto.isSuccessful() ){
+            String invoiceNo = order.getInvoiceNo();
+            while (isEmpty(invoiceNo)){
+                invoiceNo = invoiceService.createInvoice(order);
+            }
+            // 存發票
+            orderDao.saveInvoiceNo(order.getOrderId(), invoiceNo);
+        }
+        return rtnOrderDto;
+    }
     @GetMapping("member/{customerId}")
     public Page<OrderDto> memberOrder(
             @PathVariable Integer customerId,
@@ -94,7 +116,8 @@ public class OrderController {
             return Page.empty();
         }
         // 判斷權限：如果是admin可看全部訂單，如果是store只能看storeId的訂單
-        Integer storeId = (userTypeId == 1) ? userTypeId : null;
+        Integer userId = totalUserDTO.getUserId();
+        Integer storeId = (userTypeId == 1) ? userId : null;
 
         return orderService.findByCriteria(
                 orderId, storeId, storeName, memberNickname,

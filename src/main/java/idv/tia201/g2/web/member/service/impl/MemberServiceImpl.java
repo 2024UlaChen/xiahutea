@@ -13,7 +13,6 @@ import idv.tia201.g2.web.user.vo.TotalUsers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -28,7 +27,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -53,9 +51,6 @@ public class MemberServiceImpl implements MemberService {
     private CustomerCouponServiceImpl customerCouponService;
 
     Integer userType = 0;
-    @Autowired
-    private DataSourceTransactionManagerAutoConfiguration dataSourceTransactionManagerAutoConfiguration;
-
     public byte[] loadImg() throws IOException {
         String imagePath = "static/img/userIcon.jpg";
         ClassLoader classLoader = getClass().getClassLoader();
@@ -141,7 +136,6 @@ public class MemberServiceImpl implements MemberService {
             member.setSuccessful(false);
             return member;
         }
-        System.out.println(member.getValidStatus());
         if (member.getValidStatus()) {
             member = new Member();
             member.setMessage("帳號停權，請洽客服");
