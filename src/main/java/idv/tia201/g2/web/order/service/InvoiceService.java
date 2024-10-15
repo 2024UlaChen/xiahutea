@@ -32,6 +32,7 @@ public class InvoiceService {
     private RestTemplate restTemplate;
 
     // 設定 發送的發票請求參數
+    @Transactional
     public String setInvoiceInfo(Orders order) {
 
         String carrierType = "";        //載具類別
