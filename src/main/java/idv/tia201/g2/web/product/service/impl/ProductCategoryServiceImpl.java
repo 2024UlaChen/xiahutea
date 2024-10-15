@@ -1,5 +1,6 @@
 package idv.tia201.g2.web.product.service.impl;
 
+import idv.tia201.g2.core.pojo.Core;
 import idv.tia201.g2.web.product.dao.ProductCategoryRepository;
 import idv.tia201.g2.web.product.dto.ProductCategoryDTO;
 import idv.tia201.g2.web.product.service.ProductCategoryService;
@@ -37,23 +38,28 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     }
 
 
-    public ProductCategory update(Integer categoryId, ProductCategoryDTO updatedCategoryDTO, Integer userTypeId, Integer userId) {
+    public Core update(Integer categoryId, ProductCategoryDTO updatedCategoryDTO, Integer userTypeId, Integer userId) {
+        Core core = new Core();
+        core.setSuccessful(false);
         // 根据 categoryId 查找现有分类
         ProductCategory existingCategory = productCategoryRepository.findByCategoryId(categoryId);
+        Integer StoreId = existingCategory.getProductStoreId();
 
         // 如果用戶是商家，驗證該分類是否屬於該商家
         if (userTypeId == 1 && !existingCategory.getProductStoreId().equals(userId)) {
-           return null;
+            core.setMessage("無權限");
+            return core;
         }
 
-        List<ProductCategory> duplicateCategories = productCategoryRepository.findByCategoryNameAndProductStoreId(updatedCategoryDTO.getCategoryName(), userId);
+        List<ProductCategory> duplicateCategories = productCategoryRepository.findByCategoryNameAndProductStoreId(updatedCategoryDTO.getCategoryName(), StoreId);
 
 // 檢查是否存在不同 ID 的重複分類
         if (!duplicateCategories.isEmpty()) {
             for (ProductCategory category : duplicateCategories) {
                 // 如果找到的分類 ID 與當前更新的分類不同，則表示分類名稱重複
                 if (!category.getCategoryId().equals(categoryId)) {
-                    return null;
+                    core.setMessage("商品重複，請重新確認");
+                    return core;
                 }
             }
         }
@@ -65,20 +71,34 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
             existingCategory.setCategoryStatus(updatedCategoryDTO.getCategoryStatus());
 
             // 保存更新后的分类
-            return productCategoryRepository.save(existingCategory);
-        } else {
-            // 分类不存在的情况
-            return null;
+            ProductCategory save = productCategoryRepository.save(existingCategory);
+            core.setSuccessful(true);
+            core.setMessage("修改成功");
+            core.setData(save);
         }
+        // 分类不存在的情况
+        return core;
+
     }
 
 
 
     @Override
-    public String saveCategory(ProductCategoryDTO categoryDTO, Integer userId,Integer userTypeId) {
+    public Core saveCategory(ProductCategoryDTO categoryDTO, Integer userId, Integer userTypeId) {
+        Core core = new Core();
+        core.setSuccessful(false);
+
         // 进行输入校验，例如检查必填字段是否为空
         if (categoryDTO.getCategoryName() == null || categoryDTO.getCategoryName().isEmpty()) {
-            return "分类名称不能为空";
+            core.setMessage("分類名稱不能為空");
+            return core;
+        }
+
+        List<ProductCategory> oldCategorys = productCategoryRepository.findByCategoryNameAndProductStoreId(categoryDTO.getCategoryName(), userId);
+        if(!oldCategorys.isEmpty()){
+            core.setMessage("商品分類不能重複添加");
+            return core;
+
         }
 
         ProductCategory category = new ProductCategory();
@@ -89,8 +109,10 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
 
         // 保存分类
         productCategoryRepository.save(category);
+        core.setSuccessful(true);
+        core.setMessage("分類添加成功");
 
-        return "分类添加成功";
+        return core;
     }
 
 

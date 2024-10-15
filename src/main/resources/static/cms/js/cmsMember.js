@@ -275,3 +275,61 @@ pageNextBtn.addEventListener("click", function (e) {
         getQueryData(parseInt(nowPage) + 1);
     }
 })
+
+downloadBtn.addEventListener("click", function () {
+
+    fetch("manage/download")
+        .then(res => res.json())
+        .then(data => {
+            const workbook = new ExcelJS.Workbook();
+
+// 建立活頁簿1
+            const worksheet = workbook.addWorksheet('members');
+            const rows = [];
+
+// 設定工作表屬性
+            workbook.creator = 'XiaHuTea';
+            workbook.created = new Date();
+            worksheet.getRow(1).font = {name: 'Arial Unicode MS', size: 12, bold: true};
+            worksheet.properties.frozenRows = 1;
+            worksheet.views = [{state: 'frozen', ySplit: 1}];
+            worksheet.autoFilter = 'A1:M1';
+
+            worksheet.columns = [
+                {letter: 'A', header: 'ID', key: 'customerId'},
+                {letter: 'B', header: 'Name', key: 'nickname', width: 20 },
+                {letter: 'C', header: 'Phone', key: 'customerPhone', width: 20 },
+                {letter: 'D', header: 'Sex', key: 'sex', width: 10 },
+                {letter: 'E', header: 'Birthday', key: 'birthday', width: 20 },
+                {letter: 'F', header: 'Carrier', key: 'customerCarrier', width: 20 },
+                {letter: 'G', header: 'Email', key: 'customerEmail', width: 50 },
+                {letter: 'H', header: 'Money', key: 'customerMoney'},
+                {letter: 'I', header: 'Remark', key: 'customerRemark', width: 20 },
+                {letter: 'J', header: 'CreateDate', key: 'createDate', width: 20 },
+                {letter: 'K', header: 'UpdateDate', key: 'updateDate', width: 20 },
+                {letter: 'L', header: 'isValid', key: 'validStatus', width: 15 },
+                {letter: 'M', header: 'isAlive', key: 'aliveStatus', width: 15 },
+            ];
+
+            worksheet.addRows(data.data);
+
+            worksheet.getRow(1).font = {name: 'Arial Unicode MS', size: 12, bold: true};
+            for (let i = 2; i <= worksheet.rowCount; i++) {
+                worksheet.getRow(i).font = {name: 'Arial Unicode MS', size: 12};
+
+            }
+
+
+            workbook.xlsx.writeBuffer().then((content) => {
+                const link = document.createElement('a')
+                const blobData = new Blob([content], {
+                    type: 'application/octet-stream;charset=utf-8;',
+                })
+                link.download = `mamberData_${new Date().toLocaleString().substring(0, 10)}.xlsx`
+                link.href = URL.createObjectURL(blobData)
+                link.click()
+            })
+        })
+
+
+})

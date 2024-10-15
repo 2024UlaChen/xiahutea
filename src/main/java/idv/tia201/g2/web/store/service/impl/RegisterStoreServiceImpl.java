@@ -106,6 +106,7 @@ public class RegisterStoreServiceImpl implements RegisterStoreService {
             store.setStoreStatus(0);//狀態預設為0
             Timestamp registerDay = new Timestamp(System.currentTimeMillis());
             store.setRegisterDay(registerDay);
+            store.setScore(0f);
             storeDao.save(store);
             store.setSuccessful(true);
             store.setMessage("成功加入會員");

@@ -31,17 +31,10 @@ public class MemberCmsController {
     @GetMapping("all")
     public Core manage(HttpSession httpSession, @RequestParam("searchPageNo") int pageNo) {
         Core core = new Core();
-//        TotalUserDTO totalUserDTO = (TotalUserDTO) httpSession.getAttribute("totalUserDTO");
-//        if (totalUserDTO.getUserTypeId() != 3) {
-//            core.setSuccessful(false);
-//            return core;
-//        }
-        System.out.println("=================");
         Page<Member> resultPage = memberService.findQueryMember(new Member(), pageNo);
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("memberData", resultPage.getContent());
         map.put("totalPage", resultPage.getTotalPages());
-
         core.setData(map);
         core.setSuccessful(true);
         return core;
@@ -122,6 +115,14 @@ public class MemberCmsController {
         }
         core.setSuccessful(true);
         core.setMessage("update success");
+        return core;
+    }
+
+    @GetMapping("download")
+    public Core downloadMember() {
+        Core core = new Core();
+        core.setData(memberService.findAllMember());
+        core.setSuccessful(true);
         return core;
     }
 }
