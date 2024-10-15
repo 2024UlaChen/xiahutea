@@ -232,23 +232,13 @@ public class OrderServiceImpl implements OrderService {
 
         order.setOrderStatus(1);
         order.setOrderCreateDatetime(new Timestamp(System.currentTimeMillis()));
+        order.setSuccessful(true);
         orderDao.insert(order);
         // 存商品
         for (OrderDetail orderDetail : orderDetails) {
             orderDetail.setOrderId(order.getOrderId());
             orderDetailDao.insert(orderDetail);
         }
-
-        // 傳送發票參數給綠界
-        String addInvoiceNo = invoiceService.createInvoice(order);
-        if(isEmpty(addInvoiceNo)){
-            orderDto.setMessage("開立發票失敗");
-            orderDto.setSuccessful(false);
-            return orderDto;
-        }
-        // 存發票
-        orderDao.saveInvoiceNo(order.getOrderId(), addInvoiceNo);
-
         orderDto.setOrders(order);
         orderDto.setOrderDetails(orderDetails);
         orderDto.setMessage("訂單新增成功");

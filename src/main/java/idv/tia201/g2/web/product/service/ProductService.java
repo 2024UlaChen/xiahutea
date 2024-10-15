@@ -1,5 +1,6 @@
 package idv.tia201.g2.web.product.service;
 
+import idv.tia201.g2.core.pojo.Core;
 import idv.tia201.g2.web.product.dto.ProductDTO;
 import idv.tia201.g2.web.product.vo.Product;
 import org.springframework.data.domain.Page;
@@ -13,8 +14,8 @@ public interface ProductService {
 
     List<Product> getAllProducts();
     List<Product> getProductsByProductName(String productName);
-    boolean addProduct(ProductDTO productDTO,Integer userTypeId, Integer userId, byte[] blob) throws Exception;
-    boolean updateProduct(Integer productId,ProductDTO productDTO, Integer userTypeId, Integer userId, byte[] blobImg);
+    Core addProduct(ProductDTO productDTO, Integer userTypeId, Integer userId, byte[] blob) throws Exception;
+    Core updateProduct(Integer productId,ProductDTO productDTO, Integer userTypeId, Integer userId, byte[] blobImg);
     boolean deleteProduct(Integer productId);
     ProductDTO getProductById(Integer productId);
     Page<Product> getProducts(Pageable pageable);

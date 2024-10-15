@@ -1,6 +1,7 @@
 package idv.tia201.g2.web.product.controller;
 
 
+import idv.tia201.g2.core.pojo.Core;
 import idv.tia201.g2.web.advertise.service.AdsService;
 import idv.tia201.g2.web.product.dto.ProductDTO;
 import idv.tia201.g2.web.product.service.ProductService;
@@ -8,6 +9,7 @@ import idv.tia201.g2.web.product.vo.Product;
 import idv.tia201.g2.web.store.service.StoreService;
 import idv.tia201.g2.web.user.dto.TotalUserDTO;
 import jakarta.servlet.http.HttpSession;
+import org.checkerframework.checker.units.qual.C;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -121,46 +123,48 @@ public class ProductAddController {
 
 
     @PostMapping("/add")
-    public ResponseEntity<String> addProduct(@RequestBody ProductDTO productDTO,HttpSession session) throws IOException {
+    public ResponseEntity<Core> addProduct(@RequestBody ProductDTO productDTO,HttpSession session) throws IOException {
+        Core core = new Core();
+        core.setSuccessful(false);
+
         // 获取店铺ID
         // 调用 Service 层进行处理
         TotalUserDTO totalUserDTO = (TotalUserDTO)session.getAttribute("totalUserDTO");
         Integer userTypeId = totalUserDTO.getUserTypeId(); // 1 : 商家 、 3 : 管理員
-        Integer userId = totalUserDTO.getUserId();// storeId 或 adminId
+        Integer userId = totalUserDTO.getUserId();// storeId 或 adminId(管理員沒有新增商品功能)
 
         try {
             // 将 Base64 数据解码为字节数组
             byte[] fileBytes = Base64.getDecoder().decode(productDTO.getProductPicture());
             // 將圖片資料byte轉換為 Blob 物件
             //Blob blob = new SerialBlob(fileBytes);
-            productService.addProduct(productDTO, userTypeId, userId, fileBytes);
-            return ResponseEntity.ok("商品新增成功!");
+            core = productService.addProduct(productDTO, userTypeId, userId, fileBytes);
+            return ResponseEntity.ok(core);
         } catch (Exception exp){
             exp.getStackTrace();
             System.out.println(exp.getMessage());
         };
 
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("商品新增失败!");
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(core);
     }
 
     @PutMapping("/update/{productId}")
-    public ResponseEntity<String> updateProduct(@PathVariable int productId,@RequestBody ProductDTO productDTO ,HttpSession session) {
+    public ResponseEntity<Core> updateProduct(@PathVariable int productId,@RequestBody ProductDTO productDTO ,HttpSession session) {
+
+        Core core = new Core();
+        core.setSuccessful(false);
+
         TotalUserDTO totalUserDTO = (TotalUserDTO)session.getAttribute("totalUserDTO");
         Integer userTypeId = totalUserDTO.getUserTypeId(); // 1 : 商家 、 3 : 管理員
         Integer userId = totalUserDTO.getUserId();// storeId 或 adminId
         try {
             // 将 Base64 数据解码为字节数组
             byte[] fileBytes = Base64.getDecoder().decode(productDTO.getProductPicture());
-            boolean success = productService.updateProduct(productId, productDTO,userTypeId,userId, fileBytes);
-
-            if (success) {
-                return ResponseEntity.ok("商品更新成功!");
-            } else {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("商品更新失败!");
-            }
+            core = productService.updateProduct(productId, productDTO,userTypeId,userId, fileBytes);
+            return ResponseEntity.ok(core);
         } catch (Exception e) {
 
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("服务器错误: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(core);
         }
     }
     // 刪除產品
