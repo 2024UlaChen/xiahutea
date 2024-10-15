@@ -94,7 +94,8 @@ public class OrderController {
             return Page.empty();
         }
         // 判斷權限：如果是admin可看全部訂單，如果是store只能看storeId的訂單
-        Integer storeId = (userTypeId == 1) ? userTypeId : null;
+        Integer userId = totalUserDTO.getUserId();
+        Integer storeId = (userTypeId == 1) ? userId : null;
 
         return orderService.findByCriteria(
                 orderId, storeId, storeName, memberNickname,
