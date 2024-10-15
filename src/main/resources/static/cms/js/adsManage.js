@@ -213,6 +213,20 @@ document.addEventListener("DOMContentLoaded", function () {
                 storeName = store.storeName;
             }
             const row = document.createElement('tr');
+            if(ad.roleTypeId===3){
+                row.innerHTML = `
+                <td>管理員</td>
+                <td>${ad.title}</td>
+                <td>${ad.description}</td>
+                <td>${ad.startTime}</td>
+                <td>${ad.endTime}</td>
+                <td>${isdisplay}</td>
+                <td>${adStatus}</td>
+                <td>
+                    <button type="button" class="td-edit" data-id="${ad.adsId}">修改</button>
+                </td>
+            `;
+            }else{
             row.innerHTML = `
                 <td>${storeName}</td>
                 <td>${ad.title}</td>
@@ -225,6 +239,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     <button type="button" class="td-edit" data-id="${ad.adsId}">修改</button>
                 </td>
             `;
+            }
             tableBody_el.appendChild(row);
         })
         // 初始顯示第一頁並創建分頁按鈕，顯示總筆數
