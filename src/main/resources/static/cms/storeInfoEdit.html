@@ -303,14 +303,7 @@
             }
 
 
-            //確認是否帳號違停權
-            if(data.storeStatus === 2 ){
-              Swal.fire({
-                text:"帳號停權，請聯絡管理員",
-                icon:"warning"
-              });
 
-            }
             vat.value = data.vat;
             storename.value = data.storeName;
             registerday.value = data.registerDay.split("T")[0];
