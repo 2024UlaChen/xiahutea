@@ -58,7 +58,7 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
             for (ProductCategory category : duplicateCategories) {
                 // 如果找到的分類 ID 與當前更新的分類不同，則表示分類名稱重複
                 if (!category.getCategoryId().equals(categoryId)) {
-                    core.setMessage("商品重複，請重新確認");
+                    core.setMessage("商品分類重複，請重新確認");
                     return core;
                 }
             }
