@@ -95,6 +95,7 @@ public class MemberServiceImpl implements MemberService {
 //            String verifyCode = sendSmsService.sendSMS(phone);
             String verifyCode = "AAA123";
             member.setVerifyCode(verifyCode);
+            member.setSex("none");
             try {
                 member.setCustomerImg(loadImg());
             } catch (IOException e) {
