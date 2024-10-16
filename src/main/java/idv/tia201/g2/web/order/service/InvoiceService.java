@@ -93,7 +93,7 @@ public class InvoiceService {
         data.put("CarrierType", carrierType);
         data.put("CarrierNum", carrierNum);
         data.put("TaxType", "1");
-        data.put("SalesAmount", 10);
+        data.put("SalesAmount", 30);
         data.put("Items", items);
         data.put("InvType", "07");
         //----------------------------------------------------
