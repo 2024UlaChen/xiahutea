@@ -175,7 +175,7 @@ function showDispute(data) {
     // 訂單通知內容
     let notificationHtml = `
         <div class="dropdown-divider"></div>
-        <a href="./storeDisputeDetial.html?disputeId=${data.id}" class="dropdown-item">
+        <a href="./storeDisputeDetail.html?disputeOrderId=${data.id}" class="dropdown-item">
             <i class="fas fa-envelope mr-2"></i> 新爭議 ${data.id}，請進行確認 
             <span class="float-right text-muted text-sm">${new Date(data.createDatetime).toLocaleString()}</span>
         </a>

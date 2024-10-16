@@ -516,6 +516,7 @@
                         <th>訂單狀態</th>
                         <td>${statusText(data.orders.orderStatus)}</td>
                     </tr>
+
                     <tr>
                         <th>付款方式</th>
                         <td>${paymentMethodText(data.orders.paymentMethod)}</td>
@@ -523,6 +524,10 @@
                     <tr>
                         <th>付款金額</th>
                         <td>${data.orders.paymentAmount}</td>
+                    </tr>
+                     <tr>
+                        <th>折抵金額</th>
+                        <td>${(data.orders.customerMoneyDiscount)+(data.orders.couponDiscount)+(data.orders.loyaltyDiscount)}</td>
                     </tr>
                     <tr>
                         <th>發票開立方式</th>
