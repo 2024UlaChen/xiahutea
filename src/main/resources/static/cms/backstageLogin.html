@@ -111,13 +111,13 @@
 
 
         //確認有無輸入
-        if(username.length === 0 || password.length === 0){
+        if (username.length === 0 || password.length === 0) {
             $(resultEl).text("請輸入用戶名稱及用戶密碼");
             return;
         }
 
         //先確認密碼格式
-        if( !wordCheck(password) ){
+        if (!wordCheck(password)) {
             $(resultEl).text("使用者名稱或密碼錯誤");
             return;
         }
@@ -125,12 +125,12 @@
         let formData = new FormData();
         formData.append("adminUsername", username);
         formData.append("adminPassword", password);
-        formData.append("data",rememberMe)
+        formData.append("data", rememberMe)
 
         // 管理員登入
         if (!$("#store-login").hasClass("active")) {
             //確認帳號格式
-            if( !wordCheck(username) ){
+            if (!wordCheck(username)) {
                 $(resultEl).text("使用者名稱或密碼錯誤");
                 return;
             }
@@ -147,10 +147,10 @@
                     $(resultEl).text(message);
                 }
             })
-        // 商家登入
+            // 商家登入
         } else {
             //統編驗證
-            if( !vatCheck(username) ){
+            if (!vatCheck(username)) {
                 $(resultEl).text("使用者名稱或密碼錯誤");
                 return;
             }
@@ -165,7 +165,7 @@
                 })
             }).then(res => res.json()).then(store => {
                 if (store.successful) {
-                     location = `./storeInfo.html?storeId=${store.storeId}`;
+                    location = `./storeInfo.html?storeId=${store.storeId}`;
 
 
                 } else {
@@ -175,19 +175,20 @@
             })
         }
 
-        if(rememberMe){
-            localStorage.setItem("username",username)
-            localStorage.setItem("password",password)
-        }else {
-            localStorage.removeItem("username");
-            localStorage.removeItem("password");
-        }
-    })
 
-    //一進入頁面就從 localStorag 抓取資料
-    $(function (){
-        $(usernameInput).val(localStorage.getItem("username"))
-        $(passwordInput).val(localStorage.getItem("password"))
+    //     if(rememberMe){
+    //         localStorage.setItem("username",username)
+    //         localStorage.setItem("password",password)
+    //     }else {
+    //         localStorage.removeItem("username");
+    //         localStorage.removeItem("password");
+    //     }
+    // })
+    //
+    // //一進入頁面就從 localStorag 抓取資料
+    // $(function (){
+    //     $(usernameInput).val(localStorage.getItem("username"))
+    //     $(passwordInput).val(localStorage.getItem("password"))
     })
 
 </script>
