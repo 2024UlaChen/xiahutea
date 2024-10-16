@@ -239,6 +239,20 @@ public class OrderServiceImpl implements OrderService {
             orderDetail.setOrderId(order.getOrderId());
             orderDetailDao.insert(orderDetail);
         }
+        // 傳送發票參數給綠界
+        String addInvoiceNo = invoiceService.createInvoice(order);
+
+        // 傳送發票參數給綠界
+        if (isEmpty(addInvoiceNo)){
+            order.setOrderStatus(5);
+            orderDao.update(order);
+            orderDto.setMessage("發票開立失敗");
+            orderDto.setSuccessful(false);
+            return orderDto;
+        }
+        // 存發票
+        orderDao.saveInvoiceNo(order.getOrderId(), addInvoiceNo);
+
         orderDto.setOrders(order);
         orderDto.setOrderDetails(orderDetails);
         orderDto.setMessage("訂單新增成功");
