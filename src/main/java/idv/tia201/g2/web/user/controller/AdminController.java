@@ -49,10 +49,8 @@ public class AdminController {
             System.out.println(rememberMe);
             if (rememberMe){
                 // 設置一個 Cookie
-                String SHAUserneme = EncrypSHA.SHAEncrypt(admin.getAdminUsername());
-                String SHAPassword = EncrypSHA.SHAEncrypt(admin.getAdminPassword());
-                Cookie usernameCookie = new Cookie("username", SHAUserneme);
-                Cookie passwordCookie = new Cookie("password", SHAPassword);
+                Cookie usernameCookie = new Cookie("username", admin.getAdminUsername());
+                Cookie passwordCookie = new Cookie("password", admin.getAdminPassword());
                 // 設置過期時間（秒）
                 usernameCookie.setMaxAge(60 * 60 * 24 * 7); // 1周
                 passwordCookie.setMaxAge(60 * 60 * 24 * 7); // 1周
