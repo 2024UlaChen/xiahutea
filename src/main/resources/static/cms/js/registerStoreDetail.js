@@ -88,9 +88,11 @@ $(form).submit(e => {
                 location.replace("./registerStore.html")
                 });
         }else if (data.storeStatus === 0){
-            swal.fire("更新成功!", data.storeName + "尚在申請中", "success");
+            swal.fire("更新成功!", data.storeName + "尚在申請中", "success")
+                .then(result =>{history.back()})
         }else{
-            swal.fire("更新成功!", data.storeName + "被拒絕申請", "success");
+            swal.fire("更新成功!", data.storeName + "被拒絕申請", "success")
+                .then(result =>{history.back()})
         }
 
     })
@@ -114,4 +116,5 @@ $(storeStatusEle).change(function(e){
         $("#submitBtn").removeAttr("disabled");
     }
 })
+
 
