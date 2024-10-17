@@ -43,6 +43,9 @@ birthdayAnalyzeBtn.addEventListener("click", function () {
         })
 
         let option = {
+            color: [
+                '#73B4BA', '#f1a253', '#ef8994'
+            ],
             title: {
                 text: '消費者-年紀分析'
             },
@@ -66,7 +69,7 @@ birthdayAnalyzeBtn.addEventListener("click", function () {
                     data: ageCountArr,
                     markPoint: {
                         data: [
-                            {type: 'max', name: 'Max'},
+                            {type: 'max', data: 'Max'},
                         ]
                     },
                 },
@@ -105,6 +108,9 @@ sexAnalyzeBtn.addEventListener("click", function () {
         })
 
         let option = {
+            color: [
+                '#73B4BA', '#f1a253', '#ef8994'
+            ],
             title: {
                 text: '消費者-性別'
             },
@@ -152,6 +158,9 @@ validAnalyzeBtn.addEventListener("click", function () {
         })
 
         let option = {
+            color: [
+                '#73B4BA', '#f1a253', '#ef8994'
+            ],
             title: {
                 text: '消費者-停權'
             },
@@ -171,7 +180,8 @@ validAnalyzeBtn.addEventListener("click", function () {
         setChart(option);
     });
 })
-function setChart(option){
+
+function setChart(option) {
     let myChart = echarts.init(analyzeBlock);
     myChart.clear();
     myChart.setOption(option);
