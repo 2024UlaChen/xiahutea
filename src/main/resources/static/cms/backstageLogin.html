@@ -51,18 +51,14 @@
                 </label>
             </div>
 
-            <div class="input-group mb-3">
-                <input type="text" id="username" class="form-control" placeholder="用戶名稱">
-            </div>
-            <div class="input-group mb-3">
-                <input type="password" id="password" class="form-control" placeholder="用戶密碼">
-            </div>
+            <form action="#" method="POST">
+                <div class="input-group mb-3">
+                    <input type="text" id="username" class="form-control" placeholder="用戶名稱" autocomplete="on">
+                </div>
+                <div class="input-group mb-3">
+                    <input type="password" id="password" class="form-control" placeholder="用戶密碼" autocomplete="on">
+                </div>
 
-            <div>
-                <div id="result"></div>
-            </div>
-
-            <hr>
                 <div class="row ">
                     <div class="col-8 ">
                         <div class="icheck-primary">
@@ -72,13 +68,11 @@
                             </label>
                         </div>
                     </div>
-                    <!-- /.col -->
                     <div class="col-4">
                         <button type="submit" class="btn btn-info btn-block">登入</button>
                     </div>
-                    <!-- /.col -->
                 </div>
-
+            </form>
         </div>
         <!-- /.card-body -->
     </div>
@@ -103,7 +97,32 @@
     let resultEl = $("div#result");
     let rememberEle = $("input#remember");
 
-    $("button").on("click", () => {
+    function setCookie(name, value, days) {
+        let date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000)); // 設置過期時間
+        let expires = "expires=" + date.toUTCString();
+        document.cookie = name + "=" + encodeURIComponent(value) + ";" + expires + ";path=/";
+    }
+
+    function getCookie(name) {
+        let cookieArr = document.cookie.split(";"); // 分割所有 Cookies
+
+        for(let i = 0; i < cookieArr.length; i++) {
+            let cookiePair = cookieArr[i].split("="); // 分割每個 Cookie 的鍵和值
+
+            // 移除鍵的前後空白，然後比對
+            if(name === cookiePair[0].trim()) {
+                // 解碼 Cookie 值（因為值可能被編碼）
+                return decodeURIComponent(cookiePair[1]);
+            }
+        }
+
+        // 如果未找到 Cookie，返回 null
+        return null;
+    }
+
+    $("form").submit((e) => {
+        e.preventDefault()
         $(resultEl).text("");
         let username = $(usernameInput).val().trim();
         let password = $(passwordInput).val().trim();
@@ -175,20 +194,30 @@
             })
         }
 
+        if (rememberMe) {  // 要不要記住我
+            setCookie("username", $(usernameInput).val(), 7);  // 保存帳號
+            setCookie("password", $(passwordInput).val(), 7);  // 保存密碼
+        } else {
+            // 刪除 Cookies
+            setCookie("username", "", 0);  // 刪除帳號 Cookie
+            setCookie("password", "", 0);  // 刪除密碼 Cookie
+        }
 
-    //     if(rememberMe){
-    //         localStorage.setItem("username",username)
-    //         localStorage.setItem("password",password)
-    //     }else {
-    //         localStorage.removeItem("username");
-    //         localStorage.removeItem("password");
-    //     }
-    // })
-    //
+    })
+
     // //一進入頁面就從 localStorag 抓取資料
-    // $(function (){
-    //     $(usernameInput).val(localStorage.getItem("username"))
-    //     $(passwordInput).val(localStorage.getItem("password"))
+    $(function (){
+        let username = getCookie("username");
+        let password = getCookie("password");
+
+        if (username) {
+            $(usernameInput).val(username);  // 自動填入帳號
+        }
+
+        if (password) {
+            $(passwordInput).val(password);  // 自動填入密碼
+        }
+
     })
 
 </script>
