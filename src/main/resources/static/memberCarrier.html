@@ -41,7 +41,7 @@
                         <aside class="col-lg-4 no-padding member-aside">
                             <div class="member-introduction">
                                 <div>
-                                    <img class="userPhoto"  id="asidePhoto">
+                                    <img class="userPhoto" id="asidePhoto">
                                 </div>
                                 <div id="asideName"></div>
                             </div>
@@ -90,9 +90,11 @@
                                         <button id="carrierDelete">
                                             <i class="fa fa-trash"></i>
                                         </button>
+                                        <button id="carrierDownload">
+                                            <i class="fa fa-download"></i>
+                                        </button>
                                     </div>
-                                    <div>
-                                        <svg id="memberCarrierBarcode"></svg>
+                                    <div id="memberCarrierBarcodeBlock">
                                     </div>
                                 </div>
                                 <div class="modal fade" id="carrierEditing" tabindex="-1" role="dialog"
@@ -186,6 +188,8 @@
 <script src="assets/js/frontend-plugin.js"></script>
 <script src="js/general.js"></script>
 <script src="https://cdn.jsdelivr.net/jsbarcode/3.3.20/JsBarcode.all.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.min.js"></script>
+
 <script src="cms/plugins/sweetalert2/sweetalert2.all.min.js"></script>
 <script src="js/memberGeneral.js"></script>
 <script src="js/memberCarrier.js"></script>
