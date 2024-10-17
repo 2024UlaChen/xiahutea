@@ -105,21 +105,27 @@ public class LineBotServiceImpl implements LineBotService {
         // 建立API訊息的結構
         List<MsgModel> msgModelList = new ArrayList<>();
         StringBuilder text = new StringBuilder();
+        if(storeList.isEmpty()){
+            text.append("此區無店家資訊");
 
-        for (Store store : storeList) {
-
-
-            String shellTime = store.getOpeningHours().toString().split(":")[0]+":"+store.getOpeningHours().toString().split(":")[1]+"~"+store.getClosingHours().toString().split(":")[0]+":"+store.getClosingHours().toString().split(":")[1];
-            String storeName ="店名:"+store.getStoreName();
-
-            String sotreAddress ="地址:"+store.getStoreAddress();
-
-            String storeShellTime = "營業時間:"+shellTime;
-
-            text.append(storeName).append("\n").append(sotreAddress).append("\n").append(storeShellTime).append("\n");
+        }else{
+            for (Store store : storeList) {
 
 
+                String shellTime = store.getOpeningHours().toString().split(":")[0]+":"+store.getOpeningHours().toString().split(":")[1]+"~"+store.getClosingHours().toString().split(":")[0]+":"+store.getClosingHours().toString().split(":")[1];
+                String storeName ="店名:"+store.getStoreName();
+
+                String sotreAddress ="地址:"+store.getStoreAddress();
+
+                String storeShellTime = "營業時間:"+shellTime;
+
+                text.append(storeName).append("\n").append(sotreAddress).append("\n").append(storeShellTime).append("\n");
+
+
+            }
         }
+
+
         MsgModel msg = new MsgModel();
         msg.setType("text");
         msg.setText(text.toString());
