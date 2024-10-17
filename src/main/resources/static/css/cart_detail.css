@@ -891,3 +891,8 @@ input.uniform-numbers{
 .btn-submit-order:hover{
   background-color: #DFF3F7; /* 悬停背景色 */
 }
+
+input[type="text"]:focus,input[type="textarea"]:focus {
+  outline: none;
+  border-color: #c5c0c0 !important;
+}

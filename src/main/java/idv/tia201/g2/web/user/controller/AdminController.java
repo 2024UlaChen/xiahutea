@@ -8,6 +8,8 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/admin")
 public class AdminController {
     private static final long serialVersionUID = 1L;
+    private static final Logger log = LoggerFactory.getLogger(AdminController.class);
     @Autowired
     private AdminService adminService;
 
@@ -43,6 +46,7 @@ public class AdminController {
 
             // 是否有勾選記住登入資料
             Boolean rememberMe = Boolean.valueOf(String.valueOf(admin.getData()));
+            System.out.println(rememberMe);
             if (rememberMe){
                 // 設置一個 Cookie
                 String SHAUserneme = EncrypSHA.SHAEncrypt(admin.getAdminUsername());
