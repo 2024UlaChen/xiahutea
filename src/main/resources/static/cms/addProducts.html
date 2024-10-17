@@ -146,8 +146,8 @@
                                         <span for="name" class="ice-message" style="color: red"></span>
                                         <div class="form-group col-4">
 
-                                            <label class="form-check-label">冰塊調整</label><span style="color: red">*</span>
-
+                                            <label class="form-check-label" style="font-weight: 700">冰塊調整</label><span style="color: red; ">*</span>
+                                            <span class="productIce-message" style="color: red"></span>
 
                                             <div class="form-check">
                                                 <input type="checkbox" id="allice" >
@@ -166,7 +166,7 @@
                                             <div class="form-check">
                                                 <input class="item" type="checkbox" name="lightIce"
                                                     value="1">
-                                                <label class="form-check-label">微冰</label>
+                                                <label class="form-check-label ">微冰</label>
                                             </div>
                                             <div class="form-check">
                                                 <input class="item" type="checkbox" name="iceFree"
@@ -185,9 +185,10 @@
 
                                         </div>
 
-                                        <span class="sugar-message" style="color: red"></span>
                                         <div class="form-group col-4">
                                             <label fclass="form-check-label">甜度調整</label><span style="color: red">*</span>
+                                            <span class="productSugar-message" style="color: red"></span>
+<!--                                            <div class="productSugar-message" style="color: red"> </div>-->
 
 
                                             <div class="form-check">
@@ -195,31 +196,31 @@
                                                 <label class="form-check-label">全選</label>
                                             </div>
                                             <div class="form-check">
-                                                <input class="itemtwo" type="checkbox" name="fullSugar" value="1">
+                                                <input class="itemtwo sugarCheck" type="checkbox" name="fullSugar" value="1">
                                                 <label class="form-check-label">全糖</label>
                                             </div>
                                             <div class="form-check">
-                                                <input class="itemtwo" type="checkbox" name="lessSugar"
+                                                <input class="itemtwo sugarCheck" type="checkbox" name="lessSugar"
                                                     value="1">
                                                 <label class="form-check-label">少糖</label>
                                             </div>
                                             <div class="form-check">
-                                                <input class="itemtwo" type="checkbox" name="halfSugar"
+                                                <input class="itemtwo sugarCheck" type="checkbox" name="halfSugar"
                                                     value="1">
                                                 <label class="form-check-label">半糖</label>
                                             </div>
                                             <div class="form-check">
-                                                <input class="itemtwo" type="checkbox" name="quarterSugar"
+                                                <input class="itemtwo sugarCheck" type="checkbox" name="quarterSugar"
                                                     value="1">
                                                 <label class="form-check-label">微糖</label>
                                             </div>
                                             <div class="form-check">
-                                                <input class="itemtwo" type="checkbox" name="noSugar" value="1">
+                                                <input class="itemtwo sugarCheck" type="checkbox" name="noSugar" value="1">
                                                 <label class="form-check-label">無糖</label>
                                             </div>
                                         </div>
                                         <div class="form-group col-4">
-                                            <label class="form-check-label">加料</label>
+                                            <label class="form-check-label" style="font-weight: 700">加料</label>
                                             <div class="form-check">
                                                 <input type="checkbox" id="allmaterials">
                                                 <label class="form-check-label">全選</label>
@@ -440,6 +441,32 @@
             const productPrice = document.getElementById('productPrice').value;
             const category = document.querySelector('.category').value;
 
+            let itemone=document.querySelectorAll("input.item");
+            let iceCheck = false;
+            itemone.forEach(function (item,i){
+                if(item.checked){
+                    iceCheck = true;
+                    document.querySelector('.productIce-message').textContent = '';
+                }
+            })
+            if(!iceCheck){
+                document.querySelector('.productIce-message').textContent = '(請勾選冰塊調整)';
+                return false;
+            }
+
+            let itemtwo=document.querySelectorAll("input.itemtwo");
+            let sugarCheck = false;
+            itemtwo.forEach(function (item,i){
+                if(item.checked){
+                    sugarCheck = true;
+                    document.querySelector('.productSugar-message').textContent = '';
+                }
+            })
+            if(!sugarCheck){
+                document.querySelector('.productSugar-message').textContent = '(請勾選甜度調整)';
+                return false;
+            }
+
             // 驗證表單數據
             if (!productName) {
                 document.querySelector('.productName-message').textContent = '商品名稱不為空';
@@ -457,6 +484,8 @@
                 document.querySelector('.category-message').textContent = '請選擇分類';
                 return false;
             }
+
+
             document.querySelector('.category-message').textContent = '';
             // 新增商品
             if (typeId !== 'E'){ // 新增商品
@@ -484,7 +513,7 @@
 
                 const productData = {
                     productId: Number(document.getElementById('productId').value),
-                    productName: document.getElementById('productName').value,
+                    productName: document.getElementById('productName').value.trim(),
                     productPrice: Number(document.getElementById('productPrice').value),
                     size: document.getElementById('size').value,
                     productStatus: document.getElementById('status').value === "0" ? false : true,

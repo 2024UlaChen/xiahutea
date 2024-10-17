@@ -27,30 +27,31 @@ public class OrderController {
 
     @Autowired
     private OrderService orderService;
-    @Autowired
-    private InvoiceService invoiceService;
-    @Autowired
-    private OrderDao orderDao;
+//    @Autowired
+//    private InvoiceService invoiceService;
+//    @Autowired
+//    private OrderDao orderDao;
     // -------- FINISH ---------------------------------
     // 前台 新增資料
     // 前台 訂單列表 顯示
-
     @PostMapping("addOrder")
     public OrderDto addNewOrder(@RequestBody OrderDto orderDto) {
         OrderDto rtnOrderDto = orderService.addOrder(orderDto.getOrders(), orderDto.getOrderDetails());
 
-        // 傳送發票參數給綠界
-        Orders order = orderDto.getOrders();
-        if( rtnOrderDto.isSuccessful() ){
-            String invoiceNo = order.getInvoiceNo();
-            while (isEmpty(invoiceNo)){
-                invoiceNo = invoiceService.createInvoice(order);
-            }
-            // 存發票
-            orderDao.saveInvoiceNo(order.getOrderId(), invoiceNo);
-        }
+//        // 傳送發票參數給綠界
+//        Orders order = orderDto.getOrders();
+//        if( rtnOrderDto.isSuccessful() ){
+//            String invoiceNo = order.getInvoiceNo();
+//            String respInvoice = invoiceService.createInvoice(order);
+//            while (isEmpty(invoiceNo) && isEmpty(respInvoice)){
+//                respInvoice = invoiceService.createInvoice(order);
+//            }
+//            // 存發票
+//            orderDao.saveInvoiceNo(order.getOrderId(), respInvoice);
+//        }
         return rtnOrderDto;
     }
+
     @GetMapping("member/{customerId}")
     public Page<OrderDto> memberOrder(
             @PathVariable Integer customerId,

@@ -71,8 +71,8 @@ public class InvoiceService {
         item.put("ItemName", "ServiceFee");
         item.put("ItemCount", 1);
         item.put("ItemWord", "筆");
-        item.put("ItemPrice", 10);
-        item.put("ItemAmount", 10);
+        item.put("ItemPrice", 30);
+        item.put("ItemAmount", 30);
         items.add(item);
 
         // Data參數
@@ -93,7 +93,7 @@ public class InvoiceService {
         data.put("CarrierType", carrierType);
         data.put("CarrierNum", carrierNum);
         data.put("TaxType", "1");
-        data.put("SalesAmount", 10);
+        data.put("SalesAmount", 30);
         data.put("Items", items);
         data.put("InvType", "07");
         //----------------------------------------------------

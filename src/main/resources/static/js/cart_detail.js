@@ -154,7 +154,6 @@ document.addEventListener("DOMContentLoaded",function(){
     if(customer){
         let customerData = JSON.parse(customer);
         customerId = customerData.data.customerId;
-        // console.log("customerId:",customerId)
         fetch(`/cart/checkoutlist/${customerId}`)
             .then(response=>{
                 if (!response.ok) {
@@ -1154,7 +1153,6 @@ document.addEventListener("DOMContentLoaded",function(){
                     text: errorMessage.replace(/Error: /, ''),
                     icon: 'info'
                 }).then(() => {
-                    // window.location.href = 'homePage.html'; // 跳轉到指定的網頁
                     history.back();
                 })
             });
@@ -1417,8 +1415,8 @@ document.addEventListener("DOMContentLoaded",function(){
                         .forEach(radio=>{radio.checked = false});
                     document.querySelectorAll(`input[name="materials-options"]`)
                         .forEach(radio=>{radio.checked = false});
-                    document.querySelectorAll(`input[name="size-options"]`)
-                        .forEach(radio=>{radio.checked = false});
+                    // document.querySelectorAll(`input[name="size-options"]`)
+                    //     .forEach(radio=>{radio.checked = false});
                     qty_el.value = 1;
 
                     lightbox_el.style.display = "flex";

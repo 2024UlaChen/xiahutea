@@ -300,4 +300,8 @@ a {
 }
 
 
-  
+input[type="text"]:focus {
+  background-color: white;
+  width: 80%;
+  border-color: #6c757d !important;
+}

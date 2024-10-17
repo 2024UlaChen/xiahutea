@@ -4,12 +4,12 @@ const asideName = document.querySelector("#asideName");
 
 const carrierEditBtn = document.querySelector("#carrierEdit");
 const carrierDeleteBtn = document.querySelector("#carrierDelete");
+const carrierDownloadBtn = document.querySelector("#carrierDownload");
 
-const memberCarrierBarcode = document.querySelector("#memberCarrierBarcode");
+const memberCarrierBarcodeBlock = document.querySelector("#memberCarrierBarcodeBlock");
+
 const memberCarrierText = document.querySelector("#memberCarrierText");
 
-// TODO - 改抓memberID
-// const memberId = 2;
 function getMemberId() {
     const sessionDetail = JSON.parse(sessionStorage.getItem("memberData"));
     return parseInt(sessionDetail.data.customerId);
@@ -37,18 +37,23 @@ function getCarrier(memberId) {
     fetch(`member/carrier/` + memberId)
         .then(res => res.text())
         .then(data => {
+            console.log(data);
             if (data.length !== 0) {
                 memberCarrierText.classList.remove("checkInValid");
-                carrierDeleteBtn.classList.remove("hidden")
+                carrierDeleteBtn.classList.remove("hidden");
+                carrierDownloadBtn.classList.remove("hidden");
                 memberCarrierText.innerText = data;
-                JsBarcode(memberCarrierBarcode, data, {
+                memberCarrierBarcodeBlock.innerHTML=`<canvas id="memberCarrierBarcode"></canvas>`
+                JsBarcode(document.querySelector("#memberCarrierBarcode"), data, {
                     displayValue: false
                 });
             } else {
                 memberCarrierText.classList.add("checkInValid");
                 memberCarrierText.innerText = "未設定";
                 carrierDeleteBtn.classList.add("hidden");
-                memberCarrierBarcode.innerHTML = "";
+                carrierDownloadBtn.classList.add("hidden");
+                memberCarrierBarcodeBlock.innerHTML = "";
+
             }
         });
 }
@@ -125,4 +130,10 @@ carrierDeleteBtn.addEventListener("click", function () {
             updateCarrier("", getMemberId(), "delete");
         }
     });
+})
+carrierDownloadBtn.addEventListener("click", function () {
+    let link = document.createElement('a');
+    link.download = 'carrier.jpg';
+    link.href = document.querySelector("#memberCarrierBarcode").toDataURL("image/jpeg");
+    link.click();
 })
