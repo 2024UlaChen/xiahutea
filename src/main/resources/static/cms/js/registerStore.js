@@ -37,8 +37,8 @@ function searchRegisterStore(url) {
 
             // 分頁
             let pageHtml = ``;
-            let currentPage = data.number; // 當前頁數（從0開始）
-            let totalPages = data.totalPages;
+            let currentPage = core.data.number; // 當前頁數（從0開始）
+            let totalPages = core.data.totalPages;
             let maxVisiblePages = 10; // 每次最多顯示10個頁數按鈕
 
             // 計算顯示的頁碼範圍
@@ -143,5 +143,22 @@ $(document).on("click", "a.page-link", function (e) {
         url += "&storeName=" + $(storenameEle).val();
     }
     searchRegisterStore(url);
+})
+
+$(".form-control").keydown(e => {
+    if(e.which===13){
+        $(submitEle).click()
+    }
+})
+
+$(".inputEle").keyup(e => {
+    let flag = true;
+    let inputEles = $(".inputEle");
+    inputEles.each(function (){
+        if($(this).val().length > 0){
+            flag = false;
+        }
+    });
+    if(flag){$(submitEle).click()}
 })
 
