@@ -261,9 +261,16 @@
             nextButton.addEventListener("click", function () {
                 if (currentPage < totalPages - 1) {
                     currentPage++;
-                    init(  // 重新載入下一頁資料
-                        currentPage, size, orderId, storeName, memberNickname,
-                        orderStatus, selectedDateStart, selectedDateEnd
+                    let select_order_id = document.getElementsByClassName("select_order")[0]?.value.toLowerCase().trim() || "";
+                    let select_order_store = document.getElementsByClassName("select_order")[2]?.value.toLowerCase().trim() || "";
+                    let select_order_user = document.getElementsByClassName("select_order")[1]?.value.toLowerCase().trim() || "";
+                    let select_order_status = document.getElementById("select_status").value || "";
+                    let select_order_date1 = document.getElementsByClassName("select_date")[0]?.value || "";
+                    let select_order_date2 = document.getElementsByClassName("select_date")[1]?.value || "";
+                    // 依查詢條件載入訂單
+                    init(
+                        currentPage, size, select_order_id, select_order_store, select_order_user,
+                        select_order_status, select_order_date1, select_order_date2
                     );
                 }
             });
@@ -272,9 +279,16 @@
             previousButton.addEventListener("click", function () {
                 if (currentPage > 0) {
                     currentPage--;
-                    init(  // 重新載入上一頁資料
-                        currentPage, size, orderId, storeName, memberNickname,
-                        orderStatus, selectedDateStart, selectedDateEnd
+                    let select_order_id = document.getElementsByClassName("select_order")[0]?.value.toLowerCase().trim() || "";
+                    let select_order_store = document.getElementsByClassName("select_order")[2]?.value.toLowerCase().trim() || "";
+                    let select_order_user = document.getElementsByClassName("select_order")[1]?.value.toLowerCase().trim() || "";
+                    let select_order_status = document.getElementById("select_status").value || "";
+                    let select_order_date1 = document.getElementsByClassName("select_date")[0]?.value || "";
+                    let select_order_date2 = document.getElementsByClassName("select_date")[1]?.value || "";
+                    // 依查詢條件載入訂單
+                    init(
+                        currentPage, size, select_order_id, select_order_store, select_order_user,
+                        select_order_status, select_order_date1, select_order_date2
                     );
                 }
             });
@@ -391,9 +405,16 @@
         pageButtonsElements.forEach(button => {
             button.addEventListener("click", function () {
                 currentPage = parseInt(this.getAttribute("data-page"), 10);
+                let select_order_id = document.getElementsByClassName("select_order")[0]?.value.toLowerCase().trim() || "";
+                let select_order_store = document.getElementsByClassName("select_order")[2]?.value.toLowerCase().trim() || "";
+                let select_order_user = document.getElementsByClassName("select_order")[1]?.value.toLowerCase().trim() || "";
+                let select_order_status = document.getElementById("select_status").value || "";
+                let select_order_date1 = document.getElementsByClassName("select_date")[0]?.value || "";
+                let select_order_date2 = document.getElementsByClassName("select_date")[1]?.value || "";
+                // 依查詢條件載入訂單
                 init(
-                    currentPage, size, orderId, storeName, memberNickname,
-                    orderStatus, selectedDateStart, selectedDateEnd
+                    currentPage, size, select_order_id, select_order_store, select_order_user,
+                    select_order_status, select_order_date1, select_order_date2
                 );
             });
         });
