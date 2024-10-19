@@ -78,4 +78,7 @@ public interface StoreDao extends JpaRepository<Store, Integer> {
     // name vat status
     Page<Store> findByStoreNameContainingIgnoreCaseAndVatContainingAndStoreStatusIn(String name,String vat,List<Integer> statuslist, Pageable pageable);
 
+    Page<Store> findByStoreStatusInAndVatContaining(List<Integer> storeStatus, String vat, Pageable pageable);
+
+    Page<Store> findByStoreStatusInAndStoreNameContaining(List<Integer> storeStatus, String storeName, Pageable pageable);
 }
