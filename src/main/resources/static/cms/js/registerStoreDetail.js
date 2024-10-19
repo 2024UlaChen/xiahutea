@@ -89,10 +89,10 @@ $(form).submit(e => {
                 });
         }else if (data.storeStatus === 0){
             swal.fire("更新成功!", data.storeName + "尚在申請中", "success")
-                .then(result =>{history.back()})
+                .then(result =>{location.replace("./registerStore.html")})
         }else{
             swal.fire("更新成功!", data.storeName + "被拒絕申請", "success")
-                .then(result =>{history.back()})
+                .then(result =>{location.replace("./registerStore.html")})
         }
 
     })

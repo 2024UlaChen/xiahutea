@@ -1,5 +1,6 @@
 package idv.tia201.g2.web.store.service.impl;
 
+import idv.tia201.g2.core.pojo.Core;
 import idv.tia201.g2.core.pojo.Mail;
 import idv.tia201.g2.core.util.EncrypSHA;
 import idv.tia201.g2.core.util.MailUtil;
@@ -135,7 +136,8 @@ public class RegisterStoreServiceImpl implements RegisterStoreService {
 
         //只依店家狀態搜尋
         if(store.getVat() == null && store.getStoreName() == null){
-            return storeDao.findByStoreStatusIn(storeStatus, pageable);
+            Page<Store> resulte = storeDao.findByStoreStatusIn(storeStatus, pageable);
+            return resulte;
         }
 
         //依店家狀態 & 統編 & 店家名稱搜尋
@@ -144,13 +146,14 @@ public class RegisterStoreServiceImpl implements RegisterStoreService {
         }
 
         //依店家狀態 & (統編 OR 店家名稱)
-        if (store.getVat() == null){
-            store.setVat("********");
+        if (store.getVat() != null) {
+            return storeDao.findByStoreStatusInAndVatContaining(storeStatus, store.getVat(), pageable);
         }
-        if(store.getStoreName() == null){
-            store.setStoreName("********");
+        if (store.getStoreName() != null) {
+            return storeDao.findByStoreStatusInAndStoreNameContaining(storeStatus, store.getStoreName(), pageable);
         }
-        return storeDao.findByStoreStatusInAndVatOrStoreNameContaining(storeStatus, store.getVat(), store.getStoreName(), pageable);
+
+        return storeDao.findByStoreStatusIn(storeStatus, pageable); // 回傳狀態查詢
 
     }
 
