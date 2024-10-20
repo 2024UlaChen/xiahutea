@@ -90,6 +90,7 @@ document.addEventListener("DOMContentLoaded",function(){
     let receiverMethod;
     let invoiceCarrier;
     let invoiceVat;
+    let carrieraddress;
 
     let platform_fee_number_el = document.getElementsByClassName('platform-fee-number')[0];
     let CouponAmountText=null;
@@ -967,6 +968,20 @@ document.addEventListener("DOMContentLoaded",function(){
         // if(totalAmount ===0){
         //     ordernote = (ordernote ? ordernote + "；" : "") + "僅開立發票用，不予請款";
         // }
+        //地址
+        let deliveryOption = document.querySelector('input[name="delivery"]:checked').id;
+        if (deliveryOption === "carry-out") {
+            // 外送(自填地址)
+            carrieraddress = document.querySelector('input.address').value;  // 取得用戶手動輸入的地址
+        } else if (deliveryOption === "carryout-default") {
+            // 外送(預設地址)
+            let selectedMemberAddress = document.querySelector('input[name="member-address"]:checked');
+            if (selectedMemberAddress) {
+                carrieraddress = selectedMemberAddress.nextElementSibling.textContent;  // 取得預設地址的值
+            }
+        }else{
+            carrieraddress = '自取'
+        }
         const orderData = {
             orders: {
                 customerId: customerId,
@@ -985,6 +1000,7 @@ document.addEventListener("DOMContentLoaded",function(){
                 invoiceCarrier:invoiceCarrier,
                 invoiceVat:invoiceVat,
                 orderNote:ordernote,
+                receiverAddress:carrieraddress,
                 receiverMethod: receiverMethod,
                 receiverName: customer_el.textContent,
                 receiverPhone: phone_el.textContent,
@@ -1028,6 +1044,7 @@ document.addEventListener("DOMContentLoaded",function(){
                 }).then(response => response.text()) // 因為後端返回的是 HTML 表單，所以需要使用 .text()
                     .then(htmlForm => {
                         // 創建一個空的 div 並將 HTML 表單插入
+                        console.log('htmlform:',htmlForm);
                         const formContainer = document.createElement('div');
                         formContainer.innerHTML = htmlForm;
                         // 將表單插入到當前頁面中
