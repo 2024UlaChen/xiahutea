@@ -43,7 +43,7 @@
         input[type="text"], input[type="email"], input[type="password"], input[type="tel"], input[type="search"], input[type="url"], textarea, select{
             background-color: white;
             height: 40px;
-            width: 150px;
+            width: 200px;
             color: black;
             border-radius: 5px;
             border: 1px solid #DFF3F7;
@@ -292,7 +292,13 @@
             nextButton.addEventListener("click", function () {
                 if (currentPage < totalPages - 1) {
                     currentPage++;
-                    init(currentPage, size, customerId, selectedDateStart, selectedDateEnd); // 重新載入下一頁資料
+                    let selectOrderDate1El = document.getElementsByClassName("select_date")[0];
+                    let selectOrderDate2El = document.getElementsByClassName("select_date")[1];
+                    let selectOrderDate1 = selectOrderDate1El.value || "";
+                    let selectOrderDate2 = selectOrderDate2El.value || "";
+
+                    // 依查詢條件載入訂單
+                    init(currentPage, size, customerId, selectOrderDate1, selectOrderDate2);
                 }
             });
         }
@@ -300,7 +306,13 @@
             previousButton.addEventListener("click", function () {
                 if (currentPage > 0) {
                     currentPage--;
-                    init(currentPage, size, customerId, selectedDateStart, selectedDateEnd); // 重新載入上一頁資料
+                    let selectOrderDate1El = document.getElementsByClassName("select_date")[0];
+                    let selectOrderDate2El = document.getElementsByClassName("select_date")[1];
+                    let selectOrderDate1 = selectOrderDate1El.value || "";
+                    let selectOrderDate2 = selectOrderDate2El.value || "";
+
+                    // 依查詢條件載入訂單
+                    init(currentPage, size, customerId, selectOrderDate1, selectOrderDate2);
                 }
             });
         }
@@ -467,7 +479,14 @@
         pageButtonsElements.forEach(button => {
             button.addEventListener("click", function () {
                 currentPage = parseInt(this.getAttribute("data-page"), 10);
-                init(currentPage, size, customerId); // 重新載入資料
+
+                let selectOrderDate1El = document.getElementsByClassName("select_date")[0];
+                let selectOrderDate2El = document.getElementsByClassName("select_date")[1];
+                let selectOrderDate1 = selectOrderDate1El.value || "";
+                let selectOrderDate2 = selectOrderDate2El.value || "";
+
+                // 依查詢條件載入訂單
+                init(currentPage, size, customerId, selectOrderDate1, selectOrderDate2);
             });
         });
     }
