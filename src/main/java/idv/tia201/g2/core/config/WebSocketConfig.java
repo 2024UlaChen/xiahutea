@@ -21,6 +21,7 @@ public class WebSocketConfig implements WebSocketConfigurer, WebSocketMessageBro
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry.addHandler(webSocketHandler(), "cms/chat")
+                .setAllowedOriginPatterns("https://iorlvm.i234.me:8090")  // 允許所有跨域請求，或根據需要設置具體的域
                 .addInterceptors(new HttpSessionInterceptor());  // 加入攔截器
 
     }
@@ -31,13 +32,17 @@ public class WebSocketConfig implements WebSocketConfigurer, WebSocketMessageBro
     }
 
 
+
+
     //-----------------------------------------------------------------------
 
     // Notification
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/websocket-endpoint") // ←註冊端⼝
+                .setAllowedOrigins("https://iorlvm.i234.me:8090") // 确保允许的域
                 .withSockJS(); // ←啟⽤SockJS⽀援
+        System.out.println("STOMP endpoint registered at /websocket-endpoint");
     }
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
